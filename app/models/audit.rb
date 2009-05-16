@@ -1,0 +1,2 @@
+class Audit < Service
+end
