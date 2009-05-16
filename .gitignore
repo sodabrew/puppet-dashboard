@@ -1,0 +1,16 @@
+coverage/*
+log/*.log
+log/*.pid
+db/*.db
+db/*.sqlite3
+db/schema.rb
+tmp/**/*
+.DS_Store
+doc/api
+doc/app
+config/database.yml
+spec/spec.opts
+spec/rcov.opts
+public/javascripts/all.js
+public/stylesheets/all.js
+.dotest/*
