@@ -64,6 +64,6 @@ describe CustomersController, 'when integrating' do
   end
 end
 
-describe CustomersController, 'when integrating' do
+describe CustomersController, 'when not integrating' do
   it_should_behave_like 'a RESTful controller'
 end
