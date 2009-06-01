@@ -1,0 +1,956 @@
+
+Routing shortcuts for Account should map
+- resource_path to /account
+- resource_info_tags_path to /account/info/tags
+
+AccountsController#resource_service
+- .new should call :new on User
+- .find should call :current_user
+- .find should call whatever is in resource_specification @find
+- .find should raise CantFindSingleton when no custom finder (and no enclosing resource)
+- .foo should call foo on User
+- .respond_to?(:foo) should call respond_to?(:foo) on User
+
+Routing shortcuts for Addresses (users/dave/addresses/1) should map
+- resources_path to /users/dave/addresses
+- resource_path to /users/dave/addresses/1
+- resource_path(9) to /users/dave/addresses/9
+- edit_resource_path to /users/dave/addresses/1/edit
+- edit_resource_path(9) to /users/dave/addresses/9/edit
+- new_resource_path to /users/dave/addresses/new
+
+resource_service in AddressesController
+- should build new address with @user foreign key with new
+- should find @address with find(@address.id)
+- should raise RecordNotFound with find(@other_address.id)
+- should find only addresses belonging to @user with find(:all)
+
+Requesting /users/dave/addresses
+- should find the user
+- should assign the found user for the view
+- should assign the user_addresses association as the addresses resource_service
+
+Requesting /users/dave/addresses using GET
+- should be successful
+- should render index.rhtml
+- should find all addresses
+- should assign the found addresses for the view
+
+Requesting /users/dave/addresses/1 using GET
+- should be successful
+- should render show.rhtml
+- should find the thing requested
+- should assign the found thing for the view
+
+Requesting /users/dave/addresses/new using GET
+- should be successful
+- should render new.rhtml
+- should create an new thing
+- should not save the new thing
+- should assign the new thing for the view
+
+Requesting /users/dave/addresses/1/edit using GET
+- should be successful
+- should render edit.rhtml
+- should find the thing requested
+- should assign the found Thing for the view
+
+Requesting /users/dave/addresses using POST
+- should create a new address
+- should redirect to the new address
+
+Requesting /users/dave/addresses/1 using PUT
+- should find the address requested
+- should update the found address
+- should assign the found address for the view
+- should redirect to the address
+
+Requesting /users/dave/addresses/1 using DELETE
+- should find the address requested
+- should call destroy on the found thing
+- should redirect to the things list
+
+Routing shortcuts for Admin::Forums should map
+- resources_path to /admin/forums
+- resources_path(:foo => 'bar') to /admin/forums?foo=bar
+- resource_path to /admin/forums/2
+- resource_path(:foo => 'bar') to /admin/forums/2?foo=bar
+- resource_path(9) to /admin/forums/9
+- resource_path(9, :foo => 'bar') to /admin/forums/2?foo=bar
+- edit_resource_path to /admin/forums/2/edit
+- edit_resource_path(9) to /admin/forums/9/edit
+- new_resource_path to /admin/forums/new
+- resources_url to http://test.host/admin/forums
+- resource_url to http://test.host/admin/forums/2
+- resource_url(9) to http://test.host/admin/forums/9
+- edit_resource_url to http://test.host/admin/forums/2/edit
+- edit_resource_url(9) to http://test.host/admin/forums/9/edit
+- new_resource_url to http://test.host/admin/forums/new
+- resource_interests_path to /admin/forums/2/interests
+- resource_interests_path(:foo => 'bar') to /admin/forums/2/interests?foo=bar
+- resource_interests_path(9) to /admin/forums/9/interests
+- resource_interests_path(9, :foo => 'bar') to /admin/forums/9/interests?foo=bar
+- resource_interest_path(5) to /admin/forums/2/interests/5
+- resource_interest_path(9,5) to /admin/forums/9/interests/5
+- resource_interest_path(9,5, :foo => 'bar') to /admin/forums/9/interests/5?foo=bar
+- new_resource_interest_path(9) to /admin/forums/9/interests/new
+- edit_resource_interest_path(5) to /admin/forums/2/interests/5/edit
+- edit_resource_interest_path(9,5) to /admin/forums/9/interests/5/edit
+- respond_to?(:edit_resource_interest_path) should == true
+- resource_users_path should raise informative CantMapRoute
+- enclosing_resource_path should raise informative NoMethodError
+- any_old_missing_method should raise NoMethodError
+- respond_to?(:resource_users_path) should == false
+
+resource_service in Admin::ForumsController
+- should build new forum with new
+- should find @forum with find(@forum.id)
+- should find all forums with find(:all)
+
+Requesting /admin/forums using GET
+- should be successful
+- should render index.rhtml
+- should find all forums
+- should assign the found forums for the view
+
+Requesting /admin/forums.xml using GET
+- should be successful
+- should find all forums
+- should render the found forums as xml
+
+Requesting /admin/forums using XHR GET
+- should be successful
+- should find all forums
+- should render index.rjs
+
+Requesting /admin/forums/1 using GET
+- should be successful
+- should render show.rhtml
+- should find the forum requested
+- should assign the found forum for the view
+
+Requesting /admin/forums/1.xml using GET
+- should be successful
+- should find the forum requested
+- should render the found forum as xml
+
+Requesting /admin/forums/1 using XHR GET
+- should be successful
+- should render show.rjs
+- should find the forum requested
+- should assign the found forum for the view
+
+Requesting /admin/forums/new using GET
+- should be successful
+- should render new.rhtml
+- should create an new forum
+- should not save the new forum
+- should assign the new forum for the view
+
+Requesting /admin/forums/1/edit using GET
+- should be successful
+- should render edit.rhtml
+- should find the forum requested
+- should assign the found Forum for the view
+
+Requesting /admin/forums using POST
+- should create a new forum
+- should set the flash notice
+- should redirect to the new forum
+
+Requesting /admin/forums using XHR POST
+- should create a new forum
+- should not set the flash notice
+- should render create.rjs
+- should render new.rjs if unsuccesful
+
+Requesting /admin/forums/1 using PUT
+- should find the forum requested
+- should set the flash notice
+- should update the found forum
+- should assign the found forum for the view
+- should redirect to the forum
+
+Requesting /admin/forums/1 using XHR PUT
+- should find the forum requested
+- should update the found forum
+- should not set the flash notice
+- should assign the found forum for the view
+- should render update.rjs
+- should render edit.rjs, on unsuccessful save
+
+Requesting /admin/forums/1 using DELETE
+- should find the forum requested
+- should call destroy on the found forum
+- should set the flash notice
+- should redirect to the forums list
+
+Requesting /admin/forums/1 using XHR DELETE
+- should find the forum requested
+- should not set the flash notice
+- should call destroy on the found forum
+- should render destroy.rjs
+
+Routing shortcuts for Comments (forums/3/posts/2/comments/1) should map
+- resources_path to /forums/3/posts/2/comments
+- resource_path to /forums/3/posts/2/comments/1
+- resource_path(9) to /forums/3/posts/2/comments/9
+- edit_resource_path to /forums/3/posts/2/comments/1/edit
+- edit_resource_path(9) to /forums/3/posts/2/comments/9/edit
+- new_resource_path to /forums/3/posts/2/comments/new
+- resource_tags_path to /forums/3/posts/2/comments/1/tags
+- resource_tags_path(9) to /forums/3/posts/2/comments/9/tags
+- resource_tag_path(5) to /forums/3/posts/2/comments/1/tags/5
+- resource_tag_path(9,5) to /forums/3/posts/2/comments/9/tags/5
+
+resource_service in CommentsController
+- should build new comment with @post foreign key with new
+- should find @comment with find(@comment.id)
+- should raise RecordNotFound with find(@other_post.id)
+- should find only comments belonging to @post with find(:all)
+
+Requesting /forums/3/posts/2/comments (testing the before filters)
+- should find the forum
+- should assign the found forum for the view
+- should find the post
+- should assign the found post for the view
+- should assign the post_comments association as the comments resource_service
+
+Requesting /forums/3/posts/2/comments using GET
+- should be successful
+- should render index.rhtml
+- should find comments in post
+- should assign the found comments for the view
+
+Requesting /forums/3/posts/3/comments/1 using GET
+- should be successful
+- should render show.rhtml
+- should find the comment requested
+- should assign the found comment for the view
+
+Requesting /forums/3/posts/3/comments/new using GET
+- should be successful
+- should render new.rhtml
+- should create a new comment
+- should not save the new comment
+- should assign the new comment for the view
+
+Requesting /forums/3/posts/3/comments/1/edit using GET
+- should be successful
+- should render edit.rhtml
+- should find the comment requested
+- should assign the found comment for the view
+
+Requesting /forums/3/posts/3/comments using POST
+- should create a new comment
+- should redirect to the new comment
+
+Requesting /forums/3/posts/3/comments/1 using PUT
+- should find the comment requested
+- should update the found comment
+- should assign the found comment for the view
+- should redirect to the comment
+
+Requesting /forums/3/posts/3/comments/1 using DELETE
+- should find the comment requested
+- should call destroy on the found comment
+- should redirect to the comments list
+
+CommentsController without stubs responding to GET index
+- should expose all comments as @comments
+
+CommentsController without stubs responding to GET index with mime type of xml
+- should render all comments as xml
+
+CommentsController without stubs responding to GET show
+- should expose the requested comment as @comment
+
+CommentsController without stubs responding to GET show with mime type of xml
+- should render the requested comment as xml
+
+CommentsController without stubs responding to GET new
+- should expose a new comment as @comment
+
+CommentsController without stubs responding to GET edit
+- should expose the requested comment as @comment
+
+CommentsController without stubs responding to POST create with valid params
+- should create a comment
+- should expose the newly created comment as @comment
+- should be resource_saved?
+- should redirect to the created comment
+
+CommentsController without stubs responding to POST create with invalid params
+- should not create a comment
+- should expose a newly created but unsaved comment as @comment
+- should not be resource_saved?
+- should re-render the 'new' template
+
+CommentsController without stubs responding to PUT udpate with valid params
+- should update the requested comment
+- should not contain errors on comment
+- should be resource_saved?
+- should expose the requested comment as @comment
+- should redirect to the comment
+
+CommentsController without stubs responding to PUT udpate with invalid params
+- should fail to update the requested comment
+- should not be resource_saved?
+- should expose the requested comment as @comment
+- should re-render the 'edit' template
+
+CommentsController without stubs responding to DELETE destroy
+- should delete the requested comment
+- should redirect to the comments list
+
+Routing shortcuts for ForumPosts (forums/2/posts/1) should map
+- resources_path to /forums/2/posts
+- resource_path to /forums/2/posts/1
+- resource_path(9) to /forums/2/posts/9
+- edit_resource_path to /forums/2/posts/1/edit
+- edit_resource_path(9) to /forums/2/posts/9/edit
+- new_resource_path to /forums/2/posts/new
+- resource_tags_path to /forums/2/posts/1/tags
+- resource_tags_path(9) to /forums/2/posts/9/tags
+- resource_tag_path(5) to /forums/2/posts/1/tags/5
+- resource_tag_path(9,5) to /forums/2/posts/9/tags/5
+- enclosing_resource_path to /forums/2
+- enclosing_resource_path(9) to /forums/9
+- enclosing_resources_path to /forums
+- new_enclosing_resource_path to /forums/new
+- enclosing_resource_tags_path to /forums/2/tags
+- enclosing_resource_tag_path(9) to /forums/2/tags/9
+- enclosing_resource_tag_path(8,9) to /forums/8/tags/9
+
+ForumPostsController errors
+- should raise ResourceMismatch for /posts
+- should raise MissingSegment, when route does not contain the resource segment
+- should raise NoRecognizedRoute when no route is recognized
+
+resource_service in ForumPostsController
+- should build new post with @forum foreign key with new
+- should find @post with find(@post.id)
+- should raise RecordNotFound with find(@other_post.id)
+- should find only posts belonging to @forum with find(:all)
+
+ForumPostsController order of before_filters
+- should == [:abstract, :posts, :load_enclosing, :forum_posts]
+
+Requesting /forums/2/posts (testing the before filters)
+- should find the forum
+- should assign the form as other_name_for_forum
+- should assign the found forum for the view
+- should assign the forum_posts association as the posts resource_service
+
+Requesting /forums/2/posts using GET
+- should be successful
+- should render index.rhtml
+- should find all posts, in reverse order (because of AbstractPostsController)
+- should assign the found posts for the view
+
+Requesting /forums/2/posts/1 using GET
+- should be successful
+- should render show.rhtml
+- should find the thing requested
+- should assign the found thing for the view
+
+Requesting /forums/2/posts/new using GET
+- should be successful
+- should render new.rhtml
+- should create an new thing
+- should not save the new thing
+- should assign the new thing for the view
+
+Requesting /forums/2/posts/1/edit using GET
+- should be successful
+- should render edit.rhtml
+- should find the thing requested
+- should assign the found Thing for the view
+
+Requesting /forums/2/posts using POST
+- should make a new post
+- should attempt to save the new post
+- should redirect to the new post.save == true
+- should render new when post.save == false
+
+Requesting /forums/2/posts/1 using PUT
+- should find the post requested
+- should update the found post
+- should assign the found post for the view
+- should redirect to the post
+
+Requesting /forums/2/posts/1 using DELETE
+- should find the post requested
+- should call destroy on the found thing
+- should redirect to the things list
+
+Routing shortcuts for Forums should map
+- resources_path to /forums
+- resources_path(:foo => 'bar') to /forums?foo=bar
+- resource_path to /forums/2
+- resource_path(:foo => 'bar') to /forums/2?foo=bar
+- resource_path(9) to /forums/9
+- resource_path(9, :foo => 'bar') to /forums/2?foo=bar
+- edit_resource_path to /forums/2/edit
+- edit_resource_path(9) to /forums/9/edit
+- new_resource_path to /forums/new
+- resources_url to http://test.host/forums
+- resource_url to http://test.host/forums/2
+- resource_url(9) to http://test.host/forums/9
+- edit_resource_url to http://test.host/forums/2/edit
+- edit_resource_url(9) to http://test.host/forums/9/edit
+- new_resource_url to http://test.host/forums/new
+- resource_interests_path to /forums/2/interests
+- resource_interests_path(:foo => 'bar') to /forums/2/interests?foo=bar
+- resource_interests_path(9) to /forums/9/interests
+- resource_interests_path(9, :foo => 'bar') to /forums/9/interests?foo=bar
+- resource_interest_path(5) to /forums/2/interests/5
+- resource_interest_path(9,5) to /forums/9/interests/5
+- resource_interest_path(9,5, :foo => 'bar') to /forums/9/interests/5?foo=bar
+- new_resource_interest_path(9) to /forums/9/interests/new
+- edit_resource_interest_path(5) to /forums/2/interests/5/edit
+- edit_resource_interest_path(9,5) to /forums/9/interests/5/edit
+- respond_to?(:edit_resource_interest_path) should == true
+- resource_users_path should raise informative NoMethodError
+- enclosing_resource_path should raise informative NoMethodError
+- any_old_missing_method should raise NoMethodError
+- respond_to?(:resource_users_path) should == false
+
+ForumsController (checking that non actions are hidden)
+- should only have CRUD actions as action_methods
+
+resource_service in ForumsController
+- should build new forum with new
+- should find @forum with find(@forum.id)
+- should find all forums with find(:all)
+
+ForumsController requesting / (testing resource_path)
+- should generate params { :controller => 'forums', :action => 'index', :resource_path => '/forums' } from GET /
+- should be successful
+- should render index.rhtml
+- should find all forums
+- should assign the found forums for the view
+
+ForumsController requesting /create_forum (testing resource_method)
+- should generate params { :controller => 'forums', :action => 'create', :resource_path => '/forums', :resource_method => :post } from GET /create_forum
+- should create a new forum
+- should set the flash notice
+- should redirect to the new forum
+
+Requesting /forums using GET
+- should be successful
+- should render index.rhtml
+- should find all forums
+- should assign the found forums for the view
+
+Requesting /forums.xml using GET
+- should be successful
+- should find all forums
+- should render the found forums as xml
+
+Requesting /forums using XHR GET
+- should be successful
+- should find all forums
+- should render index.rjs
+
+Requesting /forums/1 using GET
+- should be successful
+- should render show.rhtml
+- should find the forum requested
+- should assign the found forum for the view
+
+Requesting /forums/1.xml using GET
+- should be successful
+- should find the forum requested
+- should render the found forum as xml
+
+Requesting /forums/1 using XHR GET
+- should be successful
+- should render show.rjs
+- should find the forum requested
+- should assign the found forum for the view
+
+Requesting /forums/new using GET
+- should be successful
+- should render new.rhtml
+- should create an new forum
+- should not save the new forum
+- should assign the new forum for the view
+
+Requesting /forums/1/edit using GET
+- should be successful
+- should render edit.rhtml
+- should find the forum requested
+- should assign the found Forum for the view
+
+Requesting /forums using POST
+- should create a new forum
+- should set the flash notice
+- should redirect to the new forum
+
+Requesting /forums using XHR POST
+- should create a new forum
+- should not set the flash notice
+- should render create.rjs
+- should render new.rjs if unsuccesful
+
+Requesting /forums/1 using PUT
+- should find the forum requested
+- should set the flash notice
+- should update the found forum
+- should assign the found forum for the view
+- should redirect to the forum
+
+Requesting /forums/1 using XHR PUT
+- should find the forum requested
+- should update the found forum
+- should not set the flash notice
+- should assign the found forum for the view
+- should render update.rjs
+- should render edit.rjs, on unsuccessful save
+
+Requesting /forums/1 using DELETE
+- should find the forum requested
+- should call destroy on the found forum
+- should set the flash notice
+- should redirect to the forums list
+
+Requesting /forums/1 using XHR DELETE
+- should find the forum requested
+- should not set the flash notice
+- should call destroy on the found forum
+- should render destroy.rjs
+
+Routing shortcuts for Infos should map
+- resource_path to /account/info
+- resource_tags_path to /account/info/tags
+
+InfosController (its actions)
+- should have only ['show', 'edit', 'update'] in action_methods
+- GET /account/info should be successful
+- GET /account/info/edit should be successful
+- PUT /account/info should be successful
+- GET /account/info/new should raise UnknownAction
+- POST /account/info should raise UnknownAction
+- DELETE /account/info/new should raise UnknownAction
+
+Routing shortcuts for Interests via Forum (forums/1/interests/2) should map
+- resources_path to /forums/1/interests
+- resource_path to /forums/1/interests/2
+- resource_path(9) to /forums/1/interests/9
+- edit_resource_path to /forums/1/interests/2/edit
+- edit_resource_path(9) to /forums/1/interests/9/edit
+- new_resource_path to /forums/1/interests/new
+
+resource_service in InterestsController via Forum
+- should build new interest with @forum fk and type with new
+- should find @interest with find(@interest.id)
+- should raise RecordNotFound with find(@other_interest.id)
+- should find only interests belonging to @forum with find(:all)
+
+Requesting /forums/1/interests using GET
+- should find the forum
+- should assign the found forum as :interested_in for the view
+- should assign the forum_interests association as the interests resource_service
+
+Routing shortcuts for Interests via User (users/dave/interests/2) should map
+- resources_path to /users/dave/interests
+- resource_path to /users/dave/interests/2
+- resource_path(9) to /users/dave/interests/9
+- edit_resource_path to /users/dave/interests/2/edit
+- edit_resource_path(9) to /users/dave/interests/9/edit
+- new_resource_path to /users/dave/interests/new
+
+resource_service in InterestsController via Forum
+- should build new interest with @user fk and type with new
+- should find @interest with find(@interest.id)
+- should raise RecordNotFound with find(@other_interest.id)
+- should find only interests belonging to @user with find(:all)
+
+Requesting /users/dave/interests using GET
+- should find the user
+- should assign the found user as :interested_in for the view
+- should assign the user_interests association as the interests resource_service
+
+Routing shortcuts for ForumOwner should map
+- resource_path to /forums/2/owner
+- resource_path(:foo => 'bar') to /forums/2/owner?foo=bar
+- edit_resource_path to /forums/2/owner/edit
+- new_resource_path to /forums/2/owner/new
+- resource_posts_path to /forums/2/owner/posts
+- resource_posts_path(:foo => 'bar') to /forums/2/owner/posts?foo=bar
+- resource_post_path(5) to /forums/2/owner/posts/5
+- enclosing_resource_path to /forums/2
+
+OwnersController#resource_service
+- .new should call :build_owner on @forum
+- .find should call :owner on @forum
+
+Requesting /forums/2/owner using GET
+- should be successful
+- should render show.rhtml
+- should find the forum requested
+- should assign the found forum for the view
+- should find the owner from forum.owner
+- should assign the found owner for the view
+
+Requesting /forums/2/owner/new using GET
+- should be successful
+- should render new.rhtml
+- should build a new owner
+
+Requesting /forums/2/owner/edit using GET
+- should be successful
+- should render edit.rhtml
+- should find the owner from forum.owner
+
+Requesting /forums/2/owner using POST
+- should build a new owner
+- should set the flash notice
+- should redirect to the new owner
+- should render new when post unsuccesful
+
+Requesting /forums/2/owner using PUT
+- should find the owner from forum.owner
+- should set the flash notice
+- should update the owner
+- should redirect to the owner
+
+Requesting /forums/2/owner using DELETE
+- should find the owner from forum.owner
+- should call destroy on the owner
+- should set the flash notice
+- should redirect to forums/2
+
+CommentsController#resource_saved Comment.new(<invalid attrs>)
+- should not be resource saved
+
+CommentsController#resource_saved Comment.new(<invalid attrs>).save
+- should not be resource saved
+
+CommentsController#resource_saved Comment.new(<invalid attrs>).save then update_attributes(<valid attrs>)
+- should be resource saved
+
+CommentsController#resource_saved Comment.find(<id>)
+- should be resource saved
+- .save should be saved
+
+CommentsController#resource_saved Comment.find(<id>) then update_attributes(<invalid attrs>)
+- should not be resource saved
+
+CommentsController#resource_saved Comment.find(<id>) then update_attributes(<new valid attrs>)
+- should be resource saved
+
+Routing shortcuts for Tags should map
+- resources_path to /tags
+- resource_path to /tags/2
+- resource_path(9) to /tags/9
+- edit_resource_path to /tags/2/edit
+- edit_resource_path(9) to /tags/9/edit
+- new_resource_path to /forums/1/tags/new
+- enclosing_resource_path should raise error
+
+resource_service in TagsController
+- .new should call new on Tag
+- .find should call find on Tag
+
+Requesting /tags using GET
+- should find the tags
+- should assign the tags for the view
+
+Routing shortcuts for Tags via account info (/account/info/) should map
+- resources_path to /account/info/tags
+- resource_path to /account/info/tags/2
+- resource_path(9) to /account/info/tags/9
+- edit_resource_path to /account/info/tags/2/edit
+- edit_resource_path(9) to /account/info/tags/9/edit
+- new_resource_path to /account/info/tags/new
+- enclosing_resource_path to /account/info
+
+resource_service in TagsController via Account Info
+- should build new tag with @info fk and type with new
+- should find @tag with find(@tag.id)
+- should raise RecordNotFound with find(@other_tag.id)
+- should find only tags belonging to @info with find(:all)
+
+Requesting /forums/1/tags using GET
+- should find the account as current_user
+- should get info from current_user
+- should get tags assoc from info
+- should get tags from tags assoc
+
+Routing shortcuts for Tags via Forum, Post and Comment (forums/1/posts/2/comments/3tags/4) should map
+- resources_path to /forums/1/posts/2/comments/3/tags
+- resource_path to /forums/1/posts/2/comments/3/tags/4
+- resource_path(9) to /forums/1/posts/2/comments/3/tags/9
+- edit_resource_path to /forums/1/posts/2/comments/3/tags/4/edit
+- edit_resource_path(9) to /forums/1/posts/2/comments/3/tags/9/edit
+- new_resource_path to /forums/1/posts/2/comments/3/tags/new
+- enclosing_resource_path to /forums/1/posts/2/comments/3
+
+resource_service in TagsController via Forum, Post and Comment
+- should build new tag with @comment fk and type with new
+- should find @tag with find(@tag.id)
+- should raise RecordNotFound with find(@other_tag.id)
+- should find only tags belonging to @post with find(:all)
+
+Requesting /forums/1/posts/2/comment/3/tags using GET
+- should find the forum
+- should find the post
+- should find the comment
+- should assign the found forum, post, and comment for the view
+- should assign the comment_tags association as the tags resource_service
+
+Routing shortcuts for Tags via Forum and Post (forums/1/posts/2/tags/3) should map
+- resources_path to /forums/1/posts/2/tags
+- resource_path to /forums/1/posts/2/tags/3
+- resource_path(9) to /forums/1/posts/2/tags/9
+- edit_resource_path to /forums/1/posts/2/tags/3/edit
+- edit_resource_path(9) to /forums/1/posts/2/tags/9/edit
+- new_resource_path to /forums/1/posts/2/tags/new
+- enclosing_resource_path to /forums/1/posts/2
+
+resource_service in TagsController via Forum and Post
+- should build new tag with @post fk and type with new
+- should find @tag with find(@tag.id)
+- should raise RecordNotFound with find(@other_tag.id)
+- should find only tags belonging to @post with find(:all)
+
+Requesting /forums/1/posts/2/tags using GET
+- should find the forum
+- should find the post
+- should assign the found post for the view
+- should assign the post_tags association as the tags resource_service
+
+Routing shortcuts for Tags via Forum (forums/1/tags/2) should map
+- resources_path to /forums/1/tags
+- resource_path to /forums/1/tags/2
+- resource_path(9) to /forums/1/tags/9
+- edit_resource_path to /forums/1/tags/2/edit
+- edit_resource_path(9) to /forums/1/tags/9/edit
+- new_resource_path to /forums/1/tags/new
+- enclosing_resource_path to /forums/1
+
+resource_service in TagsController via Forum
+- should build new tag with @forum fk and type with new
+- should find @tag with find(@tag.id)
+- should raise RecordNotFound with find(@other_tag.id)
+- should find only tags belonging to @forum with find(:all)
+
+Requesting /forums/1/tags using GET
+- should find the forum
+- should assign the found forum for the view
+- should assign the forum_tags association as the tags resource_service
+
+Requesting /forums/1/tags/new using GET
+- should find the forum
+- should assign the found forum for the view
+- should assign the forum_tags association as the tags resource_service
+- should render new template
+- should create a new tag with params
+- should not save the new category
+- should assign the new tag for the view
+- should send :resource= to controller with @tag
+
+Routing shortcuts for Tags via User and Address (users/dave/addresses/2/tags/3) should map
+- resources_path to /users/dave/addresses/2/tags
+- resource_path to /users/dave/addresses/2/tags/3
+- resource_path(9) to /users/dave/addresses/2/tags/9
+- edit_resource_path to /users/dave/addresses/2/tags/3/edit
+- edit_resource_path(9) to /users/dave/addresses/2/tags/9/edit
+- new_resource_path to /users/dave/addresses/2/tags/new
+- enclosing_resource_path to /users/dave/addresses/2
+
+resource_service in TagsController via User and Address
+- should build new tag with @address fk and type with new
+- should find @tag with find(@tag.id)
+- should raise RecordNotFound with find(@other_tag.id)
+- should find only tags belonging to @address with find(:all)
+
+Requesting /users/dave/addresses/2/tags using GET
+- should find the user
+- should find the address
+- should assign the found address for the view
+- should assign the address_tags association as the tags resource_service
+
+UsersController#route_for
+- should map { :controller => 'users', :action => 'index' } to /users
+- should map { :controller => 'users', :action => 'new' } to /users/new
+- should map { :controller => 'users', :action => 'show', :id => 'dave' } to /users/dave
+- should map { :controller => 'users', :action => 'edit', :id => 'dave' } to /users/dave/edit
+- should map { :controller => 'users', :action => 'update', :id => 'dave'} to /users/dave
+- should map { :controller => 'users', :action => 'destroy', :id => 'dave'} to /users/dave
+
+UsersController#params_from
+- should generate params { :controller => 'users', action => 'index' } from GET /users
+- should generate params { :controller => 'users', action => 'new' } from GET /users/new
+- should generate params { :controller => 'users', action => 'create' } from POST /users
+- should generate params { :controller => 'users', action => 'show', id => '1' } from GET /users/dave
+- should generate params { :controller => 'users', action => 'edit', id => '1' } from GET /users/dave;edit
+- should generate params { :controller => 'users', action => 'update', id => '1' } from PUT /users/dave
+- should generate params { :controller => 'users', action => 'destroy', id => '1' } from DELETE /users/dave
+
+UsersController handling GET /users
+- should be successful
+- should render index template
+- should find all users
+- should assign the found users for the view
+
+UsersController handling GET /users.xml
+- should be successful
+- should find all users
+- should render the found users as xml
+
+UsersController handling GET /users/dave
+- should be successful
+- should render show template
+- should find the user requested
+- should assign the found user for the view
+
+UsersController handling GET /users/dave.xml
+- should be successful
+- should find the user requested
+- should render the found user as xml
+
+UsersController handling GET /users/new
+- should be unknown action
+
+UsersController handling GET /users/dave/edit
+- should be successful
+- should render edit template
+- should find the user requested
+- should assign the found User for the view
+
+UsersController handling POST /users
+- should be unknown action
+
+UsersController handling PUT /users/dave
+- should find the user requested
+- should update the found user
+- should assign the found user for the view
+- should redirect to the user on successful update
+- should re-render 'edit' on failed update
+
+UsersController handling DELETE /users/dave
+- should be unknown action
+
+(re: saved?) Comment.new(<invalid attrs>)
+- should not be validation attempted
+- should not be saved
+
+(re: saved?) Comment.new(<invalid attrs>).save
+- should be validation attempted
+- should not be saved
+
+(re: saved?) Comment.new(<invalid attrs>).save then update_attributes(<valid attrs>)
+- should be validation attempted
+- should be saved
+
+ActionView with resources_controller Helper
+- should forward #resource_name to controller
+- should forward #resources_name to controller
+- should forward #resource to controller
+- should forward #resources to controller
+- should forward #enclosing_resource to controller
+- should forward #enclosing_resource_name to controller
+- should not forward unknown url helper to controller
+- #error_messages_for_resource should call error_messages_for with resource_name
+
+Helper#form_for_resource (when resource is new record)
+- should call form_for with create form options
+- when passed :url_options, they should be passed to the path generation
+- when not passed :url_options, they should not be passed to the path generation
+
+Helper#form_for_resource (when resource is new record) and resource is singleton
+- should call form_for with create form options
+
+Helper#form_for_resource (when resource is existing record)
+- should call form_for with update form options
+
+Helper#remote_form_for_resource (when resource is existing record)
+- should call remote_form_for with update form options
+
+#load_enclosing_resources for resources_controller_for :tags (when route_enclosing_names is [['users', false]])
+- should call load_wildcard once
+- should call Specification.new('user', :singleton => false, :as => nil)
+
+#load_enclosing_resources for resources_controller_for :tags, with :account mapping (when route_enclosing_names is [['account', true]])
+- should call load_wildcard once
+- should call load_enclosing_resource_from_specification with account specification
+- should not call Specification.new
+
+#load_enclosing_resources for resources_controller_for :tags (when route_enclosing_names is [['users', false], ['forums', false]])
+- should call load_wildcard twice
+- should call Specification.new with ('user', :singleton => false, :as => nil), then ('forum', :singleton => false, :as => nil)
+
+#load_enclosing_resources for resources_controller_for :tags, :in => ['*', :comment] (when route_enclosing_names is [['comments', false]])
+- should not call load_wildcard
+- should not call Specification.new
+
+#load_enclosing_resources for resources_controller_for :tags, :in => ['*', :comment] (when route_enclosing_names is [['users', false], ['forums', false], ['comments', false]])
+- should call load_wildcard twice
+- should call Specification.new with ('user', :singleton => false, :as => nil), then ('forum', :singleton => false, :as => nil)
+
+#load_enclosing_resources for resources_controller_for :tags, :in => ['*', :comment] (when route_enclosing_names is [['users', false], ['forums', false], ['special', true], ['comments', false]])
+- should call load_wildcard three times
+- should call Specification.new with ('user', :singleton => false, :as => nil), ('forum', :singleton => false, :as => nil), then ('special', :singleton => true, :as => nil)
+
+#load_enclosing_resources for resources_controller_for :tags, :in => ['*', '?commentable', :comment] (when route_enclosing_names is [['users', false], ['comments', false]])
+- should call load_wildcard once with 'commentable'
+- should call Specification.new with ('user', :singleton => false, :as => 'commentable')
+
+#load_enclosing_resources for resources_controller_for :tags, :in => ['*', '?commentable', :comment] (when route_enclosing_names is [['users', false], ['forums', false], ['comments', false]])
+- should call load_wildcard twice
+- should call Specification.new with ('user', :singleton => false, :as => nil), ('forum', :singleton => false, :as => 'commentable')
+
+#load_enclosing_resources for resources_controller_for :tags, :in => ['*', '?commentable', :comment] (when route_enclosing_names is [['users', false], ['forums', false], ['posts', false], ['comments', false]])
+- should call load_wildcard twice, then once with 'commentable'
+- should call Specification.new with ('user', :singleton => false, :as => nil), ('forum', :singleton => false, :as => nil), then ('post', :singleton => false, :as => 'commentable')
+
+#load_enclosing_resources for resources_controller_for :tags, :in => ['user', '*', '?taggable'] (when route_enclosing_names is [['users', false], ['comments', false]])
+- should call load_enclosing_resource_from_specification with user spec, then load_wildcard once with 'taggable'
+- should call Specification.new with ('comment', :singleton => false, :as => 'taggable')
+
+ResourcesController.load_enclosing_resources_filter_exists? when :find_filter defined
+- should call :find_filter with :load_enclosing_resources
+
+ResourcesController.load_enclosing_resources_filter_exists? when :find_filter not defined
+- should call :filter_chain
+
+ResourcesController (in general)
+- nested_in :foo, :polymorphic => true, :class => User should raise argument error (no options or block with polymorphic)
+- resources_controller_for :forums, :in => [:user, '*', '*', :comment] should raise argument error (no multiple wildcards in a row)
+
+ResourcesController#enclosing_resource_name
+- should be the class name underscored
+
+A controller's resource_service
+- may be explicitly set with #resource_service=
+
+deprecated methods
+- #save_resource should send resource.save
+
+#route_enclosing_names TagsController for named_route:
+- :tags should be []
+- :new_tag should be []
+- :edit_tag should be []
+- :tag should be []
+- :forum_tags should be [["forums", false]]
+- :forum_tag should be [["forums", false]]
+- :user_addresses_tags should be [["users", false], ["addresses", false]]
+- :account_info_tags should be [["account", true], ["info", true]]
+- :new_account_info_tag should be [["account", true], ["info", true]]
+
+#route_enclosing_names Admin::ForumsController for named_route:
+- :admin_forums should be [[]]
+
+#route_enclosing_names Admin::InterestsController for named_route:
+- :admin_forum_interests should be [["forums", false]]
+- :forums_interests should be ["forums", false]]
+
+#route_enclosing_names Admin::Superduper::ForumsController for named_route:
+- :admin_superduper_forums should be []
+
+Finished in 8.455269 seconds
+
+632 examples, 0 failures

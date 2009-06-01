@@ -1,0 +1,44 @@
+= resources_controller
+
+plugin to facilitate inheritance and DRYness in your resources controllers.
+See the docs at http://plugins.ardes.com/doc/resources_controller for details.
+Also see http://blog.ardes.com/resources_controller
+
+See the CHANGLELOG for recent changes.
+
+== works with rails 2.x
+
+resources_controller works with rails 2.x, and is currently tested against 2.0, 2.1, and 2.2 stable branches
+
+== Specs and Coverage
+
+* The SPECDOC lists the specifications
+* Coverage is 100% (C0), and the spec suite is quite comprehensive
+* Rspec's generated rspec_scaffold controller specs are tested against a simple rc controller (see rake spec:generate)
+
+RSpec is used for testing, so the tests are in <tt>spec/</tt> rather than
+<tt>test/</tt> Do rake --tasks for more details.
+
+== Continuous Integration
+
+garlic (at http://github.com/ianwhite/garlic) is used for CI.  To run the CI suite have a look at
+garlic_example.rb
+
+== Contributors
+
+The following people have made contributions to resources_controller.  Please let me know if I've missed you out.
+
+* Chris Hapgood
+* Jason Lee
+* Richard Hooker
+* Matt Mower
+* Inviz
+* Dan Kubb
+* Rein Henrichs
+* Tom Stuart
+* Joel Chippindale
+* Tim Pope
+
+== License
+
+Copyright (c) 2008 Ian White, MIT License
