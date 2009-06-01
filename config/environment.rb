@@ -10,6 +10,9 @@ Rails::Initializer.run do |config|
   config.gem 'rack'
   config.gem 'haml'
   config.gem 'mocha'
+  config.gem 'mislav-will_paginate', :version => '~> 2.3.8', :lib => 'will_paginate', 
+    :source => 'http://gems.github.com'
+
   # Settings in config/environments/* take precedence over those specified here.
   # Application configuration should go into files in config/initializers
   # -- all .rb files in that directory are automatically loaded.
