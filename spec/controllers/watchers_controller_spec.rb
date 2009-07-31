@@ -40,11 +40,15 @@ describe WatchersController, 'when integrating' do
   end
 
   describe 'create' do
+    before :each do
+      @watcher = Watcher.spawn
+    end
+    
     def do_request
       post :create, :watcher => @watcher.attributes
     end
 
-    it_should_behave_like "a successful action"
+    it_should_behave_like "a redirecting action"
   end
 
   describe 'update' do

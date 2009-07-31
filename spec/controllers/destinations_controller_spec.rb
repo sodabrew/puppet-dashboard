@@ -40,11 +40,15 @@ describe DestinationsController, 'when integrating' do
   end
 
   describe 'create' do
+    before :each do
+      @destination = Destination.spawn
+    end
+    
     def do_request
       post :create, :destination => @destination.attributes
     end
 
-    it_should_behave_like "a successful action"
+    it_should_behave_like "a redirecting action"
   end
 
   describe 'update' do
