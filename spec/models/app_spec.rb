@@ -23,6 +23,24 @@ describe App do
       @app.description = 'test description'
       @app.description.should == 'test description'
     end
+    
+    it 'should have a customer id' do
+      @app.should respond_to(:customer_id)
+    end
+    
+    it 'should allow setting and retrieving the customer id' do
+      @app.customer_id = 1
+      @app.customer_id.should == 1
+    end
+
+    it 'should have a service id' do
+      @app.should respond_to(:service_id)
+    end
+    
+    it 'should allow setting and retrieving the service id' do
+      @app.service_id = 1
+      @app.service_id.should == 1
+    end
   end
 
   describe 'validations' do
@@ -34,6 +52,12 @@ describe App do
       @app.name = nil
       @app.valid?
       @app.errors.should be_invalid(:name)
+    end
+    
+    it 'should be valid with a name' do
+      @app.name = 'Test Name'
+      @app.valid?
+      @app.errors.should_not be_invalid(:name)
     end
     
     it 'should not be valid without a customer' do
