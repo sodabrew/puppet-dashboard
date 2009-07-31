@@ -73,5 +73,15 @@ describe App do
       @app.service = @service
       @app.service.should == @service
     end
+    
+    it 'should have many deployments' do
+      @app.should respond_to(:deployments)
+    end
+
+    it 'should allow assigning deployments' do
+      @deployment = Deployment.generate!
+      @app.deployments << @deployment
+      @app.deployments.should include(@deployment)
+    end
   end
 end
