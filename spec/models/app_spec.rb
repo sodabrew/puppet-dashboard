@@ -71,6 +71,18 @@ describe App do
       @app.valid?
       @app.errors.should_not be_invalid(:customer)
     end
+  
+    it 'should be valid with a service' do
+      @app.service = Service.generate!
+      @app.valid?
+      @app.errors.should_not be_invalid(:service)
+    end
+    
+    it 'should be valid without a service' do
+      @app.service = nil
+      @app.valid?
+      @app.errors.should_not be_invalid(:service)
+    end
   end
   
   describe 'relationships' do
