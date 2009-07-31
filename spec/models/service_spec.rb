@@ -49,4 +49,30 @@ describe Service do
       @service.errors.should_not be_invalid(:name)
     end
   end
+  
+  describe 'relationships' do
+    before :each do
+      @service = Service.new
+    end
+    
+    it 'should have many edges as a source' do
+      @service.should respond_to(:source_edges)
+    end
+
+    it 'should allow assigning edges as a source' do
+      @service = Service.generate!
+      @service.source_edges.generate!
+      @service.source_edges.should_not be_empty
+    end
+
+    it 'should have many edges as a target' do
+      @service.should respond_to(:target_edges)
+    end
+
+    it 'should allow assigning edges as a target' do
+      @service = Service.generate!
+      @service.target_edges.generate!
+      @service.target_edges.should_not be_empty
+    end
+  end
 end
