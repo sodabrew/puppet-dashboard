@@ -64,5 +64,16 @@ describe Customer do
       @customer.apps.generate!
       @customer.apps.should_not be_empty
     end
+    
+    it 'should have many hosts' do
+      @customer.should respond_to(:hosts)
+    end
+    
+    it 'should create hosts when deploying customer apps' do
+      @customer = Customer.generate!
+      @app = @customer.apps.generate!
+      @deployment = Deployment.generate!(:app => @app)
+      @customer.hosts.should include(@deployment.host)
+    end
   end
 end
