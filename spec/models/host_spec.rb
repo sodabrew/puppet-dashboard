@@ -49,4 +49,20 @@ describe Host do
       @host.errors.should_not be_invalid(:name)
     end
   end
+
+  describe 'relationships' do
+    before :each do
+      @host = Host.new
+    end
+
+    it 'should have many deployments' do
+      @host.should respond_to(:deployments)
+    end
+
+    it 'should allow assigning deployments' do
+      @deployment = Deployment.generate!
+      @host.deployments << @deployment
+      @host.deployments.should include(@deployment)
+    end
+  end
 end

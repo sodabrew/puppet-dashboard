@@ -23,6 +23,15 @@ describe Deployment do
       @deployment.app_id = 1
       @deployment.app_id.should == 1
     end
+
+    it 'should have a host id' do
+      @deployment.should respond_to(:host_id)
+    end
+    
+    it 'should allow setting and retrieving the host id' do
+      @deployment.host_id = 1
+      @deployment.host_id.should == 1
+    end
   end
   
   describe 'validations' do
@@ -36,10 +45,22 @@ describe Deployment do
       @deployment.errors.should be_invalid(:app)
     end
 
-    it 'should be valid with a app' do
+    it 'should be valid with an app' do
       @deployment.app = App.generate!
       @deployment.valid?
       @deployment.errors.should_not be_invalid(:app)
+    end
+
+    it 'should not be valid without a host' do
+      @deployment.host = nil
+      @deployment.valid?
+      @deployment.errors.should be_invalid(:host)
+    end
+
+    it 'should be valid with a host' do
+      @deployment.host = Host.generate!
+      @deployment.valid?
+      @deployment.errors.should_not be_invalid(:host)
     end
   end
   
@@ -56,6 +77,16 @@ describe Deployment do
       @app = App.generate!
       @deployment.app = @app
       @deployment.app.should == @app
+    end
+    
+    it 'should belong to a host' do
+      @deployment.should respond_to(:host)
+    end
+
+    it 'should allow assigning the host' do
+      @host = Host.generate!
+      @deployment.host = @host
+      @deployment.host.should == @host
     end
   end
 end
