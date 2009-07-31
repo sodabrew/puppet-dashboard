@@ -49,4 +49,20 @@ describe Customer do
       @customer.errors.should_not be_invalid(:name)
     end
   end
+  
+  describe 'relationships' do
+    before :each do
+      @customer = Customer.new
+    end
+    
+    it 'should have many apps' do
+      @customer.should respond_to(:apps)
+    end
+
+    it 'should allow assigning apps' do
+      @customer = Customer.generate!
+      @customer.apps.generate!
+      @customer.apps.should_not be_empty
+    end
+  end
 end

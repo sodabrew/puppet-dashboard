@@ -35,5 +35,34 @@ describe App do
       @app.valid?
       @app.errors.should be_invalid(:name)
     end
+    
+    it 'should not be valid without a customer' do
+      @app.customer = nil
+      @app.valid?
+      @app.errors.should be_invalid(:customer)
+    end
+
+    it 'should be valid with a customer' do
+      @app.customer = Customer.generate!
+      @app.valid?
+      @app.errors.should_not be_invalid(:customer)
+    end
+
+  end
+  
+  describe 'relationships' do
+    before :each do
+      @app = App.new
+    end
+    
+    it 'should belong to a customer' do
+      @app.should respond_to(:customer)
+    end
+
+    it 'should allow assigning customer' do
+      @customer = Customer.generate!
+      @app.customer = @customer
+      @app.customer.should == @customer
+    end
   end
 end
