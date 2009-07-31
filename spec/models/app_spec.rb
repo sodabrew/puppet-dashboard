@@ -47,7 +47,6 @@ describe App do
       @app.valid?
       @app.errors.should_not be_invalid(:customer)
     end
-
   end
   
   describe 'relationships' do
@@ -63,6 +62,16 @@ describe App do
       @customer = Customer.generate!
       @app.customer = @customer
       @app.customer.should == @customer
+    end
+    
+    it 'should have a service' do
+      @app.should respond_to(:service)
+    end
+
+    it 'should allow assigning the service' do
+      @servie = Service.generate!
+      @app.service = @service
+      @app.service.should == @service
     end
   end
 end

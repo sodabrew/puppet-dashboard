@@ -55,6 +55,16 @@ describe Service do
       @service = Service.new
     end
     
+    it 'should have many apps' do
+      @service.should respond_to(:apps)
+    end
+    
+    it 'should allow assigning apps' do
+      @app = App.generate!
+      @service.apps << @app
+      @service.apps.should include(@app)
+    end
+    
     it 'should have many edges as a source' do
       @service.should respond_to(:source_edges)
     end
