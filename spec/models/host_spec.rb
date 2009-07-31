@@ -64,5 +64,15 @@ describe Host do
       @host.deployments << @deployment
       @host.deployments.should include(@deployment)
     end
+    
+    it 'should have many apps' do
+      @host.should respond_to(:apps)
+    end
+    
+    it 'should create apps when making deployments' do
+      @host = Host.generate!
+      @deployment = @host.deployments.generate!
+      @host.apps.should include(@deployment.app)
+    end
   end
 end
