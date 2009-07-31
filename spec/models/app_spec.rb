@@ -100,14 +100,14 @@ describe App do
       @app.customer.should == @customer
     end
     
-    it 'should have a service' do
-      @app.should respond_to(:service)
+    it 'should have many deployable instances' do
+      @app.should respond_to(:instances)
     end
-
-    it 'should allow assigning the service' do
-      @servie = Service.generate!
-      @app.service = @service
-      @app.service.should == @service
+    
+    it 'should allow assigning deployable instances' do
+      @instance = Instance.generate!
+      @app.instances << @instance
+      @app.instances.should include(@instance)
     end
     
     it 'should have many deployments' do
