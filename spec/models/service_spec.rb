@@ -181,6 +181,30 @@ describe Service do
         @service.dependents << @grandparent
         @service.all_dependents.select {|s| s == @grandparent }.size.should == 1
       end
+      
+      it 'should be able to tell if a service is root service' do
+        @service.should respond_to(:root?)
+      end
+      
+      it 'should not be a root service if it has services which depend on it' do
+        @grandparent.should be_root
+      end
+      
+      it 'should be a root service if it has no services which depend on it' do
+        @parent.should_not be_root
+      end
+      
+      it 'should be able to tell if a service is leaf service' do
+        @service.should respond_to(:leaf?)
+      end
+      
+      it 'should not be a leaf service if it has services which it depends on' do
+        @grandchild.should be_leaf
+      end
+      
+      it 'should be a leaf service if it has no services which it depends on' do
+        @child.should_not be_leaf
+      end
     end    
   end
 end

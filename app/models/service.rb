@@ -10,6 +10,14 @@ class Service < ActiveRecord::Base
   has_many :dependent_edges, :class_name => 'Edge', :foreign_key => 'target_id'  
   has_many :dependents, :through => :dependent_edges, :source => :source
   
+  def root?
+    dependents.empty?
+  end
+  
+  def leaf?
+    depends_on.empty?
+  end
+  
   def all_depends_on
     candidates, results, seen = depends_on.dup, [], {}
     while !candidates.empty?
