@@ -103,10 +103,6 @@ describe App do
       @app.should respond_to(:hosts)
     end
     
-    it 'should create hosts when making deployments' do
-      @app = App.generate!
-      @deployment = @app.deployments.generate!
-      @app.hosts.should include(@deployment.host)
-    end
+    it 'should include hosts for all deployed instances'
   end
 end

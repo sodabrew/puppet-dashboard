@@ -15,13 +15,13 @@ describe Deployment do
       @deployment.is_active.should be_true
     end
     
-    it 'should have an app id' do
-      @deployment.should respond_to(:app_id)
+    it 'should have an instance id' do
+      @deployment.should respond_to(:instance_id)
     end
     
-    it 'should allow setting and retrieving the app id' do
-      @deployment.app_id = 1
-      @deployment.app_id.should == 1
+    it 'should allow setting and retrieving the instance id' do
+      @deployment.instance_id = 1
+      @deployment.instance_id.should == 1
     end
 
     it 'should have a host id' do
@@ -39,16 +39,16 @@ describe Deployment do
       @deployment = Deployment.new
     end
     
-    it 'should not be valid without an app' do
-      @deployment.app = nil
+    it 'should not be valid without an instance' do
+      @deployment.instance = nil
       @deployment.valid?
-      @deployment.errors.should be_invalid(:app)
+      @deployment.errors.should be_invalid(:instance)
     end
 
-    it 'should be valid with an app' do
-      @deployment.app = App.generate!
+    it 'should be valid with an instance' do
+      @deployment.instance = Instance.generate!
       @deployment.valid?
-      @deployment.errors.should_not be_invalid(:app)
+      @deployment.errors.should_not be_invalid(:instance)
     end
 
     it 'should not be valid without a host' do
@@ -69,14 +69,14 @@ describe Deployment do
       @deployment = Deployment.new
     end
     
-    it 'should belong to an app' do
-      @deployment.should respond_to(:app)
+    it 'should belong to an instance' do
+      @deployment.should respond_to(:instance)
     end
 
-    it 'should allow assigning the app' do
-      @app = App.generate!
-      @deployment.app = @app
-      @deployment.app.should == @app
+    it 'should allow assigning the instance' do
+      @instance = Instance.generate!
+      @deployment.instance = @instance
+      @deployment.instance.should == @instance
     end
     
     it 'should belong to a host' do

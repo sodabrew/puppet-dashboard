@@ -85,5 +85,15 @@ describe Instance do
       @instance.service = @service
       @instance.service.should == @service
     end
+    
+    it 'should have many deployments' do
+      @instance.should respond_to(:deployments)
+    end
+    
+    it 'should allow assigning deployments' do
+      @deployment = Deployment.generate!
+      @instance.deployments << @deployment
+      @instance.deployments.should include(@deployment)
+    end
   end
 end
