@@ -32,6 +32,15 @@ describe Instance do
       @instance.app_id = 1
       @instance.app_id.should == 1
     end
+
+    it 'should have a service id' do
+      @instance.should respond_to(:service_id)
+    end
+    
+    it 'should allow setting and retrieving the service id' do
+      @instance.service_id = 1
+      @instance.service_id.should == 1
+    end
   end
   
   describe 'validations' do
@@ -65,6 +74,16 @@ describe Instance do
       @app = App.generate!
       @instance.app = @app
       @instance.app.should == @app
+    end
+    
+    it 'should belong to a service' do
+      @instance.should respond_to(:service)
+    end
+    
+    it 'should allow assigning the service' do
+      @service = Service.generate!
+      @instance.service = @service
+      @instance.service.should == @service
     end
   end
 end

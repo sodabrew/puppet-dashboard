@@ -32,15 +32,6 @@ describe App do
       @app.customer_id = 1
       @app.customer_id.should == 1
     end
-
-    it 'should have a service id' do
-      @app.should respond_to(:service_id)
-    end
-    
-    it 'should allow setting and retrieving the service id' do
-      @app.service_id = 1
-      @app.service_id.should == 1
-    end
   end
 
   describe 'validations' do
@@ -70,19 +61,7 @@ describe App do
       @app.customer = Customer.generate!
       @app.valid?
       @app.errors.should_not be_invalid(:customer)
-    end
-  
-    it 'should be valid with a service' do
-      @app.service = Service.generate!
-      @app.valid?
-      @app.errors.should_not be_invalid(:service)
-    end
-    
-    it 'should be valid without a service' do
-      @app.service = nil
-      @app.valid?
-      @app.errors.should_not be_invalid(:service)
-    end
+    end  
   end
   
   describe 'relationships' do
