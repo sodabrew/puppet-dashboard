@@ -59,6 +59,18 @@ describe Instance do
       @instance.valid?
       @instance.errors.should_not be_invalid(:app)
     end
+    
+    it 'should not be valid without a service' do
+      @instance.service = nil
+      @instance.valid?
+      @instance.errors.should be_invalid(:service)
+    end
+
+    it 'should be valid with a service' do
+      @instance.service = Service.generate!
+      @instance.valid?
+      @instance.errors.should_not be_invalid(:service)
+    end
   end
   
   describe 'relationships' do
@@ -86,14 +98,53 @@ describe Instance do
       @instance.service.should == @service
     end
     
-    it 'should have many deployments' do
-      @instance.should respond_to(:deployments)
+    it 'should have a customer' do
+      @instance.should respond_to(:customer)
     end
     
-    it 'should allow assigning deployments' do
+    it 'should return the app customer' do
+      @instance = Instance.generate!
+      @instance.customer.should == @instance.app.customer
+    end
+    
+    it 'should have a deployment' do
+      @instance.should respond_to(:deployment)
+    end
+    
+    it 'should allow assigning deployment' do
       @deployment = Deployment.generate!
-      @instance.deployments << @deployment
-      @instance.deployments.should include(@deployment)
+      @instance.deployment = @deployment
+      @instance.deployment.should == @deployment
+    end
+    
+    it 'should have a host' do
+      @instance.should respond_to(:host)
+    end
+    
+    it 'should return the host for the deployment' do
+      @deployment = Deployment.generate!
+      @instance.deployment = @deployment
+      @instance.host.should == @deployment.host 
+    end
+    
+    it 'should have a set of required services' do
+      @instance.should respond_to(:required_services)
+    end
+    
+    it 'should return its service then computing required services' do
+      @service = Service.generate!
+      @child = Service.generate!
+      @service.depends_on << @child
+      @instance.service = @service
+      @instance.required_services.should include(@service)
+    end
+    
+    it 'should return all services that its service depends on when computing required services' do
+      @service = Service.generate!
+      @child = Service.generate!
+      @service.depends_on << @child
+      @instance.service = @service
+      @instance.required_services.should include(@child)
     end
   end
 end

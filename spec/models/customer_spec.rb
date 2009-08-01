@@ -69,6 +69,52 @@ describe Customer do
       @customer.should respond_to(:hosts)
     end
 
-    it 'should include hosts from all customer apps'
+    it 'should include hosts from all customer apps' do
+      @deployments = Array.new(2) { Deployment.generate! }
+      @customer.apps << @deployments.collect(&:app)
+      @customer.hosts.sort_by(&:id).should == @deployments.collect(&:host).sort_by(&:id)
+    end
+    
+    it 'should have many instances' do
+      @customer.should respond_to(:instances)
+    end
+    
+    it 'should include instances for all customers apps' do
+      @instances = Array.new(2) { Instance.generate! }
+      @customer.apps << @instances.collect(&:app)
+      @customer.instances.sort_by(&:id).should == @instances.sort_by(&:id)      
+    end
+    
+    it 'should have many deployments' do
+      @customer.should respond_to(:deployments)
+    end
+    
+    it 'should include deployments for all customer apps' do
+      @deployments = Array.new(2) { Deployment.generate! }
+      @customer.apps << @deployments.collect(&:app)
+      @customer.deployments.sort_by(&:id).should == @deployments.sort_by(&:id)      
+    end
+    
+    it 'should have many services' do
+      @customer.should respond_to(:services)
+    end
+    
+    it 'should return services for all customer apps' do
+      @instances = Array.new(2) { Instance.generate! }
+      @customer.apps << @instances.collect(&:app)
+      @customer.services.sort_by(&:id).should == @instances.collect(&:service).flatten.sort_by(&:id)
+    end
+    
+    it 'should have a set of required services' do
+      @customer.should respond_to(:required_services)
+    end
+    
+    it 'should return required services for all customer apps' do
+      @instances = Array.new(2) { Instance.generate! }
+      @customer.apps << @instances.collect(&:app)
+      @customer.required_services.sort_by(&:id).should == @instances.collect(&:required_services).flatten.sort_by(&:id)      
+    end
+    
+    it 'should have a set of deployed services'
   end
 end

@@ -88,5 +88,42 @@ describe Deployment do
       @deployment.host = @host
       @deployment.host.should == @host
     end
+    
+    it 'should have an app' do
+      @deployment.should respond_to(:app)
+    end
+    
+    it "should return the instance's app" do
+      @deployment = Deployment.generate!
+      @deployment.app.should == @deployment.instance.app
+    end
+    
+    it 'should have a customer' do
+      @deployment.should respond_to(:customer)
+    end
+    
+    it "should return the app's customer" do
+      @deployment = Deployment.generate!
+      @deployment.customer.should == @deployment.app.customer
+    end
+    
+    it 'should have a service' do
+      @deployment.should respond_to(:service)
+    end
+    
+    it "should return the instance's service when looking up the service" do
+      @deployment = Deployment.generate!
+      @deployment.service.should == @deployment.instance.service
+    end
+    
+    it 'should have required services' do
+      @deployment.should respond_to(:required_services)
+    end
+    
+    it 'should return the required services for the instance when looking up the service' do
+      @deployment = Deployment.generate!
+      @deployment.required_services.should == @deployment.instance.required_services
+    end
+    
   end
 end

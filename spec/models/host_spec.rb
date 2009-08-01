@@ -69,12 +69,20 @@ describe Host do
       @host.should respond_to(:apps)
     end
     
-    it 'should include apps from all deployments'
+    it 'should include apps from all deployments' do
+      @deployments = Array.new(2) { Deployment.generate! }
+      @host.deployments << @deployments
+      @host.apps.sort_by(&:id).should == @deployments.collect(&:app).sort_by(&:id)
+    end
     
     it 'should have many customers' do
       @host.should respond_to(:customers)
     end
 
-    it 'should include customers from all deployments'
+    it 'should include customers from all deployments' do
+      @deployments = Array.new(2) { Deployment.generate! }
+      @host.deployments << @deployments
+      @host.customers.sort_by(&:id).should == @deployments.collect(&:customer).flatten.sort_by(&:id)      
+    end
   end
 end

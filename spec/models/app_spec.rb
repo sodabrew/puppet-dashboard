@@ -92,17 +92,55 @@ describe App do
     it 'should have many deployments' do
       @app.should respond_to(:deployments)
     end
-
-    it 'should allow assigning deployments' do
-      @deployment = Deployment.generate!
-      @app.deployments << @deployment
-      @app.deployments.should include(@deployment)
+    
+    it 'should allow return deployments from all instances' do
+      @deployments = Array.new(2) { Deployment.generate! }
+      @app.instances << @deployments.collect(&:instance)
+      @app.deployments.sort_by(&:id).should == @deployments.sort_by(&:id)
     end
     
     it 'should have many hosts' do
       @app.should respond_to(:hosts)
     end
     
-    it 'should include hosts for all deployed instances'
+    it 'should include hosts for all deployed instances' do
+      @deployments = Array.new(2) { Deployment.generate! }
+      @app.instances << @deployments.collect(&:instance)
+      @app.hosts.sort_by(&:id).should == @deployments.collect(&:host).flatten.sort_by(&:id)
+    end
+    
+    it 'should have services' do
+      @app.should respond_to(:services)
+    end
+    
+    it 'should return the services from all instances when computing services' do
+      @instances = Array.new(2) { Instance.generate! }
+      @app.instances << @instances
+      @app.services.sort_by(&:id).should == @instances.collect(&:service).sort_by(&:id)
+    end
+    
+    it 'should have required services' do
+      @instances = Array.new(2) { Instance.generate! }
+      @app.instances << @instances
+      @app.services.sort_by(&:id).should == @instances.collect(&:service).sort_by(&:id)      
+    end
+    
+    it 'should return the required services from all its instances' do
+      @service     = Service.generate!(:name => 'service')
+      @parent      = Service.generate!(:name => 'parent')
+      @grandparent = Service.generate!(:name => 'grandparent')
+      @child       = Service.generate!(:name => 'child')
+      @grandchild  = Service.generate!(:name => 'grandchild')
+      @service.dependents << @parent
+      @parent.dependents  << @grandparent
+      @service.depends_on << @child
+      @child.depends_on   << @grandchild
+      
+      @instance1 = Instance.generate!(:service => @service)
+      @instance2 = Instance.generate!(:service => @child)
+      @app.instances << [ @instance1, @instance2 ]
+      
+      @app.required_services.sort_by(&:id).should == [ @service, @child, @grandchild ].sort_by(&:id)
+    end
   end
 end

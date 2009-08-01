@@ -64,6 +64,46 @@ describe Service do
       @service.instances << @instance
       @service.instances.should include(@instance)
     end
+    
+    it 'should have many deployments' do
+      @service.should respond_to(:deployments)
+    end
+    
+    it "should return its instances' deployments when looking up deployments" do
+      @deployments = Array.new(2) { Deployment.generate! }
+      @service.instances << @deployments.collect(&:instance)
+      @service.deployments.sort_by(&:id).should == @deployments.sort_by(&:id)
+    end
+        
+    it 'should have many hosts' do
+      @service.should respond_to(:hosts)
+    end
+    
+    it "should return its instances' hosts when looking up hosts" do
+      @deployments = Array.new(2) { Deployment.generate! }
+      @service.instances << @deployments.collect(&:instance)
+      @service.hosts.sort_by(&:id).should == @deployments.collect(&:host).sort_by(&:id)      
+    end
+
+    it 'should have many apps' do
+      @service.should respond_to(:apps)      
+    end
+    
+    it "should return its instances' apps when looking up apps" do
+      @instances = Array.new(2) { Instance.generate! }
+      @service.instances << @instances
+      @service.apps.sort_by(&:id).should == @instances.collect(&:app).sort_by(&:id)            
+    end
+    
+    it 'should have many customers' do
+      @service.should respond_to(:customers)
+    end
+    
+    it "should return its instances' customers when looking up customers" do
+      @instances = Array.new(2) { Instance.generate! }
+      @service.instances << @instances
+      @service.customers.sort_by(&:id).should == @instances.collect(&:customer).sort_by(&:id)      
+    end
   end
   
   describe 'relationships' do
