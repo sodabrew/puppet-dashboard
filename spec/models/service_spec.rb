@@ -228,7 +228,7 @@ describe Service do
         @service.all_dependents.select {|s| s == @grandparent }.size.should == 1
       end
       
-      it 'should be able to tell if a service is root service' do
+      it 'should be able to tell if a service is a root service' do
         @service.should respond_to(:root?)
       end
       
@@ -240,7 +240,7 @@ describe Service do
         @parent.should_not be_root
       end
       
-      it 'should be able to tell if a service is leaf service' do
+      it 'should be able to tell if a service is a leaf service' do
         @service.should respond_to(:leaf?)
       end
       
