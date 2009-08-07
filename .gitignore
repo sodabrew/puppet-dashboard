@@ -5,6 +5,7 @@ db/*.db
 db/*.sqlite3
 db/schema.rb
 tmp/**/*
+tmp/restart.txt
 .DS_Store
 doc/api
 doc/app
