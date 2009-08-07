@@ -116,13 +116,13 @@ describe App do
     it 'should return the services from all instances when computing services' do
       @instances = Array.new(2) { Instance.generate! }
       @app.instances << @instances
-      @app.services.sort_by(&:id).should == @instances.collect(&:service).sort_by(&:id)
+      @app.services.sort_by(&:id).should == @instances.collect(&:services).flatten.sort_by(&:id)
     end
     
     it 'should have required services' do
       @instances = Array.new(2) { Instance.generate! }
       @app.instances << @instances
-      @app.services.sort_by(&:id).should == @instances.collect(&:service).sort_by(&:id)      
+      @app.services.sort_by(&:id).should == @instances.collect(&:services).flatten.sort_by(&:id)      
     end
     
     it 'should return the required services from all its instances' do
@@ -136,8 +136,11 @@ describe App do
       @service.depends_on << @child
       @child.depends_on   << @grandchild
       
-      @instance1 = Instance.generate!(:service => @service)
-      @instance2 = Instance.generate!(:service => @child)
+      @instance1 = Instance.generate!
+      @instance1.services << @service
+      @instance2 = Instance.generate!
+      @instance2.services << @child
+      
       @app.instances << [ @instance1, @instance2 ]
       
       @app.required_services.sort_by(&:id).should == [ @service, @child, @grandchild ].sort_by(&:id)

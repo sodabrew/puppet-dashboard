@@ -1,10 +1,11 @@
 class Instance < ActiveRecord::Base
   belongs_to :app
-  belongs_to :service
   has_one   :deployment
   
+  has_many :requirements
+  has_many :services, :through => :requirements
+  
   validates_presence_of :app
-  validates_presence_of :service
   
   def customer
     app.customer
@@ -15,6 +16,6 @@ class Instance < ActiveRecord::Base
   end
   
   def required_services
-    [ service ] + service.depends_on
+    (services + services.collect(&:depends_on)).flatten
   end
 end

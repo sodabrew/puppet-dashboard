@@ -102,7 +102,7 @@ describe Customer do
     it 'should return services for all customer apps' do
       @instances = Array.new(2) { Instance.generate! }
       @customer.apps << @instances.collect(&:app)
-      @customer.services.sort_by(&:id).should == @instances.collect(&:service).flatten.sort_by(&:id)
+      @customer.services.sort_by(&:id).should == @instances.collect(&:services).flatten.sort_by(&:id)
     end
     
     it 'should have a set of required services' do

@@ -17,7 +17,7 @@ class Customer < ActiveRecord::Base
   end
   
   def services
-    instances.collect(&:service)
+    instances.collect(&:services).flatten
   end
   
   def required_services

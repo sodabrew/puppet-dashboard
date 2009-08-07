@@ -107,13 +107,13 @@ describe Deployment do
       @deployment.customer.should == @deployment.app.customer
     end
     
-    it 'should have a service' do
-      @deployment.should respond_to(:service)
+    it 'should have services' do
+      @deployment.should respond_to(:services)
     end
     
-    it "should return the instance's service when looking up the service" do
+    it "should return the instance's services when looking up the service" do
       @deployment = Deployment.generate!
-      @deployment.service.should == @deployment.instance.service
+      @deployment.services.should == @deployment.instance.services
     end
     
     it 'should have required services' do
@@ -124,6 +124,5 @@ describe Deployment do
       @deployment = Deployment.generate!
       @deployment.required_services.should == @deployment.instance.required_services
     end
-    
   end
 end

@@ -59,18 +59,6 @@ describe Instance do
       @instance.valid?
       @instance.errors.should_not be_invalid(:app)
     end
-    
-    it 'should not be valid without a service' do
-      @instance.service = nil
-      @instance.valid?
-      @instance.errors.should be_invalid(:service)
-    end
-
-    it 'should be valid with a service' do
-      @instance.service = Service.generate!
-      @instance.valid?
-      @instance.errors.should_not be_invalid(:service)
-    end
   end
   
   describe 'relationships' do
@@ -88,14 +76,14 @@ describe Instance do
       @instance.app.should == @app
     end
     
-    it 'should belong to a service' do
-      @instance.should respond_to(:service)
+    it 'should have many services' do
+      @instance.should respond_to(:services)
     end
     
-    it 'should allow assigning the service' do
+    it 'should allow assigning services' do
       @service = Service.generate!
-      @instance.service = @service
-      @instance.service.should == @service
+      @instance.services << @service
+      @instance.services.should include(@service)
     end
     
     it 'should have a customer' do
@@ -131,11 +119,11 @@ describe Instance do
       @instance.should respond_to(:required_services)
     end
     
-    it 'should return its service then computing required services' do
+    it 'should return its services when computing required services' do
       @service = Service.generate!
       @child = Service.generate!
       @service.depends_on << @child
-      @instance.service = @service
+      @instance.services << @service
       @instance.required_services.should include(@service)
     end
     
@@ -143,7 +131,7 @@ describe Instance do
       @service = Service.generate!
       @child = Service.generate!
       @service.depends_on << @child
-      @instance.service = @service
+      @instance.services << @service
       @instance.required_services.should include(@child)
     end
   end

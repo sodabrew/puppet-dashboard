@@ -13,8 +13,8 @@ class Deployment < ActiveRecord::Base
     app.customer
   end
   
-  def service
-    instance.service
+  def services
+    instance.services
   end
   
   def required_services
