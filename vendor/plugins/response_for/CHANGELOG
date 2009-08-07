@@ -1,0 +1,16 @@
+* 0.2.2 - Fixed bug where response_for would clobber a respond_to if if the respond_to relied on default render [thanks Tom Stuart for the bug report]
+
+* Added VERSION introspection, this is 0.2.1
+
+* To facilitate making reusable chunks of actions and responses, simply extend Ardes::ResponsesModule into
+  your action modules.  See Ardes::ResponsesModule for details
+
+* now intercepting template_exists? to decide whether to render a response for an action
+  that has no action method defined.  (Removes somewhat mysterious behaviour of empty
+  actions being defined)
+
+* tagged v0.2.0 - API change, and major internal simplifications - see http://blog.ardes.com/response_for
+
+* tagged v0.1.0
+  
+* initial release of response_for

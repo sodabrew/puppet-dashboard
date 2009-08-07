@@ -1,0 +1,67 @@
+response_for_rc
+
+if you're using resources_controller[http://github.com/ianwhite/resources_controller] and response_for[http://github.com/ianwhite/response_for], you probably want this!
+
+== What is it?
+
+It's an alternate set of RC actions, written in response_for style.
+
+== How to use it?
+
+Just drop it into your plugins directory.
+
+== What else can I do with it?
+
+If you're writing your own RC actions with responses, refactored in modules, you've probably noticed what an ass it
+is to add the responses (you need to stick it in self.included and add them on the including class, etc, etc).
+
+Recent developments on response_for resources_controller, and now response_for_rc, mean you can now do stuff like this
+
+  module MyActions
+    extend Ardes::RcResponsesModule # <= this baby gives your module the ability to understand response_for
+                                    # <= and to add responses to any including controller
+    def new
+      # your new
+    end
+    
+    response_for :new do |format|
+      # your new response
+    end
+    
+    def show
+      # your show
+    end
+      
+    response_for :show do |format|
+      # your show response
+    end
+     
+    # and others
+  end
+  
+  # later
+  
+  class FoosController < ApplicationController
+    resources_controller_for :foos, :actions => MyActions
+    
+    # you get all of the above actions and responses
+  end
+  
+  # also works with :only and :except
+  class BarsController < ApplicationController
+    resources_controller_for :bars, :actions => MyActions, :only => [:new]
+    
+    # only get new and new response
+  end
+  
+  # if you want to set your own actions globally (as the default, look in init.rb to see how)
+  
+== Requirements
+
+You need resources_controller and response_for.
+  
+== Specs
+
+The garlic task runs all the RC specs with response_for_rc added as a plugin, this includes the 
+rspec scaffold specs.
+

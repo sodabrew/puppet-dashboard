@@ -1,0 +1,178 @@
+
+DefaultRailsBehaviourSpec::TheController GET :two_respond_tos
+- should recieve first and second in order
+
+DefaultRailsBehaviourSpec::TheController GET :two_responses
+- should only receive first and NOT second
+
+action_responses
+- SuperController.action_responses should not == SubController.action_responses
+- SuperController should have one action_response for 'a_response'
+- SubController should have two action_responses for 'a_response', and one each for 'an_action', and 'performing_action'
+
+InheritedControllerSpec::SuperController GET :an_action
+- should execute action
+- should render :an_action
+
+InheritedControllerSpec::SuperController GET :a_response
+- should execute inside the super response block
+- should NOT execute inside the sub response block
+
+InheritedControllerSpec::SuperController GET :performing_action
+- should redirect
+
+InheritedControllerSpec::SubController GET :an_action (decorated with redirecting response_for)
+- should execute action
+- should redirect
+
+InheritedControllerSpec::SubController GET :a_response (decorated with a new response)
+- should NOT execute the super response
+- should execute the sub response
+
+InheritedControllerSpec::SubController GET :performing_action
+- should NOT execute the sub response
+- should redirect as per the super def
+
+NoResponseIfPerformedSpec::TheController when before_filter redirects, GET :an_action
+- should redirect to 'http://redirected.from.before_filter'
+- should not execute inside response_for
+
+NoResponseIfPerformedSpec::TheController when before_filter doesn't redirect, GET :an_action
+- should execute inside response for
+- should render :an_action
+
+Picking template PickTemplateSpec::TemplateOnlyController GET :an_action, HTTP_ACCEPT =
+- text/html, should render an_action.html
+- application/xml, should IGNORE and render an_action.html
+
+Picking template [:atom, :xml, :html, :js] PickTemplateSpec::RespondToTypesController
+- GET :an_action, should render an_action.atom
+
+Picking template [:atom, :xml, :html, :js] PickTemplateSpec::RespondToTypesController GET :an_action, HTTP_ACCEPT =
+- text/html, should render an_action.html
+- application/xml, should render an_action.xml
+- text/javascript, should render an_action.js
+- application/atom+xml, should render an_action.atom
+
+Picking template [:atom, :xml, :html, :js] PickTemplateSpec::RespondToTypesController GET :an_action, :format =>
+- :html, should render an_action.html
+- :js, should render an_action.js
+- :xml, should render an_action.xml
+- :atom, should render an_action.atom
+
+Picking template [:atom, :xml, :html, :js] PickTemplateSpec::RespondToBlockController
+- GET :an_action, should render an_action.atom
+
+Picking template [:atom, :xml, :html, :js] PickTemplateSpec::RespondToBlockController GET :an_action, HTTP_ACCEPT =
+- text/html, should render an_action.html
+- application/xml, should render an_action.xml
+- text/javascript, should render an_action.js
+- application/atom+xml, should render an_action.atom
+
+Picking template [:atom, :xml, :html, :js] PickTemplateSpec::RespondToBlockController GET :an_action, :format =>
+- :html, should render an_action.html
+- :js, should render an_action.js
+- :xml, should render an_action.xml
+- :atom, should render an_action.atom
+
+Picking template [:atom, :xml, :html, :js] PickTemplateSpec::ResponseForTypesController
+- GET :an_action, should render an_action.atom
+
+Picking template [:atom, :xml, :html, :js] PickTemplateSpec::ResponseForTypesController GET :an_action, HTTP_ACCEPT =
+- text/html, should render an_action.html
+- application/xml, should render an_action.xml
+- text/javascript, should render an_action.js
+- application/atom+xml, should render an_action.atom
+
+Picking template [:atom, :xml, :html, :js] PickTemplateSpec::ResponseForTypesController GET :an_action, :format =>
+- :html, should render an_action.html
+- :js, should render an_action.js
+- :xml, should render an_action.xml
+- :atom, should render an_action.atom
+
+Picking template [:atom, :xml, :html, :js] PickTemplateSpec::ResponseForBlockController
+- GET :an_action, should render an_action.atom
+
+Picking template [:atom, :xml, :html, :js] PickTemplateSpec::ResponseForBlockController GET :an_action, HTTP_ACCEPT =
+- text/html, should render an_action.html
+- application/xml, should render an_action.xml
+- text/javascript, should render an_action.js
+- application/atom+xml, should render an_action.atom
+
+Picking template [:atom, :xml, :html, :js] PickTemplateSpec::ResponseForBlockController GET :an_action, :format =>
+- :html, should render an_action.html
+- :js, should render an_action.js
+- :xml, should render an_action.xml
+- :atom, should render an_action.atom
+
+Picking template [:atom, :xml, :html, :js] PickTemplateSpec::ResponseForMixOfBlockAndTypesController
+- GET :an_action, should render an_action.atom
+
+Picking template [:atom, :xml, :html, :js] PickTemplateSpec::ResponseForMixOfBlockAndTypesController GET :an_action, HTTP_ACCEPT =
+- text/html, should render an_action.html
+- application/xml, should render an_action.xml
+- text/javascript, should render an_action.js
+- application/atom+xml, should render an_action.atom
+
+Picking template [:atom, :xml, :html, :js] PickTemplateSpec::ResponseForMixOfBlockAndTypesController GET :an_action, :format =>
+- :html, should render an_action.html
+- :js, should render an_action.js
+- :xml, should render an_action.xml
+- :atom, should render an_action.atom
+
+Picking template [:atom, :xml, :html, :js] PickTemplateSpec::InheritedController
+- GET :an_action, should render an_action.atom
+
+Picking template [:atom, :xml, :html, :js] PickTemplateSpec::InheritedController GET :an_action, HTTP_ACCEPT =
+- text/html, should render an_action.html
+- application/xml, should render an_action.xml
+- text/javascript, should render an_action.js
+- application/atom+xml, should render an_action.atom
+
+Picking template [:atom, :xml, :html, :js] PickTemplateSpec::InheritedController GET :an_action, :format =>
+- :html, should render an_action.html
+- :js, should render an_action.js
+- :xml, should render an_action.xml
+- :atom, should render an_action.atom
+
+RemoveResponseForSpec::TheController
+- should have action_responses for :foo and :bar
+
+RemoveResponseForSpec::TheController.remove_response_for :bar
+- should hanve action_responses for :foo
+
+RemoveResponseForSpec::TheController.remove_response_for
+- should have empty action_responses
+
+ResponsesModuleSpec::MyController
+- should have action_response for :foo
+- should have action :foo
+- should have method defined by included
+
+StackingResponsesSpec::TheController with responses conditionally executed GET :foo (no conditions)
+- should execute second, then first, response
+- should NOT execute the html response in first
+- should NOT execute the html response in second
+- should render :action => :foo (the default response)
+
+StackingResponsesSpec::TheController with responses conditionally executed GET :foo, :second => true
+- should execute second, then first, then html second, response
+- should redirect from second response
+- should NOT execute first html response
+
+StackingResponsesSpec::TheController with responses conditionally executed GET :foo, :first => true
+- should execute second, then first, then first html response
+- should redirect from first response
+- should NOT execute second html response
+
+StackingResponsesSpec::TheController with responses conditionally executed GET :foo, :first => true, :second => true (can't execute two html blocks)
+- should execute second, then first, then second html response
+- should redirect from second response
+- should NOT execute first html response
+
+Ardes::ResponseFor::VERSION
+- STRING should be 0.2.1
+
+Finished in 0.851266 seconds
+
+96 examples, 0 failures
