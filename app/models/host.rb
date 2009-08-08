@@ -12,4 +12,12 @@ class Host < ActiveRecord::Base
   def customers
     deployments.collect(&:customer).flatten
   end
+  
+  def configuration
+    instances.inject({ 'classes' => [], 'parameters' => {} }) do |h, instance|
+      h['classes'] << instance.configuration_name
+      h['parameters'][instance.configuration_name] = instance.configuration_parameters
+      h
+    end
+  end
 end

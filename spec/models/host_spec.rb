@@ -95,4 +95,62 @@ describe Host do
       @host.customers.sort_by(&:id).should == @deployments.collect(&:customer).flatten.sort_by(&:id)      
     end
   end
+  
+  it 'should be able to compute a configuration' do
+    Host.new.should respond_to(:configuration)
+  end
+  
+  describe 'when computing a configuration' do
+    before :each do
+      @host = Host.generate!
+    end
+    
+    it 'should work without arguments' do
+      lambda { @host.configuration }.should_not raise_error(ArgumentError)
+    end
+    
+    it 'should allow no arguments' do
+      lambda { @host.configuration(:foo) }.should raise_error(ArgumentError)
+    end
+    
+    describe 'and the host has no instances deployed' do
+      it 'should return a hash of results' do
+        @host.configuration.should respond_to(:keys)
+      end
+      
+      it 'should include an empty class list in the results' do
+        @host.configuration['classes'].should == []
+      end
+      
+      it 'should include an empty hash of parameters in the results' do
+        @host.configuration['parameters'].should == {}
+      end
+    end
+    
+    describe 'and the host has instances deployed' do
+      before :each do
+        @instances = Array.new(3) { Instance.generate! }
+        @host.instances << @instances
+      end
+      
+      it 'should include a class for each deployed instance in the returned class list' do
+        @host.configuration['classes'].size.should == @instances.size
+      end
+      
+      it 'should include no additional classes' do
+        @host.configuration['classes'].size.should == @instances.size
+      end
+      
+      it 'should use an unique class name for the deployed instance classes in the returned class list' do
+        @host.configuration['classes'].sort.should == @instances.collect(&:configuration_name).sort
+      end
+
+      it "should include each instance's parameters, indexed by the unique class name for that instance" do
+        result = @host.configuration
+        @instances.each do |instance|
+          result['parameters'][instance.configuration_name].should == instance.configuration_parameters
+        end
+      end
+    end
+  end
 end
