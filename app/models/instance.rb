@@ -20,11 +20,11 @@ class Instance < ActiveRecord::Base
     (services + services.collect(&:depends_on)).flatten
   end
   
-  def host
-    deployment.host
+  def configuration_name
+    [customer.name, app.name, name].join('__')
   end
   
-  def required_services
-    (services + services.collect(&:depends_on)).flatten
+  def configuration_parameters
+    parameters || {}
   end
 end

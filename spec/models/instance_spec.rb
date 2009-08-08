@@ -171,4 +171,76 @@ describe Instance do
       @instance.required_services.should include(@child)
     end
   end
+  
+  it 'should be able to generate an unique name for use in a configuration' do
+    Instance.new.should respond_to(:configuration_name)
+  end
+  
+  describe 'when generating an unique name for use in a configuration' do
+    before :each do
+      @instance = Instance.generate!
+    end
+    
+    it 'should work without arguments' do
+      lambda { @instance.configuration_name }.should_not raise_error(ArgumentError)
+    end
+    
+    it 'should not allow arguments' do
+      lambda { @instance.configuration_name(:foo) }.should raise_error(ArgumentError)
+    end
+    
+    it 'should not be empty' do
+      @instance.configuration_name.should_not be_blank
+    end
+    
+    it 'should vary the name when its name varies' do
+      original_name = @instance.configuration_name
+      @instance.name = @instance.name.succ
+      @instance.configuration_name.should_not == original_name
+    end
+    
+    it 'should vary the name when its app name varies' do
+      original_name = @instance.configuration_name
+      @instance.app.name = 'Something Random'
+      @instance.configuration_name.should_not == original_name      
+    end
+    
+    it 'should vary the name when its customer name varies' do
+      original_name = @instance.configuration_name
+      @instance.customer.name = 'Something Random'
+      @instance.configuration_name.should_not == original_name      
+    end
+  end
+  
+  it 'should be able to generate a set of configuration parameters' do
+    Instance.new.should respond_to(:configuration_parameters)
+  end
+  
+  describe 'when generating a set of configuration parameters' do
+    before :each do
+      @instance = Instance.new
+    end
+    
+    it 'should work without arguments' do
+      lambda { @instance.configuration_parameters }.should_not raise_error(ArgumentError)
+    end
+    
+    it 'should not allow arguments' do
+      lambda { @instance.configuration_parameters(:foo) }.should raise_error(ArgumentError)
+    end
+    
+    it 'should be a hash' do
+      @instance.configuration_parameters.should respond_to(:keys)
+    end
+    
+    it "should return an empty hash when the instance's parameters are empty" do
+      @instance.parameters = nil
+      @instance.configuration_parameters.should == {}
+    end
+    
+    it "should return the instance's parameters when the parameters are not empty" do
+      @instance.parameters = { :foo => :bar, :baz => :xyzzy }
+      @instance.configuration_parameters.should == @instance.parameters
+    end
+  end
 end
