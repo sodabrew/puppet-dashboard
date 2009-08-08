@@ -210,6 +210,13 @@ describe Instance do
       @instance.customer.name = 'Something Random'
       @instance.configuration_name.should_not == original_name      
     end
+    
+    it 'should include only lowercase alphanumerics and underscores' do
+      @instance.name = 'Some Instance 123:::!!!'
+      @instance.app.name = 'Some App 123:::!!!'
+      @instance.customer.name = 'Some Customer 123:::!!!'
+      @instance.configuration_name.should == 'some_customer_123__some_app_123__some_instance_123'            
+    end
   end
   
   it 'should be able to generate a set of configuration parameters' do

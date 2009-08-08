@@ -21,10 +21,16 @@ class Instance < ActiveRecord::Base
   end
   
   def configuration_name
-    [customer.name, app.name, name].join('__')
+    [customer.name, app.name, name].collect {|str| normalize_name(str) }.join('__')
   end
   
   def configuration_parameters
     parameters || {}
+  end
+  
+  private
+  
+  def normalize_name(str)
+    str.gsub(/[^a-zA-Z0-9]+/, '_').gsub(/^_*/, '').gsub(/_*$/, '').downcase
   end
 end
