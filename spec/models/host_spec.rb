@@ -153,4 +153,74 @@ describe Host do
       end
     end
   end
+  
+  it 'should be able to generate a Puppet manifest file' do
+    Host.new.should respond_to(:puppet_manifest)
+  end
+  
+  describe 'when generating a Puppet manifest file' do
+    it 'should work without arguments' do
+      lambda { Host.new.puppet_manifest }.should_not raise_error(ArgumentError)
+    end
+    
+    it 'should not allow arguments' do
+      lambda { Host.new.puppet_manifest(:foo) }.should raise_error(ArgumentError)
+    end
+    
+    describe 'and there are no instances deployed to this host' do
+      it 'should return the empty string' do
+        Host.generate!.puppet_manifest.should == ''
+      end
+    end
+    
+    describe 'and there are instances deployed to this host' do
+      before :each do
+        @instances = Array.new(3) { Instance.generate! }
+        @instances.each do |instance| 
+          instance.parameters = { 
+            "#{instance.configuration_name}_foo" => "bar", 
+            "#{instance.configuration_name}_baz" => "xyzzy"
+          }
+          instance.save!
+        end
+        
+        @host = Host.generate!
+        @host.instances << @instances
+      end
+      
+      it 'should include a class declaration for every deployed instance' do
+        result = @host.puppet_manifest
+        @instances.each do |instance|
+          result.should match(/^\s*class\s+#{instance.configuration_name}\s*\{\s*"#{instance.configuration_name}":/)
+        end
+      end
+      
+      it 'should include parameters settings for every configuration parameter for a deployed instance' do        
+        result = @host.puppet_manifest
+        @instances.each do |instance|
+          instance.configuration_parameters.each_pair do |key, value|
+            result.should match(/^\s*\$#{key}\s*=\s*"#{value}"/)
+          end
+        end
+      end
+      
+      it 'should include a class include statement for every deployed instance' do
+        result = @host.puppet_manifest
+        @instances.each do |instance|
+          result.should match(/^\s*include\s*#{instance.configuration_name}/)
+        end
+      end
+      
+      it 'should include class include directives for each service for the instance' do
+        @services = Array.new(3) { Service.generate! }
+        @instances.each {|instance| instance.services << @services }
+        result = @host.puppet_manifest
+        @instances.each do |instance|
+          instance.services.each do |service|
+            result.should match(/^\s*include\s*#{service.configuration_name}/)
+          end
+        end
+      end
+    end
+  end
 end
