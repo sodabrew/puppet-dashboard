@@ -114,7 +114,5 @@ describe Customer do
       @customer.apps << @instances.collect(&:app)
       @customer.required_services.sort_by(&:id).should == @instances.collect(&:required_services).flatten.sort_by(&:id)      
     end
-    
-    it 'should have a set of deployed services'
   end
 end
