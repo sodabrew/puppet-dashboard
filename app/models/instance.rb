@@ -1,4 +1,6 @@
 class Instance < ActiveRecord::Base
+  include NormalizeNames
+  
   belongs_to :app
   has_one   :deployment
   has_one   :host, :through => :deployment
@@ -26,11 +28,5 @@ class Instance < ActiveRecord::Base
   
   def configuration_parameters
     parameters || {}
-  end
-  
-  private
-  
-  def normalize_name(str)
-    str.gsub(/[^a-zA-Z0-9]+/, '_').gsub(/^_*/, '').gsub(/_*$/, '').downcase
   end
 end

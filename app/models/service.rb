@@ -1,4 +1,6 @@
 class Service < ActiveRecord::Base
+  include NormalizeNames
+
   validates_presence_of :name
   validates_uniqueness_of :name
 
@@ -14,10 +16,6 @@ class Service < ActiveRecord::Base
   
   def configuration_name
     normalize_name(name)
-  end
-  
-  def normalize_name(str)
-    str.gsub(/[^a-zA-Z0-9]+/, '_').gsub(/^_*/, '').gsub(/_*$/, '').downcase
   end
 
   def customers
