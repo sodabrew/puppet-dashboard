@@ -11,6 +11,10 @@ class Instance < ActiveRecord::Base
   def customer
     app.customer
   end
+
+  def required_services
+    (services + services.collect(&:depends_on)).flatten
+  end
   
   def host
     deployment.host
