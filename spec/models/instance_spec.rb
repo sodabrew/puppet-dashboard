@@ -41,6 +41,20 @@ describe Instance do
       @instance.service_id = 1
       @instance.service_id.should == 1
     end
+    
+    it 'should have a set of parameters' do
+      @instance.should respond_to(:parameters)
+    end
+    
+    it 'should allow setting and retrieving parameter values' do
+      @instance.parameters = { :foo => 'bar' }
+      @instance.parameters[:foo].should == 'bar'
+    end
+    
+    it 'should preserve parameters as a hash across saving' do
+      @instance = Instance.generate!(:parameters => { :foo => 'bar'})
+      Instance.find(@instance.id).parameters[:foo].should == 'bar'
+    end
   end
   
   describe 'validations' do

@@ -7,6 +7,10 @@ class Instance < ActiveRecord::Base
   has_many :services, :through => :requirements
   
   validates_presence_of :app
+  validates_presence_of :name
+  validates_uniqueness_of :name, :scope => :app_id
+  
+  serialize :parameters
   
   def customer
     app.customer
