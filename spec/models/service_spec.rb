@@ -253,4 +253,37 @@ describe Service do
       end
     end    
   end
+  
+  it 'should be able to generate a configuration name' do
+    Service.new.should respond_to(:configuration_name)
+  end
+  
+  describe 'when generating a configuration name' do
+    before :each do
+      @service = Service.generate!
+    end
+    
+    it 'should work without arguments' do
+      lambda { @service.configuration_name }.should_not raise_error(ArgumentError)
+    end
+    
+    it 'should not allow arguments' do
+      lambda { @service.configuration_name(:foo) }.should raise_error(ArgumentError)
+    end
+   
+    it 'should not be empty' do
+      @service.configuration_name.should_not be_blank
+    end
+    
+    it 'should vary the name when its name varies' do
+      original_name = @service.configuration_name
+      @service.name = @service.name.succ
+      @service.configuration_name.should_not == original_name
+    end
+    
+    it 'should include only lowercase alphanumerics and underscores' do
+      @service.name = 'Some Service 123:::!!!'
+      @service.configuration_name.should == 'some_service_123'            
+    end
+  end
 end

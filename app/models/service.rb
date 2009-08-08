@@ -12,6 +12,14 @@ class Service < ActiveRecord::Base
   has_many :dependent_edges, :class_name => 'Edge', :foreign_key => 'target_id'  
   has_many :dependents, :through => :dependent_edges, :source => :source
   
+  def configuration_name
+    normalize_name(name)
+  end
+  
+  def normalize_name(str)
+    str.gsub(/[^a-zA-Z0-9]+/, '_').gsub(/^_*/, '').gsub(/_*$/, '').downcase
+  end
+
   def customers
     instances.collect(&:customer)
   end
