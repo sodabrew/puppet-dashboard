@@ -59,6 +59,28 @@ describe Instance do
       @instance.valid?
       @instance.errors.should_not be_invalid(:app)
     end
+
+    it 'should not be valid without a name' do
+      @instance.name = nil
+      @instance.valid?
+      @instance.errors.should be_invalid(:name)
+    end
+    
+    it 'should not be valid with a duplicate name within the scope of its app' do
+      other = Instance.generate!
+      @instance = Instance.spawn(:app => other.app)
+      @instance.name = other.name
+      @instance.valid?
+      @instance.errors.should be_invalid(:name)
+    end
+    
+    it 'should be valid with a duplicate name that is unique within the scope of its app' do
+      other = Instance.generate!
+      @instance = Instance.spawn
+      @instance.name = other.name
+      @instance.valid?
+      @instance.errors.should_not be_invalid(:name)
+    end
   end
   
   describe 'relationships' do
@@ -110,9 +132,9 @@ describe Instance do
     end
     
     it 'should return the host for the deployment' do
-      @deployment = Deployment.generate!
-      @instance.deployment = @deployment
-      @instance.host.should == @deployment.host 
+      @instance = Instance.generate!
+      @instance.host = @host = Host.generate!
+      @instance.host.should == @host 
     end
     
     it 'should have a set of required services' do

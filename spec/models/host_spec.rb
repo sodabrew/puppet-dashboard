@@ -65,6 +65,16 @@ describe Host do
       @host.deployments.should include(@deployment)
     end
     
+    it 'should have many instances' do
+      @host.should respond_to(:instances)
+    end
+    
+    it 'should allow assigning instances' do
+      @instance = Instance.generate!
+      @host.instances << @instance
+      @host.instances.should include(@instance)
+    end
+    
     it 'should have many apps' do
       @host.should respond_to(:apps)
     end

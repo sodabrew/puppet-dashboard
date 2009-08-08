@@ -1,6 +1,7 @@
 class Instance < ActiveRecord::Base
   belongs_to :app
   has_one   :deployment
+  has_one   :host, :through => :deployment
   
   has_many :requirements
   has_many :services, :through => :requirements
