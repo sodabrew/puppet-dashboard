@@ -55,14 +55,14 @@ describe Service do
       @service = Service.new
     end
 
-    it 'should have many hosts' do
-      @service.should respond_to(:hosts)
+    it 'should have many nodes' do
+      @service.should respond_to(:nodes)
     end
     
-    it "should allow setting and retrieving hosts" do
-      @hosts = Array.new(3) { Host.generate! }
-      @service.hosts << @hosts
-      @service.hosts.should == @hosts
+    it "should allow setting and retrieving nodes" do
+      @nodes = Array.new(3) { Node.generate! }
+      @service.nodes << @nodes
+      @service.nodes.should == @nodes
     end
   end
 end

@@ -15,13 +15,13 @@ describe Assignment do
       @assignment.service_id.should == 1
     end
 
-    it 'should have a host id' do
-      @assignment.should respond_to(:host_id)
+    it 'should have a node id' do
+      @assignment.should respond_to(:node_id)
     end
     
-    it 'should allow setting and retrieving the host id' do
-      @assignment.host_id = 1
-      @assignment.host_id.should == 1
+    it 'should allow setting and retrieving the node id' do
+      @assignment.node_id = 1
+      @assignment.node_id.should == 1
     end
   end
   
@@ -42,16 +42,16 @@ describe Assignment do
       @assignment.errors.should_not be_invalid(:service)
     end
 
-    it 'should not be valid without a host' do
-      @assignment.host = nil
+    it 'should not be valid without a node' do
+      @assignment.node = nil
       @assignment.valid?
-      @assignment.errors.should be_invalid(:host)
+      @assignment.errors.should be_invalid(:node)
     end
 
-    it 'should be valid with a host' do
-      @assignment.host = Host.generate!
+    it 'should be valid with a node' do
+      @assignment.node = Node.generate!
       @assignment.valid?
-      @assignment.errors.should_not be_invalid(:host)
+      @assignment.errors.should_not be_invalid(:node)
     end
   end
   
@@ -70,14 +70,14 @@ describe Assignment do
       @assignment.service.should == @service
     end
     
-    it 'should belong to a host' do
-      @assignment.should respond_to(:host)
+    it 'should belong to a node' do
+      @assignment.should respond_to(:node)
     end
 
-    it 'should allow assigning the host' do
-      @host = Host.generate!
-      @assignment.host = @host
-      @assignment.host.should == @host
+    it 'should allow assigning the node' do
+      @node = Node.generate!
+      @assignment.node = @node
+      @assignment.node.should == @node
     end
   end
 end
