@@ -1,2 +1,0 @@
-class Requirement
-end
