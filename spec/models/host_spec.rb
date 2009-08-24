@@ -63,6 +63,19 @@ describe Host do
       @host.errors.should_not be_invalid(:name)
     end
   end
+  
+  describe 'associations' do
+    it 'should have services' do
+      Host.new.should respond_to(:services)
+    end
+    
+    it 'should allow setting and returning services' do
+      @host = Host.new
+      @services = Array.new(3) { Service.generate! }
+      @host.services << @services
+      @host.services.should == @services
+    end
+  end
 
   it 'should be able to compute a configuration' do
     Host.new.should respond_to(:configuration)
@@ -85,9 +98,9 @@ describe Host do
       @host.configuration.keys.sort.should == ['classes', 'parameters']
     end
     
-    it "should return the host's classes in the returned class list" do
-      @host.stubs(:classes).returns(['1', '2', '3'])
-      @host.configuration['classes'].should == ['1', '2', '3']
+    it "should return the names of the host's services in the returned class list" do
+      @host.services = @services = Array.new(3) { Service.generate! }
+      @host.configuration['classes'].sort.should == @services.collect(&:name).sort
     end
     
     it "should return the host's parameters in the returned parameters list" do
