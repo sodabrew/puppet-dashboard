@@ -23,6 +23,20 @@ describe Host do
       @host.description = 'test description'
       @host.description.should == 'test description'
     end
+    
+    it 'should have a set of parameters' do
+      @host.should respond_to(:parameters)
+    end
+    
+    it 'should allow setting and retrieving parameter values' do
+      @host.parameters = { :foo => 'bar' }
+      @host.parameters[:foo].should == 'bar'
+    end
+    
+    it 'should preserve parameters as a hash across saving' do
+      @host = Host.generate!(:parameters => { :foo => 'bar'})
+      Host.find(@host.id).parameters[:foo].should == 'bar'
+    end
   end
 
   describe 'validations' do
@@ -50,52 +64,6 @@ describe Host do
     end
   end
 
-  describe 'relationships' do
-    before :each do
-      @host = Host.new
-    end
-
-    it 'should have many deployments' do
-      @host.should respond_to(:deployments)
-    end
-
-    it 'should allow assigning deployments' do
-      @deployment = Deployment.generate!
-      @host.deployments << @deployment
-      @host.deployments.should include(@deployment)
-    end
-    
-    it 'should have many instances' do
-      @host.should respond_to(:instances)
-    end
-    
-    it 'should allow assigning instances' do
-      @instance = Instance.generate!
-      @host.instances << @instance
-      @host.instances.should include(@instance)
-    end
-    
-    it 'should have many apps' do
-      @host.should respond_to(:apps)
-    end
-    
-    it 'should include apps from all deployments' do
-      @deployments = Array.new(2) { Deployment.generate! }
-      @host.deployments << @deployments
-      @host.apps.sort_by(&:id).should == @deployments.collect(&:app).sort_by(&:id)
-    end
-    
-    it 'should have many customers' do
-      @host.should respond_to(:customers)
-    end
-
-    it 'should include customers from all deployments' do
-      @deployments = Array.new(2) { Deployment.generate! }
-      @host.deployments << @deployments
-      @host.customers.sort_by(&:id).should == @deployments.collect(&:customer).flatten.sort_by(&:id)      
-    end
-  end
-  
   it 'should be able to compute a configuration' do
     Host.new.should respond_to(:configuration)
   end
@@ -109,118 +77,22 @@ describe Host do
       lambda { @host.configuration }.should_not raise_error(ArgumentError)
     end
     
-    it 'should allow no arguments' do
+    it 'should not allow arguments' do
       lambda { @host.configuration(:foo) }.should raise_error(ArgumentError)
     end
     
-    describe 'and the host has no instances deployed' do
-      it 'should return a hash of results' do
-        @host.configuration.should respond_to(:keys)
-      end
-      
-      it 'should include an empty class list in the results' do
-        @host.configuration['classes'].should == []
-      end
-      
-      it 'should include an empty hash of parameters in the results' do
-        @host.configuration['parameters'].should == {}
-      end
+    it 'should return a set of classes and parameters' do
+      @host.configuration.keys.sort.should == ['classes', 'parameters']
     end
     
-    describe 'and the host has instances deployed' do
-      before :each do
-        @instances = Array.new(3) { Instance.generate! }
-        @host.instances << @instances
-      end
-      
-      it 'should include a class for each deployed instance in the returned class list' do
-        @host.configuration['classes'].size.should == @instances.size
-      end
-      
-      it 'should include no additional classes' do
-        @host.configuration['classes'].size.should == @instances.size
-      end
-      
-      it 'should use an unique class name for the deployed instance classes in the returned class list' do
-        @host.configuration['classes'].sort.should == @instances.collect(&:configuration_name).sort
-      end
-
-      it "should include each instance's parameters, indexed by the unique class name for that instance" do
-        result = @host.configuration
-        @instances.each do |instance|
-          result['parameters'][instance.configuration_name].should == instance.configuration_parameters
-        end
-      end
-    end
-  end
-  
-  it 'should be able to generate a Puppet manifest file' do
-    Host.new.should respond_to(:puppet_manifest)
-  end
-  
-  describe 'when generating a Puppet manifest file' do
-    it 'should work without arguments' do
-      lambda { Host.new.puppet_manifest }.should_not raise_error(ArgumentError)
+    it "should return the host's classes in the returned class list" do
+      @host.stubs(:classes).returns(['1', '2', '3'])
+      @host.configuration['classes'].should == ['1', '2', '3']
     end
     
-    it 'should not allow arguments' do
-      lambda { Host.new.puppet_manifest(:foo) }.should raise_error(ArgumentError)
-    end
-    
-    describe 'and there are no instances deployed to this host' do
-      it 'should return the empty string' do
-        Host.generate!.puppet_manifest.should == ''
-      end
-    end
-    
-    describe 'and there are instances deployed to this host' do
-      before :each do
-        @instances = Array.new(3) { Instance.generate! }
-        @instances.each do |instance| 
-          instance.parameters = { 
-            "#{instance.configuration_name}_foo" => "bar", 
-            "#{instance.configuration_name}_baz" => "xyzzy"
-          }
-          instance.save!
-        end
-        
-        @host = Host.generate!
-        @host.instances << @instances
-      end
-      
-      it 'should include a class declaration for every deployed instance' do
-        result = @host.puppet_manifest
-        @instances.each do |instance|
-          result.should match(/^\s*class\s+#{instance.configuration_name}\s*\{\s*"#{instance.configuration_name}":/)
-        end
-      end
-      
-      it 'should include parameters settings for every configuration parameter for a deployed instance' do        
-        result = @host.puppet_manifest
-        @instances.each do |instance|
-          instance.configuration_parameters.each_pair do |key, value|
-            result.should match(/^\s*\$#{key}\s*=\s*"#{value}"/)
-          end
-        end
-      end
-      
-      it 'should include a class include statement for every deployed instance' do
-        result = @host.puppet_manifest
-        @instances.each do |instance|
-          result.should match(/^\s*include\s*#{instance.configuration_name}/)
-        end
-      end
-      
-      it 'should include class include directives for each service for the instance' do
-        @services = Array.new(3) { Service.generate! }
-        @instances.each {|instance| instance.services << @services }
-        result = @host.puppet_manifest
-        @instances.each do |instance|
-          instance.services.each do |service|
-            result.should match(/^\s*include\s*#{service.configuration_name}/)
-          end
-        end
-      end
+    it "should return the host's parameters in the returned parameters list" do
+      @host.parameters = {'a' => 'b', 'c' => 'd'}
+      @host.configuration['parameters'].should == { 'a' => 'b', 'c' => 'd' }  
     end
   end
 end
