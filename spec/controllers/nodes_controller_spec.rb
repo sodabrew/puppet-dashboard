@@ -70,4 +70,33 @@ end
 
 describe NodesController, 'when not integrating' do
   it_should_behave_like 'a RESTful controller'
+  
+  describe '#show, when YAML is requested' do
+    before :each do
+      @parameters = { 'a' => 'b', 'c' => 'd' }
+      @node = Node.generate!(:parameters => @parameters)
+      @services = Array.new(3) { Service.generate! }
+      @node.services << @services
+    end
+    
+    def do_get  
+      @request.env["HTTP_ACCEPT"] = "application/x-yaml" 
+      get :show, :id => @node.id.to_s
+    end
+    
+    it 'should return a YAML result' do
+      do_get
+      response.headers['Content-Type'].should match(/^application\/x-yaml/)
+    end
+    
+    it 'should not use a layout' do
+      do_get
+      response.layout.should be_nil
+    end
+
+    it 'should return the node configuration as the YAML result' do
+      do_get
+      response.body.should == @node.configuration.to_yaml
+    end
+  end
 end
