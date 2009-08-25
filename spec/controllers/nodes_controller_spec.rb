@@ -28,8 +28,7 @@ describe NodesController, 'when integrating' do
       get :show, :id => @node.id.to_s
     end
       
-    it 'should use the appropriate layout'  
-    # it_should_behave_like "a successful action"
+    it_should_behave_like "a successful action"
   end
 
   describe 'edit' do
