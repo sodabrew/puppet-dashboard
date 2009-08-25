@@ -78,10 +78,17 @@ describe '/nodes/edit' do
         @node.parameters = []
       end
       
-      it 'should have a blank input for parameters' do
+      it 'should have a blank input for parameter name' do
         do_render
         response.should have_tag('form[id=?]', "edit_node_#{@node.id}") do
-          with_tag('input[type=?][name=?]:not([value])', 'text', 'node[parameters][]')
+          with_tag('input[type=?][name=?]:not([value])', 'text', 'node[parameters][key][]')
+        end
+      end
+
+      it 'should have a blank input for parameter value' do
+        do_render
+        response.should have_tag('form[id=?]', "edit_node_#{@node.id}") do
+          with_tag('input[type=?][name=?]:not([value])', 'text', 'node[parameters][value][]')
         end
       end
     end
@@ -91,34 +98,58 @@ describe '/nodes/edit' do
         @node.parameters = nil
       end
       
-      it 'should have a blank input for parameters' do
+      it 'should have a blank input for parameter name' do
         do_render
         response.should have_tag('form[id=?]', "edit_node_#{@node.id}") do
-          with_tag('input[type=?][name=?]:not([value])', 'text', 'node[parameters][]')
+          with_tag('input[type=?][name=?]:not([value])', 'text', 'node[parameters][key][]')
+        end
+      end
+
+      it 'should have a blank input for parameter value' do
+        do_render
+        response.should have_tag('form[id=?]', "edit_node_#{@node.id}") do
+          with_tag('input[type=?][name=?]:not([value])', 'text', 'node[parameters][value][]')
         end
       end
     end
     
     describe 'when the node has parameters' do
       before :each do
-        @parameters = %w[one two three]
+        @parameters = { 'a' => 'b', 'c' => 'd', 'e' => 'f' }
         @node.parameters = @parameters
       end
       
-      it 'should have an input for each parameter' do
+      it 'should have an input for each parameter name' do
         do_render
         response.should have_tag('form[id=?]', "edit_node_#{@node.id}") do
-          @parameters.each do |parameter|
-            with_tag('input[type=?][name=?][value=?]', 'text', 'node[parameters][]', parameter)
+          @parameters.each_pair do |key, value|
+            with_tag('input[type=?][name=?][value=?]', 'text', 'node[parameters][key][]', key)
           end
         end
       end
       
-      it 'should not have a blank input for parameters' do
+      it 'should have an input for each parameter value' do
+        do_render
+        response.should have_tag('form[id=?]', "edit_node_#{@node.id}") do
+          @parameters.each_pair do |key, value|
+            with_tag('input[type=?][name=?][value=?]', 'text', 'node[parameters][value][]', value)
+          end
+        end
+      end
+      
+      it 'should not have a blank input for parameter name' do
         pending 'finding the right way to test this'
         do_render
         response.should have_tag('form[id=?]', "edit_node_#{@node.id}") do
-          with_tag('input[type=?][name=?]:not([value])', 'text', 'node[parameters][]')
+          with_tag('input[type=?][name=?]:not([value])', 'text', 'node[parameters][key][]')
+        end
+      end
+      
+      it 'should not have a blank input for parameter value' do
+        pending 'finding the right way to test this'
+        do_render
+        response.should have_tag('form[id=?]', "edit_node_#{@node.id}") do
+          with_tag('input[type=?][name=?]:not([value])', 'text', 'node[parameters][value][]')
         end
       end
     end

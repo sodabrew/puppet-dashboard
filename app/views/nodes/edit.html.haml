@@ -17,14 +17,14 @@
   %br
   %ul#parameters
     - if @node.parameters.blank?
-      = render :partial => 'parameter_input', :object => nil
+      = render :partial => 'parameter_input', :object => []
     - else
-      = render :partial => 'parameter_input', :collection => @node.parameters
+      = render :partial => 'parameter_input', :collection => @node.parameters.to_a
   %br
-  = link_to_function('Add Another Parameter', :href => 'javascript:void(0)') { |page|  page.insert_html :bottom, 'parameters', :partial => 'parameter_input', :object => nil }
+  = link_to_function('Add Another Parameter') { |page|  page.insert_html :bottom, 'parameters', :partial => 'parameter_input', :object => [] }
   %br
   %br
-  = f.submit ''
+  = f.submit 'Edit'
 
 
-= link_to 'View', @node
+= link_to 'Cancel', @node

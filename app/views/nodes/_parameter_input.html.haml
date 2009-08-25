@@ -1,4 +1,5 @@
 - parameter = parameter_input  # change silly partial-based variable name
 %li 
-  = text_field_tag 'node[parameters][]', parameter
-  %a{:href => 'javascript:void()'} (delete)
+  = text_field_tag 'node[parameters][key][]', parameter.first
+  = text_field_tag 'node[parameters][value][]', parameter.last
+  %a.delete_parameter{:href => '#'} (delete)
