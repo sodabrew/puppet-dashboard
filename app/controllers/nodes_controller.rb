@@ -8,4 +8,8 @@ class NodesController < ApplicationController
       format.yaml  { render :text => resource.configuration.to_yaml }
     end
   end
+  
+  def edit
+    @node = Node.find(params[:id])
+  end
 end

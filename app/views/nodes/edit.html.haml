@@ -1,0 +1,30 @@
+%h2 Edit Node
+
+.errors
+  = error_messages_for(:node)
+- form_for @node do |f|
+  %label{ :for => 'node_name' } Name
+  %br
+  = f.text_field :name
+  %br
+  %br
+  %label{ :for => 'node_description' } Description
+  %br
+  = f.text_area  :description
+  %br
+  %br
+  %label Parameters
+  %br
+  %ul#parameters
+    - if @node.parameters.blank?
+      = render :partial => 'parameter_input', :object => nil
+    - else
+      = render :partial => 'parameter_input', :collection => @node.parameters
+  %br
+  = link_to_function('Add Another Parameter', :href => 'javascript:void(0)') { |page|  page.insert_html :bottom, 'parameters', :partial => 'parameter_input', :object => nil }
+  %br
+  %br
+  = f.submit ''
+
+
+= link_to 'View', @node
