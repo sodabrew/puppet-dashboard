@@ -18,6 +18,12 @@ describe '/nodes/show' do
     response.should have_text(Regexp.new(Regexp.escape(@node.name)))
   end
   
+  it 'should include the node description' do
+    @node.description = 'Test Description'
+    do_render
+    response.should have_text(Regexp.new(Regexp.escape(@node.description)))
+  end
+  
   it "should include the node's parameter settings" do
     @node.parameters = { 'a' => 'b', 'c' => 'd' }
     do_render
