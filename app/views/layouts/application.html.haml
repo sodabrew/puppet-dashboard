@@ -1,0 +1,12 @@
+!!!
+%html{ :xmlns => "http://www.w3.org/1999/xhtml" }
+  %head
+    - page_title = yield(:page_title)
+    %title= [ page_title, 'Puppet Node Manager'].compact.join(' - ')
+    %link{ :href => "/images/favicon.ico", :rel => "shortcut icon" }
+    %meta{ :content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type" }
+    = javascript_include_tag :defaults, 'jquery.form', 'jquery.livequery', 'node'
+    
+  %body
+    #content
+      = yield
