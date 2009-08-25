@@ -1,8 +1,11 @@
 class NodesController < ApplicationController
   resources_controller_for :node
   
-  response_for :show do |format|
-    format.html # show.rhtml
-    format.yaml  { render :text => resource.configuration.to_yaml }
-  end  
+  def show
+    @node = Node.find(params[:id])
+    respond_to do |format|
+      format.html  { render '/nodes/show' } # FUY
+      format.yaml  { render :text => resource.configuration.to_yaml }
+    end
+  end
 end

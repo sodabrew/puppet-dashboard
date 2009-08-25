@@ -68,8 +68,17 @@ describe NodesController, 'when integrating' do
   end
 end
 
-describe NodesController, 'when not integrating' do
-  it_should_behave_like 'a RESTful controller'
+describe NodesController, 'when not integrating' do  
+  it_should_behave_like 'a RESTful controller with an index action'
+  it_should_behave_like 'a RESTful controller with a new action'
+  it_should_behave_like 'a RESTful controller with a create action'
+  it_should_behave_like 'a RESTful controller with an update action'
+  it_should_behave_like 'a RESTful controller with a destroy action'
+  it_should_behave_like 'a RESTful controller with an edit action'
+  
+  describe '#show' do
+    
+  end
   
   describe '#show, when YAML is requested' do
     before :each do
