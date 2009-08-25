@@ -1,0 +1,17 @@
+%h1== Node '#{h @node.name}'
+
+%h2 Node Parameters
+%ul
+  - (@node.parameters || {}).each_pair do |key, value|
+    %li
+      == #{h key}: #{h value}
+
+%h2 Node Classes
+%ul
+  - @node.services.each do |service|
+    %li
+      = h service.name
+
+%ul
+  %li
+    = link_to 'Edit', edit_node_path(@node)
