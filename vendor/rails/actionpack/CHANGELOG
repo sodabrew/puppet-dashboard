@@ -1,4 +1,4 @@
-*Edge*
+*2.3.3 (July 20, 2009)*
 
 * Fixed that TestResponse.cookies was returning cookies unescaped #1867 [Doug McInnes]
 

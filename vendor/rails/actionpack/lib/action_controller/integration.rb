@@ -309,12 +309,7 @@ module ActionController
 
           ActionController::Base.clear_last_instantiation!
 
-          app = @application
-          # Rack::Lint doesn't accept String headers or bodies in Ruby 1.9
-          unless RUBY_VERSION >= '1.9.0' && Rack.release <= '0.9.0'
-            app = Rack::Lint.new(app)
-          end
-
+          app = Rack::Lint.new(@application)
           status, headers, body = app.call(env)
           @request_count += 1
 
@@ -331,7 +326,7 @@ module ActionController
           end
 
           @body = ""
-          if body.is_a?(String)
+          if body.respond_to?(:to_str)
             @body << body
           else
             body.each { |part| @body << part }
@@ -414,7 +409,7 @@ module ActionController
         def multipart_requestify(params, first=true)
           returning Hash.new do |p|
             params.each do |key, value|
-              k = first ? CGI.escape(key.to_s) : "[#{CGI.escape(key.to_s)}]"
+              k = first ? key.to_s : "[#{key.to_s}]"
               if Hash === value
                 multipart_requestify(value, false).each do |subkey, subvalue|
                   p[k + subkey] = subvalue
