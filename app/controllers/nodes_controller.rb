@@ -26,8 +26,25 @@ class NodesController < ApplicationController
     end
   end
   
+  # connect a service to this node
+  def connect
+    @service = Service.find(params[:service_id])
+    @node = Node.find(params[:id])
+    @node.services << @service
+    render :layout => false
+  end
+  
+  # disconnect a service from this node
+  def disconnect
+    @service = Service.find(params[:service_id])
+    @node = Node.find(params[:id])
+    @node.services.delete(@service)
+    render :layout => false
+  end
+  
   private
   
+  # take key-value data from params[:node]['parameters'] and return the corresponding node#parameters hash
   def unserialize_parameters_data(params)
     return {} unless params[:node]['parameters'] and params[:node]['parameters']['key'] and params[:node]['parameters']['value']
     params[:node]['parameters']['key'].zip(params[:node]['parameters']['value']).inject({}) do |h, pair|

@@ -66,6 +66,31 @@ describe NodesController, 'when integrating' do
 
     it_should_behave_like "a redirecting action"
   end
+  
+  describe 'disconnect' do
+    before :each do
+      @service = Service.generate!
+    end
+    
+    def do_request
+      get :disconnect, :id => @node.id.to_s, :service_id => @service.id.to_s
+    end
+    
+    it_should_behave_like "an embeddable action"
+  end
+
+  
+  describe 'connect' do
+    before :each do
+      @service = Service.generate!
+    end
+    
+    def do_request
+      get :connect, :id => @node.id.to_s, :service_id => @service.id.to_s
+    end
+    
+    it_should_behave_like "an embeddable action"
+  end
 end
 
 describe NodesController, 'when not integrating' do  
@@ -225,6 +250,101 @@ describe NodesController, 'when not integrating' do
           Node.find(@node.id).parameters.should == { 'a' => 'b', 'c' => 'd' }                    
         end
       end
+    end
+  end
+
+  describe 'connect' do
+    before :each do
+      @node = Node.generate!
+      @service = Service.generate!
+      @params = { :id => @node.id.to_s, :service_id => @service.id.to_s }
+    end
+    
+    def do_get
+      get :connect, @params
+    end
+    
+    it 'should fail when no service id is provided' do
+      @params.delete(:service_id)
+      lambda { do_get }.should raise_error(ActiveRecord::RecordNotFound)      
+    end
+    
+    it 'should fail when no node id is provided' do
+      @params.delete(:id)
+      lambda { do_get }.should raise_error(ActiveRecord::RecordNotFound)      
+    end
+    
+    it 'should fail when an invalid service id is provided' do
+      @params[:service_id] = @service.id + 100
+      lambda { do_get }.should raise_error(ActiveRecord::RecordNotFound)      
+    end
+    
+    it 'should fail when an invalid node is provided' do
+      @params[:id] = @node.id + 100
+      lambda { do_get }.should raise_error(ActiveRecord::RecordNotFound)      
+    end
+    
+    it 'should add the requested service to the service list for the node' do
+      do_get
+      @node.services.should include(@service)
+    end
+    
+    it 'should show the connect view' do
+      do_get
+      response.should render_template('connect')
+    end
+    
+    it 'should not use a layout' do
+      do_get
+      response.layout.should be_nil
+    end
+  end
+  
+  describe 'disconnect' do
+    before :each do
+      @node = Node.generate!
+      @service = Service.generate!
+      @params = { :id => @node.id.to_s, :service_id => @service.id.to_s }
+      @node.services << @service
+    end
+    
+    def do_get
+      get :disconnect, @params
+    end
+    
+    it 'should fail when no service id is provided' do
+      @params.delete(:service_id)
+      lambda { do_get }.should raise_error(ActiveRecord::RecordNotFound)      
+    end
+    
+    it 'should fail when no node id is provided' do
+      @params.delete(:id)
+      lambda { do_get }.should raise_error(ActiveRecord::RecordNotFound)      
+    end
+    
+    it 'should fail when an invalid service id is provided' do
+      @params[:service_id] = @service.id + 100
+      lambda { do_get }.should raise_error(ActiveRecord::RecordNotFound)      
+    end
+    
+    it 'should fail when an invalid node is provided' do
+      @params[:id] = @node.id + 100
+      lambda { do_get }.should raise_error(ActiveRecord::RecordNotFound)      
+    end
+    
+    it 'should remove the requested service from the service list for the node' do
+      do_get
+      @node.services.should_not include(@service)
+    end
+    
+    it 'should show the disconnect view' do
+      do_get
+      response.should render_template('disconnect')
+    end
+    
+    it 'should not use a layout' do
+      do_get
+      response.layout.should be_nil
     end
   end
 end
