@@ -74,7 +74,6 @@ describe NodesController, 'when not integrating' do
   it_should_behave_like 'a RESTful controller with a show action'
   it_should_behave_like 'a RESTful controller with a create action'
   it_should_behave_like 'a RESTful controller with a destroy action'
-  it_should_behave_like 'a RESTful controller with an edit action'
   
   describe '#show, when YAML is requested' do
     before :each do
@@ -102,6 +101,38 @@ describe NodesController, 'when not integrating' do
     it 'should return the node configuration as the YAML result' do
       do_get
       response.body.should == @node.configuration.to_yaml
+    end
+  end
+  
+  describe '#edit' do
+    before :each do
+      @node = Node.generate!
+    end
+    
+    def do_get
+      get :edit, :id => @node.id.to_s
+    end
+    
+    it 'should make the requested node available to the view' do
+      do_get
+      assigns[:node].should == @node
+    end
+    
+    it 'should make the list of available services available to the view' do
+      @services = Array.new(6) { Service.generate! }
+      @node.services << @services[0..2]
+      do_get
+      assigns[:available_services].should == @services[3..5]
+    end
+    
+    it 'should render the edit template' do
+      do_get
+      response.should render_template('edit')
+    end
+    
+    it 'should use the default layout' do
+      do_get
+      response.layout.should == 'layouts/application'
     end
   end
   

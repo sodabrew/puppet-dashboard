@@ -11,6 +11,7 @@ class NodesController < ApplicationController
   
   def edit
     @node = Node.find(params[:id])
+    @available_services = (Service.all - @node.services) # obviously we must paginate and/or search soon.
   end
   
   def update
