@@ -2,10 +2,10 @@
 #associated-classes
   %h4 Requires these Classes
   %ul
-    - node.services.each do |service|
-      %li= link_to service.name, disconnect_service_node_path(service, node)
+    - node.services.sort_by(&:name).each do |service|
+      %li= link_to service.name, disconnect_service_node_path(service, node), :class => 'disassociate-link'
 #available-classes
   %h4 Available Classes    
   %ul
-    - (available_services || []).each do |service|
-      %li= link_to service.name, connect_service_node_path(service, node)
+    - (available_services || []).sort_by(&:name).each do |service|
+      %li= link_to service.name, connect_service_node_path(service, node), :class => 'associate-link'
