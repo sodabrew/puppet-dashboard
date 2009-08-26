@@ -1,0 +1,11 @@
+%h3 Classes
+#associated-classes
+  %h4 Requires these Classes
+  %ul
+    - node.services.each do |service|
+      %li= link_to service.name, disconnect_service_node_path(service, node)
+#available-classes
+  %h4 Available Classes    
+  %ul
+    - (available_services || []).each do |service|
+      %li= link_to service.name, connect_service_node_path(service, node)

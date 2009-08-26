@@ -254,6 +254,10 @@ describe NodesController, 'when not integrating' do
   end
 
   describe 'connect' do
+    before :all do
+      Service.delete_all
+    end
+    
     before :each do
       @node = Node.generate!
       @service = Service.generate!
@@ -284,11 +288,22 @@ describe NodesController, 'when not integrating' do
       lambda { do_get }.should raise_error(ActiveRecord::RecordNotFound)      
     end
     
+    it 'should make the requested node available to the view' do
+      do_get
+      assigns[:node].should == @node
+    end
+    
     it 'should add the requested service to the service list for the node' do
       do_get
       @node.services.should include(@service)
     end
     
+    it 'should make the list of available services available to the view' do
+      @services = Array.new(3) { Service.generate! }
+      do_get
+      assigns[:available_services].should == @services
+    end
+
     it 'should show the connect view' do
       do_get
       response.should render_template('connect')
@@ -332,9 +347,20 @@ describe NodesController, 'when not integrating' do
       lambda { do_get }.should raise_error(ActiveRecord::RecordNotFound)      
     end
     
+    it 'should make the requested node available to the view' do
+      do_get
+      assigns[:node].should == @node
+    end
+    
     it 'should remove the requested service from the service list for the node' do
       do_get
       @node.services.should_not include(@service)
+    end
+    
+    it 'should make the list of available services available to the view' do
+      @services = Array.new(3) { Service.generate! }
+      do_get
+      assigns[:available_services].sort_by(&:name).should == (@services << @service).sort_by(&:name)
     end
     
     it 'should show the disconnect view' do

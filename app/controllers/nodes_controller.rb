@@ -31,6 +31,7 @@ class NodesController < ApplicationController
     @service = Service.find(params[:service_id])
     @node = Node.find(params[:id])
     @node.services << @service
+    @available_services = (Service.all - @node.services) # obviously we must paginate and/or search soon.
     render :layout => false
   end
   
@@ -39,6 +40,7 @@ class NodesController < ApplicationController
     @service = Service.find(params[:service_id])
     @node = Node.find(params[:id])
     @node.services.delete(@service)
+    @available_services = (Service.all - @node.services) # obviously we must paginate and/or search soon.
     render :layout => false
   end
   
