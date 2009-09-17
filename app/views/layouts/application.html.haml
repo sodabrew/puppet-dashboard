@@ -6,7 +6,12 @@
     %link{ :href => "/images/favicon.ico", :rel => "shortcut icon" }
     %meta{ :content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type" }
     = javascript_include_tag :defaults, 'jquery.form', 'jquery.livequery', 'node'
-    
+    = stylesheet_link_tag :all
   %body
     #content
-      = yield
+      #header
+        %h1 Puppet Node Manager
+      #main
+        = yield
+      #footer
+        Copyright 2009 Reductive Labs
