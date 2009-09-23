@@ -3,31 +3,19 @@ require File.expand_path(File.join(File.dirname(__FILE__), *%w[.. spec_helper]))
 describe Node do
   describe 'attributes' do
     before :each do
+      Node.generate!
       @node = Node.new
     end
-    
-    it 'should have a name' do
-      @node.should respond_to(:name)
-    end
-    
-    it 'should allow setting and retrieving the name' do
-      @node.name = 'test name'
-      @node.name.should == 'test name'
-    end
 
-    it 'should have a description' do
-      @node.should respond_to(:description)
-    end
+    it { should have_many(:node_class_memberships) }
+    it { should have_many(:node_classes).through(:node_class_memberships) }
+    it { should have_many(:node_group_memberships) }
+    it { should have_many(:node_groups).through(:node_group_memberships) }
+    
+    it { should have_db_column(:name).of_type(:string) }
+    it { should validate_presence_of(:name) }
+    it { should validate_uniqueness_of(:name) }
 
-    it 'should allow setting and retrieving the description' do
-      @node.description = 'test description'
-      @node.description.should == 'test description'
-    end
-    
-    it 'should have a set of parameters' do
-      @node.should respond_to(:parameters)
-    end
-    
     it 'should allow setting and retrieving parameter values' do
       @node.parameters = { :foo => 'bar' }
       @node.parameters[:foo].should == 'bar'
@@ -39,41 +27,43 @@ describe Node do
     end
   end
 
-  describe 'validations' do
-    before :each do
+  describe '#available_node_classes' do
+    before do
       @node = Node.new
+      @node_classes = Array.new(3){ NodeClass.generate! }
     end
 
-    it 'should require a name' do
-      @node.name = nil
-      @node.valid?
-      @node.errors.should be_invalid(:name)
-    end
-    
-    it 'should require name to be unique' do
-      dup = Node.generate!(:name => 'unoriginal name')
-      @node.name = 'unoriginal name'
-      @node.valid?
-      @node.errors.should be_invalid(:name)
+    it "should include all available classes" do
+      @node.available_node_classes.should == @node_classes
     end
 
-    it 'should be valid with an unique name' do
-      @node.name = 'creative name'
-      @node.valid?
-      @node.errors.should_not be_invalid(:name)
+    describe 'when the node has classes' do
+      before { @node.node_classes << @node_classes.first }
+
+      it "should not include the node's classes" do
+        @node.available_node_classes.should_not include(@node_classes.first)
+      end
+
     end
   end
-  
-  describe 'associations' do
-    it 'should have services' do
-      Node.new.should respond_to(:services)
-    end
-    
-    it 'should allow setting and returning services' do
+
+  describe '#available_node_groups' do
+    before do
       @node = Node.new
-      @services = Array.new(3) { Service.generate! }
-      @node.services << @services
-      @node.services.should == @services
+      @node_groups = Array.new(3){ NodeGroup.generate! }
+    end
+
+    it "should include all available groups" do
+      @node.available_node_groups.should == @node_groups
+    end
+
+    describe 'when the node has groups' do
+      before { @node.node_groups << @node_groups.first }
+
+      it "should not include the node's groups" do
+        @node.available_node_groups.should_not include(@node_groups.first)
+      end
+
     end
   end
 
@@ -98,9 +88,9 @@ describe Node do
       @node.configuration.keys.sort.should == ['classes', 'parameters']
     end
     
-    it "should return the names of the node's services in the returned class list" do
-      @node.services = @services = Array.new(3) { Service.generate! }
-      @node.configuration['classes'].sort.should == @services.collect(&:name).sort
+    it "should return the names of the node's classes in the returned class list" do
+      @node.node_classes = @classes = Array.new(3) { NodeClass.generate! }
+      @node.configuration['classes'].sort.should == @classes.collect(&:name).sort
     end
     
     it "should return the node's parameters in the returned parameters list" do
