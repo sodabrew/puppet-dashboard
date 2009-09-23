@@ -1,26 +1,27 @@
 %h2== Node '#{h @node.name}'
-.description
-  = h @node.description
+.description= simple_format h(@node.description)
 
 %h3 Node Parameters
-%dl
-  - (@node.parameters || {}).each_pair do |key, value|
-    %dt= h key
-    %dd= h value
+
+- unless @node.parameters.blank?
+  %dl
+    - @node.parameters.each_pair do |key, value|
+      %dt= h key
+      %dd= h value
 
 %h3 Node Groups
-%ul
-  - @node.node_groups.each do |node_group|
-    %li
-      = h node_group.name
+
+- unless @node.node_groups.empty?
+  %ul
+    - @node.node_groups.each do |node_group|
+      %li= h node_group.name
 
 %h3 Node Classes
 
-%ul
-  - @node.node_classes.each do |node_class|
-    %li
-      = h node_class.name
+- unless @node.node_classes.empty?
+  %ul
+    - @node.node_classes.each do |node_class|
+      %li= h node_class.name
 
-%ul
-  %li
-    = link_to 'Edit', edit_node_path(@node)
+%ul.actions
+  %li= link_to 'Edit', edit_node_path(@node)

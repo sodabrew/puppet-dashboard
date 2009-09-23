@@ -27,7 +27,7 @@ describe NodesController, 'when integrating' do
     def do_request
       get :show, :id => @node.id.to_s
     end
-      
+
     it_should_behave_like "a successful action"
   end
 
@@ -68,13 +68,12 @@ describe NodesController, 'when integrating' do
   end
 end
 
-describe NodesController, 'when not integrating' do  
+describe NodesController, 'when not integrating' do
   it_should_behave_like 'a RESTful controller with an index action'
   it_should_behave_like 'a RESTful controller with a new action'
   it_should_behave_like 'a RESTful controller with a show action'
-  it_should_behave_like 'a RESTful controller with a create action'
   it_should_behave_like 'a RESTful controller with a destroy action'
-  
+
   describe '#show, when YAML is requested' do
     before :each do
       @parameters = { 'a' => 'b', 'c' => 'd' }
@@ -82,17 +81,17 @@ describe NodesController, 'when not integrating' do
       @node_classes = Array.new(3) { NodeClass.generate! }
       @node.node_classes << @node_classes
     end
-    
-    def do_get  
-      @request.env["HTTP_ACCEPT"] = "application/x-yaml" 
+
+    def do_get
+      @request.env["HTTP_ACCEPT"] = "application/x-yaml"
       get :show, :id => @node.id.to_s
     end
-    
+
     it 'should return a YAML result' do
       do_get
       response.headers['Content-Type'].should match(/^application\/x-yaml/)
     end
-    
+
     it 'should not use a layout' do
       do_get
       response.layout.should be_nil
@@ -103,97 +102,97 @@ describe NodesController, 'when not integrating' do
       response.body.should == @node.configuration.to_yaml
     end
   end
-  
+
   describe '#edit' do
     before :each do
       @node = Node.generate!
     end
-    
+
     def do_get
       get :edit, :id => @node.id.to_s
     end
-    
+
     it 'should make the requested node available to the view' do
       do_get
       assigns[:node].should == @node
     end
-    
+
     it 'should render the edit template' do
       do_get
       response.should render_template('edit')
     end
-    
+
     it 'should use the default layout' do
       do_get
       response.layout.should == 'layouts/application'
     end
   end
-  
+
   describe '#update' do
     before :each do
       @node = Node.generate!
       @params = { :id => @node.id.to_s, :node => @node.attributes }
     end
-    
+
     def do_put
       put :update, @params
     end
-    
+
     it 'should fail when an invalid node id is given' do
       @params[:id] = (@node.id+100).to_s
       lambda { do_put }.should raise_error(ActiveRecord::RecordNotFound)
     end
-    
+
     describe 'when a valid node id is given' do
 
       describe 'and the data provided would make the node invalid' do
         before :each do
           @params[:node]['name'] = nil
         end
-        
+
         it 'should make the node available to the view' do
           do_put
           assigns[:node].should == @node
         end
-        
+
         it 'should not save the node' do
           do_put
           Node.find(@node.id).name.should_not be_nil
         end
-        
+
         it 'should have errors on the node' do
           do_put
           assigns[:node].errors[:name].should_not be_blank
         end
-        
+
         it 'should render the edit action' do
           do_put
           response.should render_template('edit')
         end
-        
+
         it 'should use the default layout' do
           do_put
-          response.layout.should == 'layouts/application'       
+          response.layout.should == 'layouts/application'
         end
       end
-      
+
       describe 'and the data provided make the node valid' do
         it 'should note the update success in flash' do
           do_put
           flash[:notice].should match(/success/i)
         end
-        
+
         it 'should update the node with the data provided' do
           @params[:node]['name'] = 'new name'
           do_put
-          Node.find(@node.id).name.should == 'new name' 
+          Node.find(@node.id).name.should == 'new name'
         end
-        
+
         it 'should redirect to the show action for the node' do
           do_put
           response.should redirect_to(node_path(@node))
         end
-        
+
       end
     end
   end

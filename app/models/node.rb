@@ -20,4 +20,8 @@ class Node < ActiveRecord::Base
   def configuration
     { 'classes' => node_classes.collect(&:name), 'parameters' => parameters }
   end
+
+  def before_save
+    logger.debug "ATTRIBUTES: #{attributes.inspect}"
+  end
 end
