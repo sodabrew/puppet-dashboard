@@ -1,0 +1,25 @@
+.element
+  = form.label :name
+  = form.text_field :name
+.element
+  = form.label :description
+  = form.text_area :description, :rows => 4
+
+.element.node-parameters
+  %label Parameters
+  %ul#parameters
+    - if @node.parameters.blank?
+      = render :partial => 'parameter_input', :object => []
+    - else
+      = render :partial => 'parameter_input', :collection => @node.parameters.to_a
+  = link_to_function('Add Another Parameter') { |page|  page.insert_html :bottom, 'parameters', :partial => 'parameter_input', :object => [] }
+
+.element#node-groups
+  - form.object.node_groups.map(&:id).each do |id|
+    = form.hidden_field 'node_group_ids[]', :value => id
+  = render :partial => 'node_groups', :locals => { :node => @node }
+
+.element#node-classes
+  - form.object.node_classes.map(&:id).each do |id|
+    = form.hidden_field 'node_class_ids[]', :value => id
+  = render :partial => 'node_classes', :locals => { :node => @node }

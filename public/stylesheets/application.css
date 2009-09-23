@@ -11,8 +11,8 @@ body { font: 14px/1.5em Verdana, serif;}
 
 p  { font-size: 1em; margin-bottom: 1.5em;}
 
-h1 { font-size: 3em;	line-height: 1em;    }
-h2 { font-size: 2em; 	line-height: 1.5em;  }
+h1 { font-size: 3em;  line-height: 1em;    }
+h2 { font-size: 2em;  line-height: 1.5em;  }
 h3 { font-size: 1.5em;  line-height: 1em;    }
 h4 { font-size: 1.16em; line-height: 1.28em; }
 
@@ -31,4 +31,33 @@ ul, ol, dl, form, table { margin: 0 0 18px; }
 
 /* =Lists */
 
-ul { list-style-type: disc; list-style-position: outside; margin-left: 1.25em;}
+ul { list-style-type: disc; list-style-position: outside; margin-left: 1.25em; padding-left: 0;}
+dl { width: 100%; float: left; }
+dl dt { float: left; clear: left; font-weight: bold; }
+dl dt { float: left; }
+
+/* =Forms */
+
+form .element { margin-bottom: 1.5em }
+label { display: block; }
+form ul { list-style-type: none; margin: 0; padding: 0;}
+
+
+/* =Nodes */
+
+ul.node_classes, ul.node_groups { float: left; width: 100%; margin-bottom: 1.5em; }
+ul li.node_class, ul li.node_group { float: left; margin-right: 10px; }
+
+li.node_class a, li.node_group a { 
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
+  border: 1px solid #CCC;
+  display: block;
+  padding: 2px 5px;
+  background: #EEE;
+}
+
+li.node_class a:hover, li.node_group a:hover {
+  background: #DDD;
+  text-decoration: none;
+}

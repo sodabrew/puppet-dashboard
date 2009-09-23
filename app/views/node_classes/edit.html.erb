@@ -1,0 +1,16 @@
+<h1>Editing node_class</h1>
+
+<% form_for(@node_class) do |f| %>
+  <%= f.error_messages %>
+
+  <p>
+    <%= f.label :name %><br />
+    <%= f.text_field :name %>
+  </p>
+  <p>
+    <%= f.submit 'Update' %>
+  </p>
+<% end %>
+
+<%= link_to 'Show', @node_class %> |
+<%= link_to 'Back', node_classes_path %>

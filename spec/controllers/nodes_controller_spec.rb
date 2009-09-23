@@ -66,31 +66,6 @@ describe NodesController, 'when integrating' do
 
     it_should_behave_like "a redirecting action"
   end
-  
-  describe 'disconnect' do
-    before :each do
-      @service = Service.generate!
-    end
-    
-    def do_request
-      get :disconnect, :id => @node.id.to_s, :service_id => @service.id.to_s
-    end
-    
-    it_should_behave_like "an embeddable action"
-  end
-
-  
-  describe 'connect' do
-    before :each do
-      @service = Service.generate!
-    end
-    
-    def do_request
-      get :connect, :id => @node.id.to_s, :service_id => @service.id.to_s
-    end
-    
-    it_should_behave_like "an embeddable action"
-  end
 end
 
 describe NodesController, 'when not integrating' do  
@@ -104,8 +79,8 @@ describe NodesController, 'when not integrating' do
     before :each do
       @parameters = { 'a' => 'b', 'c' => 'd' }
       @node = Node.generate!(:parameters => @parameters)
-      @services = Array.new(3) { Service.generate! }
-      @node.services << @services
+      @node_classes = Array.new(3) { NodeClass.generate! }
+      @node.node_classes << @node_classes
     end
     
     def do_get  
@@ -141,13 +116,6 @@ describe NodesController, 'when not integrating' do
     it 'should make the requested node available to the view' do
       do_get
       assigns[:node].should == @node
-    end
-    
-    it 'should make the list of available services available to the view' do
-      @services = Array.new(6) { Service.generate! }
-      @node.services << @services[0..2]
-      do_get
-      assigns[:available_services].should == @services[3..5]
     end
     
     it 'should render the edit template' do
@@ -226,151 +194,7 @@ describe NodesController, 'when not integrating' do
           response.should redirect_to(node_path(@node))
         end
         
-        it 'should set the parameters to an empty hash when the data provides no empty parameters list' do
-          @params[:node].delete('parameters')
-          do_put
-          Node.find(@node.id).parameters.should == {}
-        end
-        
-        it 'should set the parameters to an empty hash when the data provides an empty parameters list' do
-          @params[:node]['parameters'] = {}
-          do_put
-          Node.find(@node.id).parameters.should == {}
-        end
-        
-        it 'should set the parameters to an empty hash when the data provides no non-blank parameter names' do
-          @params[:node]['parameters'] = { 'key' => ['', '', ''], 'value' => ['1', '2', '3'] }
-          do_put
-          Node.find(@node.id).parameters.should == {}          
-        end
-        
-        it 'should set the parameters to a hash based on the data keys and values' do
-          @params[:node]['parameters'] = { 'key' => ['a', '', 'c'], 'value' => ['b', 'x', 'd'] }
-          do_put
-          Node.find(@node.id).parameters.should == { 'a' => 'b', 'c' => 'd' }                    
-        end
       end
-    end
-  end
-
-  describe 'connect' do
-    before :all do
-      Service.delete_all
-    end
-    
-    before :each do
-      @node = Node.generate!
-      @service = Service.generate!
-      @params = { :id => @node.id.to_s, :service_id => @service.id.to_s }
-    end
-    
-    def do_get
-      get :connect, @params
-    end
-    
-    it 'should fail when no service id is provided' do
-      @params.delete(:service_id)
-      lambda { do_get }.should raise_error(ActiveRecord::RecordNotFound)      
-    end
-    
-    it 'should fail when no node id is provided' do
-      @params.delete(:id)
-      lambda { do_get }.should raise_error(ActiveRecord::RecordNotFound)      
-    end
-    
-    it 'should fail when an invalid service id is provided' do
-      @params[:service_id] = @service.id + 100
-      lambda { do_get }.should raise_error(ActiveRecord::RecordNotFound)      
-    end
-    
-    it 'should fail when an invalid node is provided' do
-      @params[:id] = @node.id + 100
-      lambda { do_get }.should raise_error(ActiveRecord::RecordNotFound)      
-    end
-    
-    it 'should make the requested node available to the view' do
-      do_get
-      assigns[:node].should == @node
-    end
-    
-    it 'should add the requested service to the service list for the node' do
-      do_get
-      @node.services.should include(@service)
-    end
-    
-    it 'should make the list of available services available to the view' do
-      @services = Array.new(3) { Service.generate! }
-      do_get
-      assigns[:available_services].should == @services
-    end
-
-    it 'should show the connect view' do
-      do_get
-      response.should render_template('connect')
-    end
-    
-    it 'should not use a layout' do
-      do_get
-      response.layout.should be_nil
-    end
-  end
-  
-  describe 'disconnect' do
-    before :each do
-      @node = Node.generate!
-      @service = Service.generate!
-      @params = { :id => @node.id.to_s, :service_id => @service.id.to_s }
-      @node.services << @service
-    end
-    
-    def do_get
-      get :disconnect, @params
-    end
-    
-    it 'should fail when no service id is provided' do
-      @params.delete(:service_id)
-      lambda { do_get }.should raise_error(ActiveRecord::RecordNotFound)      
-    end
-    
-    it 'should fail when no node id is provided' do
-      @params.delete(:id)
-      lambda { do_get }.should raise_error(ActiveRecord::RecordNotFound)      
-    end
-    
-    it 'should fail when an invalid service id is provided' do
-      @params[:service_id] = @service.id + 100
-      lambda { do_get }.should raise_error(ActiveRecord::RecordNotFound)      
-    end
-    
-    it 'should fail when an invalid node is provided' do
-      @params[:id] = @node.id + 100
-      lambda { do_get }.should raise_error(ActiveRecord::RecordNotFound)      
-    end
-    
-    it 'should make the requested node available to the view' do
-      do_get
-      assigns[:node].should == @node
-    end
-    
-    it 'should remove the requested service from the service list for the node' do
-      do_get
-      @node.services.should_not include(@service)
-    end
-    
-    it 'should make the list of available services available to the view' do
-      @services = Array.new(3) { Service.generate! }
-      do_get
-      assigns[:available_services].sort_by(&:name).should == (@services << @service).sort_by(&:name)
-    end
-    
-    it 'should show the disconnect view' do
-      do_get
-      response.should render_template('disconnect')
-    end
-    
-    it 'should not use a layout' do
-      do_get
-      response.layout.should be_nil
     end
   end
 end

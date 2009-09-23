@@ -1,0 +1,20 @@
+<h1>Listing node_classes</h1>
+
+<table>
+  <tr>
+    <th>Name</th>
+  </tr>
+
+<% @node_classes.each do |node_class| %>
+  <tr>
+    <td><%=h node_class.name %></td>
+    <td><%= link_to 'Show', node_class %></td>
+    <td><%= link_to 'Edit', edit_node_class_path(node_class) %></td>
+    <td><%= link_to 'Destroy', node_class, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New node_class', new_node_class_path %>

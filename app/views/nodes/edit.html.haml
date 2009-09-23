@@ -3,32 +3,6 @@
 .errors
   = error_messages_for(:node)
 - form_for @node do |f|
-  %label{ :for => 'node_name' } Name
-  %br
-  = f.text_field :name
-  %br
-  %br
-  %label{ :for => 'node_description' } Description
-  %br
-  = f.text_area  :description
-  %br
-  %br
-  
-  .node-parameters
-    %label Parameters
-    %br
-    %ul#parameters
-      - if @node.parameters.blank?
-        = render :partial => 'parameter_input', :object => []
-      - else
-        = render :partial => 'parameter_input', :collection => @node.parameters.to_a
-    %br
-    = link_to_function('Add Another Parameter') { |page|  page.insert_html :bottom, 'parameters', :partial => 'parameter_input', :object => [] }
-    %br
-    %br
-    = f.submit 'Edit'
-
-#node-classes
-  = render :partial => 'node_classes', :locals => { :node => @node, :available_services => @available_services }
-
-= link_to 'Cancel', @node
+  = render f
+  = f.submit
+  = link_to 'Cancel', @node

@@ -1,18 +1,25 @@
-%h1== Node '#{h @node.name}'
+%h2== Node '#{h @node.name}'
 .description
   = h @node.description
 
-%h2 Node Parameters
-%ul
+%h3 Node Parameters
+%dl
   - (@node.parameters || {}).each_pair do |key, value|
-    %li
-      == #{h key}: #{h value}
+    %dt= h key
+    %dd= h value
 
-%h2 Node Classes
+%h3 Node Groups
 %ul
-  - @node.services.each do |service|
+  - @node.node_groups.each do |node_group|
     %li
-      = h service.name
+      = h node_group.name
+
+%h3 Node Classes
+
+%ul
+  - @node.node_classes.each do |node_class|
+    %li
+      = h node_class.name
 
 %ul
   %li

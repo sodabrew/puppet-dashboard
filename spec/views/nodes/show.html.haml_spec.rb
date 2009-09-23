@@ -28,16 +28,17 @@ describe '/nodes/show' do
     @node.parameters = { 'a' => 'b', 'c' => 'd' }
     do_render
     @node.parameters.each_pair do |key, value|
-      response.should have_text(/#{key}.*#{value}/)
+      response.should have_tag('dt', :text => key)
+      response.should have_tag('dd', :text => value)
     end
   end
   
   it "should include the node's class list" do
-    @services = Array.new(3) { Service.generate! }
-    @node.services << @services
+    @node_classes = Array.new(3) { NodeClass.generate! }
+    @node.node_classes << @node_classes
     do_render
-    @services.each do |service|
-      response.should have_text(Regexp.new(Regexp.escape(service.name)))
+    @node_classes.each do |node_class|
+      response.should have_text(Regexp.new(Regexp.escape(node_class.name)))
     end
   end
   
