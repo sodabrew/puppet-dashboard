@@ -1,0 +1,6 @@
+haml
+mocha
+mislav-will_paginate --version '~> 2.3.8' --source http://gems.github.com
+rspec
+rspec-rails
+thoughtbot-shoulda --source http://gems.github.com
