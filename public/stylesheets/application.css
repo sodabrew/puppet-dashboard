@@ -48,12 +48,13 @@ h1, h2, h3, h4, h5, h6 { font-family: "Helvetica Neue", Helvetica, Arial, serif;
 /* =Links */
 
 a { text-decoration: none; color: #289;}
-a:hover { text-decoration: underline;}
+a:hover { text-decoration: underline; color: #39A;}
+
+h1 a:hover { text-decoration: none; }
 
 /* =Margins */
 
 h1, h2, h3, h4, h5, h6 { margin: 12px 0 6px;}
-
 ul, ol, dl, form, table { margin: 0 0 18px; }
 
 /* =Lists */
