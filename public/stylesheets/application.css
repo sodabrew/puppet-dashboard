@@ -78,10 +78,10 @@ ul li.node_class, ul li.node_group { float: left; margin-right: 10px; }
 li.node_class a, li.node_group a { 
   -moz-border-radius: 10px;
   -webkit-border-radius: 10px;
+  background: #EEE;
   border: 1px solid #CCC;
   display: block;
   padding: 2px 5px;
-  background: #EEE;
 }
 
 li.node_class a:hover, li.node_group a:hover {
