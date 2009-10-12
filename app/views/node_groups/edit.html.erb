@@ -1,0 +1,12 @@
+<h2>Editing Node Group</h2>
+
+<% form_for(@node_group) do |f| %>
+  <%= f.error_messages %>
+
+  <p>
+    <%= f.submit 'Update' %>
+  </p>
+<% end %>
+
+<%= link_to 'Show', @node_group %> |
+<%= link_to 'Back', node_groups_path %>

@@ -5,12 +5,16 @@
     %title= [ page_title, 'Puppet Node Manager'].compact.join(' - ')
     %link{ :href => "/images/favicon.ico", :rel => "shortcut icon" }
     %meta{ :content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type" }
-    = javascript_include_tag :defaults, 'jquery.form', 'jquery.livequery', 'node'
+    = javascript_include_tag :all
     = stylesheet_link_tag :all
   %body
     #content
       #header
         %h1= link_to "Puppet Node Manager", root_path
+        %ul#nav
+          %li= link_to_unless_current "Nodes", nodes_path
+          %li= link_to_unless_current "Node Classes", node_classes_path
+          %li= link_to_unless_current "Node Groups", node_groups_path
       #main
         = yield
       #footer

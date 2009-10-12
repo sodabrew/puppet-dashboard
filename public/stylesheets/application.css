@@ -5,6 +5,33 @@ body { background: #999; }
 #main, #header { padding: 0.75em 1.5em; }
 #footer { background: #AAA; color: #777; padding: .5em 1.5em; text-align: right; }
 
+/* =Navigation */
+
+ul#nav {
+  float: left;
+  font-weight: bold;
+  list-style-type: none;
+  margin-left: 0;
+  padding-left: 0;
+  width: 100%;
+}
+
+ul#nav li {
+  float: left;
+  padding-right: 2em;
+}
+
+
+ul#nav li a {
+  border-bottom: 3px solid #FFF;
+  display: block;
+}
+
+ul#nav li a:hover {
+  border-bottom: 3px solid #289;
+  text-decoration: none;
+}
+
 /* =Typography */
 
 body { font: 14px/1.5em Verdana, serif;}

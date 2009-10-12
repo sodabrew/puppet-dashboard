@@ -1,0 +1,20 @@
+<h2>Node Groups</h2>
+
+<table>
+  <tr>
+    <th>Name</th>
+  </tr>
+
+<% @node_groups.each do |node_group| %>
+  <tr>
+    <td><%= node_group.name %></td>
+    <td><%= link_to 'Show', node_group %></td>
+    <td><%= link_to 'Edit', edit_node_group_path(node_group) %></td>
+    <td><%= link_to 'Destroy', node_group, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New node_group', new_node_group_path %>
