@@ -14,14 +14,14 @@
 - unless @node.node_groups.empty?
   %ul
     - @node.node_groups.each do |node_group|
-      %li= h node_group.name
+      %li= link_to h(node_group.name), node_group
 
 %h3 Node Classes
 
 - unless @node.node_classes.empty?
   %ul
     - @node.node_classes.each do |node_class|
-      %li= h node_class.name
+      %li= link_to h(node_class.name), node_class
 
 %ul.actions
   %li= link_to 'Edit', edit_node_path(@node)

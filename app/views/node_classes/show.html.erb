@@ -1,8 +1,6 @@
-<p>
-  <b>Name:</b>
-  <%=h @node_class.name %>
-</p>
-
+<h2><%= @node_class.name %></h2>
 
 <%= link_to 'Edit', edit_node_class_path(@node_class) %> |
-<%= link_to 'Back', node_classes_path %>
+<%= link_to 'Back', node_classes_path %> |
+<%= link_to 'Destroy', @node_class, :confirm => 'Are you sure?', :method => :delete %>
+

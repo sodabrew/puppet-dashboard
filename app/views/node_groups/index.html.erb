@@ -7,8 +7,7 @@
 
 <% @node_groups.each do |node_group| %>
   <tr>
-    <td><%= node_group.name %></td>
-    <td><%= link_to 'Show', node_group %></td>
+    <td><%= link_to h(node_group.name), node_group %></td>
     <td><%= link_to 'Edit', edit_node_group_path(node_group) %></td>
     <td><%= link_to 'Destroy', node_group, :confirm => 'Are you sure?', :method => :delete %></td>
   </tr>
@@ -17,4 +16,4 @@
 
 <br />
 
-<%= link_to 'New node_group', new_node_group_path %>
+<%= link_to 'New Node Group', new_node_group_path %>

@@ -1,3 +1,5 @@
+<h2><%= @node_group.name %></h2>
 
 <%= link_to 'Edit', edit_node_group_path(@node_group) %> |
-<%= link_to 'Back', node_groups_path %>
+<%= link_to 'Node Groups', node_groups_path %> |
+<%= link_to 'Destroy', @node_group, :confirm => 'Are you sure?', :method => :delete %>
