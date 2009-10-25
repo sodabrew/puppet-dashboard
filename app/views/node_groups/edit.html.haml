@@ -1,0 +1,8 @@
+%h2 Edit Node Group
+
+.errors
+  = error_messages_for(:node_group)
+- form_for @node_group do |f|
+  = render f
+  = f.submit
+  = link_to 'Cancel', @node_group

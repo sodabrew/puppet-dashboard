@@ -1,0 +1,19 @@
+%h2= @node_group.name
+
+%h3 Parameters
+
+- unless @node_group.parameters.blank?
+  %dl
+    - @node_group.parameters.each_pair do |key, value|
+      %dt= h key
+      %dd= h value
+
+%h3 Classes
+
+- unless @node_group.node_classes.empty?
+  %ul
+    - @node_group.node_classes.each do |node_class|
+      %li= link_to h(node_class.name), node_class
+%ul.actions
+  %li= link_to 'Edit', edit_node_group_path(@node_group)
+  %li= link_to 'Destroy', @node_group, :confirm => 'Are you sure?', :method => :delete
