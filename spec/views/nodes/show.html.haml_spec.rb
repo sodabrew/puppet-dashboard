@@ -46,4 +46,9 @@ describe '/nodes/show' do
     do_render
     response.should have_tag('a[href=?]', edit_node_path(@node))
   end
+  
+  it 'should include a link to delete the node' do
+    do_render
+    response.should have_tag('a[href=?]', node_path(@node))
+  end
 end

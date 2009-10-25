@@ -25,3 +25,4 @@
 
 %ul.actions
   %li= link_to 'Edit', edit_node_path(@node)
+  %li= link_to 'Destroy', @node, :confirm => 'Are you sure?', :method => :delete
