@@ -1,0 +1,2 @@
+Generates both the TimelineEvent class and the migration to create its table. The table will have subject, actor and secondary actor as polymorphic associations.
+The use of this generator is optional. See README for more details. 
