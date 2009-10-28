@@ -1,2 +1,6 @@
-// Place your application-specific JavaScript functions and classes here
-// This file is automatically included by javascript_include_tag :defaults
+$(document).ready(function() {
+  $('.hidden').hide()
+  $('a.show-hide').click(function() {
+    $(this).parents('.actions').siblings('.hidden').toggle(); return false;
+  });
+});

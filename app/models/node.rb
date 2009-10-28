@@ -9,6 +9,10 @@ class Node < ActiveRecord::Base
   
   serialize :parameters
 
+  fires :created_node, :on => :create
+  fires :updated_node, :on => :update
+  fires :removed_node, :on => :destroy
+
   def available_node_classes
     @available_node_classes ||= NodeClass.all(:order => :name) - node_classes
   end

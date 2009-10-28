@@ -1,2 +1,18 @@
 .node
   %h3= link_to node.name, node
+  .info.hidden
+    - unless node.node_classes.empty?
+      %h4 Classes:
+      %p= node.node_classes.map{|cl| link_to cl.name, cl}.to_sentence
+    - unless node.node_groups.empty?
+      %h4 Groups:
+      %p= node.node_groups.map{|gr| link_to gr.name, gr}.to_sentence
+    - unless node.parameters.blank?
+      %h4 Parameters:
+      %dl
+        - node.parameters.each do |name, value|
+          %dt== #{name}:
+          %dd= value
+  .actions
+    = link_to "Edit", edit_node_path(node)
+    = link_to "...", "#", :class => "show-hide"

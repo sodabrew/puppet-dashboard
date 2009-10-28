@@ -17,5 +17,7 @@
           %li= link_to_unless_current "Node Groups", node_groups_path
       #main
         = yield
+      #sidebar
+        = yield :sidebar
       #footer
         Copyright 2009 Reductive Labs

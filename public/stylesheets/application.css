@@ -1,9 +1,33 @@
+/* =Reset (from Blueprint) */
+html, body, div, span, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, code, del, dfn, em, img, q, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td {margin:0;padding:0;border:0;font-weight:inherit;font-style:inherit;font-size:100%;font-family:inherit;vertical-align:baseline;}
+body {line-height:1.5;}
+table {border-collapse:separate;border-spacing:0;}
+caption, th, td {text-align:left;font-weight:normal;}
+table, td, th {vertical-align:middle;}
+blockquote:before, blockquote:after, q:before, q:after {content:"";}
+blockquote, q {quotes:"" "";}
+a img {border:none;}
+a {outline: 0;}
+
+
 /* =Layout */
 
-body { background: #999; }
-#content { background: #FFF; }
-#main, #header { padding: 0.75em 1.5em; }
-#footer { background: #AAA; color: #777; padding: .5em 1.5em; text-align: right; }
+body { background: #999;}
+#content { background: #FFF; width: 960px; margin: 0 auto;}
+#header { padding: 0.75em }
+#footer { background: #AAA; color: #777; padding: .5em 1.5em; text-align: right; clear: both;}
+
+#main {
+  width: 620px;
+  padding-left: 10px;
+  float: left;
+}
+
+#sidebar {
+  width: 300px;
+  float: right;
+  padding-right: 10px;
+}
 
 /* =Navigation */
 
@@ -43,13 +67,16 @@ h2 { font-size: 2em;  line-height: 1.5em;  }
 h3 { font-size: 1.5em;  line-height: 1em;    }
 h4 { font-size: 1.16em; line-height: 1.28em; }
 
-h1, h2, h3, h4, h5, h6 { font-family: "Helvetica Neue", Helvetica, Arial, serif; color: #333;}
+h1, h2, h3, h4, h5, h6 { font-family: "Helvetica Neue", Helvetica, Arial, serif; color: #333; font-weight: bold;}
+
+strong { font-weight: bold; color: #333; }
 
 /* =Links */
 
 a { text-decoration: none; color: #289;}
 a:hover { text-decoration: underline; color: #39A;}
 
+h1 a { color: #333; }
 h1 a:hover { text-decoration: none; }
 
 /* =Margins */
@@ -60,16 +87,14 @@ ul, ol, dl, form, table { margin: 0 0 18px; }
 /* =Lists */
 
 ul { list-style-type: disc; list-style-position: outside; margin-left: 1.25em; padding-left: 0;}
-dl { width: 100%; float: left; }
-dl dt { float: left; clear: left; font-weight: bold; }
-dl dt { float: left; }
+dt { display: inline; font-weight: bold; color: #333;}
+dd { display: inline;}
 
 /* =Forms */
 
 form .element { margin-bottom: 1.5em }
 label { display: block; }
 form ul { list-style-type: none; margin: 0; padding: 0;}
-
 
 /* =Nodes */
 
@@ -88,4 +113,29 @@ li.node_class a, li.node_group a {
 li.node_class a:hover, li.node_group a:hover {
   background: #DDD;
   text-decoration: none;
+}
+
+.node {
+  position: relative;
+  padding: 0px 10px;
+  margin: 0 0 10px;
+  border: 1px solid #eee;
+}
+
+.node .actions {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+}
+
+.node .actions a {
+  border: 1px solid #eee;
+  padding: 3px 5px;
+  display: block;
+  float: right;
+  margin-left: 5px;
+}
+
+.node h4 {
+  margin-bottom: 0;
 }

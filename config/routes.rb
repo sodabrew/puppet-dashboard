@@ -7,7 +7,7 @@ ActionController::Routing::Routes.draw do |map|
     service.resources :nodes, :member => { :disconnect => :get, :connect => :get }
   end
   
-  map.root :controller => :nodes, :action => :index
+  map.root :controller => :pages, :action => :home
 
   map.connect ':controller/:action/:id'
   map.connect ':controller/:action/:id.:format'
