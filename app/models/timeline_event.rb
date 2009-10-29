@@ -3,7 +3,7 @@ class TimelineEvent < ActiveRecord::Base
   belongs_to :subject,            :polymorphic => true
   belongs_to :secondary_subject,  :polymorphic => true
 
-  def self.recent(limit = 20)
+  def self.recent(limit = 10)
     all(:order => 'created_at DESC', :limit => limit)
   end
 end

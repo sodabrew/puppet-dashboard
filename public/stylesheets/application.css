@@ -13,7 +13,7 @@ a {outline: 0;}
 /* =Layout */
 
 body { background: #999;}
-#content { background: #FFF; width: 960px; margin: 0 auto;}
+#content { background: #FFF; width: 960px; margin: 0 auto; position: relative; }
 #header { padding: 0.75em }
 #footer { background: #AAA; color: #777; padding: .5em 1.5em; text-align: right; clear: both;}
 
@@ -56,6 +56,12 @@ ul#nav li a:hover {
   text-decoration: none;
 }
 
+#session {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+}
+
 /* =Typography */
 
 body { font: 14px/1.5em Verdana, serif;}
@@ -71,6 +77,8 @@ h1, h2, h3, h4, h5, h6 { font-family: "Helvetica Neue", Helvetica, Arial, serif;
 
 strong { font-weight: bold; color: #333; }
 
+.clear { clear: both; } /* lame */
+
 /* =Links */
 
 a { text-decoration: none; color: #289;}
@@ -78,6 +86,11 @@ a:hover { text-decoration: underline; color: #39A;}
 
 h1 a { color: #333; }
 h1 a:hover { text-decoration: none; }
+
+/* =Actions */
+
+.actions { margin-left: 0; padding-left: 0;}
+.actions li { list-style-type: none; margin-left: 0;}
 
 /* =Margins */
 
@@ -87,14 +100,19 @@ ul, ol, dl, form, table { margin: 0 0 18px; }
 /* =Lists */
 
 ul { list-style-type: disc; list-style-position: outside; margin-left: 1.25em; padding-left: 0;}
-dt { display: inline; font-weight: bold; color: #333;}
-dd { display: inline;}
+dl { float: left; width: 100%;}
+dt { font-weight: bold; float: left; clear: left;}
+dd { float: left; margin-left: .5em; }
 
 /* =Forms */
 
 form .element { margin-bottom: 1.5em }
 label { display: block; }
-form ul { list-style-type: none; margin: 0; padding: 0;}
+
+form input { vertical-align: middle; }
+
+form input.inline, form label.inline { display: inline }
+form .errorExplanation { margin-bottom: 1.5em; }
 
 /* =Nodes */
 

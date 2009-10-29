@@ -1,0 +1,6 @@
+%h2 Register
+
+- form_for @user, :url => account_path do |f|
+  = f.error_messages :header_tag => :h3
+  = render f
+  = f.submit "Register"

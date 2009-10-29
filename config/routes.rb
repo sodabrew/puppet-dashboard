@@ -6,7 +6,12 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :services do |service|
     service.resources :nodes, :member => { :disconnect => :get, :connect => :get }
   end
+
+  map.resource :user_session
+  map.resource :account, :controller => "users"
+  map.resources :users
   
+
   map.root :controller => :pages, :action => :home
 
   map.connect ':controller/:action/:id'

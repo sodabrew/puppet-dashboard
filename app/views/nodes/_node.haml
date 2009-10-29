@@ -13,6 +13,8 @@
         - node.parameters.each do |name, value|
           %dt== #{name}:
           %dd= value
+  .clear
   .actions
-    = link_to "Edit", edit_node_path(node)
+    - if current_user
+      = link_to "Edit", edit_node_path(node)
     = link_to "...", "#", :class => "show-hide"

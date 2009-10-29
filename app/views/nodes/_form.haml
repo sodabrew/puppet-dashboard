@@ -16,10 +16,10 @@
 
 .element#node-groups
   - form.object.node_groups.map(&:id).each do |id|
-    = form.hidden_field 'node_group_ids[]', :value => id
+    = hidden_field_tag 'node[node_group_ids][]', id, :id => nil
   = render :partial => 'node_groups', :locals => { :node => @node }
 
 .element#node-classes
   - form.object.node_classes.map(&:id).each do |id|
-    = form.hidden_field 'node_class_ids[]', :value => id
+    = hidden_field_tag 'node[node_class_ids][]', id, :id => nil
   = render :partial => 'node_classes', :locals => { :node => @node }

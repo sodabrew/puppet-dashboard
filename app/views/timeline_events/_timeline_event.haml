@@ -1,7 +1,9 @@
 %p
-  == #{timeline_event.subject.class.name.titleize}
+  == #{timeline_event.subject.class.name.titleize.downcase.capitalize}
   = link_to_if timeline_event.subject, "#{timeline_event.subject.name}", timeline_event.subject
   was
-  = timeline_event.event_type.to_s.split('_').first
+  = timeline_event.event_type.tr('_', ' ')
+  - if secondary = timeline_event.secondary_subject
+    == #{secondary.class.name.downcase} #{link_to secondary.name, secondary}
   = time_ago_in_words(timeline_event.created_at)
   ago.
