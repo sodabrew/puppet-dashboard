@@ -98,4 +98,17 @@ describe Node do
       @node.configuration['parameters'].should == { 'a' => 'b', 'c' => 'd' }  
     end
   end
+
+  describe "#all_classes" do
+    before do
+      @node = Node.generate!
+      @node_group = NodeGroup.generate!
+      @inherited_class = NodeClass.generate!
+      @node_group.node_classes << @inherited_class
+      @node.node_groups << @node_group
+    end
+    it "should inherit classes from its groups" do
+      @node.all_classes.should include(@inherited_class)
+    end
+  end
 end

@@ -20,6 +20,10 @@ class Node < ActiveRecord::Base
   def available_node_groups
     @available_node_groups ||= NodeGroup.all(:order => :name) - node_groups
   end
+
+  def all_classes
+    node_classes | node_groups.map(&:node_classes).flatten
+  end
   
   def configuration
     { 'classes' => node_classes.collect(&:name), 'parameters' => parameters }
