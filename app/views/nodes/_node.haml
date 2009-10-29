@@ -3,7 +3,7 @@
   .info.hidden
     - unless node.node_classes.empty?
       %h4 Classes:
-      %p= node.node_classes.map{|cl| link_to cl.name, cl}.to_sentence
+      %p= node.all_classes.map{|cl| link_to cl.name, cl}.to_sentence
     - unless node.node_groups.empty?
       %h4 Groups:
       %p= node.node_groups.map{|gr| link_to gr.name, gr}.to_sentence

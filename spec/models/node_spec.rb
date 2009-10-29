@@ -99,7 +99,7 @@ describe Node do
     end
   end
 
-  describe "#all_classes" do
+  describe "#inherited_classes" do
     before do
       @node = Node.generate!
       @node_group = NodeGroup.generate!
@@ -107,8 +107,20 @@ describe Node do
       @node_group.node_classes << @inherited_class
       @node.node_groups << @node_group
     end
+
     it "should inherit classes from its groups" do
-      @node.all_classes.should include(@inherited_class)
+      @node.inherited_classes.should include(@inherited_class)
     end
+  end
+
+  describe "#all_classes" do
+    before do
+      @node = Node.generate!
+      @node.stubs(:inherited_classes).returns([:inherited_class])
+      @node.stubs(:node_classes).returns([:local_class])
+    end
+
+    it { @node.all_classes.should include(:inherited_class) }
+    it { @node.all_classes.should include(:local_class) }
   end
 end
