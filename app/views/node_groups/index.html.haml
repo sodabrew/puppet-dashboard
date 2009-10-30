@@ -2,8 +2,8 @@
   Node Groups
     
 .table-tools
-  %form
-    %input{:type => "text"}
+  - form_tag do
+    = text_field_tag :search, '', :class => 'filter-list', :autocomplete => 'off'
   = link_to "<span class='indicator'></span>Add new", new_node_group_path, :class => "new button", :rel => 'inspect'
 %table.inspector
   %thead
