@@ -1,14 +1,7 @@
-.header
-  %h2= @node_group.name
-  %ul.actions
-    %li= link_to 'Destroy', @node_group, :confirm => 'Are you sure?', :method => :delete, :class => "delete button"
-
-.errors
-  = error_messages_for(:node_group)
-
 - form_for @node_group do |f|
+  .errors
+    = error_messages_for(:node_group)
   = render f
-  = f.submit
-  = link_to 'Cancel', @node_group
 
-
+  %button{:type => "submit", :class => "button"} Update
+  = link_to 'Cancel', f.object, :rel => 'inspect', :class => "cancel"

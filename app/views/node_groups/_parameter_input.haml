@@ -1,6 +1,8 @@
 - parameter = parameter_input  # change silly partial-based variable name
-%li 
-  = text_field_tag 'node_group[parameters][key][]', parameter.first
-  \=&gt;
-  = text_field_tag 'node_group[parameters][value][]', parameter.last
-  %a.delete-parameter{:href => '#'} (delete)
+%tr
+  %td.key
+    %div
+      = text_field_tag 'node_group[parameters][key][]', parameter.first
+      %a.delete-parameter{:href => '#'}
+        %span (delete)
+  %td.value= text_field_tag 'node_group[parameters][value][]', parameter.last

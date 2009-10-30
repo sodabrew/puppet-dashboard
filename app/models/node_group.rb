@@ -6,4 +6,8 @@ class NodeGroup < ActiveRecord::Base
   has_many :nodes, :through => :node_group_memberships
 
   serialize :parameters
+  
+  def parameters
+    read_attribute(:parameters) || {}
+  end
 end
