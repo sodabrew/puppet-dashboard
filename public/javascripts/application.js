@@ -25,6 +25,12 @@ $(document).ready(function() {
     $(this).parents('tr').siblings().removeClass('active');
     $(this).parents('tr').addClass('active');
   });
+  
+  $('table.inspector').live('reindex', function(event) {
+     $(this).zebraStripe();
+  });
+  
+  $('table.inspector').trigger('reindex')
 
-  $('.filter-list').filterList();
+  $('.filter-list').filterList();  
 });

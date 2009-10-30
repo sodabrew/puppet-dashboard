@@ -368,10 +368,6 @@ div#inspector table thead th {
   border-color: #c0c0c0;
 }
 
-div#inspector .primary-content table tr:nth-child(even) td {
-  background: #e8ecf1;
-}
-
 div#inspector .primary-content table tr.active td {
   background: #2e76da;
   color: white;
@@ -417,6 +413,10 @@ div#inspector.primary-secondary-content .secondary-content .header {
 div#inspector.primary-secondary-content .secondary-content .header h2 {
   font-size: 1.25em;
   margin: 0;
+}
+
+div#inspector .primary-content table tr.even td{
+	background: #e8ecf1;
 }
 
 div#inspector.primary-secondary-content .secondary-content h3 {
@@ -534,8 +534,8 @@ table.inspector tr:last-child td {
   border-bottom: none;
 }
 
-table.inspector tr:nth-child(even) td {
-  background: #e8ecf1;
+table.inspector tbody tr.even td{
+	background: #d8e3f1;
 }
 
 table.inspector th.key,
