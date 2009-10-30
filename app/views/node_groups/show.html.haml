@@ -1,4 +1,8 @@
-%h2= @node_group.name
+.header
+  %h2= @node_group.name
+  %ul.actions
+    %li= link_to 'Edit', edit_node_group_path(@node_group), :class => "edit button"
+    %li= link_to 'Destroy', @node_group, :confirm => 'Are you sure?', :method => :delete, :class => "delete button"
 
 
 - unless @node_group.parameters.blank?
@@ -39,6 +43,3 @@
     %span.count==(#{@node_group.parameters.size})
 
 
-%ul.actions
-  %li= link_to 'Edit', edit_node_group_path(@node_group), :class => "button"
-  %li= link_to 'Destroy', @node_group, :confirm => 'Are you sure?', :method => :delete, :class => "button"

@@ -1,8 +1,14 @@
-%h2 Edit Node Group
+.header
+  %h2= @node_group.name
+  %ul.actions
+    %li= link_to 'Destroy', @node_group, :confirm => 'Are you sure?', :method => :delete, :class => "delete button"
 
 .errors
   = error_messages_for(:node_group)
+
 - form_for @node_group do |f|
   = render f
   = f.submit
   = link_to 'Cancel', @node_group
+
+

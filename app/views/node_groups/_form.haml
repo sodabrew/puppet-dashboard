@@ -1,12 +1,26 @@
-.element
+
+.header.element
   = form.label :name
   = form.text_field :name
 
 .element.node-group-parameters
   %label Parameters
+  
+  %h3 
+    Parameters
+    %span.count==(#{@node_group.parameters.size})
+  
+
+  %table#parameters.inspector
+    %thead
+      %tr
+        %th.key Key
+        %th.value Value
+    %tbody
+      - if form.object.parameters.blank?
+        = render :partial => 'parameter_input', :object => []
+      - else
+        = render :partial => 'parameter_input', :collection => form.object.parameters.to_a
+    
   %ul#parameters
-    - if form.object.parameters.blank?
-      = render :partial => 'parameter_input', :object => []
-    - else
-      = render :partial => 'parameter_input', :collection => form.object.parameters.to_a
   = link_to_function('Add Another Parameter') { |page|  page.insert_html :bottom, 'parameters', :partial => 'parameter_input', :object => [] }

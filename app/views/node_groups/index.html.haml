@@ -4,8 +4,8 @@
 .table-tools
   %form
     %input{:type => "text"}
-      
-%table
+  = link_to "<span class='indicator'></span>Add new", new_node_group_path, :class => "new button", :rel => 'inspect'
+%table.inspector
   %thead
     %tr
       %th
@@ -28,4 +28,3 @@
         %td
           = node_group.node_classes.size
       
-= link_to 'New Node Group', new_node_group_path, :class => "button", :rel => 'inspect'

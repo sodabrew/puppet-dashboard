@@ -22,4 +22,11 @@ $(document).ready(function() {
     $(this).parents('tr').addClass('active');
     return false;
   });
+
+  $('#inspector .secondary-content .actions a.edit').live('click', function(event){
+    $('.secondary-content').load($(this).attr('href')); 
+    return false;
+  });
+
+
 });

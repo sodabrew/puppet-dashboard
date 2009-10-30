@@ -51,4 +51,7 @@ class ApplicationController < ActionController::Base
   def content_id
     nil
   end
+  
+  helper_method :content_id
+  
 end
