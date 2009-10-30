@@ -23,10 +23,15 @@
             - else
               %li= link_to "My Account", account_path
               %li= link_to "Logout", user_session_path, :method => :delete, :confirm => "Are you sure you want to logout?"
-          
+        
       #content
         .site-width
-          = yield
+          .primary-secondary-content{:id => content_id}
+            .primary-content
+              = yield
+            .secondary-content
+              = yield :secondary_content
       #footer
         .site-width
           %p &copy; Copyright 2009 Reductive Labs
+

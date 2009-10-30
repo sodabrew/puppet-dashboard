@@ -1,19 +1,44 @@
 %h2= @node_group.name
 
-%h3 Parameters
 
 - unless @node_group.parameters.blank?
-  %dl
-    - @node_group.parameters.each_pair do |key, value|
-      %dt= h key
-      %dd= h value
+  %h3 
+    Parameters
+    %span.count==(#{@node_group.parameters.size})
+  
 
-%h3 Classes
+  %table.inspector
+    %thead
+      %tr
+        %th.key Key
+        %th.value Value
+    %tbody
+      - @node_group.parameters.each_pair do |key, value|
+        %tr
+          %td.key== #{key}
+          %td.value= value
 
-- unless @node_group.node_classes.empty?
-  %ul
-    - @node_group.node_classes.each do |node_class|
-      %li= link_to h(node_class.name), node_class
+
+- unless @node_group.node_classes.blank?
+  %h3 
+    Classes
+    %span.count= @node_group.node_classes.size
+
+  %table.inspector
+    %thead
+      %th Class
+    %tbody
+      - @node_group.node_classes.each do |node_class|
+        %tr
+          %td= link_to h(node_class.name), node_class
+
+
+- unless @node_group.parameters.blank?
+  %h3 
+    Members of this group
+    %span.count==(#{@node_group.parameters.size})
+
+
 %ul.actions
-  %li= link_to 'Edit', edit_node_group_path(@node_group)
-  %li= link_to 'Destroy', @node_group, :confirm => 'Are you sure?', :method => :delete
+  %li= link_to 'Edit', edit_node_group_path(@node_group), :class => "button"
+  %li= link_to 'Destroy', @node_group, :confirm => 'Are you sure?', :method => :delete, :class => "button"

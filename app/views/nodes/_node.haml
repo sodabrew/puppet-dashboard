@@ -1,6 +1,6 @@
-.node
+.node{:id => "#{node.id}"}
   %h3= link_to node.name, node
-  .info.hidden
+  .info
     - unless node.node_classes.empty?
       %h4 Classes:
       %p= node.all_classes.map{|cl| link_to cl.name, cl}.to_sentence
@@ -9,12 +9,17 @@
       %p= node.node_groups.map{|gr| link_to gr.name, gr}.to_sentence
     - unless node.parameters.blank?
       %h4 Parameters:
-      %dl
-        - node.parameters.each do |name, value|
-          %dt== #{name}:
-          %dd= value
-  .clear
+      %table.inspector
+        %thead
+          %tr
+            %th Key
+            %th Value
+        %tbody
+          - node.parameters.each do |name, value|
+            %tr
+              %td.key== #{name}
+              %td.value= value
   .actions
-    - if current_user
-      = link_to "Edit", edit_node_path(node)
-    = link_to "...", "#", :class => "show-hide"
+    = link_to "Edit", edit_node_path(node), :class => "edit"
+    - unless node.node_classes.empty? && node.node_groups.empty? && node.parameters.blank?
+      = link_to "<span class='response'>Show</span> Details", "##{node.id}", :class => "collapsible-trigger"

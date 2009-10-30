@@ -1,5 +1,6 @@
 class NodeGroupsController < ApplicationController
   resources_controller_for :node_groups
+  layout :handle_xhr
 
   before_filter :handle_parameters, :only => [:create, :update]
 
@@ -13,4 +14,14 @@ class NodeGroupsController < ApplicationController
       params[:node_group][:parameters] = {}
     end
   end
+  
+  def handle_xhr
+    request.xhr? ? nil : 'primary_secondary'
+  end
+
+  def content_id
+    :inspector
+  end
+  helper_method :content_id
+
 end

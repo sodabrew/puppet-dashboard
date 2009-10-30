@@ -1,8 +1,7 @@
+%h2 Nodes
 .nodes
-  %h2 Nodes
   = render @nodes
 
-- content_for :sidebar do
-  .timeline
-    %h2 Activity
-    = render @timeline_events
+- content_for :secondary_content do
+  %h2 Activity
+  %ol.timeline= render @timeline_events

@@ -1,6 +1,5 @@
 class NodesController < ApplicationController
   resources_controller_for :node
-
   before_filter :handle_node_parameters, :only => [:create, :update]
 
   def show

@@ -48,4 +48,7 @@ class ApplicationController < ActionController::Base
     session[:return_to] = nil
   end
 
+  def content_id
+    nil
+  end
 end

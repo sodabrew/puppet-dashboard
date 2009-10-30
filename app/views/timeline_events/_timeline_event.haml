@@ -1,5 +1,6 @@
-%p
-  == #{timeline_event.subject.class.name.titleize.downcase.capitalize}
+%li
+  %span.type{:class => "#{timeline_event.subject.class.name.downcase} type"}
+    %span== #{timeline_event.subject.class.name.titleize}
   = link_to_if timeline_event.subject, "#{timeline_event.subject.name}", timeline_event.subject
   was
   = timeline_event.event_type.tr('_', ' ')

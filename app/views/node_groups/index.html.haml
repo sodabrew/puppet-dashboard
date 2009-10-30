@@ -1,0 +1,31 @@
+%h2
+  Node Groups
+    
+.table-tools
+  %form
+    %input{:type => "text"}
+      
+%table
+  %thead
+    %tr
+      %th
+        Name
+      %th
+        Params
+      %th
+        Classes
+      %th
+        Nodes
+  %tbody
+    - @node_groups.each do |node_group|
+      %tr
+        %td.name
+          = link_to h(node_group.name), node_group, :rel => 'inspect'
+        %td
+          = node_group.node_classes.size
+        %td
+          = node_group.node_classes.size
+        %td
+          = node_group.node_classes.size
+      
+= link_to 'New Node Group', new_node_group_path, :class => "button", :rel => 'inspect'
