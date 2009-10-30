@@ -298,7 +298,6 @@ h1 a:hover {
   border-left-color: #bbb;
   background: url(images/icons/search.png) 4px 3px no-repeat white;
   outline: none;
-  text-indent: 20px;
   -webkit-appearance: searchfield;
   position: relative;
   top: -1px;
@@ -311,7 +310,7 @@ h1 a:hover {
   -webkit-box-shadow: 1px 1px 0 #bbb;
   color: white;
   float: right;
-  margin-top: 0.4em;
+  margin-top: 0.2em;
   margin-right: 8px;
 }
 
@@ -500,7 +499,7 @@ div#inspector.primary-secondary-content .secondary-content .actions li {
 
 div#inspector.primary-secondary-content .secondary-content .actions {
   position: absolute;
-  right: 15px;
+  right: 10px;
   top: 0.45em;
 }
 
@@ -630,7 +629,6 @@ end */
   background: #999;
   color: #555;
   text-shadow: none;
-  
 }
 
 
@@ -661,17 +659,50 @@ a.cancel {
 
 
 form .element {
-  margin-bottom: 1.5em
+  margin-bottom: 1em;
 }
 
-/* @group Inspector */
+/* @group Login */
 
+form#new_user_session,
+form#new_user{
+  width: 360px;
+  margin: 0 auto;
+  border: 4px solid #ccc;
+  background: #eee;
+  padding: 20px;
+  font-size: 0.85em;
+}
 
-/* @end *
+form#new_user_session .buttons,
+form#new_user .buttons{
+	margin-top: 2em;
+}
 
-/
+form#new_user_session .button,
+form#new_user .button{
+  background: #777 url(images/white-overlays.png) top repeat-x;
+  background-position: 0 -128px;
+  text-shadow: 0 -1px 0 #666;
+  -webkit-box-shadow: 1px 1px 0 #bbb;
+  color: white;
+  font-size: 1em;
+  top: -0.25em;
+  position: relative;
+  -webkit-transition: none;
+}
 
+form#new_user_session .button:hover,
+form#new_user .button:hover{
+  background-color: #555;
+}
 
+form#new_user_session .button:active,
+form#new_user .button:active {
+  background: #999;
+  color: #555;
+  text-shadow: none;
+}
 
 /* @end */
 

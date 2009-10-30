@@ -1,6 +1,6 @@
-%h2 Login
-
 - form_for @user_session, :url => user_session_path do |f|
+  %h2 Sign In to Puppet Node Manager
+
   .element
     = f.error_messages
   .element
@@ -12,5 +12,7 @@
   .element
     = f.check_box :remember_me, :class => 'inline'
     = f.label :remember_me, "Remember Me", :class => 'inline'
-  .element
-    = f.submit "Login"
+  .element.buttons
+    = f.submit "Sign In", :class => "button"
+    or
+    = link_to "Sign Up", new_account_path
