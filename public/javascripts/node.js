@@ -5,7 +5,7 @@ jQuery(function($) {
 
   $('a.delete-parameter').livequery('click', 
     function() {
-      $(this).parent().remove(); 
+      $(this).parents("tr").remove(); 
     }
   );
 

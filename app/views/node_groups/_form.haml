@@ -5,12 +5,8 @@
 
 .element.node-group-parameters
   %label Parameters
+  = link_to_function('<span class="indicator"></span> Add new', :class => "add button") { |page|  page.insert_html :bottom, 'parameters', :partial => 'parameter_input', :object => [] }
   
-  %h3 
-    Parameters
-    %span.count==(#{@node_group.parameters.size})
-  
-
   %table#parameters.inspector
     %thead
       %tr
@@ -22,5 +18,3 @@
       - else
         = render :partial => 'parameter_input', :collection => form.object.parameters.to_a
     
-  %ul#parameters
-  = link_to_function('Add Another Parameter') { |page|  page.insert_html :bottom, 'parameters', :partial => 'parameter_input', :object => [] }

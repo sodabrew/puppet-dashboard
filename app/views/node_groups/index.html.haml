@@ -4,27 +4,27 @@
 .table-tools
   %form
     %input{:type => "text"}
-  = link_to "<span class='indicator'></span>Add new", new_node_group_path, :class => "new button", :rel => 'inspect'
+  = link_to "<span class='indicator'></span>Add new", new_node_group_path, :class => "add button", :rel => 'inspect'
 %table.inspector
   %thead
     %tr
-      %th
+      %th.name
         Name
-      %th
+      %th.params
         Params
-      %th
+      %th.classes
         Classes
-      %th
+      %th.nodes
         Nodes
   %tbody
     - @node_groups.each do |node_group|
-      %tr
+      %tr[node_group]
         %td.name
           = link_to h(node_group.name), node_group, :rel => 'inspect'
-        %td
+        %td.params
+          = node_group.parameters.size
+        %td.classes
           = node_group.node_classes.size
-        %td
-          = node_group.node_classes.size
-        %td
-          = node_group.node_classes.size
+        %td.nodes
+          = node_group.nodes.size
       

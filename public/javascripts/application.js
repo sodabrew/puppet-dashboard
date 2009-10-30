@@ -15,18 +15,14 @@ $(document).ready(function() {
     $(this).find('span.response').html("Hide");
     return false;
   });
+
+  $('a[rel=inspect]').live('click', function(event) {
+    $('.secondary-content').load($(this).attr('href')); return false;
+  });
   
-  $('table a[rel=inspect]').click(function load_inspector() {
-    $('.secondary-content').load($(this).attr('href')); 
+  $('table a[rel=inspect]').click(function(event) {
+    event.preventDefault();
     $(this).parents('tr').siblings().removeClass('active');
     $(this).parents('tr').addClass('active');
-    return false;
   });
-
-  $('#inspector .secondary-content .actions a.edit').live('click', function(event){
-    $('.secondary-content').load($(this).attr('href')); 
-    return false;
-  });
-
-
 });

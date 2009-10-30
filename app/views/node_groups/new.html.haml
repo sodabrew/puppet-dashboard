@@ -1,0 +1,5 @@
+- form_for(@node_group) do |f|
+  = render f
+  = f.error_messages
+  %button{:type => "submit", :class => "button"} Create
+  = link_to 'Cancel', node_groups_path, :class => "cancel"
