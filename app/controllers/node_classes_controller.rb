@@ -6,5 +6,5 @@ class NodeClassesController < ApplicationController
   def content_id
     :inspector
   end
-  
+  helper_method :content_id
 end

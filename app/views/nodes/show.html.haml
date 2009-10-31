@@ -1,27 +1,58 @@
-%h2== Node '#{h @node.name}'
-.description= simple_format h(@node.description)
+.header
+  %h2== Node '#{h @node.name}'
+  %ul.actions
+    %li= link_to 'Edit', edit_node_path(@node), :class => "edit button", :rel => 'inspect'
+    %li= link_to 'Destroy', @node, :confirm => 'Are you sure?', :method => :delete, :class => "delete button"
 
-%h3 Node Parameters
+
+- unless @node.description.blank?
+  .description= simple_format h(@node.description)
 
 - unless @node.parameters.blank?
-  %dl
-    - @node.parameters.each_pair do |key, value|
-      %dt= h key
-      %dd= h value
+  %h3 
+    Parameters
+    %span.count==(#{@node.parameters.size})
+  
 
-%h3 Node Groups
+  %table.inspector
+    %thead
+      %tr
+        %th.key Key
+        %th.value Value
+    %tbody
+      - @node.parameters.each_pair do |key, value|
+        %tr
+          %td.key== #{key}
+          %td.value= value
 
 - unless @node.node_groups.empty?
-  %ul
-    - @node.node_groups.each do |node_group|
-      %li= link_to h(node_group.name), node_group
 
-%h3 Node Classes
+  %h3 Node Groups
+  %table.inspector
+    %thead
+      %tr
+        %th.key Name
+        %th.value Description
+        %th.membership Member?
+    %tbody
+      - @node.node_groups.each do |node_group|
+        %tr
+          %td= node_group.name
+          %td &nbsp;
+          %td 
+            %input{:type => "checkbox"}
 
 - unless @node.node_classes.empty?
-  %ul
-    - @node.node_classes.each do |node_class|
-      %li= link_to h(node_class.name), node_class
+
+  %h3 Node Classes
+    %table.inspector
+      %thead
+        %tr
+          %th.name Name
+      %tbody
+        - @node.node_classes.each do |node_class|
+          %tr
+            %td= node_class.name
 
 %ul.actions
   %li= link_to 'Edit', edit_node_path(@node)

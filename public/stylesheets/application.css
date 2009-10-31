@@ -552,9 +552,10 @@ table.inspector td.key {
   border-right-color: #ccc;
 }
 
-table.inspector td.params,
-table.inspector td.classes,
-table.inspector td.nodes {
+table.inspector .params,
+table.inspector .groups,
+table.inspector .classes,
+table.inspector .nodes {
 	text-align: center;
 }
 

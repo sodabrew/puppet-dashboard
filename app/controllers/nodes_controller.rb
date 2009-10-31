@@ -1,6 +1,7 @@
 class NodesController < ApplicationController
   resources_controller_for :node
   before_filter :handle_node_parameters, :only => [:create, :update]
+  layout :handle_xhr
 
   def show
     @node = Node.find(params[:id])
@@ -20,4 +21,14 @@ class NodesController < ApplicationController
       params[:node][:parameters] = {}
     end
   end
+  
+  def handle_xhr
+    request.xhr? ? nil : 'primary_secondary'
+  end
+  
+  def content_id
+    :inspector
+  end
+  helper_method :content_id
+  
 end

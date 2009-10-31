@@ -32,4 +32,9 @@ class Node < ActiveRecord::Base
   def configuration
     { 'classes' => node_classes.collect(&:name), 'parameters' => parameters }
   end
+  
+  def parameters
+    read_attribute(:parameters) || {}
+  end
+  
 end
