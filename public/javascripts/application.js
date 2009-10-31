@@ -20,13 +20,21 @@ $(document).ready(function() {
     $('.secondary-content').load($(this).attr('href')); return false;
   });
   
+  $('a[rel=inspect]').live('click', function(event) {
+    $('.secondary-content').load($(this).attr('href')); return false;
+  });
+  
+  $('form.inspect').live('submit', function(){
+    $(this).ajaxSubmit({target: '.secondary-content'}); return false;
+  });
+  
   $('table a[rel=inspect]').click(function(event) {
     event.preventDefault();
     $(this).parents('tr').siblings().removeClass('active');
     $(this).parents('tr').addClass('active');
   });
   
-  $('table.inspector').live('reindex', function(event) {
+  $('table.inspector').bind('reindex', function(event) {
      $(this).zebraStripe();
   });
   

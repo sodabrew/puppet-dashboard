@@ -372,7 +372,8 @@ div#inspector .secondary-content table tr:nth-child(even) td {
   background: #e8ecf1;
 }
 
-div#inspector .primary-content table tr.active td {
+div#inspector .primary-content table tr.active td,
+div#inspector .primary-content table tr.even.active td {
   background: #2e76da;
   color: white;
 }

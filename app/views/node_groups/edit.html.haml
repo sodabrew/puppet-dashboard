@@ -1,4 +1,4 @@
-- form_for @node_group do |f|
+- form_for @node_group, :html => {:class => 'inspect'} do |f|
   .errors
     = error_messages_for(:node_group)
   = render f
