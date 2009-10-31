@@ -1,6 +1,8 @@
-class NodeGroupsController < ApplicationController
-  resources_controller_for :node_groups
+class NodeGroupsController < InheritedResources::Base
+  respond_to :html
   layout :handle_xhr
+
+  update!{@node_group}
 
   before_filter :handle_parameters, :only => [:create, :update]
 
