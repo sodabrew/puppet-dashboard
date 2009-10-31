@@ -37,9 +37,10 @@
           %td= link_to h(node_class.name), node_class
 
 
-- unless @node_group.parameters.blank?
+- unless @node_group.nodes.blank?
   %h3 
     Members of this group
-    %span.count==(#{@node_group.parameters.size})
+    %span.count==(#{@node_group.nodes.size})
+  = render @node_group.nodes
 
 
