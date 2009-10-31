@@ -45,15 +45,11 @@
 - unless @node.node_classes.empty?
 
   %h3 Node Classes
-    %table.inspector
-      %thead
+  %table.inspector
+    %thead
+      %tr
+        %th.name Name
+    %tbody
+      - @node.node_classes.each do |node_class|
         %tr
-          %th.name Name
-      %tbody
-        - @node.node_classes.each do |node_class|
-          %tr
-            %td= node_class.name
-
-%ul.actions
-  %li= link_to 'Edit', edit_node_path(@node)
-  %li= link_to 'Destroy', @node, :confirm => 'Are you sure?', :method => :delete
+          %td= node_class.name
