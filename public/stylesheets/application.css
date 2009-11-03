@@ -542,7 +542,7 @@ table.inspector tbody tr.even td{
 
 table.inspector th.key,
 table.inspector td.key {
-  width: 8em;
+  width: 12em;
   border-right: 1px solid #bbb;
 }
 
