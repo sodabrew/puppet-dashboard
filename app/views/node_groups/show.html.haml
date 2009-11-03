@@ -1,3 +1,6 @@
+- content_for :primary_content do
+  = render :partial => 'node_groups/node_groups'
+
 .header
   %h2= @node_group.name
   %ul.actions
@@ -9,38 +12,21 @@
   %h3 
     Parameters
     %span.count==(#{@node_group.parameters.size})
-  
 
-  %table.inspector
-    %thead
-      %tr
-        %th.key Key
-        %th.value Value
-    %tbody
-      - @node_group.parameters.each_pair do |key, value|
-        %tr
-          %td.key== #{key}
-          %td.value= value
-
+  = inspector_table @node_group.parameters
 
 - unless @node_group.node_classes.blank?
   %h3 
     Classes
     %span.count= @node_group.node_classes.size
 
-  %table.inspector
-    %thead
-      %th Class
-    %tbody
-      - @node_group.node_classes.each do |node_class|
-        %tr
-          %td= link_to h(node_class.name), node_class
-
+  = inspector_table @node_group.node_classes, :name, :description
 
 - unless @node_group.nodes.blank?
   %h3 
     Members of this group
     %span.count==(#{@node_group.nodes.size})
-  = render @node_group.nodes
+
+  = inspector_table @node_group.nodes, :name, :description
 
 

@@ -1,23 +1,2 @@
-%h2
-  Node Classes
-
-.table-tools
-  %form
-    %input{:type => "text"}
-  = link_to "<span class='indicator'></span>Add new", new_node_group_path, :class => "new button", :rel => 'inspect'
-
-%table
-  %tr
-    %th
-      Name
-  - @node_classes.each do |node_class|
-    %tr
-      %td
-        = link_to h(node_class.name), node_class
-      %td
-        = link_to 'Edit', edit_node_class_path(node_class)
-      %td
-        = link_to 'Destroy', node_class, :confirm => 'Are you sure?', :method => :delete
-
-
-= link_to 'New Node Class', new_node_class_path
+- content_for :primary_content do
+  = render :partial => 'node_classes/node_classes'

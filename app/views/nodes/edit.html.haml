@@ -1,8 +1,8 @@
-%h2 Edit Node
+- content_for :primary_content do
+  = render 'nodes'
 
-.errors
-  = error_messages_for(:node)
 - form_for @node do |f|
+  = f.error_messages
   = render f
   = f.submit
   = link_to 'Cancel', @node

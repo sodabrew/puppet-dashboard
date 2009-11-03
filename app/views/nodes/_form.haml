@@ -1,30 +1,44 @@
-.element
+.header.element
   = form.label :name
   = form.text_field :name
 .element
   = form.label :description
   = form.text_area :description, :rows => 4
 
-.element.node-parameters
+.element.node-group-parameters
   %label Parameters
-  %ul#parameters
-    - if @node.parameters.blank?
-      = render :partial => 'parameter_input', :object => []
-    - else
-      = render :partial => 'parameter_input', :collection => @node.parameters.to_a
-  = link_to_function('Add Another Parameter') { |page|  page.insert_html :bottom, 'parameters', :partial => 'parameter_input', :object => [] }
+  = link_to_function('<span class="indicator"></span> Add new', :class => "add button") { |page|  page.insert_html :bottom, 'parameters', :partial => 'parameter_input', :object => [] }
+  
+  %table#parameters.inspector
+    %thead
+      %tr
+        %th.key Key
+        %th.value Value
+    %tbody
+      - if form.object.parameters.blank?
+        = render :partial => 'parameter_input', :object => []
+      - else
+        = render :partial => 'parameter_input', :collection => form.object.parameters.to_a
 
 .element#node-groups
-  - form.object.node_groups.map(&:id).each do |id|
-    = hidden_field_tag 'node[node_group_ids][]', id, :id => nil
-  = render :partial => 'node_groups', :locals => { :node => @node }
+  = form.label "Node Groups"
+  = inspector_table @node.node_groups, :name, :description, :long => true
 
-.element#node-classes
-  - form.object.node_classes.map(&:id).each do |id|
-    = hidden_field_tag 'node[node_class_ids][]', id, :id => nil
-  = render :partial => 'node_classes', :locals => { :node => @node }
+.element#available-node-groups
+  = form.label "Available Groups"
+  = inspector_table @node.available_node_groups, :name, :description, :long => true
+
+- unless @node.node_classes.blank?
+  .element#node-classes
+    = form.label "Node Classes"
+    = inspector_table @node.node_classes, :name, :description, :long => true
+
+- unless @node.available_node_classes.blank?
+  .element#available-node-classes
+    = form.label "Available Classes"
+    = inspector_table @node.available_node_classes, :name, :description, :long => true
 
 - unless @node.inherited_classes.blank?
   .element#inherited-node-classes
-    %h4 Inherited Classes
-    = render @node.inherited_classes
+    %label Inherited Classes
+    = inspector_table @node.inherited_classes, :name, :description, :long => true

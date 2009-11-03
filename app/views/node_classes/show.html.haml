@@ -1,0 +1,8 @@
+- content_for :primary_content do
+  = render :partial => 'node_classes/node_classes'
+
+.header
+  %h2= @node_class.name
+  %ul.actions
+    %li= link_to 'Edit', edit_node_class_path(@node_class), :class => "edit button", :rel => 'inspect'
+    %li= link_to 'Destroy', @node_class, :confirm => 'Are you sure?', :method => :delete, :class => "delete button"

@@ -1,3 +1,6 @@
+- content_for :primary_content do
+  = render :partial => 'nodes/nodes'
+
 .header
   %h2== Node '#{h @node.name}'
   %ul.actions
@@ -12,44 +15,18 @@
   %h3 
     Parameters
     %span.count==(#{@node.parameters.size})
-  
-
-  %table.inspector
-    %thead
-      %tr
-        %th.key Key
-        %th.value Value
-    %tbody
-      - @node.parameters.each_pair do |key, value|
-        %tr
-          %td.key== #{key}
-          %td.value= value
+  = inspector_table @node.parameters
 
 - unless @node.node_groups.empty?
 
-  %h3 Node Groups
-  %table.inspector
-    %thead
-      %tr
-        %th.key Name
-        %th.value Description
-        %th.membership Member?
-    %tbody
-      - @node.node_groups.each do |node_group|
-        %tr
-          %td= node_group.name
-          %td &nbsp;
-          %td 
-            %input{:type => "checkbox"}
+  %h3
+    Node Groups
+    %span.count==(#{@node.node_groups.size})
+  = inspector_table @node.node_groups
 
 - unless @node.node_classes.empty?
 
-  %h3 Node Classes
-  %table.inspector
-    %thead
-      %tr
-        %th.name Name
-    %tbody
-      - @node.node_classes.each do |node_class|
-        %tr
-          %td= node_class.name
+  %h3
+    Node Classes
+    %span.count==(#{@node.node_classes.size})
+  = inspector_table @node.node_classes

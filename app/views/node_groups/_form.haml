@@ -1,4 +1,3 @@
-
 .header.element
   = form.label :name
   = form.text_field :name
@@ -16,5 +15,4 @@
       - if form.object.parameters.blank?
         = render :partial => 'parameter_input', :object => []
       - else
-        = render :partial => 'parameter_input', :collection => form.object.parameters.to_a
-    
+        = render :partial => 'parameter_input', :collection => form.object.parameters.to_a + [[]]

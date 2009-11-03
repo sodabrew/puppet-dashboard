@@ -1,6 +1,8 @@
+- content_for :primary_content do
+  = render :partial => 'node_groups/node_groups'
+
 - form_for @node_group, :html => {:class => 'inspect'} do |f|
-  .errors
-    = error_messages_for(:node_group)
+  = f.error_messages
   = render f
 
   %button{:type => "submit", :class => "button"} Update

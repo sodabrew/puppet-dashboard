@@ -1,0 +1,8 @@
+- content_for :primary_content do
+  = render "node_classes"
+
+- form_for(@node_class) do |form|
+  = form.error_messages
+  = render form
+  %button{:type => "submit", :class => "button"} Update
+  = link_to 'Cancel', form.object, :rel => 'inspect', :class => "cancel"
