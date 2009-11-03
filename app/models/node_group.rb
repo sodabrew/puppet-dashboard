@@ -10,4 +10,6 @@ class NodeGroup < ActiveRecord::Base
   def parameters
     read_attribute(:parameters) || {}
   end
+
+  def description; "No description yet" end
 end
