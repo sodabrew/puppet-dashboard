@@ -32,6 +32,10 @@ class Node < ActiveRecord::Base
   def configuration
     { 'classes' => node_classes.collect(&:name), 'parameters' => parameters }
   end
+
+  def to_yaml
+    configuration.to_yaml
+  end
   
   def parameters
     read_attribute(:parameters) || {}
