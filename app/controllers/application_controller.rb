@@ -12,7 +12,13 @@ class ApplicationController < ActionController::Base
 
   helper_method :current_user_session, :current_user
 
+  layout :handle_xhr
+
   private
+  def handle_xhr
+    request.xhr? ? nil : 'primary_secondary'
+  end
+
   def current_user_session
     return @current_user_session if defined?(@current_user_session)
     @current_user_session = UserSession.find
@@ -53,7 +59,14 @@ class ApplicationController < ActionController::Base
   def content_id
     nil
   end
-  
   helper_method :content_id
-  
+
+  def handle_parameters_for(param)
+    if params[param] && params[param][:parameters]
+      parameter_pairs = params[param][:parameters][:key].zip(params[param][:parameters][:value]).flatten
+      params[param][:parameters] = Hash[*parameter_pairs].reject{|k,v| k.blank?}
+    else
+      params[param][:parameters] = {}
+    end
+  end
 end

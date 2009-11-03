@@ -17,10 +17,6 @@ class NodeGroupsController < InheritedResources::Base
     end
   end
   
-  def handle_xhr
-    request.xhr? ? nil : 'primary_secondary'
-  end
-
   def content_id
     :inspector
   end
