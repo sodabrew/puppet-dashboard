@@ -1,0 +1,11 @@
+
+%table.inspector
+  %thead
+    %tr
+      %th.key= key.titleize
+      %th.value= value.titleize
+  %tbody
+    - inspector.each do |key, value|
+      %tr
+        %td.key= key
+        %td= value
