@@ -15,7 +15,7 @@
         var text = self.attr('value');
         var table = self.parents('.table-tools').next('table')
         var rows = table.find('tbody tr')
-        var matches =  rows.find('td.name a:contains("'+text+'")').parents('tr');
+        var matches = text == "" ? rows : rows.find('td.name a:contains("'+text+'")').parents('tr');
         rows.hide();
         matches.show();
         table.trigger('reindex');
