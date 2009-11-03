@@ -410,7 +410,7 @@ div#inspector.primary-secondary-content .secondary-content .header {
   padding: 0.25em 5em 0.25em 10px;
   background: #ccc;
   -webkit-border-top-radius: 2px;
-  -moz-border-radius: ;
+  -moz-border-radius: 2px;
 }
 
 div#inspector.primary-secondary-content .secondary-content .header h2 {
@@ -513,10 +513,9 @@ table.inspector {
   width: 100%;
   font-size: 0.85em;
   border: 1px solid #ccc;
-  -webkit-border-rad
-
-ius: 2px;
+  -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
+  margin-bottom: 1.5em;
 }
 
 table.inspector tbody {
