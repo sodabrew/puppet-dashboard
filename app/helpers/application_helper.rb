@@ -12,8 +12,8 @@ module ApplicationHelper
 
       collection_hash_values = collection.map{ |c|
         [
-          key.responds_to?(:call) ? key.call(c) : link_to(c.send(key), c),
-          value.responds_to?(:call) ? value.call(c) : c.send(value),
+          key.respond_to?(:call) ? key.call(c) : link_to(c.send(key), c),
+          value.respond_to?(:call) ? value.call(c) : c.send(value),
         ]
       }.flatten
 
