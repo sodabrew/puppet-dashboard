@@ -28,8 +28,8 @@ describe '/nodes/show' do
     @node.parameters = { 'a' => 'b', 'c' => 'd' }
     do_render
     @node.parameters.each_pair do |key, value|
-      response.should have_tag('dt', :text => key)
-      response.should have_tag('dd', :text => value)
+      response.should have_tag('td.key', :text => key)
+      response.should have_tag('td', :text => value)
     end
   end
   

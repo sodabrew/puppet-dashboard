@@ -1,6 +1,9 @@
 .header.element
   = form.label :name
   = form.text_field :name
+
+= form.error_messages
+
 .element
   = form.label :description
   = form.text_area :description, :rows => 4

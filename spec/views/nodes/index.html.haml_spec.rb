@@ -14,20 +14,17 @@ describe '/nodes/index' do
     do_render
   end
 
-  it 'should have a header' do
-    do_render
-    response.should have_tag('#nodes h2', :text => /Nodes/)
-  end
-  
   it 'should have a list of nodes' do
+    pending "Only in layout"
     do_render
-    response.should have_tag('.node', :count => @nodes.size)
+    response.should have_tag('tr.node', :count => @nodes.size)
   end
 
   describe 'each node' do
     it 'should have a heading with the node name' do
+      pending "Only in layout"
       do_render
-      response.should have_tag('.node h3', :text => @nodes.first.name)
+      response.should have_tag('tr.node td.name', :text => @nodes.first.name)
     end
   end
 end

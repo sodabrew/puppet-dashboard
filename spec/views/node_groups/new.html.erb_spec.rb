@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
-describe "/node_groups/new.html.erb" do
+describe "/node_groups/new.html.haml" do
   include NodeGroupsHelper
   
   before(:each) do

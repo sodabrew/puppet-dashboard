@@ -1,5 +1,7 @@
-%h2 New Node
+- content_for :primary_content do
+  = render 'collection'
 
 - form_for @node do |f|
   = render f
   = f.submit
+  = link_to 'Cancel', @node

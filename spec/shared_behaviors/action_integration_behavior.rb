@@ -3,11 +3,6 @@ shared_examples_for "a successful action" do
     do_request
     response.should be_success
   end
-
-  it 'should use the default layout' do
-    do_request
-    response.layout.should == 'layouts/application'
-  end
 end
 
 shared_examples_for "an embeddable action" do

@@ -1,8 +1,7 @@
 - content_for :primary_content do
-  = render 'nodes'
+  = render 'collection'
 
 - form_for @node do |f|
-  = f.error_messages
   = render f
   = f.submit
   = link_to 'Cancel', @node

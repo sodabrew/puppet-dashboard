@@ -2,6 +2,7 @@
   - form_tag do
     = text_field_tag :search, '', :class => 'filter-list', :autocomplete => 'off', :type => "search"
   = link_to "<span class='indicator'></span>Add new", new_node_group_path, :class => "add button", :rel => 'inspect'
+    
 %table.inspector
   %thead
     %tr
@@ -9,18 +10,18 @@
         Name
       %th.params
         Params
+      %th.groups
+        Groups
       %th.classes
         Classes
-      %th.nodes
-        Nodes
   %tbody
-    - node_groups.each do |node_group|
-      %tr[node_group]
+    - nodes.each do |node|
+      %tr[node]{:class => "#{'active' if node == @node}"}
         %td.name
-          = link_to h(node_group.name), node_group, :rel => 'inspect'
+          = link_to h(node.name), node, :rel => 'inspect'
         %td.params
-          = node_group.parameters.size
+          = node.parameters.size
+        %td.groups
+          = node.node_groups.size
         %td.classes
-          = node_group.node_classes.size
-        %td.nodes
-          = node_group.nodes.size
+          = node.node_classes.size

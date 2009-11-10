@@ -14,14 +14,14 @@ describe '/nodes/edit' do
       @node.name = nil
       @node.valid?
       do_render
-      response.should have_tag('div[class=?]', 'errors', :text => /error/)
+      response.should have_tag('div[class=?]', 'errorExplanation')
     end
   end
 
   describe 'when no errors are available' do
     it 'should not display error messages' do
       do_render
-      response.should have_tag('div[class=?]', 'errors', :text => '')
+      response.should_not have_tag('div[class=?]', 'errorExplanation')
     end
   end
 
@@ -93,9 +93,9 @@ describe '/nodes/edit' do
       end
     end
     
-    describe 'when the node has nil parameters' do
+    describe 'when the node has no parameters' do
       before :each do
-        @node.parameters = nil
+        @node.parameters = {}
       end
       
       it 'should have a blank input for parameter name' do
@@ -170,11 +170,6 @@ describe '/nodes/edit' do
     end
   end
   
-  it 'should provide a means to edit the associated classes' do
-    do_render
-    response.should have_tag('div[id=?]', 'node-classes')
-  end
-  
   describe 'class editing interface' do
     before :all do
       NodeClass.delete_all
@@ -184,41 +179,30 @@ describe '/nodes/edit' do
       @classes = Array.new(6) { NodeClass.generate! }
       @node.node_classes << @classes[0..2]
     end
+
+    it 'should provide a means to edit the associated classes' do
+      do_render
+      response.should have_tag('div[id=?]', 'node-classes')
+    end
     
     it 'should show the associated classes' do
       do_render
-      response.should have_tag('div[id=?]', 'node-classes') do
-        with_tag('div[id=?]', 'associated-classes')
-      end
+      response.should have_tag('div[id=?]', 'node-classes')
     end
     
     it 'should show each associated class in the associated classes section' do
       do_render
-      response.should have_tag('div[id=?]', 'associated-classes') do
+      response.should have_tag('div[id=?]', 'node-classes') do
         @node.node_classes.each do |node_class|
-          with_tag('li', :text => Regexp.new(Regexp.escape(node_class.name)))
+          with_tag('td', :text => Regexp.new(Regexp.escape(node_class.name)))
         end
       end
     end
     
-    it 'should provide a remove link for each associated class' do
-      pending
-    end
-    
-    it 'should show the classes available to be associated' do
-      do_render
-      response.should have_tag('div[id=?]', 'node-classes') do
-        with_tag('div[id=?]', 'available-classes')
-      end
-    end
-    
-    it 'should show non-associated classes in the classes available to be associated section' do
-      pending
-    end
-    
-    it 'should provide an associate link for each available class' do
-      pending
-    end
+    it 'should provide a remove link for each associated class'
+    it 'should show the classes available to be associated'
+    it 'should show non-associated classes in the classes available to be associated section'
+    it 'should provide an associate link for each available class'
   end
 
   it 'should link to view the node' do
