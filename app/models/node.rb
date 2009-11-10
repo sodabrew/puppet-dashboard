@@ -33,8 +33,8 @@ class Node < ActiveRecord::Base
     { 'classes' => node_classes.collect(&:name), 'parameters' => parameters }
   end
 
-  def to_yaml
-    configuration.to_yaml
+  def to_yaml(opts={})
+    configuration.to_yaml(opts)
   end
   
   def parameters
