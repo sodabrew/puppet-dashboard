@@ -8,7 +8,7 @@ class AccountsController < InheritedResources::Base
 end
 
 class UsersController < AccountsController
-  respond_to :html, :xml
+  respond_to :html, :xml, :yaml
 end
 
 module UserTestHelper
@@ -48,6 +48,16 @@ class IndexActionBaseTest < ActionController::TestCase
     assert_response :success
     assert_equal 'Generated XML', @response.body
   end
+
+  def test_render_all_users_as_yaml_when_mime_type_is_yaml
+    @request.accept = 'application/x-yaml'
+    User.expects(:find).with(:all).returns(mock_user)
+    mock_user.expects(:to_yaml).returns('Generated YAML')
+    mock_user.expects(:respond_to?).at_least_once.with(:to_yaml).returns(true)
+    get :index
+    assert_response :success
+    assert_equal 'Generated YAML', @response.body
+  end
 end
 
 class ShowActionBaseTest < ActionController::TestCase
@@ -73,6 +83,16 @@ class ShowActionBaseTest < ActionController::TestCase
     get :show, :id => '42'
     assert_response :success
     assert_equal 'Generated XML', @response.body
+  end
+
+  def test_render_all_users_as_yaml_when_mime_type_is_yaml
+    @request.accept = 'application/x-yaml'
+    User.expects(:find).with('42').returns(mock_user)
+    mock_user.expects(:to_yaml).returns('Generated YAML')
+    mock_user.expects(:respond_to?).at_least_once.with(:to_yaml).returns(true)
+    get :show, :id => '42'
+    assert_response :success
+    assert_equal 'Generated YAML', @response.body
   end
 end
 

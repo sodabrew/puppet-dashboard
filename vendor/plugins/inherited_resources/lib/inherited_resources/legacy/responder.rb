@@ -79,7 +79,7 @@ module ActionController #:nodoc:
   # Check polymorphic_url documentation for more examples.
   #
   class Responder
-    attr_reader :controller, :request, :format, :resource, :resources, :options
+    attr_reader :controller, :request, :format, :resource, :resources, :options, :method
 
     def initialize(controller, resources, options={})
       @controller = controller
@@ -88,22 +88,22 @@ module ActionController #:nodoc:
       @resource = resources.is_a?(Array) ? resources.last : resources
       @resources = resources
       @options = options
+      @method = :"to_#@format"
       @default_response = options.delete(:default_response)
     end
 
     delegate :head, :render, :redirect_to,   :to => :controller
     delegate :get?, :post?, :put?, :delete?, :to => :request
 
-    # Undefine :to_json since it's defined on Object
+    # Undefine :to_json and :to_yaml since they are defined on Object
     undef_method :to_json
+    undef_method :to_yaml
 
     # Initializes a new responder an invoke the proper format. If the format is
     # not defined, call to_format.
     #
     def self.call(*args)
-      responder = new(*args)
-      method = :"to_#{responder.format}"
-      responder.respond_to?(method) ? responder.send(method) : responder.to_format
+      new(*args).call
     end
 
     # HTML format does not render the resource, it always attempt to render a
@@ -121,11 +121,12 @@ module ActionController #:nodoc:
       end
     end
 
-    # All others formats follow the procedure below. First we try to render a
-    # template, if the template is not available, we verify if the resource
-    # responds to :to_format and display it.
+    # First we try to render the pre-defined responder method for the given
+    # format. Then we try to render a template. If the template is not
+    # available, we display it according to its formatting method.
     #
-    def to_format
+    def call
+      return send(method) if respond_to?(method)
       default_render
     rescue ActionView::MissingTemplate
       raise unless resourceful?
@@ -146,7 +147,7 @@ module ActionController #:nodoc:
     # Checks whether the resource responds to the current format or not.
     #
     def resourceful?
-      resource.respond_to?(:"to_#{format}")
+      resource.respond_to?(method)
     end
 
     # Returns the resource location by retrieving it from the options or
@@ -161,6 +162,25 @@ module ActionController #:nodoc:
     #
     def default_render
       @default_response.call
+    end
+
+    # If the format requested is not one provided by the default Rails render
+    # method.
+    def nonstandard_render_format?
+      not [:html, :xml, :js, :json].include? format
+    end
+
+    # The format used for render. Nonstandard formats are rendered as :text.
+    #
+    def render_format
+      nonstandard_render_format? ? :text : format
+    end
+
+    # The formatted version of the resource. If the resource is nonstandard and
+    # resourceful, the formatting method is used. Otherwise, Rails will handle
+    # formatting the resource itself.
+    def formatted_resource
+      nonstandard_render_format? && resourceful? ? resource.send(method) : resource
     end
 
     # display is just a shortcut to render a resource with the current format.
@@ -180,8 +200,17 @@ module ActionController #:nodoc:
     #
     #   render :xml => @user, :status => :created
     #
+    # Requests with a non-standard Mime type are rendered as text. With a YAML
+    # request,
+    #
+    #   display(@user)
+    #
+    # Results in:
+    #
+    #   render :text => @user.to_yaml
+    #
     def display(resource, given_options={})
-      render given_options.merge!(options).merge!(format => resource)
+      render given_options.merge!(options).merge!(render_format => formatted_resource)
     end
 
     # Check if the resource has errors or not.
