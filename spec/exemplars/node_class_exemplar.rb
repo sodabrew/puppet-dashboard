@@ -1,3 +1,3 @@
 class NodeClass
-  generator_for :name, :start => 'Node Class 000001'
+  generator_for :name, :start => 'NodeClass000001'
 end
