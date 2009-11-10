@@ -1,0 +1,13 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  key: MyString
+  value: MyText
+  parameterable_id: 1
+  parameterable_type: MyString
+
+two:
+  key: MyString
+  value: MyText
+  parameterable_id: 1
+  parameterable_type: MyString
