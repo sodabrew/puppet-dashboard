@@ -6,4 +6,8 @@ describe NodeClass do
   ["with spaces", "invalid ch*r"].each do |name|
     it { should_not allow_value(name).for(:name) }
   end
+
+  ["alpha", "alpha123" ].each do |name|
+    it { should allow_value(name).for(:name) }
+  end
 end

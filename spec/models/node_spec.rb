@@ -16,15 +16,6 @@ describe Node do
     it { should validate_presence_of(:name) }
     it { should validate_uniqueness_of(:name) }
 
-    it 'should allow setting and retrieving parameter values' do
-      @node.parameters = { :foo => 'bar' }
-      @node.parameters[:foo].should == 'bar'
-    end
-    
-    it 'should preserve parameters as a hash across saving' do
-      @node = Node.generate!(:parameters => { :foo => 'bar'})
-      Node.find(@node.id).parameters[:foo].should == 'bar'
-    end
   end
 
   describe '#available_node_classes' do
@@ -122,5 +113,32 @@ describe Node do
 
     it { @node.all_classes.should include(:inherited_class) }
     it { @node.all_classes.should include(:local_class) }
+  end
+
+  describe "#parameters=" do
+    before { @node = Node.generate! }
+
+    it "should create parameter objects for new parameters" do
+      lambda {
+        @node.parameters = {:key => :value}
+        @node.save
+      }.should change(Parameter, :count).by(1)
+    end
+
+    it "should create and destroy parameters based on updated parameters" do
+      @node.parameters = {:key1 => :value1}
+      lambda {
+        @node.parameters = {:key2 => :value2 }
+        @node.save
+      }.should_not change(Parameter, :count)
+    end
+
+    it "should create timeline events for creation and destruction" do
+      @node.parameters = {:key1 => :value1}
+      lambda {
+        @node.parameters = {:key2 => :value2 }
+        @node.save
+      }.should change(TimelineEvent, :count).by(3)
+    end
   end
 end

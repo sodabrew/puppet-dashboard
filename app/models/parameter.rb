@@ -3,4 +3,8 @@ class Parameter < ActiveRecord::Base
   validates_presence_of :key
 
   serialize :value
+
+  fires :added_to,      :on => :create,   :secondary_subject => :parameterable
+  fires :removed_from,  :on => :destroy,  :secondary_subject => :parameterable
+  fires :updated_on,    :on => :update,   :secondary_subject => :parameterable
 end

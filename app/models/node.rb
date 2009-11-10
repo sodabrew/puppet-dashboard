@@ -7,7 +7,29 @@ class Node < ActiveRecord::Base
   has_many :node_group_memberships
   has_many :node_groups, :through => :node_group_memberships
 
-  serialize :parameters
+  has_many :parameters_store, :class_name => 'Parameter', :as => :parameterable, :dependent => :destroy do
+    def to_hash
+      Hash[*target.map{|p| [p.key, p.value]}.flatten]
+    end
+
+    def from_hash(hash)
+      new_parameters = hash.enum_for(:each).map do |key, value|
+        key, value = key.to_s, value.to_s
+        Parameter.find_or_initialize_by_key(key) do |parameter|
+          parameter.value = value
+        end
+      end
+      replace(new_parameters)
+    end
+  end
+
+  def parameters
+    parameters_store.to_hash
+  end
+
+  def parameters=(hash)
+    parameters_store.from_hash(hash)
+  end
 
   fires :created, :on => :create
   fires :updated, :on => :update
@@ -30,15 +52,10 @@ class Node < ActiveRecord::Base
   end
 
   def configuration
-    { 'classes' => node_classes.collect(&:name), 'parameters' => parameters }
+    { 'classes' => node_classes.collect(&:name), 'parameters' => (parameters || {}).to_hash }
   end
 
   def to_yaml(opts={})
     configuration.to_yaml(opts)
   end
-  
-  def parameters
-    read_attribute(:parameters) || {}
-  end
-  
 end
