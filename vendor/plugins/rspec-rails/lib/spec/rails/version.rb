@@ -5,8 +5,9 @@ module Spec # :nodoc:
         MAJOR  = 1
         MINOR  = 2
         TINY   = 7
-
-        STRING = [MAJOR, MINOR, TINY].compact.join('.')
+        REALLY_TINY    = 1
+      
+        STRING = [MAJOR, MINOR, TINY, REALLY_TINY].compact.join('.')
 
         SUMMARY = "rspec-rails #{STRING}"
       end
