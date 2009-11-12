@@ -15,7 +15,7 @@
   %h3 
     Parameters
     %span.count==(#{@node.parameters.size})
-  = inspector_table @node.parameters
+  = inspector_table @node.parameters, :key, :value, :link => false
 
 - unless @node.node_groups.empty?
 

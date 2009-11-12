@@ -9,16 +9,7 @@
       %p= node.node_groups.map{|gr| link_to gr.name, gr}.to_sentence
     - unless node.parameters.blank?
       %h4 Parameters:
-      %table.inspector
-        %thead
-          %tr
-            %th Key
-            %th Value
-        %tbody
-          - node.parameters.each do |name, value|
-            %tr
-              %td.key== #{name}
-              %td.value= value
+      = inspector_table node.parameters, :key, :value, :link => false
   .actions
     = link_to "Edit", edit_node_path(node), :class => "edit"
     - unless node.node_classes.empty? && node.node_groups.empty? && node.parameters.blank?

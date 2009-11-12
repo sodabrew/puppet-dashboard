@@ -10,8 +10,8 @@
 
 .element.node-group-parameters
   %label Parameters
-  = link_to_function('<span class="indicator"></span> Add new', :class => "add button") { |page|  page.insert_html :bottom, 'parameters', :partial => 'parameter_input', :object => [] }
-  
+  = link_to_function('<span class="indicator"></span> Add new', :class => "add button") { |page|  page.insert_html :bottom, 'parameters', :partial => 'parameter_input', :object => form.object.parameters.build }
+
   %table#parameters.inspector
     %thead
       %tr
@@ -19,9 +19,9 @@
         %th.value Value
     %tbody
       - if form.object.parameters.blank?
-        = render :partial => 'parameter_input', :object => []
+        = render :partial => 'parameter_input', :object => form.object.parameters.build
       - else
-        = render :partial => 'parameter_input', :collection => form.object.parameters.to_a
+        = render :partial => 'parameter_input', :collection => form.object.parameters
 
 .element#node-groups
   = form.label "Node Groups"

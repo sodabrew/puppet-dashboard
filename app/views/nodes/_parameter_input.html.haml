@@ -2,7 +2,7 @@
 %tr
   %td.key
     %div
-      = text_field_tag 'node[parameters][key][]', parameter.first
+      = text_field_tag 'node[parameter_attributes][][key]', parameter.key
       %a.delete-parameter{:href => '#'}
         %span (delete)
-  %td.value= text_field_tag 'node[parameters][value][]', parameter.last
+  %td.value= text_field_tag 'node[parameter_attributes][][value]', parameter.value

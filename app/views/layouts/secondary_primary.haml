@@ -1,0 +1,37 @@
+!!!
+%html{ :xmlns => "http://www.w3.org/1999/xhtml" }
+  %head
+    - page_title = yield(:page_title)
+    %title= [ page_title, 'Puppet Node Manager'].compact.join(' - ')
+    %link{ :href => "/images/favicon.ico", :rel => "shortcut icon" }
+    %meta{ :content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type" }
+    = javascript_include_tag :all
+    = stylesheet_link_tag :all
+  %body
+    #puppet-node-manager
+      #header
+        .site-width
+          %h1= link_to "Puppet Node Manager", root_path
+          %ul#global-navigation.navigation
+            %li= tab_to_unless_current "Nodes", nodes_path
+            %li= tab_to_unless_current "Node Classes", node_classes_path
+            %li= tab_to_unless_current "Node Groups", node_groups_path
+          %ul#secondary-navigation.navigation
+            - unless current_user
+              %li= link_to "Register", new_account_path
+              %li= link_to "Log In", new_user_session_path
+            - else
+              %li= link_to "My Account", account_path
+              %li= link_to "Logout", user_session_path, :method => :delete
+        
+      #content
+        .site-width
+          .primary-secondary-content{:id => content_id}
+            .primary-content
+              = yield
+            .secondary-content
+              = yield :secondary_content
+      #footer
+        .site-width
+          %p &copy; Copyright 2009 Reductive Labs
+

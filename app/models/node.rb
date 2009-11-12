@@ -7,28 +7,20 @@ class Node < ActiveRecord::Base
   has_many :node_group_memberships
   has_many :node_groups, :through => :node_group_memberships
 
-  has_many :parameters_store, :class_name => 'Parameter', :as => :parameterable, :dependent => :destroy do
+  has_many :parameters, :as => :parameterable, :dependent => :destroy do
     def to_hash
       Hash[*target.map{|p| [p.key, p.value]}.flatten]
     end
+  end
 
-    def from_hash(hash)
-      new_parameters = hash.enum_for(:each).map do |key, value|
-        key, value = key.to_s, value.to_s
-        Parameter.find_or_initialize_by_key(key) do |parameter|
-          parameter.value = value
-        end
+  def parameter_attributes=(values)
+    new_parameters = values.reject{|v| v[:key].blank? && v[:value].blank?}.map do |hash|
+      returning(Parameter.find_or_initialize_by_key(hash[:key])) do |parameter|
+        parameter.value = hash[:value]
+        parameter.save
       end
-      replace(new_parameters)
     end
-  end
-
-  def parameters
-    parameters_store.to_hash
-  end
-
-  def parameters=(hash)
-    parameters_store.from_hash(hash)
+    self.parameters = (new_parameters)
   end
 
   fires :created, :on => :create
@@ -52,7 +44,7 @@ class Node < ActiveRecord::Base
   end
 
   def configuration
-    { 'classes' => node_classes.collect(&:name), 'parameters' => (parameters || {}).to_hash }
+    { 'classes' => node_classes.collect(&:name), 'parameters' => (parameters.blank? ? {} : parameters.to_hash) }
   end
 
   def to_yaml(opts={})

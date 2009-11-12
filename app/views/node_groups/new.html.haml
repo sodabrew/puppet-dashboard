@@ -1,3 +1,6 @@
+- content_for :primary_content do
+  = render 'collection'
+
 - form_for(@node_group) do |f|
   = render f
   = f.error_messages
