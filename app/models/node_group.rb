@@ -5,11 +5,7 @@ class NodeGroup < ActiveRecord::Base
   has_many :node_group_memberships
   has_many :nodes, :through => :node_group_memberships
 
-  serialize :parameters
+  has_parameters
   
-  def parameters
-    read_attribute(:parameters) || {}
-  end
-
   def description; "No description yet" end
 end

@@ -7,7 +7,7 @@
 %li
   %span.type{:class => "#{primary_class.downcase} type"}
     %span= primary_class.titleize
-  = link_to_unless secondary, subject.name.titleize, primary
+  = link_to_unless secondary, subject.name.capitalize, primary
   was
   = timeline_event.event_type.tr('_', ' ')
   = link_to "#{secondary.class.name} #{secondary.name}", secondary if secondary

@@ -30,3 +30,7 @@
     Node Classes
     %span.count==(#{@node.node_classes.size})
   = inspector_table @node.node_classes
+
+- unless @node.timeline_events.empty?
+  %h3 Activity
+  %ol.timeline= render @node.timeline_events

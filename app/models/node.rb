@@ -7,21 +7,7 @@ class Node < ActiveRecord::Base
   has_many :node_group_memberships
   has_many :node_groups, :through => :node_group_memberships
 
-  has_many :parameters, :as => :parameterable, :dependent => :destroy do
-    def to_hash
-      Hash[*target.map{|p| [p.key, p.value]}.flatten]
-    end
-  end
-
-  def parameter_attributes=(values)
-    new_parameters = values.reject{|v| v[:key].blank? && v[:value].blank?}.map do |hash|
-      returning(Parameter.find_or_initialize_by_key(hash[:key])) do |parameter|
-        parameter.value = hash[:value]
-        parameter.save
-      end
-    end
-    self.parameters = (new_parameters)
-  end
+  has_parameters
 
   fires :created, :on => :create
   fires :updated, :on => :update
@@ -44,10 +30,17 @@ class Node < ActiveRecord::Base
   end
 
   def configuration
-    { 'classes' => node_classes.collect(&:name), 'parameters' => (parameters.blank? ? {} : parameters.to_hash) }
+    { 'name' => name, 'classes' => node_classes.collect(&:name), 'parameters' => (parameters.blank? ? {} : parameters.to_hash) }
   end
 
   def to_yaml(opts={})
     configuration.to_yaml(opts)
+  end
+
+  def timeline_events
+    TimelineEvent.find(:all,
+                       :conditions => ["(subject_id = :id AND subject_type = :klass) OR (secondary_subject_id = :id AND secondary_subject_type = :klass)", {:id => id, :klass => self.class.name}],
+                       :order => 'created_at DESC'
+                      )
   end
 end

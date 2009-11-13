@@ -24,15 +24,6 @@ describe '/nodes/show' do
     response.should have_text(Regexp.new(Regexp.escape(@node.description)))
   end
   
-  it "should include the node's parameter settings" do
-    @node.parameters = { 'a' => 'b', 'c' => 'd' }
-    do_render
-    @node.parameters.each_pair do |key, value|
-      response.should have_tag('td.key', :text => key)
-      response.should have_tag('td', :text => value)
-    end
-  end
-  
   it "should include the node's class list" do
     @node_classes = Array.new(3) { NodeClass.generate! }
     @node.node_classes << @node_classes

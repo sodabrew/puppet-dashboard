@@ -75,8 +75,8 @@ describe Node do
       lambda { @node.configuration(:foo) }.should raise_error(ArgumentError)
     end
     
-    it 'should return a set of classes and parameters' do
-      @node.configuration.keys.sort.should == ['classes', 'parameters']
+    it 'should return a name and set of classes and parameters' do
+      @node.configuration.keys.sort.should == ['classes', 'name', 'parameters']
     end
     
     it "should return the names of the node's classes in the returned class list" do
@@ -85,7 +85,7 @@ describe Node do
     end
     
     it "should return the node's parameters in the returned parameters list" do
-      @node.parameters = {'a' => 'b', 'c' => 'd'}
+      @node.stubs(:parameters).returns({'a' => 'b', 'c' => 'd'})
       @node.configuration['parameters'].should == { 'a' => 'b', 'c' => 'd' }  
     end
   end
@@ -120,23 +120,23 @@ describe Node do
 
     it "should create parameter objects for new parameters" do
       lambda {
-        @node.parameters = {:key => :value}
+        @node.parameter_attributes = [{:key => :key, :value => :value}]
         @node.save
       }.should change(Parameter, :count).by(1)
     end
 
     it "should create and destroy parameters based on updated parameters" do
-      @node.parameters = {:key1 => :value1}
+      @node.parameter_attributes = [{:key => :key1, :value => :value1}]
       lambda {
-        @node.parameters = {:key2 => :value2 }
+        @node.parameter_attributes = [{:key => :key2, :value => :value2}]
         @node.save
       }.should_not change(Parameter, :count)
     end
 
     it "should create timeline events for creation and destruction" do
-      @node.parameters = {:key1 => :value1}
+      @node.parameter_attributes = [{:key => :key1, :value => :value1}]
       lambda {
-        @node.parameters = {:key2 => :value2 }
+        @node.parameter_attributes = [{:key => :key2, :value => :value2}]
         @node.save
       }.should change(TimelineEvent, :count).by(3)
     end
