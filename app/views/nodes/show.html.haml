@@ -11,11 +11,11 @@
 - unless @node.description.blank?
   .description= simple_format h(@node.description)
 
-- unless @node.parameters.blank?
+- unless @node.compiled_parameters.blank?
   %h3 
     Parameters
-    %span.count==(#{@node.parameters.size})
-  = inspector_table @node.parameters, :key, :value, :link => false
+    %span.count==(#{@node.compiled_parameters.size})
+  = inspector_table @node.compiled_parameters, :key, :value, :link => false
 
 - unless @node.node_groups.empty?
 

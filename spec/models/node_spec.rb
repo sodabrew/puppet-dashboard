@@ -141,4 +141,38 @@ describe Node do
       }.should change(TimelineEvent, :count).by(3)
     end
   end
+
+  describe "handling parameters in the graph" do
+    before do
+      @node = Node.generate!(:name => "A node")
+
+      @node_group_a = NodeGroup.generate!(:name => "A")
+      @node_group_b = NodeGroup.generate!(:name => "B")
+
+      @param_1 = Parameter.generate(:key => 'foo', :value => '1')
+      @param_2 = Parameter.generate(:key => 'bar', :value => '2')
+
+      @node_group_a.parameters << @param_1
+      @node_group_b.parameters << @param_2
+
+      @node.node_groups = [@node_group_a, @node_group_b]
+    end
+
+    it "should return the compiled parameters" do
+      @node.compiled_parameters.should == {'foo' => '1', 'bar' => '2'}
+    end
+
+    it "should ensure that parameters nearer to the node are retained" do
+      @node_group_a1 = NodeGroup.generate!
+      @node_group_a1.parameters << Parameter.create(:key => 'foo', :value => '2')
+      @node_group_a.node_groups << @node_group_a1
+
+      @node.compiled_parameters.should == {'foo' => '1', 'bar' => '2'}
+    end
+
+    it "should raise an error if there are parameter conflicts among children" do
+      @param_2.update_attribute(:key, 'foo')
+      lambda {@node.compiled_parameters}.should raise_error(ParameterConflictError)
+    end
+  end
 end

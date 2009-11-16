@@ -1,4 +1,5 @@
 class Node < ActiveRecord::Base
+
   validates_presence_of :name
   validates_uniqueness_of :name
 
@@ -42,5 +43,26 @@ class Node < ActiveRecord::Base
                        :conditions => ["(subject_id = :id AND subject_type = :klass) OR (secondary_subject_id = :id AND secondary_subject_type = :klass)", {:id => id, :klass => self.class.name}],
                        :order => 'created_at DESC'
                       )
+  end
+
+  # Walks the graph of node groups for the given node, compiling parameters by
+  # merging down (preferring parameters specified in node groups that are
+  # nearer). Raises a ParameterConflictError if parameters at the same distance
+  # from the node have the same name.
+  def compiled_parameters
+    return @compiled_parameters if @compiled_parameters
+    seen_parameters = {}
+    compile_parameters(self, 0, seen_parameters)
+    @compiled_parameters = seen_parameters.sort_by{|key, value| key}.inject({}){|compiled, p| compiled.reverse_merge(p[1])}
+  end
+
+  def compile_parameters(object, depth, seen_parameters)
+    object.parameters.each do |parameter|
+      seen_parameters[depth] ||= {}
+      raise ParameterConflictError if seen_parameters[depth][parameter.key]
+      seen_parameters[depth][parameter.key] = parameter.value
+    end
+
+    object.node_groups.each{|group| compile_parameters(group, depth+1, seen_parameters)}
   end
 end
