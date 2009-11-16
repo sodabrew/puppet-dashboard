@@ -1,5 +1,6 @@
-- subject = timeline_event.subject
-- secondary = timeline_event.secondary_subject
+- te = timeline_event
+- subject = te.subject
+- secondary = te.secondary_subject
 
 - primary = secondary || subject
 - primary_class = primary.class.name
@@ -7,9 +8,10 @@
 %li
   %span.type{:class => "#{primary_class.downcase} type"}
     %span= primary_class.titleize
-  = link_to_unless secondary, subject.name.capitalize, primary
+  = link_to_unless secondary, te.subject_name.capitalize, primary
   was
-  = timeline_event.event_type.tr('_', ' ')
-  = link_to "#{secondary.class.name} #{secondary.name}", secondary if secondary
-  = time_ago_in_words(timeline_event.created_at)
+  = te.event_type.tr('_', ' ')
+  = secondary.class.name
+  = link_to te.secondary_name, secondary if secondary
+  = time_ago_in_words(te.created_at)
   ago.
