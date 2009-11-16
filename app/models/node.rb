@@ -1,4 +1,5 @@
 class Node < ActiveRecord::Base
+  include NodeGroupGraph
 
   validates_presence_of :name
   validates_uniqueness_of :name

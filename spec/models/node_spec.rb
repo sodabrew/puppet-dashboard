@@ -11,7 +11,7 @@ describe Node do
     it { should have_many(:node_classes).through(:node_class_memberships) }
     it { should have_many(:node_group_memberships) }
     it { should have_many(:node_groups).through(:node_group_memberships) }
-    
+
     it { should have_db_column(:name).of_type(:string) }
     it { should validate_presence_of(:name) }
     it { should validate_uniqueness_of(:name) }
@@ -61,29 +61,29 @@ describe Node do
   it 'should be able to compute a configuration' do
     Node.new.should respond_to(:configuration)
   end
-  
+
   describe 'when computing a configuration' do
     before :each do
       @node = Node.generate!
     end
-    
+
     it 'should work without arguments' do
       lambda { @node.configuration }.should_not raise_error(ArgumentError)
     end
-    
+
     it 'should not allow arguments' do
       lambda { @node.configuration(:foo) }.should raise_error(ArgumentError)
     end
-    
+
     it 'should return a name and set of classes and parameters' do
       @node.configuration.keys.sort.should == ['classes', 'name', 'parameters']
     end
-    
+
     it "should return the names of the node's classes in the returned class list" do
       @node.node_classes = @classes = Array.new(3) { NodeClass.generate! }
       @node.configuration['classes'].sort.should == @classes.collect(&:name).sort
     end
-    
+
     it "should return the node's parameters in the returned parameters list" do
       @node.stubs(:parameters).returns({'a' => 'b', 'c' => 'd'})
       @node.configuration['parameters'].should == { 'a' => 'b', 'c' => 'd' }  
@@ -142,7 +142,7 @@ describe Node do
     end
   end
 
-  describe "handling parameters in the graph" do
+  describe "handling the node group graph" do
     before do
       @node = Node.generate!(:name => "A node")
 
@@ -158,21 +158,33 @@ describe Node do
       @node.node_groups = [@node_group_a, @node_group_b]
     end
 
-    it "should return the compiled parameters" do
-      @node.compiled_parameters.should == {'foo' => '1', 'bar' => '2'}
-    end
-
-    it "should ensure that parameters nearer to the node are retained" do
+    it "should raise an error if the graph contains a cycle" do
       @node_group_a1 = NodeGroup.generate!
-      @node_group_a1.parameters << Parameter.create(:key => 'foo', :value => '2')
+      @node_group_a1.node_groups << @node_group_a
       @node_group_a.node_groups << @node_group_a1
 
-      @node.compiled_parameters.should == {'foo' => '1', 'bar' => '2'}
+      lambda{@node.node_group_graph}.should raise_error(NodeGroupCycleError)
     end
 
-    it "should raise an error if there are parameter conflicts among children" do
-      @param_2.update_attribute(:key, 'foo')
-      lambda {@node.compiled_parameters}.should raise_error(ParameterConflictError)
+    describe "handling parameters in the graph" do
+
+      it "should return the compiled parameters" do
+        @node.compiled_parameters.should == {'foo' => '1', 'bar' => '2'}
+      end
+
+      it "should ensure that parameters nearer to the node are retained" do
+        @node_group_a1 = NodeGroup.generate!
+        @node_group_a1.parameters << Parameter.create(:key => 'foo', :value => '2')
+        @node_group_a.node_groups << @node_group_a1
+
+        @node.compiled_parameters.should == {'foo' => '1', 'bar' => '2'}
+      end
+
+      it "should raise an error if there are parameter conflicts among children" do
+        @param_2.update_attribute(:key, 'foo')
+        lambda {@node.compiled_parameters}.should raise_error(ParameterConflictError)
+      end
     end
   end
+
 end

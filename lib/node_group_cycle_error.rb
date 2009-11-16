@@ -1,0 +1,2 @@
+class NodeGroupCycleError < StandardError
+end
