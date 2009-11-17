@@ -11,7 +11,8 @@
   = link_to_unless secondary, te.subject_name.capitalize, primary
   was
   = te.event_type.tr('_', ' ')
-  = secondary.class.name
-  = link_to te.secondary_name, secondary if secondary
+  - if secondary
+    = secondary.class.name
+    = link_to te.secondary_name, secondary
   = time_ago_in_words(te.created_at)
   ago.
