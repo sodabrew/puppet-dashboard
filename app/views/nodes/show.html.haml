@@ -11,11 +11,19 @@
 - unless @node.description.blank?
   .description= simple_format h(@node.description)
 
-- unless @node.compiled_parameters.blank?
-  %h3 
-    Parameters
-    %span.count==(#{@node.compiled_parameters.size})
-  = inspector_table @node.compiled_parameters, :key, :value, :link => false
+- begin
+  - unless @node.compiled_parameters.blank?
+    %h3 
+      Parameters
+      %span.count==(#{@node.compiled_parameters.size})
+    = inspector_table @node.compiled_parameters, :key, :value, :link => false
+- rescue NodeGroupCycleError => error
+  %h3 Parameters
+  %p.error
+    %strong Warning:
+    There appears to be a problem with your node groups.
+    = error.message
+    
 
 - unless @node.node_groups.empty?
 

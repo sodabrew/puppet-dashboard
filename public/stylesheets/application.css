@@ -54,9 +54,6 @@ a {
   padding: 0 20px;
   margin: 0 auto;
   position: relative;
-/
-
-*background: url(images/grid.png) 20px;*/
 }
 
 .site-width:after {
@@ -121,7 +118,12 @@ span.count {
 
 strong {
   font-weight: bold;
-  color: #333;
+}
+
+p.error {
+  color: #C33;
+  background: #FEE;
+  padding: .5em 1em;
 }
 
 /* @end */
