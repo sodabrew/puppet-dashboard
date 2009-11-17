@@ -54,7 +54,7 @@ class Node < ActiveRecord::Base
     seen_parameters[depth] ||= {}
     graph.each do |parent, children_graph|
       parent.parameters.each do |parameter|
-        raise ParameterConflictError if seen_parameters[depth][parameter.key]
+        raise ParameterConflictError if seen_parameters[depth][parameter.key] && seen_parameters[depth][parameter.key] != parameter.value
         seen_parameters[depth][parameter.key] = parameter.value
       end
       compiled_parameters(children_graph, depth+1, seen_parameters)

@@ -184,6 +184,11 @@ describe Node do
         @param_2.update_attribute(:key, 'foo')
         lambda {@node.compiled_parameters}.should raise_error(ParameterConflictError)
       end
+
+      it "should not raise an error if there are two sibling parameters with the same key and value" do
+        @param_2.update_attributes(:key => @param_1.key, :value => @param_1.value)
+        lambda {@node.compiled_parameters}.should_not raise_error(ParameterConflictError)
+      end
     end
   end
 
