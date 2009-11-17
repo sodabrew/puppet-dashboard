@@ -1,5 +1,11 @@
 class NodesController < InheritedResources::Base
+  belongs_to :node_group, :optional => true
   respond_to :html, :yaml
+
+  def create
+    create!
+    @node.node_groups << parent if parent?
+  end
 
   private
 

@@ -1,11 +1,8 @@
 ActionController::Routing::Routes.draw do |map|
   map.resources :node_classes
-  map.resources :node_groups
+  map.resources :node_groups, :has_many => :nodes
 
   map.resources :nodes
-  map.resources :services do |service|
-    service.resources :nodes, :member => { :disconnect => :get, :connect => :get }
-  end
 
   map.resource :user_session
   map.resource :account, :controller => "users"
