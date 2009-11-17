@@ -1,5 +1,6 @@
 - te = timeline_event
 - subject = te.subject
+- subject_name = resource == subject ? "This #{subject.class.name.downcase}" : subject.name.capitalize
 - secondary = te.secondary_subject
 
 - primary = secondary || subject
@@ -8,11 +9,11 @@
 %li
   %span.type{:class => "#{primary_class.downcase} type"}
     %span= primary_class.titleize
-  = link_to_unless secondary, te.subject_name.capitalize, primary
+  = link_to_unless secondary || resource == subject, subject_name, primary
   was
   = te.event_type.tr('_', ' ')
   - if secondary
-    = secondary.class.name
-    = link_to te.secondary_name, secondary
+    - secondary_name = resource == secondary ? "this #{secondary.class.name.downcase}" : "#{secondary.class.name} #{secondary.name.capitalize}"
+    = link_to_unless resource == secondary, secondary_name, secondary
   = time_ago_in_words(te.created_at)
   ago.
