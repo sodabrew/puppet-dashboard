@@ -7,6 +7,7 @@ module ApplicationHelper
   end
 
   def inspector_table(collection, key=nil, value=nil, options={})
+    key, options = nil, key if key.is_a?(Hash)
     unless collection.is_a?(Hash)
       key ||= :name; value ||= :description
 

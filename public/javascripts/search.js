@@ -1,13 +1,4 @@
 (function($) {  
-  $.fn.zebraStripe = function() {
-    $(this)
-      .find('tbody tr:visible')
-      .removeClass('even')
-      .filter(function (index) {return index % 2 == 1})
-      .addClass('even');
-    return this;
-  };
-
   $.fn.filterList = function(opt) {
     return this.each(function() {
       var self = $(this);
@@ -18,7 +9,7 @@
         var matches = text == "" ? rows : rows.find('td.name a:contains("'+text+'")').parents('tr');
         rows.hide();
         matches.show();
-        table.trigger('reindex');
+        table.find('tbody').trigger('restripe');
       })
     });
   };

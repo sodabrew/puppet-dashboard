@@ -16,11 +16,5 @@ $(document).ready(function() {
     return false;
   });
 
-  $('table.inspector').bind('reindex', function(event) {
-     $(this).zebraStripe();
-  });
-  
-  $('table.inspector').trigger('reindex')
-
   $('.filter-list').filterList();  
 });

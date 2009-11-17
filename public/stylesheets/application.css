@@ -302,10 +302,13 @@ h1 a:hover {
   outline: none;
   -webkit-appearance: searchfield;
   position: relative;
-  top: -1px;
+  width: 26em;
 }
 
-.table-tools a.button {
+.primary-content .table-tools input { width: 15em; }
+
+.table-tools a.button,
+.section a.button {
   background: #777 url(images/white-overlays.png) top repeat-x;
   background-position: 0 -128px;
   text-shadow: 0 -1px 0 #666;
@@ -313,20 +316,27 @@ h1 a:hover {
   color: white;
   float: right;
   margin-top: 0.2em;
-  margin-right: 8px;
+  margin-right: 2px;
 }
 
-.table-tools a.add.button span.indicator {
+
+.section a.button {
+  margin-right: 0;
+}
+
+.table-tools a.add.button span.indicator,
+.section a.add.button span.indicator {
   background: url(images/icons/add_grey.png);
 }
 
-.table-tools:hover a.add.button {
+.table-tools:hover a.add.button,
+.section:hover a.add.button {
   background: #376e1b url(images/white-overlays.png) repeat-x 0 -128px;
   text-shadow: #386522 0 -1px 0;
   color: white;
 }
 
-.table-tools:hover a.add.button {
+.section:hover a.add.button {
   background-color: #3d7224;
   text-shadow: 0 -1px 0 #666;
 }
@@ -365,16 +375,15 @@ div#inspector table thead th {
   background: #ddd;
 }
 
-div#inspector table thead th {
+table.inspector thead th {
   border-color: #c0c0c0;
 }
 
-div#inspector .secondary-content table tr:nth-child(even) td {
+table.inspector tr:nth-child(even) td {
   background: #e8ecf1;
 }
 
-div#inspector .primary-content table tr.active td,
-div#inspector .primary-content table tr.even.active td {
+div#inspector .primary-content table tr.active td {
   background: #2e76da;
   color: white;
 }
@@ -559,40 +568,57 @@ table.inspector .nodes {
 	text-align: center;
 }
 
-table.inspector td div {
+table.inspector td > div {
   position: relative;
 }
 
-table.inspector td a.delete-parameter {
+table.inspector div.popup-actions {
   position: absolute;
-  left: -32px;
+  right: -32px;
   top: -5px;
-  display: block;
-  width: 16px;
-  height: 16px;
-  background: url(images/icons/delete.png) white center no-repeat;
-  padding: 4px;
+  padding: 4px 4px 4px 0;
   height: 100%;
-  -webkit-border-top-left-radius: 8px;
-  -webkit-border-bottom-left-radius: 8px;
+  -webkit-border-top-right-radius: 8px;
+  -webkit-border-bottom-right-radius: 8px;
   -moz-border-radius: 8px;
   border: 1px solid #ccc;
-  border-right: none;
+  border-left: none;
   visibility: hidden;
 }
 
-table.inspector td a.delete-parameter span {
+table.inspector td .popup-actions a {
+  display: block;
+  float: left;
+  width: 16px;
+  height: 100%;
+  margin-left: 4px;
+}
+
+.popup-actions a.delete-parameter,
+.popup-actions a.delete {
+  background: url(images/icons/delete.png) transparent center center no-repeat;
+}
+.popup-actions a.add {
+  background: url(images/icons/add.png) transparent center center no-repeat;
+}
+
+
+table.inspector td .popup-actions a span {
   display: none;
 }
 
 form table.inspector tr:hover td,
-table.inspector tr:hover td a.delete-parameter {
-  background-color: lightgoldenrodyellow;
+table.inspector tr:hover td div.popup-actions {
+  background-color: lightgoldenrodyellow !important;
   visibility: visible;
 }
 
+table.inspector td {
+  padding-right: 15px;
+}
+
 table.inspector td input {
-  width: 95%;
+  width: 100%;
 }
 
 
@@ -637,8 +663,6 @@ a.cancel {
 	color: #888;
 	font-size: 0.85em;
 }
-
-
 
 .add.button span.indicator {
   display: inline-block;

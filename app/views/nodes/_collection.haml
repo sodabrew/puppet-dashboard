@@ -18,7 +18,7 @@
     - nodes.each do |node|
       %tr[node]{:class => "#{'active' if node == @node}"}
         %td.name
-          = link_to h(node.name), node, :rel => 'inspect'
+          = link_to h(node.name), [parent, node], :rel => 'inspect'
         %td.params
           = node.parameters.size
         %td.groups

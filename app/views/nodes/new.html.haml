@@ -1,7 +1,7 @@
 - content_for :primary_content do
   = render 'collection'
 
-- form_for @node do |f|
+- form_for [parent, @node] do |f|
   = render f
   = f.submit
   = link_to 'Cancel', @node

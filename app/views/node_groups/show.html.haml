@@ -13,20 +13,22 @@
     Parameters
     %span.count==(#{@node_group.parameters.size})
 
-  = inspector_table @node_group.parameters
+  = inspector_table @node_group.parameters.to_hash
 
 - unless @node_group.node_classes.blank?
   %h3 
     Classes
-    %span.count= @node_group.node_classes.size
+    %span.count== (#{@node_group.node_classes.size})
 
-  = inspector_table @node_group.node_classes, :name, :description
+  = inspector_table @node_group.node_classes, :name, :description, :link => true
 
-- unless @node_group.nodes.blank?
-  %h3 
-    Members of this group
-    %span.count==(#{@node_group.nodes.size})
+.section
+  - unless @node_group.nodes.blank?
+    %h3 
+      Members of this group
+      %span.count==(#{@node_group.nodes.size})
+      = link_to '<span class="indicator"></span>Add Node', new_node_group_node_path(@node_group), :class => "add button"
 
-  = inspector_table @node_group.nodes, :name, :description
+  = inspector_table @node_group.nodes, :name, :description, :link => true
 
 

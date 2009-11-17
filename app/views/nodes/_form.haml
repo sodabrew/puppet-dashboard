@@ -25,23 +25,56 @@
 
 .element#node-groups
   = form.label "Node Groups"
-  = inspector_table @node.node_groups, :name, :description, :long => true
+  %table.inspector
+    %thead
+      %tr
+        %th.key Name
+        %th.value Description
+    %tbody
+      - form.object.node_groups.each do |group|
+        %tr[group]
+          %td.key= link_to group.name, group
+          %td
+            %div
+              = group.description
+              .popup-actions
+                %a.delete{:href => '#'}
+                  %span (delete)
 
 .element#available-node-groups
   = form.label "Available Groups"
-  = inspector_table @node.available_node_groups, :name, :description, :long => true
+  .table-tools
+    - form_tag do
+      = text_field_tag :search, '', :class => 'filter-list', :autocomplete => 'off', :type => "search"
+    = link_to "<span class='indicator'></span>Add new", new_node_group_path, :class => "add button", :rel => 'inspect'
+  %table.inspector
+    %thead
+      %tr
+        %th.key Name
+        %th.value Description
+    %tbody
+      - form.object.available_node_groups.each do |group|
+        %tr[group]
+          %td.key= link_to group.name, group
+          %td
+            %div
+              = group.description
+              .popup-actions
+                %a.add{:href => '#'}
+                  %span (add)
 
-- unless @node.node_classes.blank?
-  .element#node-classes
-    = form.label "Node Classes"
-    = inspector_table @node.node_classes, :name, :description, :long => true
+.element#node-classes
+  = form.label "Node Classes"
+  = inspector_table @node.node_classes, :name, :description, :link => true
 
-- unless @node.available_node_classes.blank?
-  .element#available-node-classes
-    = form.label "Available Classes"
-    = inspector_table @node.available_node_classes, :name, :description, :long => true
+.element#available-node-classes
+  = form.label "Available Classes"
+  .table-tools
+    - form_tag do
+      = text_field_tag :search, '', :class => 'filter-list', :autocomplete => 'off', :type => "search"
+    = link_to "<span class='indicator'></span>Add new", new_node_group_path, :class => "add button", :rel => 'inspect'
+  = inspector_table @node.available_node_classes, :name, :description, :link => true
 
-- unless @node.inherited_classes.blank?
-  .element#inherited-node-classes
-    %label Inherited Classes
-    = inspector_table @node.inherited_classes, :name, :description, :long => true
+.element#inherited-node-classes
+  %label Inherited Classes
+  = inspector_table @node.inherited_classes, :name, :description, :link => true

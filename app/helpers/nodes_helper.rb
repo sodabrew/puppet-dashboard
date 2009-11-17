@@ -1,5 +1,6 @@
 module NodesHelper
   def nodes
-    @nodees ||= Node.all
+    return parent.nodes if parent?
+    collection || @nodes || Node.all
   end
 end

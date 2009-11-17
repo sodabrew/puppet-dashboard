@@ -16,7 +16,7 @@ class Node < ActiveRecord::Base
   fires :removed, :on => :destroy
 
   def available_node_classes
-    @available_node_classes ||= NodeClass.all(:order => :name) - node_classes
+    @available_node_classes ||= NodeClass.all(:order => :name) - node_classes - inherited_classes
   end
 
   def available_node_groups

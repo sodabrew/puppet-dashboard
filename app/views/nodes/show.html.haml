@@ -30,14 +30,14 @@
   %h3
     Node Groups
     %span.count==(#{@node.node_groups.size})
-  = inspector_table @node.node_groups
+  = inspector_table @node.node_groups, :link => true
 
 - unless @node.node_classes.empty?
 
   %h3
     Node Classes
     %span.count==(#{@node.node_classes.size})
-  = inspector_table @node.node_classes
+  = inspector_table @node.node_classes, :link => true
 
 - unless @node.timeline_events.empty?
   %h3 Activity
