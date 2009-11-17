@@ -9,7 +9,7 @@ module HasParameters
 
       has_many :parameters, :as => :parameterable, :dependent => :destroy do
         def to_hash
-          Hash[*target.map{|p| [p.key, p.value]}.flatten]
+          Hash[*all.map{|p| [p.key, p.value]}.flatten]
         end
       end
     end

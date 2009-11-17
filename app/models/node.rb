@@ -50,20 +50,24 @@ class Node < ActiveRecord::Base
   # merging down (preferring parameters specified in node groups that are
   # nearer). Raises a ParameterConflictError if parameters at the same distance
   # from the node have the same name.
-  def compiled_parameters
-    return @compiled_parameters if @compiled_parameters
-    seen_parameters = {}
-    compile_parameters(self, 0, seen_parameters)
-    @compiled_parameters = seen_parameters.sort_by{|key, value| key}.inject({}){|compiled, p| compiled.reverse_merge(p[1])}
-  end
-
-  def compile_parameters(object, depth, seen_parameters)
-    object.parameters.each do |parameter|
-      seen_parameters[depth] ||= {}
-      raise ParameterConflictError if seen_parameters[depth][parameter.key]
-      seen_parameters[depth][parameter.key] = parameter.value
+  # def compiled_parameters
+    # return @compiled_parameters if @compiled_parameters
+    # seen_parameters = {}
+    # compile_parameters(self, 0, seen_parameters)
+    # @compiled_parameters = seen_parameters.sort_by{|key, value| key}.inject({}){|compiled, p| compiled.reverse_merge(p[1])}
+  # end
+  def compiled_parameters(graph=node_group_graph, depth=1, seen_parameters={0 => parameters.to_hash})
+    seen_parameters[depth] ||= {}
+    graph.each do |parent, children_graph|
+      parent.parameters.each do |parameter|
+        raise ParameterConflictError if seen_parameters[depth][parameter.key]
+        seen_parameters[depth][parameter.key] = parameter.value
+      end
+      compiled_parameters(children_graph, depth+1, seen_parameters)
     end
 
-    object.node_groups.each{|group| compile_parameters(group, depth+1, seen_parameters)}
+    return seen_parameters.sort_by{|k,v| k}.inject({}){|results, array| depth, parameters = array; results.reverse_merge(parameters)}
   end
+  alias_method :cp, :compiled_parameters
+
 end

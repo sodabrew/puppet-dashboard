@@ -12,4 +12,6 @@ class NodeGroup < ActiveRecord::Base
   has_parameters
   
   def description; "No description yet" end
+
+  def inspect; "#<NodeGroup id:#{id}, name:#{name.inspect}>" end
 end
