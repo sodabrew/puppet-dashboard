@@ -12,11 +12,7 @@
       #header
         .site-width
           %h1= link_to "Puppet Node Manager", root_path
-          - if current_user
-            %ul#global-navigation.navigation
-              %li= tab_to_unless_current "Nodes", nodes_path
-              %li= tab_to_unless_current "Node Classes", node_classes_path
-              %li= tab_to_unless_current "Node Groups", node_groups_path
+          = render :partial => 'shared/global_nav'
           %ul#secondary-navigation.navigation
             - unless current_user
               %li= link_to "Register", new_account_path

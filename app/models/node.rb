@@ -9,6 +9,8 @@ class Node < ActiveRecord::Base
   has_many :node_group_memberships
   has_many :node_groups, :through => :node_group_memberships
 
+  has_many :reports
+
   has_parameters
 
   fires :created, :on => :create
@@ -32,7 +34,7 @@ class Node < ActiveRecord::Base
   end
 
   def configuration
-    { 'name' => name, 'classes' => node_classes.collect(&:name), 'parameters' => (parameters.blank? ? {} : parameters.to_hash) }
+    { 'name' => name, 'classes' => all_classes.collect(&:name), 'parameters' => (parameters.blank? ? {} : parameters.to_hash) }
   end
 
   def to_yaml(opts={})
@@ -40,10 +42,7 @@ class Node < ActiveRecord::Base
   end
 
   def timeline_events
-    TimelineEvent.find(:all,
-                       :conditions => ["(subject_id = :id AND subject_type = :klass) OR (secondary_subject_id = :id AND secondary_subject_type = :klass)", {:id => id, :klass => self.class.name}],
-                       :order => 'created_at DESC'
-                      )
+    TimelineEvent.for_node(self)
   end
 
   # Walks the graph of node groups for the given node, compiling parameters by
@@ -61,5 +60,16 @@ class Node < ActiveRecord::Base
     end
 
     return seen_parameters.sort_by{|k,v| k}.inject({}){|results, array| depth, parameters = array; results.reverse_merge(parameters)}
+  end
+
+
+  # Placeholder attributes
+  
+  def environment
+    'production'
+  end
+
+  def last_report
+    reports.first(:order => :created_at)
   end
 end

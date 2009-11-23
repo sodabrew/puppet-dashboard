@@ -6,75 +6,74 @@
 
 .element
   = form.label :description
-  = form.text_area :description, :rows => 4
+  .textarea
+    = form.text_area :description, :rows => 4
 
-.element.node-group-parameters
-  %label Parameters
-  = link_to_function('<span class="indicator"></span> Add new', :class => "add button") { |page|  page.insert_html :bottom, 'parameters', :partial => 'parameter_input', :object => form.object.parameters.build }
+.table-tools.head
+  %h3 Parameters
+  = link_to_function("<span class='indicator'></span>Add", :class => "add button") { |page|  page.insert_html :bottom, 'parameters', :partial => 'parameter_input', :object => form.object.parameters.build }
+  %div{:style => 'clear:both;'}
+%table#parameters.inspector
+  %thead
+    %tr
+      %th.key Key
+      %th.value Value
+  %tbody
+    - if form.object.parameters.blank?
+      = render :partial => 'parameter_input', :object => form.object.parameters.build
+    - else
+      = render :partial => 'parameter_input', :collection => form.object.parameters
 
-  %table#parameters.inspector
-    %thead
-      %tr
-        %th.key Key
-        %th.value Value
-    %tbody
-      - if form.object.parameters.blank?
-        = render :partial => 'parameter_input', :object => form.object.parameters.build
-      - else
-        = render :partial => 'parameter_input', :collection => form.object.parameters
-
-.element#node-groups
-  = form.label "Node Groups"
+#node-groups
   %table.inspector
+    %caption Node Groups
     %thead
       %tr
         %th.key Name
-        %th.value Description
+        %th.value{:colspan => 2} Description
     %tbody
       - form.object.node_groups.each do |group|
         %tr[group]
           %td.key= link_to group.name, group
           %td
+            = group.description
+            = hidden_field_tag 'node[node_groups][]', group.id
+          %td.actions
+            %a.icon.delete{:href => '#'}
+              %span(delete)
+
+#available-node-groups
+  .table-tools
+    - form_tag do
+      = text_field_tag :search, '', :class => 'node-group-search', :autocomplete => 'off', :type => "search"
+    = link_to "<span class='indicator'></span>Add", new_node_group_path, :class => "add button", :rel => 'inspect' unless form.object.new_record?
+  .results
+
+#node-classes
+  %table.inspector
+    %caption Node Classes
+    %thead
+      %tr
+        %th.key Name
+        %th.value{:colspan => 2} Description
+    %tbody
+      - form.object.node_classes.each do |node_class|
+        %tr[node_class]
+          %td.key= link_to node_class.name, node_class
+          %td
             %div
-              = group.description
+              = node_class.description
               .popup-actions
                 %a.delete{:href => '#'}
                   %span (delete)
 
-.element#available-node-groups
-  = form.label "Available Groups"
+#available-node-classes
   .table-tools
     - form_tag do
-      = text_field_tag :search, '', :class => 'filter-list', :autocomplete => 'off', :type => "search"
-    = link_to "<span class='indicator'></span>Add new", new_node_group_path, :class => "add button", :rel => 'inspect'
-  %table.inspector
-    %thead
-      %tr
-        %th.key Name
-        %th.value Description
-    %tbody
-      - form.object.available_node_groups.each do |group|
-        %tr[group]
-          %td.key= link_to group.name, group
-          %td
-            %div
-              = group.description
-              .popup-actions
-                %a.add{:href => '#'}
-                  %span (add)
+      = text_field_tag :search, '', :class => 'node-class-search', :autocomplete => 'off', :type => "search"
+    = link_to "<span class='indicator'></span>Add", new_node_class_path, :class => "add button", :rel => 'inspect' unless form.object.new_record?
+  .results
 
-.element#node-classes
-  = form.label "Node Classes"
-  = inspector_table @node.node_classes, :name, :description, :link => true
-
-.element#available-node-classes
-  = form.label "Available Classes"
-  .table-tools
-    - form_tag do
-      = text_field_tag :search, '', :class => 'filter-list', :autocomplete => 'off', :type => "search"
-    = link_to "<span class='indicator'></span>Add new", new_node_group_path, :class => "add button", :rel => 'inspect'
-  = inspector_table @node.available_node_classes, :name, :description, :link => true
-
-.element#inherited-node-classes
-  %label Inherited Classes
-  = inspector_table @node.inherited_classes, :name, :description, :link => true
+- unless @node.inherited_classes.empty?
+  #inherited-node-classes
+    = inspector_table @node.inherited_classes, :name, :description, :link => true, :caption => 'Inherited Classes'

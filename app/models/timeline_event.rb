@@ -3,9 +3,10 @@ class TimelineEvent < ActiveRecord::Base
   belongs_to :subject,            :polymorphic => true
   belongs_to :secondary_subject,  :polymorphic => true
 
-  def self.recent(limit = 10)
-    all(:order => 'created_at DESC', :limit => limit)
-  end
+  named_scope :for_node, lambda { |node| {:conditions =>
+    [ "(subject_id = :id AND subject_type = :klass) OR (secondary_subject_id = :id AND secondary_subject_type = :klass)",
+      {:id => node.id, :klass => node.class.name} ] } }
+  named_scope :recent, :order => 'created_at DESC', :limit => 10
 
   def subject_name
     subject ? subject.name : "A #{subject_type.downcase}"

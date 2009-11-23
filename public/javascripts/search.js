@@ -13,4 +13,16 @@
       })
     });
   };
+
+  $.fn.autocompleteInspector = function(url) {
+    var self = this
+    self.keyup(function(e) {
+      var text = $(this).attr('value');
+      var div = self.parents('.table-tools').next('.results');
+      var html = $.get(url, { q: text }, function(html, status) {
+        div.html(html);
+      }, "html");
+    });
+    return self;
+  }
 })(jQuery);

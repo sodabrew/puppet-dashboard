@@ -6,6 +6,7 @@ describe '/nodes/edit' do
   end
 
   def do_render
+    pending "Testing inherited resources views"
     render '/nodes/edit'
   end
 

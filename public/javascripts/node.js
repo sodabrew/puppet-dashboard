@@ -24,7 +24,31 @@ jQuery(function($) {
     function() {
       $(this)
         .removeClass('add').addClass('delete')
-        .parents('tr').remove().appendTo('#node-groups table tbody')
+        .parents('tr')
+          .remove().appendTo('#node-groups table tbody')
+          .find('input[type=hidden]').attr('disabled', false)
+        $('tbody').trigger('restripe')
+      return false;
+    }
+  );
+
+  $('#node-classes a.delete').livequery('click', 
+    function() {
+      $(this)
+        .removeClass('delete').addClass('add')
+        .parents('tr').remove()
+        $('tbody').trigger('restripe')
+      return false;
+    }
+  );
+
+  $('#available-node-classes a.add').livequery('click', 
+    function() {
+      $(this)
+        .removeClass('add').addClass('delete')
+        .parents('tr')
+          .remove().appendTo('#node-classes table tbody')
+          .find('input[type=hidden]').attr('disabled', false)
         $('tbody').trigger('restripe')
       return false;
     }

@@ -1,10 +1,12 @@
 %table.inspector
+  - if options[:caption]
+    %caption= options[:caption]
   %thead
     %tr
       %th.key= key.titleize
-      %th.value= value.titleize
+      %th.value{:colspan => 2}= value.titleize
   %tbody
     - inspector.each do |key, value|
       %tr
         %td.key= key
-        %td= value
+        %td{:colspan => 2}= value

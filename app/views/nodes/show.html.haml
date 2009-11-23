@@ -2,7 +2,7 @@
   = render :partial => 'collection'
 
 .header
-  %h2== Node '#{h @node.name}'
+  %h2= h @node.name
   %ul.actions
     %li= link_to 'Edit', edit_node_path(@node), :class => "edit button", :rel => 'inspect'
     %li= link_to 'Destroy', @node, :confirm => 'Are you sure?', :method => :delete, :class => "delete button"
@@ -13,10 +13,7 @@
 
 - begin
   - unless @node.compiled_parameters.blank?
-    %h3 
-      Parameters
-      %span.count==(#{@node.compiled_parameters.size})
-    = inspector_table @node.compiled_parameters, :key, :value, :link => false
+    = inspector_table @node.compiled_parameters, :key, :value, :link => false, :caption => 'Parameters'
 - rescue NodeGroupCycleError => error
   %h3 Parameters
   %p.error
@@ -26,19 +23,34 @@
     
 
 - unless @node.node_groups.empty?
-
-  %h3
-    Node Groups
-    %span.count==(#{@node.node_groups.size})
-  = inspector_table @node.node_groups, :link => true
+  = inspector_table @node.node_groups, :link => true, :caption => 'Groups'
 
 - unless @node.node_classes.empty?
+  = inspector_table @node.node_classes, :link => true, :caption => 'Classes'
 
-  %h3
-    Node Classes
-    %span.count==(#{@node.node_classes.size})
-  = inspector_table @node.node_classes, :link => true
+- unless @node.inherited_classes.empty?
+  = inspector_table @node.inherited_classes, :link => true, :caption => 'Inherited Classes'
 
 - unless @node.timeline_events.empty?
-  %h3 Activity
-  %ol.timeline= render @node.timeline_events
+  .element
+    %h3 Activity
+    %ol.timeline= render @node.timeline_events.recent(10)
+
+%table.inspector
+  %caption Reports
+  %thead
+    %tr
+      %th Reported at
+      %th Total
+      %th Failed
+      %th Skipped
+      %th Runtime
+  %tbody
+    - @node.reports.each do |rpt|
+      - report = rpt.parsed
+      %tr
+        %td= link_to report.time.to_s(:long), rpt
+        %td= report.metrics["resources"][:total]
+        %td= report.metrics["resources"][:failed]
+        %td= report.metrics["resources"][:skipped]
+        %td= "%0.2f" % report.metrics["time"][:total]

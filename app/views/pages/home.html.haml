@@ -1,6 +1,28 @@
 %h2 Nodes
-.nodes
-  = render @nodes
+%table.inspector
+  %thead
+    %tr
+      %th.name
+        Name
+      %th.environment Environment
+      %th.last_report Last Report
+      %th.last_update Last Updated
+  %tbody
+    - @nodes.each do |node|
+      %tr[node]{:class => "#{'active' if node == @node} #{node.last_report && node.last_report.status}"}
+        %td.name
+          = link_to h(node.name), node
+        %td.environment= node.environment
+        %td.last_report
+          - if node.last_report
+            %span.icon{:class => node.last_report.status}
+              %span== (#{node.last_report.status})
+            = link_to time_ago_in_words(node.last_report.time) + ' ago', node.last_report
+          - else
+            None
+        %td.last_updates
+          = time_ago_in_words node.updated_at
+          ago
 
 - content_for :secondary_content do
   %h2 Activity

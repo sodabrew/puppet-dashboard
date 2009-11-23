@@ -1,4 +1,4 @@
-/* @override http://localhost:3000/stylesheets/application.css */
+/* @oerride http://localhost:3000/stylesheets/application.css */
 
 /* @group Reset */
 
@@ -88,6 +88,7 @@ a:hover {
 h1 {
   font-size: 2.5em;
   line-height: 1em;
+  margin-bottom: 0.33em;
 }
 
 h2 {
@@ -116,8 +117,20 @@ span.count {
   color: #aaa;
 }
 
+span.alt {
+  color: #999;
+  font-family: "Georgia", sefif;
+  font-weight: normal;
+  font-style: italic;
+}
+
 strong {
   font-weight: bold;
+}
+
+code, pre {
+  font-family: "Monaco", "Courier New", Courier, fixed-width;
+  font-size: 12px;
 }
 
 p.error {
@@ -282,10 +295,15 @@ h1 a:hover {
 
 .table-tools {
   background: #ccc;
-  padding: 0.33em;
-  -webkit-border-top-left-radius: 4px;
-  -webkit-border-top-right-radius: 4px;
-  -moz-border-radius: ;
+  padding: 4px 4px 6px 4px;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  margin-bottom: -2px;
+}
+
+.table-tools h3 {
+  padding: 4px;
+  float: left;
 }
 
 .table-tools form {
@@ -293,8 +311,9 @@ h1 a:hover {
 }
 
 .table-tools input {
+  top: 1px;
   -webkit-border-radius: 8px;
-  -moz-border-radius: ;
+  -moz-border-radius: 8px;
   border: 1px solid #eee;
   border-top-color: #aaa;
   border-left-color: #bbb;
@@ -302,7 +321,11 @@ h1 a:hover {
   outline: none;
   -webkit-appearance: searchfield;
   position: relative;
-  width: 26em;
+  width: 25em;
+}
+
+.table-tools + table {
+  margin-top: -2px;
 }
 
 .primary-content .table-tools input { width: 15em; }
@@ -315,7 +338,6 @@ h1 a:hover {
   -webkit-box-shadow: 1px 1px 0 #bbb;
   color: white;
   float: right;
-  margin-top: 0.2em;
   margin-right: 2px;
 }
 
@@ -349,6 +371,30 @@ h1 a:hover {
 
 /* @end */
 
+/* @group Icons */
+
+.icon {
+  display: inline-block;
+  height: 100%;
+  width: 16px;
+  text-indent: -9999px;
+  vertical-align: baseline;
+}
+
+.icon.success {
+  background: url(images/icons/success.png) transparent center center no-repeat;
+}
+
+.icon.add {
+  background: url(images/icons/add.png) transparent center center no-repeat;
+}
+
+.icon.delete {
+  background: url(images/icons/delete.png) transparent center center no-repeat;
+}
+
+/* @end */
+
 /* @group Inspector */
 
 div#inspector.primary-secondary-content {
@@ -375,14 +421,6 @@ div#inspector table thead th {
   background: #ddd;
 }
 
-table.inspector thead th {
-  border-color: #c0c0c0;
-}
-
-table.inspector tr:nth-child(even) td {
-  background: #e8ecf1;
-}
-
 div#inspector .primary-content table tr.active td {
   background: #2e76da;
   color: white;
@@ -393,11 +431,31 @@ div#inspector .primary-content table tr.active td a {
 }
 
 div#inspector .primary-content table tbody {
-  height: 10em;
-  overflow-y: scroll;
 }
 
 
+div#inspector .secondary-content .header.element label {
+  display: none;
+}
+
+div#inspector .secondary-content .header input {
+  font-size: 1.25em;
+  font-weight: bold;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border: 1px solid #aaa;
+  margin-left: -0.2em;
+}
+
+div#inspector.primary-secondary-content .secondary-content .actions li {
+  display: inline-block;
+}
+
+div#inspector.primary-secondary-content .secondary-content ul.actions {
+  position: absolute;
+  right: 10px;
+  top: 0.45em;
+}
 
 /* @end */
 
@@ -431,13 +489,6 @@ div#inspector.primary-secondary-content .secondary-content .header h2 {
 
 div#inspector .primary-content table tr.even td{
 	background: #e8ecf1;
-}
-
-div#inspector.primary-secondary-content .secondary-content h3 {
-  font-size: 1em;
-  margin-top: 1em;
-  margin-bottom: 0.5em;
-  color: #555;
 }
 
 div#inspector .secondary-content .actions .button {
@@ -476,44 +527,6 @@ div#inspector .secondary-content .header input {
   margin-left: -0.2em;
 }
 
-div#inspector .secondary-content .element label {
-  font-size: 1em;
-  font-weight: bold;
-  color: #555;
-  display: block;
-  margin-bottom: 0.5em;
-}
-
-div#inspector .secondary-content .element.node-group-parameters label {
-	display: inline;
-}
-
-div#inspector .secondary-content .element.node-group-parameters table {
-	margin-top: 1em;
-}
-
-div#inspector .secondary-content .element.node-group-parameters .button{
-  font-size: 0.67em;
-  vertical-align: middle;
-  position: relative;
-  top: -0.1em;
-}
-
-div#inspector .secondary-content .element.node-group-parameters .button .indicator{
-	display: none;
-}
-
-div#inspector.primary-secondary-content .secondary-content .actions li {
-  display: inline-block;
-}
-
-div#inspector.primary-secondary-content .secondary-content .actions {
-  position: absolute;
-  right: 10px;
-  top: 0.45em;
-}
-
-
 /* @end */
 
 /* @group Tables */
@@ -526,7 +539,31 @@ table.inspector {
   border: 1px solid #ccc;
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
-  margin-bottom: 1.5em;
+  margin-bottom: 1em;
+}
+
+table.inspector caption,
+.table-tools h3,
+.element h3,
+.element label {
+  font-size: 18px;
+  background: #CCC;
+  color: #666;
+  font-weight: bold;
+  padding: 2px 8px;
+}
+
+.element h3 {
+  padding: 6px 8px;
+}
+
+table.inspector caption {
+  border: 1px solid #ccc;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  margin-right: -2px;
+  margin-bottom: -2px;
+  padding: 2px 8px;
 }
 
 table.inspector tbody {
@@ -540,6 +577,7 @@ table.inspector thead th {
 }
 
 table.inspector td {
+  vertical-align: baseline;
   border-bottom: 1px solid #d3dff1;
 }
 
@@ -547,8 +585,12 @@ table.inspector tr:last-child td {
   border-bottom: none;
 }
 
-table.inspector tbody tr.even td{
-	background: #d8e3f1;
+table.inspector thead th {
+  border-color: #c0c0c0;
+}
+
+table.inspector tr:nth-child(even) td {
+  background: #e8ecf1;
 }
 
 table.inspector th.key,
@@ -559,6 +601,10 @@ table.inspector td.key {
 
 table.inspector td.key {
   border-right-color: #ccc;
+}
+
+table.inspector td.total {
+  font-weight: bold;
 }
 
 table.inspector .params,
@@ -594,17 +640,32 @@ table.inspector td .popup-actions a {
   margin-left: 4px;
 }
 
-.popup-actions a.delete-parameter,
-.popup-actions a.delete {
+table.inspector tbody tr td.actions {
+  text-align: right;
+  padding-right: 5px;
+}
+
+table.inspector tr a.icon { visibility: hidden; }
+table.inspector tr:hover a.icon { visibility: visible; }
+
+table.inspector .popup-actions a.delete-parameter,
+table.inspector .popup-actions a.delete {
   background: url(images/icons/delete.png) transparent center center no-repeat;
 }
-.popup-actions a.add {
+table.inspector .popup-actions a.add {
   background: url(images/icons/add.png) transparent center center no-repeat;
 }
 
-
 table.inspector td .popup-actions a span {
   display: none;
+}
+
+form .table-tools {
+  margin-bottom: 1em;
+}
+
+form .table-tools.head {
+  margin-bottom: 0;
 }
 
 form table.inspector tr:hover td,
@@ -682,9 +743,63 @@ a.cancel {
 
 }
 
+form .textarea {
+  padding-right: 6px;
+}
 
-form .element {
+form textarea {
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.element {
+  border: 1px solid #ccc;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
   margin-bottom: 1em;
+  padding: 10px 10px 0 10px;
+}
+
+.element h3,
+.element label {
+  margin: -10px -10px 10px -10px;
+}
+
+.grouping {
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  padding: 10px 10px 0 10px;
+  background: #F8F8F8;
+  border: 1px solid #DDD;
+  margin-bottom: 1.5em;
+}
+
+.grouping h2 {
+  background: #EEE;
+  margin: -10px -10px 10px -10px;
+  padding: 6px 10px 3px 10px;
+  border-top: 1px solid #F8F8F8;
+}
+
+.grouping .section h3 {
+  background: #EEE;
+  margin: -10px -10px 10px -10px;
+  padding: 6px 10px 6px 10px;
+  border-top: 1px solid #F8F8F8;
+}
+
+.grouping table,
+.grouping .element {
+  margin-bottom: 10px;
+}
+
+.grouping .section {
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  padding: 10px 10px 0 10px;
+  background: #F8F8F8;
+  border: 1px solid #DDD;
+  margin-bottom: 1.5em;
 }
 
 /* @group Login */
@@ -832,21 +947,6 @@ div.node {
   font-size: 0.85em;
 }
 
-.node .actions a.edit {
-  position: absolute;
-  top: 0.6em;
-  right: 6px;
-  color: white;
-  background: #ccc;
-  padding: 0.125em 0.5em;
-  -webkit-border-radius: 3px;
-  -moz-border-radius: ;
-}
-
-.node:hover a.edit {
-  background: #1f508c;
-}
-
 .node h4 {
   margin-top: 0.5em;
   margin-bottom: 0.25em;
@@ -885,3 +985,23 @@ span.node.type {
 }
 
 /* @end */
+
+/* @group Report */
+
+.report h3.status {
+  margin-bottom: 10px;
+}
+
+.report h3.status.success,
+.report h3.status.failure {
+  padding-left: 20px;
+}
+
+
+.report h3.status.success {
+  background: url(images/icons/success.png) transparent left center no-repeat;
+}
+
+.report h3.status.failure {
+  background: url(images/icons/failure.png) transparent left center no-repeat;
+}

@@ -1,3 +1,4 @@
+- resource = false unless defined?(resource)
 - te = timeline_event
 - subject = te.subject
 - subject_name = resource == subject ? "This #{subject.class.name.downcase}" : subject.name.capitalize

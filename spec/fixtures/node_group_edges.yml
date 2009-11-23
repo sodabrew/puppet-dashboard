@@ -1,9 +1,0 @@
-# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
-
-one:
-  to_id: 
-  from_id: 1
-
-two:
-  to_id: 
-  from_id: 1
