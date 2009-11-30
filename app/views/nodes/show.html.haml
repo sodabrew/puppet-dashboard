@@ -2,18 +2,18 @@
   = render :partial => 'collection'
 
 .header
-  %h2= h @node.name
+  %h2= h resource.name
   %ul.actions
-    %li= link_to 'Edit', edit_node_path(@node), :class => "edit button", :rel => 'inspect'
-    %li= link_to 'Destroy', @node, :confirm => 'Are you sure?', :method => :delete, :class => "delete button"
+    %li= link_to 'Edit', edit_node_path(resource), :class => "edit button", :rel => 'inspect'
+    %li= link_to 'Destroy', resource, :confirm => 'Are you sure?', :method => :delete, :class => "delete button"
 
 
-- unless @node.description.blank?
-  .description= simple_format h(@node.description)
+- unless resource.description.blank?
+  .description= simple_format h(resource.description)
 
 - begin
-  - unless @node.compiled_parameters.blank?
-    = inspector_table @node.compiled_parameters, :key, :value, :link => false, :caption => 'Parameters'
+  - unless resource.compiled_parameters.blank?
+    = inspector_table resource.compiled_parameters, :key, :value, :link => false, :caption => 'Parameters'
 - rescue NodeGroupCycleError => error
   %h3 Parameters
   %p.error
@@ -22,19 +22,19 @@
     = error.message
     
 
-- unless @node.node_groups.empty?
-  = inspector_table @node.node_groups, :link => true, :caption => 'Groups'
+- unless resource.node_groups.empty?
+  = inspector_table resource.node_groups, :link => true, :caption => 'Groups'
 
-- unless @node.node_classes.empty?
-  = inspector_table @node.node_classes, :link => true, :caption => 'Classes'
+- unless resource.node_classes.empty?
+  = inspector_table resource.node_classes, :link => true, :caption => 'Classes'
 
-- unless @node.inherited_classes.empty?
-  = inspector_table @node.inherited_classes, :link => true, :caption => 'Inherited Classes'
+- unless resource.inherited_classes.empty?
+  = inspector_table resource.inherited_classes, :link => true, :caption => 'Inherited Classes'
 
-- unless @node.timeline_events.empty?
+- unless resource.timeline_events.empty?
   .element
     %h3 Activity
-    %ol.timeline= render @node.timeline_events.recent(10)
+    %ol.timeline= render resource.timeline_events.recent(10)
 
 %table.inspector
   %caption Reports
@@ -46,7 +46,7 @@
       %th Skipped
       %th Runtime
   %tbody
-    - @node.reports.each do |rpt|
+    - resource.reports.each do |rpt|
       - report = rpt.parsed
       %tr
         %td= link_to report.time.to_s(:long), rpt

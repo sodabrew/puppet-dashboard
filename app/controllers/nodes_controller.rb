@@ -7,7 +7,11 @@ class NodesController < InheritedResources::Base
 
   def create
     create!
-    @node.node_groups << parent if parent?
+    resource.node_groups << parent if parent?
+  end
+
+  def resource
+    end_of_association_chain.find_by_url!(params[:id])
   end
 
   private
