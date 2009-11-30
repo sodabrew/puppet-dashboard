@@ -74,6 +74,6 @@
     = link_to "<span class='indicator'></span>Add", new_node_class_path, :class => "add button", :rel => 'inspect' unless form.object.new_record?
   .results
 
-- unless @node.inherited_classes.empty?
+- unless form.object.inherited_classes.empty?
   #inherited-node-classes
-    = inspector_table @node.inherited_classes, :name, :description, :link => true, :caption => 'Inherited Classes'
+    = inspector_table form.object.inherited_classes, :name, :description, :link => true, :caption => 'Inherited Classes'
