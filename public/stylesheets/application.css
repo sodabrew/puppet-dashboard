@@ -230,14 +230,13 @@ h1 a:hover {
 #header ul#global-navigation li a {
   background: #444;
   color: #888;
+  -webkit-transition: all 0.125s ease-in-out;
 }
 
 #header ul#global-navigation li a:hover {
   color: #aaa;
-  background: #555
-
-;
- 
+  background: #555;
+  text-decoration: none;
 }
 
 /* @end */
@@ -339,11 +338,20 @@ h1 a:hover {
   color: white;
   float: right;
   margin-right: 2px;
+  font-size: 12px;
+  position: relative;
+  top: 3px;
 }
 
 
-.section a.button {
-  margin-right: 0;
+.secondary-content a.button {
+  margin-right: -2px;
+  top: 2px;
+}
+
+.secondary-content .table-tools a.button {
+  margin-right: 2px;
+  top: 0;
 }
 
 .table-tools a.add.button span.indicator,
@@ -468,8 +476,8 @@ div#inspector .secondary-content {
   position: relative;
   left: auto;
   display: table;
-  border: 2px solid #ccc;
-  -webkit-border-radius: 4px;
+  border: 1px solid #ccc;
+  -webkit-border-radius: 2px;
   padding: 10px;
 }
 
@@ -485,6 +493,7 @@ div#inspector.primary-secondary-content .secondary-content .header {
 div#inspector.primary-secondary-content .secondary-content .header h2 {
   font-size: 1.25em;
   margin: 0;
+  color: #666;
 }
 
 div#inspector .primary-content table tr.even td{
