@@ -1,0 +1,27 @@
+.grouping
+  %h2 Reports
+
+  %table.inspector
+    %thead
+      %tr
+        %th Reported at
+        %th Host
+        %th Total
+        %th Failed
+        %th Failed restarts
+        %th Skipped
+        %th Config retrieval
+        %th Runtime
+    %tbody
+      - @reports.each_with_index do |rpt, id|
+        - report = rpt.parsed
+        - id += 1
+        %tr
+          %td= link_to report.time.to_s(:long), report_path(id)
+          %td= h report.host
+          %td= report.metrics["resources"][:total]
+          %td= report.metrics["resources"][:failed]
+          %td= report.metrics["resources"][:failed_restarts]
+          %td= report.metrics["resources"][:skipped]
+          %td= "%0.2f" % report.metrics["time"][:config_retrieval]
+          %td= "%0.2f" % report.metrics["time"][:total]

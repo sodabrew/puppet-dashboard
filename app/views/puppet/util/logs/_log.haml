@@ -1,0 +1,9 @@
+%tr
+  %td.level
+    %code= h log.level
+  %td
+    %code= h log.message
+  %td
+    %code= h log.source
+  %td{:style => 'width:7em;'}
+    %code= log.time.to_s(:short)

@@ -1,0 +1,5 @@
+%tbody
+  - metric.values.each do |klass, name, value|
+    %tr
+      %td.key{:class => klass.to_s}= name
+      %td.value= value

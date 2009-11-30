@@ -1,0 +1,27 @@
+.report.grouping
+  %h2
+    = report.time.to_s(:long)
+    - if report.node
+      %span.alt for
+      = link_to report.node.name, report.node
+  
+  %h3.status{:class => report.status}= report.status.titleize
+
+  .section
+    %h3 Metrics
+    - report.metrics.each do |name, metric|
+      %table.inspector
+        %caption= name.capitalize
+        = render metric
+
+  .section
+    %h3 Log
+    %table.inspector
+      %thead
+        %tr
+          %th Level
+          %th Message
+          %th Source
+          %th Time
+      %tbody
+        = render report.logs

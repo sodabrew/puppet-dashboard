@@ -16,12 +16,14 @@ class NodesController < InheritedResources::Base
   helper_method :content_id
 
   def find_node_classes
-    return true unless ids = params[:node] && params[:node][:node_classes]
-    params[:node][:node_classes] = NodeClass.find(ids)
+    params[:node][:node_classes] ||= []
+    return if params[:node][:node_classes].empty?
+    params[:node][:node_classes] = NodeClass.find(params[:node][:node_classes])
   end
 
   def find_node_groups
-    return true unless ids = params[:node] && params[:node][:node_groups]
-    params[:node][:node_groups] = NodeGroup.find(ids)
+    params[:node][:node_groups] ||= []
+    return if params[:node][:node_groups].empty?
+    params[:node][:node_groups] = NodeGroup.find(params[:node][:node_groups])
   end
 end

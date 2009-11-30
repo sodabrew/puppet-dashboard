@@ -1,0 +1,24 @@
+.report.grouping
+  %h2= report.time.to_s(:long)
+
+  .section
+    %h3 Metrics
+    - report.metrics.each do |name, metric|
+      %table.inspector
+        %caption= name.capitalize
+        = render metric
+
+  .section
+    %h3 Log
+    %table.inspector
+      %thead
+        %tr
+          %th Level
+          %th Message
+          %th Source
+          %th Time
+      %tbody
+        = render report.logs
+
+  .section
+    %pre= h report.pretty_inspect

@@ -4,9 +4,9 @@ class Node < ActiveRecord::Base
   validates_presence_of :name
   validates_uniqueness_of :name
 
-  has_many :node_class_memberships
-  has_many :node_classes, :through => :node_class_memberships, :dependent => :destroy
-  has_many :node_group_memberships
+  has_many :node_class_memberships, :dependent => :destroy
+  has_many :node_classes, :through => :node_class_memberships
+  has_many :node_group_memberships, :dependent => :destroy
   has_many :node_groups, :through => :node_group_memberships
 
   has_many :reports
@@ -26,7 +26,7 @@ class Node < ActiveRecord::Base
   end
 
   def inherited_classes
-    @inherited_classes ||= node_groups.map(&:node_classes).flatten
+    (node_group_list - [self]).map(&:node_classes).flatten.uniq
   end
 
   def all_classes
