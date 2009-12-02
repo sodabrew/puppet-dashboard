@@ -1,7 +1,9 @@
 - resource = false unless defined?(resource)
 - te = timeline_event
 - subject = te.subject
-- subject_name = resource == subject ? "This #{subject.class.name.downcase}" : subject.name.capitalize
+- subject_name = te.subject_type
+- subject_name = "This #{subject_name.downcase}" if subject && subject == resource
+- subject_name = "A #{subject_name.downcase}" unless subject
 - secondary = te.secondary_subject
 
 - primary = secondary || subject
