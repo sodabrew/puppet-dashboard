@@ -20,9 +20,9 @@
       %th.value Value
   %tbody
     - if form.object.parameters.blank?
-      = render :partial => 'parameter_input', :object => form.object.parameters.build
+      = render :partial => 'parameters/parameter_input', :object => form.object.parameters.build
     - else
-      = render :partial => 'parameter_input', :collection => form.object.parameters
+      = render :partial => 'parameters/parameter_input', :collection => form.object.parameters
 
 #node-groups
   %table.inspector

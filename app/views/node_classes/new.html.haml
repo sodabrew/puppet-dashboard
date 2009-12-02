@@ -1,7 +1,8 @@
 - content_for :primary_content do
   = render 'collection'
 
-- form_for(@node_group) do |f|
+- form_for(@node_class) do |f|
   = render f
+  = f.error_messages
   %button{:type => "submit", :class => "button"} Create
-  = link_to 'Cancel', node_groups_path, :class => "cancel"
+  = link_to 'Cancel', node_classes_path, :class => "cancel"

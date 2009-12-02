@@ -11,6 +11,8 @@ class NodeGroup < ActiveRecord::Base
 
   has_parameters
 
+  validates_presence_of :name
+
   def self.search(query)
     return [] if query.blank?
     find(:all, :conditions => ["name like ?", "%#{query}%"])

@@ -3,7 +3,7 @@ jQuery(function($) {
     return object.attr('id').split('_').slice(-1);
   }
 
-  $('a.delete-parameter').livequery('click', 
+  $('tr a.delete').livequery('click', 
     function() {
       $(this).parents("tr").remove(); 
       return false;

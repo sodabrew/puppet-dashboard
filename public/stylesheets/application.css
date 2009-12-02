@@ -47,6 +47,10 @@ a {
   outline: 0;
 }
 
+ul {
+  list-style-position: inside;
+}
+
 /* @end */
 
 .site-width {
@@ -453,6 +457,7 @@ div#inspector .secondary-content .header input {
   -moz-border-radius: 3px;
   border: 1px solid #aaa;
   margin-left: -0.2em;
+  width: 100%;
 }
 
 div#inspector.primary-secondary-content .secondary-content .actions li {
@@ -772,6 +777,30 @@ form textarea {
 .element h3,
 .element label {
   margin: -10px -10px 10px -10px;
+}
+
+
+.errors.element {
+  border-color: #FCC;
+  color: #F66;
+}
+
+.errors.element h3 {
+  color: #D55;
+  background: #FCC;
+}
+
+.errors ul {
+  list-style: none; margin-bottom: .5em;
+}
+
+.errors ul li {
+  padding-left: 20px;
+  background: url(images/icons/failure.png) left center no-repeat;
+}
+
+.fieldWithErrors input {
+  background: #FDD;
 }
 
 .grouping {

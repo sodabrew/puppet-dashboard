@@ -25,4 +25,19 @@ module ApplicationHelper
 
     render :partial => 'shared/inspector', :object => collection, :locals => {:key => key.to_s, :value => value.to_s, :options => options}
   end
+
+  def error_messages_for(object_name, options)
+    objects = [options.delete(:object)].flatten
+    count   = objects.inject(0) {|sum, object| sum + object.errors.count }
+
+    return '' if count.zero?
+
+    header_message = "Please correct #{count > 1 ? "these #{count} errors" : 'this error'}:"
+    error_messages = objects.sum {|object| object.errors.full_messages.map {|msg| content_tag(:li, h(msg)) } }.join
+
+    contents = content_tag(:h3, header_message) +
+               content_tag(:ul, error_messages)
+
+    content_tag(:div, contents, :class => 'errors element')
+  end
 end
