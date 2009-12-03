@@ -4,31 +4,16 @@ jQuery(function($) {
   }
 
   $('tr a.delete').livequery('click', 
-    function() {
-      $(this).parents("tr").remove(); 
-      return false;
+    function(event) {
+      $(this).parents("tr").remove().parents('tbody').trigger('restripe');
+      event.preventDefaults();
     }
   );
 
   $('#node-groups a.delete').livequery('click', 
-    function() {
-      $(this)
-        .removeClass('delete').addClass('add')
-        .parents('tr').remove().prependTo('#available-node-groups table tbody')
-        $('tbody').trigger('restripe')
-      return false;
-    }
-  );
-
-  $('#available-node-groups a.add').livequery('click', 
-    function() {
-      $(this)
-        .removeClass('add').addClass('delete')
-        .parents('tr')
-          .remove().appendTo('#node-groups table tbody')
-          .find('input[type=hidden]').attr('disabled', false)
-        $('tbody').trigger('restripe')
-      return false;
+    function(event) {
+      $('input.node-group-search').trigger('cancel.autocomplete');
+      event.preventDefaults();
     }
   );
 
@@ -37,18 +22,6 @@ jQuery(function($) {
       $(this)
         .removeClass('delete').addClass('add')
         .parents('tr').remove()
-        $('tbody').trigger('restripe')
-      return false;
-    }
-  );
-
-  $('#available-node-classes a.add').livequery('click', 
-    function() {
-      $(this)
-        .removeClass('add').addClass('delete')
-        .parents('tr')
-          .remove().appendTo('#node-classes table tbody')
-          .find('input[type=hidden]').attr('disabled', false)
         $('tbody').trigger('restripe')
       return false;
     }

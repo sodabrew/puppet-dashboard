@@ -319,7 +319,7 @@ h1 a:hover {
   -moz-border-radius: 8px;
   border: 1px solid #eee;
   border-top-color: #aaa;
-  border-left-color: #bbb;
+  border-left-color: #CCC;
   background: url(images/icons/search.png) 4px 3px no-repeat white;
   outline: none;
   -webkit-appearance: searchfield;
@@ -429,8 +429,14 @@ div#inspector .primary-content table {
   -moz-border-radius: 0;
 }
 
-div#inspector table thead th {
+div#inspector table thead th,
+div#inspector table tfoot td {
   background: #ddd;
+}
+
+div#inspector table tfoot td {
+  border-top: 1px solid #CCC;
+  padding: 6px 8px 4px;
 }
 
 div#inspector .primary-content table tr.active td {
@@ -610,11 +616,11 @@ table.inspector tr:nth-child(even) td {
 table.inspector th.key,
 table.inspector td.key {
   width: 12em;
-  border-right: 1px solid #bbb;
+  border-right: 1px solid #CCC;
 }
 
 table.inspector td.key {
-  border-right-color: #ccc;
+  border-right-color: #CCC;
 }
 
 table.inspector td.total {
@@ -662,6 +668,8 @@ table.inspector tbody tr td.actions {
 table.inspector tr a.icon { visibility: hidden; }
 table.inspector tr:hover a.icon { visibility: visible; }
 
+a.icon span { display: none; }
+
 table.inspector .popup-actions a.delete-parameter,
 table.inspector .popup-actions a.delete {
   background: url(images/icons/delete.png) transparent center center no-repeat;
@@ -682,7 +690,7 @@ form .table-tools.head {
   margin-bottom: 0;
 }
 
-form table.inspector tr:hover td,
+form table.inspector tbody tr:hover td,
 table.inspector tr:hover td div.popup-actions {
   background-color: lightgoldenrodyellow !important;
   visibility: visible;
