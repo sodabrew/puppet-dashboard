@@ -1,0 +1,154 @@
+table td,
+table th {
+  vertical-align: middle;
+  padding: 0.33em 8px;
+}
+
+table.inspector {
+  width: 100%;
+  font-size: 0.85em;
+  border: 1px solid #ccc;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  margin-bottom: 1em;
+}
+
+table.inspector tbody {
+  background: white;
+}
+
+table.inspector thead th,
+table.inspector tfoot td {
+  background: #ddd;
+  color: #888;
+  font-weight: bold;
+}
+
+table.inspector tfoot td {
+  padding: 6px 8px 4px;
+}
+
+table.inspector caption {
+  border: 1px solid #ccc;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  margin-right: -2px;
+  margin-bottom: -2px;
+  padding: 2px 8px;
+}
+
+table.inspector tbody td {
+  vertical-align: baseline;
+  border-bottom: 1px solid #d3dff1;
+}
+
+table.inspector tbody tr:last-child td {
+  border-bottom: none;
+}
+
+table.inspector tbody tr:nth-child(even) td {
+  background: #e8ecf1;
+}
+
+table.inspector .key {
+  width: 140px;
+  border-right: 1px solid #DDD;
+}
+
+table.inspector th.key {
+  border-color: #CCC;
+}
+
+table.inspector td.total {
+  font-weight: bold;
+}
+
+table.inspector .params,
+table.inspector .groups,
+table.inspector .classes,
+table.inspector .nodes {
+  text-align: center;
+}
+
+table.inspector td > div {
+  position: relative;
+}
+
+table.inspector div.popup-actions {
+  position: absolute;
+  right: -32px;
+  top: -5px;
+  padding: 4px 4px 4px 0;
+  height: 100%;
+  -webkit-border-top-right-radius: 8px;
+  -webkit-border-bottom-right-radius: 8px;
+  -moz-border-radius: 8px;
+  border: 1px solid #ccc;
+  border-left: none;
+  visibility: hidden;
+}
+
+table.inspector td .popup-actions a {
+  display: block;
+  float: left;
+  width: 16px;
+  height: 100%;
+  margin-left: 4px;
+}
+
+table.inspector tbody tr td.actions {
+  text-align: right;
+  padding-right: 5px;
+}
+
+table.inspector tr a.icon { visibility: hidden; }
+table.inspector tr:hover a.icon { visibility: visible; }
+
+.primary-content table.inspector tr.active td {
+  background: #2e76da;
+  color: white;
+}
+
+.primary-content table.inspector tr.active td a {
+  color: white;
+}
+
+.primary-content table.inspector tbody {
+}
+
+.table-tools {
+  background: #ccc;
+  padding: 4px 4px 6px 4px;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  margin-bottom: -2px;
+}
+
+.table-tools h3 {
+  padding: 4px;
+  float: left;
+}
+
+.table-tools form {
+  display: inline;
+}
+
+.table-tools input {
+  top: 1px;
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
+  border: 1px solid #eee;
+  border-top-color: #aaa;
+  border-left-color: #CCC;
+  background: url(images/icons/search.png) 4px 3px no-repeat white;
+  outline: none;
+  -webkit-appearance: searchfield;
+  position: relative;
+  width: 25em;
+}
+
+.table-tools + table {
+  margin-top: -2px;
+}
+
+.primary-content .table-tools input { width: 250px; }

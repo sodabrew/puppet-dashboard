@@ -1,0 +1,142 @@
+form .header label {
+  display: none;
+}
+
+form .header input {
+  padding: 6px;
+  margin: -6px -6px 4px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border: 1px solid #aaa;
+}
+
+.secondary-content form .header input {
+  width: 532px;
+}
+
+form .table-tools {
+  margin-bottom: 1em;
+}
+
+form .table-tools.head {
+  margin-bottom: 0;
+}
+
+form table.inspector tbody tr:hover td,
+table.inspector tr:hover td div.popup-actions {
+  background-color: lightgoldenrodyellow !important;
+  visibility: visible;
+}
+
+form table.inspector td {
+  padding-right: 15px;
+}
+
+form table.inspector td input {
+  width: 100%;
+}
+
+form .textarea {
+  padding-right: 6px;
+}
+
+form textarea {
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.element {
+  border: 1px solid #ccc;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  margin-bottom: 1em;
+  padding: 10px 10px 0 10px;
+}
+
+.element h3,
+.element label {
+  margin: -10px -10px 10px -10px;
+}
+
+.errors.element {
+  border-color: #FCC;
+  color: #F66;
+}
+
+.errors.element h3 {
+  color: #D55;
+  background: #FCC;
+}
+
+.errors ul {
+  list-style: none; margin-bottom: .5em;
+}
+
+.errors ul li {
+  padding-left: 20px;
+  background: url(images/icons/failure.png) left center no-repeat;
+}
+
+.fieldWithErrors input {
+  background: #FDD;
+}
+
+form#new_user_session,
+form#new_user{
+  width: 360px;
+  margin: 0 auto;
+  border: 4px solid #ccc;
+  background: #eee;
+  padding: 20px;
+  font-size: 0.85em;
+}
+
+form#new_user_session .buttons,
+form#new_user .buttons{
+  margin-top: 2em;
+}
+
+form#new_user_session .button,
+form#new_user .button{
+  background: #777 url(images/white-overlays.png) top repeat-x;
+  background-position: 0 -128px;
+  text-shadow: 0 -1px 0 #666;
+  -webkit-box-shadow: 1px 1px 0 #bbb;
+  color: white;
+  font-size: 1em;
+  top: -0.25em;
+  position: relative;
+  -webkit-transition: none;
+}
+
+form#new_user_session .button:hover,
+form#new_user .button:hover{
+  background-color: #555;
+}
+
+form#new_user_session .button:active,
+form#new_user .button:active {
+  background: #999;
+  color: #555;
+  text-shadow: none;
+}
+
+/* @end */
+
+label {
+  display: block;
+}
+
+input {
+  vertical-align: middle;
+  font: inherit;
+}
+
+form input.inline, form label.inline {
+  display: inline
+}
+
+form .errorExplanation {
+  margin-bottom: 1.5em;
+}
+

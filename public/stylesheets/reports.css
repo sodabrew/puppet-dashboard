@@ -1,0 +1,18 @@
+.report h3.status {
+  margin-bottom: 10px;
+}
+
+.report h3.status.success,
+.report h3.status.failure {
+  padding-left: 20px;
+}
+
+
+.report h3.status.success {
+  background: url(images/icons/success.png) transparent left center no-repeat;
+}
+
+.report h3.status.failure {
+  background: url(images/icons/failure.png) transparent left center no-repeat;
+}
+

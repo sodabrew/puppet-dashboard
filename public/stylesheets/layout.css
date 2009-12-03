@@ -1,0 +1,44 @@
+.site-width {
+  width: 960px;
+  padding: 0 20px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.site-width:after {
+  content: ".";
+  display: block;
+  clear: both;
+  height: 0;
+  visibility: hidden;
+}
+
+.primary-secondary-content {
+  padding-right: 320px;
+}
+
+div#inspector.primary-secondary-content {
+  padding-left: 400px;
+  padding-right: 0;
+}
+
+.primary-secondary-content:after {
+  content: ".";
+  display: block;
+  clear: both;
+  height: 0;
+  visibility: hidden;
+}
+
+.primary-secondary-content .primary-content,
+.primary-secondary-content .secondary-content {
+  float: left;
+  width: 100%;
+}
+
+.primary-secondary-content .secondary-content {
+  width: 300px;
+  margin-right: -300px;
+  position: relative;
+  left: 20px;
+}

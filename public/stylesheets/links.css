@@ -1,0 +1,144 @@
+ul.actions {
+  position: absolute;
+  right: 10px;
+  top: 0.45em;
+}
+
+ul.actions li {
+  display: inline-block;
+}
+
+.button {
+  background: #ccc url(images/white-overlay.png);
+  color: #333;
+  padding: 0.2em 0.85em;
+  -webkit-border-radius: 1em;
+  -moz-border-radius: 1em;
+  -webkit-box-shadow: 1px 1px 1px #999;
+  -webkit-transition: 0.125s all ease-in-out;
+  display: inline-block;
+  border: none;
+  font: inherit;
+  font-size: 0.8em;
+  font-weight: bold;
+  text-shadow: 0 1px 0 #ddd;
+  text-decoration: none !important;
+}
+
+.button:hover {
+  color: #333;
+  background-color: #aaa;
+  text-shadow: 1px 0 0 #ccc;
+  -webkit-transition: none;
+}
+
+.button:active {
+  background: #999;
+  color: #555;
+  text-shadow: none;
+}
+
+a.cancel {
+  color: #888;
+  font-size: 0.85em;
+}
+
+.add.button span.indicator {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  margin-right: 0.4em;
+  margin-left: -0.4em;
+  vertical-align: middle;
+  position: relative;
+  top: -0.2em;
+  background: url(images/icons/add_light_grey.png);
+}
+
+.add.button:hover span.indicator {
+  background: url(images/icons/add.png);
+  text-shadow: #386522 0 -1px 0;
+
+}
+
+
+.add.button span.indicator {
+  background: url(images/icons/add_grey.png);
+}
+
+.table-tools:hover a.add.button span.indicator,
+caption:hover a.add.button span.indicator,
+.section:hover a.add.button span.indicator {
+  background: url(images/icons/add.png);
+}
+
+.actions .button:hover {
+  background-color: #555;
+}
+
+.actions .button {
+  background: #777 url(images/white-overlays.png) top repeat-x;
+  background-position: 0 -128px;
+  text-shadow: 0 -1px 0 #666;
+  -webkit-box-shadow: 1px 1px 0 #bbb;
+  color: white;
+}
+
+.actions .button:hover {
+  background-color: #555;
+}
+
+.table-tools .button,
+caption .button,
+.section .button {
+  background: #777 url(images/white-overlays.png) top repeat-x;
+  background-position: 0 -128px;
+  text-shadow: 0 -1px 0 #666;
+  -webkit-box-shadow: 1px 1px 0 #bbb;
+  color: white;
+  float: right;
+  margin-right: 2px;
+  font-size: 12px;
+  position: relative;
+  top: 3px;
+}
+
+.icon {
+  display: inline-block;
+  height: 100%;
+  width: 16px;
+  text-indent: -9999px;
+  vertical-align: baseline;
+}
+
+a.icon span { display: none; }
+
+.icon.success {
+  background: url(images/icons/success.png) transparent center center no-repeat;
+}
+
+.icon.add {
+  background: url(images/icons/add.png) transparent center center no-repeat;
+}
+
+.icon.delete {
+  background: url(images/icons/delete.png) transparent center center no-repeat;
+}
+
+span.type {
+  top: 0.25em;
+  left: 0;
+  position: absolute;
+  display: block;
+  width: 16px;
+  height: 16px;
+}
+
+span.type span {
+  display: none;
+}
+
+span.node.type {
+  background: url(images/icons/computer.png);
+}
+

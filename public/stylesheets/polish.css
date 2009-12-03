@@ -1,0 +1,21 @@
+.table-tools:hover a.add.button,
+caption:hover a.add.button,
+.section:hover a.add.button {
+  background: #376e1b url(images/white-overlays.png) repeat-x 0 -128px;
+  text-shadow: #386522 0 -1px 0;
+  color: white;
+}
+
+.actions .button {
+  background: #777 url(images/white-overlays.png) top repeat-x;
+  background-position: 0 -128px;
+  text-shadow: 0 -1px 0 #666;
+  -webkit-box-shadow: 1px 1px 0 #bbb;
+  color: white;
+}
+
+.button {
+  background: #ccc url(images/white-overlay.png);
+  -webkit-box-shadow: 1px 1px 1px #999;
+  -webkit-transition: 0.125s all ease-in-out;
+}

@@ -1,0 +1,81 @@
+body {
+  font-family: Verdana, sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6,
+.actions, .button, .navigation,
+.header input {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: #333;
+  font-weight: bold;
+}
+
+h1 {
+  font-size: 2.5em;
+  line-height: 1em;
+  margin-bottom: 0.33em;
+}
+
+  h1 a { color: white; }
+  h1 a:hover { text-decoration: none; }
+
+h2 {
+  font-size: 1.5em;
+  line-height: 1.5em;
+  margin-bottom: 0.5em;
+}
+
+h3 {
+  font-size: 1.25em;
+  line-height: 1em;
+}
+
+h4 {
+  font-size: 1em;
+  line-height: 1.28em;
+}
+
+p {
+  font-size: 1em;
+  margin-bottom: 1.5em;
+}
+
+a {
+  text-decoration: none;
+  color: #1f508c;
+}
+
+a:hover {
+  text-decoration: underline;
+  color: #3268aa;
+}
+
+span.count {
+  font-size: 0.75em;
+  color: #aaa;
+}
+
+span.alt {
+  color: #999;
+  font-family: "Georgia", sefif;
+  font-weight: normal;
+  font-style: italic;
+}
+
+strong {
+  font-weight: bold;
+}
+
+code, pre {
+  font-family: "Monaco", "Courier New", Courier, fixed-width;
+  font-size: 12px;
+}
+
+p.error {
+  color: #C33;
+  background: #FEE;
+  padding: .5em 1em;
+}
