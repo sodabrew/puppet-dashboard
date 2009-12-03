@@ -18,8 +18,11 @@ class NodeGroup < ActiveRecord::Base
     find(:all, :conditions => ["name like ?", "%#{query}%"])
   end
   
-  def description; "No description yet" end
+  def description; "No description" end
 
   def inspect; "#<NodeGroup id:#{id}, name:#{name.inspect}>" end
-  
+
+  def to_json(options)
+    super({:methods => :description, :only => [:name, :id]}.merge(options))
+  end
 end

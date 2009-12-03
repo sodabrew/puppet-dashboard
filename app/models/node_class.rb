@@ -8,4 +8,8 @@ class NodeClass < ActiveRecord::Base
   end
   
   def description; "No description" end
+
+  def to_json(options)
+    super({:methods => :description, :only => [:name, :id]}.merge(options))
+  end
 end
