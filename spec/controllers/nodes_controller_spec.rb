@@ -7,7 +7,7 @@ describe NodesController do
     end
 
     def do_get
-      get :edit, :id => @node.id.to_s
+      get :edit, :id => @node.url
     end
 
     it 'should make the requested node available to the view' do
@@ -24,7 +24,7 @@ describe NodesController do
   describe '#update' do
     before :each do
       @node = Node.generate!
-      @params = { :id => @node.id.to_s, :node => @node.attributes }
+      @params = { :id => @node.url, :node => @node.attributes }
     end
 
     def do_put
@@ -32,7 +32,7 @@ describe NodesController do
     end
 
     it 'should fail when an invalid node id is given' do
-      @params[:id] = (@node.id+100).to_s
+      @params[:id] = 'unknown'
       lambda { do_put }.should raise_error(ActiveRecord::RecordNotFound)
     end
 
