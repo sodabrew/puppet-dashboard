@@ -40,14 +40,12 @@
             = hidden_field_tag 'node[node_groups][]', group.id
           %td.actions
             %a.icon.delete{:href => '#'}
-              %span(delete)
-
-#available-node-groups
-  .table-tools
-    - form_tag do
-      = text_field_tag :search, '', :class => 'node-group-search', :autocomplete => 'off', :type => "search"
-    = link_to "<span class='indicator'></span>Add", new_node_group_path, :class => "add button", :rel => 'inspect' unless form.object.new_record?
-  .results
+              %span (delete)
+    %tfoot#available-node-groups
+      %tr
+        %td{:colspan => 3}
+          - form_tag do
+            = text_field_tag :search, '', :class => 'node-group-search', :autocomplete => 'off', :type => "search"
 
 #node-classes
   %table.inspector
@@ -66,13 +64,11 @@
               .popup-actions
                 %a.delete{:href => '#'}
                   %span (delete)
-
-#available-node-classes
-  .table-tools
-    - form_tag do
-      = text_field_tag :search, '', :class => 'node-class-search', :autocomplete => 'off', :type => "search"
-    = link_to "<span class='indicator'></span>Add", new_node_class_path, :class => "add button", :rel => 'inspect' unless form.object.new_record?
-  .results
+    %tfoot#available-node-classes
+      %tr
+        %td{:colspan => 3}
+          - form_tag do
+            = text_field_tag :search, '', :class => 'node-class-search', :autocomplete => 'off', :type => "search"
 
 - unless form.object.inherited_classes.empty?
   #inherited-node-classes
