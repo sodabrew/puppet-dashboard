@@ -55,15 +55,15 @@
         %th.key Name
         %th.value{:colspan => 2} Description
     %tbody
-      - form.object.node_classes.each do |node_class|
-        %tr[node_class]
-          %td.key= link_to node_class.name, node_class
+      - form.object.node_classes.each do |klass|
+        %tr[klass]
+          %td.key= link_to klass.name, klass
           %td
-            %div
-              = node_class.description
-              .popup-actions
-                %a.delete{:href => '#'}
-                  %span (delete)
+            = klass.description
+            = hidden_field_tag 'node[node_classes][]', klass.id
+          %td.actions
+            %a.icon.delete{:href => '#'}
+              %span (delete)
     %tfoot#available-node-classes
       %tr
         %td{:colspan => 3}
