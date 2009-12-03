@@ -4,7 +4,7 @@ class Report < ActiveRecord::Base
 
   before_create :assign_to_node
 
-  delegate :time, :metrics, :logs, :to => :parsed
+  delegate :time, :metrics, :logs, :host, :to => :parsed
 
   def status
     return 'failed' if parsed.metrics["resources"][:failed] > 0
