@@ -334,6 +334,7 @@ h1 a:hover {
 .primary-content .table-tools input { width: 15em; }
 
 .table-tools a.button,
+caption a.button,
 .section a.button {
   background: #777 url(images/white-overlays.png) top repeat-x;
   background-position: 0 -128px;
@@ -347,35 +348,20 @@ h1 a:hover {
   top: 3px;
 }
 
-
-.secondary-content a.button {
-  margin-right: -2px;
-  top: 2px;
-}
-
-.secondary-content .table-tools a.button {
-  margin-right: 2px;
-  top: 0;
-}
-
-.table-tools a.add.button span.indicator,
-.section a.add.button span.indicator {
+.a.add.button span.indicator {
   background: url(images/icons/add_grey.png);
 }
 
 .table-tools:hover a.add.button,
+caption:hover a.add.button,
 .section:hover a.add.button {
   background: #376e1b url(images/white-overlays.png) repeat-x 0 -128px;
   text-shadow: #386522 0 -1px 0;
   color: white;
 }
-
-.section:hover a.add.button {
-  background-color: #3d7224;
-  text-shadow: 0 -1px 0 #666;
-}
-
-.table-tools:hover a.add.button span.indicator {
+.table-tools:hover a.add.button span.indicator,
+caption:hover a.add.button span.indicator,
+.section:hover a.add.button span.indicator {
   background: url(images/icons/add.png);
 }
 
