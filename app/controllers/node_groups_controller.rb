@@ -4,8 +4,8 @@ class NodeGroupsController < InheritedResources::Base
   update!{@node_group}
 
   def search
-    @node_groups = NodeGroup.search(params[:q])
-    render :layout => false
+    @node_groups = NodeGroup.search(params[:val])
+    render :json => @node_groups.to_json
   end
 
   private
