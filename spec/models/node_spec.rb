@@ -144,10 +144,10 @@ describe Node do
 
   describe "handling the node group graph" do
     before do
-      @node = Node.generate!(:name => "A node")
+      @node = Node.generate!
 
-      @node_group_a = NodeGroup.generate!(:name => "A")
-      @node_group_b = NodeGroup.generate!(:name => "B")
+      @node_group_a = NodeGroup.generate!
+      @node_group_b = NodeGroup.generate!
 
       @param_1 = Parameter.generate(:key => 'foo', :value => '1')
       @param_2 = Parameter.generate(:key => 'bar', :value => '2')
@@ -155,7 +155,8 @@ describe Node do
       @node_group_a.parameters << @param_1
       @node_group_b.parameters << @param_2
 
-      @node.node_groups = [@node_group_a, @node_group_b]
+      @node.node_groups << @node_group_a
+      @node.node_groups << @node_group_b
     end
 
     it "should raise an error if the graph contains a cycle" do
