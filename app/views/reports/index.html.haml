@@ -13,12 +13,10 @@
         %th Config retrieval
         %th Runtime
     %tbody
-      - @reports.each_with_index do |rpt, id|
-        - report = rpt.parsed
-        - id += 1
+      - @reports.each do |report|
         %tr
-          %td= link_to report.time.to_s(:long), report_path(id)
-          %td= h report.host
+          %td= link_to report.time.to_s(:long), report
+          %td= link_to_if report.node, report.host, report.node
           %td= report.metrics["resources"][:total]
           %td= report.metrics["resources"][:failed]
           %td= report.metrics["resources"][:failed_restarts]
