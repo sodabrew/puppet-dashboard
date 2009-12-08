@@ -8,8 +8,8 @@ management and reporting tools. Nodes can be exported in YAML format, allowing t
 ## Dependencies
 
 * ruby >= 1.8.1
-* rake >- 0.8.4
-* sqlite3 (by default)
+* rake >= 0.8.4
+* sqlite3 (by default, or other Rails compatible database)
 
 ## Installation
 
