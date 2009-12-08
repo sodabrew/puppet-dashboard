@@ -4,14 +4,18 @@ class Report < ActiveRecord::Base
 
   before_create :assign_to_node
 
-  delegate :time, :metrics, :logs, :host, :to => :parsed
+  delegate :time, :logs, :host, :to => :parsed
 
   default_scope :order => 'created_at DESC'
 
   def status
-    return 'failed' if parsed.metrics["resources"][:failed] > 0
-    return 'failed' if parsed.metrics["resources"][:failed_restarts] > 0
+    return 'failed' if metrics[:resources][:failed] > 0
+    return 'failed' if metrics[:resources][:failed_restarts] > 0
     'success'
+  end
+
+  def metrics
+    @metrics ||= parsed.metrics.with_indifferent_access
   end
 
   def parsed
