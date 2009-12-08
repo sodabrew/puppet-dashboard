@@ -7,7 +7,7 @@
 - secondary = te.secondary_subject
 
 - primary = secondary || subject
-- primary_class = primary.class.name
+- primary_class = te.secondary_subject_type || te.subject_type
 
 %li
   %span.type{:class => "#{primary_class.downcase} type"}
