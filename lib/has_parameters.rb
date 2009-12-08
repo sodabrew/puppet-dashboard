@@ -4,10 +4,12 @@ module HasParameters
   end
 
   module ClassMethods
-    def has_parameters
+    def has_parameters(options={})
+  
+
       include HasParameters::InstanceMethods
 
-      has_many :parameters, :as => :parameterable, :dependent => :destroy do
+      has_many :parameters, {:as => :parameterable, :dependent => :destroy}.merge(options) do
         def to_hash
           Hash[*all.map{|p| [p.key, p.value]}.flatten]
         end
