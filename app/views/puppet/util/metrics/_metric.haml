@@ -2,4 +2,4 @@
   - metric.values.each do |klass, name, value|
     %tr
       %td.key{:class => klass.to_s}= name
-      %td.value= value
+      %td.value{:class => klass.to_s}= "%0.2f" % value.to_f

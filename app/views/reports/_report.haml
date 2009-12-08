@@ -1,17 +1,16 @@
 .report.grouping
   %h2
-    = report.time.to_s(:long)
+    %span.status{:class => report.status}
+      = report.time.to_s(:long)
     - if report.node
       %span.alt for
       = link_to report.node.name, report.node
-  
-  %h3.status{:class => report.status}= report.status.titleize
 
   .section
     %h3 Metrics
     - report.metrics.each do |name, metric|
       %table.inspector
-        %caption= name.capitalize
+        %caption= name.titleize
         = render metric
 
   .section
