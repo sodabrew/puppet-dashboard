@@ -1,5 +1,5 @@
-%h2 Nodes
 %table.inspector
+  %caption Nodes
   %thead
     %tr
       %th.name
@@ -14,10 +14,10 @@
           = link_to h(node.name), node
         %td.environment= node.environment
         %td.last_report
-          - if node.last_report
+          - if node.reported_at
             %span.icon{:class => node.last_report.status}
               %span== (#{node.last_report.status})
-            = link_to time_ago_in_words(node.last_report.time) + ' ago', node.last_report
+            = link_to time_ago_in_words(node.reported_at) + ' ago', node.last_report
           - else
             None
         %td.last_updates

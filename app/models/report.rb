@@ -26,7 +26,7 @@ class Report < ActiveRecord::Base
   private
 
   def assign_to_node
-    node = Node.find_or_create_by_name(host)
-    write_attribute(:node_id, node.id) if node
+    self.node = Node.find_or_create_by_name(host)
+    node.update_attribute(:reported_at, Time.now)
   end
 end
