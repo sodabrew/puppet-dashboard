@@ -108,3 +108,26 @@ ol.timeline li {
   position: relative;
 }
 
+ul.status {
+  list-style: none;
+}
+
+#global-status-target {
+  color: #666;
+  text-align: left;
+  display: none;
+  position: absolute;
+  top: 64px;
+  right: 18px;
+  background: #FFF;
+  padding: 10px;
+  border: 2px solid #EEE;
+  border-top: 0;
+  -webkit-border-bottom-left-radius: 4px;
+  -webkit-border-bottom-right-radius: 4px;
+  -moz-border-radius-bottomleft: 4px;
+  -moz-border-radius-bottomright: 4px;
+  z-index: 10;
+}
+
+span.sparkline { vertical-align: bottom; }

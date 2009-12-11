@@ -18,5 +18,30 @@ $(document).ready(function() {
 
   // $('.filter-list').filterList();
 
+  $.fn.sparklineStatus = function() {
+    $(this).sparkline('html', {
+      spotRadius: 0,
+      fillColor: false,
+      lineColor: "#666666"
+    });
+    return $(this);
+  };
 
+  $('span.sparkline').sparklineStatus();
+
+  $('a#global-status-link').click( function() {
+      $(this).parents('li').addClass('active');
+      $('#global-status-target:hidden')
+        .load(this.href)
+        .show('fast', function(){$('#global-status-target span.sparkline').sparklineStatus()});
+
+      $('#global-status-link, #global-status-target').bind('click.hideStatus', function(e){e.stopPropagation()});
+      $(document).one('click.hideStatus', function() {
+        $('#global-status-target').hide();
+        $('a#global-status-link').parents('li').removeClass('active');
+      });
+      $.sparkline_display_visible()
+      return false;
+  })
+  
 });

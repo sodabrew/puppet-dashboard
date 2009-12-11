@@ -1,6 +1,11 @@
 %ul#global-navigation.navigation
-  %li= tab_to_unless_current "Dashboard", root_path
-  %li= tab_to_unless_current "Nodes", nodes_path
-  %li= tab_to_unless_current "Node Classes", node_classes_path
-  %li= tab_to_unless_current "Node Groups", node_groups_path
-  %li= tab_to_unless_current "Reports", reports_path
+  %li= link_to "Dashboard", root_path
+  %li= link_to "Nodes", nodes_path
+  %li= link_to "Node Classes", node_classes_path
+  %li= link_to "Node Groups", node_groups_path
+  %li= link_to "Reports", reports_path
+
+%ul#status.navigation
+  %li
+    %span= link_to "<span class='sparkline'>#{Status.sparkline.join(', ')}</span> Status", status_path, :id => "global-status-link"
+#global-status-target

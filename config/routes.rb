@@ -10,6 +10,8 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :reports
 
+  map.resource :status
+
   map.root :controller => :pages, :action => :home
 
   map.connect ':controller/:action/:id'

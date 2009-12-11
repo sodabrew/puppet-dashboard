@@ -1,0 +1,4 @@
+%ul.status
+  %li
+    %span.sparkline= Status.sparkline.join(', ')
+    = link_to "#{number_to_percentage Status.sparkline.last, :precision => 2} Puppet Run Failures"
