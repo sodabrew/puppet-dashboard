@@ -7,7 +7,7 @@ describe NodeClass do
     it { should_not allow_value(name).for(:name) }
   end
 
-  ["alpha", "alpha123" ].each do |name|
+  ["alpha", "alpha123", "namespaced::class" ].each do |name|
     it { should allow_value(name).for(:name) }
   end
 end
