@@ -1,10 +1,11 @@
 - parameter = parameter_input  # change silly partial-based variable name
+- object_name = params[:controller].singularize
 %tr
   %td.key
-    = text_field_tag 'node[parameter_attributes][][key]', parameter.key
+    = text_field_tag "#{object_name}[parameter_attributes][][key]", parameter.key
   %td.value
     %div
-      = text_field_tag 'node[parameter_attributes][][value]', parameter.value
+      = text_field_tag "#{object_name}[parameter_attributes][][value]", parameter.value
       .popup-actions
         %a.icon.delete{:href => '#'}
           %span (delete)

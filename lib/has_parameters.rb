@@ -20,11 +20,12 @@ module HasParameters
   module InstanceMethods
     def parameter_attributes=(values)
       new_parameters = values.reject{|v| v[:key].blank? && v[:value].blank?}.map do |hash|
-        returning(parameters.find_or_initialize_by_key(hash[:key])) do |parameter|
-          parameter.value = hash[:value]
-        end
+        parameter = parameters.find_or_initialize_by_key(hash[:key])
+        parameter.value = hash[:value]
+        parameter.save
+        parameter
       end
-      self.parameters = (new_parameters)
+      self.parameters = new_parameters
     end
   end
 end
