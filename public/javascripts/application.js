@@ -33,11 +33,11 @@ $(document).ready(function() {
       $(this).parents('li').addClass('active');
       $('#global-status-target:hidden')
         .load(this.href)
-        .show('fast', function(){$('#global-status-target span.sparkline').sparklineStatus()});
+        .blindDown('fast', function(){$('#global-status-target span.sparkline').sparklineStatus()});
 
       $('#global-status-link, #global-status-target').bind('click.hideStatus', function(e){e.stopPropagation()});
       $(document).one('click.hideStatus', function() {
-        $('#global-status-target').hide();
+        $('#global-status-target').html('').blindUp();
         $('a#global-status-link').parents('li').removeClass('active');
       });
       $.sparkline_display_visible()
