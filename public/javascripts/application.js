@@ -44,18 +44,32 @@ $(document).ready(function() {
       return false;
   })
 
-  $('table.flot-data').graphTable(
+
+  $('table.flot-data.benchmark').graphTable(
       {height: '150px', width: '100%'},
       {legend: {show: false },
+       lines:  {show: true },
        points: {show: true },
-       lines:   {show: true },
-       grid:   {color: "#CCCCCC" },
+       grid:   {color: "#999"},
        xaxis:  {mode: "time",
                 timeformat: "%h:%M%p",
                 minTickSize: [1, "minute"]},
        yaxis:  {tickFormatter: function(val, axis){
         var ms = val * 1000;
         return ms.toFixed(0).toString() + 'ms'
+      }}});
+
+  $('table.flot-data.percent').graphTable(
+      {height: '150px', width: '100%'},
+      {legend: {show: false },
+       lines:  {show: true },
+       points: {show: true },
+       grid:   {color: "#999"},
+       xaxis:  {mode: "time",
+                timeformat: "%h:%M%p",
+                minTickSize: [10, "minute"]},
+       yaxis:  {tickFormatter: function(val, axis){
+        return val.toString() + '%'
       }}});
   
 });

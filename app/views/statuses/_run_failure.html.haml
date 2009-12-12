@@ -1,0 +1,12 @@
+- statuses = Status.by_interval(:limit => 30)
+%table.inspector.flot-data.percent
+  %thead
+    %tr
+      %th
+      - statuses.each do |status|
+        %th= status.start.utc.to_i * 1000
+  %tbody
+    %tr
+      %th Fail Percentage
+      - statuses.each do |status|
+        %td= status.percent

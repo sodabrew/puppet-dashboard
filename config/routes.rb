@@ -10,7 +10,7 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :reports
 
-  map.resource :status
+  map.resource :status, :member => {:overview => :get}
 
   map.root :controller => :pages, :action => :home
 

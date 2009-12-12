@@ -101,10 +101,8 @@ table.inspector caption,
 
 ol.timeline li {
   list-style-type: none;
-  font-size: 0.85em;
-  line-height: 1.25em;
-  margin-bottom: 0.67em;
   padding-left: 20px;
+  margin-bottom: 5px;
   position: relative;
 }
 
@@ -112,12 +110,23 @@ ul.status {
   list-style: none;
 }
 
+#global-status-target ul.status {
+  margin-bottom: 10px;
+}
+
+#global-status-target ul.status strong {
+  display: inline-block;
+  width: 5em;
+}
+
 #global-status-target {
+  font-size: 12px;
+  line-height: 20px;
   color: #666;
   text-align: left;
   display: none;
   position: absolute;
-  top: 64px;
+  top: 54px;
   right: 18px;
   background: #FFF;
   padding: 10px;
@@ -133,4 +142,4 @@ ul.status {
 span.sparkline { vertical-align: bottom; }
 
 table.flot-data { display: none; }
-div.flot-graph { margin-bottom: 20px; }
+div.flot-graph { margin-bottom: 10px; width: 100%;}

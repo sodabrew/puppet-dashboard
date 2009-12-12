@@ -25,7 +25,6 @@
   border: 1px solid #555;
   right: 20px;
   top: -1.5em;
-  font-size: 0.75em;
   padding: 1em 0.5em 0.25em;
   -webkit-border-bottom-left-radius: 4px;
   -webkit-border-bottom-right-radius: 4px;
@@ -45,7 +44,8 @@
 
 #header ul#secondary-navigation a {
   color: #aaa;
-  text-decoration: underline;
+  text-decoration: none;
+  font-size: 12px;
 }
 
 #header ul#secondary-navigation a:hover {

@@ -1,0 +1,11 @@
+%ul.status
+  %li
+    %span.sparkline= Status.sparkline.join(', ')
+    %strong== #{number_to_percentage Status.sparkline.last, :precision => 2}
+    Run Failure %
+  %li
+    %span.sparkline= Status.runtime.join(', ')
+    %strong== #{(Status.runtime.last * 1000).to_i}ms
+    Run Time
+%div{:style => 'text-align: right;'}
+  = link_to "Status Report", status_path, :class => 'button'

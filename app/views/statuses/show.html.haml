@@ -1,7 +1,18 @@
-%ul.status
-  %li
-    %span.sparkline= Status.sparkline.join(', ')
-    = link_to "#{number_to_percentage Status.sparkline.last, :precision => 2} Puppet Run Failures"
-  %li
-    %span.sparkline= Status.runtime.join(', ')
-    = link_to "#{(Status.runtime.last * 1000).to_i}ms Puppet Run Time"
+.element
+  %h3 Run Failures
+  = render :partial => 'statuses/run_failure'
+
+- reports = Report.all(:limit => 30, :order => 'created_at ASC')
+.element
+  %h3 Run Times
+  %table.inspector.flot-data.benchmark
+    %thead
+      %tr
+        %th
+        - reports.map{|r| r.created_at.utc}.each do |time|
+          %th= time.to_i * 1000
+    %tbody
+      %tr
+        %th Runtime
+        - reports.map{|r| r.metrics[:time][:total]}.each do |time|
+          %td= "%0.3f" % time

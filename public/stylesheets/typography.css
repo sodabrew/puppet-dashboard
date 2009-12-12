@@ -1,5 +1,7 @@
 body {
-  font-family: Verdana, sans-serif;
+  font-family: Helvetica, Arial, Verdana, sans-serif;
+  line-height: 20px;
+  font-size: 14px;
 }
 
 h1, h2, h3, h4, h5, h6,
@@ -54,7 +56,6 @@ a:hover {
 }
 
 span.count {
-  font-size: 0.75em;
   color: #aaa;
 }
 
@@ -71,7 +72,6 @@ strong {
 
 code, pre {
   font-family: "Monaco", "Courier New", Courier, fixed-width;
-  font-size: 12px;
 }
 
 p.error {
