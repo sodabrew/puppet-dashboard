@@ -9,7 +9,7 @@ management and reporting tools. Nodes can be exported in YAML format, allowing t
 
 * ruby >= 1.8.1
 * rake >= 0.8.4
-* sqlite3 (by default, or other Rails compatible database)
+* mysql
 
 ## Installation
 
@@ -21,7 +21,7 @@ management and reporting tools. Nodes can be exported in YAML format, allowing t
 
 This will start a local Puppet Dashboard server on port 3000. As a Rails application, Puppet Dashboard can be deployed in any server configuration that Rails supports. Instructions for deployment via Phusion Passenger coming soon.
 
-Note: Puppet Dashboard is configured to use a Sqlite3 database by default. Consult the Rails Guides section on [Configuring A Database](http://guides.rubyonrails.org/getting_started.html#configuring-a-database) for information on how to set up a MySQL or other database.
+Note: Puppet Dashboard is configured to use a MySQL database by default. Consult the Rails Guides section on [Configuring A Database](http://guides.rubyonrails.org/getting_started.html#configuring-a-database) for information on how to set up a different database.
 
 ## Reporting
 
