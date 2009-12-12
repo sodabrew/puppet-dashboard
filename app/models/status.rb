@@ -27,7 +27,7 @@ class Status
       SELECT
         COUNT(*) - SUM(success) as failed,
         COUNT(*) as total,
-        (COUNT(*) - SUM(success)) / COUNT(*) as percent,
+        (COUNT(*) - SUM(success)) / COUNT(*) * 100 as percent,
         FROM_UNIXTIME(FLOOR(UNIX_TIMESTAMP(created_at) / #{interval}) * #{interval}) as start
       FROM reports
     SQL
@@ -38,6 +38,10 @@ class Status
     sql << " LIMIT #{options[:limit]}" if options[:limit]
 
     execute sql
+  end
+
+  def self.runtime
+    Report.all(:limit => 20, :order => 'created_at ASC').map{|r| r.metrics[:time][:total]}
   end
 
   private

@@ -31,6 +31,7 @@ class Report < ActiveRecord::Base
     assign_to_node
     set_node_reported_at
     set_success_status
+    return true
   end
 
   def assign_to_node

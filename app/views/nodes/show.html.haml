@@ -8,6 +8,8 @@
     %li= link_to 'Destroy', resource, :confirm => 'Are you sure?', :method => :delete, :class => "delete button"
 
 
+- reports = @node.reports.find(:all, :order => 'created_at ASC', :limit => 10)
+
 - unless resource.description.blank?
   .description= simple_format h(resource.description)
 
@@ -36,6 +38,20 @@
     %h3 Activity
     %ol.timeline= render resource.timeline_events.recent(10)
 
+.element
+  %h3 Run Time
+  %table.inspector.flot-data
+    %thead
+      %tr
+        %th
+        - reports.map{|r| r.created_at.utc}.each do |time|
+          %th= time.to_i * 1000
+    %tbody
+      %tr
+        %th Runtime
+        - reports.map{|r| r.metrics[:time][:total]}.each do |time|
+          %td= "%0.3f" % time
+
 %table.inspector
   %caption Reports
   %thead
@@ -46,10 +62,9 @@
       %th Skipped
       %th Runtime
   %tbody
-    - resource.reports.each do |rpt|
-      - report = rpt.parsed
+    - resource.reports.each do |report|
       %tr
-        %td= link_to report.time.to_s(:long), rpt
+        %td= link_to report.created_at.utc.to_s(:long), report
         %td= report.metrics["resources"][:total]
         %td= report.metrics["resources"][:failed]
         %td= report.metrics["resources"][:skipped]

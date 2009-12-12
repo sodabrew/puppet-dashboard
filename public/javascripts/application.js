@@ -43,5 +43,19 @@ $(document).ready(function() {
       $.sparkline_display_visible()
       return false;
   })
+
+  $('table.flot-data').graphTable(
+      {height: '150px', width: '100%'},
+      {legend: {show: false },
+       points: {show: true },
+       lines:   {show: true },
+       grid:   {color: "#CCCCCC" },
+       xaxis:  {mode: "time",
+                timeformat: "%h:%M%p",
+                minTickSize: [1, "minute"]},
+       yaxis:  {tickFormatter: function(val, axis){
+        var ms = val * 1000;
+        return ms.toFixed(0).toString() + 'ms'
+      }}});
   
 });

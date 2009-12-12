@@ -131,3 +131,6 @@ ul.status {
 }
 
 span.sparkline { vertical-align: bottom; }
+
+table.flot-data { display: none; }
+div.flot-graph { margin-bottom: 20px; }

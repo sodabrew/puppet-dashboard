@@ -2,7 +2,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :node_classes, :has_many => :nodes, :collection => {:search => :get}
   map.resources :node_groups, :has_many => :nodes, :collection => {:search => :get}
 
-  map.resources :nodes
+  map.resources :nodes, :member => {:performance => :get}
 
   map.resource :user_session
   map.resource :account, :controller => "users"
