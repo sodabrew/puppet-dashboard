@@ -1,0 +1,49 @@
+0.1.0
+=====
+86e93c3  Dashboard now requires MySQL
+cdc181b  Add status graphs to dashboard and status page
+3d4c34d  Adding runtime stats
+79f9d54  [Bugfix #2897] Add dependency to rake >= 0.8.4
+e81c542  [Bugfix #2912] Node class names allow "::"
+8b3ecba  Updating status javascript
+0100afd  Adding basic status info/graphs
+425849e  Fix bug in parameter assignment
+
+0.0.2
+=====
+a8d2b39  Version 0.0.2
+1c9bce1  Add reported_at to Node, updated by report creation
+bd878de  Adding rake to dependencies list
+9c1a9e7  Display icon for deleted subjects in timeline
+b6f35bf  Use indifferent access hash for report metrics
+a3775eb  Tweak reports styles
+9963092  Require unique class and group names
+dfe9f21  has_parameters accepts options for has_many
+8f3ecfc  Adding rake dependency to README list
+265988f  Add copy database.yml task to rake install
+75a6b0b  README is a markdown file (for github)
+
+0.0.1
+=====
+8a6cf1d  Adding VERSION file
+b78e9da  Fix bug in node group graphing
+fe84f81  Update README for release
+0578b53  Adding HOST and PORT constants to report processor
+15d33c6  Updates to report handling
+16e67dc  Moving report generator
+26befce  Adding install rake task
+c91c067  Adding puppet report generator
+3e69d37  CSS Refactor
+bc7e1a1  Adding icon class to parameter delete button
+396eda1  Node form autocomplete tweaks, hiding headers of empty tables
+cbf88bf  Adding description to group and class json
+6038670  Add host accessor to Report
+db40158  Fix bug in node form class list
+b9421c7  Adding sample report to seed data
+81ca370  Updating seed data
+c84f001  class and group search return JSON for autocomplete
+7072ef1  Moving puppet require to env
+a1d9f87  Put autocomplete search box in table footer
+bdd9709  Adding autocomplete javascripts and impl
+         ... and 201 more.
+
