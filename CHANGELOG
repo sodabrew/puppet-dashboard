@@ -1,5 +1,10 @@
 0.1.0
 =====
+dae4172  Reordering of node view information, minor CSS tweak
+5475b16  Equal caption size to header
+b1cbc08  Increasing tick size in timeline graphs
+0cf3df1  Version bump 0.1.0
+e6ee999  Adding changelog
 86e93c3  Dashboard now requires MySQL
 cdc181b  Add status graphs to dashboard and status page
 3d4c34d  Adding runtime stats
