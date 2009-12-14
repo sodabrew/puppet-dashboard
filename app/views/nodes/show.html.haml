@@ -6,9 +6,8 @@
   %ul.actions
     %li= link_to 'Edit', edit_node_path(resource), :class => "edit button", :rel => 'inspect'
     %li= link_to 'Destroy', resource, :confirm => 'Are you sure?', :method => :delete, :class => "delete button"
+    %li= link_to 'Export', resource_path(resource, :format => :yaml), :class => "export button"
 
-
-- reports = @node.reports.find(:all, :order => 'created_at ASC', :limit => 10)
 
 - unless resource.description.blank?
   .description= simple_format h(resource.description)
@@ -33,11 +32,7 @@
 - unless resource.inherited_classes.empty?
   = inspector_table resource.inherited_classes, :link => true, :caption => 'Inherited Classes'
 
-- unless resource.timeline_events.empty?
-  .element
-    %h3 Activity
-    %ol.timeline= render resource.timeline_events.recent(10)
-
+- reports = @node.reports.find(:all, :order => 'created_at ASC', :limit => 10)
 .element
   %h3 Run Time
   %table.inspector.flot-data.benchmark
@@ -53,7 +48,7 @@
           %td= "%0.3f" % time
 
 %table.inspector
-  %caption Reports
+  %caption Recent Reports
   %thead
     %tr
       %th Reported at
@@ -64,8 +59,15 @@
   %tbody
     - resource.reports.each do |report|
       %tr
-        %td= link_to report.created_at.utc.to_s(:long), report
+        %td
+          %span.status{:class => report.status}= link_to report.created_at.utc.to_s(:default), report
         %td= report.metrics["resources"][:total]
         %td= report.metrics["resources"][:failed]
         %td= report.metrics["resources"][:skipped]
         %td= "%0.2f" % report.metrics["time"][:total]
+
+- unless resource.timeline_events.empty?
+  .element
+    %h3 Activity
+    %ol.timeline= render resource.timeline_events.recent(10)
+

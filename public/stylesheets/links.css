@@ -140,3 +140,16 @@ span.node.type {
   background: url(images/icons/computer.png);
 }
 
+.status.success,
+.status.failure {
+  padding-left: 20px;
+}
+
+.status.success {
+  background: url(images/icons/success.png) left center no-repeat;
+}
+
+.status.failure {
+  background: url(images/icons/failure.png) left center no-repeat;
+}
+
