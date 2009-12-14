@@ -53,7 +53,7 @@ $(document).ready(function() {
        grid:   {color: "#999"},
        xaxis:  {mode: "time",
                 timeformat: "%h:%M%p",
-                minTickSize: [1, "minute"]},
+                minTickSize: [10, "minute"]},
        yaxis:  {tickFormatter: function(val, axis){
         var ms = val * 1000;
         return ms.toFixed(0).toString() + 'ms'
