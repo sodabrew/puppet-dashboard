@@ -6,4 +6,4 @@ task :copy_config do
 end
 
 desc "Install puppet dashboard"
-task :install => [:copy_config, 'db:create', 'db:migrate', 'db:seed']
+task :install => [:copy_config, 'db:create', 'db:schema:load', 'db:seed']
