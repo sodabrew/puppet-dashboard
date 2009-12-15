@@ -138,7 +138,7 @@ describe Node do
       lambda {
         @node.parameter_attributes = [{:key => :key2, :value => :value2}]
         @node.save
-      }.should change(TimelineEvent, :count).by(3)
+      }.should change(TimelineEvent, :count).by_at_least(2)
     end
   end
 
