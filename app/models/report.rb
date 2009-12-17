@@ -2,14 +2,18 @@ require 'puppet'
 class Report < ActiveRecord::Base
   belongs_to :node
 
-  before_create :process_report
+  validates_presence_of :host
+  validates_uniqueness_of :host, :scope => :time, :allow_nil => true
+  before_validation :process_report
 
-  delegate :time, :logs, :host, :to => :parsed
+  delegate :logs, :to => :report
 
   default_scope :order => 'created_at DESC'
 
+  serialize :report
+
   def succeeded?
-    metrics[:resources][:failed] == 0
+    metrics[:resources] && metrics[:resources][:failed] == 0
   end
 
   def status
@@ -17,20 +21,15 @@ class Report < ActiveRecord::Base
   end
 
   def metrics
-    @metrics ||= parsed.metrics.with_indifferent_access
-  end
-
-  def parsed
-    raise "No report data for #{self.inspect}, unable to parse" unless report
-    @parsed ||= YAML.load(report)
+    @metrics ||= report.metrics.with_indifferent_access
   end
 
   private
 
   def process_report
+    set_attributes
     assign_to_node
     set_node_reported_at
-    set_success_status
     return true
   end
 
@@ -38,11 +37,21 @@ class Report < ActiveRecord::Base
     self.node = Node.find_or_create_by_name(host)
   end
 
-  def set_success_status
-    self.success = success?
+  def set_attributes
+    set_success
+    set_time_and_host
+  end
+
+  def set_success
+    self.success = succeeded?
+  end
+
+  def set_time_and_host
+    self.time = report.time
+    self.host = report.host
   end
 
   def set_node_reported_at
-    node.update_attribute(:reported_at, Time.now)
+    node.update_attribute(:reported_at, report.time)
   end
 end

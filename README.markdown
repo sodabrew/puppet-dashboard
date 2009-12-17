@@ -25,6 +25,18 @@ Note: Puppet Dashboard is configured to use a MySQL database by default. Consult
 
 ## Reporting
 
+### Report Import
+
+To import puppet run reports stored in /var/puppet/lib/reports:
+
+    rake reports:import
+
+To specify a different report directory:
+
+    rake reports:import REPORT_DIR /path/to/your/reports
+
+### Live report aggregation
+
 To enable report aggregation in Puppet Dashboard, the file `lib/puppet/puppet_dashboard.rb` must be available in Puppet's lib path. The easiest way to do this is to add `RAILS_ROOT/lib/puppet` to `$libdir` in your `puppet.conf`, where `RAILS_ROOT` is the directory containing this README. Then ensure that your puppetmasterd runs with the option `--reports puppet_dashboard`.
 
 The puppet_dashboard report assumes that your Dashboard server is available at `localhost` on port 3000 (as it would be if you started it via `script/server`). For now, you will need to modify the constants in `puppet_dashboard.rb` if this is not the case.
