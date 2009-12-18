@@ -1,7 +1,7 @@
 .element
   %h3 Run Success
   = render :partial => 'statuses/run_failure'
-  %div{:style => 'text-align: right; margin-bottom: 10px;'}
+  .footer
     = link_to "Status Report &raquo;", status_path, :class => 'button'
 
 %table.inspector
