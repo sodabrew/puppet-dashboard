@@ -1,9 +1,5 @@
-.table-tools
-  - form_tag do
-    = text_field_tag :search, '', :class => 'filter-list', :autocomplete => 'off', :type => "search"
-  = link_to "<span class='indicator'></span>Add new", new_node_path, :class => "add button"
-    
 %table.inspector
+  %caption Nodes
   %thead
     %tr
       %th.name
@@ -25,3 +21,7 @@
           = node.node_groups.size
         %td.classes
           = node.node_classes.size
+  %tfoot
+    %tr.actions
+      %td{:colspan => 4}
+        = link_to "<span class='indicator'></span>Add new", new_node_path, :class => "add button"
