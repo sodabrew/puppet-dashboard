@@ -1,5 +1,7 @@
 %table.inspector.report
-  %caption Reports
+  %caption
+    Reports
+    %span.count== (#{@reports.total_entries})
   %thead
     %tr
       %th Reported at
@@ -22,3 +24,6 @@
         %td= report.metrics[:resources][:skipped]
         %td= "%0.2f" % report.metrics[:time][:config_retrieval]
         %td= "%0.2f" % report.metrics[:time][:total]
+  %tfoot
+    %tr.actions
+      %td{:colspan => 8}= will_paginate(@reports)

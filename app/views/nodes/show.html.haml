@@ -60,6 +60,10 @@
           %td= report.metrics["resources"][:failed]
           %td= report.metrics["resources"][:skipped]
           %td= "%0.2f" % report.metrics["time"][:total]
+    %tfoot
+      %tr.actions
+        %td{:colspan => 5}
+          = link_to "View More &raquo;", node_reports_path(@node), :class => 'button'
 
 - unless resource.timeline_events.empty?
   .element

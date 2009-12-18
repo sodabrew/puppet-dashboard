@@ -2,7 +2,7 @@
   %h3 Run Success
   = render :partial => 'statuses/run_failure'
   %div{:style => 'text-align: right; margin-bottom: 10px;'}
-    = link_to "Status Report", status_path, :class => 'button'
+    = link_to "Status Report &raquo;", status_path, :class => 'button'
 
 %table.inspector
   %caption Recent Reports
@@ -30,6 +30,9 @@
           = time_ago_in_words node.updated_at
           ago
   %tfoot
+    %tr.actions
+      %td{:colspan => 4}
+        = link_to "View More &raquo;", reports_path, :class => 'button'
 
 - content_for :secondary_content do
   .element

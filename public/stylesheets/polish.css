@@ -6,16 +6,12 @@ caption:hover a.add.button,
   color: white;
 }
 
-.actions .button {
-  background: #777 url(images/white-overlays.png) top repeat-x;
-  background-position: 0 -128px;
-  text-shadow: 0 -1px 0 #666;
+a.button {
+  text-shadow: 0 -1px 0 #888;
   -webkit-box-shadow: 1px 1px 0 #bbb;
-  color: white;
 }
 
-.button {
-  background: #ccc url(images/white-overlay.png);
+a.button {
   -webkit-box-shadow: 1px 1px 1px #999;
   -webkit-transition: 0.125s all ease-in-out;
 }

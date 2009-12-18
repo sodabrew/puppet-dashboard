@@ -9,7 +9,7 @@ class Report < ActiveRecord::Base
 
   delegate :logs, :to => :report
 
-  default_scope :order => 'created_at DESC'
+  default_scope :order => 'time DESC'
 
   serialize :report
 
