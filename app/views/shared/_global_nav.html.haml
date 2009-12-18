@@ -7,5 +7,7 @@
 
 %ul#status.navigation
   %li
-    %span= link_to "<span class='sparkline'>#{Status.sparkline.join(', ')}</span> Status", overview_status_path, :id => "global-status-link"
+    %span
+      = link_to "Status", overview_status_path, :id => "global-status-link"
 #global-status-target
+  = render 'statuses/overview'

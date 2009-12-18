@@ -32,39 +32,34 @@
 - unless resource.inherited_classes.empty?
   = inspector_table resource.inherited_classes, :link => true, :caption => 'Inherited Classes'
 
-- reports = @node.reports.find(:all, :order => 'created_at ASC', :limit => 10)
 .element
-  %h3 Run Time
-  %table.inspector.flot-data.benchmark
+  %h3 Run Success
+  = render :partial => 'statuses/run_failure', :statuses => Status.by_interval(:limit => 30, :node => @node)
+
+- reports = @node.reports.find(:all, :order => 'time ASC', :limit => 30)
+- unless reports.empty?
+  .element
+    %h3 Run Time
+    = render 'statuses/run_time', :reports => reports
+
+  %table.inspector
+    %caption Recent Reports
     %thead
       %tr
-        %th
-        - reports.map{|r| r.created_at.utc}.each do |time|
-          %th= time.to_i * 1000
-    %tbody
-      %tr
+        %th Reported at
+        %th Total
+        %th Failed
+        %th Skipped
         %th Runtime
-        - reports.map{|r| r.metrics[:time][:total]}.each do |time|
-          %td= "%0.3f" % time
-
-%table.inspector
-  %caption Recent Reports
-  %thead
-    %tr
-      %th Reported at
-      %th Total
-      %th Failed
-      %th Skipped
-      %th Runtime
-  %tbody
-    - resource.reports.each do |report|
-      %tr
-        %td
-          %span.status{:class => report.status}= link_to report.created_at.utc.to_s(:default), report
-        %td= report.metrics["resources"][:total]
-        %td= report.metrics["resources"][:failed]
-        %td= report.metrics["resources"][:skipped]
-        %td= "%0.2f" % report.metrics["time"][:total]
+    %tbody
+      - reports[0,10].each do |report|
+        %tr
+          %td
+            %span.status{:class => report.status}= link_to report.created_at.utc.to_s(:default), report
+          %td= report.metrics["resources"][:total]
+          %td= report.metrics["resources"][:failed]
+          %td= report.metrics["resources"][:skipped]
+          %td= "%0.2f" % report.metrics["time"][:total]
 
 - unless resource.timeline_events.empty?
   .element

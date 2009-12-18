@@ -1,0 +1,11 @@
+%table.inspector.flot-data.benchmark
+  %thead
+    %tr
+      %th
+      - reports.map{|r| r.time.utc}.each do |time|
+        %th= time.to_i * 1000
+  %tbody
+    %tr
+      %th Runtime
+      - reports.map{|r| r.metrics[:time][:total]}.each do |time|
+        %td= "%0.3f" % time

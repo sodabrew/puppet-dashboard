@@ -18,29 +18,41 @@ $(document).ready(function() {
 
   // $('.filter-list').filterList();
 
-  $.fn.sparklineStatus = function() {
-    $(this).sparkline('html', {
+  $.fn.sparklineStatus = function(opt) {
+    opt = $.extend({}, {
       spotRadius: 0,
       fillColor: false,
-      lineColor: "#666666"
-    });
+      lineColor: "#666666",
+      width: '39px'
+    }, opt)
+
+    $(this).sparkline('html', opt);
     return $(this);
   };
 
-  $('span.sparkline').sparklineStatus();
+  $('span.sparkline').not('.percent').sparklineStatus();
+  $('span.sparkline.percent').sparklineStatus({
+    type: 'bar',
+    barWidth: 1,
+    barSpacing: 1,
+    barColor: '#999',
+    chartRangeMin: 0,
+    chartRangeMax: 100,
+    fillColor: '#DFD'
+  });
 
   $('a#global-status-link').click( function() {
       $(this).parents('li').addClass('active');
       $('#global-status-target:hidden')
-        .load(this.href)
-        .blindDown('fast', function(){$('#global-status-target span.sparkline').sparklineStatus()});
+        .show(10, function(){
+          $.sparkline_display_visible()
+        });
 
       $('#global-status-link, #global-status-target').bind('click.hideStatus', function(e){e.stopPropagation()});
       $(document).one('click.hideStatus', function() {
-        $('#global-status-target').html('').blindUp();
+        $('#global-status-target').hide();
         $('a#global-status-link').parents('li').removeClass('active');
       });
-      $.sparkline_display_visible()
       return false;
   })
 
@@ -52,23 +64,21 @@ $(document).ready(function() {
        points: {show: true },
        grid:   {color: "#999"},
        xaxis:  {mode: "time",
-                timeformat: "%h:%M%p",
-                minTickSize: [10, "minute"]},
+                timeformat: "%d/%m/%y<br />%h:%M%p"},
        yaxis:  {tickFormatter: function(val, axis){
-        var ms = val * 1000;
-        return ms.toFixed(0).toString() + 'ms'
+        return val.toString() + 's'
       }}});
 
   $('table.flot-data.percent').graphTable(
       {height: '150px', width: '100%'},
       {legend: {show: false },
-       lines:  {show: true },
-       points: {show: true },
+       bars:   {show: true,
+                barWidth: 10 * 60 * 1000},
        grid:   {color: "#999"},
        xaxis:  {mode: "time",
-                timeformat: "%h:%M%p",
-                minTickSize: [10, "minute"]},
-       yaxis:  {tickFormatter: function(val, axis){
+                timeformat: "%d/%m/%y<br />%h:%M%p"},
+       yaxis:  {min: 0, max: 100,
+                tickFormatter: function(val, axis){
         return val.toString() + '%'
       }}});
   

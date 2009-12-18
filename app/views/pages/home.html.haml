@@ -1,5 +1,5 @@
 .element
-  %h3 Run Failure
+  %h3 Run Success
   = render :partial => 'statuses/run_failure'
   %div{:style => 'text-align: right; margin-bottom: 10px;'}
     = link_to "Status Report", status_path, :class => 'button'
@@ -29,6 +29,7 @@
         %td.last_updates
           = time_ago_in_words node.updated_at
           ago
+  %tfoot
 
 - content_for :secondary_content do
   .element

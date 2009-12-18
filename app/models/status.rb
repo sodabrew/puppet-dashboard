@@ -12,12 +12,12 @@ class Status
   end
 
   def self.recent(options={})
-    by_interval options.merge(:start => 30.minutes.ago)
+    by_interval options.merge(:start => 1.hour.ago)
   end
 
   def self.sparkline
     # return [12.5, 10.5, 13.4, 11.4, 13.2, 12.3, 13.4, 14.3]
-    by_interval.map(&:percent)
+    by_interval(:limit => 20).map(&:percent)
   end
 
   def self.by_interval(options={})
@@ -27,13 +27,16 @@ class Status
       SELECT
         COUNT(*) - SUM(success) as failed,
         COUNT(*) as total,
-        (COUNT(*) - SUM(success)) / COUNT(*) * 100 as percent,
-        FROM_UNIXTIME(FLOOR(UNIX_TIMESTAMP(created_at) / #{interval}) * #{interval}) as start
+        SUM(success) / COUNT(*) * 100 as percent,
+        FROM_UNIXTIME(FLOOR(UNIX_TIMESTAMP(time) / #{interval}) * #{interval}) as start
       FROM reports
     SQL
 
-    sql << %{ WHERE created_at >= "#{options[:start].to_s(:db)}"} if options[:start]
-    sql << " GROUP BY FLOOR(UNIX_TIMESTAMP(created_at) / #{interval})"
+    sql << " WHERE" if options[:start] or options[:node]
+    sql << " time >= \"#{options[:start].to_s(:db)}\"}" if options[:start]
+    sql << " AND" if options[:start] and options[:node]
+    sql << " node_id = #{options[:node].id}" if options[:node]
+    sql << " GROUP BY FLOOR(UNIX_TIMESTAMP(time) / #{interval})"
 
     sql << " LIMIT #{options[:limit]}" if options[:limit]
 
@@ -41,7 +44,7 @@ class Status
   end
 
   def self.runtime
-    Report.all(:limit => 20, :order => 'created_at ASC').map{|r| r.metrics[:time][:total]}
+    Report.all(:limit => 20, :order => 'time ASC').map{|r| r.metrics[:time][:total]}
   end
 
   private

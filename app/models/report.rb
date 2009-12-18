@@ -3,6 +3,7 @@ class Report < ActiveRecord::Base
   belongs_to :node
 
   validates_presence_of :host
+  validates_presence_of :time
   validates_uniqueness_of :host, :scope => :time, :allow_nil => true
   before_validation :process_report
 
