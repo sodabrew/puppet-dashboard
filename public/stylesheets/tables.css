@@ -31,6 +31,10 @@ table.inspector tfoot tr.actions td {
   text-align: right;
 }
 
+table.inspector tfoot tr.actions td {
+  text-align: right;
+}
+
 table.inspector caption {
   border: 1px solid #ccc;
   -webkit-border-radius: 2px;

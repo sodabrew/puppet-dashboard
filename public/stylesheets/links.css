@@ -39,6 +39,14 @@ ul.actions li {
   text-shadow: none;
 }
 
+
+.button {
+}
+
+.button:hover {
+  background-color: #555;
+}
+
 a.cancel {
   color: #888;
 }
