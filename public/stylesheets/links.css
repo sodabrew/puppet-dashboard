@@ -145,7 +145,8 @@ span.node.type {
 }
 
 .status.success,
-.status.failure {
+.status.failure,
+.status.failed {
   padding-left: 20px;
 }
 
@@ -153,7 +154,7 @@ span.node.type {
   background: url(images/icons/success.png) left center no-repeat;
 }
 
-.status.failure {
+.status.failure, .status.failed {
   background: url(images/icons/failure.png) left center no-repeat;
 }
 
