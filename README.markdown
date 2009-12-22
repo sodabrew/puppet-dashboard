@@ -2,8 +2,7 @@
 
 ## Overview
 
-The Puppet Dashboard is a Puppet web interface that provides node
-management and reporting tools. Nodes can be exported in YAML format, allowing the dashboard to be used as an external node classification tool.
+The Puppet Dashboard is a Puppet web interface that provides node management and reporting tools. Nodes can be exported in YAML format, allowing the dashboard to be used as an external node classification tool.
 
 ## Dependencies
 
@@ -43,7 +42,7 @@ The puppet_dashboard report assumes that your Dashboard server is available at `
 
 ## External Node Tool
 
-Puppet Dashboard functions as an external node tool. All nodes make a puppet-compatible YAML specification available for export.
+Puppet Dashboard functions as an external node tool. All nodes make a puppet-compatible YAML specification available for export. See bin/external_node for an example script that connects to Puppet Dashboard as an external node tool.
 
 ## Contributors
 
