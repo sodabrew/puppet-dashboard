@@ -11,7 +11,7 @@ class NodesController < InheritedResources::Base
   end
 
   def resource
-    get_resource_ivar || set_resource_ivar(end_of_association_chain.find_by_url!(params[:id]))
+    get_resource_ivar || set_resource_ivar(end_of_association_chain.find_by_name!(params[:id]))
   end
 
   private

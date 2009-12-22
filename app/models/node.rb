@@ -20,7 +20,7 @@ class Node < ActiveRecord::Base
   fires :removed, :on => :destroy
 
   acts_as_url :name, :sync_url => true
-  def to_param; url end
+  def to_param; name end
 
   def available_node_classes
     @available_node_classes ||= NodeClass.all(:order => :name) - node_classes - inherited_classes
