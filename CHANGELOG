@@ -1,3 +1,25 @@
+0.2.0
+=====
+b62d71e  Update README
+d57764e  Sample external nodes script
+320c1eb  Lookup node by host name
+924d4f9  Tweak status report link text
+482448f  Tweak footer paddings
+c2d9194  Element footer (styled like table footer)
+7890b62  Move node sidebar Add button to table footer
+eb5d2c3  Add paginated reports and view more links
+49d7e02  Adding will paginate to vendor and gem.config
+f1cb4c1  [BUGFIX #2946] not showing failed icon
+6f0906c  [BUGFIX #2947] uneven lists on dashboard
+2130b97  Large update to stats and graphing
+1352421  [BUGFIX #2946] not showing failed icon
+8b17973  rake reports:import task imports report YAML files
+32c48a5  Extract data from report into reports table
+024fe93  Update install task to use file tasks
+24f37ab  More robust test of node activity feed
+3e83b56  Fix statuses controller spec
+66ca885  Updating CHANGELOG for 0.1.1
+
 0.1.1
 =====
 df15ea5  Updating CHANGELOG for 0.1.1
