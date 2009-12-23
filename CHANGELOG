@@ -1,3 +1,8 @@
+0.2.1
+=====
+773bc5f  Fix nasty routing bug for hosts that contain a '.'
+a849c84  Releasing 0.2.0
+
 0.2.0
 =====
 b62d71e  Update README
