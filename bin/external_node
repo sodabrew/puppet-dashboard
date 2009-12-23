@@ -1,4 +1,4 @@
-#! /usr/bin/ruby -ryaml -ropen-uri
+#! /usr/bin/ruby
 #
 # Sample External Node script for Puppet Dashboard
 #
@@ -6,15 +6,20 @@
 #
 #  [main]
 #  external_nodes = /path/to/external_node
-#  node_terminus = exec
+#  node_terminus -ryaml -rnet-http -ruri = exec
+
+require 'yaml'
+require 'uri'
+require 'net/http'
 
 BASE="http://localhost:3000"
-NODE_URI="#{BASE}/nodes/%s.yaml"
-HOST = ARGV.first
+NODE = ARGV.first
 
-begin
-  open(NODE_URI % HOST) { |doc| puts doc.read }
-rescue OpenURI::HTTPError => e
-  STDERR.puts 'Error: ' << e.message
-  exit 1
+url = URI.parse("#{BASE}/nodes/#{NODE}")
+req = Net::HTTP::Get.new(url.path, 'Accept' => 'text/yaml')
+res = Net::HTTP.start(url.host, url.port) {|http| http.request(req) }
+
+case res
+when Net::HTTPSuccess; puts res.body; exit 0
+else; STDERR.puts "Error: #{res.code} #{res.message}"; exit 1
 end

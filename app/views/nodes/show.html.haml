@@ -6,8 +6,6 @@
   %ul.actions
     %li= link_to 'Edit', edit_node_path(resource), :class => "edit button", :rel => 'inspect'
     %li= link_to 'Destroy', resource, :confirm => 'Are you sure?', :method => :delete, :class => "delete button"
-    %li= link_to 'Export', resource_path(resource, :format => :yaml), :class => "export button"
-
 
 - unless resource.description.blank?
   .description= simple_format h(resource.description)
