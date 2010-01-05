@@ -1,6 +1,7 @@
 class Node < ActiveRecord::Base
   include NodeGroupGraph
 
+  default_scope :order => 'name ASC'
   named_scope :by_report_date, :order => 'reported_at DESC'
 
   validates_presence_of :name
