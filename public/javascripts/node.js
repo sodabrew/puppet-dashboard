@@ -47,19 +47,22 @@ jQuery(function($) {
         .attr('value', '')
         .parents('table').find('tbody').append(tr);
     });
-
-  $('input.node-class-search')
-    .autocomplete({
+  
+  $.fn.node_class_search = function(object_name) {
+    return this.autocomplete({
       ajax: '/node_classes/search.json',
       match: function(typed) { return true; },
       insertText: function(node_class) { return node_class.node_class.name; }
     })
     .bind('activate.autocomplete', function(e, node_class) {
       var item = node_class.node_class
-      var tr = "<tr class='node_class'><td class='key'><a href='/node_classes/"+item.id+"'>"+item.name+"</a></td><td>"+item.description+"<input type='hidden' name='node[node_classes[]' value='"+item.id+"'/></td><td class='actions'><a class='icon delete' href='#'><span>(add)</span></a></td></tr>";
+      var tr = "<tr class='node_class'><td class='key'><a href='/node_classes/"+item.id+"'>"+item.name+"</a></td><td>"+item.description+"<input type='hidden' name='"+object_name+"[node_classes[]' value='"+item.id+"'/></td><td class='actions'><a class='icon delete' href='#'><span>(add)</span></a></td></tr>";
 
       $(e.target)
         .attr('value', '')
         .parents('table').find('tbody').append(tr);
     });
+  };
+
+  $('input.node_group.node-class-search').node_class_search('node_group');
 });

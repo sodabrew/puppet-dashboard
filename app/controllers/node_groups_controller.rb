@@ -1,6 +1,8 @@
 class NodeGroupsController < InheritedResources::Base
   respond_to :html
 
+  before_filter :find_node_classes, :only => [:update, :create]
+
   update!{@node_group}
 
   def search
@@ -14,5 +16,11 @@ class NodeGroupsController < InheritedResources::Base
     :inspector
   end
   helper_method :content_id
+
+  def find_node_classes
+    params[:node_group][:node_classes] ||= []
+    return if params[:node_group][:node_classes].empty?
+    params[:node_group][:node_classes] = NodeClass.find(params[:node_group][:node_classes])
+  end
 
 end
