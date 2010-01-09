@@ -1,5 +1,7 @@
 %table.inspector
-  %caption Nodes
+  %caption
+    Nodes
+    %span.count== (#{@nodes.total_entries})
   %thead
     %tr
       %th.name
@@ -11,17 +13,20 @@
       %th.classes
         Classes
   %tbody
-    - nodes.each do |node|
-      %tr[node]{:class => "#{'active' if node == @node}"}
+    - @nodes.each do |n|
+      %tr[n]{:class => "#{'active' if n == @node}"}
         %td.name
-          = link_to h(node.name), [parent, node], :rel => 'inspect'
+          = link_to h(n.name), [parent, n], :rel => 'inspect'
         %td.params
-          = node.parameters.size
+          = n.parameters.size
         %td.groups
-          = node.node_groups.size
+          = n.node_groups.size
         %td.classes
-          = node.node_classes.size
+          = n.node_classes.size
   %tfoot
+    %tr.actions
+      %td{:colspan => 4}
+        = will_paginate(@nodes)
     %tr.actions
       %td{:colspan => 4}
         = link_to "<span class='indicator'></span>Add new", new_node_path, :class => "add button"

@@ -4,6 +4,7 @@ class NodesController < InheritedResources::Base
 
   before_filter :find_node_groups, :only => [:update, :create]
   before_filter :find_node_classes, :only => [:update, :create]
+  before_filter :collection
 
   def create
     create!
@@ -17,6 +18,10 @@ class NodesController < InheritedResources::Base
   end
 
   private
+
+  def collection
+    get_collection_ivar || set_collection_ivar(end_of_association_chain.paginate(:page => params[:page]))
+  end
 
   def content_id; :inspector end
   helper_method :content_id
