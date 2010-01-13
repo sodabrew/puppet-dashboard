@@ -2,7 +2,7 @@
   %h3 Run Success
   = render 'statuses/run_failure'
 
-- reports = Report.all(:limit => 30, :order => 'created_at ASC')
+- reports = Report.all(:limit => 30, :order => 'created_at DESC')
 .element
   %h3 Run Times
   = render 'statuses/run_time', :reports => reports

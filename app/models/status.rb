@@ -44,7 +44,7 @@ class Status
   end
 
   def self.runtime
-    Report.all(:limit => 20, :order => 'time ASC').map{|r| r.metrics[:time][:total]}
+    Report.all(:limit => 20, :order => 'time DESC').map{|r| r.metrics[:time][:total]}
   end
 
   private
