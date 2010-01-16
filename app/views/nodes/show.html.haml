@@ -32,7 +32,7 @@
 
 .element
   %h3 Run Success
-  = render :partial => 'statuses/run_failure', :statuses => Status.by_interval(:limit => 30, :node => @node)
+  = render :partial => 'statuses/run_failure', :locals => { :statuses => Status.by_interval(:limit => 30, :node => @node) }
 
 - reports = @node.reports.limit(10)
 - unless reports.empty?
@@ -41,7 +41,9 @@
     = render 'statuses/run_time', :reports => reports
 
   %table.inspector
-    %caption Recent Reports
+    %caption
+      Recent Reports
+      %span.count== (#{@node.reports.size})
     %thead
       %tr
         %th Reported at
