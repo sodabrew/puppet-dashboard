@@ -64,7 +64,7 @@ $(document).ready(function() {
        points: {show: true },
        grid:   {color: "#999"},
        xaxis:  {mode: "time",
-                timeformat: "%d/%m/%y<br />%h:%M%p"},
+                timeformat: "%m/%d/%y<br />%h:%M%p"},
        yaxis:  {tickFormatter: function(val, axis){
         return val.toString() + 's'
       }}});
@@ -76,7 +76,7 @@ $(document).ready(function() {
                 barWidth: 10 * 60 * 1000},
        grid:   {color: "#999"},
        xaxis:  {mode: "time",
-                timeformat: "%d/%m/%y<br />%h:%M%p"},
+                timeformat: "%m/%d/%y<br />%h:%M%p"},
        yaxis:  {min: 0, max: 100,
                 tickFormatter: function(val, axis){
         return val.toString() + '%'

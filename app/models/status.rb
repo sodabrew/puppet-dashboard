@@ -37,7 +37,7 @@ class Status
     sql << " AND" if options[:start] and options[:node]
     sql << " node_id = #{options[:node].id}" if options[:node]
     sql << " GROUP BY FLOOR(UNIX_TIMESTAMP(time) / #{interval})"
-
+    sql << " ORDER BY time DESC"
     sql << " LIMIT #{options[:limit]}" if options[:limit]
 
     execute sql
