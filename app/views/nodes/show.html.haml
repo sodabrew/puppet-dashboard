@@ -37,6 +37,10 @@
 - reports = @node.reports.limit(10)
 - unless reports.empty?
   .element
+    %h3 Run Success
+    = render :partial => 'statuses/run_failure', :locals => { :statuses => Status.by_interval(:limit => 30, :node => @node) }
+
+  .element
     %h3 Run Time
     = render 'statuses/run_time', :reports => reports
 
