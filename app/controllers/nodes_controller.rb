@@ -10,6 +10,8 @@ class NodesController < InheritedResources::Base
     resource.node_groups << parent if parent?
   end
 
+  protected
+
   def resource
     get_resource_ivar || set_resource_ivar(end_of_association_chain.find_by_name!(params[:id]))
   end

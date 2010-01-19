@@ -7,7 +7,7 @@ describe NodesController do
     end
 
     def do_get
-      get :edit, :id => @node.url
+      get :edit, :id => @node.name
     end
 
     it 'should make the requested node available to the view' do
@@ -24,7 +24,7 @@ describe NodesController do
   describe '#update' do
     before :each do
       @node = Node.generate!
-      @params = { :id => @node.url, :node => @node.attributes }
+      @params = { :id => @node.name, :node => @node.attributes }
     end
 
     def do_put
