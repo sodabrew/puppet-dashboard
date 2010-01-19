@@ -1,6 +1,14 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe Report do
+  describe "#metrics" do
+    it "should not fail when there are no metrics" do
+      @report = Report.new
+      @report.stubs(:report).returns(mock(:metrics => nil))
+      lambda{@report.metrics}.should_not raise_error
+    end
+  end
+
   describe "on creation" do
     before do
       @now = Time.now

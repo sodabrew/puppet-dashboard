@@ -22,6 +22,7 @@ class Report < ActiveRecord::Base
   end
 
   def metrics
+    return unless report && report.metrics
     @metrics ||= report.metrics.with_indifferent_access
   end
 
