@@ -11,15 +11,12 @@ Rails::Initializer.run do |config|
   config.gem 'rack'
   config.gem 'haml'
   config.gem 'mocha'
-  config.gem 'mislav-will_paginate', :version => '~> 2.3.8', :lib => 'will_paginate',
-    :source => 'http://gems.github.com'
   config.gem 'rspec', :lib => false
   config.gem 'rspec-rails', :lib => false
   config.gem 'thoughtbot-shoulda',
              :lib => false,
              :source => 'http://gems.github.com'
   config.gem 'authlogic'
-  config.gem 'stringex'
   config.gem 'will_paginate'
 
   # Settings in config/environments/* take precedence over those specified here.
@@ -54,5 +51,3 @@ Rails::Initializer.run do |config|
   # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}')]
   # config.i18n.default_locale = :de
 end
-
-require 'puppet'
