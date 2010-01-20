@@ -77,6 +77,6 @@ class Node < ActiveRecord::Base
   end
 
   def last_report
-    reports.first(:order => :created_at)
+    reports.first
   end
 end
