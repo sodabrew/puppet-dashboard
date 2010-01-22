@@ -34,7 +34,7 @@
   %h3 Run Success
   = render :partial => 'statuses/run_failure', :statuses => Status.by_interval(:limit => 30, :node => @node)
 
-- reports = @node.reports.find(:all, :order => 'time ASC', :limit => 30)
+- reports = @node.reports.limit(10)
 - unless reports.empty?
   .element
     %h3 Run Time
@@ -50,10 +50,10 @@
         %th Skipped
         %th Runtime
     %tbody
-      - reports[0,10].each do |report|
+      - reports.each do |report|
         %tr
           %td
-            %span.status{:class => report.status}= link_to report.created_at.utc.to_s(:default), report
+            %span.status{:class => report.status}= link_to report.time.utc.to_s(:default), report
           %td= report.metrics["resources"][:total]
           %td= report.metrics["resources"][:failed]
           %td= report.metrics["resources"][:skipped]
