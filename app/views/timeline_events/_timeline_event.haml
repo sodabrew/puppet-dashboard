@@ -14,9 +14,15 @@
     %span= primary_class.titleize
   = link_to_unless secondary || resource == subject, subject_name, primary
   - if secondary
-    = link_to subject.name, subject
+    - if subject_name.downcase.eql?('parameter')
+      = subject.key
+    - else
+      = link_to subject.name, subject
   - else
-    = link_to primary.name, primary
+    - if subject_name.downcase.eql?('parameter')
+      = primary.name
+    - else
+      = link_to primary.name, primary
   was
   = te.event_type.tr('_', ' ')
   - if secondary
