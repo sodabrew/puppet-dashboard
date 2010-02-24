@@ -1,13 +1,4 @@
 %ul#global-navigation.navigation
-  %li= link_to "Dashboard", root_path
-  %li= link_to "Nodes", nodes_path
-  %li= link_to "Node Classes", node_classes_path
-  %li= link_to "Node Groups", node_groups_path
-  %li= link_to "Reports", reports_path
-
-%ul#status.navigation
-  %li
-    %span
-      = link_to "Status", overview_status_path, :id => "global-status-link"
-#global-status-target
-  = render 'statuses/overview'
+  %li{:class => active_if(request.url == root_url)}= link_to "Puppet Dashboard", root_path
+  %li{:class => active_if(controller_name == 'nodes')}= link_to "Nodes", nodes_path
+  %li= link_to "Certificates", root_path

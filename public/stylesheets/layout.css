@@ -1,44 +1,21 @@
-.site-width {
-  width: 960px;
-  padding: 0 20px;
-  margin: 0 auto;
-  position: relative;
+#wrap {
+  margin: 0 1em 1em;
 }
 
-.site-width:after {
-  content: ".";
-  display: block;
-  clear: both;
-  height: 0;
-  visibility: hidden;
+#header {
+  margin-bottom: 1em;
 }
 
-.primary-secondary-content {
-  padding-right: 320px;
-}
+#content #sidebar { width: 20%; float: left; }
 
-div#inspector.primary-secondary-content {
-  padding-left: 400px;
-  padding-right: 0;
+#content #main { width: 80%; float: left; }
+#content #main #list {
+  max-height: 300px;
+  overflow: auto;
 }
-
-.primary-secondary-content:after {
-  content: ".";
-  display: block;
-  clear: both;
-  height: 0;
-  visibility: hidden;
-}
-
-.primary-secondary-content .primary-content,
-.primary-secondary-content .secondary-content {
-  float: left;
-  width: 100%;
-}
-
-.primary-secondary-content .secondary-content {
-  width: 300px;
-  margin-right: -300px;
-  position: relative;
-  left: 20px;
+#content #main #item {
+  padding: 1em;
+  background: #FFF;
+  border: 1px solid #DDD;
+  border-top: 3px solid #DDD;
 }

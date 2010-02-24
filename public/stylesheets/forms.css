@@ -1,10 +1,27 @@
+form {
+  background: #FFF;
+}
+
+form.search {
+  float: right;
+  background: transparent;
+  font-size: 12px;
+  padding: 0;
+}
+
+form.search input {
+  color: #444;
+  margin: 0;
+  padding: .35em;
+  width: 20em;
+}
+
 form .header label {
   display: none;
 }
 
 form .header input {
   padding: 6px;
-  margin: -6px -6px 4px;
   -webkit-border-radius: 3px;
   -moz-border-radius: 3px;
   border: 1px solid #aaa;
@@ -46,16 +63,7 @@ form textarea {
 }
 
 .element {
-  border: 1px solid #ccc;
-  -webkit-border-radius: 2px;
-  -moz-border-radius: 2px;
-  margin-bottom: 1em;
-  padding: 10px 10px 0 10px;
-}
-
-.element h3,
-.element label {
-  margin: -10px -10px 10px -10px;
+  margin-bottom: .5em;
 }
 
 .errors.element {
@@ -124,11 +132,6 @@ form#new_user .button:active {
 
 label {
   display: block;
-}
-
-input {
-  vertical-align: middle;
-  font: inherit;
 }
 
 form input.inline, form label.inline {

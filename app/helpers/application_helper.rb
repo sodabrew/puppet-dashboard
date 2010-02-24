@@ -40,4 +40,8 @@ module ApplicationHelper
 
     content_tag(:div, contents, :class => 'errors element')
   end
+
+  def active_if(condition)
+    'active' if condition
+  end
 end

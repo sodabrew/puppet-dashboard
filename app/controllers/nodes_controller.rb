@@ -1,4 +1,5 @@
 class NodesController < InheritedResources::Base
+  belongs_to :node_class, :optional => true
   belongs_to :node_group, :optional => true
   respond_to :html, :yaml
 
@@ -6,9 +7,24 @@ class NodesController < InheritedResources::Base
   before_filter :find_node_classes, :only => [:update, :create]
   before_filter :collection
 
+  layout lambda {|c| c.request.xhr? ? false : 'application' }
+
   def create
     create!
-    resource.node_groups << parent if parent?
+    case parent
+    when NodeGroup; resource.node_groups << parent
+    when NodeClass; resource.node_classes << parent
+    end
+  end
+
+  def successful
+    @nodes = Node.successful.paginate(:page => params[:page])
+    render :index
+  end
+
+  def failed
+    @nodes = Node.failed.paginate(:page => params[:page])
+    render :index
   end
 
   protected
@@ -20,7 +36,7 @@ class NodesController < InheritedResources::Base
   private
 
   def collection
-    get_collection_ivar || set_collection_ivar(end_of_association_chain.paginate(:page => params[:page]))
+    get_collection_ivar || set_collection_ivar(end_of_association_chain.by_report_date.paginate(:page => params[:page]))
   end
 
   def content_id; :inspector end

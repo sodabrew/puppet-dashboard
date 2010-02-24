@@ -1,76 +1,64 @@
-- content_for :primary_content do
-  = render :partial => 'collection'
+#sidebar= render 'nodes_sidebar'
+#main
+  #item
+    .header
+      %h2= h resource.name
 
-.header
-  %h2= h resource.name
-  %ul.actions
-    %li= link_to 'Edit', edit_node_path(resource), :class => "edit button", :rel => 'inspect'
-    %li= link_to 'Destroy', resource, :confirm => 'Are you sure?', :method => :delete, :class => "delete button"
+    - unless resource.description.blank?
+      .description= simple_format h(resource.description)
 
-- unless resource.description.blank?
-  .description= simple_format h(resource.description)
+    - begin
+      - unless resource.compiled_parameters.blank?
+        = inspector_table resource.compiled_parameters, :key, :value, :link => false, :caption => 'Parameters'
+    - rescue NodeGroupCycleError => error
+      %h3 All Parameters
+      %p.error
+        %strong Warning:
+        There appears to be a problem with your node groups.
+        = error.message
+        
 
-- begin
-  - unless resource.compiled_parameters.blank?
-    = inspector_table resource.compiled_parameters, :key, :value, :link => false, :caption => 'Parameters'
-- rescue NodeGroupCycleError => error
-  %h3 All Parameters
-  %p.error
-    %strong Warning:
-    There appears to be a problem with your node groups.
-    = error.message
-    
+    - unless resource.node_groups.empty?
+      = inspector_table resource.node_groups, :link => true, :caption => 'Groups'
 
-- unless resource.node_groups.empty?
-  = inspector_table resource.node_groups, :link => true, :caption => 'Groups'
+    - unless resource.node_classes.empty?
+      = inspector_table resource.node_classes, :link => true, :caption => 'Classes'
 
-- unless resource.node_classes.empty?
-  = inspector_table resource.node_classes, :link => true, :caption => 'Classes'
+    - unless resource.inherited_classes.empty?
+      = inspector_table resource.inherited_classes, :link => true, :caption => 'Inherited Classes'
 
-- unless resource.inherited_classes.empty?
-  = inspector_table resource.inherited_classes, :link => true, :caption => 'Inherited Classes'
+    - reports = @node.reports.limit(10)
+    - unless reports.empty?
+      .element
+        %h3 Run Success
+        = render :partial => 'statuses/run_failure', :locals => { :statuses => Status.by_interval(:limit => 30, :node => @node) }
 
-.element
-  %h3 Run Success
-  = render :partial => 'statuses/run_failure', :locals => { :statuses => Status.by_interval(:limit => 30, :node => @node) }
+      .element
+        %h3 Run Time
+        = render 'statuses/run_time', :reports => reports
 
-- reports = @node.reports.limit(10)
-- unless reports.empty?
-  .element
-    %h3 Run Success
-    = render :partial => 'statuses/run_failure', :locals => { :statuses => Status.by_interval(:limit => 30, :node => @node) }
+      %table.inspector
+        %caption
+          Recent Reports
+          %span.count== (#{@node.reports.size})
+        %thead
+          %tr
+            %th Reported at
+            %th Total
+            %th Failed
+            %th Skipped
+            %th Runtime
+        %tbody
+          - reports.each do |report|
+            %tr
+              %td
+                %span.status{:class => report.status}= link_to report.time.utc.to_s(:default), report
+              %td= report.metrics["resources"][:total]
+              %td= report.metrics["resources"][:failed]
+              %td= report.metrics["resources"][:skipped]
+              %td= "%0.2f" % report.metrics["time"][:total]
 
-  .element
-    %h3 Run Time
-    = render 'statuses/run_time', :reports => reports
-
-  %table.inspector
-    %caption
-      Recent Reports
-      %span.count== (#{@node.reports.size})
-    %thead
-      %tr
-        %th Reported at
-        %th Total
-        %th Failed
-        %th Skipped
-        %th Runtime
-    %tbody
-      - reports.each do |report|
-        %tr
-          %td
-            %span.status{:class => report.status}= link_to report.time.utc.to_s(:default), report
-          %td= report.metrics["resources"][:total]
-          %td= report.metrics["resources"][:failed]
-          %td= report.metrics["resources"][:skipped]
-          %td= "%0.2f" % report.metrics["time"][:total]
-    %tfoot
-      %tr.actions
-        %td{:colspan => 5}
-          = link_to "View More &raquo;", node_reports_path(@node), :class => 'button'
-
-- unless resource.timeline_events.empty?
-  .element
-    %h3 Activity
-    %ol.timeline= render resource.timeline_events.recent(10)
+    - unless resource.timeline_events.empty?
+      %h3 Activity
+      %ol.timeline= render resource.timeline_events.recent(10)
 

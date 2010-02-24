@@ -1,109 +1,17 @@
+body {
+  background: #e8eef0;
+  color: #444;
+  min-width: 800px;
+}
+
 #content {
   padding: 1.5em 0 2em;
 }
 
-#footer .site-width p {
+#footer p {
+  clear: both;
+  padding-top: 1em;
   color: #777;
-  border-top: 3px solid #ccc;
-  padding-top: 0.5em;
-}
-
-div#inspector.primary-secondary-content {
-  padding-left: 400px;
-  padding-right: 0;
-}
-
-div#inspector .secondary-content {
-  margin: 0;
-  width: 100%;
-  position: relative;
-  left: auto;
-  display: table;
-  border: 1px solid #ccc;
-  -webkit-border-radius: 2px;
-  padding: 10px;
-}
-
-#inspector .primary-content {
-  width: 360px;
-  margin-left: -360px;
-  position: relative;
-  left: -40px;
-}
-
-.header {
-  margin: -10px;
-  margin-bottom: 1em;
-  padding: 0.25em 5em 0.25em 10px;
-  background: #ccc;
-  -webkit-border-top-radius: 2px;
-  -moz-border-radius: 2px;
-}
-
-.header h2, .header input {
-  font-size: 1.25em;
-  font-weight: bold;
-  margin: 0;
-  color: #666;
-}
-
-table.inspector caption,
-.table-tools h3,
-.element h3,
-.element label {
-  font-size: 18px;
-  background: #CCC;
-  color: #666;
-  font-weight: bold;
-  padding: 2px 8px;
-}
-
-.element h3 {
-  padding: 6px 8px;
-}
-
-.element .footer {
-  background: #DDD;
-  padding: 6px 8px;
-  margin: 10px -10px 0;
-  text-align: right;
-}
-
-.grouping {
-  -moz-border-radius: 2px;
-  -webkit-border-radius: 2px;
-  padding: 10px 10px 0 10px;
-  background: #F8F8F8;
-  border: 1px solid #DDD;
-  margin-bottom: 1.5em;
-}
-
-.grouping h2 {
-  background: #EEE;
-  margin: -10px -10px 10px -10px;
-  padding: 6px 10px 3px 10px;
-  border-top: 1px solid #F8F8F8;
-}
-
-.grouping .section h3 {
-  background: #EEE;
-  margin: -10px -10px 10px -10px;
-  padding: 6px 10px 6px 10px;
-  border-top: 1px solid #F8F8F8;
-}
-
-.grouping table,
-.grouping .element {
-  margin-bottom: 10px;
-}
-
-.grouping .section {
-  -moz-border-radius: 2px;
-  -webkit-border-radius: 2px;
-  padding: 10px 10px 0 10px;
-  background: #F8F8F8;
-  border: 1px solid #DDD;
-  margin-bottom: 1.5em;
 }
 
 ol.timeline li {
@@ -113,41 +21,8 @@ ol.timeline li {
   position: relative;
 }
 
-ol.timeline li.node {
-  background: url(images/icons/computer.png) no-repeat 0 2px;
-}
-
 ul.status {
   list-style: none;
-}
-
-#global-status-target ul.status {
-  margin-bottom: 10px;
-}
-
-#global-status-target ul.status strong {
-  display: inline-block;
-  width: 5em;
-}
-
-#global-status-target {
-  font-size: 12px;
-  line-height: 20px;
-  color: #666;
-  text-align: left;
-  display: none;
-  position: absolute;
-  top: 54px;
-  right: 18px;
-  background: #FFF;
-  padding: 10px;
-  border: 2px solid #EEE;
-  border-top: 0;
-  -webkit-border-bottom-left-radius: 4px;
-  -webkit-border-bottom-right-radius: 4px;
-  -moz-border-radius-bottomleft: 4px;
-  -moz-border-radius-bottomright: 4px;
-  z-index: 10;
 }
 
 span.sparkline { vertical-align: bottom; }
@@ -155,3 +30,186 @@ span.sparkline { vertical-align: bottom; }
 table.flot-data { display: none; }
 div.flot-graph { margin-bottom: 10px; width: 100%;}
 .tickLabel { font-size: .85em; line-height: 1.2 }
+
+button {
+  background: #DDD -webkit-gradient(linear, 0% 0%, 0% 100%, from(#EEE), to(#CCC));
+  border: 1px solid #DDD;
+  border-color: #FFF #AAA #AAA #FFF;
+
+  color: #666;
+  cursor: pointer;
+  font-size: 12px;
+  height: 2em;
+  line-height: 2em;
+  margin:0;
+  padding: 0 .5em;
+
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
+}
+
+button:hover {
+  text-decoration: none;
+  background: #E8E8E8 -webkit-gradient(linear, 0% 0%, 0% 100%, from(#F8F8F8), to(#D8D8D8));
+}
+
+button:active {
+  background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#CCC), to(#EEE));
+}
+
+/* SIDEBAR */
+
+#content #sidebar .group {
+  border: 1px solid #DDD;
+  background: #FFF;
+  margin: 0 .5em 1em 0;
+
+  -webkit-border-radius: .2em;
+  -moz-border-radius: .2em;
+  border-radius: .2em;
+}
+
+#content #sidebar .group .active a {
+  background: #e2edf5;
+}
+
+#content #sidebar .group h3 {
+  color: #444;
+  font-size: 14px;
+  line-height: 14px;
+  position: relative;
+  display: block;
+  background: #DDD;
+  padding: .5em;
+}
+
+#content #sidebar .group span.count {
+  display: block;
+
+  position: absolute;
+  right: 3px;
+  top: 3px;
+
+  background: #DDD;
+  color:  #FFF;
+  font-size: 12px;
+  padding: 0 .4em;
+  text-align: center;
+
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+}
+
+#content #sidebar .group ul {
+  border-top: 1px solid #D8D8D8;
+}
+
+#content #sidebar .group ul li {
+  position: relative;
+}
+
+#content #sidebar .group ul li a {
+  padding: .25em .5em;
+  display: block;
+}
+
+#content #sidebar a.fold { width: 1em; display: inline-block; text-align: center; font-size: 14px; font-weight: bold;}
+
+#content #sidebar ul {
+  list-style: none;
+}
+
+/* ACTIONBAR */
+
+.actionbar {
+  background: #DDD;
+  padding: 2px;
+}
+
+.actionbar .pagination {
+  font-size: 12px;
+  padding: .1em .5em;
+  float: right;
+}
+
+.actionbar ul {
+  float: left;
+  list-style: none;
+  margin-right: .25em;
+}
+
+.actionbar ul li {
+  float: left;
+  position: relative;
+}
+
+.actionbar ul li:first-child button {
+  -webkit-border-top-right-radius: 0px;
+  -webkit-border-bottom-right-radius: 0px;
+  -moz-border-radius-topright: 0px;
+  -moz-border-radius-bottomright: 0px;
+  border-top-right-radius: 0px;
+  border-bottom-right-radius: 0px;
+}
+
+.actionbar ul li:last-child button {
+  -webkit-border-top-left-radius: 0px
+  -webkit-border-bottom-left-radius: 0px;
+  -moz-border-radius-topleft: 0px;
+  -moz-border-radius-bottomleft: 0px;
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
+}
+
+.actionbar ul li:only-child button {
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
+}
+
+.actionbar button.drop:after {
+  content: "   \002193";
+}
+
+.actionbar ul li .dropdown { /* drop down menu */
+  display: none;
+
+  left; 0;
+  position: absolute;
+  top: 2em;
+
+  background: #FFF;
+  border: 1px solid #CCC;
+  color: #666;
+  font-size: 14px;
+  width: 15em;
+
+  z-index: 7;
+}
+
+.actionbar ul li .dropdown ul {
+  width: 100%;
+  padding: .25em .5em;
+  margin-bottom: .25em;
+  max-height: 30em;
+  overflow: auto;
+}
+
+.actionbar .dropdown .actions {
+  border-top: 1px solid #DDD;
+  background-color: #EEE;
+  clear: both;
+  padding: .25em .5em;
+}
+
+.actionbar ul li .dropdown input {
+  display: inline;
+  vertical-align: middle;
+}
+
+.actionbar form {
+  margin-top: 1px;
+  padding: .25em;
+}

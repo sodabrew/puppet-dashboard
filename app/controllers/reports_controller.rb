@@ -1,6 +1,5 @@
 class ReportsController < InheritedResources::Base
   belongs_to :node, :optional => true, :finder => :find_by_url!
-  layout 'application'
   protect_from_forgery :except => :create
 
   before_filter :handle_raw_post, :only => :create

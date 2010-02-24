@@ -3,5 +3,7 @@
 
 - form_for [parent, @node] do |f|
   = render f
-  = f.submit
-  = link_to 'Cancel', @node
+  %button= Save Changes
+  or
+  = link_to 'Cancel', @node, :class => 'alt_action'
+

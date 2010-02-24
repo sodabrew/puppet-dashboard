@@ -1,13 +1,12 @@
-.header.element
-  = form.label :name
+.header
+  = form.label :hostname
   = form.text_field :name
 
 = form.error_messages
 
-.element
-  = form.label :description
-  .textarea
-    = form.text_area :description, :rows => 4
+= form.label :description
+.textarea
+  = form.text_area :description, :rows => 4
 
 %table#parameters.inspector
   %caption
@@ -23,52 +22,3 @@
     - else
       = render :partial => 'parameters/parameter_input', :collection => form.object.parameters
 
-#node-groups
-  %table.inspector
-    %caption Node Groups
-    %thead
-      %tr
-        %th.key Name
-        %th.value{:colspan => 2} Description
-    %tbody
-      - form.object.node_groups.each do |group|
-        %tr[group]
-          %td.key= link_to group.name, group
-          %td
-            = group.description
-            = hidden_field_tag 'node[node_groups][]', group.id
-          %td.actions
-            %a.icon.delete{:href => '#'}
-              %span (delete)
-    %tfoot#available-node-groups
-      %tr
-        %td{:colspan => 3}
-          - form_tag do
-            = text_field_tag :search, '', :class => 'node-group-search', :autocomplete => 'off', :type => "search"
-
-#node-classes
-  %table.inspector
-    %caption Node Classes
-    %thead
-      %tr
-        %th.key Name
-        %th.value{:colspan => 2} Description
-    %tbody
-      - form.object.node_classes.each do |klass|
-        %tr[klass]
-          %td.key= link_to klass.name, klass
-          %td
-            = klass.description
-            = hidden_field_tag 'node[node_classes][]', klass.id
-          %td.actions
-            %a.icon.delete{:href => '#'}
-              %span (delete)
-    %tfoot#available-node-classes
-      %tr
-        %td{:colspan => 3}
-          - form_tag do
-            = text_field_tag :search, '', :class => 'node-class-search', :autocomplete => 'off', :type => "search"
-
-- unless form.object.inherited_classes.empty?
-  #inherited-node-classes
-    = inspector_table form.object.inherited_classes, :name, :description, :link => true, :caption => 'Inherited Classes'

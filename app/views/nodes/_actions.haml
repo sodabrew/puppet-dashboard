@@ -1,0 +1,26 @@
+%ul
+  %li
+    %button.drop Groups
+    .dropdown
+      %ul
+        - NodeGroup.all.each do |g|
+          %li
+            %label
+              = check_box_tag dom_id(g)
+              = g.name
+      .actions
+        = link_to "Assign"
+  %li
+    %button.drop Classes
+    .dropdown
+      %ul
+        - NodeClass.all.each do |c|
+          %li
+            %label
+              = check_box_tag dom_id(c)
+              = c.name
+      .actions
+        = link_to "Assign"
+%ul
+  %li
+    %button.add{:href => new_node_path} Add Node

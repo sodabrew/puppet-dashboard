@@ -1,8 +1,9 @@
 class Node < ActiveRecord::Base
+  def self.per_page; 5 end # Pagination
+
   include NodeGroupGraph
 
   default_scope :order => 'name ASC'
-  named_scope :by_report_date, :order => 'reported_at DESC'
 
   validates_presence_of :name
   validates_uniqueness_of :name
@@ -13,12 +14,18 @@ class Node < ActiveRecord::Base
   has_many :node_groups, :through => :node_group_memberships
 
   has_many :reports
+  has_one :last_report, :class_name => 'Report', :order => 'time DESC'
+  named_scope :by_report_date, :order => 'reported_at DESC'
 
   has_parameters
 
   fires :created, :on => :create
   fires :updated, :on => :update
   fires :removed, :on => :destroy
+
+  # RH:TODO: Denormalize last report status into nodes table.
+  named_scope :successful, :select => 'DISTINCT `nodes`.name, `nodes`.*', :joins => 'INNER JOIN reports on reports.time = reported_at', :conditions => 'reports.success = 1'
+  named_scope :failed, :select => 'DISTINCT `nodes`.name, `nodes`.*', :joins => 'LEFT OUTER JOIN reports on reports.time = reported_at', :conditions => 'reports.success = 0 OR reported_at IS NULL'
 
   def to_param
     name.to_s
@@ -78,7 +85,8 @@ class Node < ActiveRecord::Base
     'production'
   end
 
-  def last_report
-    reports.first
+  def status_class
+    return 'no_report' unless last_report
+    last_report.success? ? 'success' : 'failure'
   end
 end

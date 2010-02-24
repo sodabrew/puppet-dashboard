@@ -5,19 +5,15 @@
     %title= [ page_title, 'Puppet Node Manager'].compact.join(' - ')
     %link{ :href => "/images/favicon.ico", :rel => "shortcut icon" }
     %meta{ :content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type" }
+    = javascript_include_tag 'http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js'
     = javascript_include_tag :all
     = stylesheet_link_tag :all
   %body
-    #puppet-node-manager
+    #wrap
       #header
-        .site-width
-          %h1= link_to "Puppet Node Manager", root_path
-          = render :partial => 'shared/global_nav'
-          = render :partial => 'shared/secondary_nav'
-          
+        = render :partial => 'shared/global_nav'
+        = render :partial => 'shared/secondary_nav'
       #content
-        .site-width
-          = yield
+        = yield
       #footer
-        .site-width
-          %p &copy; Copyright 2009 Reductive Labs
+        %p &copy; Copyright 2009 Reductive Labs

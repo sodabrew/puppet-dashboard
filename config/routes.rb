@@ -1,8 +1,13 @@
 ActionController::Routing::Routes.draw do |map|
-  map.resources :node_classes, :has_many => :nodes, :collection => {:search => :get}
-  map.resources :node_groups, :has_many => :nodes, :collection => {:search => :get}
+  map.resources :node_classes, :collection => {:search => :get} do |classes|
+    classes.resources :nodes, :requirements => {:id => /.*/}
+  end
 
-  map.resources :nodes, :member => {:performance => :get}, :has_many => :reports, :requirements => {:id => /.*/}
+  map.resources :node_groups, :collection => {:search => :get} do |groups|
+    groups.resources :nodes, :requirements => {:id => /.*/}
+  end
+
+  map.resources :nodes, :member => {:performance => :get}, :collection => {:successful => :get, :failed => :get}, :has_many => :reports, :requirements => {:id => /.*/}
 
   map.resource :user_session
   map.resource :account, :controller => "users"

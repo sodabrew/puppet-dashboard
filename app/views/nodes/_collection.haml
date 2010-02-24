@@ -1,32 +1,37 @@
-%table.inspector
-  %caption
-    Nodes
-    %span.count== (#{@nodes.total_entries})
+.actionbar
+  = render 'search'
+  = render 'actions'
+  %div{:style => 'clear:both;'}
+  #add_node{:style => 'display:none;'}
+    - form_for Node.new do |f|
+      = render f
+      %button= 'Save Changes'
+      or
+      = link_to 'Cancel', request.url, :class => 'alt_action cancel'
+
+%table.main
   %thead
     %tr
-      %th.name
-        Name
-      %th.params
-        Params
-      %th.groups
-        Groups
-      %th.classes
-        Classes
+      %th.check
+        = check_box_tag "check_all"
+      %th.status
+        %span{:alt => "Status", :title => "Status"} &bull;
+      %th.hostname
+        Hostname
+      %th.latest_report.desc
+        &darr; Latest Report
   %tbody
     - @nodes.each do |n|
       %tr[n]{:class => "#{'active' if n == @node}"}
-        %td.name
+        %td.check
+          = check_box_tag "check_all"
+        %td.status{:class => n.status_class, :alt => n.status_class.titleize, :title => n.status_class.titleize}
+          %span &bull;
+        %td.hostname
           = link_to h(n.name), [parent, n], :rel => 'inspect'
-        %td.params
-          = n.parameters.size
-        %td.groups
-          = n.node_groups.size
-        %td.classes
-          = n.node_classes.size
-  %tfoot
-    %tr.actions
-      %td{:colspan => 4}
-        = will_paginate(@nodes)
-    %tr.actions
-      %td{:colspan => 4}
-        = link_to "<span class='indicator'></span>Add new", new_node_path, :class => "add button"
+        %td.latest_report
+          = n.last_report ? n.last_report.time.to_s(:long) : "Has not reported"
+- if @nodes.respond_to?(:total_pages) && @nodes.total_pages > 1
+  .actionbar
+    = will_paginate(@nodes)
+    %div{:style => 'clear:both;'}

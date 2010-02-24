@@ -21,9 +21,6 @@ h1 {
   margin-bottom: 0.33em;
 }
 
-  h1 a { color: white; }
-  h1 a:hover { text-decoration: none; }
-
 h2 {
   font-size: 1.5em;
   line-height: 1.5em;

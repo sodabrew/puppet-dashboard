@@ -12,8 +12,6 @@ class ApplicationController < ActionController::Base
 
   helper_method :current_user_session, :current_user
 
-  layout :primary_or_secondary
-
   private
   def primary_or_secondary
     params[:action] == "index" ? "secondary_primary" : "primary_secondary"
