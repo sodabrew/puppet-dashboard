@@ -67,14 +67,6 @@ describe Node do
       @node = Node.generate!
     end
 
-    it 'should work without arguments' do
-      lambda { @node.configuration }.should_not raise_error(ArgumentError)
-    end
-
-    it 'should not allow arguments' do
-      lambda { @node.configuration(:foo) }.should raise_error(ArgumentError)
-    end
-
     it 'should return a name and set of classes and parameters' do
       @node.configuration.keys.sort.should == ['classes', 'name', 'parameters']
     end
@@ -84,8 +76,8 @@ describe Node do
       @node.configuration['classes'].sort.should == @classes.collect(&:name).sort
     end
 
-    it "should return the node's parameters in the returned parameters list" do
-      @node.stubs(:parameters).returns({'a' => 'b', 'c' => 'd'})
+    it "should return the node's compiled parameters in the returned parameters list" do
+      @node.stubs(:compiled_parameters).returns({'a' => 'b', 'c' => 'd'})
       @node.configuration['parameters'].should == { 'a' => 'b', 'c' => 'd' }  
     end
   end
@@ -189,6 +181,11 @@ describe Node do
       it "should not raise an error if there are two sibling parameters with the same key and value" do
         @param_2.update_attributes(:key => @param_1.key, :value => @param_1.value)
         lambda {@node.compiled_parameters}.should_not raise_error(ParameterConflictError)
+      end
+
+      it "should include parameters of the node itself" do
+        @node.parameters << Parameter.create(:key => "node_parameter", :value => "exist")
+        @node.compiled_parameters["node_parameter"].should == "exist"
       end
     end
   end

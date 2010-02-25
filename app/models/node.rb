@@ -41,7 +41,7 @@ class Node < ActiveRecord::Base
   end
 
   def configuration
-    { 'name' => name, 'classes' => all_classes.collect(&:name), 'parameters' => (parameters.blank? ? {} : parameters.to_hash) }
+    { 'name' => name, 'classes' => all_classes.collect(&:name), 'parameters' => compiled_parameters }
   end
 
   def to_yaml(opts={})
@@ -57,6 +57,8 @@ class Node < ActiveRecord::Base
   # nearer). Raises a ParameterConflictError if parameters at the same distance
   # from the node have the same name.
   def compiled_parameters(graph=node_group_graph, depth=1, seen_parameters={0 => parameters.to_hash})
+    return @compiled_parameters if @compiled_parameters
+
     seen_parameters[depth] ||= {}
     graph.each do |parent, children_graph|
       parent.parameters.each do |parameter|
@@ -66,7 +68,7 @@ class Node < ActiveRecord::Base
       compiled_parameters(children_graph, depth+1, seen_parameters)
     end
 
-    return seen_parameters.sort_by{|k,v| k}.inject({}){|results, array| depth, parameters = array; results.reverse_merge(parameters)}
+    return @compiled_parameters = parameters.to_hash.reverse_merge(seen_parameters.sort_by{|k,v| k}.inject({}){|results, array| depth, parameters = array; results.reverse_merge(parameters)})
   end
 
 
