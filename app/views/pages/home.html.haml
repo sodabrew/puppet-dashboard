@@ -17,7 +17,7 @@
     - @nodes.each do |node|
       %tr[node]{:class => "#{'active' if node == @node} #{node.last_report && node.last_report.status}"}
         %td.name
-          = link_to h(node.name), node
+          %span{:title => node.name}= link_to h(truncate(node.name, 10)), node
         %td.environment= node.environment
         %td.last_report
           - if node.reported_at && node.last_report
