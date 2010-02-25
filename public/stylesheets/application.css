@@ -62,6 +62,7 @@ button:active {
 
 #content #sidebar .group {
   border: 1px solid #DDD;
+  border-top: 1px solid #EEE;
   background: #FFF;
   margin: 0 .5em 1em 0;
 
@@ -125,7 +126,11 @@ button:active {
 
 .actionbar {
   background: #DDD;
-  padding: 2px;
+  padding: 1px;
+
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
 }
 
 .actionbar .pagination {
@@ -178,7 +183,7 @@ button:active {
 
   left; 0;
   position: absolute;
-  top: 2em;
+  top: 1.75em;
 
   background: #FFF;
   border: 1px solid #CCC;
@@ -210,6 +215,15 @@ button:active {
 }
 
 .actionbar form {
-  margin-top: 1px;
   padding: .25em;
+}
+
+.actionbar #add_node {
+  margin: 2px 2px 1px;
+}
+
+.actionbar #add_node form {
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
 }
