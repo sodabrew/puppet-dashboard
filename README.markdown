@@ -6,7 +6,7 @@ The Puppet Dashboard is a Puppet web interface that provides node management and
 
 ## Dependencies
 
-* ruby >= 1.8.1
+* ruby (built with iconv support) >= 1.8.1
 * rake >= 0.8.4
 * mysql
 
