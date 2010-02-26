@@ -113,6 +113,10 @@ ol.timeline li {
   position: relative;
 }
 
+ol.timeline li.node {
+  background: url(images/icons/computer.png) no-repeat 0 2px;
+}
+
 ul.status {
   list-style: none;
 }

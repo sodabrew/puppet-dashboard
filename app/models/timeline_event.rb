@@ -13,6 +13,14 @@ class TimelineEvent < ActiveRecord::Base
   end
 
   def secondary_name
-    secondary_subject ? secondary_subject.name : "A #{secondary_subject_type.downcase}"
+    secondary_subject ? secondary_subject.name : "a #{secondary_subject_type.underscore.humanize.downcase}"
+  end
+
+  def object_type
+    (secondary_subject_type || subject_type).to_s.downcase
+  end
+
+  def action
+    "was #{event_type.tr('_', ' ')}"
   end
 end

@@ -1,32 +1,8 @@
-- resource = false unless defined?(resource)
 - te = timeline_event
-- subject = te.subject
-- subject_name = te.subject_type
-- subject_name = "This #{subject_name.downcase}" if subject && subject == resource
-- subject_name = "A #{subject_name.downcase}" unless subject
-- secondary = te.secondary_subject
 
-- primary = secondary || subject
-- primary_class = te.secondary_subject_type || te.subject_type
-
-%li
-  %span.type{:class => "#{primary_class.downcase} type"}
-    %span= primary_class.titleize
-  = link_to_unless secondary || resource == subject, subject_name, primary
-  - if secondary
-    - if subject_name.downcase.eql?('parameter')
-      = subject.key
-    - else
-      = link_to subject.name, subject
-  - else
-    - if subject_name.downcase.eql?('parameter')
-      = primary.name
-    - else
-      = link_to primary.name, primary
-  was
-  = te.event_type.tr('_', ' ')
-  - if secondary
-    - secondary_name = resource == secondary ? "this #{secondary.class.name.downcase}" : "#{secondary.class.name.downcase} #{secondary.name}"
-    = link_to_unless resource == secondary, secondary_name, secondary
+%li{:class => te.object_type}
+  = link_to_unless te.secondary_subject_type,  te.subject_name, te.subject
+  = te.action
+  = te.secondary_name if te.secondary_subject_type
   = time_ago_in_words(te.created_at)
-  ago.
+  ago

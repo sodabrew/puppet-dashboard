@@ -103,23 +103,6 @@ a.icon span { display: none; }
   background: url(images/icons/delete.png) transparent center center no-repeat;
 }
 
-span.type {
-  top: 0.25em;
-  left: 0;
-  position: absolute;
-  display: block;
-  width: 16px;
-  height: 16px;
-}
-
-span.type span {
-  display: none;
-}
-
-span.node.type {
-  background: url(images/icons/computer.png);
-}
-
 .status.success,
 .status.failure,
 .status.failed {
