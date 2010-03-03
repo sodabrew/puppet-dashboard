@@ -1,24 +1,35 @@
 .header
-  = form.label :hostname
+  = form.label 'Hostname', :name
   = form.text_field :name
 
 = form.error_messages
 
-= form.label :description
-.textarea
+.element.textarea
+  = form.label :description
   = form.text_area :description, :rows => 4
 
-%table#parameters.inspector
-  %caption
-    Parameters
-    = link_to_function("<span class='indicator'></span>Add", :class => "add button") { |page|  page.insert_html :bottom, 'parameters', :partial => 'parameters/parameter_input', :object => form.object.parameters.build }
-  %thead
-    %tr
-      %th.key Key
-      %th.value Value
-  %tbody
-    - if form.object.parameters.blank?
-      = render :partial => 'parameters/parameter_input', :object => form.object.parameters.build
-    - else
-      = render :partial => 'parameters/parameter_input', :collection => form.object.parameters
+.element
+  %table#parameters.inspector
+    %caption
+      Parameters
+    %thead
+      %tr
+        %th.key Key
+        %th.value Value
+    %tbody
+      - if form.object.parameters.blank?
+        = render :partial => 'parameters/parameter_input', :object => form.object.parameters.build
+      - else
+        = render :partial => 'parameters/parameter_input', :collection => form.object.parameters
+    %tfoot
+      %tr
+        %td{:colspan => 2}
+          = link_to_function("Add Parameter", :class => "add button") { |page|  page.insert_html :bottom, 'parameters', :partial => 'parameters/parameter_input', :object => form.object.parameters.build }
 
+.element
+  = form.label :group_names, 'Groups'
+  = form.text_field :group_names
+  %ul#current_groups
+    %li a_group
+    - @node.node_groups.each do |group|
+      %li= group.name

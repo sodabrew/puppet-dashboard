@@ -16,20 +16,9 @@ $(document).ready(function() {
     return false;
   })
 
-  $('.actionbar ul li button.add').click( function() {
-    $(document).trigger('click.hideDropdown'); /* hide any open dropdown */
-    $('#add_node').toggle();
-    return false;
-  });
-
   $('table.main th input#check_all').click( function() {
     self = $(this);
     self.parents('table').find('td input:checkbox').attr('checked', self.is(':checked'));
-  });
-
-  $('.actionbar #new_node a.cancel').click(function(){
-    $('#add_node').hide();
-    return false;
   });
 
   $.fn.sparklineStatus = function(opt) {
@@ -96,4 +85,5 @@ $(document).ready(function() {
         return val.toString() + '%'
       }}});
 
+  $('#node_group_names').facebooklist('#current_groups', {url:'/node_groups.json',cache:0}, 10, {userfilter:1,casesensetive:0}, 0);
 });
