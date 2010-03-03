@@ -1,5 +1,5 @@
 class NodeGroupsController < InheritedResources::Base
-  respond_to :html
+  respond_to :html, :json
 
   before_filter :find_node_classes, :only => [:update, :create]
 

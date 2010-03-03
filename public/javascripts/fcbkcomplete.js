@@ -45,6 +45,7 @@ remove element fixed
 */
 
 jQuery.fn.facebooklist = function(list, ajax, height, filter, newel){
+  if (!this.length) { return }
 
   var KEY = {
     ESC: 27,
@@ -57,6 +58,7 @@ jQuery.fn.facebooklist = function(list, ajax, height, filter, newel){
   };
 
   var elem = $(this);
+  elem.attr('disabled', 'disabled');
   var feed = document.createElement('ul');
   feed = $(feed).hide().addClass('facebook-auto');
 
@@ -64,8 +66,7 @@ jQuery.fn.facebooklist = function(list, ajax, height, filter, newel){
     var input = document.createElement('input');
     $(input).attr({
       'type': 'hidden',
-      'name': (elem.attr('id') + '[]'),
-      'id': (elem.attr('id') + '[]'),
+      'name': (elem.attr('name')),
       'value': value
     });
     return input;
@@ -96,7 +97,8 @@ jQuery.fn.facebooklist = function(list, ajax, height, filter, newel){
       return false;
     });
     if (!preadded) {
-      holder.removeChild(document.getElementById('annoninput'));
+      console.log('removing input');
+      $(holder).find('li.bit-input').remove();
       addInput();
     }
     feed.hide();
@@ -197,12 +199,14 @@ jQuery.fn.facebooklist = function(list, ajax, height, filter, newel){
     });
     maininput.unbind('keydown');
     maininput.keydown(function(event){
-      if (event.keyCode == 13 && nowFocusOn != null) {
+      var k = event.which || event.keycode;
+      
+      if (k == 13 && nowFocusOn != null) {
         addItem($(nowFocusOn));
         feed.hide();
         event.preventDefault();
       }
-      if (event.keyCode == 40) {
+      if (k == 40) {
         removeFeedEvent();
         if (typeof(nowFocusOn) == 'undefined' || nowFocusOn.length == 0) {
           nowFocusOn = $(feed.children('li:visible:first'));
@@ -220,7 +224,7 @@ jQuery.fn.facebooklist = function(list, ajax, height, filter, newel){
         feed.children('li').removeClass("auto-focus");
         nowFocusOn.addClass("auto-focus");
       }
-      if (event.keyCode == 38) {
+      if (k == 38) {
         removeFeedEvent();
         if (typeof(nowFocusOn) == 'undefined' || nowFocusOn.length == 0) {
           nowFocusOn = $(feed.children('li:visible:last'));
@@ -246,7 +250,6 @@ jQuery.fn.facebooklist = function(list, ajax, height, filter, newel){
     var input = document.createElement('input');
     $(li).attr({
       'class': 'bit-input',
-      'id': 'annoninput'
     });
     $(input).attr({
       'type': 'text',

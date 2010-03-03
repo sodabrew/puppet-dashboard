@@ -1,5 +1,5 @@
 class NodeClassesController < InheritedResources::Base
-  resources_controller_for :node_classes
+  respond_to :html, :json
 
   def search
     @node_classes = NodeClass.search(params[:val])

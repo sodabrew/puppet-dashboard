@@ -89,4 +89,16 @@ class Node < ActiveRecord::Base
     return 'no_report' unless last_report
     last_report.success? ? 'success' : 'failure'
   end
+
+  attr_accessor :node_class_names
+  after_save :assign_node_classes
+  def assign_node_classes
+    self.node_classes = (@node_class_names || []).map{|name| NodeClass.find_by_name(name)}
+  end
+
+  attr_accessor :node_group_names
+  after_save :assign_node_groups
+  def assign_node_groups
+    self.node_groups = (@node_group_names || []).map{|name| NodeGroup.find_by_name(name)}
+  end
 end

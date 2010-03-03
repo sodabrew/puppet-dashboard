@@ -9,14 +9,6 @@ class NodesController < InheritedResources::Base
 
   layout lambda {|c| c.request.xhr? ? false : 'application' }
 
-  def create
-    create!
-    case parent
-    when NodeGroup; resource.node_groups << parent
-    when NodeClass; resource.node_classes << parent
-    end
-  end
-
   def successful
     @nodes = Node.successful.paginate(:page => params[:page])
     render :index

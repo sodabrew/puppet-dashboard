@@ -26,10 +26,17 @@
         %td{:colspan => 2}
           = link_to_function("Add Parameter", :class => "add button") { |page|  page.insert_html :bottom, 'parameters', :partial => 'parameters/parameter_input', :object => form.object.parameters.build }
 
-.element
-  = form.label :group_names, 'Groups'
-  = form.text_field :group_names
-  %ul#current_groups
-    %li a_group
-    - @node.node_groups.each do |group|
+.element.node_groups
+  = label_tag 'Node Groups'
+  = text_field_tag 'node[node_group_names][]', '', :id => 'node_group_names'
+  %ul#existing_node_groups
+    - form.object.node_groups.each do |group|
       %li= group.name
+    
+.element.node_classes
+  = label_tag 'Node Classes'
+  = text_field_tag 'node[node_class_names][]', '', :id => 'node_class_names'
+  %ul#existing_node_classes
+    - form.object.node_classes.each do |klass|
+      %li= klass.name
+    
