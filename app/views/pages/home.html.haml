@@ -2,9 +2,14 @@
   .header
     %h2 Dashboard
   #item
-    .element
+    .section.half
       %h3 Run Success
-      = render :partial => 'statuses/run_failure'
+      = render 'statuses/run_failure', :statuses => @statuses
 
-    %h3 Recent Node Reports
-    = render 'nodes/nodes', :nodes => @nodes
+    .section.half
+      %h3 Run Time
+      = render 'statuses/run_time', :reports => @reports
+
+    .section
+      %h3 Recent Node Reports
+      = render 'nodes/nodes', :nodes => @nodes
