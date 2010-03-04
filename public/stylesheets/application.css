@@ -280,3 +280,9 @@ ul li .dropdown ul {
 .section {
   margin-bottom: 1em;
 }
+
+.half {
+  width: 45%;
+  margin-right: 5%;
+  float: left;
+

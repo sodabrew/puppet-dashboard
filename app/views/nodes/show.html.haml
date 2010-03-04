@@ -2,6 +2,9 @@
 #main
   .header
     %h2= h resource.name
+    %ul.actions
+      %li= link_to 'Edit', edit_node_path(@node), :class => "edit button", :rel => 'inspect'
+      %li= link_to 'Destroy', @node, :confirm => 'Are you sure?', :method => :delete, :class => "delete button"
   #item
     - unless resource.description.blank?
       .description= simple_format h(resource.description)
@@ -17,47 +20,61 @@
         = error.message
         
 
-    - unless resource.node_groups.empty?
-      = inspector_table resource.node_groups, :link => true, :caption => 'Groups'
+    .section
+      %h3 Groups
+      - unless resource.node_groups.empty?
+        = inspector_table resource.node_groups, :link => true
+      - else
+        No Groups
 
-    - unless resource.node_classes.empty?
-      = inspector_table resource.node_classes, :link => true, :caption => 'Classes'
+    .section
+      %h3 Classes
+      - unless resource.node_classes.empty?
+        = inspector_table resource.node_classes, :link => true
+      - else
+        No Classes
 
     - unless resource.inherited_classes.empty?
       = inspector_table resource.inherited_classes, :link => true, :caption => 'Inherited Classes'
 
     - reports = @node.reports.limit(10)
+
+    .clear
+
     - unless reports.empty?
-      .element
+      .section.half
         %h3 Run Success
         = render :partial => 'statuses/run_failure', :locals => { :statuses => Status.by_interval(:limit => 30, :node => @node) }
 
-      .element
+      .section.half
         %h3 Run Time
         = render 'statuses/run_time', :reports => reports
 
-      %table.inspector
-        %caption
+      .section.half
+        %h3
           Recent Reports
           %span.count== (#{@node.reports.size})
-        %thead
-          %tr
-            %th Reported at
-            %th Total
-            %th Failed
-            %th Skipped
-            %th Runtime
-        %tbody
-          - reports.each do |report|
+        %table.inspector
+          %thead
             %tr
-              %td
-                %span.status{:class => report.status}= link_to report.time.utc.to_s(:default), report
-              %td= report.metrics["resources"][:total]
-              %td= report.metrics["resources"][:failed]
-              %td= report.metrics["resources"][:skipped]
-              %td= "%0.2f" % report.metrics["time"][:total]
+              %th Reported at
+              %th Total
+              %th Failed
+              %th Runtime
+          %tbody
+            - reports.each do |report|
+              %tr
+                %td
+                  %span.status{:class => report.status}= link_to report.time.utc.to_s(:default), report
+                %td= report.metrics["resources"][:total]
+                %td= report.metrics["resources"][:failed]
+                %td= "%0.2f" % report.metrics["time"][:total]
 
-    - unless resource.timeline_events.empty?
+    .section.half
       %h3 Activity
-      %ol.timeline= render resource.timeline_events.recent(10)
+      - unless resource.timeline_events.empty?
+        %ol.timeline= render resource.timeline_events.recent(10)
+      - else
+        No Activity
 
+    .clear
