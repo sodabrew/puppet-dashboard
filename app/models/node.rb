@@ -1,5 +1,5 @@
 class Node < ActiveRecord::Base
-  def self.per_page; 5 end # Pagination
+  def self.per_page; 20 end # Pagination
 
   include NodeGroupGraph
 
