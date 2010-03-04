@@ -13,9 +13,6 @@ class ApplicationController < ActionController::Base
   helper_method :current_user_session, :current_user
 
   private
-  def primary_or_secondary
-    params[:action] == "index" ? "secondary_primary" : "primary_secondary"
-  end
 
   def current_user_session
     return @current_user_session if defined?(@current_user_session)
@@ -53,11 +50,6 @@ class ApplicationController < ActionController::Base
     redirect_to(session[:return_to] || default)
     session[:return_to] = nil
   end
-
-  def content_id
-    nil
-  end
-  helper_method :content_id
 
   def handle_parameters_for(param)
     if params[param] && params[param][:parameters]
