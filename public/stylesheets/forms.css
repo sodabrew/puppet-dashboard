@@ -48,6 +48,10 @@ label {
   font-weight: bold;
 }
 
+form h3 {
+  font-size: 1em;
+}
+
 form input.inline, form label.inline {
   display: inline;
 }
