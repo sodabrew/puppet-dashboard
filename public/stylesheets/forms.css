@@ -17,6 +17,32 @@ form .element.actions {
   padding: .2em 0;
 }
 
+form .errors.element {
+  border: 1px solid #FCC;
+  background: #FEE;
+  color: #F66;
+}
+
+form .errors.element h3 {
+  color: #D55;
+  background: #FCC;
+}
+
+form .errors ul {
+  list-style: none; margin-bottom: .5em;
+  padding: 0 0.5em;
+}
+
+form .errors ul li {
+  padding-left: 20px;
+  background: url(images/icons/failure.png) left center no-repeat;
+}
+
+
+form .element.errors h3 {
+  padding: .2em .5em;
+}
+
 label {
   display: block;
   font-weight: bold;
@@ -62,29 +88,6 @@ form.search input {
   margin: 0;
   padding: .35em;
   width: 20em;
-}
-
-.element {
-  margin-bottom: .5em;
-}
-
-.errors.element {
-  border-color: #FCC;
-  color: #F66;
-}
-
-.errors.element h3 {
-  color: #D55;
-  background: #FCC;
-}
-
-.errors ul {
-  list-style: none; margin-bottom: .5em;
-}
-
-.errors ul li {
-  padding-left: 20px;
-  background: url(images/icons/failure.png) left center no-repeat;
 }
 
 .fieldWithErrors input {
