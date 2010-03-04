@@ -4,6 +4,20 @@ body {
   min-width: 800px;
 }
 
+a#logo {
+  background: transparent url('/images/dashboard_logo.png') no-repeat top center;
+  text-indent: -9000px;
+  display: block;
+  height: 23px;
+  width: 155px;
+  position: relative;
+  top: 1px;
+}
+
+a#logo:hover {
+  background-position: bottom center;
+}
+
 #content {
   padding: 1.5em 0 2em;
 }

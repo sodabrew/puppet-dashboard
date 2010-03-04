@@ -49,12 +49,11 @@ p {
 
 a {
   text-decoration: none;
-  color: #1f508c;
+  color: #2C66A8;
 }
 
 a:hover {
   text-decoration: underline;
-  color: #3268aa;
 }
 
 span.count {
