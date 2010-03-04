@@ -13,7 +13,7 @@
     - nodes.each do |n|
       %tr[n]{:class => "#{'active' if n == @node}"}
         %td.check
-          = check_box_tag "check_all"
+          = check_box_tag dom_id(n)
         %td.status{:class => n.status_class, :alt => n.status_class.titleize, :title => n.status_class.titleize}
           %span &bull;
         %td.hostname
