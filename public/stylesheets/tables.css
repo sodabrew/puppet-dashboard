@@ -71,7 +71,7 @@ table.main thead th.hostname {
 }
 
 table.inspector {
-  width: 512px;
+  width: 100%;
   border-collapse: collapse;
   background: #FFF;
   margin-bottom: 1em;

@@ -86,8 +86,9 @@ form.search {
 form.search input {
   color: #444;
   margin: 0;
-  padding: .35em;
+  padding: .4em;
   width: 20em;
+  vertical-align: -1px;
 }
 
 .fieldWithErrors input {
