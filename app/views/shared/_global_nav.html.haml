@@ -1,6 +1,6 @@
 %ul#global-navigation.navigation
   %li{:class => active_if(request.url == root_url)}= link_to "Puppet Dashboard", root_path
-  %li{:class => active_if(controller_name == 'nodes')}
+  %li{:class => active_if(%w[nodes node_groups node_classes].include?(controller_name))}
     = link_to "Node Manager", nodes_path, :class => 'drop'
     .dropdown
       %ul
