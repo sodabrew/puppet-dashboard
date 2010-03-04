@@ -13,13 +13,13 @@
   margin-right: 0.8em;
 }
 
-#header ul.navigation li {
+#header ul.navigation > li {
   display: block;
   float: left;
   margin-right: 1em;
 }
 
-#header ul.navigation li.active a,
-#header ul.navigation li.active a:hover {
+#header ul.navigation > li.active a,
+#header ul.navigation > li.active a:hover {
   font-weight: bold;
 }

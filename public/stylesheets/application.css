@@ -186,16 +186,21 @@ button:active, a.button:hover {
   border-radius: 2px;
 }
 
-.actionbar button.drop:after {
+.navigation {
+  position: relative;
+}
+
+button.drop:after,
+a.drop:after {
   content: "   \002193";
 }
 
-.actionbar ul li .dropdown { /* drop down menu */
+ul li .dropdown { /* drop down menu */
   display: none;
 
   left; 0;
   position: absolute;
-  top: 1.75em;
+  top: 1.5em;
 
   background: #FFF;
   border: 1px solid #CCC;
@@ -206,22 +211,34 @@ button:active, a.button:hover {
   z-index: 7;
 }
 
-.actionbar ul li .dropdown ul {
+.actionbar .dropdown {
+  top: 1.75em;
+}
+
+ul li .dropdown ul {
   width: 100%;
-  padding: .25em .5em;
   margin-bottom: .25em;
   max-height: 30em;
   overflow: auto;
 }
 
-.actionbar .dropdown .actions {
+.dropdown li {
+  list-style: none;
+}
+
+.dropdown li a {
+  display: block;
+  padding: .2em .5em;
+}
+
+.dropdown .actions {
   border-top: 1px solid #DDD;
   background-color: #EEE;
   clear: both;
   padding: .25em .5em;
 }
 
-.actionbar ul li .dropdown input {
+.dropdown input {
   display: inline;
   vertical-align: middle;
 }

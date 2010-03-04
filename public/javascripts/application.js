@@ -1,7 +1,7 @@
 $(document).ready(function() {
-  $('.actionbar ul li button.drop').click( function(e) {
+  $('button.drop, a.drop').click( function(e) {
     var self = $(this);
-    var all_drops = self.parents('.actionbar').find('.dropdown');
+    var all_drops = self.parents('div').find('.dropdown');
     var drop = self.next('.dropdown');
 
     if (drop.is(':hidden')) {
