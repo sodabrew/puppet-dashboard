@@ -61,14 +61,11 @@ form .errorExplanation {
 }
 
 form .header input {
-  width: 99.5%;
-  font-size: 18px;
-  padding: .25em .25%;
-  border: 1px solid #EEE;
-
-  -webkit-border-radius: 2px;
-  -moz-border-radius: 2px;
-  border-radius: 2px;
+  border: 1px solid transparent;
+  font-size: 1.45em;
+  font-weight: bold;
+  margin: 2px;
+  width: 80%;
 }
 
 form .header label {
@@ -113,4 +110,6 @@ form#new_user .buttons{
   margin-top: 2em;
 }
 
-/* @end */
+.in-place {
+  display: none;
+}
