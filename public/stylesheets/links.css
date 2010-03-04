@@ -8,75 +8,9 @@ ul.actions li {
   display: inline-block;
 }
 
-.button {
-  -moz-border-radius: 1em;
-  -webkit-border-radius: 1em;
-  -webkit-box-shadow: 1px 1px 0 #bbb;
-  -webkit-box-shadow: 1px 1px 1px #999;
-  -webkit-transition: 0.125s all ease-in-out;
-  background-position: 0 -128px;
-  background: #999 url(images/white-overlays.png) top repeat-x;
-  border: none;
-  color: white;
-  display: inline-block;
-  font-weight: bold !important;
-  font: inherit;
-  padding: 0.2em 0.85em;
-  text-decoration: none !important;
-  text-shadow: 0 -1px 0 #666;
-  text-shadow: 0 1px 0 #ddd;
-}
-
-.button:hover {
-  color: #FFF;
-  background-color: #888;
-  -webkit-transition: none;
-}
-
-.button:active {
-  background: #888;
-  color: #FFF;
-  text-shadow: none;
-}
-
-
-.button {
-}
-
-.button:hover {
-  background-color: #555;
-}
-
 a.cancel {
   color: #888;
 }
-
-.add.button span.indicator {
-  display: inline-block;
-  width: 16px;
-  height: 16px;
-  margin-right: 0.4em;
-  margin-left: -0.4em;
-  vertical-align: middle;
-  position: relative;
-  top: -0.2em;
-  background: url(images/icons/add_light_grey.png);
-}
-
-a.add.button:hover {
-  background: #376e1b url(images/white-overlays.png) repeat-x 0 -128px;
-}
-
-.add.button:hover span.indicator {
-  background: url(images/icons/add.png);
-  text-shadow: #386522 0 -1px 0;
-
-}
-
-.add.button span.indicator {
-  background: url(images/icons/add_grey.png);
-}
-
 .icon {
   display: inline-block;
   height: 100%;

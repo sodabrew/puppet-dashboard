@@ -1,9 +1,8 @@
 #sidebar= render 'nodes_sidebar'
 #main
+  .header
+    %h2= h resource.name
   #item
-    .header
-      %h2= h resource.name
-
     - unless resource.description.blank?
       .description= simple_format h(resource.description)
 

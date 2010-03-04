@@ -2,6 +2,49 @@ form {
   background: #FFF;
 }
 
+form .element {
+  width: 512px;
+  margin: 0 0 .5em;
+}
+
+form .element.actions {
+  background: #DDD;
+  width: 100%;
+  padding: .2em 0;
+}
+
+label {
+  display: block;
+  font-weight: bold;
+}
+
+form input.inline, form label.inline {
+  display: inline;
+}
+
+form .errorExplanation {
+  margin-bottom: 1.5em;
+}
+
+form .header input {
+  width: 99.5%;
+  font-size: 18px;
+  padding: .25em .25%;
+  border: 1px solid #EEE;
+
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
+}
+
+form .header label {
+  display: none;
+}
+
+form textarea {
+  width: 99%;
+}
+
 form.search {
   float: right;
   background: transparent;
@@ -9,57 +52,12 @@ form.search {
   padding: 0;
 }
 
+
 form.search input {
   color: #444;
   margin: 0;
   padding: .35em;
   width: 20em;
-}
-
-form .header label {
-  display: none;
-}
-
-form .header input {
-  padding: 6px;
-  -webkit-border-radius: 3px;
-  -moz-border-radius: 3px;
-  border: 1px solid #aaa;
-}
-
-.secondary-content form .header input {
-  width: 532px;
-}
-
-form .table-tools {
-  margin-bottom: 1em;
-}
-
-form .table-tools.head {
-  margin-bottom: 0;
-}
-
-form table.inspector tbody tr:hover td,
-table.inspector tr:hover td div.popup-actions {
-  background-color: lightgoldenrodyellow !important;
-  visibility: visible;
-}
-
-form table.inspector td {
-  padding-right: 15px;
-}
-
-form table.inspector td input {
-  width: 100%;
-}
-
-form .textarea {
-  padding-right: 6px;
-}
-
-form textarea {
-  width: 100%;
-  margin-bottom: 10px;
 }
 
 .element {
@@ -103,42 +101,4 @@ form#new_user .buttons{
   margin-top: 2em;
 }
 
-form#new_user_session .button,
-form#new_user .button{
-  background: #777 url(images/white-overlays.png) top repeat-x;
-  background-position: 0 -128px;
-  text-shadow: 0 -1px 0 #666;
-  -webkit-box-shadow: 1px 1px 0 #bbb;
-  color: white;
-  font-size: 1em;
-  top: -0.25em;
-  position: relative;
-  -webkit-transition: none;
-}
-
-form#new_user_session .button:hover,
-form#new_user .button:hover{
-  background-color: #555;
-}
-
-form#new_user_session .button:active,
-form#new_user .button:active {
-  background: #999;
-  color: #555;
-  text-shadow: none;
-}
-
 /* @end */
-
-label {
-  display: block;
-}
-
-form input.inline, form label.inline {
-  display: inline
-}
-
-form .errorExplanation {
-  margin-bottom: 1.5em;
-}
-

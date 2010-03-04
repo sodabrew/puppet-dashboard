@@ -31,7 +31,7 @@ table.flot-data { display: none; }
 div.flot-graph { margin-bottom: 10px; width: 100%;}
 .tickLabel { font-size: .85em; line-height: 1.2 }
 
-button {
+button, a.button {
   background: #DDD -webkit-gradient(linear, 0% 0%, 0% 100%, from(#EEE), to(#CCC));
   border: 1px solid #DDD;
   border-color: #FFF #AAA #AAA #FFF;
@@ -39,7 +39,6 @@ button {
   color: #666;
   cursor: pointer;
   font-size: 12px;
-  height: 2em;
   line-height: 2em;
   margin:0;
   padding: 0 .5em;
@@ -49,13 +48,23 @@ button {
   border-radius: 2px;
 }
 
-button:hover {
+a.button {
+  display: inline-block;
+  font-size: 12px;
+}
+
+button:hover, a.button:hover {
+  color: #666;
   text-decoration: none;
   background: #E8E8E8 -webkit-gradient(linear, 0% 0%, 0% 100%, from(#F8F8F8), to(#D8D8D8));
 }
 
-button:active {
+button:active, a.button:hover {
   background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#CCC), to(#EEE));
+}
+
+.actions {
+  font-size: 12px;
 }
 
 /* SIDEBAR */
@@ -150,7 +159,8 @@ button:active {
   position: relative;
 }
 
-.actionbar ul li:first-child button {
+.actionbar ul li:first-child button,
+.actionbar ul li:first-child a.button {
   -webkit-border-top-right-radius: 0px;
   -webkit-border-bottom-right-radius: 0px;
   -moz-border-radius-topright: 0px;
@@ -159,7 +169,8 @@ button:active {
   border-bottom-right-radius: 0px;
 }
 
-.actionbar ul li:last-child button {
+.actionbar ul li:last-child button,
+.actionbar ul li:last-child a.button {
   -webkit-border-top-left-radius: 0px
   -webkit-border-bottom-left-radius: 0px;
   -moz-border-radius-topleft: 0px;
@@ -168,7 +179,8 @@ button:active {
   border-bottom-left-radius: 0px;
 }
 
-.actionbar ul li:only-child button {
+.actionbar ul li:only-child button,
+.actionbar ul li:only-child a.button {
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
   border-radius: 2px;
@@ -227,3 +239,23 @@ button:active {
   -moz-border-radius: 2px;
   border-radius: 2px;
 }
+
+.clear {
+  clear:both;
+}
+
+.header {
+  background: #DDD;
+  padding: 0;
+  margin: 0;
+}
+
+.header h2 {
+  margin-bottom: 0;
+  padding: 0 14px;
+}
+
+#item {
+  padding: 1em;
+}
+

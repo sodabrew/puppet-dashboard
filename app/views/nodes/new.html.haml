@@ -1,9 +1,9 @@
-- content_for :primary_content do
-  = render 'collection'
-
-- form_for [parent, @node] do |f|
-  = render f
-  %button= Save Changes
-  or
-  = link_to 'Cancel', @node, :class => 'alt_action'
+#sidebar= render 'nodes_sidebar'
+#main
+  - form_for @node do |f|
+    = render f
+    .element.actions
+      %button Save Changes
+      or
+      = link_to 'Cancel', @node
 

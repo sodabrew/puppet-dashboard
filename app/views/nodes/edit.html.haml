@@ -1,7 +1,8 @@
-- content_for :primary_content do
-  = render 'collection'
-
-- form_for @node do |f|
-  = render f
-  = f.submit
-  = link_to 'Cancel', @node
+#sidebar= render 'nodes_sidebar'
+#main
+  - form_for @node do |f|
+    = render f
+    .element.actions
+      %button Save Changes
+      or
+      = link_to 'Cancel', @node

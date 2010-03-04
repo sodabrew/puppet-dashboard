@@ -69,3 +69,47 @@ table tbody td.status.failure {
 table.main thead th.hostname {
   width: 5em;
 }
+
+table.inspector {
+  width: 512px;
+  border-collapse: collapse;
+  background: #FFF;
+  margin-bottom: 1em;
+}
+
+table.inspector thead th {
+  background: #EEE -webkit-gradient(linear, 0% 0%, 0% 100%, from(#F8F8F8), to(#E8E8E8));
+  border: 1px solid #DDD;
+  padding: 0 .5em;
+  color: #888;
+}
+
+table.inspector tfoot td {
+  border: 1px solid #DDD;
+  background: #DDD;
+}
+
+
+table.inspector tbody td {
+  border: 1px solid #DDD;
+  padding: .2em .5em;
+}
+
+table.inspector tbody tr:nth-child(even) td {
+  background: #E8EEF0;
+}
+
+form table.inspector input {
+  padding: 5px 1%;
+  width: 97%;
+  margin: 0;
+}
+
+table.inspector caption {
+  font-size: 1.25em;
+  font-weight: bold;
+}
+
+form table.inspector caption {
+  font-size: 1em;
+}

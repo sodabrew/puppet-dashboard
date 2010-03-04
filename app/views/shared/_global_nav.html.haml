@@ -1,4 +1,3 @@
 %ul#global-navigation.navigation
   %li{:class => active_if(request.url == root_url)}= link_to "Puppet Dashboard", root_path
   %li{:class => active_if(controller_name == 'nodes')}= link_to "Nodes", nodes_path
-  %li= link_to "Certificates", root_path
