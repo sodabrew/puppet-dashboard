@@ -248,6 +248,7 @@ button:active, a.button:hover {
   background: #DDD;
   padding: 0;
   margin: 0;
+  position: relative;
 }
 
 .header h2 {
@@ -259,3 +260,6 @@ button:active, a.button:hover {
   padding: 1em;
 }
 
+.section {
+  margin-bottom: 1em;
+}

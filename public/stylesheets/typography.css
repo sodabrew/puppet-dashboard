@@ -13,6 +13,7 @@ h1, h2, h3, h4, h5, h6,
 h1, h2, h3, h4, h5, h6 {
   color: #333;
   font-weight: bold;
+  margin-bottom: .5em;
 }
 
 h1 {
@@ -30,6 +31,10 @@ h2 {
 h3 {
   font-size: 1.25em;
   line-height: 1em;
+}
+
+#sidebar h3 {
+  margin: 0;
 }
 
 h4 {

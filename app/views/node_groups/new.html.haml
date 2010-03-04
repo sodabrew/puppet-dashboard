@@ -1,7 +1,8 @@
-- content_for :primary_content do
-  = render 'collection'
-
-- form_for(@node_group) do |f|
-  = render f
-  %button{:type => "submit", :class => "button"} Create
-  = link_to 'Cancel', node_groups_path, :class => "cancel"
+#sidebar= render 'sidebar'
+#main
+  - form_for(@node_group) do |f|
+    = render f
+    .element.actions
+      %button Create
+      or
+      = link_to 'Cancel', node_groups_path

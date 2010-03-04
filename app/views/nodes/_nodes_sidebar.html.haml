@@ -14,13 +14,13 @@
   %h3 By Class
   %ul
     - NodeClass.all(:include => :nodes).each do |node_class|
-      %li{:class => active_if(@node_class && @node_class == node_class)}
+      %li{:class => active_if(controller_name == "nodes" && @node_class && @node_class == node_class)}
         = link_to node_class.name, node_class_nodes_path(node_class)
         %span.count= node_class.nodes.count
 .group
   %h3 By Group
   %ul
     - NodeGroup.all(:include => :nodes).each do |node_group|
-      %li{:class => active_if(@node_group && @node_group == node_group)}
+      %li{:class => active_if(controller_name == "nodes" && @node_group && @node_group == node_group)}
         = link_to node_group.name, node_group_nodes_path(node_group)
         %span.count= node_group.nodes.count

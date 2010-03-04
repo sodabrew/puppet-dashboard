@@ -1,9 +1,8 @@
-- content_for :primary_content do
-  = render :partial => 'collection'
-
-- form_for @node_group, :html => {:class => 'inspect'} do |f|
-  = f.error_messages
-  = render f
-
-  %button{:type => "submit", :class => "button"} Update
-  = link_to 'Cancel', f.object, :rel => 'inspect', :class => "cancel"
+#sidebar= render 'sidebar'
+#main
+  - form_for(@node_group) do |f|
+    = render f
+    .element.actions
+      %button Update
+      or
+      = link_to 'Cancel', @node_group

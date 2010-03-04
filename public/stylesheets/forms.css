@@ -7,6 +7,10 @@ form .element {
   margin: 0 0 .5em;
 }
 
+form .element.header {
+  width: 100%;
+}
+
 form .element.actions {
   background: #DDD;
   width: 100%;

@@ -2,41 +2,37 @@
   = form.label :name
   = form.text_field :name
 
-= form.error_messages
+#item
+  = form.error_messages
 
-%table#parameters.inspector
-  %caption
-    Parameters
-    = link_to_function("<span class='indicator'></span>Add", :class => "add button") { |page|  page.insert_html :bottom, 'parameters', :partial => 'parameters/parameter_input', :object => form.object.parameters.build }
-  %thead
-    %tr
-      %th.key Key
-      %th.value Value
-  %tbody
-    - if form.object.parameters.blank?
-      = render :partial => 'parameters/parameter_input', :object => form.object.parameters.build
-    - else
-      = render :partial => 'parameters/parameter_input', :collection => form.object.parameters
-
-#node-classes
-  %table.inspector
-    %caption Node Classes
-    %thead
-      %tr
-        %th.key Name
-        %th.value{:colspan => 2} Description
-    %tbody
+  .element
+    %table#parameters.inspector
+      %caption
+        Parameters
+      %thead
+        %tr
+          %th.key Key
+          %th.value Value
+      %tbody
+        - if form.object.parameters.blank?
+          = render :partial => 'parameters/parameter_input', :object => form.object.parameters.build
+        - else
+          = render :partial => 'parameters/parameter_input', :collection => form.object.parameters
+      %tfoot
+        %tr
+          %td{:colspan => 2}
+            = link_to_function("Add Parameter", :class => "add button") { |page|  page.insert_html :bottom, 'parameters', :partial => 'parameters/parameter_input', :object => form.object.parameters.build }
+  .element.node_classes
+    = label_tag 'Node Classes'
+    = text_field_tag 'node_group[node_class_names][]', '', :id => 'node_class_names'
+    %ul#existing_node_classes
       - form.object.node_classes.each do |klass|
-        %tr[klass]
-          %td.key= link_to klass.name, klass
-          %td
-            = klass.description
-            = hidden_field_tag 'node_group[node_classes][]', klass.id
-          %td.actions
-            %a.icon.delete{:href => '#'}
-              %span (delete)
-    %tfoot#available-node-classes
-      %tr
-        %td{:colspan => 3}
-          - form_tag do
-            = text_field_tag :search, '', :class => 'node-class-search node_group', :autocomplete => 'off', :type => "search"
+        %li= klass.name
+
+  .element.node_groups
+    = label_tag 'Node Groups'
+    = text_field_tag 'node_group[node_group_names][]', '', :id => 'node_group_names'
+    %ul#existing_node_groups
+      - form.object.node_groups.each do |group|
+        %li= group.name
+

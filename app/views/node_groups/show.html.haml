@@ -1,25 +1,38 @@
-- content_for :primary_content do
-  = render 'collection'
+#sidebar= render 'sidebar'
+#main
+  .header
+    %h2= @node_group.name
+    %ul.actions
+      %li= link_to 'Edit', edit_node_group_path(@node_group), :class => "edit button", :rel => 'inspect'
+      %li= link_to 'Destroy', @node_group, :confirm => 'Are you sure?', :method => :delete, :class => "delete button"
 
-.header
-  %h2= @node_group.name
-  %ul.actions
-    %li= link_to 'Edit', edit_node_group_path(@node_group), :class => "edit button", :rel => 'inspect'
-    %li= link_to 'Destroy', @node_group, :confirm => 'Are you sure?', :method => :delete, :class => "delete button"
+  #item
+    %h3 Parameters
+    .section
+      - unless @node_group.parameters.blank?
+        = inspector_table @node_group.parameters.to_hash
+      - else
+        No Parameters
+
+    %h3 Classes
+    .section
+      - unless @node_group.node_classes.blank?
+        = inspector_table @node_group.node_classes, :name, :description, :link => true
+      - else
+        No Classes
+
+    %h3 Inherited Groups
+    .section
+      - unless @node_group.node_groups.blank?
+        = inspector_table @node_group.node_groups, :name, :description, :link => true
+      - else
+        No Groups
 
 
-- unless @node_group.parameters.blank?
-  = inspector_table @node_group.parameters.to_hash, :caption => "Parameters"
-
-- unless @node_group.node_classes.blank?
-  = inspector_table @node_group.node_classes, :name, :description, :link => true, :caption => "Classes"
-
-.section
-  - unless @node_group.nodes.blank?
-    - caption = capture_haml do
-      Nodes
-      = link_to '<span class="indicator"></span>Add Node', new_node_group_node_path(@node_group), :class => "add button"
-
-  = inspector_table @node_group.nodes, :name, :description, :link => true, :caption => caption
-
+    %h3 Nodes
+    .section
+      - unless @node_group.nodes.empty?
+        = render 'nodes/nodes', :nodes => @node_group.nodes
+      - else
+        No Nodes
 
