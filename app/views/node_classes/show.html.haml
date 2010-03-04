@@ -1,8 +1,16 @@
-- content_for :primary_content do
-  = render :partial => 'collection'
+#sidebar= render 'nodes/nodes_sidebar'
+#main
+  .header
+    %h2= @node_class.name
+    %ul.actions
+      %li= link_to 'Edit', edit_node_class_path(@node_class), :class => "edit button", :rel => 'inspect'
+      %li= link_to 'Destroy', @node_class, :confirm => 'Are you sure?', :method => :delete, :class => "delete button"
 
-.header
-  %h2= @node_class.name
-  %ul.actions
-    %li= link_to 'Edit', edit_node_class_path(@node_class), :class => "edit button", :rel => 'inspect'
-    %li= link_to 'Destroy', @node_class, :confirm => 'Are you sure?', :method => :delete, :class => "delete button"
+  #item
+    %h3 Nodes
+    .section
+      - unless @node_class.nodes.empty?
+        = render 'nodes/nodes', :nodes => @node_class.nodes
+      - else
+        No Nodes
+
