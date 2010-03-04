@@ -15,7 +15,7 @@ class Node < ActiveRecord::Base
 
   has_many :reports
   has_one :last_report, :class_name => 'Report', :order => 'time DESC'
-  named_scope :by_report_date, :order => 'reported_at DESC'
+  named_scope :by_report_date, :order => 'reported_at DESC', :conditions => 'reported_at IS NOT NULL'
 
   has_parameters
 

@@ -9,6 +9,8 @@
 #content #sidebar { width: 20%; float: left; }
 
 #content #main { width: 80%; float: left; }
+#content #main.full { width: 100%; }
+
 #content #main #list {
   max-height: 300px;
   overflow: auto;
