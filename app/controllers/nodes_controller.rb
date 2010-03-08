@@ -22,6 +22,6 @@ class NodesController < InheritedResources::Base
   end
 
   def collection
-    get_collection_ivar || set_collection_ivar(end_of_association_chain.by_report_date.paginate(:page => params[:page]))
+    get_collection_ivar || set_collection_ivar(end_of_association_chain.search(params[:q]).by_report_date.paginate(:page => params[:page]))
   end
 end

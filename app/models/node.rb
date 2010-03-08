@@ -15,7 +15,16 @@ class Node < ActiveRecord::Base
 
   has_many :reports
   has_one :last_report, :class_name => 'Report', :order => 'time DESC'
+
   named_scope :by_report_date, :order => 'reported_at DESC'
+
+  named_scope :search, lambda{|q| q.blank? ? {} : {:conditions => ['name LIKE ?', "%#{q}%"]} }
+
+  # ordering scopes for has_scope
+  named_scope :by_latest_report, proc { |order| 
+    direction = {1 => 'ASC', 0 => 'DESC'}[order]
+    direction ? {:order => "reported_at #{direction}"} : {}
+  }
 
   has_parameters
 
