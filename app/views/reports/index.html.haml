@@ -1,29 +1,32 @@
-%table.inspector.report
-  %caption
-    Reports
-    %span.count== (#{@reports.total_entries})
-  %thead
-    %tr
-      %th Reported at
-      %th Host
-      %th Total
-      %th Failed
-      %th Failed restarts
-      %th Skipped
-      %th Config retrieval
-      %th Runtime
-  %tbody
-    - @reports.each do |report|
-      %tr
-        %td
-          %span.status{:class => report.status}= link_to report.time.to_s(:short), report
-        %td= link_to_if report.node, report.host, report.node
-        %td= report.metrics[:resources][:total]
-        %td= report.metrics[:resources][:failed]
-        %td= report.metrics[:resources][:failed_restarts]
-        %td= report.metrics[:resources][:skipped]
-        %td= "%0.2f" % report.metrics[:time][:config_retrieval]
-        %td= "%0.2f" % report.metrics[:time][:total]
-  %tfoot
-    %tr.actions
-      %td{:colspan => 8}= will_paginate(@reports)
+#main.full
+  .header
+    %h2
+      Reports
+      %span.count== (#{@reports.total_entries})
+  #item
+    %table.inspector.report
+      %thead
+        %tr
+          %th Reported at &darr;
+          %th Host
+          %th Total
+          %th Failed
+          %th Failed restarts
+          %th Skipped
+          %th Config retrieval
+          %th Runtime
+      %tbody
+        - @reports.each do |report|
+          %tr
+            %td
+              %span.status{:class => report.status}= link_to report.time.to_s(:short), report
+            %td= link_to_if report.node, report.host, report.node
+            %td= report.metrics[:resources][:total]
+            %td= report.metrics[:resources][:failed]
+            %td= report.metrics[:resources][:failed_restarts]
+            %td= report.metrics[:resources][:skipped]
+            %td= "%0.2f" % report.metrics[:time][:config_retrieval]
+            %td= "%0.2f" % report.metrics[:time][:total]
+      %tfoot
+        %tr.actions
+          %td{:colspan => 8}= will_paginate(@reports)

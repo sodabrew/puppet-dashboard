@@ -1,19 +1,20 @@
-.report.grouping
+.header
   %h2
     %span.status{:class => report.status}
       = report.time.to_s(:long)
     - if report.node
       %span.alt for
       = link_to report.node.name, report.node
-
+#item
   .section
     %h3 Metrics
     - report.metrics.each do |name, metric|
-      %table.inspector
-        %caption= name.titleize
-        = render metric
+      .section.half
+        %h4= name.titleize
+        %table.inspector
+          = render metric
 
-  .section
+  .section.clear
     %h3 Log
     %table.inspector
       %thead
