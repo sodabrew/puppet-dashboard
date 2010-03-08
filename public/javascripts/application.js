@@ -69,7 +69,7 @@ $(document).ready(function() {
        xaxis:  {mode: "time",
                 timeformat: "%m/%d/%y<br />%h:%M%p"},
        yaxis:  {tickFormatter: function(val, axis){
-        return val.toString() + 's'
+        return val.toString().slice(0,5) + 's'
       }}});
 
   $('table.flot-data.percent').graphTable(
