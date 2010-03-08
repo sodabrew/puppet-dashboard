@@ -20,14 +20,14 @@
         = error.message
         
 
-    .section
+    .section.half
       %h3 Groups
       - unless resource.node_groups.empty?
         = inspector_table resource.node_groups, :link => true
       - else
         No Groups
 
-    .section
+    .section.half
       %h3 Classes
       - unless resource.node_classes.empty?
         = inspector_table resource.node_classes, :link => true
@@ -42,11 +42,11 @@
     .clear
 
     - unless reports.empty?
-      .section.half
+      .section
         %h3 Run Success
         = render :partial => 'statuses/run_failure', :locals => { :statuses => Status.by_interval(:limit => 30, :node => @node) }
 
-      .section.half
+      .section
         %h3 Run Time
         = render 'statuses/run_time', :reports => reports
 
