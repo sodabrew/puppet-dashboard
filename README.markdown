@@ -8,7 +8,8 @@ The Puppet Dashboard is a Puppet web interface that provides node management and
 
 * ruby (built with iconv support) >= 1.8.1
 * rake >= 0.8.4
-* mysql
+* MySQL
+* ruby mysql bindings (`gem install mysql` for ruby >= 1.8.6 or use your package manager's mysql-ruby package)
 
 ## Installation
 
@@ -18,9 +19,11 @@ The Puppet Dashboard is a Puppet web interface that provides node management and
 
 3. **Start the server:** `script/server`
 
+4. **Import Reports (optional):** `rake reports:import`
+
 This will start a local Puppet Dashboard server on port 3000. As a Rails application, Puppet Dashboard can be deployed in any server configuration that Rails supports. Instructions for deployment via Phusion Passenger coming soon.
 
-Note: Puppet Dashboard is configured to use a MySQL database by default. Consult the Rails Guides section on [Configuring A Database](http://guides.rubyonrails.org/getting_started.html#configuring-a-database) for information on how to set up a different database.
+Note: Puppet Dashboard is currently MySQL only. Other databases coming soon.
 
 ## Reporting
 
