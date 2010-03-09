@@ -49,4 +49,7 @@ Puppet Dashboard functions as an external node tool. All nodes make a puppet-com
 
 ## Contributors
 
-* Rein Henrichs - rein@reductivelabs.com
+Rein Henrichs <rein@reductivelabs.com>
+Rick Bradley <rick@rickbradley.com>
+Andrew Maier <dev+andrewmaier@hashrocket.com>
+Scott Smith <scott@ohlol.net>
