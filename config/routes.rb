@@ -7,7 +7,7 @@ ActionController::Routing::Routes.draw do |map|
     groups.resources :nodes, :requirements => {:id => /.*/}
   end
 
-  map.resources :nodes, :member => {:performance => :get}, :collection => {:successful => :get, :failed => :get}, :has_many => :reports, :requirements => {:id => /.*/}
+  map.resources :nodes, :member => {:reports => :get}, :collection => {:successful => :get, :failed => :get}, :requirements => {:id => /[^\/]+/}
 
   map.resource :user_session
   map.resource :account, :controller => "users"

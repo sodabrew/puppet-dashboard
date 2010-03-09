@@ -69,6 +69,11 @@
                 %td= report.metrics["resources"][:total]
                 %td= report.metrics["resources"][:failed]
                 %td= "%0.2f" % report.metrics["time"][:total]
+          %tfoot
+            %tr
+              %td{:colspan => @node ? 8 : 7}
+                .actionbar
+                  = link_to "View More &raquo;", reports_node_path(@node), :class => 'button'
 
     .section.half
       %h3 Activity
