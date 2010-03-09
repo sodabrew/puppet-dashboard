@@ -84,6 +84,10 @@ table.inspector thead th {
   color: #888;
 }
 
+table.inspector td.key {
+  width: 20%;
+}
+
 table.inspector tfoot td {
   border: 1px solid #DDD;
   background: #DDD;
