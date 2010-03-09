@@ -5,6 +5,14 @@ class NodesController < InheritedResources::Base
 
   layout lambda {|c| c.request.xhr? ? false : 'application' }
 
+  layout lambda {|c| c.request.xhr? ? false : 'application' }
+  def index
+    index! do |format|
+      # Do not paginate yaml
+      format.yaml { render :text => Node.all.to_yaml, :content_type => 'application/x-yaml' }
+    end
+  end
+
   def successful
     @nodes = Node.successful.paginate(:page => params[:page])
     render :index
