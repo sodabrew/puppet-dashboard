@@ -5,7 +5,6 @@ class NodesController < InheritedResources::Base
 
   layout lambda {|c| c.request.xhr? ? false : 'application' }
 
-  layout lambda {|c| c.request.xhr? ? false : 'application' }
   def index
     index! do |format|
       # Do not paginate yaml
