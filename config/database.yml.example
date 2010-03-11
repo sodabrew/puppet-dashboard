@@ -1,7 +1,8 @@
 development:
   adapter: mysql
   database: dashboard_development
-  user: root
+  username: root
+  encoding: utf8
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
@@ -9,9 +10,11 @@ development:
 test:
   adapter: mysql
   database: dashboard_test
-  user: root
+  username: root
+  encoding: utf8
 
 production:
   adapter: mysql
   database: dashboard_production
-  user: root
+  username: root
+  encoding: utf8
