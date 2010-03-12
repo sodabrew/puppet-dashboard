@@ -66,10 +66,6 @@ table tbody td.status.failure {
   color: red;
 }
 
-table.main thead th.hostname {
-  width: 5em;
-}
-
 table.inspector {
   width: 100%;
   border-collapse: collapse;
