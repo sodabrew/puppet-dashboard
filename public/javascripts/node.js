@@ -36,13 +36,13 @@ jQuery(function($) {
 
   $('input.node-group-search')
     .autocomplete({
-      ajax: '/node_groups/search.json',
+      ajax: relative_url_root+'/node_groups/search.json',
       match: function(typed) { return true; },
       insertText: function(node_group) { return node_group.node_group.name; }
     })
     .bind('activate.autocomplete', function(e, node_group) {
       var item = node_group.node_group;
-      var tr = "<tr class='node_group'><td class='key'><a href='/node_groups/"+item.id+"'>"+item.name+"</a></td><td>"+item.description+"<input type='hidden' name='node[node_groups[]' value='"+item.id+"'/></td><td class='actions'><a class='icon delete' href='#'><span>(add)</span></a></td></tr>";
+      var tr = "<tr class='node_group'><td class='key'><a href='"+relative_url_root+"/node_groups/"+item.id+"'>"+item.name+"</a></td><td>"+item.description+"<input type='hidden' name='node[node_groups[]' value='"+item.id+"'/></td><td class='actions'><a class='icon delete' href='#'><span>(add)</span></a></td></tr>";
       $(e.target)
         .attr('value', '')
         .parents('table').find('tbody').append(tr);
@@ -50,13 +50,13 @@ jQuery(function($) {
   
   $.fn.node_class_search = function(object_name) {
     return this.autocomplete({
-      ajax: '/node_classes/search.json',
+      ajax: relative_url_root+'/node_classes/search.json',
       match: function(typed) { return true; },
       insertText: function(node_class) { return node_class.node_class.name; }
     })
     .bind('activate.autocomplete', function(e, node_class) {
       var item = node_class.node_class
-      var tr = "<tr class='node_class'><td class='key'><a href='/node_classes/"+item.id+"'>"+item.name+"</a></td><td>"+item.description+"<input type='hidden' name='"+object_name+"[node_classes[]' value='"+item.id+"'/></td><td class='actions'><a class='icon delete' href='#'><span>(add)</span></a></td></tr>";
+      var tr = "<tr class='node_class'><td class='key'><a href='"+relative_url_root+"/node_classes/"+item.id+"'>"+item.name+"</a></td><td>"+item.description+"<input type='hidden' name='"+object_name+"[node_classes[]' value='"+item.id+"'/></td><td class='actions'><a class='icon delete' href='#'><span>(add)</span></a></td></tr>";
 
       $(e.target)
         .attr('value', '')

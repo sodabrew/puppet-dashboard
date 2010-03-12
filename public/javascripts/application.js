@@ -85,8 +85,8 @@ $(document).ready(function() {
         return val.toString() + '%'
       }}});
 
-  $('#node_group_names').facebooklist('#existing_node_groups', {url:'/node_groups.json',cache:0}, 10, {userfilter:1,casesensetive:0}, 0);
-  $('#node_class_names').facebooklist('#existing_node_classes', {url:'/node_classes.json',cache:0}, 10, {userfilter:1,casesensetive:0}, 0);
+  $('#node_group_names').facebooklist('#existing_node_groups', {url:relative_url_root+'/node_groups.json',cache:0}, 10, {userfilter:1,casesensetive:0}, 0);
+  $('#node_class_names').facebooklist('#existing_node_classes', {url:relative_url_root+'/node_classes.json',cache:0}, 10, {userfilter:1,casesensetive:0}, 0);
   
   $('a.in-place').click(function() {
     $(this).parents('.header').hide().next('.in-place').show().find('input[type=text]').focus();
