@@ -7,7 +7,7 @@ The Puppet Dashboard is a Puppet web interface that provides node management and
 ## Dependencies
 
 * ruby (built with iconv support) >= 1.8.1
-* rake >= 0.8.4
+* rake >= 0.8.3
 * MySQL
 * ruby mysql bindings (`gem install mysql` for ruby >= 1.8.6 or use your package manager's mysql-ruby package)
 
