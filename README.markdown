@@ -21,6 +21,8 @@ The Puppet Dashboard is a Puppet web interface that provides node management and
 
 4. **Import Reports (optional):** `rake reports:import`
 
+**RedHat and CentOS users:** see [Install puppet-dashboard on RedHat/CentOS 5 : Mike Zupan&#039;s Random Blog](http://zcentric.com/2010/03/11/install-puppet-dashboard-on-redhatcentos-5/)
+
 This will start a local Puppet Dashboard server on port 3000. As a Rails application, Puppet Dashboard can be deployed in any server configuration that Rails supports. Instructions for deployment via Phusion Passenger coming soon.
 
 Note: Puppet Dashboard is currently MySQL only. Other databases coming soon.
