@@ -1,3 +1,27 @@
+v1.0.0rc1
+=========
+ad6704b  [Bug #3322] Use local times, not UTC times
+e20bd0b  [Bug #3358] Do not specify hostname column width in tables
+c428643  Fix example conf for external_node script
+da48338  No longer blowing away groups and classes when updating node
+0667504  Ignoring semver file
+de657e1  Adding Ian Comfort as a contributor
+2fa2e95  Relax rake requirement to >= 0.8.3
+ae755db  Add link to Mike Zupan's install guide
+6b34e97  Fix database.yml example
+7307b5f  Updating contributors
+0705119  Remove extra layout line in nodes controller
+9ab62c6  [Bug ##3302] pagination breaks external node
+7c06dc0  Fix node reports index routing and re-add View More
+7c63eb2  Updating key/value table CSS
+420d8b9  Reorganize report show view
+81e378b  Reorganize node show view
+8770033  Reports use new UI
+28bf686  Fix number formatting in flot graphs
+7f4c8ec  Update README
+60f670d  Basic node search (by hostname only)
+         ... and 48 more.
+
 0.2.1
 =====
 773bc5f  Fix nasty routing bug for hosts that contain a '.'
