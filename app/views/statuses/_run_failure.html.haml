@@ -4,7 +4,7 @@
     %tr
       %th
       - statuses.each do |status|
-        %th= status.start.utc.to_i * 1000
+        %th= status.start.to_i * 1000
   %tbody
     %tr
       %th Fail Percentage

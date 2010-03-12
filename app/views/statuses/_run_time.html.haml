@@ -2,7 +2,7 @@
   %thead
     %tr
       %th
-      - reports.map{|r| r.time.utc}.each do |time|
+      - reports.map{|r| r.time}.each do |time|
         %th= time.to_i * 1000
   %tbody
     %tr

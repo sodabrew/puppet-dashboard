@@ -65,7 +65,7 @@
             - reports.each do |report|
               %tr
                 %td
-                  %span.status{:class => report.status}= link_to report.time.utc.to_s(:default), report
+                  %span.status{:class => report.status}= link_to report.time.to_s(:default), report
                 %td= report.metrics["resources"][:total]
                 %td= report.metrics["resources"][:failed]
                 %td= "%0.2f" % report.metrics["time"][:total]
