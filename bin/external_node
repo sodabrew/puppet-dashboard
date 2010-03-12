@@ -6,7 +6,7 @@
 #
 #  [main]
 #  external_nodes = /path/to/external_node
-#  node_terminus -ryaml -rnet-http -ruri = exec
+#  node_terminus = exec
 
 require 'yaml'
 require 'uri'
