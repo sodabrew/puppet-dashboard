@@ -5,7 +5,7 @@ body {
 }
 
 a#logo {
-  background: transparent url('/images/dashboard_logo.png') no-repeat top center;
+  background: transparent url('../images/dashboard_logo.png') no-repeat top center;
   text-indent: -9000px;
   display: block;
   height: 23px;

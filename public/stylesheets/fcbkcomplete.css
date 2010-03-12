@@ -20,7 +20,7 @@ form ul.holder { width: 500px; }
 ul.holder li.bit-hover { background: #BBCEF1; border: 1px solid #6D95E0; }
 ul.holder li.bit-box-focus { border-color: #598BEC; background: #598BEC; color: #fff; }
 ul.holder li.bit-box { padding-right: 13px; position: relative;}
-ul.holder li.bit-box a.closebutton { position: absolute; right: 4px; top: 5px; display: block; width: 7px; height: 7px; font-size: 1px; background: url('/images/close.gif'); z-index: 7; }
+ul.holder li.bit-box a.closebutton { position: absolute; right: 4px; top: 5px; display: block; width: 7px; height: 7px; font-size: 1px; background: url('../images/close.gif'); z-index: 7; }
 ul.holder li.bit-box a.closebutton:hover { background-position: 7px; }
 ul.holder li.bit-box-focus a.closebutton, ul.holder li.bit-box-focus a.closebutton:hover { background-position: bottom; }
 
