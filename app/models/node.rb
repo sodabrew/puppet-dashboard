@@ -34,7 +34,7 @@ class Node < ActiveRecord::Base
 
   # RH:TODO: Denormalize last report status into nodes table.
   named_scope :successful, :select => 'DISTINCT `nodes`.name, `nodes`.*', :joins => 'INNER JOIN reports on reports.time = reported_at', :conditions => 'reports.success = 1'
-  named_scope :failed, :select => 'DISTINCT `nodes`.name, `nodes`.*', :joins => 'LEFT OUTER JOIN reports on reports.time = reported_at', :conditions => 'reports.success = 0 OR reported_at IS NULL'
+  named_scope :failed, :select => 'DISTINCT `nodes`.name, `nodes`.*', :joins => 'LEFT OUTER JOIN reports on reports.time = reported_at', :conditions => 'reports.success IS NULL OR reported_at IS NULL'
 
   def to_param
     name.to_s
