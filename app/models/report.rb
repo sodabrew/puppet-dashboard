@@ -20,12 +20,24 @@ class Report < ActiveRecord::Base
   end
 
   def status
-    succeeded? ? 'success' : 'failed'
+    succeeded? ? 'success' : 'failure'
   end
 
   def metrics
     return unless report && report.metrics
     @metrics ||= report.metrics.with_indifferent_access
+  end
+
+  def total_time
+    metrics && metrics[:time] && "%0.2f" % metrics[:time][:total]
+  end
+
+  def total_resources
+    metrics && metrics[:resources] && metrics[:resources][:total]
+  end
+
+  def failed_resources
+    metrics && metrics[:resources] && metrics[:resources][:failed]
   end
 
   private
