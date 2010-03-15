@@ -7,5 +7,5 @@
   %tbody
     %tr
       %th Runtime
-      - reports.map{|r| r.metrics[:time][:total]}.each do |time|
+      - reports.map{|r| r.total_time}.compact.each do |time|
         %td= "%0.3f" % time

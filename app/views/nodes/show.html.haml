@@ -50,13 +50,15 @@
         %h3 Run Time
         = render 'statuses/run_time', :reports => reports
 
-      .section.half
+      .section
         %h3
           Recent Reports
           %span.count== (#{@node.reports.size})
         %table.inspector
           %thead
             %tr
+              %th.status
+                %span{:alt => "Status", :title => "Status"} &bull;
               %th Reported at
               %th Total
               %th Failed
@@ -64,18 +66,19 @@
           %tbody
             - reports.each do |report|
               %tr
-                %td
-                  %span.status{:class => report.status}= link_to report.time.to_s(:default), report
-                %td= report.metrics["resources"][:total]
-                %td= report.metrics["resources"][:failed]
-                %td= "%0.2f" % report.metrics["time"][:total]
+                %td.status{:class => report.status, :alt => report.status.titleize, :title => report.status.titleize}
+                  %span &bull;
+                %td= link_to report.time.to_s(:default), report
+                %td= report.total_resources
+                %td= report.failed_resources
+                %td= report.total_time
           %tfoot
             %tr
               %td{:colspan => @node ? 8 : 7}
                 .actionbar
                   = link_to "View More &raquo;", reports_node_path(@node), :class => 'button'
 
-    .section.half
+    .section
       %h3 Activity
       - unless resource.timeline_events.empty?
         %ol.timeline= render resource.timeline_events.recent(10)
