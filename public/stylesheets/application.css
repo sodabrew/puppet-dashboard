@@ -296,6 +296,24 @@ ul li .dropdown ul {
   margin-bottom: 1em;
 }
 
+.section.error {
+  background: #FDD;
+  border: 1px solid #FDD;
+  padding: 10px 10px 0;
+
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
+  color: #433;
+}
+
+.section.error h3 {
+  margin: -10px -10px .5em;
+  padding: .5em 10px .5em 26px;
+  background: #Fcc url(images/icons/failure.png) 8px center no-repeat;
+  color: #433;
+}
+
 .half {
   width: 45%;
   margin-right: 5%;
