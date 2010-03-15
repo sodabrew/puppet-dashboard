@@ -1,24 +1,26 @@
-table.main {
+table.main, table.inspector {
   border-collapse: collapse;
   width: 100%;
   background: #FFF;
-}
-
-table.main {
   border: 1px solid #DDD;
+  margin-bottom: 1em;
 }
 
-table.main thead th {
+table.main thead th,
+table.inspector thead th {
   background: #EEE -webkit-gradient(linear, 0% 0%, 0% 100%, from(#F8F8F8), to(#E8E8E8));
   border: 1px solid #DDD;
   padding: 0 .5em;
   color: #888;
 }
 
+table.inspector tbody td,
 table.main tbody td {
+  border: 1px solid #DDD;
   padding: .5em .5em .3em;
 }
 
+table.inspector tbody tr:nth-child(even) td,
 table.main tbody tr:nth-child(even) td {
   background: #E8EEF0;
 }
@@ -66,20 +68,6 @@ table tbody td.status.failure {
   color: red;
 }
 
-table.inspector {
-  width: 100%;
-  border-collapse: collapse;
-  background: #FFF;
-  margin-bottom: 1em;
-}
-
-table.inspector thead th {
-  background: #EEE -webkit-gradient(linear, 0% 0%, 0% 100%, from(#F8F8F8), to(#E8E8E8));
-  border: 1px solid #DDD;
-  padding: 0 .5em;
-  color: #888;
-}
-
 table.inspector td.key {
   width: 20%;
 }
@@ -89,27 +77,8 @@ table.inspector tfoot td {
   background: #DDD;
 }
 
-
-table.inspector tbody td {
-  border: 1px solid #DDD;
-  padding: .2em .5em;
-}
-
-table.inspector tbody tr:nth-child(even) td {
-  background: #E8EEF0;
-}
-
 form table.inspector input {
   padding: 5px 1%;
   width: 97%;
   margin: 0;
-}
-
-table.inspector caption {
-  font-size: 1.25em;
-  font-weight: bold;
-}
-
-form table.inspector caption {
-  font-size: 1em;
 }
