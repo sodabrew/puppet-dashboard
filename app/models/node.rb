@@ -102,14 +102,14 @@ class Node < ActiveRecord::Base
   attr_accessor :node_class_names
   after_save :assign_node_classes
   def assign_node_classes
-    return unless @node_group_names
+    return true unless @node_class_names
     self.node_classes = (@node_class_names || []).map{|name| NodeClass.find_by_name(name)}
   end
 
   attr_accessor :node_group_names
   after_save :assign_node_groups
   def assign_node_groups
-    return unless @node_group_names
+    return true unless @node_group_names
     self.node_groups = (@node_group_names || []).map{|name| NodeGroup.find_by_name(name)}
   end
 end
