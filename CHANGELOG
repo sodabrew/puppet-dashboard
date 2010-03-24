@@ -1,8 +1,31 @@
+v1.0.0
+======
+74f1f7b  Releasing 1.0.0 (Sweet!)
+803ce67  Removing changelog task
+30e16b3  Update changelog task
+549b985  Fix bug in assigning classes to nodes
+f584f3b  Add indexes for reports(time) and reports(node_id)
+bea2df6  Adding report status indicator to reports index
+4328e99  Add node failure warning to dashboard page
+65d20fe  Add accessor for report metrics and report status icon
+0144ee1  Use distinct count in nodes sidebar
+355f705  Fix report status names (for CSS)
+d56ea83  Fix Node.failed scope SQL
+af761df  Update tables CSS
+2c6507c  Update gitignore
+05d1da7  Fix JavaScript autocompletion to work under relative_url_root
+ba78196  Fix image URLs in stylesheets to work under relative_url_root
+
 v1.0.0rc1
 =========
+e926fe7  Releasing v1.0.0rc1 (Yeaah!)
+9cd63b9  Updating CHANGELOG
 ad6704b  [Bug #3322] Use local times, not UTC times
 e20bd0b  [Bug #3358] Do not specify hostname column width in tables
 c428643  Fix example conf for external_node script
+
+v0.2.1
+======
 da48338  No longer blowing away groups and classes when updating node
 0667504  Ignoring semver file
 de657e1  Adding Ian Comfort as a contributor
@@ -20,74 +43,134 @@ ae755db  Add link to Mike Zupan's install guide
 28bf686  Fix number formatting in flot graphs
 7f4c8ec  Update README
 60f670d  Basic node search (by hostname only)
-         ... and 48 more.
+bebda1d  Removing code from old UI
+30e3eab  In place edit for class names
+282bf5c  Render correct sidebar for class show
+         ... and 45 more.
 
-0.2.1
-=====
-773bc5f  Fix nasty routing bug for hosts that contain a '.'
-a849c84  Releasing 0.2.0
+v0.2.0
+======
+da48338  No longer blowing away groups and classes when updating node
+0667504  Ignoring semver file
+de657e1  Adding Ian Comfort as a contributor
+2fa2e95  Relax rake requirement to >= 0.8.3
+ae755db  Add link to Mike Zupan's install guide
+6b34e97  Fix database.yml example
+7307b5f  Updating contributors
+0705119  Remove extra layout line in nodes controller
+9ab62c6  [Bug ##3302] pagination breaks external node
+7c06dc0  Fix node reports index routing and re-add View More
+7c63eb2  Updating key/value table CSS
+420d8b9  Reorganize report show view
+81e378b  Reorganize node show view
+8770033  Reports use new UI
+28bf686  Fix number formatting in flot graphs
+7f4c8ec  Update README
+60f670d  Basic node search (by hostname only)
+bebda1d  Removing code from old UI
+30e3eab  In place edit for class names
+282bf5c  Render correct sidebar for class show
+         ... and 47 more.
 
-0.2.0
-=====
-b62d71e  Update README
-d57764e  Sample external nodes script
-320c1eb  Lookup node by host name
-924d4f9  Tweak status report link text
-482448f  Tweak footer paddings
-c2d9194  Element footer (styled like table footer)
-7890b62  Move node sidebar Add button to table footer
-eb5d2c3  Add paginated reports and view more links
-49d7e02  Adding will paginate to vendor and gem.config
-f1cb4c1  [BUGFIX #2946] not showing failed icon
-6f0906c  [BUGFIX #2947] uneven lists on dashboard
-2130b97  Large update to stats and graphing
-1352421  [BUGFIX #2946] not showing failed icon
-8b17973  rake reports:import task imports report YAML files
-32c48a5  Extract data from report into reports table
-024fe93  Update install task to use file tasks
-24f37ab  More robust test of node activity feed
-3e83b56  Fix statuses controller spec
-66ca885  Updating CHANGELOG for 0.1.1
+v0.1.1
+======
+da48338  No longer blowing away groups and classes when updating node
+0667504  Ignoring semver file
+de657e1  Adding Ian Comfort as a contributor
+2fa2e95  Relax rake requirement to >= 0.8.3
+ae755db  Add link to Mike Zupan's install guide
+6b34e97  Fix database.yml example
+7307b5f  Updating contributors
+0705119  Remove extra layout line in nodes controller
+9ab62c6  [Bug ##3302] pagination breaks external node
+7c06dc0  Fix node reports index routing and re-add View More
+7c63eb2  Updating key/value table CSS
+420d8b9  Reorganize report show view
+81e378b  Reorganize node show view
+8770033  Reports use new UI
+28bf686  Fix number formatting in flot graphs
+7f4c8ec  Update README
+60f670d  Basic node search (by hostname only)
+bebda1d  Removing code from old UI
+30e3eab  In place edit for class names
+282bf5c  Render correct sidebar for class show
+         ... and 66 more.
 
 0.1.1
 =====
 df15ea5  Updating CHANGELOG for 0.1.1
-c1b5a52  Version bump 0.1.1
-1be1310  Add changelog generation task
-49109c2  [BUGFIX] Add migration for reports.success field
-40460d5  Use schema load in rake install
-522e62e  Start tracking schema.rb
 
-0.1.0
-=====
-87905c0  Updating changelog
-dae4172  Reordering of node view information, minor CSS tweak
-5475b16  Equal caption size to header
-b1cbc08  Increasing tick size in timeline graphs
-0cf3df1  Version bump 0.1.0
-e6ee999  Adding changelog
-86e93c3  Dashboard now requires MySQL
-cdc181b  Add status graphs to dashboard and status page
-3d4c34d  Adding runtime stats
-79f9d54  [Bugfix #2897] Add dependency to rake >= 0.8.4
-e81c542  [Bugfix #2912] Node class names allow "::"
-8b3ecba  Updating status javascript
-0100afd  Adding basic status info/graphs
-425849e  Fix bug in parameter assignment
+v0.1.0
+======
+da48338  No longer blowing away groups and classes when updating node
+0667504  Ignoring semver file
+de657e1  Adding Ian Comfort as a contributor
+2fa2e95  Relax rake requirement to >= 0.8.3
+ae755db  Add link to Mike Zupan's install guide
+6b34e97  Fix database.yml example
+7307b5f  Updating contributors
+0705119  Remove extra layout line in nodes controller
+9ab62c6  [Bug ##3302] pagination breaks external node
+7c06dc0  Fix node reports index routing and re-add View More
+7c63eb2  Updating key/value table CSS
+420d8b9  Reorganize report show view
+81e378b  Reorganize node show view
+8770033  Reports use new UI
+28bf686  Fix number formatting in flot graphs
+7f4c8ec  Update README
+60f670d  Basic node search (by hostname only)
+bebda1d  Removing code from old UI
+30e3eab  In place edit for class names
+282bf5c  Render correct sidebar for class show
+         ... and 71 more.
 
-0.0.2
-=====
-a8d2b39  Version 0.0.2
-1c9bce1  Add reported_at to Node, updated by report creation
-bd878de  Adding rake to dependencies list
-9c1a9e7  Display icon for deleted subjects in timeline
-b6f35bf  Use indifferent access hash for report metrics
-a3775eb  Tweak reports styles
-9963092  Require unique class and group names
-dfe9f21  has_parameters accepts options for has_many
-8f3ecfc  Adding rake dependency to README list
-265988f  Add copy database.yml task to rake install
-75a6b0b  README is a markdown file (for github)
+v0.0.2
+======
+da48338  No longer blowing away groups and classes when updating node
+0667504  Ignoring semver file
+de657e1  Adding Ian Comfort as a contributor
+2fa2e95  Relax rake requirement to >= 0.8.3
+ae755db  Add link to Mike Zupan's install guide
+6b34e97  Fix database.yml example
+7307b5f  Updating contributors
+0705119  Remove extra layout line in nodes controller
+9ab62c6  [Bug ##3302] pagination breaks external node
+7c06dc0  Fix node reports index routing and re-add View More
+7c63eb2  Updating key/value table CSS
+420d8b9  Reorganize report show view
+81e378b  Reorganize node show view
+8770033  Reports use new UI
+28bf686  Fix number formatting in flot graphs
+7f4c8ec  Update README
+60f670d  Basic node search (by hostname only)
+bebda1d  Removing code from old UI
+30e3eab  In place edit for class names
+282bf5c  Render correct sidebar for class show
+         ... and 85 more.
+
+v0.0.1
+======
+da48338  No longer blowing away groups and classes when updating node
+0667504  Ignoring semver file
+de657e1  Adding Ian Comfort as a contributor
+2fa2e95  Relax rake requirement to >= 0.8.3
+ae755db  Add link to Mike Zupan's install guide
+6b34e97  Fix database.yml example
+7307b5f  Updating contributors
+0705119  Remove extra layout line in nodes controller
+9ab62c6  [Bug ##3302] pagination breaks external node
+7c06dc0  Fix node reports index routing and re-add View More
+7c63eb2  Updating key/value table CSS
+420d8b9  Reorganize report show view
+81e378b  Reorganize node show view
+8770033  Reports use new UI
+28bf686  Fix number formatting in flot graphs
+7f4c8ec  Update README
+60f670d  Basic node search (by hostname only)
+bebda1d  Removing code from old UI
+30e3eab  In place edit for class names
+282bf5c  Render correct sidebar for class show
+         ... and 96 more.
 
 0.0.1
 =====
