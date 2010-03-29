@@ -28,8 +28,14 @@
             = link_to "see the list", unreported_nodes_path
 
     .section
-      %h3 Run Time
+      %h3
+        Run Status
       = render 'statuses/run_time', :reports => @reports
+
+    .section
+      %h3
+        Run Time (ms)
+      = render 'statuses/run_failure'
 
     .section
       %h3 Recent Node Reports

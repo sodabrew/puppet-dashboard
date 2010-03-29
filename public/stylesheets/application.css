@@ -41,9 +41,7 @@ ul.status {
 
 span.sparkline { vertical-align: bottom; }
 
-table.flot-data { display: none; }
 div.flot-graph { margin-bottom: 10px; width: 100%;}
-.tickLabel { font-size: .85em; line-height: 1.2 }
 
 button, a.button {
   background: #DDD -webkit-gradient(linear, 0% 0%, 0% 100%, from(#EEE), to(#CCC));
