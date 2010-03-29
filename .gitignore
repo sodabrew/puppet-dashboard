@@ -18,3 +18,4 @@ public/stylesheets/all.js
 *.swp
 .semver
 db/dump.sql
+tags
