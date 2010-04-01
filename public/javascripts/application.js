@@ -87,12 +87,11 @@ jQuery(document).ready(function(J) {
         grid: false,
         labels: label_data,
         label_color: '#666',
-        colors: { succeeded: "#090", failed: "#900" },
+        colors: { succeeded: "#0C3", failed: "#901" },
         show_ticks: false,
         datalabels: { succeeded: succeeded_data_label, failed: failed_data_label },
         font_size: 9,
         label_rotation: -30,
-        show_vertical_labels: false,
       }
     );
 
