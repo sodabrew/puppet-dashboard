@@ -298,7 +298,7 @@ ul li .dropdown ul {
 
 .section.error {
   background: #FDD;
-  border: 1px solid #FDD;
+  border: 1px solid #FCC;
   padding: 10px 10px 0;
 
   -webkit-border-radius: 2px;
@@ -307,11 +307,29 @@ ul li .dropdown ul {
   color: #433;
 }
 
+.section.warning {
+  background: #DDD;
+  border: 1px solid #CCC;
+  padding: 10px 10px 0;
+
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
+  color: #444;
+}
+
 .section.error h3 {
   margin: -10px -10px .5em;
   padding: .5em 10px .5em 26px;
   background: #Fcc url(images/icons/failure.png) 8px center no-repeat;
   color: #433;
+}
+
+.section.warning h3 {
+  margin: -10px -10px .5em;
+  padding: .5em 10px;
+  background: #CCC url(images/icons/warning.png) 8px center no-repeat;
+  color: #444;
 }
 
 .half {

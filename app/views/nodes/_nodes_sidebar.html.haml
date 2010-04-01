@@ -10,6 +10,9 @@
     %li{:class => active_if(controller_name == 'nodes' && action_name == 'failed' && parent.nil?)}
       = link_to "Failed", failed_nodes_path
       %span.count= Node.failed.count('DISTINCT `nodes`.name')
+    %li{:class => active_if(controller_name == 'nodes' && action_name == 'unreported' && parent.nil?)}
+      = link_to "Unreported", unreported_nodes_path
+      %span.count= Node.unreported.count
 .group
   %h3 By Class
   %ul

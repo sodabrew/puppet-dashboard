@@ -6,13 +6,26 @@
       .section.error
         %h3 Node Failures
         %p
-          = pluralize @failed_nodes.length, 'Node'
+          = pluralize @failed_nodes.length, 'node'
           are reporting failures:
           = succeed '.' do
             = @failed_nodes.map{|node| link_to node.name, node}.to_sentence
           You can also 
           = succeed '.' do
             = link_to "see the list", failed_nodes_path
+
+    - unless @unreported_nodes.empty?
+      .section.warning
+        %h3 Unreported Nodes
+        %p
+          = pluralize @unreported_nodes.length, 'node'
+          = @unreported_nodes.length == 1 ? 'has' : 'have'
+          not yet reported:
+          = succeed '.' do
+            = @unreported_nodes.map{|node| link_to node.name, node}.to_sentence
+          You can also 
+          = succeed '.' do
+            = link_to "see the list", unreported_nodes_path
 
     .section
       %h3 Run Time
