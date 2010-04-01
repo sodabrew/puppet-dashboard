@@ -18,6 +18,37 @@ describe Node do
 
   end
 
+  describe ".failed" do
+    it "should return all nodes whose latest report failed" do
+      time = Time.new
+      node = Node.generate
+      report = Report.generate(:time => time, :host => node.name)
+      report.update_attribute(:success, false)
+
+      Node.failed.should include(node)
+    end
+  end
+
+  describe ".successful" do
+    it "should return all nodes whose latest report was successful" do
+      time = Time.new
+      node = Node.generate
+      report = Report.generate(:time => time, :host => node.name)
+      report.update_attribute(:success, true)
+
+      Node.successful.should include(node)
+    end
+  end
+
+  describe ".unreported" do
+    it "should return all nodes whose latest report was unreported" do
+      time = Time.new
+      node = Node.generate
+
+      Node.unreported.should include(node)
+    end
+  end
+
   describe '#available_node_classes' do
     before do
       @node = Node.new

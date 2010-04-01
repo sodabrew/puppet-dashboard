@@ -16,7 +16,7 @@ class Report < ActiveRecord::Base
   serialize :report
 
   def succeeded?
-    metrics[:resources] && metrics[:resources][:failed] == 0
+    failed_resources == 0
   end
 
   def status
