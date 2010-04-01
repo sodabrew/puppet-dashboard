@@ -1,12 +1,13 @@
-- statuses = Status.by_interval(:limit => 100) unless statuses
-%table.inspector.flot-data.percent
+- statuses = Status.by_interval(:limit => 30) unless statuses
+%table.inspector.data.status.bar
   %thead
-    %tr
-      %th
+    %tr.labels
       - statuses.each do |status|
-        %th= status.start.to_i * 1000
+        %th= status.start.strftime("%m/%d/%y")
   %tbody
-    %tr
-      %th Fail Percentage
+    %tr.succeeded
       - statuses.each do |status|
-        %td= status.percent
+        %td= status.total - status.failed
+    %tr.failed
+      - statuses.each do |status|
+        %td= status.failed

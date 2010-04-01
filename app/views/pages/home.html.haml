@@ -13,6 +13,7 @@
           You can also 
           = succeed '.' do
             = link_to "see the list", failed_nodes_path
+      
 
     - unless @unreported_nodes.empty?
       .section.warning
@@ -29,14 +30,9 @@
 
     .section
       %h3
-        Run Status
-      = render 'statuses/run_time', :reports => @reports
+        Daily Run Status
+      = render 'statuses/run_failure', :statuses => @statuses
 
     .section
-      %h3
-        Run Time (ms)
-      = render 'statuses/run_failure'
-
-    .section
-      %h3 Recent Node Reports
+      %h3 Recently Reported Nodes
       = render 'nodes/nodes', :nodes => @nodes

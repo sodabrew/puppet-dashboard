@@ -5,10 +5,25 @@
     %title= [ page_title, 'Puppet Node Manager'].compact.join(' - ')
     %link{ :href => "/images/favicon.ico", :rel => "shortcut icon" }
     %meta{ :content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type" }
+
+    = javascript_include_tag 'http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js'
     :javascript
       var relative_url_root = '#{ActionController::Base.relative_url_root}';
-    = javascript_include_tag 'http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js'
-    = javascript_include_tag :all
+      $.noConflict();
+
+    = javascript_include_tag 'http://ajax.googleapis.com/ajax/libs/prototype/1.6.1.0/prototype.js'
+    = javascript_include_tag "jrails" 
+    = javascript_include_tag "fcbkcomplete" 
+
+    = javascript_include_tag "excanvas.min" 
+    = javascript_include_tag "raphael-min" 
+    = javascript_include_tag "grafico.min" 
+    = javascript_include_tag "jquery.form" 
+    = javascript_include_tag "jquery.ui.autocomplete" 
+    = javascript_include_tag "jquery.ui.autocomplete.ext" 
+    = javascript_include_tag "search" 
+    = javascript_include_tag "application" 
+
     = stylesheet_link_tag 'reset', 'layout', 'application', 'header', 'forms', 'tables', 'jquery.ui.autocomplete.css', 'reports', 'typography', 'links', 'fcbkcomplete'
   %body
     #wrap

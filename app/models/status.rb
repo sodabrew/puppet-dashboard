@@ -21,7 +21,7 @@ class Status
   end
 
   def self.by_interval(options={})
-    interval = options[:of] || 5.minutes
+    interval = options[:of] || 1.day
 
     sql = <<-SQL
       SELECT
@@ -40,7 +40,7 @@ class Status
     sql << " ORDER BY time DESC"
     sql << " LIMIT #{options[:limit]}" if options[:limit]
 
-    execute sql
+    execute(sql).reverse
   end
 
   def self.runtime
