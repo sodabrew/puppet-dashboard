@@ -57,14 +57,14 @@ jQuery.fn.facebooklist = function(list, ajax, height, filter, newel){
     DOWN: 40
   };
 
-  var elem = $(this);
+  var elem = jQuery(this);
   elem.attr('disabled', 'disabled');
   var feed = document.createElement('ul');
-  feed = $(feed).hide().addClass('facebook-auto');
+  feed = jQuery(feed).hide().addClass('facebook-auto');
 
   var addHiddenInput = function(value){
     var input = document.createElement('input');
-    $(input).attr({
+    jQuery(input).attr({
       'type': 'hidden',
       'name': (elem.attr('name')),
       'value': value
@@ -79,26 +79,26 @@ jQuery.fn.facebooklist = function(list, ajax, height, filter, newel){
     var txt = document.createTextNode(title);
     var aclose = document.createElement('a');
     var input = addHiddenInput(value);
-    $(li).attr({
+    jQuery(li).attr({
       'class': 'bit-box'
     });
-    $(li).prepend(txt);
-    $(aclose).attr({
+    jQuery(li).prepend(txt);
+    jQuery(aclose).attr({
       'class': 'closebutton',
       'href': '#'
     });
     li.appendChild(aclose);
     li.appendChild(input);
     holder.appendChild(li);
-    $(aclose).click(function(){
-      $(this).parent('li').fadeOut('fast', function(){
-        $(this).remove();
+    jQuery(aclose).click(function(){
+      jQuery(this).parent('li').fadeOut('fast', function(){
+        jQuery(this).remove();
       });
       return false;
     });
     if (!preadded) {
       console.log('removing input');
-      $(holder).find('li.bit-input').remove();
+      jQuery(holder).find('li.bit-input').remove();
       addInput();
     }
     feed.hide();
@@ -139,13 +139,13 @@ jQuery.fn.facebooklist = function(list, ajax, height, filter, newel){
 
   var addItemFeed = function(data, input){
     feed.children('li[fckb=2]').remove();
-    $.each(data, function(i, val){
+    jQuery.each(data, function(i, val){
       if (val.name) {
         var li = document.createElement('li');
-        $(li).attr({
+        jQuery(li).attr({
           'fckb': '2'
         });
-        if (feedFilter($(li), val.name, input)) {
+        if (feedFilter(jQuery(li), val.name, input)) {
           feed.append(li);
           counter++;
         }
@@ -158,11 +158,11 @@ jQuery.fn.facebooklist = function(list, ajax, height, filter, newel){
     if (newel) {
       feed.children('li[fckb=1]').remove();
       var li = document.createElement('li');
-      $(li).attr({
+      jQuery(li).attr({
         'rel': value,
         'fckb': '1'
       });
-      $(li).html(value);
+      jQuery(li).html(value);
       feed.prepend(li);
       counter++;
     }
@@ -180,21 +180,21 @@ jQuery.fn.facebooklist = function(list, ajax, height, filter, newel){
   var bindFeedEvent = function () {
     feed.children('li').mouseover(function(){
       feed.children('li').removeClass("auto-focus");
-      $(this).addClass("auto-focus");
-      nowFocusOn = $(this);
+      jQuery(this).addClass("auto-focus");
+      nowFocusOn = jQuery(this);
     });
     feed.children('li').mouseout( function(){
-      $(this).removeClass("auto-focus");
+      jQuery(this).removeClass("auto-focus");
       nowFocusOn = null;
     });
   }
 
   var bindEvents = function(){
-    var maininput = $('.maininput');
+    var maininput = jQuery('.maininput');
     bindFeedEvent();
     feed.children('li').unbind('click');
     feed.children('li').click(function(){
-      addItem($(this));
+      addItem(jQuery(this));
       feed.hide();
     });
     maininput.unbind('keydown');
@@ -202,14 +202,14 @@ jQuery.fn.facebooklist = function(list, ajax, height, filter, newel){
       var k = event.which || event.keycode;
       
       if (k == 13 && nowFocusOn != null) {
-        addItem($(nowFocusOn));
+        addItem(jQuery(nowFocusOn));
         feed.hide();
         event.preventDefault();
       }
       if (k == 40) {
         removeFeedEvent();
         if (typeof(nowFocusOn) == 'undefined' || nowFocusOn.length == 0) {
-          nowFocusOn = $(feed.children('li:visible:first'));
+          nowFocusOn = jQuery(feed.children('li:visible:first'));
           feed.get(0).scrollTop = 0;
         }
         else {
@@ -227,7 +227,7 @@ jQuery.fn.facebooklist = function(list, ajax, height, filter, newel){
       if (k == 38) {
         removeFeedEvent();
         if (typeof(nowFocusOn) == 'undefined' || nowFocusOn.length == 0) {
-          nowFocusOn = $(feed.children('li:visible:last'));
+          nowFocusOn = jQuery(feed.children('li:visible:last'));
           feed.get(0).scrollTop = parseInt(nowFocusOn.get(0).scrollHeight,10) * (parseInt(feed.children('li:visible').length,10) - Math.round(height /2));
         }
         else {
@@ -248,34 +248,34 @@ jQuery.fn.facebooklist = function(list, ajax, height, filter, newel){
   var addInput = function(){
     var li = document.createElement('li');
     var input = document.createElement('input');
-    $(li).attr({
+    jQuery(li).attr({
       'class': 'bit-input',
     });
-    $(input).attr({
+    jQuery(input).attr({
       'type': 'text',
       'class': 'maininput'
     });
     li.appendChild(input);
     holder.appendChild(li);
-    $(input).focus(function(){
+    jQuery(input).focus(function(){
       feed.fadeIn('fast');
     });
-    $(holder).click(function(){
-      $(input).focus();
-      if (feed.length && $(input).val().length) {
+    jQuery(holder).click(function(){
+      jQuery(input).focus();
+      if (feed.length && jQuery(input).val().length) {
         feed.show();
       }
       else {
         feed.children('li[fckb=2]').remove();
         feed.children('li').addClass('hidden');
         feed.css('height','0px');
-        $('.default').show();
+        jQuery('.default').show();
       }
     });
-    $(input).keyup(function(event){
+    jQuery(input).keyup(function(event){
       if (event.keyCode != 40 && event.keyCode != 38) {
         counter = 0;
-        var etext = $(input).val();
+        var etext = jQuery(input).val();
         addTextItemFeed(etext);
         if (ajax.url) {
           if (ajax.cache && cache.length > 0) {
@@ -283,7 +283,7 @@ jQuery.fn.facebooklist = function(list, ajax, height, filter, newel){
             bindEvents();
           }
           else {
-            $.getJSON(ajax.url + '?tag=' + etext, null, function(data){
+            jQuery.getJSON(ajax.url + '?tag=' + etext, null, function(data){
               addItemFeed(data, etext);
               cache = data;
               bindEvents();
@@ -293,40 +293,40 @@ jQuery.fn.facebooklist = function(list, ajax, height, filter, newel){
         else {
           bindEvents();
         }
-        $('.default').hide();
+        jQuery('.default').hide();
         feed.show();
       }
     });
   }
 
   if (typeof(elem) != 'object') {
-    elem = $(elem);
+    elem = jQuery(elem);
   }
   if (typeof(list) != 'object') {
-    list = $(list);
+    list = jQuery(list);
   }
   var cache = {};
   var counter = 0;
   var nowFocusOn;
   var holder = document.createElement('ul');
   elem.css('display', 'none');
-  $(holder).attr('class', 'holder');
+  jQuery(holder).attr('class', 'holder');
 
   if (list && list.children('li').length) {
-    $.each(list.children('li'), function(i, val){
-      addItem($(list.children('li')[i]), 1);
+    jQuery.each(list.children('li'), function(i, val){
+      addItem(jQuery(list.children('li')[i]), 1);
     });
     list.hide();
   }
 
   addInput();
   elem.before(holder);
-  $(holder).after($(feed));
+  jQuery(holder).after(jQuery(feed));
 
-  $(document).click(function (event) {
-    if ($(event.target).attr('class') != 'holder' && $(event.target).attr('class') != 'maininput') {
-      $('.default').hide();
-      $(feed).hide();
+  jQuery(document).click(function (event) {
+    if (jQuery(event.target).attr('class') != 'holder' && jQuery(event.target).attr('class') != 'maininput') {
+      jQuery('.default').hide();
+      jQuery(feed).hide();
       
     }
   });
