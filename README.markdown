@@ -37,7 +37,7 @@ To import puppet run reports stored in /var/puppet/lib/reports:
 
 To specify a different report directory:
 
-    rake reports:import REPORT_DIR /path/to/your/reports
+    rake reports:import REPORT_DIR=/path/to/your/reports
 
 ### Live report aggregation
 
