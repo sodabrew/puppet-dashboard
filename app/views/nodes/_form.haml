@@ -28,6 +28,7 @@
 
   .element.node_classes
     = label_tag 'Classes'
+    = hidden_field_tag 'node[node_class_names][]', '   '
     = text_field_tag 'node[node_class_names][]', '', :id => 'node_class_names'
     %ul#existing_node_classes
       - form.object.node_classes.each do |klass|
@@ -35,6 +36,7 @@
 
   .element.node_groups
     = label_tag 'Groups'
+    = hidden_field_tag 'node[node_group_names][]', '   '
     = text_field_tag 'node[node_group_names][]', '', :id => 'node_group_names'
     %ul#existing_node_groups
       - form.object.node_groups.each do |group|
