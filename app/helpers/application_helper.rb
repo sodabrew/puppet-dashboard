@@ -1,5 +1,19 @@
 # Methods added to this helper will be available to all templates in the application.
 module ApplicationHelper
+  def truncated_node_sentence(nodes, options={})
+    truncated_sentence(5, nodes, :more => link_to("%d more", options[:more_link])){|node| link_to node.name, node}
+  end
+
+  def truncated_sentence(max, items, options={}, &block)
+    more_text = options[:more] || "%d more"
+    extra = items.size - max
+    items_to_list = items[0,max]
+
+    items_to_list.map!(&block) if block
+    items_to_list << more_text % extra if items.size > max
+    items_to_list.to_sentence
+  end
+
   def tab_to_unless_current (name, url)
     link_to_unless_current name, url do
       content_tag(:span, name, :class => "current")

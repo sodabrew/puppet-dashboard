@@ -9,11 +9,7 @@
           = pluralize @failed_nodes.length, 'node'
           are reporting failures:
           = succeed '.' do
-            = @failed_nodes.map{|node| link_to node.name, node}.to_sentence
-          You can also 
-          = succeed '.' do
-            = link_to "see the list", failed_nodes_path
-      
+            = truncated_node_sentence(@failed_nodes, :more_link => failed_nodes_path)
 
     - unless @unreported_nodes.empty?
       .section.warning
@@ -23,10 +19,7 @@
           = @unreported_nodes.length == 1 ? 'has' : 'have'
           not yet reported:
           = succeed '.' do
-            = @unreported_nodes.map{|node| link_to node.name, node}.to_sentence
-          You can also 
-          = succeed '.' do
-            = link_to "see the list", unreported_nodes_path
+            = truncated_node_sentence(@unreported_nodes, :more_link => unreported_nodes_path)
 
     .section
       %h3
