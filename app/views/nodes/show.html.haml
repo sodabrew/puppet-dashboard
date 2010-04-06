@@ -68,7 +68,7 @@
               %tr
                 %td.status{:class => report.status, :alt => report.status.titleize, :title => report.status.titleize}
                   %span &bull;
-                %td= link_to report.time.to_s(:default), report
+                %td= link_to report.time.to_s, report
                 %td= report.total_resources
                 %td= report.failed_resources
                 %td= report.total_time
