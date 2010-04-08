@@ -1,8 +1,10 @@
 - te = timeline_event
+- is_current = @node && te.subject == @node
+- subject = is_current ? "This node" : te.subject.name
 
 %li{:class => te.object_type}
-  = link_to_unless te.secondary_subject_type,  te.subject_name, te.subject
+  = link_to_unless is_current || te.secondary_subject_type,  subject, te.subject
   = te.action
-  = te.secondary_name if te.secondary_subject_type
+  = link_to te.secondary_name, te.secondary_subject if te.secondary_subject_type
   = time_ago_in_words(te.created_at)
   ago
