@@ -92,10 +92,6 @@ button:active, a.button:hover {
   border-radius: .2em;
 }
 
-#content #sidebar .group .active a {
-  background: #e2edf5;
-}
-
 #content #sidebar .group h3 {
   color: #444;
   font-size: 14px;
@@ -125,15 +121,22 @@ button:active, a.button:hover {
 }
 
 #content #sidebar .group ul {
+  max-height: 20em;
+  overflow: auto;
   border-top: 1px solid #D8D8D8;
 }
 
 #content #sidebar .group ul li {
+  padding: .25em .5em;
   position: relative;
 }
 
+#content #sidebar .group ul li.active {
+  background: #e2edf5;
+}
+
+
 #content #sidebar .group ul li a {
-  padding: .25em .5em;
   display: block;
 }
 
