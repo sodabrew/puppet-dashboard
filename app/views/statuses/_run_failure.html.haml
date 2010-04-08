@@ -1,13 +1,16 @@
 - statuses = Status.by_interval(:limit => 30) unless statuses
-%table.inspector.data.status.bar
-  %thead
-    %tr.labels
-      - statuses.each do |status|
-        %th= status.start.strftime("%m/%d/%y")
-  %tbody
-    %tr.succeeded
-      - statuses.each do |status|
-        %td= status.total - status.failed
-    %tr.failed
-      - statuses.each do |status|
-        %td= status.failed
+- if statuses.present?
+  %table.inspector.data.status.bar
+    %thead
+      %tr.labels
+        - statuses.each do |status|
+          %th= status.start.strftime("%m/%d/%y")
+    %tbody
+      %tr.succeeded
+        - statuses.each do |status|
+          %td= status.total - status.failed
+      %tr.failed
+        - statuses.each do |status|
+          %td= status.failed
+- else
+  %p No runs to report

@@ -1,10 +1,10 @@
 class Status
   attr_reader :failed, :total, :percent, :start
   def initialize(datum)
-    @failed   = datum["failed"].to_i
-    @total    = datum["total"].to_i
-    @percent  = datum["percent"].to_f
-    @start    = datum["start"].to_time
+    @failed = datum["failed"].to_i
+    @total = datum["total"].to_i
+    @percent = datum["percent"].to_f
+    @start = datum["start"].to_time
   end
  
   def self.latest(options={})
@@ -21,24 +21,32 @@ class Status
   end
 
   def self.by_interval(options={})
+    return [] if options[:nodes] && options[:nodes].empty?
     interval = options[:of] || 1.day
 
+    has_where = options[:start] || options[:node] || options[:nodes].present?
+
+    has_and = options[:start]
+    has_and &&= options[:node] or options[:nodes].present?
+
     sql = <<-SQL
-      SELECT
-        COUNT(*) - SUM(success) as failed,
-        COUNT(*) as total,
-        SUM(success) / COUNT(*) * 100 as percent,
-        FROM_UNIXTIME(FLOOR(UNIX_TIMESTAMP(time) / #{interval}) * #{interval}) as start
-      FROM reports
+
+    SELECT
+      COUNT(*) - SUM(success)       as failed,
+      COUNT(*)                      as total,
+      SUM(success) / COUNT(*) * 100 as percent,
+      FROM_UNIXTIME(FLOOR(UNIX_TIMESTAMP(time) / #{interval}) * #{interval}) as start
+    FROM reports
     SQL
 
-    sql << " WHERE" if options[:start] or options[:node]
-    sql << " time >= \"#{options[:start].to_s(:db)}\"}" if options[:start]
-    sql << " AND" if options[:start] and options[:node]
-    sql << " node_id = #{options[:node].id}" if options[:node]
-    sql << " GROUP BY FLOOR(UNIX_TIMESTAMP(time) / #{interval})"
-    sql << " ORDER BY time DESC"
-    sql << " LIMIT #{options[:limit]}" if options[:limit]
+    sql << "WHERE " if has_where
+    sql << "time >= \"#{options[:start].to_s(:db)}\"}\n" if options[:start]
+    sql << "AND " if has_and
+    sql << "node_id = #{options[:node].id} " if options[:node]
+    sql << "node_id IN (#{options[:nodes].map(&:id).join(',')})\n" if options[:nodes].present?
+    sql << "GROUP BY FLOOR(UNIX_TIMESTAMP(time) / #{interval})\n"
+    sql << "ORDER BY time DESC\n"
+    sql << "LIMIT #{options[:limit]}" if options[:limit]
 
     execute(sql).reverse
   end

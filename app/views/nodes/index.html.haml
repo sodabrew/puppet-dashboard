@@ -1,5 +1,11 @@
 #sidebar= render 'nodes_sidebar'
 #main
+
+  .section
+    %h3
+      Daily Run Status
+    = render 'statuses/run_failure', :statuses => Status.by_interval(:limit => 30, :nodes => @nodes)
+
   .actionbar
     = render 'search'
     = render 'actions'
