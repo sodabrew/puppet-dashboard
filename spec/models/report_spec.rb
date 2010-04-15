@@ -48,4 +48,23 @@ describe Report do
       }.should change { @node.reported_at }.to(@report_data.time)
     end
   end
+
+  describe "deserializing the report" do
+    before do
+      yaml_file = File.join RAILS_ROOT, "spec", "fixtures", "sample_report.yml"
+      @loading_yaml = proc { YAML.load_file(yaml_file) }
+    end
+
+    it "should be able to parse the report" do
+      @loading_yaml.should_not raise_error
+    end
+
+    it "should return a puppet report object" do
+      @loading_yaml.call.should be_a_kind_of Puppet::Transaction::Report
+    end
+
+    it "should have the correct time" do
+      @loading_yaml.call.time.to_yaml.should == "--- 2009-11-19 17:08:50.631428 -08:00\ntt"
+    end
+  end
 end

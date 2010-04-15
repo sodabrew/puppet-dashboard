@@ -1,0 +1,101 @@
+--- !ruby/object:Puppet::Transaction::Report 
+host: sample_node
+logs: 
+- !ruby/object:Puppet::Util::Log 
+  level: :info
+  message: Applying configuration version '1258679330'
+  source: Puppet
+  tags: 
+  - info
+  time: 2009-11-19 17:08:50.557829 -08:00
+- !ruby/object:Puppet::Util::Log 
+  level: :info
+  message: Adding /tmp/puppet_test(6d0007e52f7afb7d5a0650b0ffb8a4d1)
+  source: Filebucket[/tmp/puppet/var/clientbucket]
+  tags: 
+  - info
+  time: 2009-11-19 17:08:50.605975 -08:00
+- !ruby/object:Puppet::Util::Log 
+  file: /tmp/puppet/manifests/site.pp
+  level: :info
+  line: 4
+  message: Filebucketed /tmp/puppet_test to puppet with sum 6d0007e52f7afb7d5a0650b0ffb8a4d1
+  source: //Node[default]/File[/tmp/puppet_test]
+  tags: 
+  - file
+  - node
+  - default
+  - class
+  - main
+  - info
+  time: 2009-11-19 17:08:50.607171 -08:00
+  version: 1258679330
+- !ruby/object:Puppet::Util::Log 
+  file: /tmp/puppet/manifests/site.pp
+  level: :notice
+  line: 4
+  message: content changed '{md5}6d0007e52f7afb7d5a0650b0ffb8a4d1' to 'unknown checksum'
+  source: //Node[default]/File[/tmp/puppet_test]/content
+  tags: 
+  - file
+  - node
+  - default
+  - class
+  - main
+  - content
+  - notice
+  time: 2009-11-19 17:08:50.625690 -08:00
+  version: 1258679330
+metrics: 
+  time: !ruby/object:Puppet::Util::Metric 
+    label: Time
+    name: time
+    values: 
+    - - :config_retrieval
+      - Config retrieval
+      - 0.185256958007812
+    - - :total
+      - Total
+      - 0.253255844116211
+    - - :file
+      - File
+      - 0.0679988861083984
+  resources: !ruby/object:Puppet::Util::Metric 
+    label: Resources
+    name: resources
+    values: 
+    - - :out_of_sync
+      - Out of sync
+      - 1
+    - - :total
+      - Total
+      - 3
+    - - :scheduled
+      - Scheduled
+      - 1
+    - - :skipped
+      - Skipped
+      - 0
+    - - :applied
+      - Applied
+      - 1
+    - - :restarted
+      - Restarted
+      - 0
+    - - :failed_restarts
+      - Failed restarts
+      - 0
+    - - :failed
+      - Failed
+      - 0
+  changes: !ruby/object:Puppet::Util::Metric 
+    label: Changes
+    name: changes
+    values: 
+    - - :total
+      - Total
+      - 1
+records: {}
+
+time: 2009-11-19 17:08:50.631428 -08:00
+

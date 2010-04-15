@@ -1,4 +1,4 @@
-require 'puppet'
+require 'lib/puppet/report'
 class Report < ActiveRecord::Base
   def self.per_page; 20 end # Pagination
 
