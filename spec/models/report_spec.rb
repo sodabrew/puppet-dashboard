@@ -14,45 +14,41 @@ describe Report do
       @now = Time.now
       Time.stubs(:now).returns(@now)
       @node = Node.generate
-      @report_yaml ="--- !ruby/object:Puppet::Transaction::Report \nhost: localhost\nlogs: []\n\nmetrics: {}\n\nrecords: {}\n\ntime: 2009-12-17 14:18:13.225235 -08:00\n"
+      @report_yaml = File.read(File.join(RAILS_ROOT, "spec/fixtures/sample_report.yml"))
       @report_data = YAML.load @report_yaml
     end
 
     it "is not created if a report for the same host exists with the same time" do
+
       Report.create(:report => @report_yaml)
       lambda {
         Report.create(:report => @report_yaml)
       }.should_not change(Report, :count)
     end
 
-    it "finds a node by host if it exists" do
-      Node.expects(:find_or_create_by_name).with('localhost').returns(@node)
-      Report.create(:report => @report_yaml)
+    it "assigns a node by host if it exists" do
+      node = Node.generate(:name => @report_data.host)
+      Report.create(:report => @report_yaml).node.should == node
     end
 
     it "creates a node by host if none exists" do
       lambda {
         Report.create(:report => @report_yaml)
-      }.should change { Node.count(:conditions => {:name => 'localhost'}) }.by(1)
-    end
-
-    it "assigns the node to the report" do
-      Node.expects(:find_or_create_by_name).with('localhost').returns(@node)
-      Report.create(:report => @report_yaml).node.should == @node
+      }.should change { Node.count(:conditions => {:name => @report_data.host}) }.by(1)
     end
 
     it "updates the node's reported_at timestamp" do
-      Node.expects(:find_or_create_by_name).with('localhost').returns(@node)
-      lambda {
-        Report.create(:report => @report_yaml)
-      }.should change { @node.reported_at }.to(@report_data.time)
+      node = Node.generate(:name => @report_data.host)
+      Report.create(:report => @report_yaml)
+      node.reload
+      node.reported_at.should be_close(@report_data.time.in_time_zone, 1.second)
     end
   end
 
   describe "deserializing the report" do
     before do
-      yaml_file = File.join RAILS_ROOT, "spec", "fixtures", "sample_report.yml"
-      @loading_yaml = proc { YAML.load_file(yaml_file) }
+      @yaml_file = File.join RAILS_ROOT, "spec", "fixtures", "sample_report.yml"
+      @loading_yaml = proc { YAML.load_file(@yaml_file) }
     end
 
     it "should be able to parse the report" do
@@ -64,7 +60,12 @@ describe Report do
     end
 
     it "should have the correct time" do
-      @loading_yaml.call.time.to_yaml.should == "--- 2009-11-19 17:08:50.631428 -08:00\ntt"
+      @loading_yaml.call.time.to_yaml.should == "--- 2009-11-19 17:08:50.631428 -08:00\n"
+    end
+
+    it "should deserialize into the correct object tyoe" do
+      report = Report.new(:report => File.read(@yaml_file))
+      report.report.should be_a_kind_of(Puppet::Transaction::Report)
     end
   end
 end

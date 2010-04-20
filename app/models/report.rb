@@ -1,4 +1,5 @@
-require 'lib/puppet/report'
+require "#{RAILS_ROOT}/lib/puppet/report"
+
 class Report < ActiveRecord::Base
   def self.per_page; 20 end # Pagination
 
@@ -13,7 +14,7 @@ class Report < ActiveRecord::Base
 
   default_scope :order => 'time DESC'
 
-  serialize :report
+  serialize :report, Puppet::Transaction::Report
 
   def succeeded?
     failed_resources == 0
@@ -49,22 +50,14 @@ class Report < ActiveRecord::Base
     return true
   end
 
-  def assign_to_node
-    self.node = Node.find_or_create_by_name(host)
-  end
-
   def set_attributes
-    set_success
-    set_time_and_host
-  end
-
-  def set_success
     self.success = succeeded?
+    self.time    = report.time
+    self.host    = report.host
   end
 
-  def set_time_and_host
-    self.time = report.time
-    self.host = report.host
+  def assign_to_node
+    self.node = Node.find_or_create_by_name(report.host)
   end
 
   def set_node_reported_at
