@@ -20,29 +20,24 @@ describe Node do
 
   describe ".failed" do
     it "should return all nodes whose latest report failed" do
-      time = Time.new
-      node = Node.generate
-      report = Report.generate(:time => time, :host => node.name)
+      report = Report.generate
       report.update_attribute(:success, false)
 
-      Node.failed.should include(node)
+      Node.failed.should include(report.node)
     end
   end
 
   describe ".successful" do
     it "should return all nodes whose latest report was successful" do
-      time = Time.new
-      node = Node.generate
-      report = Report.generate(:time => time, :host => node.name)
+      report = Report.generate
       report.update_attribute(:success, true)
 
-      Node.successful.should include(node)
+      Node.successful.should include(report.node)
     end
   end
 
   describe ".unreported" do
     it "should return all nodes whose latest report was unreported" do
-      time = Time.new
       node = Node.generate
 
       Node.unreported.should include(node)

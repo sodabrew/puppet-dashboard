@@ -3,7 +3,7 @@
 # updated to handle changes in the Puppet implementation.
 #
 module Puppet #:nodoc:
-  module Transaction
+  class Transaction
     class Report
       attr_reader :logs, :metrics, :host, :time
     end

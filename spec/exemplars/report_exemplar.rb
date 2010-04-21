@@ -1,7 +1,5 @@
 class Report
-  generator_for :host, :start => 'host.name.aaaa'
-
   def report
-    Struct.new(:time, :metrics, :host).new(Time.now, {}, self.host)
+    YAML.load_file("#{RAILS_ROOT}/spec/fixtures/sample_report.yml")
   end
 end
