@@ -5,6 +5,8 @@
     - if report.node
       %span.alt for
       = link_to report.node.name, report.node
+  %ul.actions
+    %li= link_to 'Destroy', @report, :confirm => 'Are you sure?', :method => :delete, :class => "delete button"
 #item
   .section
     %h3 Metrics
