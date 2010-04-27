@@ -1,21 +1,17 @@
 .header
-  = form.label 'Hostname', :name
-  = form.text_field :name
+  = form.label 'hostname', :name
+  = form.text_field :name, :placeholder => "hostname"
 
 .item
   = form.error_messages
 
   .element.textarea
     = form.label :description
-    = form.text_area :description, :rows => 4
+    = form.text_area :description, :rows => 4, :placeholder => "Enter a description for this host here..."
 
   .element
     %h3 Parameters
     %table#parameters.inspector
-      %thead
-        %tr
-          %th.key Key
-          %th.value Value
       %tbody
         - if form.object.parameters.blank?
           = render :partial => 'parameters/parameter_input', :object => form.object.parameters.build
