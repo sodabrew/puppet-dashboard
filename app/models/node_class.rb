@@ -6,12 +6,7 @@ class NodeClass < ActiveRecord::Base
   validates_format_of :name, :with => /\A[a-z_\d:]+\Z/i
   validates_uniqueness_of :name
 
-  def self.search(query)
-    return [] if query.blank?
-    find(:all, :conditions => ["name like ?", "%#{query}%"])
-  end
-  
-  def description; "No description" end
+  named_scope :search, lambda{|q| q.blank? ? {} : {:conditions => ['name LIKE ?', "%#{q}%"]} }
 
   def to_json(options)
     super({:methods => :description, :only => [:name, :id]}.merge(options))
