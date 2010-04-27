@@ -1,9 +1,7 @@
 .group
-  %h3= link_to "Nodes", nodes_path
+  %h3{:class => active_if(controller_name == "nodes" && action_name == "index")}= link_to "Nodes", nodes_path
+  %span.count= Node.count
   %ul
-    %li{:class => active_if(controller_name == 'nodes' && action_name == 'index' && parent.nil?)}
-      = link_to "All", nodes_path
-      %span.count= Node.count
     %li{:class => active_if(controller_name == 'nodes' && action_name == 'successful' && parent.nil?)}
       = link_to "Successful", successful_nodes_path
       %span.count= Node.successful.count('DISTINCT `nodes`.name')
@@ -14,16 +12,18 @@
       = link_to "Unreported", unreported_nodes_path
       %span.count= Node.unreported.count
 .group
-  %h3= link_to "Classes", node_classes_path
+  %h3{:class => active_if(controller_name == "node_classes" && action_name == "index")}= link_to "Classes", node_classes_path
+  %span.count= NodeClass.count
   %ul
     - NodeClass.all(:include => :nodes).each do |node_class|
-      %li{:class => active_if(controller_name == "nodes" && @node_class && @node_class == node_class)}
-        = link_to node_class.name, node_class_nodes_path(node_class)
+      %li{:class => active_if(controller_name == "node_classes" && @node_class && @node_class == node_class)}
+        = link_to node_class.name, node_class_path(node_class)
         %span.count= node_class.nodes.count
 .group
-  %h3 By Group
+  %h3{:class => active_if(controller_name == "node_groups" && action_name == "index")}= link_to "Groups", node_groups_path
+  %span.count= NodeGroup.count
   %ul
     - NodeGroup.all(:include => :nodes).each do |node_group|
-      %li{:class => active_if(controller_name == "nodes" && @node_group && @node_group == node_group)}
-        = link_to node_group.name, node_group_nodes_path(node_group)
+      %li{:class => active_if(controller_name == "node_groups" && @node_group && @node_group == node_group)}
+        = link_to node_group.name, node_group_path(node_group)
         %span.count= node_group.nodes.count

@@ -1,11 +1,11 @@
-#sidebar= render 'nodes_sidebar'
+#sidebar= render 'shared/node_manager_sidebar'
 #main
   .header
     %h2= h resource.name
     %ul.actions
       %li= link_to 'Edit', edit_node_path(@node), :class => "edit button", :rel => 'inspect'
       %li= link_to 'Destroy', @node, :confirm => 'Are you sure?', :method => :delete, :class => "delete button"
-  #item
+  .item
     - unless resource.description.blank?
       .description= simple_format h(resource.description)
 

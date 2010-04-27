@@ -1,4 +1,4 @@
-#sidebar= render 'sidebar'
+#sidebar= render 'shared/node_manager_sidebar'
 #main
   .header
     %h2= @node_class.name
@@ -13,11 +13,10 @@
           %button Save
           %li= link_to 'Cancel', @node_class, :class => 'button'
 
-  #item
-    %h3 Nodes
-    .section
-      - unless @node_class.nodes.empty?
-        = render 'nodes/nodes', :nodes => @node_class.nodes
-      - else
-        No Nodes
-
+  - unless @node_class.nodes.empty?
+    .item
+      .section
+        %h3
+          Daily Run Status
+        = render 'statuses/run_failure', :statuses => Status.by_interval(:limit => 30, :nodes => @node_class.nodes)
+      = render 'nodes/nodes', :nodes => @node_class.nodes

@@ -82,8 +82,8 @@ button:active, a.button:hover {
 /* SIDEBAR */
 
 #content #sidebar .group {
+  position: relative;
   border: 1px solid #DDD;
-  border-top: 1px solid #EEE;
   background: #FFF;
   margin: 0 .5em 1em 0;
 
@@ -99,6 +99,14 @@ button:active, a.button:hover {
   position: relative;
   display: block;
   background: #DDD;
+}
+
+#content #sidebar .group h3.active {
+  background: #d2dde5;
+}
+
+#content #sidebar .group h3 a {
+  display: block;
   padding: .5em;
 }
 
@@ -109,16 +117,22 @@ button:active, a.button:hover {
   right: 3px;
   top: 3px;
 
-  background: #DDD;
   color:  #FFF;
   font-size: 12px;
   padding: 0 .4em;
   text-align: center;
 
+  background: #CCC;
+
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
   border-radius: 5px;
 }
+
+#content #sidebar .group li span.count {
+  background: #DDD;
+}
+
 
 #content #sidebar .group ul {
   max-height: 20em;
@@ -127,8 +141,14 @@ button:active, a.button:hover {
 }
 
 #content #sidebar .group ul li {
-  padding: .25em .5em;
   position: relative;
+  font-size: 12px;
+  border-bottom: 1px solid #EEE;
+}
+
+
+#content #sidebar .group ul li:last-child {
+  border: 0;
 }
 
 #content #sidebar .group ul li.active {
@@ -137,6 +157,7 @@ button:active, a.button:hover {
 
 
 #content #sidebar .group ul li a {
+  padding: .25em .5em;
   display: block;
 }
 
@@ -289,33 +310,33 @@ ul li .dropdown ul {
   padding: 0 .5em;
 }
 
-#item {
+.item {
+  background: #FFF;
   padding: 1em;
+  margin-bottom: 1em;
 }
 
 .section {
   margin-bottom: 1em;
 }
 
-.section.error {
-  background: #FDD;
-  border: 1px solid #FCC;
+.section.error, .section.warning {
   padding: 10px 10px 0;
 
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
   border-radius: 2px;
+}
+
+.section.error {
+  background: #FDD;
+  border: 1px solid #FCC;
   color: #433;
 }
 
 .section.warning {
   background: #DDD;
   border: 1px solid #CCC;
-  padding: 10px 10px 0;
-
-  -webkit-border-radius: 2px;
-  -moz-border-radius: 2px;
-  border-radius: 2px;
   color: #444;
 }
 
