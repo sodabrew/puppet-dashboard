@@ -85,7 +85,7 @@ button:active, a.button:hover {
   position: relative;
   border: 1px solid #DDD;
   background: #FFF;
-  margin: 0 .5em 1em 0;
+  margin: 0 .5em 0.5em 0;
 
   -webkit-border-radius: .2em;
   -moz-border-radius: .2em;
