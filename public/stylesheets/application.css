@@ -44,6 +44,7 @@ span.sparkline { vertical-align: bottom; }
 div.flot-graph { margin-bottom: 10px; width: 100%;}
 
 button, a.button {
+  background: #DDD -moz-linear-gradient(top, #EEE, #CCC);
   background: #DDD -webkit-gradient(linear, 0% 0%, 0% 100%, from(#EEE), to(#CCC));
   border: 1px solid #DDD;
   border-color: #FFF #AAA #AAA #FFF;
@@ -67,10 +68,12 @@ a.button {
 button:hover, a.button:hover {
   color: #666;
   text-decoration: none;
+  background: #E8E8E8 -moz-linear-gradient(top, #F8F8F8, #D8D8D8);
   background: #E8E8E8 -webkit-gradient(linear, 0% 0%, 0% 100%, from(#F8F8F8), to(#D8D8D8));
 }
 
 button:active, a.button:active {
+  background: -moz-linear-gradient(top, #CCC, #EEE);
   background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#CCC), to(#EEE));
 }
 

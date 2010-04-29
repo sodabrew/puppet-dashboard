@@ -3,11 +3,13 @@ table.main, table.inspector {
   width: 100%;
   background: #FFF;
   border: 1px solid #DDD;
-  margin-bottom: 1em;
 }
+
+table.inspector { margin-bottom: 1em; }
 
 table.main thead th,
 table.inspector thead th {
+  background: #EEE -moz-linear-gradient(top, #F8F8F8, #E8E8E8);
   background: #EEE -webkit-gradient(linear, 0% 0%, 0% 100%, from(#F8F8F8), to(#E8E8E8));
   border: 1px solid #DDD;
   padding: 0 .5em;
