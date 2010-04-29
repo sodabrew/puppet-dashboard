@@ -4,7 +4,6 @@
       %th.check
         = check_box_tag "check_all"
       %th.status
-        %span{:alt => "Status", :title => "Status"} &bull;
       %th.hostname
         Hostname
       %th.latest_report.desc
@@ -14,8 +13,9 @@
       %tr[n]{:class => "#{'active' if n == @node}"}
         %td.check
           = check_box_tag dom_id(n)
-        %td.status{:class => n.status_class, :alt => n.status_class.titleize, :title => n.status_class.titleize}
-          %span &bull;
+        %td.status{:class => n.status_class}
+          %span{:title => node_title_text(n)}
+            = n.reported_at ? n.last_report.success? ? '&#10004;' : '&#10008;' : '?'
         %td.hostname
           = link_to h(n.name), n
         %td.latest_report

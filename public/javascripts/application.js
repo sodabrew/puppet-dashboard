@@ -1,4 +1,6 @@
 jQuery(document).ready(function(J) {
+  J('.status span[title]').tipsy({gravity: 's'});
+
   J('button.drop, a.drop').click( function(e) {
     var self = J(this);
     var all_drops = self.parents('div').find('.dropdown');

@@ -45,15 +45,12 @@ table thead th.check input, table tbody td.check input {
 
 table thead th.status, table tbody td.status {
   color: #AAA;
-  padding: 0 .075em;
-  width: 1px;
+  padding: 0 .05em;
   text-align: center;
-  font-size: 3em;
 }
 
 table thead th.status span, table tbody td.status span {
-  position: relative;
-  top: .15em;
+  font-weight: bold;
 }
 
 table thead th.status span {
