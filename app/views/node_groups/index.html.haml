@@ -1,29 +1,25 @@
 #sidebar= render 'shared/node_manager_sidebar'
 #main
   .header
-    %h2 Groups
+    %h2.half Groups
+    = render 'shared/search' if action_name == "index"
+    %div{:style => 'clear:both;'}
 
-  .item
-    .actionbar
-      = render 'shared/search'
-      = render 'actions'
-      %div{:style => 'clear:both;'}
-
-    %table.main
-      %thead
-        %tr
-          %th.check
+  %table.main
+    %thead
+      %tr
+        %th.check
+          = check_box_tag "check_all"
+        %th.name
+          Name
+    %tbody
+      - @node_groups.each do |n|
+        %tr[n]
+          %td.check
             = check_box_tag "check_all"
-          %th.name
-            Name
-      %tbody
-        - @node_groups.each do |n|
-          %tr[n]
-            %td.check
-              = check_box_tag "check_all"
-            %td.name
-              = link_to h(n.name), n
-    - if @node_groups.respond_to?(:total_pages) && @node_groups.total_pages > 1
-      .actionbar
-        = will_paginate(@node_groups)
-        %div{:style => 'clear:both;'}
+          %td.name
+            = link_to h(n.name), n
+  - if @node_groups.respond_to?(:total_pages) && @node_groups.total_pages > 1
+    .actionbar
+      = will_paginate(@node_groups)
+      %div{:style => 'clear:both;'}

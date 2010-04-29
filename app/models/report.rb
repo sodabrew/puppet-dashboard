@@ -21,7 +21,7 @@ class Report < ActiveRecord::Base
   end
 
   def status
-    succeeded? ? 'success' : 'failure'
+    success? ? 'success' : 'failure'
   end
 
   def metrics

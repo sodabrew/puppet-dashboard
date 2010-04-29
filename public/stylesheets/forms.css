@@ -76,10 +76,13 @@ form textarea {
   width: 99%;
 }
 
+.header form.search {
+  font-size: 1.25em;
+}
+
 form.search {
   float: right;
   background: transparent;
-  font-size: 12px;
   padding: 0;
 }
 
@@ -87,9 +90,14 @@ form.search {
 form.search input {
   color: #444;
   margin: 0;
-  padding: .4em;
   width: 20em;
-  vertical-align: -1px;
+  margin: 1px 0;
+  line-height: 1.4em;
+  border: 1px solid #CCC;
+}
+
+form.search button {
+  margin-left: -.25em;
 }
 
 .fieldWithErrors input {

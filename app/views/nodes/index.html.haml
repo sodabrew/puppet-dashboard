@@ -2,17 +2,14 @@
 #main
 
   .header
-    %h2== #{action_name.titleize unless action_name == 'index' } Nodes
+    %h2.half== #{action_name.titleize unless action_name == 'index' } Nodes
+    = render 'search' if action_name == "index"
+    %div{:style => 'clear:both;'}
 
-  .item
+  .item{:style => 'margin-bottom: 0;'}
     .section
       %h3
         Daily Run Status
       = render 'statuses/run_failure', :statuses => Status.by_interval(:limit => 30, :nodes => @nodes)
 
-    .actionbar
-      = render 'search'
-      = render 'actions'
-      %div{:style => 'clear:both;'}
-
-    = render 'nodes', :nodes => @nodes
+  = render 'nodes', :nodes => @nodes

@@ -50,8 +50,8 @@ button, a.button {
 
   color: #666;
   cursor: pointer;
-  font-size: 12px;
-  line-height: 2em;
+  font-size: 0.9em;
+  line-height: 1.5em;
   margin:0;
   padding: 0 .5em;
 
@@ -62,7 +62,6 @@ button, a.button {
 
 a.button {
   display: inline-block;
-  font-size: 12px;
 }
 
 button:hover, a.button:hover {
@@ -71,7 +70,7 @@ button:hover, a.button:hover {
   background: #E8E8E8 -webkit-gradient(linear, 0% 0%, 0% 100%, from(#F8F8F8), to(#D8D8D8));
 }
 
-button:active, a.button:hover {
+button:active, a.button:active {
   background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#CCC), to(#EEE));
 }
 
@@ -94,8 +93,7 @@ button:active, a.button:hover {
 
 #content #sidebar .group h3 {
   color: #444;
-  font-size: 14px;
-  line-height: 14px;
+  line-height: 1.25em;
   position: relative;
   display: block;
   background: #DDD;
@@ -107,7 +105,7 @@ button:active, a.button:hover {
 
 #content #sidebar .group h3 a {
   display: block;
-  padding: .5em;
+  padding: .25em .5em;
 }
 
 #content #sidebar .group span.count {
@@ -307,13 +305,15 @@ ul li .dropdown ul {
 .header h2, .header input {
   border: 1px solid transparent;
   margin: 0 2px;
-  padding: 0 .5em;
+  padding: 0 .25em;
+  line-height: 1.333em;
 }
 
 .item {
   background: #FFF;
   padding: 1em;
   margin-bottom: 1em;
+  overflow: hidden;
 }
 
 .section {

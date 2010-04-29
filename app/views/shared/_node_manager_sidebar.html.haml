@@ -11,6 +11,9 @@
     %li{:class => active_if(controller_name == 'nodes' && action_name == 'unreported' && parent.nil?)}
       = link_to "Unreported", unreported_nodes_path
       %span.count= Node.unreported.count
+  .footer.actionbar
+    = link_to "Add Node", new_node_path, :class => 'button'
+
 .group
   %h3{:class => active_if(controller_name == "node_classes" && action_name == "index")}= link_to "Classes", node_classes_path
   %span.count= NodeClass.count
@@ -19,6 +22,9 @@
       %li{:class => active_if(controller_name == "node_classes" && @node_class && @node_class == node_class)}
         = link_to node_class.name, node_class_path(node_class)
         %span.count= node_class.nodes.count
+  .footer.actionbar
+    = link_to "Add Group", new_node_group_path, :class => 'button'
+
 .group
   %h3{:class => active_if(controller_name == "node_groups" && action_name == "index")}= link_to "Groups", node_groups_path
   %span.count= NodeGroup.count
@@ -27,3 +33,5 @@
       %li{:class => active_if(controller_name == "node_groups" && @node_group && @node_group == node_group)}
         = link_to node_group.name, node_group_path(node_group)
         %span.count= node_group.nodes.count
+  .footer.actionbar
+    = link_to "Add Class", new_node_class_path, :class => 'button'

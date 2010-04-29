@@ -1,7 +1,7 @@
 body {
   font-family: Helvetica, Arial, Verdana, sans-serif;
-  line-height: 20px;
-  font-size: 14px;
+  line-height: 18px;
+  font-size: 12px;
 }
 
 h1, h2, h3, h4, h5, h6,
@@ -79,4 +79,8 @@ p.error {
   color: #C33;
   background: #FEE;
   padding: .5em 1em;
+}
+
+input {
+  font-size: 1em;
 }

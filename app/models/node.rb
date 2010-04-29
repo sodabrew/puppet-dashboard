@@ -100,8 +100,8 @@ class Node < ActiveRecord::Base
   end
 
   def status_class
-    return 'no_report' unless last_report
-    last_report.success? ? 'success' : 'failure'
+    return 'no reports' unless last_report
+    last_report.status
   end
 
   attr_accessor :node_class_names
