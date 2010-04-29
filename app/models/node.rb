@@ -39,6 +39,7 @@ class Node < ActiveRecord::Base
   named_scope :failed, :select => 'DISTINCT `nodes`.name, `nodes`.*', :joins => 'LEFT OUTER JOIN reports on reports.time = reported_at', :conditions => 'reports.success = 0', :order => "reported_at DESC"
 
   named_scope :unreported, :conditions => {:reported_at => nil}
+  named_scope :no_longer_reporting, :conditions => ['reported_at < ?', 30.minutes.ago]
 
   def to_param
     name.to_s

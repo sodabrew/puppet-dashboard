@@ -27,6 +27,11 @@ class NodesController < InheritedResources::Base
     render :index
   end
 
+  def no_longer_reporting
+    @nodes = Node.no_longer_reporting.paginate(:page => params[:page])
+    render :index
+  end
+
   # TODO: routing currently can't handle nested resources due to node's id
   # requirements
   def reports

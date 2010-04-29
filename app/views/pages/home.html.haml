@@ -11,13 +11,23 @@
           = succeed '.' do
             = truncated_node_sentence(@failed_nodes, :more_link => failed_nodes_path)
 
+    - unless @no_longer_reporting_nodes.empty?
+      .section.warning
+        %h3 Nodes Failed To Report
+        %p
+          = pluralize @no_longer_reporting_nodes.length, 'node'
+          = @no_longer_reporting_nodes.length == 1 ? 'has' : 'have'
+          not reported in the last 30 minutes:
+          = succeed '.' do
+            = truncated_node_sentence(@no_longer_reporting_nodes, :more_link => no_longer_reporting_nodes_path)
+
     - unless @unreported_nodes.empty?
       .section.warning
-        %h3 Unreported Nodes
+        %h3 Nodes Not Reporting
         %p
           = pluralize @unreported_nodes.length, 'node'
           = @unreported_nodes.length == 1 ? 'has' : 'have'
-          not yet reported:
+          never reported:
           = succeed '.' do
             = truncated_node_sentence(@unreported_nodes, :more_link => unreported_nodes_path)
 

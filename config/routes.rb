@@ -7,7 +7,14 @@ ActionController::Routing::Routes.draw do |map|
     groups.resources :nodes, :requirements => {:id => /.*/}
   end
 
-  map.resources :nodes, :member => {:reports => :get}, :collection => {:successful => :get, :failed => :get, :unreported => :get}, :requirements => {:id => /[^\/]+/}
+  map.resources :nodes, 
+    :member => {:reports => :get},
+    :collection => {
+     :successful => :get,
+     :failed     => :get,
+     :unreported => :get,
+     :no_longer_reporting => :get},
+    :requirements => {:id => /[^\/]+/}
 
   map.resource :user_session
   map.resource :account, :controller => "users"
