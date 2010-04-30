@@ -23,7 +23,7 @@
         = link_to node_class.name, node_class_path(node_class)
         %span.count= node_class.nodes.count
   .footer.actionbar
-    = link_to "Add Group", new_node_group_path, :class => 'button'
+    = link_to "Add Class", new_node_class_path, :class => 'button'
 
 .group
   %h3{:class => active_if(controller_name == "node_groups" && action_name == "index")}= link_to "Groups", node_groups_path
@@ -34,4 +34,4 @@
         = link_to node_group.name, node_group_path(node_group)
         %span.count= node_group.nodes.count
   .footer.actionbar
-    = link_to "Add Class", new_node_class_path, :class => 'button'
+    = link_to "Add Group", new_node_group_path, :class => 'button'
