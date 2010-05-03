@@ -1,0 +1,13 @@
+# Install the basic application files
+app usr/share/puppet-dashboard
+config usr/share/puppet-dashboard
+db usr/share/puppet-dashboard
+lib usr/share/puppet-dashboard
+public usr/share/puppet-dashboard
+Rakefile usr/share/puppet-dashboard
+script usr/share/puppet-dashboard
+spec usr/share/puppet-dashboard
+vendor/plugins usr/share/puppet-dashboard/vendor
+vendor/gems usr/share/puppet-dashboard/vendor
+vendor/rails /usr/share/puppet-dashboard/vendor
+debian/conf/*.template usr/share/puppet-dashboard/templates

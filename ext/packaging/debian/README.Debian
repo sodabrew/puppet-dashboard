@@ -1,0 +1,76 @@
+puppet-dashboard for Debian
+---------------------------
+* Puppet Dashboard v1.0 
+
+* SUPPORTS SETUP AND UPGRADES OF MULTIPLE DATABASE INSTANCES
+ This puppet-dashboard package is designed to automatically configure database
+ BUT NOT the web server.
+ The default database instance is called "default".
+ A debconf facility is provided for configuring several puppet-dashboard
+ instances. Use dpkg-reconfigure to define the instances identifiers.
+ NOTICE : every rake command has to know which instance it applies to.
+ TO SELECT THE INSTANCE, USE
+	X_DEBIAN_SITEID=<instancename>
+ BEFORE ANY RAKE TASK.
+ 
+* MANUAL WEB SERVER CONFIGURATION
+ For web server configuration, examples are available in /usr/share/doc/puppet-dashboard/examples
+ To choose which instance to run, set the environment variable :
+ X_DEBIAN_SITEID=<instancename>
+ By default, 
+ X_DEBIAN_SITEID=default
+
+ If used with apache2, lighttpd and similar web servers,
+ it is HIGHLY RECOMMENDED to install libfcgi-ruby,
+ and when using apache2, libapache2-mod-fcgid.
+
+* QUICK LAUNCH USING WEBRICK
+ To test puppet-dashboard without installing a web server, run as root :
+ cd /usr/share/puppet-dashboard/
+ sudo -u www-data X_DEBIAN_SITEID="default" ruby script/server webrick -e production
+ and point your browser to http://localhost:3000
+ NOTICE : running without sudoing to www-data will change permissions on some files, e.g.
+ /var/log/puppet-dashboard files. Fix it or reinstall the puppet-dashboard package if you did so.
+
+ * OWNERS AND PERMISSIONS
+ It is assumed ruby will run puppet-dashboard as www-data:www-data.
+ Accordingly, these files are owned by root:www-data and have 640 permissions :
+ /etc/puppet-dashboard/<instancename>/session.yml
+ /etc/puppet-dashboard/<instancename>/database.yml
+ These folders are owned by www-data:www-data and have 750 permissions :
+ /var/log/puppet-dashboard/*
+ /var/lib/puppet-dashboard/*
+ /var/cache/puppet-dashboard/*
+
+ Relaxing those permissions is discouraged. Please think twice before doing so.
+ If one really need to run puppet-dashboard as another user, please read what follows.
+
+* MANUAL INSTALL / RUNNING AS UNPRIVILEGED USER WITHOUT COPYING /usr/share/puppet-dashboard
+ Why : puppet-dashboard package upgrades will benefit to all puppet-dashboard instances, although
+ calling manually rake db:migrate on each package upgrade is still necessary.
+ Besides support for X_DEBIAN_SITEID, several environment variables are available :
+  RAILS_ETC (where database.yml, email.yml are supposed to be)
+  RAILS_LOG (the log files)
+  RAILS_VAR (contains the files/ directory)
+  RAILS_CACHE (cached data)
+  and, of course, RAILS_ENV
+ That way, one can install puppet-dashboard as a user foo :
+ - first create some directories in e.g. /home/foo/puppet-dashboard : config, files, tmp, log
+ - in a terminal, declare those environment variables :
+  mydir=/home/dev/test/puppet-dashboard
+  export RAILS_ETC=$mydir/config
+  export RAILS_LOG=$mydir/log
+  export RAILS_VAR=$mydir
+  export RAILS_CACHE=$mydir/tmp
+  export RAILS_ENV=production
+  export X_DEBIAN_SITEID=myinstance
+ - copy /usr/share/puppet-dashboard/templates/database.yml.template to $mydir/config/database.yml
+ and adapt it to your needs; for a quick setup it's easier to use the sqlite template,
+ located in the same dir.
+ - link /usr/share/puppet-dashboard/db to $mydir/db :
+  ln -s /usr/share/puppet-dashboard/db $mydir/db
+ - then "install" puppet-dashboard :
+  rake -f /usr/share/puppet-dashboard/Rakefile generate_session_store
+ - Run puppet-dashboard using e.g. webrick and point your browser to localhost:3000
+  ruby /usr/share/puppet-dashboard/script/server webrick -e production
+ 

@@ -1,0 +1,4 @@
+#
+# path to where you installed puppet dashboard
+#
+DASHBOARD_HOME=/usr/share/puppet-dashboard
