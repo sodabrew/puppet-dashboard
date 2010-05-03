@@ -1,0 +1,27 @@
+#!/usr/bin/make -f
+# -*- makefile -*-
+
+include /usr/share/cdbs/1/rules/debhelper.mk
+
+DEB_UPSTREAM_VERSION := $(shell echo $(DEB_VERSION) | cut -d- -f1 )
+TARBALL = $(DEB_SOURCE_PACKAGE)_$(DEB_UPSTREAM_VERSION).orig.tar.gz
+
+GIT_REVISION := $(shell echo $(DEB_UPSTREAM_VERSION) | awk -F"~" '{ print $$2 }' | sed 's/git//' )
+GIT_URL := http://github.com/reductivelabs/puppet-dashboard.git
+
+
+binary-install/puppet-dashboard::
+	# Clean up the "extra" license files
+	rm -f debian/puppet-dashboard/usr/share/puppet-dashboard/doc/README_FOR_APP
+	rm -f debian/puppet-dashboard/usr/share/puppet-dashboard/vendor/plugins/*/*LICENSE
+	rm -f debian/puppet-dashboard/usr/share/puppet-dashboard/vendor/plugins/*/License.txt
+	rm -f debian/puppet-dashboard/usr/share/puppet-dashboard/vendor/plugins/*/COPYING
+	rm -f debian/puppet-dashboard/usr/share/puppet-dashboard/vendor/gems/*/COPYING
+	rm -f debian/puppet-dashboard/usr/share/puppet-dashboard/vendor/gems/*/*LICENSE
+	rm -f debian/puppet-dashboard/usr/share/puppet-dashboard/vendor/gems/*/License.txt
+	rm -f debian/puppet-dashboard/usr/share/puppet-dashboard/vendor/rails/*/*LICENSE
+	# ...and other various files
+	rm -f debian/puppet-dashboard/.gems
+	rm -f debian/puppet-dashboard/.autotest
+	find debian/puppet-dashboard -name '.gitignore' -type f | xargs rm -f
+	find debian/puppet-dashboard -name '.git' -type d | xargs rm -rf

@@ -1,0 +1,59 @@
+#!/bin/bash
+#
+# Init script for puppet-dashboard
+#
+# chkconfig: - 85 15
+# description: Init script for puppet-dashboard
+
+# Source function library.
+. /etc/rc.d/init.d/functions
+
+if [ -f /etc/sysconfig/puppet-dashboard ]; then
+    . /etc/sysconfig/puppet-dashboard
+fi
+
+prog=puppet-dashboard
+RETVAL=0
+
+start() {
+        echo -n $"Starting $prog: "
+        /usr/bin/ruby ${DASHBOARD_HOME}/script/server >/dev/null 2>&1 &
+        RETVAL=$?
+        if [ $RETVAL = 0 ]
+        then
+            echo $! > /var/run/puppet-dashboard.pid
+            echo_success
+        else
+            echo_failure
+        fi 
+
+        echo
+
+        return $RETVAL
+}
+stop() {
+        echo -n $"Stopping $prog: "
+        killproc puppet-dashboard
+        RETVAL=$?
+        echo
+        [ $RETVAL = 0 ] && rm -f /var/run/puppet-dashboard.pid
+}
+
+# See how we were called.
+case "$1" in
+    start)
+        start
+        ;;
+    stop)
+        stop
+        ;;
+    restart)
+        stop
+        start
+        ;;
+    *)
+        echo $"Usage: $prog {start|stop|restart}"
+        exit 1
+esac
+
+exit $RETVAL
