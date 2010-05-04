@@ -1,10 +1,15 @@
 - te = timeline_event
 - is_current = @node && te.subject == @node
-- subject = is_current ? "This node" : te.subject_type
+- subject_name = te.subject && te.subject_name
+- subject = is_current ? "This node" : subject_name
+
+- is_secondary = @node && te.secondary_subject == @node
+- secondary_name = te.secondary_subject && te.secondary_name
+- secondary = is_secondary ? "this node" : secondary_name
 
 %li{:class => te.object_type}
-  = link_to_unless is_current || te.secondary_subject_type,  subject, te.subject
+  %span.date
+    = te.created_at
+  = begin; link_to_unless is_current, subject, te.subject; rescue NoMethodError; subject; end
   = te.action
-  = link_to te.secondary_name, te.secondary_subject if te.secondary_subject_type
-  = time_ago_in_words(te.created_at)
-  ago
+  = link_to_unless is_secondary, secondary, te.secondary_subject if te.secondary_subject_type

@@ -35,6 +35,12 @@ ol.timeline li {
   position: relative;
 }
 
+ol.timeline li span.date {
+  color: #666;
+  display: inline-block;
+  width: 9em;
+}
+
 ul.status {
   list-style: none;
 }
