@@ -61,6 +61,7 @@ class Report < ActiveRecord::Base
   end
 
   def set_node_reported_at
-    node.update_attribute(:reported_at, report.time)
+    node.reported_at = report.time
+    node.send :update_without_callbacks # do not create a timeline event
   end
 end

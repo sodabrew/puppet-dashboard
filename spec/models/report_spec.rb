@@ -43,6 +43,14 @@ describe Report do
       node.reload
       node.reported_at.should be_close(@report_data.time.in_time_zone, 1.second)
     end
+
+    it "does not create a timeline event for the node" do
+      node = Node.generate(:name => @report_data.host)
+      lambda {
+        Report.create(:report => @report_yaml)
+        node.reload
+      }.should_not change(TimelineEvent, :count)
+    end
   end
 
   describe "deserializing the report" do
