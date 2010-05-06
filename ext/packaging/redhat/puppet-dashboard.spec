@@ -1,14 +1,14 @@
-%define confdir ext/packaging/redhat
-%define _initrddir /etc/rc.d/init.d}
+%global confdir ext/packaging/redhat
+%global initrddir /etc/rc.d/init.d
 
 Name:           puppet-dashboard
 Version:        1.0.0
-Release:        2%{?dist}
+Release:        4%{?dist}
 Summary:        Systems Management web application
-Group:          Development/Tools 
+Group:          Applications/System
 License:        GPLv2+
-URL:            http://www.puppetlabs.com 
-Source:         http://puppetlabs.com/downloads/puppet/%{name}-%{version}.tar.gz
+URL:            http://www.puppetlabs.com
+Source0:        http://yum.puppetlabs.com/sources/%{name}-%{version}.tar.gz
 BuildArch:      noarch
 Requires:       ruby(abi) = 1.8, rubygems, rubygem(rake)
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -28,33 +28,33 @@ Puppet installations and is written using the Ruby on Rails framework.
 %build
 
 %install
-%{__rm} -rf %{buildroot}
+rm -rf %{buildroot}
 
-%{__install} -p -d -m0755 %{buildroot}%{_datadir}/%{name}
-%{__install} -p -d -m0755 %{buildroot}%{_datadir}/%{name}/vendor
-%{__install} -p -d -m0755 %{buildroot}%{_defaultdocdir}/%{name}-%{version}
-%{__cp} -p -r app bin config db lib public Rakefile script spec %{buildroot}%{_datadir}/%{name}
+install -p -d -m0755 %{buildroot}%{_datadir}/%{name}
+install -p -d -m0755 %{buildroot}%{_datadir}/%{name}/vendor
+install -p -d -m0755 %{buildroot}%{_defaultdocdir}/%{name}-%{version}
+cp -p -r app bin config db lib public Rakefile script spec %{buildroot}%{_datadir}/%{name}
 
 # Add sysconfig and init script
-%{__install} -Dp -m0755 %{confdir}/%{name}.init %{buildroot}%{_initrddir}/puppet-dashboard
-%{__install} -Dp -m0644 %{confdir}/%{name}.sysconfig %{buildroot}%{_sysconfdir}/sysconfig/puppet-dashboard
+install -Dp -m0755 %{confdir}/%{name}.init %{buildroot}%{initrddir}/puppet-dashboard
+install -Dp -m0644 %{confdir}/%{name}.sysconfig %{buildroot}%{_sysconfdir}/sysconfig/puppet-dashboard
 
 # Not all plugins are installed from our source file.
-%{__mkdir} %{buildroot}%{_datadir}/%{name}/vendor/plugins
+mkdir %{buildroot}%{_datadir}/%{name}/vendor/plugins
 for plugin in authlogic inherited_resources jrails object_daddy resources_controller rspec-rails timeline_fu will_paginate; do
-  %{__cp} -p -r vendor/plugins/$plugin %{buildroot}%{_datadir}/%{name}/vendor/plugins/$plugin
+  cp -p -r vendor/plugins/$plugin %{buildroot}%{_datadir}/%{name}/vendor/plugins/$plugin
 done
 
-%{__cp} -p -r vendor/gems %{buildroot}%{_datadir}/%{name}/vendor
-%{__cp} -p -r vendor/rails %{buildroot}%{_datadir}/%{name}/vendor
+cp -p -r vendor/gems %{buildroot}%{_datadir}/%{name}/vendor
+cp -p -r vendor/rails %{buildroot}%{_datadir}/%{name}/vendor
 
 chmod a+x %{buildroot}%{_datadir}/%{name}/script/* 
 
 for file in $(find %{buildroot} -size 0) ; do
-    %{__rm} -f "$file"
+    rm -f "$file"
 done
 
-%{__rm} -f -r %{buildroot}%{_datadir}/%{name}/.git
+rm -f -r %{buildroot}%{_datadir}/%{name}/.git
 
 mv CHANGELOG timestamp
 iconv -f ISO-8859-1 -t UTF-8 -o CHANGELOG timestamp
@@ -75,16 +75,28 @@ if [ "$1" -ge 1 ]; then
 fi
 
 %clean
-%{__rm} -rf %{buildroot}
+rm -rf %{buildroot}
 
 %files
 %defattr(-,root,root,0755)
 %{_datadir}/%{name}
-%{_initrddir}/puppet-dashboard
+%{initrddir}/puppet-dashboard
 %{_sysconfdir}/sysconfig/puppet-dashboard
 %doc CHANGELOG COPYING README.markdown VERSION doc/README_FOR_APP doc/domain-model.graffle doc/domain-model.png
 
 %changelog
+* Mon May 03 2010 Todd Zullinger <tmz@pobox.com> - 1.0.0-4
+- Don't define %%_initrddir, rpm has defined it since the Red Hat Linux days
+  (When RHEL-6 and Fedora-9 are the oldest supported releases, %%_initddir should
+  be used instead.)
+- %%global is preferred over %%define
+  https://fedoraproject.org/wiki/Packaging:Guidelines#Source_RPM_Buildtime_Macros
+- Drop use of %%{__mkdir} and similar, the macros add nothing but clutter
+- Fix Source0 URL
+
+* Mon May  3 2010 James Turnbull <james@lovedthanlost.net> - 1.0.0-3
+- Fixed init script type
+
 * Fri Apr 16 2010 James Turnbull <james@lovedthanlost.net> - 1.0.0-2
 - Added init script support
 - Imported changes for older RPM builds provided by Michael Stahnke
