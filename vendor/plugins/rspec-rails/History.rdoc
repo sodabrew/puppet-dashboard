@@ -1,3 +1,56 @@
+=== Version 1.3.3 / (in git)
+
+* bug fix
+  * support message expectation on template.render with locals (Sergey
+    Nebolsin). Closes #941.
+  * helper instance variable no longer persists across examples
+    (alex rothenberg). Closes #627.
+  * mock_model stubs marked_for_destruction? (returns false).
+
+=== Version 1.3.2 / 2010-01-13
+
+* bug fix
+  * generator only adds code for rspec-rails
+    * which depends on rspec
+
+=== Version 1.3.1 / 2010-01-12
+
+* bug fix
+  * ensure that Spec::Rails module is defined (Jack Chen and Ryan Bigg).
+    Closes #939.
+
+=== Version 1.3.0 / 2010-01-11
+
+* enhancements
+  * use stub() instead of stub!() in generators
+  * generate gem config in test.rb with 'script/generate rspec'
+
+=== Version 1.2.9 / 2009-10-05
+
+* enhancements
+  * added route_to and be_routable matchers (Randy Harmon). Closes #843.
+  * Provide better failure message for render_template when redirected (Josh
+    Nichols). Closes #885.
+  * generated specs require 'spec_helper'
+
+* bug fixes
+  * pass the correct args to super in controller#render depending on the rails
+    version (Lucas Carlson). Closes #865.
+  * use Rack::Utils.parse_query to convert query strings to hashes. Closes #872.
+  * errors correctly bubble up when a controller spec in isolation mode
+    requests a non-existent action/template
+    * no error if either action or template exist
+    * error if neither exist
+    * Closes #888.
+  * mock_model stubs destroyed? to return false
+
+* removals
+  * spec_server has been removed in favor of spork.
+    * You can still use the --drb flag, but you've got to install the spork
+      gem.
+    * Windows users who cannot use the spork gem can install the spec_server
+      from http://github.com/dchelimsky/spec_server
+
 === Version 1.2.7 / 2009-06-22
 
 * enhancements

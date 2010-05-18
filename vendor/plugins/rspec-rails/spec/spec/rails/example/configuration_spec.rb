@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/../../../spec_helper'
+require 'spec_helper'
 
 module Spec
   module Runner
@@ -44,12 +44,14 @@ module Spec
         it "should default to RAILS_ROOT + '/spec/fixtures'" do
           config.fixture_path.should == RAILS_ROOT + '/spec/fixtures'
           ActiveSupport::TestCase.fixture_path.should == RAILS_ROOT + '/spec/fixtures'
+          ActionController::IntegrationTest.fixture_path.should == RAILS_ROOT + '/spec/fixtures'
         end
 
         it "should set fixture_path" do
           config.fixture_path = "/new/path"
           config.fixture_path.should == "/new/path"
           ActiveSupport::TestCase.fixture_path.should == "/new/path"
+          ActionController::IntegrationTest.fixture_path.should == "/new/path"
         end
       end
 

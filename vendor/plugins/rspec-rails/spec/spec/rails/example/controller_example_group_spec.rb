@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/../../../spec_helper'
+require 'spec_helper'
 require 'controller_spec_controller'
 require File.join(File.dirname(__FILE__), "/shared_routing_example_group_examples.rb")
 
@@ -148,7 +148,7 @@ require File.join(File.dirname(__FILE__), "/shared_routing_example_group_example
       it "should support a Symbol key" do
         get 'action_which_sets_cookie', :value => "cookie value"
         if ::Rails::VERSION::STRING >= "2.3"
-          cookies[:cookie_key].should == "cookie+value"
+          cookies[:cookie_key].should match("cookie[\+ ]value")
         else
           cookies[:cookie_key].should == ["cookie value"]
         end
@@ -157,7 +157,7 @@ require File.join(File.dirname(__FILE__), "/shared_routing_example_group_example
       it "should support a String key" do
         get 'action_which_sets_cookie', :value => "cookie value"
         if ::Rails::VERSION::STRING >= "2.3"
-          cookies['cookie_key'].should == "cookie+value"
+          cookies['cookie_key'].should match("cookie[\+ ]value")
         else
           cookies['cookie_key'].should == ["cookie value"]
         end
@@ -188,11 +188,19 @@ require File.join(File.dirname(__FILE__), "/shared_routing_example_group_example
       }.should_not raise_error
     end
     
-    describe "extending #render on a controller" do
-      it "supports two arguments (as with rails 2.2)" do
-        get 'action_with_two_arg_render'
-        response.body.should =~ /new Effect\.Highlight/
+    if ::Rails::VERSION::STRING > '2.1'
+      describe "extending #render on a controller" do
+        it "supports two arguments (as with rails 2.1)" do
+          get 'action_with_two_arg_render'
+          response.body.should =~ /new Effect\.Highlight/
+        end
       end
+    end
+    
+    it "should access headers" do
+      request.env['ACCEPT'] = "application/json"
+      get 'action_that_returns_headers', :header => 'ACCEPT'
+      response.body.should == "application/json"
     end
   end
 

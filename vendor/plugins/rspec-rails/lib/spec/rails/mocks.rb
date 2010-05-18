@@ -14,6 +14,8 @@ module Spec
           :id => id,
           :to_param => id.to_s,
           :new_record? => false,
+          :destroyed? => false,
+          :marked_for_destruction? => false,
           :errors => stub("errors", :count => 0)
         })
         m = mock("#{model_class.name}_#{id}", options_and_stubs)

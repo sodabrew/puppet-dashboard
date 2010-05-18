@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/../../../spec_helper'
+require 'spec_helper'
 Spec::Runner.configuration.global_fixtures = :people
 
 describe ExplicitHelper, :type => :helper do
@@ -148,7 +148,7 @@ module Spec
         helper_name :explicit
         
         before(:each) do
-          if Rails::VERSION::STRING <= "2.1"
+          if ::Rails::VERSION::STRING < "2.2"
             pending("need to get this new feature working against pre 2.2 versions of rails")
           end
         end
@@ -175,6 +175,20 @@ module Spec
         end
       end
 
+      # both specs the same as textmate invokes first-then-second but rake spec:plugins:rspec_on_rails invokes second-then-first
+      describe HelperExampleGroup, "new helper for each spec - instance variables side effects are isolated", :type=> :helper do
+        it 'should be able to set an instance variable on the helper on a new instance of the helper' do
+          helper.instance_variable_get(:@test_instance_var).should be_nil
+          helper.instance_variable_set(:@test_instance_var, :first_value)
+          helper.instance_variable_get(:@test_instance_var).should == :first_value 
+        end
+
+        it 'should get a clean copy of the helper with no saved instance variables from the last run' do
+          helper.instance_variable_get(:@test_instance_var).should be_nil
+          helper.instance_variable_set(:@test_instance_var, :second_value)
+          helper.instance_variable_get(:@test_instance_var).should == :second_value 
+        end
+      end
     end
   end
 end

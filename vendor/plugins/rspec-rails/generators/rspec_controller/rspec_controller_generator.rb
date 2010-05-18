@@ -30,6 +30,8 @@ class RspecControllerGenerator < ControllerGenerator
       m.template 'controller:helper.rb',
         File.join('app/helpers', class_path, "#{file_name}_helper.rb")
 
+
+
       # Spec and view template for each action.
       actions.each do |action|
         m.template 'view_spec.rb',

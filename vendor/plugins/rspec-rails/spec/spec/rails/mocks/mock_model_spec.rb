@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/../../../spec_helper'
+require 'spec_helper'
 require File.dirname(__FILE__) + '/ar_classes'
 
 describe "mock_model" do
@@ -23,6 +23,12 @@ describe "mock_model" do
     end
     it "should not say it instance_of? if it isn't, even if it's ancestor is" do
       @model.instance_of?(MockableModel).should be(false)
+    end
+    it "should say it is not destroyed" do
+      @model.destroyed?(SubMockableModel).should be(false)
+    end
+    it "should say it is not marked_for_destruction" do
+      @model.marked_for_destruction?.should be(false)
     end
   end
 

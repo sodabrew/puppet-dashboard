@@ -1,3 +1,37 @@
+= Upgrade to 1.2.8 - 1.3.2
+
+== What's new
+
+=== route_to and be_routable matchers
+
+Stop using route_for and params_from today! These new matchers from Randy
+Harmon are more expressive and more reliable. Here's how you use them:
+
+    { :put => "/projects/37" }.should route_to(:controller => 'projects', :action => 'update', :id => '37')
+
+    { :get => "/nonexisting_route" }.should_not be_routable
+
+== What's changed
+
+=== spec_server has been removed
+
+spec_server was deprecated in 1.2.7 and has now been removed. Admittedly, this
+was a short deprecation cycle, but spec server never quite worked right in all
+situations and spork is a great solution that you can use today! This is all
+you need to do:
+
+    [sudo] gem install spork
+    cd path/to/project
+    spork --bootsrap
+    
+Now open up spec/spec_helper.rb and follow the directions at the top. You'll
+be up and running in no time.
+
+For more info:
+
+* http://github.com/timcharper/spork
+* http://groups.google.com/group/sporkgem
+
 = Upgrade to 1.2.7
 
 == What's changed
