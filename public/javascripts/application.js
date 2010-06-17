@@ -23,8 +23,8 @@ jQuery(document).ready(function(J) {
     self.parents('table').find('td input:checkbox').attr('checked', self.is(':checked'));
   });
 
-  J('#node_group_names').facebooklist('#existing_node_groups', {url:relative_url_root+'/node_groups.json',cache:0}, 10, {userfilter:1,casesensetive:0}, 0);
-  J('#node_class_names').facebooklist('#existing_node_classes', {url:relative_url_root+'/node_classes.json',cache:0}, 10, {userfilter:1,casesensetive:0}, 0);
+  J('#node_group_names').facebooklist('#existing_node_groups', {url:relative_url_root+'/node_groups.json',cache:0}, 10, {userfilter:0,casesensetive:1}, 0);
+  J('#node_class_names').facebooklist('#existing_node_classes', {url:relative_url_root+'/node_classes.json',cache:0}, 10, {userfilter:0,casesensetive:1}, 0);
   
   J('a.in-place').click(function() {
     J(this).parents('.header').hide().next('.in-place').show().find('input[type=text]').focus();

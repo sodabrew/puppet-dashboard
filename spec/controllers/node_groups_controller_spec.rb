@@ -1,14 +1,10 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
+require 'shared_behaviors/controller_mixins'
 
 describe NodeGroupsController do
-  describe "index when searching" do
-    it "should return groups whose name matches the query" do
-      included = NodeGroup.generate(:name => "queryable")
-      excluded = NodeGroup.generate(:name => "excluded")
-      get :index, :q => 'query'
+  def model; NodeGroup end
 
-      assigns[:node_groups].should include(included)
-      assigns[:node_groups].should_not include(excluded)
-    end
-  end
+  it_should_behave_like "without JSON pagination"
+  it_should_behave_like "with search by q and tag"
+
 end
