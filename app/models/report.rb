@@ -32,15 +32,32 @@ class Report < ActiveRecord::Base
   TOTAL_TIME_FORMAT = "%0.2f"
 
   def total_time
-    metrics && metrics[:time] && TOTAL_TIME_FORMAT % metrics[:time][:total]
+    TOTAL_TIME_FORMAT % metric_value(:time, :total)
   end
 
   def total_resources
-    metrics && metrics[:resources] && metrics[:resources][:total]
+    metric_value :resources, :total
   end
 
   def failed_resources
-    metrics && metrics[:resources] && metrics[:resources][:failed]
+    metric_value :resources, :failed
+  end
+
+  def changes
+    metric_value :changes, :total
+  end
+
+  # Returns the metric value at the key found by traversing the metrics hash
+  # tree. Returns nil if any intermediary results are nil.
+  #
+  def metric_value(*keys)
+    return nil unless metrics
+    result = metrics
+    keys.each do |key|
+      result = result[key]
+      break unless result
+    end
+    result
   end
 
   private
