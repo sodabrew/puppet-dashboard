@@ -58,4 +58,18 @@ module ApplicationHelper
   def active_if(condition)
     condition ? 'active' : ''
   end
+
+  include WillPaginate::ViewHelpers
+
+  # Return HTML with pagination controls for displaying an ActiveRecord +scope+.
+  def pagination_for(scope)
+    if scope.respond_to?(:total_pages) && scope.total_pages > 1
+      content_tag(:div, :class => 'actionbar') do
+        [
+          will_paginate(scope),
+          tag(:div, :style => 'clear: both;')
+        ]
+      end
+    end
+  end
 end
