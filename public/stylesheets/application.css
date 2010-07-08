@@ -50,21 +50,21 @@ span.sparkline { vertical-align: bottom; }
 div.flot-graph { margin-bottom: 10px; width: 100%;}
 
 button, a.button {
-  background: #DDD -moz-linear-gradient(top, #EEE, #CCC);
-  background: #DDD -webkit-gradient(linear, 0% 0%, 0% 100%, from(#EEE), to(#CCC));
+  background: #5C80A8 -moz-linear-gradient(top, #638AB5, #55779C);
+  background: #5C80A8 -webkit-gradient(linear, 0% 0%, 0% 100%, from(#638AB5), to(#55779C));
   border: 1px solid #DDD;
   border-color: #FFF #AAA #AAA #FFF;
 
-  color: #666;
+  color: white;
   cursor: pointer;
-  font-size: 0.9em;
+  font-size: 1.1em;
   line-height: 1.5em;
-  margin:0;
+  margin: 0.25em;
   padding: 0 .5em;
 
-  -webkit-border-radius: 2px;
-  -moz-border-radius: 2px;
-  border-radius: 2px;
+  -webkit-border-radius: 0.35em;
+  -moz-border-radius: 0.35em;
+  border-radius: 0.35em;
 }
 
 a.button {
@@ -72,15 +72,16 @@ a.button {
 }
 
 button:hover, a.button:hover {
-  color: #666;
   text-decoration: none;
-  background: #E8E8E8 -moz-linear-gradient(top, #F8F8F8, #D8D8D8);
-  background: #E8E8E8 -webkit-gradient(linear, 0% 0%, 0% 100%, from(#F8F8F8), to(#D8D8D8));
+  background: #6A94C2 -moz-linear-gradient(top, #719DCF, #638AB5);
+  background: #6A94C2 -webkit-gradient(linear, 0% 0%, 0% 100%, from(#719DCF), to(#638AB5));
+
+  color: yellow;
 }
 
 button:active, a.button:active {
-  background: -moz-linear-gradient(top, #CCC, #EEE);
-  background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#CCC), to(#EEE));
+  background: -moz-linear-gradient(top, #476382, #55769C);
+  background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#476382), to(#55769C));
 }
 
 .actions {
