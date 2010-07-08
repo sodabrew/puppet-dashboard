@@ -4,11 +4,9 @@ class ReportsController < InheritedResources::Base
 
   before_filter :handle_raw_post, :only => :create
 
-  private
+  include PaginatedIndex
 
-  def collection
-    get_collection_ivar || set_collection_ivar(end_of_association_chain.paginate(:page => params[:page]))
-  end
+  private
 
   def handle_raw_post
     report = params[:report]
