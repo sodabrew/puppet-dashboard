@@ -1,10 +1,10 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
-describe "/node_groups/index.html.haml" do
-  include NodeGroupsHelper
+describe "/node_classes/index.html.haml" do
+  include NodeClassesHelper
 
   before(:each) do
-    assigns[:node_groups] = [ NodeGroup.generate, NodeGroup.generate ]
+    assigns[:node_classes] = [ NodeClass.generate, NodeClass.generate ]
   end
 
   describe "the response"  do
@@ -14,8 +14,8 @@ describe "/node_groups/index.html.haml" do
     it { should be_a_success }
 
     it "has node class items" do
-      should have_tag('table.main tr.node_group', assigns[:node_groups].size)
-      should have_tag("table.main tr#node_group_#{assigns[:node_groups].last.id}")
+      should have_tag('table.main tr.node_class', assigns[:node_classes].size)
+      should have_tag("table.main tr#node_class_#{assigns[:node_classes].last.id}")
     end
   end
 

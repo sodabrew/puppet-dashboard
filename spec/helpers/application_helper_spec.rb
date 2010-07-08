@@ -47,4 +47,24 @@ describe ApplicationHelper do
     end
   end
 
+ describe "#pagination_for" do
+    before do
+      @template.stubs( :request => request, :params => params, :url_for => 'someurl')
+    end
+
+    context "when given paginated records" do
+      subject { helper.pagination_for([*(1..100)].paginate) }
+
+      it { should have_tag('div.actionbar') }
+      it { should have_tag('a', /Next/) }
+    end
+
+    context "when not given paginated records" do
+      subject { helper.pagination_for([]) }
+
+      it { should be_nil }
+    end
+
+  end
+
 end

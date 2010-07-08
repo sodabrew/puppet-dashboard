@@ -1,6 +1,37 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe NodesController do
+  describe "#index" do
+    before do
+      @node = Node.generate!
+    end
+
+    context "as HTML" do
+      before { get :index }
+      specify { response.should be_success }
+    end
+
+    context "as JSON" do
+      before { get :index, :format => "json" }
+      specify { response.should be_success }
+      it "should return JSON" do
+        struct = JSON.parse(response.body)
+        struct.size.should == 1
+        struct.first["name"].should == @node.name
+      end
+    end
+
+    context "as YAML" do
+      before { get :index, :format => "yaml" }
+      specify { response.should be_success }
+      it "should return YAML" do
+        struct = YAML.load(response.body)
+        struct.size.should == 1
+        struct.first["name"].should == @node.name
+      end
+    end
+  end
+
   describe '#edit' do
     before :each do
       @node = Node.generate!
@@ -81,6 +112,149 @@ describe NodesController do
           assigns[:node].should be_valid
         end
       end
+    end
+  end
+
+  describe "#reports" do
+    shared_examples_for "a successful reports rendering" do
+      specify { response.should be_success }
+    end
+
+    shared_examples_for "a paginated reports collection" do
+      it "should be paginated" do
+        assigns[:reports].should be_a_kind_of(WillPaginate::Collection)
+      end
+    end
+
+    shared_examples_for "an un-paginated reports collection" do
+      it "should not be paginated" do
+        assigns[:reports].should_not be_a_kind_of(WillPaginate::Collection)
+      end
+    end
+
+    before do
+      @node = Node.generate!
+      Node.stubs(:find_by_name! => @node)
+      Report.stubs(:assign_to_node => false)
+      @node.reports = [
+        Report.generate!(:node => @node)
+      ]
+    end
+
+    context "for HTML" do
+      before { get :reports, :node => 123 }
+
+      it_should_behave_like "a successful reports rendering"
+      it_should_behave_like "a paginated reports collection"
+    end
+
+    context "for YAML" do
+      before { get :reports, :node => 123, :format => "yaml" }
+
+      it_should_behave_like "a successful reports rendering"
+      it_should_behave_like "an un-paginated reports collection"
+
+      it "should return YAML" do
+        struct = YAML.load(response.body)
+        struct.size.should == 1
+        struct.first["name"].should == @action
+      end
+    end
+
+    context "for JSON" do
+      before { get :reports, :node => 123, :format => "json" }
+
+      it_should_behave_like "a successful reports rendering"
+      it_should_behave_like "an un-paginated reports collection"
+
+      it "should return JSON" do
+        struct = JSON.parse(response.body)
+        struct.size.should == 1
+        struct.first["name"].should == @action
+      end
+    end
+  end
+
+  describe "#scoped_index" do
+    shared_examples_for "a successful scoped_index rendering" do
+      specify { response.should be_success }
+
+      it "should assign only appropriate records" do
+        assigns[:nodes].size.should == 1
+        assigns[:nodes].first.name.should == @action
+      end
+    end
+
+    shared_examples_for "a paginated nodes collection" do
+      it "should be paginated" do
+        assigns[:nodes].should be_a_kind_of(WillPaginate::Collection)
+      end
+    end
+
+    shared_examples_for "an un-paginated nodes collection" do
+      it "should not be paginated" do
+        assigns[:nodes].should_not be_a_kind_of(WillPaginate::Collection)
+      end
+    end
+
+    # Relies on @action being defined as the name of a NodesController action, e.g. as "successful".
+    shared_examples_for "a scope_index action" do
+      before do
+        Node.stubs(@action => [Node.generate!(:name => @action)])
+      end
+
+      context "as HTML" do
+        before { get @action }
+
+        it_should_behave_like "a successful scoped_index rendering"
+        it_should_behave_like "a paginated nodes collection"
+      end
+
+      context "as YAML" do
+        before { get @action, :format => "yaml" }
+
+        it_should_behave_like "a successful scoped_index rendering"
+        it_should_behave_like "an un-paginated nodes collection"
+
+        it "should return YAML" do
+          struct = YAML.load(response.body)
+          struct.size.should == 1
+          struct.first["name"].should == @action
+        end
+      end
+
+      context "as JSON" do
+        before { get @action, :format => "json" }
+
+        it_should_behave_like "a successful scoped_index rendering"
+        it_should_behave_like "an un-paginated nodes collection"
+
+        it "should return JSON" do
+          struct = JSON.parse(response.body)
+          struct.size.should == 1
+          struct.first["name"].should == @action
+        end
+      end
+    end
+
+    describe "#successful" do
+      before { @action = "successful" }
+      it_should_behave_like "a scope_index action"
+    end
+
+    describe "#failed" do
+      before { @action = "failed" }
+      it_should_behave_like "a scope_index action"
+    end
+
+    describe "#unreported" do
+      before { @action = "unreported" }
+      it_should_behave_like "a scope_index action"
+    end
+
+    describe "#no_longer_reporting" do
+      before { @action = "no_longer_reporting" }
+      it_should_behave_like "a scope_index action"
     end
   end
 end
