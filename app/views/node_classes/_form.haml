@@ -1,5 +1,8 @@
 = focus :node_class_name
 
-.header.element
-  = form.label :name
-  = form.text_field :name, :placeholder => "Class Name"
+= header_for(form)
+
+.item
+  .element
+    = form.label :name
+    = form.text_field :name, :placeholder => "Class Name"
