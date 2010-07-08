@@ -1,7 +1,7 @@
 class NodeGroupsController < InheritedResources::Base
   respond_to :html, :json
 
-  include JsonIndex
+  include PaginatedIndex
   include PaginatedSearch
 
 end
