@@ -1,0 +1,416 @@
+/*
+    IMPORTANT: This stylesheet is processed using SASS!
+
+    Edit this file:
+        public/stylesheets/sass/application.scss
+
+    And after a Rails action, it'll generate a fresh copy of:
+        public/stylesheets/application.css
+
+    Be sure to edit the right file, all changes to the .css file will be lost!
+*/
+
+$button_background: #5c80a8;
+$button_gradient_percentage: 10%;
+
+$button_hover_background: lighten($button_background, 10%);
+
+$button_active_background: darken($button_background, 10%);
+
+$rounding_radius: 0.35em;
+
+@mixin roundify($top_left: $rounding_radius, $top_right: $rounding_radius, $bottom_right: $rounding_radius, $bottom_left: $rounding_radius) {
+  -webkit-border-radius: $top_left $top_right $bottom_right $bottom_left;
+  -moz-border-radius: $top_left $top_right $bottom_right $bottom_left;
+  border-radius: $top_left $top_right $bottom_right $bottom_left;
+}
+
+@mixin rounded($radius: $rounding_radius) {
+  @include roundify($radius, $radius, $radius, $radius);
+}
+
+@mixin rounded_top($radius: $rounding_radius) {
+  @include roundify($radius, $radius, 0, 0);
+}
+
+@mixin rounded_bottom($radius: $rounding_radius) {
+  @include roundify(0, 0, $radius, $radius);
+}
+
+@mixin buttony {
+  @include rounded;
+  background: $button_background -moz-linear-gradient(top, lighten($button_background, $button_gradient_percentage), darken($button_background, $button_gradient_percentage));
+  background: $button_background -webkit-gradient(linear, 0% 0%, 0% 100%, from(lighten($button_background, $button_gradient_percentage), to(darken($button_background, $button_gradient_percentage))));
+  border: 1px solid #DDD;
+  border-color: #FFF #AAA #AAA #FFF;
+  color: white;
+  cursor: pointer;
+  font-size: 1.1em;
+  line-height: 1.5em;
+  margin: 0.25em;
+  padding: 0 .5em;
+
+  &:hover {
+    text-decoration: none;
+    color: yellow;
+    background: $button_hover_background -moz-linear-gradient(top, lighten($button_hover_background, $button_gradient_percentage), darken($button_hover_background, $button_gradient_percentage));
+    background: $button_hover_background -webkit-gradient(linear, 0% 0%, 0% 100%, from(lighten($button_hover_background, $button_gradient_percentage), to(darken($button_hover_background, $button_gradient_percentage))));
+  }
+
+  &:active {
+    background: $button_active_background -moz-linear-gradient(top, lighten($button_active_background, $button_gradient_percentage), darken($button_active_background, $button_gradient_percentage));
+    background: $button_active_background -webkit-gradient(linear, 0% 0%, 0% 100%, from(lighten($button_active_background, $button_gradient_percentage), to(darken($button_active_background, $button_gradient_percentage))));
+  }
+
+  &.drop:after {
+    content: "   \002193";
+  }
+}
+
+body {
+  background: #e8eef0;
+  color: #444;
+  min-width: 800px;
+
+  #content {
+    padding: 1.5em 0 2em;
+  }
+
+  #footer p {
+    clear: both;
+    padding-top: 1em;
+    color: #777;
+  }
+
+  .header {
+    @include rounded_top;
+    background: #DDD;
+    padding: 0;
+    margin: 0;
+    position: relative;
+
+    h2,
+    input {
+      border: 1px solid transparent;
+      margin: 0 2px;
+      padding: 0 .25em;
+      line-height: 1.75em;
+    }
+  }
+
+  a#logo {
+    background: transparent url('../images/dashboard_logo.png') no-repeat top center;
+    text-indent: -9000px;
+    display: block;
+    height: 23px;
+    width: 155px;
+    position: relative;
+    top: 1px;
+
+    &:hover {
+      background-position: bottom center;
+    }
+  }
+
+  ol.timeline li {
+    list-style-type: none;
+    padding-left: 20px;
+    margin-bottom: 5px;
+    position: relative;
+
+    span.date {
+      color: #666;
+      display: inline-block;
+      width: 9em;
+    }
+  }
+
+  ul {
+    .status {
+      list-style: none;
+    }
+
+    li {
+      /* drop down menu */
+      .dropdown {
+        display: none;
+        left: 0;
+        position: absolute;
+        top: 1.5em;
+        background: #FFF;
+        border: 1px solid #CCC;
+        color: #666;
+        font-size: 14px;
+        width: 15em;
+        z-index: 7;
+
+        ul {
+          width: 100%;
+          margin-bottom: .25em;
+          max-height: 30em;
+          overflow: auto;
+        }
+
+        li {
+          list-style: none;
+
+          a {
+            display: block;
+            padding: .2em .5em;
+          }
+        }
+
+        .actions {
+          border-top: 1px solid #DDD;
+          background-color: #EEE;
+          clear: both;
+          padding: .25em .5em;
+        }
+
+        input {
+          display: inline;
+          vertical-align: middle;
+        }
+      }
+    }
+  }
+
+  span.sparkline {
+    vertical-align: bottom;
+  }
+
+  div.flot-graph {
+    margin-bottom: 10px;
+    width: 100%;
+  }
+
+  a.button {
+    display: inline-block;
+  }
+
+  a.button,
+  button {
+    @include buttony;
+  }
+
+  .actions {
+    font-size: 12px;
+  }
+
+  /* SIDEBAR */
+
+  #content #sidebar {
+    .group {
+      @include rounded;
+      position: relative;
+      border: 1px solid #DDD;
+      background: #FFF;
+      margin: 0 1em 1em 0;
+
+      h3 {
+        @include rounded_top;
+
+        color: #444;
+        line-height: 1.25em;
+        position: relative;
+        display: block;
+        background: #DDD;
+
+        &.active {
+          background: #d2dde5;
+        }
+
+        a {
+          display: block;
+          padding: .25em .5em;
+        }
+      }
+
+      .footer.actionbar {
+        @include rounded_bottom;
+      }
+
+      span.count {
+        @include rounded(5px);
+        display: block;
+        position: absolute;
+        right: 3px;
+        top: 3px;
+        color: #FFF;
+        font-size: 12px;
+        padding: 0 .4em;
+        text-align: center;
+        background: #CCC;
+      }
+
+      ul {
+        max-height: 20em;
+        overflow: auto;
+        border-top: 1px solid #D8D8D8;
+
+        li {
+          position: relative;
+          font-size: 12px;
+          border-bottom: 1px solid #EEE;
+
+          &:last-child {
+            border: 0; }
+
+          &.active {
+            background: #e2edf5; }
+
+          a {
+            padding: .25em .5em;
+            display: block;
+          }
+
+          span.count {
+            background: #DDD;
+          }
+        }
+      }
+    }
+
+    a.fold {
+      width: 1em;
+      display: inline-block;
+      text-align: center;
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    ul {
+      list-style: none;
+    }
+  }
+
+  /* ACTIONBAR */
+
+  .actionbar {
+    @include rounded;
+    background: #DDD;
+    padding: 1px;
+
+    form {
+      padding: .25em;
+    }
+
+    #add_node {
+      margin: 2px 2px 1px;
+
+      form {
+        @include rounded;
+      }
+    }
+
+    .pagination {
+      font-size: 12px;
+      padding: .1em .5em;
+      float: right;
+    }
+
+    .dropdown {
+      top: 1.75em;
+    }
+
+    ul {
+      float: left;
+      list-style: none;
+      margin-right: .25em;
+
+      li {
+        float: left;
+        position: relative;
+
+        /* &:first-child { */
+          /* button, a.button { */
+            /* -webkit-border-top-right-radius: 0px; */
+            /* -webkit-border-bottom-right-radius: 0px; */
+            /* -moz-border-radius-topright: 0px; */
+            /* -moz-border-radius-bottomright: 0px; */
+            /* border-top-right-radius: 0px; */
+            /* border-bottom-right-radius: 0px; */
+          /* } */
+        /* } */
+
+        /* &:last-child { */
+          /* button, a.button { */
+            /* -webkit-border-top-left-radius: 0px; */
+            /* -webkit-border-bottom-left-radius: 0px; */
+            /* -moz-border-radius-topleft: 0px; */
+            /* -moz-border-radius-bottomleft: 0px; */
+            /* border-top-left-radius: 0px; */
+            /* border-bottom-left-radius: 0px; */
+          /* } */
+        /* } */
+
+        /* &:only-child { */
+          /* button, a.button { */
+            /* -webkit-border-radius: 2px; */
+            /* -moz-border-radius: 2px; */
+            /* border-radius: 2px; */
+          /* } */
+        /* } */
+      }
+    }
+  }
+
+  .navigation {
+    position: relative;
+  }
+
+  .clear {
+    clear: both;
+  }
+
+  .item {
+    @include rounded_bottom;
+    background: #FFF;
+    padding: 1em;
+    margin-bottom: 1em;
+    overflow: hidden;
+  }
+
+  .half {
+    width: 45%;
+    margin-right: 5%;
+    float: left;
+  }
+
+  .section {
+    margin-bottom: 1em;
+
+    &.error, &.warning {
+      @include rounded;
+      padding: 10px 10px 0;
+    }
+
+    &.error {
+      background: #FDD;
+      border: 1px solid #FCC;
+      color: #433;
+
+      h3 {
+        margin: -10px -10px .5em;
+        padding: .5em 10px .5em 26px;
+        background: #ffcccc url('../images/icons/failure.png') 8px center no-repeat;
+        color: #433;
+      }
+    }
+
+    &.warning {
+      background: #DDD;
+      border: 1px solid #CCC;
+      color: #444;
+
+      h3 {
+        margin: -10px -10px .5em;
+        padding: .5em 10px;
+        background: #cccccc url('../images/icons/warning.png') 8px center no-repeat;
+        color: #444;
+      }
+    }
+
+  }
+}
+
