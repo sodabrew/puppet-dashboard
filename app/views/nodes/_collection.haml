@@ -31,7 +31,4 @@
           = link_to h(n.name), [parent, n], :rel => 'inspect'
         %td.latest_report
           = n.last_report ? n.last_report.time.to_s(:long) : "Has not reported"
-- if @nodes.respond_to?(:total_pages) && @nodes.total_pages > 1
-  .actionbar
-    = will_paginate(@nodes)
-    %div{:style => 'clear:both;'}
+= pagination_for @nodes
