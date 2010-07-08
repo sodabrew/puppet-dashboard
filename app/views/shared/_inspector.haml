@@ -4,9 +4,11 @@
   %thead
     %tr
       %th.key= key.titleize
-      %th.value{:colspan => 2}= value.titleize
+      - unless options[:key_only]
+        %th.value{:colspan => 2}= value.titleize
   %tbody
     - inspector.each do |key, value|
       %tr
         %td.key= key
-        %td{:colspan => 2}= value
+        - unless options[:key_only]
+          %td{:colspan => 2}= value

@@ -20,15 +20,36 @@ module ApplicationHelper
     end
   end
 
+  # Return HTML with a fancy table for a collection of values.
+  #
+  # Arguments:
+  # * +collection+: Either an array-of-arrays with each element containing a key
+  #   and value to display as columns, or a hash. Required.
+  # * +key+: The hash key to display in the table's key column if +collection+ is a
+  #   hash. Optional.
+  # * +value+: The hash key to display in the table's value column if +collection+
+  #   is a hash. If false, won't set or display the table's value column. Optional.
+  # * options: A hash of options, see below.
+  #
+  # Options:
+  # * :caption => String to display as a table caption.
+  # * :link => Should the key column be made into a link? Boolan.
+  # * :key_only => Only display the key column? Will be set to true if +value+ is false.
   def inspector_table(collection, key=nil, value=nil, options={})
     key, options = nil, key if key.is_a?(Hash)
     unless collection.is_a?(Hash)
-      key ||= :name; value ||= :description
+      key ||= :name
+      value = :description if value.nil?
+      options[:key_only] = true if value == false
 
       collection_hash_values = collection.map{ |c|
         [
-          key.respond_to?(:call) ? key.call(c) : link_to_if(options[:link], c.send(key), c),
-          value.respond_to?(:call) ? value.call(c) : c.send(value),
+          key.respond_to?(:call) ? 
+            key.call(c) : 
+            link_to_if(options[:link], c.send(key), c),
+          value ? 
+            (value.respond_to?(:call) ? value.call(c) : c.send(value)) : 
+            false
         ]
       }.flatten
 
