@@ -58,4 +58,11 @@ module ApplicationHelper
   def active_if(condition)
     condition ? 'active' : ''
   end
+
+  # Return HTML for this +form+'s header.
+  def header_for(form)
+    content_tag(:h2, :class => "header") do
+      (form.object.new_record? ? "Add" : "Edit") + " " + form.object.class.name.titleize.downcase
+    end
+  end
 end

@@ -33,5 +33,18 @@ describe ApplicationHelper do
 
   end
 
+  describe "#header_for" do
+    it "should return a header for a form with a new record" do
+      record = Node.spawn
+      form = stub(:object => record)
+      helper.header_for(form).should have_text /Add node/
+    end
+
+    it "should return a header for a form with an existing object" do
+      record = Node.generate
+      form = stub(:object => record)
+      helper.header_for(form).should have_text /Edit node/
+    end
+  end
 
 end
