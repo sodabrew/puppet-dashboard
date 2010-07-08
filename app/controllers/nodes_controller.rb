@@ -1,14 +1,15 @@
 class NodesController < InheritedResources::Base
   belongs_to :node_class, :optional => true
   belongs_to :node_group, :optional => true
-  respond_to :html, :yaml
+  respond_to :html, :yaml, :json
 
   layout lambda {|c| c.request.xhr? ? false : 'application' }
 
   def index
     index! do |format|
-      # Do not paginate yaml
+      format.html { paginate_collection! }
       format.yaml { render :text => Node.all.to_yaml, :content_type => 'application/x-yaml' }
+      format.json { render :json => collection.to_json }
     end
   end
 
