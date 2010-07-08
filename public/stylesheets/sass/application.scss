@@ -1,0 +1,305 @@
+/*
+    IMPORTANT: This stylesheet is processed using SASS!
+
+    Edit this file:
+        public/stylesheets/sass/application.scss
+
+    And after a Rails action, it'll generate a fresh copy of:
+        public/stylesheets/application.css
+
+    Be sure to edit the right file, all changes to the .css file will be lost!
+*/
+
+body {
+  background: #e8eef0;
+  color: #444;
+  min-width: 800px; }
+
+a#logo {
+  background: transparent url('../images/dashboard_logo.png') no-repeat top center;
+  text-indent: -9000px;
+  display: block;
+  height: 23px;
+  width: 155px;
+  position: relative;
+  top: 1px;
+  &:hover {
+    background-position: bottom center; } }
+
+#content {
+  padding: 1.5em 0 2em; }
+
+#footer p {
+  clear: both;
+  padding-top: 1em;
+  color: #777; }
+
+ol.timeline li {
+  list-style-type: none;
+  padding-left: 20px;
+  margin-bottom: 5px;
+  position: relative;
+  span.date {
+    color: #666;
+    display: inline-block;
+    width: 9em; } }
+
+ul.status {
+  list-style: none; }
+
+span.sparkline {
+  vertical-align: bottom; }
+
+div.flot-graph {
+  margin-bottom: 10px;
+  width: 100%; }
+
+button {
+  background: #5c80a8 -moz-linear-gradient(top, #638ab5, #55779c);
+  background: #5c80a8 -webkit-gradient(linear, 0% 0%, 0% 100%, from(#638ab5), to(#55779c));
+  border: 1px solid #DDD;
+  border-color: #FFF #AAA #AAA #FFF;
+  color: white;
+  cursor: pointer;
+  font-size: 1.1em;
+  line-height: 1.5em;
+  margin: 0.25em;
+  padding: 0 .5em;
+  -webkit-border-radius: 0.35em;
+  -moz-border-radius: 0.35em;
+  border-radius: 0.35em; }
+
+a.button {
+  background: #5c80a8 -moz-linear-gradient(top, #638ab5, #55779c);
+  background: #5c80a8 -webkit-gradient(linear, 0% 0%, 0% 100%, from(#638ab5), to(#55779c));
+  border: 1px solid #DDD;
+  border-color: #FFF #AAA #AAA #FFF;
+  color: white;
+  cursor: pointer;
+  font-size: 1.1em;
+  line-height: 1.5em;
+  margin: 0.25em;
+  padding: 0 .5em;
+  -webkit-border-radius: 0.35em;
+  -moz-border-radius: 0.35em;
+  border-radius: 0.35em;
+  display: inline-block; }
+
+button:hover, a.button:hover {
+  text-decoration: none;
+  background: #6a94c2 -moz-linear-gradient(top, #719dcf, #638ab5);
+  background: #6a94c2 -webkit-gradient(linear, 0% 0%, 0% 100%, from(#719dcf), to(#638ab5));
+  color: yellow; }
+
+button:active, a.button:active {
+  background: -moz-linear-gradient(top, #476382, #55769c);
+  background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#476382), to(#55769c)); }
+
+.actions {
+  font-size: 12px; }
+
+/* SIDEBAR */
+
+#content #sidebar {
+  .group {
+    position: relative;
+    border: 1px solid #DDD;
+    background: #FFF;
+    margin: 0 .5em 0.5em 0;
+    -webkit-border-radius: .2em;
+    -moz-border-radius: .2em;
+    border-radius: .2em;
+    h3 {
+      color: #444;
+      line-height: 1.25em;
+      position: relative;
+      display: block;
+      background: #DDD;
+      &.active {
+        background: #d2dde5; }
+      a {
+        display: block;
+        padding: .25em .5em; } }
+    span.count {
+      display: block;
+      position: absolute;
+      right: 3px;
+      top: 3px;
+      color: #FFF;
+      font-size: 12px;
+      padding: 0 .4em;
+      text-align: center;
+      background: #CCC;
+      -webkit-border-radius: 5px;
+      -moz-border-radius: 5px;
+      border-radius: 5px; }
+    li span.count {
+      background: #DDD; }
+    ul {
+      max-height: 20em;
+      overflow: auto;
+      border-top: 1px solid #D8D8D8;
+      li {
+        position: relative;
+        font-size: 12px;
+        border-bottom: 1px solid #EEE;
+        &:last-child {
+          border: 0; }
+        &.active {
+          background: #e2edf5; }
+        a {
+          padding: .25em .5em;
+          display: block; } } } }
+  a.fold {
+    width: 1em;
+    display: inline-block;
+    text-align: center;
+    font-size: 14px;
+    font-weight: bold; }
+  ul {
+    list-style: none; } }
+
+/* ACTIONBAR */
+
+.actionbar {
+  background: #DDD;
+  padding: 1px;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
+  .pagination {
+    font-size: 12px;
+    padding: .1em .5em;
+    float: right; }
+  ul {
+    float: left;
+    list-style: none;
+    margin-right: .25em;
+    li {
+      float: left;
+      position: relative;
+      &:first-child {
+        button, a.button {
+          -webkit-border-top-right-radius: 0px;
+          -webkit-border-bottom-right-radius: 0px;
+          -moz-border-radius-topright: 0px;
+          -moz-border-radius-bottomright: 0px;
+          border-top-right-radius: 0px;
+          border-bottom-right-radius: 0px; } }
+      &:last-child {
+        button, a.button {
+          -webkit-border-top-left-radius: 0px;
+          -webkit-border-bottom-left-radius: 0px;
+          -moz-border-radius-topleft: 0px;
+          -moz-border-radius-bottomleft: 0px;
+          border-top-left-radius: 0px;
+          border-bottom-left-radius: 0px; } }
+      &:only-child {
+        button, a.button {
+          -webkit-border-radius: 2px;
+          -moz-border-radius: 2px;
+          border-radius: 2px; } } } } }
+
+.navigation {
+  position: relative; }
+
+button.drop:after, a.drop:after {
+  content: "   \002193"; }
+
+ul li .dropdown {
+  /* drop down menu */
+  display: none;
+  left: 0;
+  position: absolute;
+  top: 1.5em;
+  background: #FFF;
+  border: 1px solid #CCC;
+  color: #666;
+  font-size: 14px;
+  width: 15em;
+  z-index: 7; }
+
+.actionbar .dropdown {
+  top: 1.75em; }
+
+ul li .dropdown ul {
+  width: 100%;
+  margin-bottom: .25em;
+  max-height: 30em;
+  overflow: auto; }
+
+.dropdown {
+  li {
+    list-style: none;
+    a {
+      display: block;
+      padding: .2em .5em; } }
+  .actions {
+    border-top: 1px solid #DDD;
+    background-color: #EEE;
+    clear: both;
+    padding: .25em .5em; }
+  input {
+    display: inline;
+    vertical-align: middle; } }
+
+.actionbar {
+  form {
+    padding: .25em; }
+  #add_node {
+    margin: 2px 2px 1px;
+    form {
+      -webkit-border-radius: 2px;
+      -moz-border-radius: 2px;
+      border-radius: 2px; } } }
+
+.clear {
+  clear: both; }
+
+.header {
+  background: #DDD;
+  padding: 0;
+  margin: 0;
+  position: relative;
+  h2, input {
+    border: 1px solid transparent;
+    margin: 0 2px;
+    padding: 0 .25em;
+    line-height: 1.333em; } }
+
+.item {
+  background: #FFF;
+  padding: 1em;
+  margin-bottom: 1em;
+  overflow: hidden; }
+
+.section {
+  margin-bottom: 1em;
+  &.error, &.warning {
+    padding: 10px 10px 0;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px; }
+  &.error {
+    background: #FDD;
+    border: 1px solid #FCC;
+    color: #433; }
+  &.warning {
+    background: #DDD;
+    border: 1px solid #CCC;
+    color: #444; }
+  &.error h3 {
+    margin: -10px -10px .5em;
+    padding: .5em 10px .5em 26px;
+    background: #ffcccc url(images/icons/failure.png) 8px center no-repeat;
+    color: #433; }
+  &.warning h3 {
+    margin: -10px -10px .5em;
+    padding: .5em 10px;
+    background: #cccccc url(images/icons/warning.png) 8px center no-repeat;
+    color: #444; } }
+
+.half {
+  width: 45%;
+  margin-right: 5%;
+  float: left; }
