@@ -58,4 +58,14 @@ module ApplicationHelper
   def active_if(condition)
     condition ? 'active' : ''
   end
+
+  # Focus the form input on the +target+ id element, e.g. "node_name".
+  def focus(target)
+    # javascript_tag "jQuery(document).ready(function () { '##{h target.to_s}').focus(); });"
+    javascript_tag <<-HERE
+      jQuery(document).ready( function() {
+        jQuery('##{h target.to_s}').focus().focus();
+      });
+    HERE
+  end
 end
