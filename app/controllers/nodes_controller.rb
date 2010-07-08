@@ -14,31 +14,31 @@ class NodesController < InheritedResources::Base
   end
 
   def successful
-    @nodes = Node.successful.paginate(:page => params[:page])
-    render :index
+    scoped_index :successful
   end
 
   def failed
-    @nodes = Node.failed.paginate(:page => params[:page])
-    render :index
+    scoped_index :failed
   end
 
   def unreported
-    @nodes = Node.unreported.paginate(:page => params[:page])
-    render :index
+    scoped_index :unreported
   end
 
   def no_longer_reporting
-    @nodes = Node.no_longer_reporting.paginate(:page => params[:page])
-    render :index
+    scoped_index :no_longer_reporting
   end
 
   # TODO: routing currently can't handle nested resources due to node's id
   # requirements
   def reports
     @node = Node.find_by_name!(params[:id])
-    @reports = @node.reports.paginate(:page => params[:page])
-    render 'reports/index'
+    @reports = @node.reports
+    respond_to do |format|
+      format.html { @reports = @reports.paginate(:page => params[:page]); render 'reports/index' }
+      format.yaml { render :text => @reports.to_yaml, :content_type => 'application/x-yaml' }
+      format.json { render :json => @reports.to_json }
+    end
   end
 
   protected
@@ -48,6 +48,16 @@ class NodesController < InheritedResources::Base
   end
 
   def collection
-    get_collection_ivar || set_collection_ivar(end_of_association_chain.search(params[:q]).by_report_date.paginate(:page => params[:page]))
+    get_collection_ivar || set_collection_ivar(end_of_association_chain.search(params[:q]).by_report_date)
+  end
+
+  # Render the index using the +scope_name+ (e.g. :successful for Node.successful).
+  def scoped_index(scope_name)
+    set_collection_ivar(end_of_association_chain.send(scope_name))
+    respond_to do |format|
+      format.html { paginate_collection!; render :index }
+      format.yaml { render :text => collection.to_yaml, :content_type => 'application/x-yaml' }
+      format.json { render :json => collection.to_json }
+    end
   end
 end
