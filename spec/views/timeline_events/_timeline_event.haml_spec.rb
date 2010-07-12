@@ -7,16 +7,19 @@ describe "/timeline_events/_timeline_event.haml" do
       @node.name.swapcase!
       @node.save!
 
-      @class = NodeClass.generate!
+      @node_class = NodeClass.generate! 
+      @node.node_classes << @node_class
 
-      @node.node_classes << @class
+      @parameter = Parameter.generate! :parameterable => @node
+      @node.reload
 
       assigns[:node] = @node
     end
 
     context "when this node is the subject" do
       before do
-        template.stubs(:timeline_event => @node.timeline_events.first(:conditions => {:event_type => "created"}))
+        subject = @node.timeline_events.first(:conditions => {:subject_type => "Node", :event_type => "created"})
+        template.stubs(:timeline_event => subject)
         render
       end
 
@@ -28,15 +31,40 @@ describe "/timeline_events/_timeline_event.haml" do
     end
 
     context "when something else is the subject" do
-      before do
-        template.stubs(:timeline_event => @node.timeline_events.first(:conditions => {:event_type => "added_to"}))
-        render
+      context "and is linkable" do
+        before do
+          subject = @node.timeline_events.first(:conditions => {:subject_type => "NodeClass", :event_type => "added_to"})
+          template.stubs(:timeline_event => subject)
+          render
+        end
+
+        subject { response }
+
+        it "should describe the action on that subject" do
+          should have_text /NodeClass.+?#{@node_class.name}.+?was added to\s+this node/sm
+        end
+
+        it "should link to the subject" do
+          should have_tag 'a[href=?]', node_class_path(@node_class), @node_class.name
+        end
       end
 
-      subject { response }
+      context "and is not linkable" do
+        before do
+          subject = @node.timeline_events.first(:conditions => {:subject_type => "Parameter", :event_type => "added_to"})
+          template.stubs(:timeline_event => subject)
+          render
+        end
 
-      it "should describe the action on that something" do
-        should have_text /NodeClass.+?#{@class.name}.+?was added to\s+this node/sm
+        subject { response }
+
+        it "should describe the action on that subject" do
+          should have_text /#{@parameter.name}\s+was added to\s+this node/sm
+        end
+
+        it "should not link to the subject" do
+          should_not have_tag 'a'
+        end
       end
     end
 
