@@ -9,6 +9,6 @@ class Parameter < ActiveRecord::Base
   fires :changed_on,    :on => :update,   :secondary_subject => 'parameterable'
 
   def name
-    "parameter #{key}"
+    "Parameter '#{key}'"
   end
 end
