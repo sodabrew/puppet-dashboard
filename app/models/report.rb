@@ -29,8 +29,10 @@ class Report < ActiveRecord::Base
     @metrics ||= report.metrics.with_indifferent_access
   end
 
+  TOTAL_TIME_FORMAT = "%0.2f"
+
   def total_time
-    metrics && metrics[:time] && "%0.2f" % metrics[:time][:total]
+    metrics && metrics[:time] && TOTAL_TIME_FORMAT % metrics[:time][:total]
   end
 
   def total_resources
