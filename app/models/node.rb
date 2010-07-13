@@ -41,6 +41,18 @@ class Node < ActiveRecord::Base
   named_scope :unreported, :conditions => {:reported_at => nil}
   named_scope :no_longer_reporting, :conditions => ['reported_at < ?', 30.minutes.ago]
 
+  def self.count_successful
+    successful.count(:name, :distinct => true)
+  end
+
+  def self.count_failed
+    failed.count(:name, :distinct => true)
+  end
+
+  def self.count_unreported
+    unreported.count
+  end
+
   def to_param
     name.to_s
   end
