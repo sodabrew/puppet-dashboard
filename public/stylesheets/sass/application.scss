@@ -39,8 +39,9 @@ $rounding_radius: 0.35em;
 
 @mixin buttony {
   @include rounded;
-  background: $button_background -moz-linear-gradient(top, lighten($button_background, $button_gradient_percentage), darken($button_background, $button_gradient_percentage));
-  background: $button_background -webkit-gradient(linear, 0% 0%, 0% 100%, from(lighten($button_background, $button_gradient_percentage), to(darken($button_background, $button_gradient_percentage))));
+  background: $button_background;
+  background: -moz-linear-gradient(top, lighten($button_background, $button_gradient_percentage), darken($button_background, $button_gradient_percentage));
+  background: -webkit-gradient(linear, center top, center bottom, from(lighten($button_background, $button_gradient_percentage)), to(darken($button_background, $button_gradient_percentage)));
   border: 1px solid #DDD;
   border-color: #FFF #AAA #AAA #FFF;
   color: white;
@@ -321,36 +322,6 @@ body {
       li {
         float: left;
         position: relative;
-
-        /* &:first-child { */
-          /* button, a.button { */
-            /* -webkit-border-top-right-radius: 0px; */
-            /* -webkit-border-bottom-right-radius: 0px; */
-            /* -moz-border-radius-topright: 0px; */
-            /* -moz-border-radius-bottomright: 0px; */
-            /* border-top-right-radius: 0px; */
-            /* border-bottom-right-radius: 0px; */
-          /* } */
-        /* } */
-
-        /* &:last-child { */
-          /* button, a.button { */
-            /* -webkit-border-top-left-radius: 0px; */
-            /* -webkit-border-bottom-left-radius: 0px; */
-            /* -moz-border-radius-topleft: 0px; */
-            /* -moz-border-radius-bottomleft: 0px; */
-            /* border-top-left-radius: 0px; */
-            /* border-bottom-left-radius: 0px; */
-          /* } */
-        /* } */
-
-        /* &:only-child { */
-          /* button, a.button { */
-            /* -webkit-border-radius: 2px; */
-            /* -moz-border-radius: 2px; */
-            /* border-radius: 2px; */
-          /* } */
-        /* } */
       }
     }
   }

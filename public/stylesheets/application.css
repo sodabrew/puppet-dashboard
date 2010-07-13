@@ -99,8 +99,9 @@ body {
     -webkit-border-radius: 0.35em 0.35em 0.35em 0.35em;
     -moz-border-radius: 0.35em 0.35em 0.35em 0.35em;
     border-radius: 0.35em 0.35em 0.35em 0.35em;
-    background: #5c80a8 -moz-linear-gradient(top, #7d9aba, #496788);
-    background: #5c80a8 -webkit-gradient(linear, 0% 0%, 0% 100%, from(#7d9aba, to(#496788)));
+    background: #5c80a8;
+    background: -moz-linear-gradient(top, #7d9aba, #496788);
+    background: -webkit-gradient(linear, center top, center bottom, from(#7d9aba), to(#496788));
     border: 1px solid #DDD;
     border-color: #FFF #AAA #AAA #FFF;
     color: white;
@@ -214,34 +215,7 @@ body {
       margin-right: .25em; }
       body .actionbar ul li {
         float: left;
-        position: relative;
-        /* &:first-child { */
-        /* button, a.button { */
-        /* -webkit-border-top-right-radius: 0px; */
-        /* -webkit-border-bottom-right-radius: 0px; */
-        /* -moz-border-radius-topright: 0px; */
-        /* -moz-border-radius-bottomright: 0px; */
-        /* border-top-right-radius: 0px; */
-        /* border-bottom-right-radius: 0px; */
-        /* } */
-        /* } */
-        /* &:last-child { */
-        /* button, a.button { */
-        /* -webkit-border-top-left-radius: 0px; */
-        /* -webkit-border-bottom-left-radius: 0px; */
-        /* -moz-border-radius-topleft: 0px; */
-        /* -moz-border-radius-bottomleft: 0px; */
-        /* border-top-left-radius: 0px; */
-        /* border-bottom-left-radius: 0px; */
-        /* } */
-        /* } */
-        /* &:only-child { */
-        /* button, a.button { */
-        /* -webkit-border-radius: 2px; */
-        /* -moz-border-radius: 2px; */
-        /* border-radius: 2px; */
-        /* } */
-        /* } */ }
+        position: relative; }
   body .navigation {
     position: relative; }
   body .clear {
