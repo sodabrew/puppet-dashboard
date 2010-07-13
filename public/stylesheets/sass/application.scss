@@ -77,10 +77,16 @@ body {
     padding: 1.5em 0 2em;
   }
 
-  #footer p {
-    clear: both;
-    padding-top: 1em;
-    color: #777;
+  #footer {
+    p {
+      clear: both;
+      padding-top: 1em;
+      color: #777;
+
+      a {
+        color: inherit;
+      }
+    }
   }
 
   .header {
