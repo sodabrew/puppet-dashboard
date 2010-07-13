@@ -241,4 +241,16 @@ describe Node do
 
   end
 
+  describe "destroying" do
+    before do
+      @node = Node.generate!(:name => 'sample_node')
+      @report = Report.generate!
+    end
+
+    subject { lambda { @node.destroy } }
+
+    it("destroys dependent reports") { should change(Report, :count).by(-1) }
+  end
+
+
 end
