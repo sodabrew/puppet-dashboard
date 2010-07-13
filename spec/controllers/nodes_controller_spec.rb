@@ -136,9 +136,8 @@ describe NodesController do
       @node = Node.generate!
       Node.stubs(:find_by_name! => @node)
       Report.stubs(:assign_to_node => false)
-      @node.reports = [
-        Report.generate!(:node => @node)
-      ]
+      @report = Report.generate!(:node => @node)
+      @node.reports = [@report]
     end
 
     context "for HTML" do
@@ -155,9 +154,10 @@ describe NodesController do
       it_should_behave_like "an un-paginated reports collection"
 
       it "should return YAML" do
+        response.body.should =~ %r{ruby/object:Report}
         struct = YAML.load(response.body)
         struct.size.should == 1
-        struct.first["name"].should == @action
+        struct.first.should == @report
       end
     end
 
@@ -170,18 +170,31 @@ describe NodesController do
       it "should return JSON" do
         struct = JSON.parse(response.body)
         struct.size.should == 1
-        struct.first["name"].should == @action
+
+        for key in %w[host id node_id success]
+          struct.first[key].should == @report.send(key)
+        end
+
+        struct.first['report']['metrics']['resources']['values'].tap do |values|
+          @report.total_resources.should == values.find{|t| t.first['total']}[2]
+          @report.failed_resources.should == values.find{|t| t.first['failed']}[2]
+        end
+
+        struct.first['report']['metrics']['time']['values'].tap do |values|
+          @report.total_time.should == (Report::TOTAL_TIME_FORMAT % values.find{|t| t.first['total']}[2].to_s)
+        end
       end
     end
   end
 
+  # Relies on #action returning name of a NodesController action, e.g. as "successful".
   describe "#scoped_index" do
     shared_examples_for "a successful scoped_index rendering" do
       specify { response.should be_success }
 
       it "should assign only appropriate records" do
         assigns[:nodes].size.should == 1
-        assigns[:nodes].first.name.should == @action
+        assigns[:nodes].first.name.should == action
       end
     end
 
@@ -197,21 +210,20 @@ describe NodesController do
       end
     end
 
-    # Relies on @action being defined as the name of a NodesController action, e.g. as "successful".
     shared_examples_for "a scope_index action" do
       before do
-        Node.stubs(@action => [Node.generate!(:name => @action)])
+        Node.stubs(action => [Node.generate!(:name => action)])
       end
 
       context "as HTML" do
-        before { get @action }
+        before { get action }
 
         it_should_behave_like "a successful scoped_index rendering"
         it_should_behave_like "a paginated nodes collection"
       end
 
       context "as YAML" do
-        before { get @action, :format => "yaml" }
+        before { get action, :format => "yaml" }
 
         it_should_behave_like "a successful scoped_index rendering"
         it_should_behave_like "an un-paginated nodes collection"
@@ -219,12 +231,12 @@ describe NodesController do
         it "should return YAML" do
           struct = YAML.load(response.body)
           struct.size.should == 1
-          struct.first["name"].should == @action
+          struct.first["name"].should == action
         end
       end
 
       context "as JSON" do
-        before { get @action, :format => "json" }
+        before { get action, :format => "json" }
 
         it_should_behave_like "a successful scoped_index rendering"
         it_should_behave_like "an un-paginated nodes collection"
@@ -232,29 +244,16 @@ describe NodesController do
         it "should return JSON" do
           struct = JSON.parse(response.body)
           struct.size.should == 1
-          struct.first["name"].should == @action
+          struct.first["name"].should == action
         end
       end
     end
 
-    describe "#successful" do
-      before { @action = "successful" }
-      it_should_behave_like "a scope_index action"
-    end
-
-    describe "#failed" do
-      before { @action = "failed" }
-      it_should_behave_like "a scope_index action"
-    end
-
-    describe "#unreported" do
-      before { @action = "unreported" }
-      it_should_behave_like "a scope_index action"
-    end
-
-    describe "#no_longer_reporting" do
-      before { @action = "no_longer_reporting" }
-      it_should_behave_like "a scope_index action"
+    for action in %w[successful failed unreported no_longer_reporting]
+      describe action do
+        let(:action) { action }
+        it_should_behave_like "a scope_index action"
+      end
     end
   end
 end
