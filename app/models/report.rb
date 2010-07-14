@@ -32,7 +32,15 @@ class Report < ActiveRecord::Base
   TOTAL_TIME_FORMAT = "%0.2f"
 
   def total_time
-    TOTAL_TIME_FORMAT % metric_value(:time, :total)
+    if value = metric_value(:time, :total)
+      TOTAL_TIME_FORMAT % value
+    end
+  end
+
+  def config_retrieval_time
+    if value = metric_value(:time, :config_retrieval)
+      TOTAL_TIME_FORMAT % value
+    end
   end
 
   def total_resources
@@ -41,6 +49,14 @@ class Report < ActiveRecord::Base
 
   def failed_resources
     metric_value :resources, :failed
+  end
+
+  def failed_restarts
+    metric_value :resources, :failed_restarts
+  end
+
+  def skipped_resources
+    metric_value :resources, :skipped_resources
   end
 
   def changes
