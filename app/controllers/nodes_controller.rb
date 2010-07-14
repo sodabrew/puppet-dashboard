@@ -6,11 +6,7 @@ class NodesController < InheritedResources::Base
   layout lambda {|c| c.request.xhr? ? false : 'application' }
 
   def index
-    index! do |format|
-      format.html { paginate_collection! }
-      format.yaml { render :text => Node.all.to_yaml, :content_type => 'application/x-yaml' }
-      format.json { render :json => collection.to_json }
-    end
+    scoped_index
   end
 
   def successful
@@ -47,14 +43,11 @@ class NodesController < InheritedResources::Base
     get_resource_ivar || set_resource_ivar(end_of_association_chain.find_by_name!(params[:id]))
   end
 
-  def collection
-    get_collection_ivar || set_collection_ivar(end_of_association_chain.search(params[:q]).by_report_date)
-  end
-
   # Render the index using the +scope_name+ (e.g. :successful for Node.successful).
-  def scoped_index(scope_name)
-    set_collection_ivar(end_of_association_chain.send(scope_name))
-    respond_to do |format|
+  def scoped_index(scope_name=nil)
+    set_collection_ivar(end_of_association_chain.search(params[:q]).by_report_date)
+    set_collection_ivar(end_of_association_chain.send(scope_name)) if scope_name
+    index! do |format|
       format.html { paginate_collection!; render :index }
       format.yaml { render :text => collection.to_yaml, :content_type => 'application/x-yaml' }
       format.json { render :json => collection.to_json }
