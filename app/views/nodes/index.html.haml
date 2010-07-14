@@ -3,7 +3,7 @@
 
   .header
     %h2.half== #{action_name.titleize unless action_name == 'index' } Nodes
-    = render 'search' if action_name == "index"
+    = render 'search'
     %div{:style => 'clear:both;'}
 
   .item{:style => 'margin-bottom: 0;'}
