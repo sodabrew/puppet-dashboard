@@ -12,7 +12,7 @@
       %thead
         %tr
           %th.status
-            %span{:alt => "Status", :title => "Status"} &bull;
+            &nbsp;
           %th Reported at &darr;
           - unless @node
             %th Host
@@ -25,8 +25,7 @@
       %tbody
         - @reports.each do |report|
           %tr
-            %td.status{:class => report.status, :alt => report.status.titleize, :title => report.status.titleize}
-              %span &bull;
+            = render 'report_status_td', :report => report
             %td= link_to report.time.to_s(:short), report
             - unless @node
               %td= link_to_if report.node, report.host, report.node

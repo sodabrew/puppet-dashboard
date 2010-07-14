@@ -65,9 +65,7 @@
           %tbody
             - @node.reports.limit(10).each do |report|
               %tr
-                %td.status{:class => report.status}
-                  %span{:title => report.status.titleize}
-                    = report.success? ? '&#10004;' : '&#10008;'
+                = render 'reports/report_status_td', :report => report
                 %td= link_to report.time.to_s, report
                 %td= report.total_resources
                 %td= report.failed_resources
