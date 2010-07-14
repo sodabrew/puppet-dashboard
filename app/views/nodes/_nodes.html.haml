@@ -15,7 +15,10 @@
           = check_box_tag dom_id(n)
         %td.status{:class => n.status_class}
           %span{:title => node_title_text(n)}
-            = n.reported_at ? n.last_report.success? ? '&#10004;' : '&#10008;' : '?'
+            - if n.last_report
+              = n.last_report.success? ? icon(:success) : icon(:failure)
+            - else
+              &nbsp;
         %td.hostname
           = link_to h(n.name), n
         %td.latest_report
