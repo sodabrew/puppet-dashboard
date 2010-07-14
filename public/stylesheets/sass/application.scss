@@ -113,6 +113,13 @@ body {
     }
   }
 
+  p {
+    &.legend {
+      color: #999;
+      margin-bottom: 0;
+    }
+  }
+
   ol.timeline li {
     list-style-type: none;
     padding-left: 20px;
@@ -349,7 +356,7 @@ body {
   }
 
   .section {
-    margin-bottom: 1em;
+    margin-bottom: 1.5em;
 
     &.error, &.warning {
       @include rounded;
@@ -384,4 +391,3 @@ body {
 
   }
 }
-
