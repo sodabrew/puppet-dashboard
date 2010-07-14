@@ -110,4 +110,9 @@ module ApplicationHelper
       end
     end
   end
+
+  def icon(name)
+    image_tag "icons/#{name}.png"
+  end
+
 end
