@@ -6,7 +6,7 @@ desc "Create database.yml from example"
 task :copy_config => ['config/database.yml']
 
 desc "Install puppet dashboard"
-task :install => [:copy_config, 'db:create', 'db:schema:load', 'db:seed']
+task :install => [:copy_config, 'db:create', 'db:schema:load']
 
 desc "Update puppet dashboard"
 task :update => ['db:migrate']
