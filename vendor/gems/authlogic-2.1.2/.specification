@@ -1,6 +1,10 @@
 --- !ruby/object:Gem::Specification 
 name: authlogic
 version: !ruby/object:Gem::Version 
+  segments: 
+  - 2
+  - 1
+  - 2
   version: 2.1.2
 platform: ruby
 authors: 
@@ -14,14 +18,17 @@ default_executable:
 dependencies: 
 - !ruby/object:Gem::Dependency 
   name: activesupport
-  type: :runtime
-  version_requirement: 
-  version_requirements: !ruby/object:Gem::Requirement 
+  requirement: &id001 !ruby/object:Gem::Requirement 
     requirements: 
     - - ">="
       - !ruby/object:Gem::Version 
+        segments: 
+        - 0
         version: "0"
     version: 
+  type: :runtime
+  version_requirement: 
+  version_requirements: *id001
 description: 
 email: bjohnson@binarylogic.com
 executables: []
@@ -167,18 +174,22 @@ required_ruby_version: !ruby/object:Gem::Requirement
   requirements: 
   - - ">="
     - !ruby/object:Gem::Version 
+      segments: 
+      - 0
       version: "0"
   version: 
 required_rubygems_version: !ruby/object:Gem::Requirement 
   requirements: 
   - - ">="
     - !ruby/object:Gem::Version 
+      segments: 
+      - 0
       version: "0"
   version: 
 requirements: []
 
 rubyforge_project: authlogic
-rubygems_version: 1.3.5
+rubygems_version: 1.3.6
 signing_key: 
 specification_version: 3
 summary: A clean, simple, and unobtrusive ruby authentication solution.

@@ -1,6 +1,10 @@
 --- !ruby/object:Gem::Specification 
 name: mislav-will_paginate
 version: !ruby/object:Gem::Version 
+  segments: 
+  - 2
+  - 3
+  - 10
   version: 2.3.10
 platform: ruby
 authors: 
@@ -10,7 +14,7 @@ autorequire:
 bindir: bin
 cert_chain: []
 
-date: 2009-05-21 00:00:00 -05:00
+date: 2009-05-20 22:00:00 -07:00
 default_executable: 
 dependencies: []
 
@@ -70,6 +74,7 @@ files:
 - test/view_test.rb
 has_rdoc: true
 homepage: http://github.com/mislav/will_paginate/wikis
+licenses: 
 post_install_message: 
 rdoc_options: 
 - --main
@@ -82,18 +87,22 @@ required_ruby_version: !ruby/object:Gem::Requirement
   requirements: 
   - - ">="
     - !ruby/object:Gem::Version 
+      segments: 
+      - 0
       version: "0"
   version: 
 required_rubygems_version: !ruby/object:Gem::Requirement 
   requirements: 
   - - ">="
     - !ruby/object:Gem::Version 
+      segments: 
+      - 0
       version: "0"
   version: 
 requirements: []
 
 rubyforge_project: 
-rubygems_version: 1.3.1
+rubygems_version: 1.3.6
 signing_key: 
 specification_version: 2
 summary: Most awesome pagination solution for Rails

@@ -1,0 +1,68 @@
+--- !ruby/object:Gem::Specification 
+name: haml
+version: !ruby/object:Gem::Version 
+  prerelease: false
+  segments: 
+  - 3
+  - 0
+  - 13
+  version: 3.0.13
+platform: ruby
+authors: []
+
+autorequire: 
+bindir: bin
+cert_chain: []
+
+date: 2010-07-14 00:00:00 -07:00
+default_executable: 
+dependencies: []
+
+description: 
+email: 
+executables: []
+
+extensions: []
+
+extra_rdoc_files: []
+
+files: 
+- lib
+- lib/haml
+- lib/haml.rb
+- lib/haml.rbc
+- lib/sass
+- lib/sass.rb
+- lib/sass.rbc
+has_rdoc: true
+homepage: 
+licenses: []
+
+post_install_message: 
+rdoc_options: []
+
+require_paths: 
+- lib
+required_ruby_version: !ruby/object:Gem::Requirement 
+  requirements: 
+  - - ">="
+    - !ruby/object:Gem::Version 
+      segments: 
+      - 0
+      version: "0"
+required_rubygems_version: !ruby/object:Gem::Requirement 
+  requirements: 
+  - - ">="
+    - !ruby/object:Gem::Version 
+      segments: 
+      - 0
+      version: "0"
+requirements: []
+
+rubyforge_project: 
+rubygems_version: 1.3.6
+signing_key: 
+specification_version: 3
+summary: 
+test_files: []
+
