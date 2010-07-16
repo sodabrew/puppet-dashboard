@@ -1,5 +1,78 @@
+v1.0.1
+======
+aabe1c3  [#4216] Successful and failed scopes only return appropriate nodes
+3646ff3  maint: Updating documentation (with installation instructions)
+63ba904  [Bug #4163] [Bug #4166] [Bug #4169] Improved installation instructions.
+d8a2e23  [#3839] Add legends and labels to node charts
+7e66479  maint: Use status icons for report tables
+5345d41  [#4116] Refactor reports index to use report metric accessors
+27c7e54  [#3535] Refactor report metric access
+12a7a54  [#3841] Add search to all node index-like actions
+310373e  [#3840] Replace symbols with icons
+7fbcac3  maint: update vendored gem specifications
+b495b3b  [#4164] No longer load seed data with the rake install task
+d31f353  maint: removing unused views and partial
+7718c3a  [Bug #3843] Footer should say PuppetLabs
+c1dcb52  [#3579] Destroying a node destroys all dependent reports
+5d35e76  maint: Refactor node counts
+9e819ac  Added `rake scss` task to compile application.scss to STDOUT, useful for debugging.
+7f79868  Fixed application.scss styling of buttons for webkit browsers and removed disabled styles.
+cab1a13  Improved nodes_controller_spec to provide more complete examples and remove duplication.
+6a84fc5  Fixed environments/test to declare dependency on 'rspec-rails' gem
+88bd9fd  Upgraded bundled gems to rspec-1.3.0 and rspec-rails-1.3.2.
+967840c  Fixed timeline_event view to handle subjects that can't be linked (e.g. Parameter). Updated specs.
+813efde  Updated Red Hat spec file
+00c53d3  Added updated packaging information for Red Hat and Debian
+e6b530d  [Bug #4181] Fixed broken reports.css link in application layout.
+443ff8d  Fixed node_groups#show to not fail with exceptions if it has classes or groups.
+fea0098  Fixed nodes#show to not display "value" columns in inspector tables.
+8a285cf  Improved ApplicationHelper#inspector_table and shared#_inspector to only display "value" column if wanted.
+874837d  Rewrote application.scss using nesting, mixins, variables and calculations.
+4cf7b6e  Converted application.css to application.scss.
+151d5ee  Upgraded vendored gem "haml" from 2.2.2 to 3.0.13
+2f9f88f  Converted application.css to application.scss using SASS, to simplify styling.
+d38b6f9  Made buttons more visible by using contrasting colors, margins and rounded corners.
+418be6a  Added ApplicationHelper#focus to set the UI focus on a specific form field using JavaScript.
+104a3dc  Refactored timeline_events partial and added specs.
+55c55da  Corrected nodes#new form's submit button.
+d79f102  Updated forms to use #header_for helper.
+450c20b  Added ApplicationHelper#header_for(form).
+8c2ed8a  Updated index views to use #pagination_for helper.
+4cb2812  Added ApplicationController#pagination_for, which extracts common pagination code throughout the views.
+7993f95  Improved NodesController by adding #scoped_index to generalize scoped index rendering, added specs.
+8e71715  Updated reports_collection to use PaginatedIndex.
+eef740e  Updated NodesController to use paginate_collection!
+81c5e88  Added ApplicationController#paginate_collection! and updated PaginatedIndex#index to use it.
+958ce4d  Renamed JsonIndex to PaginatedIndex, updated controllers using it.
+82e9447  [#3719] Do not paginate Groups and Classes JSON
+79206fc  Fixing RubyGems deprecation warning
+6ca7629  Moving testing-only gems to the testing environment config
+4f42eb8  Removing rspec-rails gem (we use the plugin)
+3ca326e  Updating rspec/rails plugin to 1.3.2
+8abdf2a  Creating a Report shouldn't trigger node updated audit msg
+0d56fb9  Updated audit entry text and style
+2aee9fa  [Bug #3660] timeline event undefined method "name"
+68b53fd  Fix add class and add group butotns
+dd3635c  CSS: Firefox gradient love
+ef336eb  CSS and layout updates
+c9f7734  Add tooltips for node report status
+b79ff03  [Feature #3701] Home page left hand navigation
+2cddec9  [Feature #2985] warn if node stops sending reports
+cf4c4dc  [Feature #3426] name field should have a label
+6c2868c  CSS: adjust sidebar margins
+1178f72  Remove description placeholder from groups and classes
+07b80cf  [Feature #3477] Node Manager sidebar class and group links
+52ec66c  [Bug #3544] Class and group search broken
+0f1a245  [Bug #3562] all browser javascript dependencies should be bundled.
+94a59df  [Feature #3579] Added ability to delete single reports
+3683132  Change report inspect for better debugging
+0bb51b4  By Class and By Group sidebars now sroll
+d294d86  Add status graphs to all node index pages
+6017005  Fix incorrectly failing report specs for real
+
 v1.0.0rc2
 =========
+d5918df  Releasing v1.0.0rc2
 b70552f  Vendoring authlogic plugin
 8cf65cf  Add report specs, refactor report, fix spec issue
 75f951c  [Bug #3516] puppet dashboard rake install aborted
