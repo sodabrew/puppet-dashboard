@@ -35,8 +35,8 @@ class Node < ActiveRecord::Base
   fires :removed, :on => :destroy
 
   # RH:TODO: Denormalize last report status into nodes table.
-  named_scope :successful, :select => 'DISTINCT `nodes`.name, `nodes`.*', :joins => 'INNER JOIN reports on reports.time = reported_at', :conditions => 'reports.success = 1', :order => "reported_at DESC"
-  named_scope :failed, :select => 'DISTINCT `nodes`.name, `nodes`.*', :joins => 'LEFT OUTER JOIN reports on reports.time = reported_at', :conditions => 'reports.success = 0', :order => "reported_at DESC"
+  named_scope :successful, :select => 'DISTINCT `nodes`.name, `nodes`.*', :joins => 'INNER JOIN reports on reports.time = reported_at', :conditions => 'reports.success = 1 AND (`nodes`.id = reports.node_id)', :order => "reported_at DESC"
+  named_scope :failed, :select => 'DISTINCT `nodes`.name, `nodes`.*', :joins => 'LEFT OUTER JOIN reports on reports.time = reported_at', :conditions => 'reports.success = 0 AND (`nodes`.id = reports.node_id)', :order => "reported_at DESC"
 
   named_scope :unreported, :conditions => {:reported_at => nil}
   named_scope :no_longer_reporting, :conditions => ['reported_at < ?', 30.minutes.ago]
