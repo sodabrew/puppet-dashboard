@@ -14,7 +14,7 @@
 #
 # Lines starting with an octothorpe ("#") are comments. Uncommented,
 # unindented lines start a new environment (e.g., "production"). Indented
-# lines below an unindented line are setting related to that environment.
+# lines below an unindented line are settings related to that environment.
 #
 # Example
 # -------
