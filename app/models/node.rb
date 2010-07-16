@@ -15,7 +15,7 @@ class Node < ActiveRecord::Base
   has_many :node_group_memberships, :dependent => :destroy
   has_many :node_groups, :through => :node_group_memberships
 
-  has_many :reports
+  has_many :reports, :dependent => :destroy
   has_one :last_report, :class_name => 'Report', :order => 'time DESC'
 
   named_scope :by_report_date, :order => 'reported_at DESC'
@@ -35,11 +35,23 @@ class Node < ActiveRecord::Base
   fires :removed, :on => :destroy
 
   # RH:TODO: Denormalize last report status into nodes table.
-  named_scope :successful, :select => 'DISTINCT `nodes`.name, `nodes`.*', :joins => 'INNER JOIN reports on reports.time = reported_at', :conditions => 'reports.success = 1', :order => "reported_at DESC"
-  named_scope :failed, :select => 'DISTINCT `nodes`.name, `nodes`.*', :joins => 'LEFT OUTER JOIN reports on reports.time = reported_at', :conditions => 'reports.success = 0', :order => "reported_at DESC"
+  named_scope :successful, :select => 'DISTINCT `nodes`.name, `nodes`.*', :joins => 'INNER JOIN reports on reports.time = reported_at', :conditions => 'reports.success = 1 AND (`nodes`.id = reports.node_id)', :order => "reported_at DESC"
+  named_scope :failed, :select => 'DISTINCT `nodes`.name, `nodes`.*', :joins => 'LEFT OUTER JOIN reports on reports.time = reported_at', :conditions => 'reports.success = 0 AND (`nodes`.id = reports.node_id)', :order => "reported_at DESC"
 
   named_scope :unreported, :conditions => {:reported_at => nil}
   named_scope :no_longer_reporting, :conditions => ['reported_at < ?', 30.minutes.ago]
+
+  def self.count_successful
+    successful.count(:name, :distinct => true)
+  end
+
+  def self.count_failed
+    failed.count(:name, :distinct => true)
+  end
+
+  def self.count_unreported
+    unreported.count
+  end
 
   def to_param
     name.to_s

@@ -43,6 +43,14 @@ describe Report do
       node.reload
       node.reported_at.should be_close(@report_data.time.in_time_zone, 1.second)
     end
+
+    it "does not create a timeline event for the node" do
+      node = Node.generate(:name => @report_data.host)
+      lambda {
+        Report.create(:report => @report_yaml)
+        node.reload
+      }.should_not change(TimelineEvent, :count)
+    end
   end
 
   describe "deserializing the report" do
@@ -68,4 +76,64 @@ describe Report do
       report.report.should be_a_kind_of(Puppet::Transaction::Report)
     end
   end
+
+  describe "#metric_value" do
+    before { @report = report_from_yaml }
+
+    it "should return the value when present" do
+      total = @report.metric_value(:resources, :total)
+      total.should == @report.metrics[:resources][:total]
+    end
+
+    it "should return nil if value is not present" do
+      missing = @report.metric_value(:resources, :missing)
+      missing.should be_nil
+    end
+
+    it "should return nil if parent is not present" do
+      missing = @report.metric_value(:missing)
+      missing.should be_nil
+    end
+  end
+
+  describe "#total_time" do
+    subject { report_from_yaml.total_time }
+    it { should == '0.25' }
+  end
+
+  describe "#total_resources" do
+    subject { report_from_yaml.total_resources }
+    it { should == 3 }
+  end
+
+  describe "#failed_resources" do
+    subject { report_from_yaml.failed_resources }
+    it { should == 0 }
+  end
+
+  describe "#changes" do
+    subject { report_from_yaml.changes }
+    it { should == 1 }
+  end
+
+  # describe "#changes" do
+  # before do
+  # @report_yaml = File.read(File.join(RAILS_ROOT, "spec/fixtures/sample_report.yml"))
+  # @report_data = YAML.load @report_yaml
+  # @report = Report.create(:report => @report_yaml)
+  # end
+
+  # subject { @report }
+
+  # it "should equal the number of changes in the report YAML" do
+  # @report.
+  # end
+
+  # end
+
+  def report_from_yaml
+    report_yaml = File.read(File.join(RAILS_ROOT, "spec/fixtures/sample_report.yml"))
+    Report.create(:report => report_yaml)
+  end
+
 end

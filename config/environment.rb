@@ -10,12 +10,6 @@ Rails::Initializer.run do |config|
   config.gem 'rake', :version => '>= 0.8.3'
   config.gem 'rack'
   config.gem 'haml'
-  config.gem 'mocha'
-  config.gem 'rspec', :lib => false
-  config.gem 'rspec-rails', :lib => false
-  config.gem 'thoughtbot-shoulda',
-             :lib => false,
-             :source => 'http://gems.github.com'
   config.gem 'authlogic'
   config.gem 'will_paginate'
   config.gem 'has_scope'
@@ -25,7 +19,7 @@ Rails::Initializer.run do |config|
   # -- all .rb files in that directory are automatically loaded.
 
   # Add additional load paths for your own custom dirs
-  # config.load_paths += %W( #{RAILS_ROOT}/extras )
+  config.load_paths += %W( #{RAILS_ROOT}/app/mixins )
 
   # Specify gems that this application depends on and have them installed with rake gems:install
   # config.gem "bj"

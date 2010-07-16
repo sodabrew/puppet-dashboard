@@ -23,8 +23,8 @@ jQuery(document).ready(function(J) {
     self.parents('table').find('td input:checkbox').attr('checked', self.is(':checked'));
   });
 
-  J('#node_group_names').facebooklist('#existing_node_groups', {url:relative_url_root+'/node_groups.json',cache:0}, 10, {userfilter:1,casesensetive:0}, 0);
-  J('#node_class_names').facebooklist('#existing_node_classes', {url:relative_url_root+'/node_classes.json',cache:0}, 10, {userfilter:1,casesensetive:0}, 0);
+  J('#node_group_names').facebooklist('#existing_node_groups', {url:relative_url_root+'/node_groups.json',cache:0}, 10, {userfilter:0,casesensetive:1}, 0);
+  J('#node_class_names').facebooklist('#existing_node_classes', {url:relative_url_root+'/node_classes.json',cache:0}, 10, {userfilter:0,casesensetive:1}, 0);
   
   J('a.in-place').click(function() {
     J(this).parents('.header').hide().next('.in-place').show().find('input[type=text]').focus();
@@ -48,18 +48,20 @@ jQuery(document).ready(function(J) {
         runtimes: runtime_data
       },
       {
-        grid: false,
-        markers: "value",
-        labels: label_data,
-        label_color: '#666',
         colors: { runtimes: "#009" },
-        show_ticks: false,
+        font_size: 9,
+        grid: false,
+        label_color: '#666',
+        labels: label_data,
+        label_rotation: -30,
+        markers: "value",
         meanline: true,
-        vertical_label_unit: "ms",
-        stroke_width: 3,
-        font_size: 10,
+        padding_top: 10,
+        // show_horizontal_labels: false,
+        show_ticks: false,
         start_at_zero: false,
-        show_horizontal_labels: false,
+        stroke_width: 3,
+        vertical_label_unit: "ms",
       }
     );
 
@@ -86,14 +88,15 @@ jQuery(document).ready(function(J) {
         failed: failed_data
       },
       {
-        grid: false,
-        labels: label_data,
-        label_color: '#666',
         colors: { succeeded: "#0C3", failed: "#901" },
-        show_ticks: false,
         datalabels: { succeeded: succeeded_data_label, failed: failed_data_label },
         font_size: 9,
+        grid: false,
+        label_color: '#666',
         label_rotation: -30,
+        labels: label_data,
+        padding_top: 10,
+        show_ticks: false,
       }
     );
 

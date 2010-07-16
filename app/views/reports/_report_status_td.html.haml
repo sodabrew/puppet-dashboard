@@ -1,0 +1,3 @@
+%td.status{:class => report.status}
+  %span{:title => report_title_text(report)}
+    = report.success? ? icon(:success) : icon(:failure)

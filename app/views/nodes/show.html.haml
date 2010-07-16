@@ -23,19 +23,19 @@
     .section.half
       %h3 Groups
       - unless resource.node_groups.empty?
-        = inspector_table resource.node_groups, :name, :name, :link => true
+        = inspector_table resource.node_groups, :name, false, :link => true
       - else
         No Groups
 
     .section.half
       %h3 Classes
       - unless resource.node_classes.empty?
-        = inspector_table resource.node_classes, :name, :name, :link => true
+        = inspector_table resource.node_classes, :name, false, :link => true
       - else
         No Classes
 
     - unless resource.inherited_classes.empty?
-      = inspector_table resource.inherited_classes, :name, :name, :link => true, :caption => 'Inherited Classes'
+      = inspector_table resource.inherited_classes, :name, false, :link => true, :caption => 'Inherited Classes'
 
 
     .clear
@@ -43,11 +43,9 @@
     - reports = @node.reports.limit(30).order('time ASC')
     - unless reports.empty?
       .section
-        %h3 Daily Run Status
         = render :partial => 'statuses/run_failure', :locals => { :statuses => Status.by_interval(:limit => 30, :node => @node) }
 
       .section
-        %h3 Run Time (ms)
         = render 'statuses/run_time', :reports => reports.reverse
 
       .section
@@ -65,9 +63,7 @@
           %tbody
             - @node.reports.limit(10).each do |report|
               %tr
-                %td.status{:class => report.status}
-                  %span{:title => report.status.titleize}
-                    = report.success? ? '&#10004;' : '&#10008;'
+                = render 'reports/report_status_td', :report => report
                 %td= link_to report.time.to_s, report
                 %td= report.total_resources
                 %td= report.failed_resources

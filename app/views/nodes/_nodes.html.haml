@@ -15,12 +15,12 @@
           = check_box_tag dom_id(n)
         %td.status{:class => n.status_class}
           %span{:title => node_title_text(n)}
-            = n.reported_at ? n.last_report.success? ? '&#10004;' : '&#10008;' : '?'
+            - if n.last_report
+              = n.last_report.success? ? icon(:success) : icon(:failure)
+            - else
+              &nbsp;
         %td.hostname
           = link_to h(n.name), n
         %td.latest_report
           = n.last_report ? n.last_report.time.to_s(:long) : "Has not reported"
-- if nodes.respond_to?(:total_pages) && nodes.total_pages > 1
-  .actionbar
-    = will_paginate(nodes)
-    %div{:style => 'clear:both;'}
+= pagination_for nodes

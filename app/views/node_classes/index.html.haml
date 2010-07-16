@@ -19,7 +19,4 @@
             = check_box_tag "check_all"
           %td.name
             = link_to h(n.name), n
-  - if @node_classes.respond_to?(:total_pages) && @node_classes.total_pages > 1
-    .actionbar
-      = will_paginate(@node_classes)
-      %div{:style => 'clear:both;'}
+  = pagination_for @node_classes

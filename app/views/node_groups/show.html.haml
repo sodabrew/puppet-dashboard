@@ -17,14 +17,14 @@
     .section
       %h3 Classes
       - unless @node_group.node_classes.blank?
-        = inspector_table @node_group.node_classes, :name, :description, :link => true
+        = inspector_table @node_group.node_classes, :name, false, :link => true
       - else
         No Classes
 
     .section
       %h3 Inherited Groups
       - unless @node_group.node_groups.blank?
-        = inspector_table @node_group.node_groups, :name, :description, :link => true
+        = inspector_table @node_group.node_groups, :name, false, :link => true
       - else
         No Groups
 

@@ -1,14 +1,17 @@
-.header.element
-  = form.label :name
-  = form.text_field :name, :placeholder => "Group Name"
+= focus :node_group_name
+
+= header_for(form)
 
 .item
   = form.error_messages
 
   .element
+    = form.label :name
+    = form.text_field :name, :placeholder => "Group Name"
+
+  .element
+    %h3 Parameters
     %table#parameters.inspector
-      %caption
-        Parameters
       %thead
         %tr
           %th.key Key

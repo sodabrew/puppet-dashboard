@@ -1,9 +1,7 @@
 class NodeClassesController < InheritedResources::Base
   respond_to :html, :json
 
-  private
+  include PaginatedIndex
+  include PaginatedSearch
 
-  def collection
-    get_collection_ivar || set_collection_ivar(end_of_association_chain.search(params[:q]).paginate(:page => params[:page]))
-  end
 end

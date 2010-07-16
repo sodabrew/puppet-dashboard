@@ -1,9 +1,13 @@
-.header
-  = form.label 'hostname', :name
-  = form.text_field :name, :placeholder => "hostname"
+= focus :node_name
+
+= header_for(form)
 
 .item
   = form.error_messages
+
+  .element
+    = form.label :hostname, "Hostname"
+    = form.text_field :name, :placeholder => "Enter the hostname here"
 
   .element.textarea
     = form.label :description

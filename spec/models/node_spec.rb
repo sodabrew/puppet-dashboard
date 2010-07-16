@@ -18,6 +18,34 @@ describe Node do
 
   end
 
+  describe ".successful" do
+    it "should return all nodes whose latest report was successful" do
+      report = Report.generate
+      report.update_attribute(:success, true)
+
+      Node.successful.should include(report.node)
+    end
+
+    it "should not return failed nodes" do
+      failed_node = Node.generate
+
+      failed_report = Report.generate
+      successful_report = failed_report.clone
+
+      failed_report.stubs(:assign_to_node)
+      failed_report.stubs(:set_attributes)
+
+      failed_report.node = failed_node
+      failed_report.success = false
+      failed_report.host = failed_node.name
+
+      failed_report.save!
+      successful_report.save!
+
+      Node.successful.should_not include(failed_node)
+    end
+  end
+
   describe ".failed" do
     it "should return all nodes whose latest report failed" do
       report = Report.generate
@@ -25,14 +53,24 @@ describe Node do
 
       Node.failed.should include(report.node)
     end
-  end
 
-  describe ".successful" do
-    it "should return all nodes whose latest report was successful" do
-      report = Report.generate
-      report.update_attribute(:success, true)
+    it "should not return successful nodes" do
+      failed_node = Node.generate
 
-      Node.successful.should include(report.node)
+      failed_report = Report.generate
+      successful_report = failed_report.clone
+
+      failed_report.stubs(:assign_to_node)
+      failed_report.stubs(:set_attributes)
+
+      failed_report.node = failed_node
+      failed_report.success = false
+      failed_report.host = failed_node.name
+
+      failed_report.save!
+      successful_report.save!
+
+      Node.failed.should_not include(successful_report.node)
     end
   end
 
@@ -240,5 +278,17 @@ describe Node do
     end
 
   end
+
+  describe "destroying" do
+    before do
+      @node = Node.generate!(:name => 'sample_node')
+      @report = Report.generate!
+    end
+
+    subject { lambda { @node.destroy } }
+
+    it("destroys dependent reports") { should change(Report, :count).by(-1) }
+  end
+
 
 end

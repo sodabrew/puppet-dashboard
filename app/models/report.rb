@@ -29,16 +29,51 @@ class Report < ActiveRecord::Base
     @metrics ||= report.metrics.with_indifferent_access
   end
 
+  TOTAL_TIME_FORMAT = "%0.2f"
+
   def total_time
-    metrics && metrics[:time] && "%0.2f" % metrics[:time][:total]
+    if value = metric_value(:time, :total)
+      TOTAL_TIME_FORMAT % value
+    end
+  end
+
+  def config_retrieval_time
+    if value = metric_value(:time, :config_retrieval)
+      TOTAL_TIME_FORMAT % value
+    end
   end
 
   def total_resources
-    metrics && metrics[:resources] && metrics[:resources][:total]
+    metric_value :resources, :total
   end
 
   def failed_resources
-    metrics && metrics[:resources] && metrics[:resources][:failed]
+    metric_value :resources, :failed
+  end
+
+  def failed_restarts
+    metric_value :resources, :failed_restarts
+  end
+
+  def skipped_resources
+    metric_value :resources, :skipped_resources
+  end
+
+  def changes
+    metric_value :changes, :total
+  end
+
+  # Returns the metric value at the key found by traversing the metrics hash
+  # tree. Returns nil if any intermediary results are nil.
+  #
+  def metric_value(*keys)
+    return nil unless metrics
+    result = metrics
+    keys.each do |key|
+      result = result[key]
+      break unless result
+    end
+    result
   end
 
   private
@@ -61,6 +96,7 @@ class Report < ActiveRecord::Base
   end
 
   def set_node_reported_at
-    node.update_attribute(:reported_at, report.time)
+    node.reported_at = report.time
+    node.send :update_without_callbacks # do not create a timeline event
   end
 end

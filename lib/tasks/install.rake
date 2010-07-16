@@ -1,12 +1,7 @@
-rule 'database.yml' => 'config/database.yml.example' do
-  sh "cp config/database.yml.example config/database.yml"
+desc "Install the Puppet Dashboard"
+task :install do
+  puts "Please see the README.markdown file for installation instructions."
 end
 
-desc "Create database.yml from example"
-task :copy_config => ['config/database.yml']
-
-desc "Install puppet dashboard"
-task :install => [:copy_config, 'db:create', 'db:schema:load', 'db:seed']
-
-desc "Update puppet dashboard"
+desc "Update the Puppet Dashboard"
 task :update => ['db:migrate']
