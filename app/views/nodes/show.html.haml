@@ -51,7 +51,8 @@
       .section
         %h3
           Recent Reports
-          %span.count== (#{@node.reports.size})
+          %span.count== (#{@node.reports.count})
+          - reports_limit = 10
         %table.inspector
           %thead
             %tr
@@ -61,7 +62,7 @@
               %th Failed
               %th Runtime
           %tbody
-            - @node.reports.limit(10).each do |report|
+            - @node.reports.limit(reports_limit).each do |report|
               %tr
                 = report_status_td(report)
                 %td= link_to report.time.to_s, report
@@ -72,7 +73,10 @@
             %tr
               %td{:colspan => @node ? 8 : 7}
                 .actionbar
-                  = link_to "View More &raquo;", reports_node_path(@node), :class => 'button'
+                  - if @node.reports.count > reports_limit
+                    = link_to "More &raquo;", reports_node_path(@node), :class => 'button'
+                  - else
+                    &nbsp;
 
     .section
       %h3 Dashboard Activity
