@@ -11,21 +11,21 @@
 
 .item
   .section
+    %h3 Log
+    .section
+      %table.inspector
+        %thead
+          %tr
+            %th Level
+            %th Message
+            %th Source
+            %th Time
+        %tbody
+          = render report.logs
+  .section
     %h3 Metrics
-    - report.metrics.each do |name, metric|
+    - report.metrics.sort_by{|name, metric| name}.each do |name, metric|
       .section
         %h4= name.titleize
         %table.inspector
           = render metric
-
-  .section.clear
-    %h3 Log
-    %table.inspector
-      %thead
-        %tr
-          %th Level
-          %th Message
-          %th Source
-          %th Time
-      %tbody
-        = render report.logs
