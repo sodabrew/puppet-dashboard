@@ -27,7 +27,10 @@
     = javascript_include_tag "application" 
 
     = stylesheet_link_tag 'reset', 'layout', 'application', 'forms', 'tables', 'jquery.ui.autocomplete.css', 'typography', 'links', 'fcbkcomplete', 'tipsy'
-  %body
+
+  - body_classes = [ "#{controller.controller_name}_controller", "#{controller.controller_name}_#{controller.action_name}_action" ]
+  - body_classes << "#{controller.controller_name}_form_action" if %w[new create edit update].include?(controller.action_name)
+  %body{:class => body_classes}
     #wrap
       #header
         = render :partial => 'shared/global_nav'
