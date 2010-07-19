@@ -38,7 +38,7 @@ jQuery(document).ready(function(J) {
   J("table.data.runtime").each(function(i){
     var id, label_data, runtime_data, runtime_data_label
     id = "table_runtime"+i
-    J("<div id='"+id+"' style='height:150px'></div>").insertAfter(J(this));
+    J("<div id='"+id+"' style='height:150px; width: *%'></div>").insertAfter(J(this));
 
     label_data = J(this).find("tr.labels th").mapHtml();
     runtime_data = J(this).find("tr.runtimes td").mapHtmlFloat();
@@ -57,6 +57,7 @@ jQuery(document).ready(function(J) {
         markers: "value",
         meanline: true,
         padding_top: 10,
+        left_padding: 50,
         // show_horizontal_labels: false,
         show_ticks: false,
         start_at_zero: false,
@@ -73,7 +74,7 @@ jQuery(document).ready(function(J) {
   J("table.data.status").each(function(i){
     var id, label_data, succeeded_data, failed_data
     id = "table_status"+i
-    J("<div id='"+id+"' style='height:150px'></div>").insertAfter(J(this));
+    J("<div id='"+id+"' style='height: 150px; width: *%;'></div>").insertAfter(J(this));
 
     label_data = J(this).find("tr.labels th").mapHtml();
     succeeded_data = J(this).find("tr.succeeded td").mapHtmlInt();
@@ -96,6 +97,7 @@ jQuery(document).ready(function(J) {
         label_rotation: -30,
         labels: label_data,
         padding_top: 10,
+        left_padding: 50,
         show_ticks: false,
       }
     );
