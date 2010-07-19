@@ -254,9 +254,7 @@ body {
     float: left; }
   body .section {
     margin-bottom: 1.5em; }
-    body .section:last-child {
-      margin-bottom: 0; }
-    body .section.error, body .section.warning {
+    body .section.error {
       -webkit-border-radius: 0.35em 0.35em 0.35em 0.35em;
       -moz-border-radius: 0.35em 0.35em 0.35em 0.35em;
       border-radius: 0.35em 0.35em 0.35em 0.35em;
@@ -282,3 +280,10 @@ body {
         padding: .5em 10px .5em 26px;
         background: #ddcccc url("../images/icons/warning.png") 8px center no-repeat;
         color: #444444; }
+  body.reports_show_action .section {
+    margin-left: 1em; }
+  body.reports_show_action h4 {
+    color: #444; }
+  body.reports_show_action table.inspector td.key {
+    text-align: right;
+    white-space: nowrap; }

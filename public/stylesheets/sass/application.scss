@@ -423,4 +423,21 @@ body {
         #DCC);
     }
   }
+
+  &.reports_show_action {
+    .section {
+      margin-left: 1em;
+    }
+
+    h4 {
+      color: #444;
+    }
+
+    table.inspector {
+      td.key {
+        text-align: right;
+        white-space: nowrap;
+      }
+    }
+  }
 }
