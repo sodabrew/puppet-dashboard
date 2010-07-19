@@ -9,4 +9,7 @@ class PagesController < ApplicationController
     @timeline_events = TimelineEvent.recent(10)
     @nodes = Node.by_report_date.all(:limit => 10)
   end
+
+  def release_notes
+  end
 end
