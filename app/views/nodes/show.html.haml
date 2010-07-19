@@ -75,7 +75,7 @@
                   = link_to "View More &raquo;", reports_node_path(@node), :class => 'button'
 
     .section
-      %h3 Activity
+      %h3 Dashboard Activity
       - unless resource.timeline_events.empty?
         %ol.timeline= render resource.timeline_events.recent(10)
       - else

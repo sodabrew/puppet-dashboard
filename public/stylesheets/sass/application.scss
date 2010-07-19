@@ -172,10 +172,8 @@ body {
   }
 
   ol.timeline li {
-    list-style-type: none;
-    padding-left: 20px;
-    margin-bottom: 5px;
-    position: relative;
+    list-style-type: disc;
+    margin-left: 2em;
 
     span.date {
       color: #666;
