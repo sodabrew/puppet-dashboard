@@ -68,6 +68,21 @@ $rounding_radius: 0.35em;
   }
 }
 
+@mixin icony_section($icon_name, $header_foreground, $header_background, $section_foreground, $section_background, $border_color) {
+  @include rounded;
+  padding: 10px 10px 0;
+  background: $section_background;
+  border: 1px solid $border_color;
+  color: $section_foreground;
+
+  h3 {
+    margin: -10px -10px .5em;
+    padding: .5em 10px .5em 26px;
+    background: $header_background url('../images/icons/' + $icon_name + '.png') 8px center no-repeat;
+    color: $header_foreground;
+  }
+}
+
 body {
   background: #e8eef0;
   color: #444;
@@ -394,39 +409,18 @@ body {
   .section {
     margin-bottom: 1.5em;
 
-    &:last-child {
-      margin-bottom: 0;
-    }
-
-    &.error, &.warning {
-      @include rounded;
-      padding: 10px 10px 0;
-    }
-
     &.error {
-      background: #FDD;
-      border: 1px solid #FCC;
-      color: #433;
-
-      h3 {
-        margin: -10px -10px .5em;
-        padding: .5em 10px .5em 26px;
-        background: #ffcccc url('../images/icons/failure.png') 8px center no-repeat;
-        color: #433;
-      }
+      @include icony_section('failure', 
+        #433, #FCC, 
+        #433, #FDD, 
+        #FCC);
     }
 
     &.warning {
-      background: #DDD;
-      border: 1px solid #CCC;
-      color: #444;
-
-      h3 {
-        margin: -10px -10px .5em;
-        padding: .5em 10px;
-        background: #cccccc url('../images/icons/warning.png') 8px center no-repeat;
-        color: #444;
-      }
+      @include icony_section('warning', 
+        #444, #DCC, 
+        #433, #EDD, 
+        #DCC);
     }
   }
 }

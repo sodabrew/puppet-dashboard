@@ -260,22 +260,25 @@ body {
       -webkit-border-radius: 0.35em 0.35em 0.35em 0.35em;
       -moz-border-radius: 0.35em 0.35em 0.35em 0.35em;
       border-radius: 0.35em 0.35em 0.35em 0.35em;
-      padding: 10px 10px 0; }
-    body .section.error {
-      background: #FDD;
-      border: 1px solid #FCC;
-      color: #433; }
+      padding: 10px 10px 0;
+      background: #ffdddd;
+      border: 1px solid #ffcccc;
+      color: #443333; }
       body .section.error h3 {
         margin: -10px -10px .5em;
         padding: .5em 10px .5em 26px;
         background: #ffcccc url("../images/icons/failure.png") 8px center no-repeat;
-        color: #433; }
+        color: #443333; }
     body .section.warning {
-      background: #DDD;
-      border: 1px solid #CCC;
-      color: #444; }
+      -webkit-border-radius: 0.35em 0.35em 0.35em 0.35em;
+      -moz-border-radius: 0.35em 0.35em 0.35em 0.35em;
+      border-radius: 0.35em 0.35em 0.35em 0.35em;
+      padding: 10px 10px 0;
+      background: #eedddd;
+      border: 1px solid #ddcccc;
+      color: #443333; }
       body .section.warning h3 {
         margin: -10px -10px .5em;
-        padding: .5em 10px;
-        background: #cccccc url("../images/icons/warning.png") 8px center no-repeat;
-        color: #444; }
+        padding: .5em 10px .5em 26px;
+        background: #ddcccc url("../images/icons/warning.png") 8px center no-repeat;
+        color: #444444; }
