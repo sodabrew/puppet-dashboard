@@ -19,7 +19,8 @@ table.inspector thead th {
 table.inspector tbody td,
 table.main tbody td {
   border: 1px solid #DDD;
-  padding: .5em .5em .3em;
+  padding: .25em .5em .15em;
+  vertical-align: top;
 }
 
 table.inspector tbody tr:nth-child(even) td,
@@ -67,8 +68,18 @@ table tbody td.status.failure {
   color: red;
 }
 
+table.inspector td.key,
+table.inspector td.value {
+  vertical-align: top;
+  text-align: left;
+}
+
 table.inspector td.key {
   width: 20%;
+}
+
+table.inspector td.value {
+  width: 100%;
 }
 
 table.inspector tfoot td {
