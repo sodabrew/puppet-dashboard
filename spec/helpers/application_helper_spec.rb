@@ -67,4 +67,9 @@ describe ApplicationHelper do
 
   end
 
+  describe "#icon" do
+    it "should return an image tag to an icon" do
+      helper.icon('foo').should have_tag('img[src=?]', image_path('icons/foo.png'))
+    end
+  end
 end
