@@ -33,10 +33,6 @@
             = truncated_node_sentence(@unreported_nodes, :more_link => unreported_nodes_path)
 
     .section
-      %h3
-        Daily Run Status
       = render 'statuses/run_failure', :statuses => @statuses
-
     .section
-      %h3 Recently Reported Nodes
       = render 'nodes/nodes', :nodes => @nodes
