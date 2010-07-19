@@ -25,7 +25,7 @@
       %tbody
         - @reports.each do |report|
           %tr
-            = render 'reports/report_status_td', :report => report
+            = report_status_td(report)
             %td= link_to report.time.to_s(:short), report
             - unless @node
               %td= link_to_if report.node, report.host, report.node

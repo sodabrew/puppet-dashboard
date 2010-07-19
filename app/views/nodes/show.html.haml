@@ -63,7 +63,7 @@
           %tbody
             - @node.reports.limit(10).each do |report|
               %tr
-                = render 'reports/report_status_td', :report => report
+                = report_status_td(report)
                 %td= link_to report.time.to_s, report
                 %td= report.total_resources
                 %td= report.failed_resources
