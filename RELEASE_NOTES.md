@@ -1,6 +1,16 @@
 Puppet Dashboard Release Notes
 ==============================
 
+v1.0.2
+------
+
+* Added missing "favicon.ico", the lack of which was filling logs with errors.
+* Fixed chart formatting.
+* Fixed chart headers display.
+* Fixed errors in documentation.
+* Fixed exception on the node reports page
+* Fixed homepage warning message boxes to look like errors.
+
 v1.0.1
 ------
 
