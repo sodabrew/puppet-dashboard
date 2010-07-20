@@ -134,9 +134,9 @@ won't create duplicate entries.
 To enable live report aggregation, you will need to modify your puppetmaster and puppet clients.
 
 Make your clients send reports to the puppetmaster by setting `report` to
-`true` in the `[agent]` block of your `puppet.conf`, e.g.:
+`true` in the `[puppetd]` block of your `puppet.conf`, e.g.:
 
-    [agent]
+    [puppetd]
     report=true
 
 Then modify your puppetmaster:
@@ -183,6 +183,8 @@ running on `localhost` at port `3000` may look like:
 
     [agent]
     report=true
+
+*Note:* The `reporturl` above is the default. You only need to specify a `reporturl` if you host Dashboard at some other url. Also note that the `puppet.conf` block name changed in 2.6.x from `[puppetd]` to `[agent]`.
 
 Using as an external node classification tool
 ---------------------------------------------
