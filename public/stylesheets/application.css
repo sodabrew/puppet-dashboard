@@ -272,7 +272,7 @@ body {
       body .section.error h3 {
         margin: -10px -10px .5em;
         padding: .5em 10px .5em 26px;
-        background: #ffcccc url("../images/icons/failure.png") 8px center no-repeat;
+        background: #ffcccc url("../images/icons/failure.png") 5px center no-repeat;
         color: #443333; }
     body .section.warning {
       -webkit-border-radius: 0.35em 0.35em 0.35em 0.35em;
@@ -285,5 +285,5 @@ body {
       body .section.warning h3 {
         margin: -10px -10px .5em;
         padding: .5em 10px .5em 26px;
-        background: #ddcccc url("../images/icons/warning.png") 8px center no-repeat;
+        background: #ddcccc url("../images/icons/warning.png") 5px center no-repeat;
         color: #444444; }
