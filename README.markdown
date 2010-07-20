@@ -39,11 +39,13 @@ You may also want to install these tools:
 Installation
 ------------
 
-1. Download the Puppet Dashboard software:
+1. Download the Puppet Dashboard software, all the following instructions
+    assume that you're running commands from the directory containing this source
+    code, which has this `README.markdown` file:
 
     1. Checkout the latest source code using Git:
 
-           git clone git://github.com/reductivelabs/puppet-dashboard.git
+            git clone git://github.com/reductivelabs/puppet-dashboard.git
 
     2. Or install the software using APT or RPM packages. See
        `README_PACKAGES.markdown` for instructions.
@@ -60,18 +62,16 @@ Installation
    new database. Please see the `config/database.yml.example` file for further
    details about database configurations and environments.
 
-4. Populate the database with the tables for the Puppet Dashboard. You must
-   `cd` into the directory with the Puppet Dashboard software before running
-   these commands:
+4. Populate the database with the tables for the Puppet Dashboard:
 
     1. For typical use with the `production` environment:
 
-           rake RAILS_ENV=production db:migrate
+             rake RAILS_ENV=production db:migrate
 
     2. For developing the software using the `development` and `test`
        environments:
 
-           rake db:migrate db:test:prepare
+             rake db:migrate db:test:prepare
 
 Running
 -------
@@ -83,13 +83,15 @@ recommend:
    without any additional software. This is great for getting started quickly,
    but isn't recommended for production use because it's slow and can't handle
    multiple requests at the same time. You must `cd` into the directory with
-   the Puppet Dashboard software before running these commands:
+   the Puppet Dashboard software containing this `README.markdown` file before
+   running these commands:
 
     1. Start a `production` server on port 3000:
 
            ./script/server -e production
 
-    2. Or start a `development` server on port 8080:
+    2. Or start a `development` server on port 8080, where the `development`
+        environment is used by default:
 
            ./script/server -p 8080
 
@@ -106,14 +108,14 @@ recommend:
    your application as a cluster, and then put it behind a proxy like
    [Apache](http://httpd.apache.org/) or [Nginx](http://nginx.org/) -- it's
    fast and reliable. For further information, please see
-   [Thin](http://code.macournoyer.com/thin/)
+   [Thin](http://code.macournoyer.com/thin/).
 
 Reporting
 ---------
 
 ### Import existing reports into the Puppet Dashboard
 
-To import Puppet run reports stored in `/var/puppet/lib/reports` to your
+To import Puppet run reports stored in `/var/puppet/lib/reports` into your
 `production` environment:
 
     rake RAILS_ENV=production reports:import
@@ -122,46 +124,62 @@ Or specify a different report directory:
 
     rake RAILS_ENV=production reports:import REPORT_DIR=/path/to/your/reports
 
-### Import reports from your puppetmasterd as they're produced
+You can re-run these commands, the importer will skip existing reports and
+won't create duplicate entries.
 
-First, ensure that your puppet agents are sending reports to the puppet server by setting `report` to true in the `[agents]` block of your `puppet.conf`.
+### Import reports from your puppetmasterd as they're produced
 
 #### Puppet 0.25.x and earlier
 
-To enable live report aggregation, add the absolute path to the Puppet
-Dashboard's `lib/puppet` directory to your `puppet.conf` file's `libdir`.
+To enable live report aggregation, you will need to modify your puppetmaster and puppet clients.
 
-For example, if you installed the Puppet Dashboard into `/opt/puppet-dashboard`
-and your regular `libdir` was `/var/puppet/lib`, you would add a line to your
-`puppet.conf` like:
+Make your clients send reports to the puppetmaster by setting `report` to
+`true` in the `[agent]` block of your `puppet.conf`, e.g.:
 
-    libdir = /opt/puppet-dashboard/lib/puppet:/var/puppet/lib
+    [agent]
+    report=true
 
-To verify that this change was valid, run this command and confirm that it
-printed what you just set:
+Then modify your puppetmaster:
 
-    puppet --configprint libdir
+1. The custom reporting library will assume that your Puppet Dashboard server is
+    running on `localhost` at port `3000`, which is the default if started
+    using `script/server`. If you need to specify different values, edit the
+    settings in Puppet Dashboard's `lib/puppet/puppet_dashboard.rb` file.
 
-Then ensure that your puppetmasterd runs with the option `--reports
-puppet_dashboard`.
+2. Identify your puppetmaster's `libdir` by running the following command, it
+    will probably be `/var/lib/puppet`:
 
-The `puppet_dashboard` report assumes that your Puppet Dashboard server is
-available at `localhost` on port 3000 (as it would be if you started it via
-`script/server`). For now, you will need to modify the constants in
-`lib/puppet/puppet_dashboard.rb` if this is not the case.
+        puppetmasterd --configprint libdir
+
+3. Create a directory for custom report libraries, e.g. run the following
+    command, but replace `LIBDIR` with the path you found in step 2:
+
+        mkdir -p LIBDIR/lib/puppet/reports/
+
+2. Copy or symlink the Puppet Dashboard's report library in, e.g. run the
+    following command from your Puppet Dashboard's checkout directory, but
+    replace `LIBDIR` with the path you found in step 2:
+
+        ln sf $PWD/lib/puppet/puppet_dashboard.rb LIBDIR/lib/puppet/reports
+
+4. Ensure that your puppetmasterd runs successfully with the option:
+
+        --reports puppet_dashboard
 
 #### Puppet 2.6.x
 
-For the latest Puppet, a new `http` reports processor has been added that will
-send reports to a server located at `http://localhost:3000/reports`. To enable the `http`
-processor, add it to the `reports` setting in your `puppet.conf`. The url can
-be configured via the `reporturl` setting in your `puppet.conf`.
+For newer versions of Puppet, a new `http` reports processor has been added
+that will send reports to a server located at `http://localhost:3000/reports`.
+To enable the `http` processor, add it to the `reports` setting in your
+`puppet.conf`. The url can be configured via the `reporturl` setting in your
+`puppet.conf`.
 
-A complete `puppet.conf` example for reporting to a Puppet Dashboard server running under Passenger on port 81:
+For example, a `puppet.conf` for sending reports to a Puppet Dashboard server
+running on `localhost` at port `3000` may look like:
 
     [server]
-    reporturl=http://localhost:81/reports
     reports=http
+    reporturl=http://localhost:3000/reports
 
     [agent]
     report=true
@@ -172,7 +190,9 @@ Using as an external node classification tool
 The Puppet Dashboard functions as an external node classification tool. All
 nodes can be exported as Puppet-compatible YAML. See `bin/external_node` for an
 example script that connects to the Puppet Dashboard as an external node
-classifier.
+classifier. The tool assumes that the Puppet Dashboard is running on
+`localhost` at port `3000`. Please modify the `bin/external_node` constants if
+you need different settings.
 
 Contributors
 ------------
