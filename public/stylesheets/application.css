@@ -17,6 +17,31 @@ body {
   /* ACTIONBAR */ }
   body #content {
     padding: 1.5em 0 2em; }
+  body #header {
+    padding: 1em 0 0; }
+    body #header ul#secondary-navigation {
+      float: right;
+      top: -1.5em; }
+      body #header ul#secondary-navigation li {
+        list-style-type: none;
+        float: left;
+        margin-right: 0.8em; }
+    body #header ul.navigation li {
+      display: block;
+      float: left;
+      margin-right: 1em; }
+      body #header ul.navigation li.active > a, body #header ul.navigation li.active > a:hover {
+        font-weight: bold; }
+    body #header a#logo {
+      background: transparent url("../images/dashboard_logo.png") no-repeat top center;
+      text-indent: -9000px;
+      display: inline-block;
+      height: 23px;
+      width: 155px;
+      position: relative;
+      top: 1px; }
+      body #header a#logo:hover {
+        background-position: bottom center; }
   body #footer p {
     clear: both;
     padding-top: 1em;
@@ -37,16 +62,6 @@ body {
       margin: 0 2px;
       padding: 0 .25em;
       line-height: 1.75em; }
-  body a#logo {
-    background: transparent url("../images/dashboard_logo.png") no-repeat top center;
-    text-indent: -9000px;
-    display: block;
-    height: 23px;
-    width: 155px;
-    position: relative;
-    top: 1px; }
-    body a#logo:hover {
-      background-position: bottom center; }
   body p.legend {
     color: #999;
     margin-bottom: 0; }
@@ -239,6 +254,13 @@ body {
     float: left; }
   body .section {
     margin-bottom: 1.5em; }
+    body .section:last-child {
+      margin-bottom: 0; }
+    body .section.error, body .section.warning {
+      -webkit-border-radius: 0.35em 0.35em 0.35em 0.35em;
+      -moz-border-radius: 0.35em 0.35em 0.35em 0.35em;
+      border-radius: 0.35em 0.35em 0.35em 0.35em;
+      padding: 10px 10px 0; }
     body .section.error {
       -webkit-border-radius: 0.35em 0.35em 0.35em 0.35em;
       -moz-border-radius: 0.35em 0.35em 0.35em 0.35em;

@@ -92,6 +92,50 @@ body {
     padding: 1.5em 0 2em;
   }
 
+  #header {
+    padding: 1em 0 0;
+
+    ul {
+      &#secondary-navigation {
+        float: right;
+        top: -1.5em;
+
+        li {
+          list-style-type: none;
+          float: left;
+          margin-right: 0.8em;
+        }
+      }
+
+      &.navigation {
+        li {
+          display: block;
+          float: left;
+          margin-right: 1em;
+
+          &.active > a,
+          &.active > a:hover {
+            font-weight: bold;
+          }
+        }
+      }
+    }
+
+    a#logo {
+      background: transparent url('../images/dashboard_logo.png') no-repeat top center;
+      text-indent: -9000px;
+      display: inline-block;
+      height: 23px;
+      width: 155px;
+      position: relative;
+      top: 1px;
+
+      &:hover {
+        background-position: bottom center;
+      }
+    }
+  }
+
   #footer {
     p {
       clear: both;
@@ -117,20 +161,6 @@ body {
       margin: 0 2px;
       padding: 0 .25em;
       line-height: 1.75em;
-    }
-  }
-
-  a#logo {
-    background: transparent url('../images/dashboard_logo.png') no-repeat top center;
-    text-indent: -9000px;
-    display: block;
-    height: 23px;
-    width: 155px;
-    position: relative;
-    top: 1px;
-
-    &:hover {
-      background-position: bottom center;
     }
   }
 
@@ -378,6 +408,15 @@ body {
 
   .section {
     margin-bottom: 1.5em;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    &.error, &.warning {
+      @include rounded;
+      padding: 10px 10px 0;
+    }
 
     &.error {
       @include icony_section('failure', 
