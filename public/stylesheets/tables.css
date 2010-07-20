@@ -50,6 +50,7 @@ table thead th.status, table tbody td.status {
   color: #AAA;
   padding: 0;
   text-align: center;
+  vertical-align: middle;
 }
 
 table thead th.status span, table tbody td.status span {
