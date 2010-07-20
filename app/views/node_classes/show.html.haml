@@ -16,7 +16,6 @@
   - unless @node_class.nodes.empty?
     .item
       .section
-        %h3
-          Daily Run Status
         = render 'statuses/run_failure', :statuses => Status.by_interval(:limit => 30, :nodes => @node_class.nodes)
-      = render 'nodes/nodes', :nodes => @node_class.nodes
+      .section
+        = render 'nodes/nodes', :nodes => @node_class.nodes
