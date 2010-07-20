@@ -1,5 +1,10 @@
 %tbody
-  - metric.values.each do |klass, name, value|
+  - metric.values.sort_by{|klass, name, value| name}.each do |klass, name, value|
     %tr
       %td.key{:class => klass.to_s}= name
-      %td.value{:class => klass.to_s}= "%0.2f" % value.to_f
+      %td.value{:class => klass.to_s}
+        - if metric.name == "time"
+          = "%0.2f" % value.to_f
+          seconds
+        - else
+          = value

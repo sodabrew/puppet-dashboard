@@ -115,4 +115,14 @@ module ApplicationHelper
     image_tag "icons/#{name}.png"
   end
 
+  # Return status icon for the +report+.
+  def report_status_icon(report)
+    render 'reports/report_status_icon', :report => report
+  end
+
+  # Return status table cell with icon for the +report+.
+  def report_status_td(report)
+    render 'reports/report_status_td', :report => report
+  end
+
 end

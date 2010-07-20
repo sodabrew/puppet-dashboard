@@ -172,10 +172,8 @@ body {
   }
 
   ol.timeline li {
-    list-style-type: none;
-    padding-left: 20px;
-    margin-bottom: 5px;
-    position: relative;
+    list-style-type: disc;
+    margin-left: 2em;
 
     span.date {
       color: #666;
@@ -409,15 +407,6 @@ body {
   .section {
     margin-bottom: 1.5em;
 
-    &:last-child {
-      margin-bottom: 0;
-    }
-
-    &.error, &.warning {
-      @include rounded;
-      padding: 10px 10px 0;
-    }
-
     &.error {
       @include icony_section('failure', 
         #433, #FCC, 
@@ -430,6 +419,23 @@ body {
         #444, #DCC, 
         #433, #EDD, 
         #DCC);
+    }
+  }
+
+  &.reports_show_action {
+    .section {
+      margin-left: 1em;
+    }
+
+    h4 {
+      color: #444;
+    }
+
+    table.inspector {
+      td.key {
+        text-align: right;
+        white-space: nowrap;
+      }
     }
   }
 }
