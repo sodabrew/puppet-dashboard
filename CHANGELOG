@@ -1,5 +1,24 @@
+v1.0.2
+======
+798575b  maint: Add missing warning.png, minor CSS tweak for message box icons
+1264997  maint: Minor update to README's Reports section
+4a5a0a4  [Bug #4283] Hid "Register" and "Log in" links because authorization isn't implemented yet.
+1565e93  [Bug #4170] Fixed warnings to look like errors.
+7c38593  [Bug #4272] Fixed errors in documentation.
+11f369a  [Feature #4264] Added a release notes page.
+c297715  [Bug #4282] Fixed warnings produced by missing haml-3.0.13 gem specification.
+2ae0bad  GEM: Added vendored Maruku 0.6.0 library for rendering release notes Markdown.
+7d20359  [Fixed #4281] Renamed REALEASE_NOTES.md to RELEASE_NOTES.md
+f896b82  [Fixed #4271] Added missing "favicon.ico", the lack of which was filling logs with errors.
+fcbffd3  [Bug #4280] Fixed chart formatting.
+4f210cf  [Fixed #4276] Fixed exception on the node reports page, caused by unqualified path to partial.
+3d55aeb  [Fixed #4265] Chart headers displayed twice or none at all.
+
 v1.0.1
 ======
+4be5dcb  maint: Fix filename typo
+916ecc7  maint: Adding release notes
+f18dddd  maint: Updating CHANGELOG for v1.0.1
 aabe1c3  [#4216] Successful and failed scopes only return appropriate nodes
 3646ff3  maint: Updating documentation (with installation instructions)
 63ba904  [Bug #4163] [Bug #4166] [Bug #4169] Improved installation instructions.
