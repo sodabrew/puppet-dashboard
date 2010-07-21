@@ -9,6 +9,7 @@ v1.0.3
 * Fixed and improved README documentation for reporting, classification and security.
 * Fixed the ordering of content on the report pages.
 * Fixed icons, warning sections and other styling issues.
+* Fixed chart rendering issues.
 * Fixed unintended dependency on the Puppet gem.
 * Fixed unintended dependency on the JSON gem.
 
