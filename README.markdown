@@ -196,6 +196,27 @@ classifier. The tool assumes that the Puppet Dashboard is running on
 `localhost` at port `3000`. Please modify the `bin/external_node` constants if
 you need different settings.
 
+Database backups
+----------------
+
+The Puppet Dashboard database can be backed up and restored using your database vendor's tools, or using the included `rake` tasks which simplify the process. You must `cd` into the directory with the Puppet Dashboard software containing this `README.markdown` file before running these commands.
+
+### Dump
+
+To dump the Puppet Dashboard `production` database to a file called `production.sql`:
+
+    rake RAILS_ENV=production db:raw:dump
+
+Or dump it to a specific file:
+
+    rake RAILS_ENV=production FILE=/my/backup/file.sql db:raw:dump
+
+### Restore
+
+To restore the Puppet Dashboard from a file called `production.sql` to your `production` environment:
+
+    rake RAILS_ENV=production FILE=production.sql db:raw:restore
+
 Contributors
 ------------
 
