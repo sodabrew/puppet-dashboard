@@ -1,15 +1,30 @@
 Puppet Dashboard Release Notes
 ==============================
 
+v1.0.3
+------
+
+* Added support for Puppet 2.6 reports.
+* Added rake tasks to dump and restore the databse, see README for details.
+* Fixed and improved README documentation for reporting, classification and security.
+* Fixed the ordering of content on the report pages.
+* Fixed icons, warning sections and other styling issues.
+* Fixed unintended dependency on the Puppet gem.
+* Fixed unintended dependency on the JSON gem.
+
 v1.0.2
 ------
 
-* Added missing "favicon.ico", the lack of which was filling logs with errors.
-* Fixed chart formatting.
-* Fixed chart headers display.
-* Fixed errors in documentation.
-* Fixed exception on the node reports page
+* Fixed exceptions on the node reports page.
+* Fixed chart headers so they are shown only once.
+* Fixed chart formatting errors.
 * Fixed homepage warning message boxes to look like errors.
+* Fixed errors in documentation.
+* Added userful menu bar.
+* Added version number to menu bar and release notes page.
+* Added missing "favicon.ico", the lack of which was filling logs with errors.
+* Removed unused "Register" and "Log in" links.
+
 
 v1.0.1
 ------
