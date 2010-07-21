@@ -285,3 +285,6 @@ body {
   body.reports_show_action table.inspector td.key {
     text-align: right;
     white-space: nowrap; }
+  body.pages_release_notes_action .markeddown h2 {
+    margin-top: 1em;
+    margin-bottom: 0.15em; }
