@@ -15,7 +15,7 @@ describe NodesController do
       before { get :index, :format => "json" }
       specify { response.should be_success }
       it "should return JSON" do
-        struct = JSON.parse(response.body)
+        struct = json_from_response_body
         struct.size.should == 1
         struct.first["name"].should == @node.name
       end
@@ -25,7 +25,7 @@ describe NodesController do
       before { get :index, :format => "yaml" }
       specify { response.should be_success }
       it "should return YAML" do
-        struct = YAML.load(response.body)
+        struct = yaml_from_response_body
         struct.size.should == 1
         struct.first["name"].should == @node.name
       end
@@ -155,7 +155,7 @@ describe NodesController do
 
       it "should return YAML" do
         response.body.should =~ %r{ruby/object:Report}
-        struct = YAML.load(response.body)
+        struct = yaml_from_response_body
         struct.size.should == 1
         struct.first.should == @report
       end
@@ -168,7 +168,7 @@ describe NodesController do
       it_should_behave_like "an un-paginated reports collection"
 
       it "should return JSON" do
-        struct = JSON.parse(response.body)
+        struct = json_from_response_body
         struct.size.should == 1
 
         for key in %w[host id node_id success]
@@ -229,7 +229,7 @@ describe NodesController do
         it_should_behave_like "an un-paginated nodes collection"
 
         it "should return YAML" do
-          struct = YAML.load(response.body)
+          struct = yaml_from_response_body
           struct.size.should == 1
           struct.first["name"].should == action
         end
@@ -242,7 +242,7 @@ describe NodesController do
         it_should_behave_like "an un-paginated nodes collection"
 
         it "should return JSON" do
-          struct = JSON.parse(response.body)
+          struct = json_from_response_body
           struct.size.should == 1
           struct.first["name"].should == action
         end
