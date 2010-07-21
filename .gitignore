@@ -20,3 +20,4 @@ public/stylesheets/all.js
 db/dump.sql
 tags
 README.markdown.html
+Makefile
