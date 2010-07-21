@@ -438,4 +438,13 @@ body {
       }
     }
   }
+
+  &.pages_release_notes_action {
+    .markeddown {
+        h2 {
+            margin-top: 1em;
+            margin-bottom: 0.15em;
+        }
+    }
+  }
 }
