@@ -6,6 +6,10 @@ module Puppet #:nodoc:
   class Transaction
     class Report
       attr_reader :logs, :metrics, :host, :time
+
+      def inspect
+        "#<#{self.class}:0x#{object_id.to_s(16)}>"
+      end
     end
   end
 
