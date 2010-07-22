@@ -12,7 +12,7 @@
 body {
   background: #e8eef0;
   color: #444;
-  min-width: 800px;
+  min-width: 400px;
   /* SIDEBAR */
   /* ACTIONBAR */ }
   body #content {
@@ -127,7 +127,8 @@ body {
     font-size: 1.1em;
     line-height: 1.5em;
     margin: 0.25em;
-    padding: 0 .5em; }
+    padding: 0 .5em;
+    white-space: nowrap; }
     body a.button:hover,
     body button:hover {
       text-decoration: none;
