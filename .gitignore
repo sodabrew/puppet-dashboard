@@ -13,7 +13,7 @@ config/database.yml
 spec/spec.opts
 spec/rcov.opts
 public/javascripts/all.js
-public/stylesheets/all.js
+public/stylesheets/all.css
 .dotest/*
 *.swp
 .semver

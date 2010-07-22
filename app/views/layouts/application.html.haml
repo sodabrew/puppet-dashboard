@@ -11,22 +11,9 @@
       var relative_url_root = '#{ActionController::Base.relative_url_root}';
       $.noConflict();
 
-    = javascript_include_tag 'prototype'
-    = javascript_include_tag "jrails" 
-    = javascript_include_tag "fcbkcomplete" 
+    = javascript_include_tag 'prototype', 'jrails', 'fcbkcomplete', 'excanvas.min', 'raphael-min', 'grafico.min', 'jquery.form', 'jquery.placeholders', 'jquery.ui.autocomplete', 'jquery.ui.autocomplete.ext', 'jquery.tipsy', 'search', 'application', :cache => 'all'
 
-    = javascript_include_tag "excanvas.min" 
-    = javascript_include_tag "raphael-min" 
-    = javascript_include_tag "grafico.min" 
-    = javascript_include_tag "jquery.form" 
-    = javascript_include_tag "jquery.placeholders" 
-    = javascript_include_tag "jquery.ui.autocomplete" 
-    = javascript_include_tag "jquery.ui.autocomplete.ext" 
-    = javascript_include_tag "jquery.tipsy" 
-    = javascript_include_tag "search" 
-    = javascript_include_tag "application" 
-
-    = stylesheet_link_tag 'reset', 'layout', 'application', 'forms', 'tables', 'jquery.ui.autocomplete.css', 'typography', 'links', 'fcbkcomplete', 'tipsy'
+    = stylesheet_link_tag 'reset', 'layout', 'forms', 'tables', 'jquery.ui.autocomplete.css', 'typography', 'links', 'fcbkcomplete', 'tipsy', 'application', :cache => 'all'
 
   - body_classes = [ "#{controller.controller_name}_controller", "#{controller.controller_name}_#{controller.action_name}_action" ]
   - body_classes << "#{controller.controller_name}_form_action" if %w[new create edit update].include?(controller.action_name)
