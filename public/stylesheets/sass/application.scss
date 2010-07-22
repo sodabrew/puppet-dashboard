@@ -50,6 +50,7 @@ $rounding_radius: 0.35em;
   line-height: 1.5em;
   margin: 0.25em;
   padding: 0 .5em;
+  white-space: nowrap;
 
   &:hover {
     text-decoration: none;
@@ -86,7 +87,7 @@ $rounding_radius: 0.35em;
 body {
   background: #e8eef0;
   color: #444;
-  min-width: 800px;
+  min-width: 400px;
 
   #content {
     padding: 1.5em 0 2em;
