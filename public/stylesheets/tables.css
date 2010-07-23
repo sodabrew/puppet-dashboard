@@ -47,6 +47,7 @@ table thead th.check input, table tbody td.check input {
 }
 
 table thead th.status, table tbody td.status {
+  width: 2em;
   color: #AAA;
   padding: 0;
   text-align: center;

@@ -1,27 +1,31 @@
-require "#{RAILS_ROOT}/lib/puppet/report"
-
 class Report < ActiveRecord::Base
   def self.per_page; 20 end # Pagination
 
   belongs_to :node
 
+  validate :report_contains_metrics
   validates_presence_of :host
   validates_presence_of :time
   validates_uniqueness_of :host, :scope => :time, :allow_nil => true
   before_validation :process_report
 
-  delegate :logs, :to => :report
+  delegate :logs, :metric_value, :to => :report
+  delegate :total_resources, :failed_resources, :failed_restarts, :skipped_resources,
+           :changed_resources, :failed?, :changed?,
+           :to => :report
 
   default_scope :order => 'time DESC'
 
   serialize :report, Puppet::Transaction::Report
 
-  def succeeded?
-    failed_resources == 0
+  def report
+    rep = read_attribute(:report)
+    rep.extend(ReportExtensions) unless rep.nil? or rep.is_a?(ReportExtensions)
+    rep
   end
 
   def status
-    success? ? 'success' : 'failure'
+    failed? ? 'failure' : 'success'
   end
 
   def metrics
@@ -32,7 +36,7 @@ class Report < ActiveRecord::Base
   TOTAL_TIME_FORMAT = "%0.2f"
 
   def total_time
-    if value = metric_value(:time, :total)
+    if value = report.total_time
       TOTAL_TIME_FORMAT % value
     end
   end
@@ -41,39 +45,6 @@ class Report < ActiveRecord::Base
     if value = metric_value(:time, :config_retrieval)
       TOTAL_TIME_FORMAT % value
     end
-  end
-
-  def total_resources
-    metric_value :resources, :total
-  end
-
-  def failed_resources
-    metric_value :resources, :failed
-  end
-
-  def failed_restarts
-    metric_value :resources, :failed_restarts
-  end
-
-  def skipped_resources
-    metric_value :resources, :skipped_resources
-  end
-
-  def changes
-    metric_value :changes, :total
-  end
-
-  # Returns the metric value at the key found by traversing the metrics hash
-  # tree. Returns nil if any intermediary results are nil.
-  #
-  def metric_value(*keys)
-    return nil unless metrics
-    result = metrics
-    keys.each do |key|
-      result = result[key]
-      break unless result
-    end
-    result
   end
 
   private
@@ -86,7 +57,7 @@ class Report < ActiveRecord::Base
   end
 
   def set_attributes
-    self.success = succeeded?
+    self.success = !report.failed?
     self.time    = report.time
     self.host    = report.host
   end
@@ -98,5 +69,9 @@ class Report < ActiveRecord::Base
   def set_node_reported_at
     node.reported_at = report.time
     node.send :update_without_callbacks # do not create a timeline event
+  end
+
+  def report_contains_metrics
+    not report.metrics.nil?
   end
 end
