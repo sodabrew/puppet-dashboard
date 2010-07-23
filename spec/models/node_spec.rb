@@ -19,6 +19,8 @@ describe Node do
   end
 
   describe ".successful" do
+    include DescribeReports
+
     it "should return all nodes whose latest report was successful" do
       report = Report.generate
       report.update_attribute(:success, true)
@@ -27,26 +29,21 @@ describe Node do
     end
 
     it "should not return failed nodes" do
-      failed_node = Node.generate
-
-      failed_report = Report.generate
-      successful_report = failed_report.clone
-
-      failed_report.stubs(:assign_to_node)
-      failed_report.stubs(:set_attributes)
-
-      failed_report.node = failed_node
-      failed_report.success = false
-      failed_report.host = failed_node.name
-
-      failed_report.save!
+      successful_report = report_model_from_yaml('success.yml')
       successful_report.save!
+      successful_node = successful_report.node
 
-      Node.successful.should_not include(failed_node)
+      failed_report = report_model_from_yaml('failure.yml')
+      failed_report.save!
+      failed_node = failed_report.node
+
+      Node.successful.should_not include(failed_report.node)
     end
   end
 
   describe ".failed" do
+    include DescribeReports
+
     it "should return all nodes whose latest report failed" do
       report = Report.generate
       report.update_attribute(:success, false)
@@ -55,20 +52,13 @@ describe Node do
     end
 
     it "should not return successful nodes" do
-      failed_node = Node.generate
-
-      failed_report = Report.generate
-      successful_report = failed_report.clone
-
-      failed_report.stubs(:assign_to_node)
-      failed_report.stubs(:set_attributes)
-
-      failed_report.node = failed_node
-      failed_report.success = false
-      failed_report.host = failed_node.name
-
-      failed_report.save!
+      successful_report = report_model_from_yaml('success.yml')
       successful_report.save!
+      successful_node = successful_report.node
+
+      failed_report = report_model_from_yaml('failure.yml')
+      failed_report.save!
+      failed_node = failed_report.node
 
       Node.failed.should_not include(successful_report.node)
     end

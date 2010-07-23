@@ -1,0 +1,15 @@
+--- !ruby/object:Puppet::Transaction::Report
+  external_times: {}
+  host: puppet.puppetlabs.vm
+  logs: 
+    - !ruby/object:Puppet::Util::Log
+      level: !ruby/sym info
+      message: Caching catalog for puppet.puppetlabs.vm
+      source: Puppet
+      tags: 
+        - info
+      time: 2010-07-22 12:16:05.073204 -07:00
+      version: 2.6.0
+  metrics: {}
+  resource_statuses: {}
+  time: 2010-07-22 12:16:04.059816 -07:00
