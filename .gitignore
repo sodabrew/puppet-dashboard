@@ -1,3 +1,6 @@
+/*.sql
+.sass-cache/*
+coverage.info
 coverage/*
 log/*.log
 log/*.pid
