@@ -14,6 +14,7 @@ Rails::Initializer.run do |config|
   config.gem 'will_paginate'
   config.gem 'has_scope'
   config.gem 'maruku'
+  config.gem 'facets', :lib => false
 
   # Settings in config/environments/* take precedence over those specified here.
   # Application configuration should go into files in config/initializers
