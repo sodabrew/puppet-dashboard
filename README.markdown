@@ -41,7 +41,7 @@ Installation
    2. Or install the software using APT or RPM packages. See
        `README_PACKAGES.markdown` for instructions.
 
-2. Create a `config/database.yml` file to connect your Puppet Dashboard to this new database. Please see the `config/database.yml.example` file for further details about database configurations and environments. These files paths are relative to the path of the Puppet Dashboard software containing this `README.markdown` file.
+2. Create a `config/database.yml` file to specify Puppet Dashboard's database configuration. Please see the `config/database.yml.example` file for further details about database configurations and environments. These files paths are relative to the path of the Puppet Dashboard software containing this `README.markdown` file.
 
 
 3. Setup a MySQL database server, create a user and database for use with the Dashboard. A rake task can be used to create the database using the configuration specified in your `config/database.yml`. You must `cd` into the directory with the Puppet Dashboard software containing this `README.markdown` file before running these commands. To create the production database, use:
