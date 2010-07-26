@@ -41,15 +41,14 @@ Installation
    2. Or install the software using APT or RPM packages. See
        `README_PACKAGES.markdown` for instructions.
 
-2. Setup a MySQL database server, create a user and database for use with the Dashboard. For example, you might start a `mysql` session as `root` and run commands like:
+2. Create a `config/database.yml` file to connect your Puppet Dashboard to this new database. Please see the `config/database.yml.example` file for further details about database configurations and environments. These files paths are relative to the path of the Puppet Dashboard software containing this `README.markdown` file.
 
-        CREATE DATABASE dashboard CHARACTER SET utf8;
-        CREATE USER 'dashboard'@'localhost' IDENTIFIED BY 'my_password';
-        GRANT ALL PRIVILEGES ON dashboard.* TO 'dashboard'@'localhost';
 
-3. Create a `config/database.yml` file to connect your Puppet Dashboard to this new database. Please see the `config/database.yml.example` file for further details about database configurations and environments. These files paths are relative to the path of the Puppet Dashboard software containing this `README.markdown` file.
+3. Setup a MySQL database server, create a user and database for use with the Dashboard. A rake task can be used to create the database using the configuration specified in your `config/database.yml`. You must `cd` into the directory with the Puppet Dashboard software containing this `README.markdown` file before running these commands. To create the production database, use:
 
-4. Populate the database with the tables for the Puppet Dashboard. You must `cd` into the directory with the Puppet Dashboard software containing this `README.markdown` file before running these commands:
+    rake RAILS_ENV=production db:create
+
+4. Populate the database with the tables for the Puppet Dashboard.
 
    1. For typical use with the `production` environment:
 
@@ -116,11 +115,13 @@ The Puppet Dashboard can collect reports from your Puppet Master as they're crea
 
         mkdir -p LIBDIR/puppet/reports/
 
-3. Create a custom report processor file on your Puppet Master by copying the Puppet Dashboard's `lib/puppet/puppet_dashboard.rb` file to `LIBDIR/puppet/reports`. E.g.,
+3. Create a custom report processor file on your Puppet Master by copying the Puppet Dashboard's `ext/puppet/puppet_dashboard.rb` file to `LIBDIR/puppet/reports`. E.g.,
 
-        cp lib/puppet/puppet_dashboard.rb LIBDIR/puppet/reports
+        cp ext/puppet/puppet_dashboard.rb LIBDIR/puppet/reports
 
-   *NOTE:* This report processor will assume that your Puppet Dashboard server is running at `localhost` on port `3000`, which is the default if it was started using `script/server`. If you need to specify different values, edit the `lib/puppet/puppet_dashboard.rb` file.
+   This report processor will assume that your Puppet Dashboard server is running at `localhost` on port `3000`, which is the default if it was started using `script/server`. If you need to specify different values, edit the `ext/puppet/puppet_dashboard.rb` file.
+
+   *NOTE:* In Puppet Dashboard versions prior to 1.0.3, this file was located at `lib/puppet/puppet_dashboard.rb`
 
 5. Add a `puppet_dashboard` value to the `reports` setting in the `[puppetmasterd]` section of your `puppet.conf` file, e.g.:
 
