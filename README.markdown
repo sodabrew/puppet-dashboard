@@ -46,7 +46,7 @@ Installation
 
 3. Setup a MySQL database server, create a user and database for use with the Dashboard. A rake task can be used to create the database using the configuration specified in your `config/database.yml`. You must `cd` into the directory with the Puppet Dashboard software containing this `README.markdown` file before running these commands. To create the production database, use:
 
-    rake RAILS_ENV=production db:create
+       rake RAILS_ENV=production db:create
 
 4. Populate the database with the tables for the Puppet Dashboard.
 
