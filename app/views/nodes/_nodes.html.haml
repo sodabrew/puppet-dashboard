@@ -9,7 +9,7 @@
       %th.hostname
         Hostname
       %th.latest_report.desc
-        &darr; Latest Report
+        &darr; Latest report
   %tbody
     - nodes.each do |n|
       %tr[n]{:class => "#{'active' if n == @node}"}

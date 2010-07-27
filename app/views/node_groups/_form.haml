@@ -7,7 +7,7 @@
 
   .element
     = form.label :name
-    = form.text_field :name, :placeholder => "Group Name"
+    = form.text_field :name, :placeholder => "Group name"
 
   .element
     %h3 Parameters
@@ -24,16 +24,16 @@
       %tfoot
         %tr
           %td{:colspan => 2}
-            = link_to_function("Add Parameter", :class => "add button") { |page|  page.insert_html :bottom, 'parameters', :partial => 'parameters/parameter_input', :object => form.object.parameters.build }
+            = link_to_function("Add parameter", :class => "add button") { |page|  page.insert_html :bottom, 'parameters', :partial => 'parameters/parameter_input', :object => form.object.parameters.build }
   .element.node_classes
-    = label_tag 'Node Classes'
+    = label_tag 'Classes'
     = text_field_tag 'node_group[node_class_names][]', '', :id => 'node_class_names'
     %ul#existing_node_classes
       - form.object.node_classes.each do |klass|
         %li= klass.name
 
   .element.node_groups
-    = label_tag 'Node Groups'
+    = label_tag 'Groups'
     = text_field_tag 'node_group[node_group_names][]', '', :id => 'node_group_names'
     %ul#existing_node_groups
       - form.object.node_groups.each do |group|

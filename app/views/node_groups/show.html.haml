@@ -12,21 +12,21 @@
       - unless @node_group.parameters.blank?
         = inspector_table @node_group.parameters.to_hash
       - else
-        No Parameters
+        No parameters
 
     .section
       %h3 Classes
       - unless @node_group.node_classes.blank?
         = inspector_table @node_group.node_classes, :name, false, :link => true
       - else
-        No Classes
+        No classes
 
     .section
-      %h3 Inherited Groups
+      %h3 Inherited groups
       - unless @node_group.node_groups.blank?
         = inspector_table @node_group.node_groups, :name, false, :link => true
       - else
-        No Groups
+        No groups
 
   .item
     - if @node_group.nodes.present?
