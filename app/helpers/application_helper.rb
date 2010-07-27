@@ -115,6 +115,11 @@ module ApplicationHelper
     image_tag "icons/#{name}.png"
   end
 
+  # Return status icon for the +node+.
+  def node_status_icon(node)
+    report_status_icon(node.last_report)
+  end
+
   # Return status icon for the +report+.
   def report_status_icon(report)
     render 'reports/report_status_icon', :report => report

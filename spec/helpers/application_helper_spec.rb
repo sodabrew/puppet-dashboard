@@ -72,4 +72,9 @@ describe ApplicationHelper do
       helper.icon('foo').should have_tag('img[src=?]', image_path('icons/foo.png'))
     end
   end
+
+  # Figure out how to test rendering from a partial
+  describe "#report_status_td" do; end
+  describe "#report_status_icon" do; end
+  describe "#node_status_icon" do; end
 end
