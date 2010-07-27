@@ -3,8 +3,6 @@ class Node < ActiveRecord::Base
 
   include NodeGroupGraph
 
-  default_scope :order => 'name ASC'
-
   validates_presence_of :name
   validates_uniqueness_of :name
 
@@ -14,8 +12,9 @@ class Node < ActiveRecord::Base
   has_many :node_groups, :through => :node_group_memberships
 
   has_many :reports, :dependent => :destroy
-  has_one :last_report, :class_name => 'Report', :order => 'time DESC'
+  belongs_to :last_report, :class_name => 'Report'
 
+  named_scope :with_last_report, :include => :last_report
   named_scope :by_report_date, :order => 'reported_at DESC'
 
   named_scope :search, lambda{|q| q.blank? ? {} : {:conditions => ['name LIKE ?', "%#{q}%"]} }
@@ -126,5 +125,9 @@ class Node < ActiveRecord::Base
   def assign_node_groups
     return true unless @node_group_names
     self.node_groups = (@node_group_names || []).reject(&:blank?).map{|name| NodeGroup.find_by_name(name)}
+  end
+
+  def find_last_report
+    return Report.find_last_for(self)
   end
 end

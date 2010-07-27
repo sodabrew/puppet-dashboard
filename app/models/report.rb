@@ -8,6 +8,7 @@ class Report < ActiveRecord::Base
   validates_presence_of :time
   validates_uniqueness_of :host, :scope => :time, :allow_nil => true
   before_validation :process_report
+  after_save :update_node
 
   delegate :logs, :metric_value, :to => :report
   delegate :total_resources, :failed_resources, :failed_restarts, :skipped_resources,
@@ -17,6 +18,10 @@ class Report < ActiveRecord::Base
   default_scope :order => 'time DESC'
 
   serialize :report, Puppet::Transaction::Report
+
+  def self.find_last_for(node)
+    self.first(:conditions => {:node_id => node.id}, :order => 'time DESC', :limit => 1)
+  end
 
   def report
     rep = read_attribute(:report)
@@ -52,7 +57,6 @@ class Report < ActiveRecord::Base
   def process_report
     set_attributes
     assign_to_node
-    set_node_reported_at
     return true
   end
 
@@ -66,12 +70,19 @@ class Report < ActiveRecord::Base
     self.node = Node.find_or_create_by_name(report.host)
   end
 
-  def set_node_reported_at
-    node.reported_at = report.time
-    node.send :update_without_callbacks # do not create a timeline event
+  def update_node(force=false)
+    if node && (force || (node.reported_at.nil? || (node.reported_at-1.second) <= self.time))
+      node.last_report = self unless node.last_report == self
+      node.reported_at = self.time
+      node.success = self.success?
+
+      # FIXME #update_without_callbacks doesn't update the object, and #save! is creating unwanted timeline events.
+      ### node.send :update_without_callbacks # do not create a timeline event
+      node.save!
+    end
   end
 
   def report_contains_metrics
-    not report.metrics.nil?
+    report.metrics.present?
   end
 end
