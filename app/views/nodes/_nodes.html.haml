@@ -3,8 +3,8 @@
 %table.main
   %thead
     %tr
-      %th.check
-        = check_box_tag "check_all"
+      -# %th.check
+        -# = check_box_tag "check_all"
       %th.status
       %th.hostname
         Hostname
@@ -13,8 +13,8 @@
   %tbody
     - nodes.each do |n|
       %tr[n]{:class => "#{'active' if n == @node}"}
-        %td.check
-          = check_box_tag dom_id(n)
+        -# %td.check
+          -# = check_box_tag dom_id(node)
         %td.status{:class => n.status_class}
           %span{:title => node_title_text(n)}
             - if n.last_report

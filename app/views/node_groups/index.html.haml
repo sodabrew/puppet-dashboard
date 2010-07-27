@@ -8,15 +8,15 @@
   %table.main
     %thead
       %tr
-        %th.check
-          = check_box_tag "check_all"
+        -# %th.check
+          -# = check_box_tag "check_all"
         %th.name
           Name
     %tbody
       - @node_groups.each do |n|
         %tr[n]
-          %td.check
-            = check_box_tag "check_all"
+          -# %td.check
+            -# = check_box_tag "check_all"
           %td.name
             = link_to h(n.name), n
   = pagination_for @node_groups
