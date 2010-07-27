@@ -31,7 +31,7 @@ class NodesController < InheritedResources::Base
     @node = Node.find_by_name!(params[:id])
     @reports = @node.reports
     respond_to do |format|
-      format.html { @reports = @reports.paginate(:page => params[:page]); render 'reports/index' }
+      format.html { render 'reports/index' }
       format.yaml { render :text => @reports.to_yaml, :content_type => 'application/x-yaml' }
       format.json { render :json => @reports.to_json }
     end
@@ -48,7 +48,7 @@ class NodesController < InheritedResources::Base
     set_collection_ivar(end_of_association_chain.search(params[:q]).by_report_date)
     set_collection_ivar(end_of_association_chain.send(scope_name)) if scope_name
     index! do |format|
-      format.html { paginate_collection!; render :index }
+      format.html { render :index }
       format.yaml { render :text => collection.to_yaml, :content_type => 'application/x-yaml' }
       format.json { render :json => collection.to_json }
     end

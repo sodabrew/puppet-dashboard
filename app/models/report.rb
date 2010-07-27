@@ -1,6 +1,4 @@
 class Report < ActiveRecord::Base
-  def self.per_page; 20 end # Pagination
-
   belongs_to :node
 
   validate :report_contains_metrics

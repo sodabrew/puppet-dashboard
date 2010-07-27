@@ -4,8 +4,6 @@ class ReportsController < InheritedResources::Base
 
   before_filter :handle_raw_post, :only => :create
 
-  include PaginatedIndex
-
   def create
     if params[:report][:report].blank?
       render :status => 406
