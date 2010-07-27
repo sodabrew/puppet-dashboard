@@ -35,4 +35,5 @@
     .section
       = render 'statuses/run_failure', :statuses => @statuses
     .section
+      %h3 Recently-reported nodes
       = render 'nodes/nodes', :nodes => @nodes, :more_link => nodes_path(:page => 2)
