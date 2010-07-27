@@ -16,6 +16,11 @@ class NodeGroup < ActiveRecord::Base
 
   named_scope :search, lambda{|q| q.blank? ? {} : {:conditions => ['name LIKE ?', "%#{q}%"]} }
 
+  named_scope :with_nodes_count,
+    :select => 'node_groups.*, count(nodes.id) as nodes_count',
+    :joins => 'LEFT OUTER JOIN node_group_memberships ON (node_groups.id = node_group_memberships.node_group_id) LEFT OUTER JOIN nodes ON (nodes.id = node_group_memberships.node_id)',
+    :group => 'node_groups.id'
+
   def inspect; "#<NodeGroup id:#{id}, name:#{name.inspect}>" end
 
   def to_json(options)

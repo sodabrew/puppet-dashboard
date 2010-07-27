@@ -8,6 +8,11 @@ class NodeClass < ActiveRecord::Base
 
   named_scope :search, lambda{|q| q.blank? ? {} : {:conditions => ['name LIKE ?', "%#{q}%"]} }
 
+  named_scope :with_nodes_count,
+    :select => 'node_classes.*, count(nodes.id) as nodes_count',
+    :joins => 'LEFT OUTER JOIN node_class_memberships ON (node_classes.id = node_class_memberships.node_class_id) LEFT OUTER JOIN nodes ON (nodes.id = node_class_memberships.node_id)',
+    :group => 'node_classes.id'
+
   def to_json(options)
     super({:methods => :description, :only => [:name, :id]}.merge(options))
   end
