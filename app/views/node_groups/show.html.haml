@@ -12,25 +12,29 @@
       - unless @node_group.parameters.blank?
         = inspector_table @node_group.parameters.to_hash
       - else
-        No Parameters
+        No parameters
 
     .section
       %h3 Classes
       - unless @node_group.node_classes.blank?
         = inspector_table @node_group.node_classes, :name, false, :link => true
       - else
-        No Classes
+        No classes
 
     .section
-      %h3 Inherited Groups
+      %h3 Inherited groups
       - unless @node_group.node_groups.blank?
         = inspector_table @node_group.node_groups, :name, false, :link => true
       - else
-        No Groups
+        No groups
 
-  - unless @node_group.nodes.empty?
-    .item
+  .item
+    - if @node_group.nodes.present?
       .section
-        = render 'statuses/run_failure', :statuses => Status.by_interval(:limit => 30, :nodes => @node_group.nodes)
-      .section
+        = render 'statuses/run_failure', :nodes => @node_group.nodes
+    .section
+      %h3 Nodes for this group
+      - if @node_group.nodes.present?
         = render 'nodes/nodes', :nodes => @node_group.nodes
+      - else
+        &mdash; No nodes assigned to this group &mdash;

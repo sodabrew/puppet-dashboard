@@ -10,11 +10,11 @@ class NodesController < InheritedResources::Base
   end
 
   def successful
-    scoped_index :successful
+    redirect_to nodes_path(:current => true.to_s, :successful => true.to_s)
   end
 
   def failed
-    scoped_index :failed
+    redirect_to nodes_path(:current => true.to_s, :successful => false.to_s)
   end
 
   def unreported
@@ -31,7 +31,7 @@ class NodesController < InheritedResources::Base
     @node = Node.find_by_name!(params[:id])
     @reports = @node.reports
     respond_to do |format|
-      format.html { @reports = @reports.paginate(:page => params[:page]); render 'reports/index' }
+      format.html { render 'reports/index' }
       format.yaml { render :text => @reports.to_yaml, :content_type => 'application/x-yaml' }
       format.json { render :json => @reports.to_json }
     end
@@ -45,10 +45,20 @@ class NodesController < InheritedResources::Base
 
   # Render the index using the +scope_name+ (e.g. :successful for Node.successful).
   def scoped_index(scope_name=nil)
-    set_collection_ivar(end_of_association_chain.search(params[:q]).by_report_date)
-    set_collection_ivar(end_of_association_chain.send(scope_name)) if scope_name
     index! do |format|
-      format.html { paginate_collection!; render :index }
+      scope = end_of_association_chain
+      if params[:q]
+        scope = scope.search(params[:q])
+      end
+      if scope_name
+        scope = scope.send(scope_name)
+      end
+      if params[:current] or params[:successful]
+        scope = scope.by_currentness_and_successfulness(params[:current] == "true", params[:successful] == "true")
+      end
+      set_collection_ivar(scope.with_last_report.by_report_date)
+
+      format.html { render :index }
       format.yaml { render :text => collection.to_yaml, :content_type => 'application/x-yaml' }
       format.json { render :json => collection.to_json }
     end

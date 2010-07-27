@@ -1,7 +1,9 @@
 #sidebar= render 'shared/node_manager_sidebar'
 #main
   .header
-    %h2= h resource.name
+    %h2
+      = node_status_icon(resource)
+      = h resource.name
     %ul.actions
       %li= link_to 'Edit', edit_node_path(@node), :class => "edit button", :rel => 'inspect'
       %li= link_to 'Destroy', @node, :confirm => 'Are you sure?', :method => :delete, :class => "delete button"
@@ -13,7 +15,7 @@
       - unless resource.compiled_parameters.blank?
         = inspector_table resource.compiled_parameters, :key, :value, :link => false, :caption => 'Parameters'
     - rescue NodeGroupCycleError => error
-      %h3 All Parameters
+      %h3 All parameters
       %p.error
         %strong Warning:
         There appears to be a problem with your node groups.
@@ -25,32 +27,31 @@
       - unless resource.node_groups.empty?
         = inspector_table resource.node_groups, :name, false, :link => true
       - else
-        No Groups
+        No groups
 
     .section.half
       %h3 Classes
       - unless resource.node_classes.empty?
         = inspector_table resource.node_classes, :name, false, :link => true
       - else
-        No Classes
+        No classes
 
     - unless resource.inherited_classes.empty?
       = inspector_table resource.inherited_classes, :name, false, :link => true, :caption => 'Inherited Classes'
 
-
-    .clear
+    %br.clear
 
     - reports = @node.reports.limit(30).order('time ASC')
     - unless reports.empty?
       .section
-        = render 'statuses/run_failure', :statuses => Status.by_interval(:limit => 30, :node => @node)
+        = render 'statuses/run_failure', :node => @node
 
       .section
         = render 'statuses/run_time', :reports => reports.reverse
 
       .section
         %h3
-          Recent Reports
+          Recent reports
           %span.count== (#{@node.reports.count})
           - reports_limit = 10
         %table.inspector
@@ -79,10 +80,10 @@
                     &nbsp;
 
     .section
-      %h3 Dashboard Activity
+      %h3 Dashboard activity
       - unless resource.timeline_events.empty?
         %ol.timeline= render resource.timeline_events.recent(10)
       - else
-        No Activity
+        &mdash; No activity &mdash;
 
-    .clear
+    %br.clear

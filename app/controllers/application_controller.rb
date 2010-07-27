@@ -59,10 +59,4 @@ class ApplicationController < ActionController::Base
       params[param][:parameters] = {}
     end
   end
-
-  # Add pagination to the current InheritedResources collection.
-  def paginate_collection!
-    set_collection_ivar(get_collection_ivar.paginate(:page => params[:page]))
-  end
-
 end

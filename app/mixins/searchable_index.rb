@@ -1,4 +1,4 @@
-module PaginatedSearch
+module SearchableIndex
   private
 
   def collection

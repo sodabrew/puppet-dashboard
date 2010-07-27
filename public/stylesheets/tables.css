@@ -25,7 +25,7 @@ table.main tbody td {
 
 table.inspector tbody tr:nth-child(even) td,
 table.main tbody tr:nth-child(even) td {
-  background: #E8EEF0;
+  background: #F5F5F5;
 }
 
 table.main tbody tr.active td {

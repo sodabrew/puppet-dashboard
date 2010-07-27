@@ -82,6 +82,20 @@ $rounding_radius: 0.35em;
     background: $header_background url('../images/icons/' + $icon_name + '.png') 5px center no-repeat;
     color: $header_foreground;
   }
+
+  p:last-child {
+    padding-bottom: 0;
+    margin-bottom: 0.75em;
+  }
+}
+
+@mixin reporty_level_row($background_color, $darken_amount: 3%) {
+    &:nth-child(even) td {
+        background: darken($background_color, $darken_amount);
+    }
+    td {
+        background: $background_color;
+    }
 }
 
 body {
@@ -163,6 +177,15 @@ body {
       padding: 0 .25em;
       line-height: 1.75em;
     }
+
+    h2 {
+        &.half {
+            width: 0%;
+            margin-right: 5%;
+            float: left;
+            white-space: nowrap;
+        }
+    }
   }
 
   p {
@@ -179,7 +202,7 @@ body {
     span.date {
       color: #666;
       display: inline-block;
-      width: 9em;
+      width: 12em;
     }
   }
 
@@ -327,7 +350,7 @@ body {
             border: 0; }
 
           &.active {
-            background: #e2edf5; }
+            background: #FFFFCC; }
 
           a {
             padding: .25em .5em;
@@ -336,6 +359,10 @@ body {
 
           span.count {
             background: #DDD;
+
+            &.failure {
+                background: #DD9B9B;
+            }
           }
         }
       }
@@ -357,7 +384,7 @@ body {
   /* ACTIONBAR */
 
   .actionbar {
-    @include rounded;
+    @include rounded_bottom;
     background: #DDD;
     padding: 1px;
 
@@ -376,7 +403,8 @@ body {
     .pagination {
       font-size: 12px;
       padding: .1em .5em;
-      float: right;
+      float: left;
+      padding-left: 0.5em;
     }
 
     .dropdown {
@@ -403,12 +431,21 @@ body {
     clear: both;
   }
 
+  .nowrap {
+    white-space: nowrap;
+  }
+
   .item {
     @include rounded_bottom;
     background: #FFF;
     padding: 1em;
     margin-bottom: 1em;
     overflow: hidden;
+
+    &:last-child {
+        padding-bottom: 0;
+        margin-bottom: 0;
+    }
   }
 
   .half {
@@ -495,6 +532,18 @@ body {
         h2 {
             margin-top: 1em;
             margin-bottom: 0.15em;
+        }
+    }
+  }
+
+  &.reports_show_action {
+    tr.puppet_log {
+        &.puppet_log_level_err {
+            @include reporty_level_row(#FFD6D6);
+        }
+
+        &.puppet_log_level_warning {
+            @include reporty_level_row(#FFEBD6);
         }
     }
   }

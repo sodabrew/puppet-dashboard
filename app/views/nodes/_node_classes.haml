@@ -1,11 +1,11 @@
 %h3 Classes
 #associated-classes
-  %h4 Requires these Classes
+  %h4 Requires these classes
   %ul.node_classes
     - node.node_classes.each do |node_class|
       %li[node_class]= link_to node_class.name, '#', :class => 'remove-node-class'
 #available-classes
-  %h4 Available Classes
+  %h4 Available classes
   %ul.node_classes
     - node.available_node_classes.each do |node_class|
       %li[node_class]= link_to node_class.name, '#', :class => 'add-node-class'

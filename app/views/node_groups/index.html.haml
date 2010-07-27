@@ -1,22 +1,24 @@
+- node_groups = paginate_scope(@node_groups)
+
 #sidebar= render 'shared/node_manager_sidebar'
 #main
   .header
     %h2.half Groups
     = render 'shared/search' if action_name == "index"
-    %div{:style => 'clear:both;'}
+    %br.clear
 
   %table.main
     %thead
       %tr
-        %th.check
-          = check_box_tag "check_all"
+        -# %th.check
+          -# = check_box_tag "check_all"
         %th.name
           Name
     %tbody
-      - @node_groups.each do |n|
-        %tr[n]
-          %td.check
-            = check_box_tag "check_all"
+      - for node_group in node_groups
+        %tr[node_group]
+          -# %td.check
+            -# = check_box_tag "check_all"
           %td.name
-            = link_to h(n.name), n
-  = pagination_for @node_groups
+            = link_to h(node_group.name), node_group
+  = pagination_for node_groups

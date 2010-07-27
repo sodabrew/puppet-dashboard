@@ -1,0 +1,19 @@
+-# Render a sidebar section for a +type+ (e.g. NodeGroup or NodeClass).
+
+- table = type.name.tableize
+- label = type.name.sub(/Node/, '')
+- ivar = instance_variable_get "@#{table.singularize}"
+- path_for_index = "#{table}_path"
+- path_for_new = "new_#{table.singularize}_path"
+- path_for_show = "#{table.singularize}_path"
+
+.group
+  %h3{:class => active_if(controller_name == table && action_name == "index")}= link_to(label, send(path_for_index))
+  - entries = type.with_nodes_count
+  %ul
+    - for entry in entries
+      %li{:class => active_if(controller_name == table && ivar && ivar == entry)}
+        = link_to entry.name, send(path_for_show, entry)
+        %span.count= entry.nodes_count
+  .footer.actionbar
+    = link_to "Add #{label}", send(path_for_new), :class => 'button'

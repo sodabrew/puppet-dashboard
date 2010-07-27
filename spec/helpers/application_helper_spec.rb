@@ -72,4 +72,70 @@ describe ApplicationHelper do
       helper.icon('foo').should have_tag('img[src=?]', image_path('icons/foo.png'))
     end
   end
+
+  # Figure out how to test rendering from a partial
+  describe "#report_status_td" do; end
+  describe "#report_status_icon" do; end
+  describe "#node_status_icon" do; end
+
+  describe "#counter_class" do
+    context "when measuring failure" do
+      it "should be 'success' if count is zero" do
+        helper.counter_class(0, true).should == 'success'
+      end
+
+      it "should be 'failure' if count is greater than zero" do
+        helper.counter_class(1, true).should == 'failure'
+      end
+    end
+
+    context "when measuring success" do
+      it "should be 'success' if count is zero" do
+        helper.counter_class(0, false).should == 'success'
+
+      end
+
+      it "should be 'success' if count is greater than zero" do
+        helper.counter_class(1, false).should == 'success'
+      end
+    end
+  end
+
+  describe "#items_per_page" do
+    context "when using defaults" do
+      before do
+        @per_page = ENV['ITEMS_PER_PAGE']
+        ENV.delete('ITEMS_PER_PAGE')
+      end
+
+      after do
+        ENV['ITEMS_PER_PAGE'] = @per_page if @per_page
+      end
+
+      it "should return the default number of items to paginate by" do
+        helper.items_per_page.should == ApplicationHelper::ITEMS_PER_PAGE_DEFAULT
+      end
+    end
+
+    context "when overriden by environmental variable" do
+      before do
+        @per_page = 51;
+        ENV['ITEMS_PER_PAGE'] = @per_page.to_s
+      end
+
+      after do
+        ENV.delete('ITEMS_PER_PAGE')
+      end
+
+      it "should return the overriden number of items to paginate by" do
+        helper.items_per_page.should == @per_page
+      end
+    end
+  end
+
+  describe "#paginate_scope" do
+    it "should paginate the scope" do
+      helper.paginate_scope([1,2,3]).should be_a_kind_of(WillPaginate::Collection)
+    end
+  end
 end

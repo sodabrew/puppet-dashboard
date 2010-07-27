@@ -2,7 +2,7 @@
   %h2
     %span.status{:class => report.status}
       = report_status_icon(report)
-      = report.time.to_s(:long)
+      = report.time.to_s
     - if report.node
       %span.alt for
       = link_to report.node.name, report.node
@@ -21,11 +21,14 @@
             %th Source
             %th Time
         %tbody
-          = render report.logs
+          = render :partial => 'puppet/util/logs/log', :collection => puppet_log_sorter(report.logs.compact)
   .section
     %h3 Metrics
-    - report.metrics.sort_by{|name, metric| name}.each do |name, metric|
-      .section
-        %h4= name.titleize
-        %table.inspector
-          = render metric
+    - if report.metrics
+      - report.metrics.sort_by{|name, metric| name}.each do |name, metric|
+        .section
+          %h4= name.titleize
+          %table.inspector
+            = render metric
+    - else
+      &mdash; No metrics in this report &mdash;

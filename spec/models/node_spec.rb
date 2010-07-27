@@ -18,51 +18,107 @@ describe Node do
 
   end
 
-  describe ".successful" do
-    include DescribeReports
+  describe "::by_currentness_and_successfulness" do
+    before do
+      Node.destroy_all
 
-    it "should return all nodes whose latest report was successful" do
-      report = Report.generate
-      report.update_attribute(:success, true)
+      later = 1.week.ago.to_date
+      sooner = Date.today
 
-      Node.successful.should include(report.node)
+      @always_suceeding = Node.generate!(:name => 'always_suceeding').tap do |node|
+        Report.generate_for(node, later, true)
+        Report.generate_for(node, sooner, true)
+        node.reload
+      end
+
+      @currently_succeeding = Node.generate!(:name => 'currently_succeeding').tap do |node|
+        Report.generate_for(node, later, false)
+        Report.generate_for(node, sooner, true)
+        node.reload
+      end
+
+      @always_failing = Node.generate!(:name => 'always_failing').tap do |node|
+        Report.generate_for(node, later, false)
+        Report.generate_for(node, sooner, false)
+        node.reload
+      end
+
+      @currently_failing = Node.generate!(:name => 'currently_failing').tap do |node|
+        Report.generate_for(node, later, true)
+        Report.generate_for(node, sooner, false)
+        node.reload
+      end
     end
 
-    it "should not return failed nodes" do
-      successful_report = report_model_from_yaml('success.yml')
-      successful_report.save!
-      successful_node = successful_report.node
+    after do
+      Node.destroy_all
+    end
 
-      failed_report = report_model_from_yaml('failure.yml')
-      failed_report.save!
-      failed_node = failed_report.node
+    [
+      [true,  true,  %w[always_suceeding currently_succeeding]],
+      [true,  false, %w[always_failing currently_failing]],
+      [false, true,  %w[always_suceeding currently_succeeding currently_failing]],
+      [false, false, %w[currently_succeeding always_failing currently_failing]],
+    ].each do |currentness, successfulness, inclusions|
+      context "when #{currentness ? 'current' : 'ever'} and #{successfulness ? 'successful' : 'failed'}" do
+        let(:currentness) { currentness }
+        let(:successfulness) { successfulness }
+        let(:inclusions) { inclusions }
 
-      Node.successful.should_not include(failed_report.node)
+        subject { Node.by_currentness_and_successfulness(currentness, successfulness).map(&:name).sort }
+
+        it "should exactly match: #{inclusions.join(', ')}" do
+          should == inclusions.sort
+        end
+      end
     end
   end
 
-  describe ".failed" do
-    include DescribeReports
+  # describe ".successful" do
+    # include DescribeReports
 
-    it "should return all nodes whose latest report failed" do
-      report = Report.generate
-      report.update_attribute(:success, false)
+    # it "should return all nodes whose latest report was successful" do
+      # report = Report.generate
+      # report.update_attribute(:success, true)
 
-      Node.failed.should include(report.node)
-    end
+      # Node.successful.should include(report.node)
+    # end
 
-    it "should not return successful nodes" do
-      successful_report = report_model_from_yaml('success.yml')
-      successful_report.save!
-      successful_node = successful_report.node
+    # it "should not return failed nodes" do
+      # successful_report = report_model_from_yaml('success.yml')
+      # successful_report.save!
+      # successful_node = successful_report.node
 
-      failed_report = report_model_from_yaml('failure.yml')
-      failed_report.save!
-      failed_node = failed_report.node
+      # failed_report = report_model_from_yaml('failure.yml')
+      # failed_report.save!
+      # failed_node = failed_report.node
 
-      Node.failed.should_not include(successful_report.node)
-    end
-  end
+      # Node.successful.should_not include(failed_report.node)
+    # end
+  # end
+
+  # describe ".failed" do
+    # include DescribeReports
+
+    # it "should return all nodes whose latest report failed" do
+      # report = Report.generate
+      # report.update_attribute(:success, false)
+
+      # Node.failed.should include(report.node)
+    # end
+
+    # it "should not return successful nodes" do
+      # successful_report = report_model_from_yaml('success.yml')
+      # successful_report.save!
+      # successful_node = successful_report.node
+
+      # failed_report = report_model_from_yaml('failure.yml')
+      # failed_report.save!
+      # failed_node = failed_report.node
+
+      # Node.failed.should_not include(successful_report.node)
+    # end
+  # end
 
   describe ".unreported" do
     it "should return all nodes whose latest report was unreported" do
@@ -73,8 +129,8 @@ describe Node do
   end
 
   describe "no_longer_reporting" do
-    it "should return all nodes whose latest report is more than 30 minutes ago" do
-      old = node = Node.generate(:reported_at => 1.hour.ago)
+    it "should return all nodes whose latest report is more than 1 hour ago" do
+      old = node = Node.generate(:reported_at => 2.hours.ago)
       new = node = Node.generate(:reported_at => 10.minutes.ago)
 
       Node.no_longer_reporting.should include(old)

@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100318131825) do
+ActiveRecord::Schema.define(:version => 20100726070117) do
 
   create_table "assignments", :force => true do |t|
     t.integer  "node_id"
@@ -65,6 +65,8 @@ ActiveRecord::Schema.define(:version => 20100318131825) do
     t.datetime "updated_at"
     t.string   "url"
     t.datetime "reported_at"
+    t.boolean  "success",        :default => false
+    t.integer  "last_report_id"
   end
 
   create_table "parameters", :force => true do |t|
