@@ -1,3 +1,5 @@
+- reports = paginate_scope(@reports, :per_page => 20)
+
 #main.full
   .header
     %h2
@@ -5,7 +7,7 @@
       - if @node
         %span.alt for
         = link_to @node.name, @node
-      %span.count== (#{@reports.total_entries})
+      %span.count== (#{reports.total_entries})
 
   .item
     %table.main
@@ -23,7 +25,7 @@
           %th Config retrieval
           %th Runtime
       %tbody
-        - @reports.each do |report|
+        - for report in reports
           %tr
             = report_status_td(report)
             %td= link_to report.time.to_s, report
@@ -35,11 +37,8 @@
             %td= report.skipped_resources
             %td= report.config_retrieval_time
             %td= report.total_time
-      - if @reports.total_pages > 1
+      - if reports.total_pages > 1
         %tfoot
           %tr
             %td{:colspan => @node ? 10 : 9}
-              .actionbar
-                = will_paginate(@reports)
-                %div{:style => 'clear:both;'}
-
+              = pagination_for(reports)
