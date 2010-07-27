@@ -143,4 +143,13 @@ module ApplicationHelper
   def items_per_page
     ENV['ITEMS_PER_PAGE'].ergo.to_i || ITEMS_PER_PAGE_DEFAULT
   end
+
+  # Return a paginated +scope+.
+  def paginate_scope(scope, opts={})
+    opts.reverse_merge!(
+      :page     => params[:page],
+      :per_page => items_per_page
+    )
+    return scope.paginate(opts)
+  end
 end

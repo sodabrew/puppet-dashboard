@@ -132,4 +132,10 @@ describe ApplicationHelper do
       end
     end
   end
+
+  describe "#paginate_scope" do
+    it "should paginate the scope" do
+      helper.paginate_scope([1,2,3]).should be_a_kind_of(WillPaginate::Collection)
+    end
+  end
 end
