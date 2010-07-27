@@ -26,7 +26,7 @@
         - @reports.each do |report|
           %tr
             = report_status_td(report)
-            %td= link_to report.time.to_s(:short), report
+            %td= link_to report.time.to_s, report
             - unless @node
               %td= link_to_if report.node, report.host, report.node
             %td= report.total_resources
