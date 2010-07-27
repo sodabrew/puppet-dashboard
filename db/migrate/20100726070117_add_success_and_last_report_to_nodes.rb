@@ -8,7 +8,7 @@ class AddSuccessAndLastReportToNodes < ActiveRecord::Migration
     require "#{RAILS_ROOT}/lib/progress_bar"
     nodes = Node.all
     pbar = ProgressBar.new("Migrating:", nodes.size, STDOUT)
-    for node in Node.all
+    nodes.each do |node|
       report = node.find_last_report
       pbar.inc
       next unless report
