@@ -375,3 +375,11 @@ body {
   body.pages_release_notes_action .markeddown h2 {
     margin-top: 1em;
     margin-bottom: 0.15em; }
+  body.reports_show_action tr.puppet_log.puppet_log_level_err:nth-child(even) td {
+    background: #ffc7c7; }
+  body.reports_show_action tr.puppet_log.puppet_log_level_err td {
+    background: #ffd6d6; }
+  body.reports_show_action tr.puppet_log.puppet_log_level_warning:nth-child(even) td {
+    background: #ffe4c7; }
+  body.reports_show_action tr.puppet_log.puppet_log_level_warning td {
+    background: #ffebd6; }

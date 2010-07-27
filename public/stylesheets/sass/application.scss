@@ -89,6 +89,15 @@ $rounding_radius: 0.35em;
   }
 }
 
+@mixin reporty_level_row($background_color, $darken_amount: 3%) {
+    &:nth-child(even) td {
+        background: darken($background_color, $darken_amount);
+    }
+    td {
+        background: $background_color;
+    }
+}
+
 body {
   background: #e8eef0;
   color: #444;
@@ -523,6 +532,18 @@ body {
         h2 {
             margin-top: 1em;
             margin-bottom: 0.15em;
+        }
+    }
+  }
+
+  &.reports_show_action {
+    tr.puppet_log {
+        &.puppet_log_level_err {
+            @include reporty_level_row(#FFD6D6);
+        }
+
+        &.puppet_log_level_warning {
+            @include reporty_level_row(#FFEBD6);
         }
     }
   }
