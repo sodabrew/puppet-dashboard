@@ -262,6 +262,9 @@ body {
     padding: 1em;
     margin-bottom: 1em;
     overflow: hidden; }
+    body .item:last-child {
+      padding-bottom: 0;
+      margin-bottom: 0; }
   body .half {
     width: 45%;
     margin-right: 5%;

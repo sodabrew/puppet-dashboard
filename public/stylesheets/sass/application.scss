@@ -422,6 +422,11 @@ body {
     padding: 1em;
     margin-bottom: 1em;
     overflow: hidden;
+
+    &:last-child {
+        padding-bottom: 0;
+        margin-bottom: 0;
+    }
   }
 
   .half {
