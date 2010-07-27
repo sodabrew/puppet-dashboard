@@ -287,6 +287,9 @@ body {
         padding: .5em 10px .5em 26px;
         background: #ffcccc url("../images/icons/failure.png") 5px center no-repeat;
         color: #443333; }
+      body .section.error p:last-child {
+        padding-bottom: 0;
+        margin-bottom: 0.75em; }
     body .section.failure {
       -webkit-border-radius: 0.35em 0.35em 0.35em 0.35em;
       -moz-border-radius: 0.35em 0.35em 0.35em 0.35em;
@@ -300,6 +303,9 @@ body {
         padding: .5em 10px .5em 26px;
         background: #ffcccc url("../images/icons/failure.png") 5px center no-repeat;
         color: #443333; }
+      body .section.failure p:last-child {
+        padding-bottom: 0;
+        margin-bottom: 0.75em; }
     body .section.warning {
       -webkit-border-radius: 0.35em 0.35em 0.35em 0.35em;
       -moz-border-radius: 0.35em 0.35em 0.35em 0.35em;
@@ -313,6 +319,9 @@ body {
         padding: .5em 10px .5em 26px;
         background: #ddcccc url("../images/icons/warning.png") 5px center no-repeat;
         color: #444444; }
+      body .section.warning p:last-child {
+        padding-bottom: 0;
+        margin-bottom: 0.75em; }
     body .section.success {
       -webkit-border-radius: 0.35em 0.35em 0.35em 0.35em;
       -moz-border-radius: 0.35em 0.35em 0.35em 0.35em;
@@ -326,6 +335,9 @@ body {
         padding: .5em 10px .5em 26px;
         background: #ccddcc url("../images/icons/warning.png") 5px center no-repeat;
         color: #444444; }
+      body .section.success p:last-child {
+        padding-bottom: 0;
+        margin-bottom: 0.75em; }
     body .section.notice {
       -webkit-border-radius: 0.35em 0.35em 0.35em 0.35em;
       -moz-border-radius: 0.35em 0.35em 0.35em 0.35em;
@@ -339,6 +351,9 @@ body {
         padding: .5em 10px .5em 26px;
         background: #cccccc url("../images/icons/notice.png") 5px center no-repeat;
         color: #444444; }
+      body .section.notice p:last-child {
+        padding-bottom: 0;
+        margin-bottom: 0.75em; }
     body .section#flash {
       margin-left: auto;
       margin-right: auto;

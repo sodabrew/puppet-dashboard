@@ -82,6 +82,11 @@ $rounding_radius: 0.35em;
     background: $header_background url('../images/icons/' + $icon_name + '.png') 5px center no-repeat;
     color: $header_foreground;
   }
+
+  p:last-child {
+    padding-bottom: 0;
+    margin-bottom: 0.75em;
+  }
 }
 
 body {
