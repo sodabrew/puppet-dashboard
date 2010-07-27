@@ -22,6 +22,13 @@
         = render :partial => 'shared/global_nav'
         = render :partial => 'shared/secondary_nav'
       #content
+        - [:success, :warning, :failure].each do |type|
+          - if message = flash[type]
+            %div.section#flash{:class => type}
+              .close= link_to_function icon(:close), "jQuery('#flash').hide()"
+              %p
+                = icon(type)
+                = message
         = yield
       #footer
         %p= link_to "&copy; Copyright #{Time.now.year} Puppet Labs", 'http://puppetlabs.com/'

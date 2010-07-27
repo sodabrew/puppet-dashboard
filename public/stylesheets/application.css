@@ -121,13 +121,13 @@ body {
     background: -moz-linear-gradient(top, #7d9aba, #496788);
     background: -webkit-gradient(linear, center top, center bottom, from(#7d9aba), to(#496788));
     border: 1px solid #DDD;
-    border-color: #FFF #AAA #AAA #FFF;
+    border-color: #CCC #AAA #AAA #CCC;
     color: white;
     cursor: pointer;
-    font-size: 1.1em;
+    font-size: 1em;
     line-height: 1.5em;
     margin: 0.25em;
-    padding: 0 .5em;
+    padding: .15em .65em;
     white-space: nowrap; }
     body a.button:hover,
     body button:hover {
@@ -142,6 +142,14 @@ body {
     body a.button.drop:after,
     body button.drop:after {
       content: "   \002193"; }
+  body a.button.warning, body button.warning {
+    background: #C66; }
+  body .header a.button,
+  body .header button {
+    font-size: 1.2em;
+    margin: .15em 0; }
+  body .header ul.actions {
+    margin-left: .25em; }
   body .actions {
     font-size: 12px; }
   body #content #sidebar .group {
@@ -266,6 +274,19 @@ body {
         padding: .5em 10px .5em 26px;
         background: #ffcccc url("../images/icons/failure.png") 5px center no-repeat;
         color: #443333; }
+    body .section.failure {
+      -webkit-border-radius: 0.35em 0.35em 0.35em 0.35em;
+      -moz-border-radius: 0.35em 0.35em 0.35em 0.35em;
+      border-radius: 0.35em 0.35em 0.35em 0.35em;
+      padding: 10px 10px 0;
+      background: #ffdddd;
+      border: 1px solid #ffcccc;
+      color: #443333; }
+      body .section.failure h3 {
+        margin: -10px -10px .5em;
+        padding: .5em 10px .5em 26px;
+        background: #ffcccc url("../images/icons/failure.png") 5px center no-repeat;
+        color: #443333; }
     body .section.warning {
       -webkit-border-radius: 0.35em 0.35em 0.35em 0.35em;
       -moz-border-radius: 0.35em 0.35em 0.35em 0.35em;
@@ -279,6 +300,43 @@ body {
         padding: .5em 10px .5em 26px;
         background: #ddcccc url("../images/icons/warning.png") 5px center no-repeat;
         color: #444444; }
+    body .section.success {
+      -webkit-border-radius: 0.35em 0.35em 0.35em 0.35em;
+      -moz-border-radius: 0.35em 0.35em 0.35em 0.35em;
+      border-radius: 0.35em 0.35em 0.35em 0.35em;
+      padding: 10px 10px 0;
+      background: #ddeedd;
+      border: 1px solid #ccddcc;
+      color: #334433; }
+      body .section.success h3 {
+        margin: -10px -10px .5em;
+        padding: .5em 10px .5em 26px;
+        background: #ccddcc url("../images/icons/warning.png") 5px center no-repeat;
+        color: #444444; }
+    body .section.notice {
+      -webkit-border-radius: 0.35em 0.35em 0.35em 0.35em;
+      -moz-border-radius: 0.35em 0.35em 0.35em 0.35em;
+      border-radius: 0.35em 0.35em 0.35em 0.35em;
+      padding: 10px 10px 0;
+      background: #dddddd;
+      border: 1px solid #cccccc;
+      color: #333333; }
+      body .section.notice h3 {
+        margin: -10px -10px .5em;
+        padding: .5em 10px .5em 26px;
+        background: #cccccc url("../images/icons/notice.png") 5px center no-repeat;
+        color: #444444; }
+    body .section#flash {
+      margin-left: auto;
+      margin-right: auto;
+      width: 50%;
+      position: relative; }
+      body .section#flash .close {
+        position: absolute;
+        top: 0;
+        right: 0; }
+      body .section#flash img {
+        vertical-align: top; }
   body.reports_show_action .section {
     margin-left: 1em; }
   body.reports_show_action h4 {

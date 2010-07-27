@@ -43,13 +43,13 @@ $rounding_radius: 0.35em;
   background: -moz-linear-gradient(top, lighten($button_background, $button_gradient_percentage), darken($button_background, $button_gradient_percentage));
   background: -webkit-gradient(linear, center top, center bottom, from(lighten($button_background, $button_gradient_percentage)), to(darken($button_background, $button_gradient_percentage)));
   border: 1px solid #DDD;
-  border-color: #FFF #AAA #AAA #FFF;
+  border-color: #CCC #AAA #AAA #CCC;
   color: white;
   cursor: pointer;
-  font-size: 1.1em;
+  font-size: 1em;
   line-height: 1.5em;
   margin: 0.25em;
-  padding: 0 .5em;
+  padding: .15em .65em;
   white-space: nowrap;
 
   &:hover {
@@ -251,6 +251,18 @@ body {
     @include buttony;
   }
 
+  a.button.warning, button.warning { background: #C66; }
+
+  .header a.button,
+  .header button {
+    font-size: 1.2em;
+    margin: .15em 0;
+  }
+
+  .header ul.actions {
+    margin-left: .25em;
+  }
+
   .actions {
     font-size: 12px;
   }
@@ -415,11 +427,49 @@ body {
         #FCC);
     }
 
+    &.failure {
+      @include icony_section('failure', 
+        #433, #FCC, 
+        #433, #FDD, 
+        #FCC);
+    }
+
     &.warning {
       @include icony_section('warning', 
         #444, #DCC, 
         #433, #EDD, 
         #DCC);
+    }
+
+    &.success {
+      @include icony_section('warning', 
+        #444, #CDC, 
+        #343, #DED, 
+        #CDC);
+    }
+
+    &.notice {
+      @include icony_section('notice', 
+        #444, #CCC, 
+        #333, #DDD, 
+        #CCC);
+    }
+
+    &#flash {
+      margin-left: auto;
+      margin-right: auto;
+      width: 50%;
+      position: relative;
+
+      & .close {
+        position: absolute;
+        top: 0;
+        right: 0;
+      }
+
+      & img {
+      vertical-align: top;
+      }
     }
   }
 
