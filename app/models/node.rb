@@ -60,7 +60,8 @@ class Node < ActiveRecord::Base
   named_scope :unreported, :conditions => {:reported_at => nil}
 
   # Seconds in the past since a node's last report for a node to be considered no longer reporting.
-  NO_LONGER_REPORTING_CUTOFF = 30.minutes
+  # Defaults to twice the default puppet run period to prevent timing errors.
+  NO_LONGER_REPORTING_CUTOFF = 1.hour
 
   # Return nodes that haven't reported recently.
   named_scope :no_longer_reporting, :conditions => ['reported_at < ?', NO_LONGER_REPORTING_CUTOFF.ago]
