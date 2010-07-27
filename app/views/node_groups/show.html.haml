@@ -31,7 +31,7 @@
   .item
     - if @node_group.nodes.present?
       .section
-        = render 'statuses/run_failure', :statuses => Status.by_interval(:limit => 30, :nodes => @node_group.nodes)`
+        = render 'statuses/run_failure', :nodes => @node_group.nodes
     .section
       %h3 Nodes for this group
       - if @node_group.nodes.present?

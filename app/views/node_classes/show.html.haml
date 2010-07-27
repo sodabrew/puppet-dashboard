@@ -16,7 +16,7 @@
   .item
     - if @node_class.nodes.present?
       .section
-        = render 'statuses/run_failure', :statuses => Status.by_interval(:limit => 30, :nodes => @node_class.nodes)
+        = render 'statuses/run_failure', :nodes => @node_class.nodes
     .section
       %h3 Nodes in this class
       - if @node_class.nodes.present?

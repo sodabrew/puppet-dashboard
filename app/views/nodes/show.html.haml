@@ -42,7 +42,7 @@
     - reports = @node.reports.limit(30).order('time ASC')
     - unless reports.empty?
       .section
-        = render 'statuses/run_failure', :statuses => Status.by_interval(:limit => 30, :node => @node)
+        = render 'statuses/run_failure', :node => @node
 
       .section
         = render 'statuses/run_time', :reports => reports.reverse

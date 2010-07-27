@@ -8,6 +8,6 @@
 
   .item{:style => 'margin-bottom: 0;'}
     .section
-      = render 'statuses/run_failure', :statuses => Status.by_interval(:limit => 30, :nodes => @nodes)
+      = render 'statuses/run_failure', :nodes => @nodes
     .section
       = render 'nodes', :nodes => @nodes
