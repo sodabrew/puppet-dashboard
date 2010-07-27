@@ -207,7 +207,7 @@ body {
         body #content #sidebar .group ul li:last-child {
           border: 0; }
         body #content #sidebar .group ul li.active {
-          background: #e2edf5; }
+          background: #FFFF99; }
         body #content #sidebar .group ul li a {
           padding: .25em .5em;
           display: block; }
