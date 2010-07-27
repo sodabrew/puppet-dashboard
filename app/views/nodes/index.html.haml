@@ -7,7 +7,7 @@
         = action_name.titleize.capitalize
         nodes
       - elsif params[:current] or params[:successful]
-        = Node.label_for_currentness_and_successfulness(params[:current].to_b, params[:successful].to_b).capitalize
+        = Node.label_for_currentness_and_successfulness(params[:current] == "true", params[:successful] == "true").capitalize
         nodes
       - else
         Nodes

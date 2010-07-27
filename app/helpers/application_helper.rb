@@ -141,7 +141,7 @@ module ApplicationHelper
   # Return the number of items to put on a paginated page. Override the default
   # value by setting the ITEMS_PER_PAGE environmental variable.
   def items_per_page
-    ENV['ITEMS_PER_PAGE'].ergo.to_i || ITEMS_PER_PAGE_DEFAULT
+    ENV['ITEMS_PER_PAGE'].try(:to_i) || ITEMS_PER_PAGE_DEFAULT
   end
 
   # Return a paginated +scope+.

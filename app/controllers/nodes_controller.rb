@@ -54,7 +54,7 @@ class NodesController < InheritedResources::Base
         scope = scope.send(scope_name)
       end
       if params[:current] or params[:successful]
-        scope = scope.by_currentness_and_successfulness(params[:current].to_b, params[:successful].to_b)
+        scope = scope.by_currentness_and_successfulness(params[:current] == "true", params[:successful] == "true")
       end
       set_collection_ivar(scope.with_last_report.by_report_date)
 

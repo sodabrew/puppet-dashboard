@@ -4,7 +4,7 @@
   %ul
     - for currentness in [true, false]
       - for successfulness in [true, false]
-        %li{:class => active_if(controller_name == 'nodes' && params[:current] && params[:current].to_b == currentness && params[:successful] && params[:successful].to_b == successfulness && parent.nil?)}
+        %li{:class => active_if(controller_name == 'nodes' && params[:current] && (params[:current] == "true") == currentness && params[:successful] && (params[:successful] == "true") == successfulness && parent.nil?)}
           - label = Node.label_for_currentness_and_successfulness(currentness, successfulness)
           = link_to label, nodes_path(:current => currentness.to_s, :successful => successfulness.to_s)
           - count = Node.count_by_currentness_and_successfulness(currentness, successfulness)
