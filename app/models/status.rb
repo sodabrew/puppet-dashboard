@@ -20,6 +20,9 @@ class Status
     by_interval(:limit => 20).map(&:percent)
   end
 
+  # Default time in seconds for the interval
+  INTERVAL_CUTOFF = 30.days
+
   def self.by_interval(options={})
     return [] if options[:nodes] && options[:nodes].empty?
     interval = options[:of] || 1.day
