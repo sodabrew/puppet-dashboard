@@ -136,4 +136,11 @@ module ApplicationHelper
     (count > 0 && measures_failure) ? 'failure' : 'success'
   end
 
+  ITEMS_PER_PAGE_DEFAULT = 50
+
+  # Return the number of items to put on a paginated page. Override the default
+  # value by setting the ITEMS_PER_PAGE environmental variable.
+  def items_per_page
+    ENV['ITEMS_PER_PAGE'].ergo.to_i || ITEMS_PER_PAGE_DEFAULT
+  end
 end
