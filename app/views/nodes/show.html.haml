@@ -37,8 +37,7 @@
     - unless resource.inherited_classes.empty?
       = inspector_table resource.inherited_classes, :name, false, :link => true, :caption => 'Inherited Classes'
 
-
-    .clear
+    %br.clear
 
     - reports = @node.reports.limit(30).order('time ASC')
     - unless reports.empty?
@@ -85,4 +84,4 @@
       - else
         &mdash; No activity &mdash;
 
-    .clear
+    %br.clear
