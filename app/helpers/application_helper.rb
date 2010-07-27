@@ -130,4 +130,10 @@ module ApplicationHelper
     render 'reports/report_status_td', :report => report
   end
 
+  # Return 'sucess' or 'failure' CSS class name if the numeric +count+ is
+  # non-zero and this boolean +measures_failure+.
+  def counter_class(count, measures_failure)
+    (count > 0 && measures_failure) ? 'failure' : 'success'
+  end
+
 end

@@ -77,4 +77,27 @@ describe ApplicationHelper do
   describe "#report_status_td" do; end
   describe "#report_status_icon" do; end
   describe "#node_status_icon" do; end
+
+  describe "#counter_class" do
+    context "when measuring failure" do
+      it "should be 'success' if count is zero" do
+        helper.counter_class(0, true).should == 'success'
+      end
+
+      it "should be 'failure' if count is greater than zero" do
+        helper.counter_class(1, true).should == 'failure'
+      end
+    end
+
+    context "when measuring success" do
+      it "should be 'success' if count is zero" do
+        helper.counter_class(0, false).should == 'success'
+
+      end
+
+      it "should be 'success' if count is greater than zero" do
+        helper.counter_class(1, false).should == 'success'
+      end
+    end
+  end
 end
