@@ -100,12 +100,12 @@ module ApplicationHelper
   include WillPaginate::ViewHelpers
 
   # Return HTML with pagination controls for displaying an ActiveRecord +scope+.
-  def pagination_for(scope)
+  def pagination_for(scope, more_link=nil)
     if scope.respond_to?(:total_pages) && scope.total_pages > 1
       content_tag(:div, :class => 'actionbar') do
         [
-          will_paginate(scope),
-          tag(:div, :style => 'clear: both;')
+          more_link ? content_tag(:span, :class => 'pagination') { link_to('More &raquo;', more_link) } : will_paginate(scope),
+          tag(:br, :class=> 'clear')
         ]
       end
     end
