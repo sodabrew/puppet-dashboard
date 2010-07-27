@@ -1,7 +1,9 @@
 #sidebar= render 'shared/node_manager_sidebar'
 #main
   .header
-    %h2= h resource.name
+    %h2
+      = node_status_icon(resource)
+      = h resource.name
     %ul.actions
       %li= link_to 'Edit', edit_node_path(@node), :class => "edit button", :rel => 'inspect'
       %li= link_to 'Destroy', @node, :confirm => 'Are you sure?', :method => :delete, :class => "delete button"
