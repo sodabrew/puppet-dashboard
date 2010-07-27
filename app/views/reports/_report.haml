@@ -21,7 +21,7 @@
             %th Source
             %th Time
         %tbody
-          = render report.logs
+          = render :partial => 'puppet/util/logs/log', :collection => puppet_log_sorter(report.logs.compact)
   .section
     %h3 Metrics
     - if report.metrics

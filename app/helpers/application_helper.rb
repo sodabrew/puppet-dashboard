@@ -152,4 +152,24 @@ module ApplicationHelper
     )
     return scope.paginate(opts)
   end
+
+  # Return +collection+ of Puppet::Util::Log objects sorted by their severity level.
+  def puppet_log_sorter(collection)
+    collection.sort_by do |instance|
+      case instance.level.to_sym
+      when :err
+        0
+      when :warning
+        10
+      when :notice
+        20
+      when :info
+        30
+      when :debug
+        50
+      else
+        40
+      end
+    end
+  end
 end
