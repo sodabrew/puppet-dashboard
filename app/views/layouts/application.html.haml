@@ -11,8 +11,8 @@
       var relative_url_root = '#{ActionController::Base.relative_url_root}';
       $.noConflict();
 
-    = javascript_include_tag 'prototype', 'jrails', 'fcbkcomplete', 'excanvas.min', 'raphael-min', 'grafico.min', 'jquery.form', 'jquery.placeholders', 'jquery.ui.autocomplete', 'jquery.ui.autocomplete.ext', 'jquery.tipsy', 'search', 'application', :cache => 'all'
     = stylesheet_link_tag 'reset', 'layout', 'forms', 'tables', 'jquery.ui.autocomplete.css', 'typography', 'links', 'fcbkcomplete', 'tipsy', 'application', :cache => 'all'
+    = javascript_include_tag 'prototype', 'jrails', 'fcbkcomplete', 'excanvas.min', 'raphael-min', 'grafico.min', 'jquery.form', 'jquery.placeholders', 'jquery.ui.autocomplete', 'jquery.ui.autocomplete.ext', 'jquery.tipsy', 'search', 'application', :cache => 'all'
 
   - body_classes = [ "#{controller.controller_name}_controller", "#{controller.controller_name}_#{controller.action_name}_action" ]
   - body_classes << "#{controller.controller_name}_form_action" if %w[new create edit update].include?(controller.action_name)
