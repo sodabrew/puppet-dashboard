@@ -370,7 +370,7 @@ body {
   /* ACTIONBAR */
 
   .actionbar {
-    @include rounded;
+    @include rounded_bottom;
     background: #DDD;
     padding: 1px;
 

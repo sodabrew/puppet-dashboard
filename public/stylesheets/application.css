@@ -224,9 +224,9 @@ body {
   body #content #sidebar ul {
     list-style: none; }
   body .actionbar {
-    -webkit-border-radius: 0.35em 0.35em 0.35em 0.35em;
-    -moz-border-radius: 0.35em 0.35em 0.35em 0.35em;
-    border-radius: 0.35em 0.35em 0.35em 0.35em;
+    -webkit-border-radius: 0 0 0.35em 0.35em;
+    -moz-border-radius: 0 0 0.35em 0.35em;
+    border-radius: 0 0 0.35em 0.35em;
     background: #DDD;
     padding: 1px; }
     body .actionbar form {
