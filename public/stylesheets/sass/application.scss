@@ -163,6 +163,15 @@ body {
       padding: 0 .25em;
       line-height: 1.75em;
     }
+
+    h2 {
+        &.half {
+            width: 0%;
+            margin-right: 5%;
+            float: left;
+            white-space: nowrap;
+        }
+    }
   }
 
   p {
