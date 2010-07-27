@@ -3,18 +3,18 @@
   .header
     %h2 Dashboard
   .item
-    - unless @failed_nodes.empty?
+    - if @currently_failing_nodes.present?
       .section.error
-        %h3 Node Failures
+        %h3 Node failures
         %p
-          = pluralize @failed_nodes.length, 'node'
-          are reporting failures:
+          = pluralize @currently_failing_nodes.length, 'node'
+          are currently reporting failures:
           = succeed '.' do
-            = truncated_node_sentence(@failed_nodes, :more_link => failed_nodes_path)
+            = truncated_node_sentence(@currently_failing_nodes, :more_link => nodes_path(:current => true, :successful => false))
 
-    - unless @no_longer_reporting_nodes.empty?
+    - if @no_longer_reporting_nodes.present?
       .section.warning
-        %h3 Nodes Failed To Report
+        %h3 Nodes no longer reporting
         %p
           = pluralize @no_longer_reporting_nodes.length, 'node'
           = @no_longer_reporting_nodes.length == 1 ? 'has' : 'have'
@@ -22,9 +22,9 @@
           = succeed '.' do
             = truncated_node_sentence(@no_longer_reporting_nodes, :more_link => no_longer_reporting_nodes_path)
 
-    - unless @unreported_nodes.empty?
+    - if @unreported_nodes.present?
       .section.warning
-        %h3 Nodes Not Reporting
+        %h3 Nodes never reported
         %p
           = pluralize @unreported_nodes.length, 'node'
           = @unreported_nodes.length == 1 ? 'has' : 'have'

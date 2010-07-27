@@ -2,11 +2,19 @@
 #main
 
   .header
-    %h2.half== #{action_name.titleize unless action_name == 'index' } Nodes
+    %h2.half
+      - if action_name != 'index'
+        = action_name.titleize.capitalize
+        nodes
+      - elsif params[:current] or params[:successful]
+        = Node.label_for_currentness_and_successfulness(params[:current].to_b, params[:successful].to_b).capitalize
+        nodes
+      - else
+        Nodes
     = render 'search'
     %br.clear
 
-  .item{:style => 'margin-bottom: 0;'}
+  .item
     .section
       = render 'statuses/run_failure', :nodes => @nodes
     .section

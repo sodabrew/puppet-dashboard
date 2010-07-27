@@ -2,36 +2,23 @@
   %h3{:class => active_if(controller_name == "nodes" && action_name == "index")}= link_to "Nodes", nodes_path
   %span.count= Node.count
   %ul
-    %li{:class => active_if(controller_name == 'nodes' && action_name == 'successful' && parent.nil?)}
-      = link_to "Successful", successful_nodes_path
-      %span.count= Node.count_successful
-    %li{:class => active_if(controller_name == 'nodes' && action_name == 'failed' && parent.nil?)}
-      = link_to "Failed", failed_nodes_path
-      %span.count= Node.count_failed
+    - for currentness in [true, false]
+      - for successfulness in [true, false]
+        %li{:class => active_if(controller_name == 'nodes' && params[:current] && params[:current].to_b == currentness && params[:successful] && params[:successful].to_b == successfulness && parent.nil?)}
+          - label = Node.label_for_currentness_and_successfulness(currentness, successfulness)
+          = link_to label, nodes_path(:current => currentness.to_s, :successful => successfulness.to_s)
+          - count = Node.count_by_currentness_and_successfulness(currentness, successfulness)
+          %span.count{:class => counter_class(count, currentness && !successfulness)}= count
     %li{:class => active_if(controller_name == 'nodes' && action_name == 'unreported' && parent.nil?)}
-      = link_to "Unreported", unreported_nodes_path
-      %span.count= Node.count_unreported
+      = link_to "Never reported", unreported_nodes_path
+      - count = Node.count_unreported
+      %span.count{:class => counter_class(count, true)}= count
+    %li{:class => active_if(controller_name == 'nodes' && action_name == 'no_longer_reporting' && parent.nil?)}
+      = link_to "Not currently reporting", no_longer_reporting_nodes_path
+      - count = Node.count_no_longer_reporting
+      %span.count{:class => counter_class(count, true)}= count
   .footer.actionbar
-    = link_to "Add Node", new_node_path, :class => 'button'
+    = link_to "Add node", new_node_path, :class => 'button'
 
-.group
-  %h3{:class => active_if(controller_name == "node_classes" && action_name == "index")}= link_to "Classes", node_classes_path
-  %span.count= NodeClass.count
-  %ul
-    - NodeClass.all(:include => :nodes).each do |node_class|
-      %li{:class => active_if(controller_name == "node_classes" && @node_class && @node_class == node_class)}
-        = link_to node_class.name, node_class_path(node_class)
-        %span.count= node_class.nodes.count
-  .footer.actionbar
-    = link_to "Add Class", new_node_class_path, :class => 'button'
-
-.group
-  %h3{:class => active_if(controller_name == "node_groups" && action_name == "index")}= link_to "Groups", node_groups_path
-  %span.count= NodeGroup.count
-  %ul
-    - NodeGroup.all(:include => :nodes).each do |node_group|
-      %li{:class => active_if(controller_name == "node_groups" && @node_group && @node_group == node_group)}
-        = link_to node_group.name, node_group_path(node_group)
-        %span.count= node_group.nodes.count
-  .footer.actionbar
-    = link_to "Add Group", new_node_group_path, :class => 'button'
+- for type in [NodeClass, NodeGroup]
+  = render "shared/node_manager_sidebar_for_type", :type => type

@@ -2,7 +2,8 @@ class PagesController < ApplicationController
   def home
     @statuses = Status.by_interval(:limit => 30)
     @reports = Report.all(:limit => 20, :order => 'time ASC')
-    @failed_nodes = Node.failed
+
+    @currently_failing_nodes = Node.by_currentness_and_successfulness(true, false)
     @unreported_nodes = Node.unreported
     @no_longer_reporting_nodes = Node.no_longer_reporting
 
