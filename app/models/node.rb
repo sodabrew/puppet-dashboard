@@ -36,7 +36,12 @@ class Node < ActiveRecord::Base
   named_scope :failed, :select => 'DISTINCT `nodes`.name, `nodes`.*', :joins => 'LEFT OUTER JOIN reports on reports.time = reported_at', :conditions => 'reports.success = 0 AND (`nodes`.id = reports.node_id)', :order => "reported_at DESC"
 
   named_scope :unreported, :conditions => {:reported_at => nil}
-  named_scope :no_longer_reporting, :conditions => ['reported_at < ?', 30.minutes.ago]
+
+  # Seconds in the past since a node's last report for a node to be considered no longer reporting.
+  NO_LONGER_REPORTING_CUTOFF = 30.minutes
+
+  # Return nodes that haven't reported recently.
+  named_scope :no_longer_reporting, :conditions => ['reported_at < ?', NO_LONGER_REPORTING_CUTOFF.ago]
 
   def self.count_successful
     successful.count(:name, :distinct => true)
