@@ -24,8 +24,11 @@
           = render report.logs
   .section
     %h3 Metrics
-    - report.metrics.sort_by{|name, metric| name}.each do |name, metric|
-      .section
-        %h4= name.titleize
-        %table.inspector
-          = render metric
+    - if report.metrics
+      - report.metrics.sort_by{|name, metric| name}.each do |name, metric|
+        .section
+          %h4= name.titleize
+          %table.inspector
+            = render metric
+    - else
+      &mdash; No metrics in this report &mdash;

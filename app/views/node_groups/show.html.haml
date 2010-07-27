@@ -28,9 +28,13 @@
       - else
         No Groups
 
-  - unless @node_group.nodes.empty?
-    .item
+  .item
+    - if @node_group.nodes.present?
       .section
-        = render 'statuses/run_failure', :statuses => Status.by_interval(:limit => 30, :nodes => @node_group.nodes)
-      .section
+        = render 'statuses/run_failure', :statuses => Status.by_interval(:limit => 30, :nodes => @node_group.nodes)`
+    .section
+      %h3 Nodes for this group
+      - if @node_group.nodes.present?
         = render 'nodes/nodes', :nodes => @node_group.nodes
+      - else
+        &mdash; No nodes assigned to this group &mdash;
