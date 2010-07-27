@@ -47,8 +47,13 @@ describe "without JSON pagination", :shared => true do
       before { get 'index', :format => 'html' }
       subject { assigns[model.name.tableize] }
 
-      it "paginates by the page parameter" do
-        should be_a_kind_of(WillPaginate::Collection)
+      # NOTE: Once upon a time, the collection was paginated until it was realized that this broke the charts.
+      # it "paginates by the page parameter" do
+        # should be_a_kind_of(WillPaginate::Collection)
+      # end
+
+      it "does not paginate" do
+        should_not be_a_kind_of(WillPaginate::Collection)
       end
     end
 

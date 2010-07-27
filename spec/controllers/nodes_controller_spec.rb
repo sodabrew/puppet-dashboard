@@ -120,12 +120,6 @@ describe NodesController do
       specify { response.should be_success }
     end
 
-    shared_examples_for "a paginated reports collection" do
-      it "should be paginated" do
-        assigns[:reports].should be_a_kind_of(WillPaginate::Collection)
-      end
-    end
-
     shared_examples_for "an un-paginated reports collection" do
       it "should not be paginated" do
         assigns[:reports].should_not be_a_kind_of(WillPaginate::Collection)
@@ -144,7 +138,7 @@ describe NodesController do
       before { get :reports, :node => 123 }
 
       it_should_behave_like "a successful reports rendering"
-      it_should_behave_like "a paginated reports collection"
+      it_should_behave_like "an un-paginated reports collection"
     end
 
     context "for YAML" do
@@ -212,18 +206,23 @@ describe NodesController do
 
     shared_examples_for "a scope_index action" do
       before do
-        Node.stubs(action => [Node.generate!(:name => action)])
+        @results = [Node.generate!(:name => action)]
+        @results.stubs(:with_last_report => @results, :by_report_date => @results)
+        Node.stubs(action => @results)
+        Node.stubs(:by_currentness_and_successfulness => @results)
       end
 
       context "as HTML" do
-        before { get action }
+        before { get action, action_params }
 
         it_should_behave_like "a successful scoped_index rendering"
-        it_should_behave_like "a paginated nodes collection"
+        # NOTE: Once upon a time, these were paginated but were breaking the graphs
+        # it_should_behave_like "a paginated nodes collection"
+        it_should_behave_like "an un-paginated nodes collection"
       end
 
       context "as YAML" do
-        before { get action, :format => "yaml" }
+        before { get action, action_params.merge(:format => "yaml") }
 
         it_should_behave_like "a successful scoped_index rendering"
         it_should_behave_like "an un-paginated nodes collection"
@@ -236,7 +235,7 @@ describe NodesController do
       end
 
       context "as JSON" do
-        before { get action, :format => "json" }
+        before { get action, action_params.merge(:format => "json") }
 
         it_should_behave_like "a successful scoped_index rendering"
         it_should_behave_like "an un-paginated nodes collection"
@@ -249,11 +248,35 @@ describe NodesController do
       end
     end
 
-    for action in %w[successful failed unreported no_longer_reporting]
+    for action in %w[unreported no_longer_reporting]
       describe action do
         let(:action) { action }
+        let(:action_params) { {} }
         it_should_behave_like "a scope_index action"
       end
+    end
+
+    describe "#successful" do
+      it "should redirect to current and successful" do
+        get :successful
+
+        response.should redirect_to(nodes_path(:current => true.to_s, :successful => true.to_s))
+      end
+    end
+
+    describe "#failed" do
+      it "should redirect to current and failed" do
+        get :failed
+
+        response.should redirect_to(nodes_path(:current => true.to_s, :successful => false.to_s))
+      end
+    end
+
+    describe "current and successful" do
+      let(:action) { "index" }
+      let(:action_params) { {:current => true, :successful => true} }
+
+      it_should_behave_like "a scope_index action"
     end
   end
 end
