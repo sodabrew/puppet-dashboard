@@ -417,6 +417,10 @@ body {
     clear: both;
   }
 
+  .nowrap {
+    white-space: nowrap;
+  }
+
   .item {
     @include rounded_bottom;
     background: #FFF;

@@ -255,6 +255,8 @@ body {
     position: relative; }
   body .clear {
     clear: both; }
+  body .nowrap {
+    white-space: nowrap; }
   body .item {
     -webkit-border-radius: 0 0 0.35em 0.35em;
     -moz-border-radius: 0 0 0.35em 0.35em;
