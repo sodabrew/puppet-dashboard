@@ -389,7 +389,8 @@ body {
     .pagination {
       font-size: 12px;
       padding: .1em .5em;
-      float: right;
+      float: left;
+      padding-left: 0.5em;
     }
 
     .dropdown {
