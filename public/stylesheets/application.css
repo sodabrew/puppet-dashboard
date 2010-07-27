@@ -213,6 +213,8 @@ body {
           display: block; }
         body #content #sidebar .group ul li span.count {
           background: #DDD; }
+          body #content #sidebar .group ul li span.count.failure {
+            background: #DD9B9B; }
   body #content #sidebar a.fold {
     width: 1em;
     display: inline-block;

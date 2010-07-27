@@ -345,6 +345,10 @@ body {
 
           span.count {
             background: #DDD;
+
+            &.failure {
+                background: #DD9B9B;
+            }
           }
         }
       }
