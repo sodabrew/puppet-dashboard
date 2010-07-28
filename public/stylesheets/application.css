@@ -67,6 +67,8 @@ body {
       margin-right: 5%;
       float: left;
       white-space: nowrap; }
+    body .header h2 img {
+      vertical-align: -0.15em; }
   body p.legend {
     color: #999;
     margin-bottom: 0; }
@@ -137,7 +139,7 @@ body {
     body a.button:hover,
     body button:hover {
       text-decoration: none;
-      color: yellow;
+      color: #FFFFCC;
       background: #7d9aba -moz-linear-gradient(top, #9fb4cb, #5c80a8);
       background: #7d9aba -webkit-gradient(linear, 0% 0%, 0% 100%, from(#9fb4cb, to(#5c80a8))); }
     body a.button:active,

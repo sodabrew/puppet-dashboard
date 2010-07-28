@@ -54,7 +54,7 @@ $rounding_radius: 0.35em;
 
   &:hover {
     text-decoration: none;
-    color: yellow;
+    color: #FFFFCC;
     background: $button_hover_background -moz-linear-gradient(top, lighten($button_hover_background, $button_gradient_percentage), darken($button_hover_background, $button_gradient_percentage));
     background: $button_hover_background -webkit-gradient(linear, 0% 0%, 0% 100%, from(lighten($button_hover_background, $button_gradient_percentage), to(darken($button_hover_background, $button_gradient_percentage))));
   }
@@ -184,6 +184,10 @@ body {
             margin-right: 5%;
             float: left;
             white-space: nowrap;
+        }
+
+        img {
+          vertical-align: -0.15em;
         }
     }
   }

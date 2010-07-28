@@ -82,17 +82,17 @@ form.search {
 }
 
 
-form.search input {
+body form.search input {
   color: #444;
-  margin: 0;
   width: 20em;
-  margin: 1px 0;
+  margin: 0;
   line-height: 1.4em;
+  padding: .35em;
   border: 1px solid #CCC;
 }
 
-form.search button {
-  margin-left: -.25em;
+body form.search button {
+  margin: 0.25em 0.25em 0.25em 0em;
 }
 
 .fieldWithErrors input {
