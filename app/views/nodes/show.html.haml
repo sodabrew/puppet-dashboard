@@ -27,14 +27,14 @@
       - unless resource.node_groups.empty?
         = inspector_table resource.node_groups, :name, false, :link => true
       - else
-        No groups
+        &mdash; No groups &mdash;
 
     .section.half
       %h3 Classes
       - unless resource.node_classes.empty?
         = inspector_table resource.node_classes, :name, false, :link => true
       - else
-        No classes
+        &mdash; No classes &mdash;
 
     - unless resource.inherited_classes.empty?
       = inspector_table resource.inherited_classes, :name, false, :link => true, :caption => 'Inherited Classes'

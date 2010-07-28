@@ -10,7 +10,7 @@
       %span.count== (#{reports.total_entries})
 
   .item
-    %table.main
+    %table.inspector
       %thead
         %tr
           %th.status
@@ -25,20 +25,24 @@
           %th Config retrieval
           %th Runtime
       %tbody
-        - for report in reports
-          %tr
-            = report_status_td(report)
-            %td= link_to report.time.to_s, report
-            - unless @node
-              %td= link_to_if report.node, report.host, report.node
-            %td= report.total_resources
-            %td= report.failed_resources
-            %td= report.failed_restarts
-            %td= report.skipped_resources
-            %td= report.config_retrieval_time
-            %td= report.total_time
-      - if reports.total_pages > 1
-        %tfoot
-          %tr
-            %td{:colspan => @node ? 10 : 9}
-              = pagination_for(reports)
+        - if reports.present?
+          - for report in reports
+            %tr
+              = report_status_td(report)
+              %td= link_to report.time.to_s, report
+              - unless @node
+                %td= link_to_if report.node, report.host, report.node
+              %td= report.total_resources
+              %td= report.failed_resources
+              %td= report.failed_restarts
+              %td= report.skipped_resources
+              %td= report.config_retrieval_time
+              %td= report.total_time
+          - if reports.total_pages > 1
+            %tfoot
+              %tr
+                %td{:colspan => @node ? 10 : 9}
+                  = pagination_for(reports)
+        - else
+          %td.empty{:colspan => @node ? 10 : 9}
+            &mdash; No reports found &mdash;

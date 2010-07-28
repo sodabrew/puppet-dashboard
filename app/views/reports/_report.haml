@@ -21,14 +21,19 @@
             %th Source
             %th Time
         %tbody
-          = render :partial => 'puppet/util/logs/log', :collection => puppet_log_sorter(report.logs.compact)
+          - if report.logs.present?
+            = render :partial => 'puppet/util/logs/log', :collection => puppet_log_sorter(report.logs.compact)
+          - else
+            %td.empty{:colspan => 4}
+              &mdash; No log messages in this report &mdash;
   .section
     %h3 Metrics
-    - if report.metrics
+    - if report.metrics.present?
       - report.metrics.sort_by{|name, metric| name}.each do |name, metric|
-        .section
-          %h4= name.titleize
-          %table.inspector
-            = render metric
+        - if metric.values.present?
+          .section
+            %h4= name.titleize
+            %table.inspector
+              = render metric
     - else
       &mdash; No metrics in this report &mdash;

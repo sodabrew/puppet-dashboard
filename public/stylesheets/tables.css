@@ -94,3 +94,9 @@ form table.inspector input {
   width: 97%;
   margin: 0;
 }
+
+table td.empty {
+  text-align: center;
+  color: #999;
+  background: #F8F8F8;
+}
