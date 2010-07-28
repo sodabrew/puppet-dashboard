@@ -95,6 +95,10 @@ form table.inspector input {
   margin: 0;
 }
 
+body table.inspector tbody tr td.total {
+  font-weight: bold;
+}
+
 table td.empty {
   text-align: center;
   color: #999;

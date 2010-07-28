@@ -1,5 +1,5 @@
 %tbody
-  - metric.values.sort_by{|klass, name, value| name}.each do |klass, name, value|
+  - metric.values.reverse.each do |klass, name, value|
     %tr
       %td.key{:class => klass.to_s}= name
       %td.value{:class => klass.to_s}
