@@ -5,9 +5,9 @@ v1.0.3
 ------
 
 * MIGRATION: Added cache with node's latest report and success status to improve performance.
-* Added support for parsing and displaying Puppet 2.6 reports.
 * Added rake tasks to dump and restore the database, see README for details.
 * Added database check to ensure it's running the latest schema.
+* Added support for accepting Puppet 2.6 reports, with limited support for displaying their contents.
 * Fixed and improved the README documentation with much more complete installation instructions.
 * Fixed node categorization, added new categories to "Nodes" sidebar and highlighting of errors.
 * Fixed node failures causing them to be listed as failed forever.
