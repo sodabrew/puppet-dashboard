@@ -1,5 +1,73 @@
 v1.0.3
 ======
+3cbc8dc  [Bug #4329] Updated documentation with operating system-specific installation instructions.
+f7f5b83  Fixed exception in nodes/_form partial, it now uses :object or :collection as appropriate.
+6d0d39a  Fixed unwanted dependency on 'rake' gem, because 'rake' is often installed outside of RubyGems.
+c07300d  maint: Redo report metrics to always put total at the bottom
+e507743  maint: Make report metric totals last and bold
+bffdd9e  maint: CSS improved button spacing, hover style
+1e10b83  maint: Fixed display of empty entries
+daba9de  Updated RELEASE NOTES regarding Puppet 2.6 reports.
+616c681  [#4332] Using lighter yellow
+f85d1b3  [#4332] Use 2x default Puppet Run frequency for no longer reporting cutoff
+0a6e484  [#4332] Removing facets and replacing #ergo and #to_b
+eaf6491  [#4375] Added instructions for setting up the database using both a `rake` task and `mysql` console.
+65eb170  [#4332] Don't query Node.all twice, use #each
+fddaeb8  Updated RELEASE_NOTES.
+d03b130  Fixed '.timeline .date' CSS style to be wide enough for larger dates.
+f096ab7  Updated specs.
+59cfd0b  Added CSS styles for colorizing log entries by their severity level.
+d10378f  Improved '.section.error' and '.section.warning' CSS styles to reduce gap below the text.
+c80cb17  Added '.nowrap' style to easily stop text wrapping.
+5854d28  Improved '.pagination' CSS style by moving it to right side where it's more visible.
+ae65cb4  Fixed '.actionbar' CSS style to have a flat top and rounded bottom.
+fe45ac2  Added 'body item:last-child' style to eliminate big gap below these sections.
+4b3308f  Added '#sidebar .count.failure' CSS style to highlight errors in sidebar.
+c0d09a4  Improved '#sidebar .active' CSS style to be more visible.
+40cb05b  Fixed '.header h2.half' CSS style to shrink to its content, rather than cause unwanted wrapping on narrow screens.
+8939a30  [Bug #4332] Fixed node categories, failing nodes from being displayed forever, many performance problems.
+2d9ffcf  Extracted Node::NO_LONGER_REPORTING_CUTOFF as constant.
+4cbb3ac  Improved nodes/show by adding node_status_icon.
+dc70d65  [Bug #4374] Added pagination to node_classes#index, node_groups#index, reports#index and nodes/_nodes.
+fde96e6  Fixed  header for nodes listings: removed it from nodes/nodes partial, added specific ones to home and nodes/index.
+73cc839  Fixed statuses/run_failure partial to get only data it needs, simplified invocations.
+a537ef4  Switched date-time formatting to international form.
+55bf1eb  Improved puppet/util/logs/_log partial by adding classes to colorize logs by their level.
+dec66c0  Fixed puppet/util/logs/_log partial exceptions when rendering time, its improved formatting.
+a86e5fb  Improved reports/_report partial to sort logs by level and specified location associated partial.
+dc7a2ec  Removed unused checkboxes.
+1e3ccab  Fixed .clear and 'clear: both' CSS styles by unifying them to the same valid markup.
+e27ebe7  Normalized titles, their case and contents.
+ba9aacf  Removed pagination from nodes, groups, classes and reports controllers.
+e8af364  Added NodeClass::with_nodes_count and NodeGroup::with_nodes_count.
+ebb1225  Fixed exceptions and messages shown if missing entries on the groups, classes and reports listings.
+1661570  Added "Reports" to the main menu.
+16c4949  Fixed Status::by_interval exceptions when given :start or multiple options.
+b990cee  Added Status::INTERVAL_CUTOFF constant to specify how much status information to graph.
+e1c3e3d  Removed unused "collection" and "sidebar" partials.
+c6257d7  Added ApplicationHelper#paginate_scope to return a paginated scope based on current #items_per_page settings.
+e175547  Added ApplicationHelper#items_per_page to return number of items on a page for pagination.
+bb5e22d  Added ApplicationHelper#counter_class to return CSS class used to colorize a sidebar item as an error.
+8c47fae  Improved #report_status_icon to show errors, and added #node_status_icon to show icon for a node.
+1cb3e92  Improved ApplicationHelper#pagination_for to optionally display a "More" link.
+cf3ee73  Fixed chart width to fit on screen, for real this time.
+7811962  MIGRATION: Added :success and :last_report columns to Node and improved Report to set these.
+b46af2b  Added vendored 'facets' gem
+64cf395  maint: Fix button size for search
+b01b55c  maint: Add flash to the layout and update css
+92a0785  maint: Clarify wording in README
+b7f4b8a  maint: Fix indention of code block in README
+b8d57df  [#4306] Move report processor to ext/puppet
+819b1f4  [#4358] Added start-up check to ensure database is running the latest schema.
+04453b6  Refactored .gitignore: sorted contents, squashed duplicates and clarified paths.
+0289778  Updated .gitignore to add more entries.
+313096b  Removed unwanted 'taglist' file.
+f5d4e55  [#4324] Update report handling for 2.6.0 reports
+b619e5c  [Bug #4341] Fixed autocomplete styling so that these dropdowns are more visible.
+a617aa9  [Bug #4320] [Bug #4331] Reduced minimum width of content body so it will fit on smaller screens.
+0b35618  [#4330] Concatenated .js and .css files to speed up loading.
+7657a00  [Bug #4323] Fixed formatting of h2 headers in release notes.
+2b55e31  maint: Fixing CHANGELOG by removing duplicate version tags
 5bfbbc2  Added release note about fixing chart rendering issues.
 9c9cfeb  [Bug #4320] Fixed run-time chart rendering problems.
 4ed02f0  [#4316] Added version and release notes for v1.0.3, and fixed them for v1.0.2.
