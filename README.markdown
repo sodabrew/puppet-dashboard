@@ -4,7 +4,7 @@ Puppet Dashboard
 Overview
 --------
 
-The Puppet Dashboard is a web interface for [Puppet](http://www.puppetlabs.com/), an open source system configuration management tool. The Puppet Dashboard displays reports with the detailed status and history of your Puppet-managed servers (nodes), and allows you to assign Puppet classes and parameters to them.
+The Puppet Dashboard is a web interface for [Puppet](http://www.puppetlabs.com/), an open source system configuration management tool. The Puppet Dashboard currently displays reports with the detailed status and history of Puppet-managed servers (nodes), and can assign Puppet classes and parameters to them.
 
 Source, community and support
 -----------------------------
@@ -17,61 +17,116 @@ Source, community and support
 Dependencies
 ------------
 
-The Puppet Dashboard will run on most Unix, Linux and Mac OS X systems if you install the following software from your operating system's repositories or these websites:
+The Puppet Dashboard will run on most Unix, Linux and Mac OS X systems once its dependencies are installed from either the operating system's repositories or their respective websites. For installation instructions on specific operating systems, see below. A list of dependencies follows:
 
 * [Ruby](http://www.ruby-lang.org/en/downloads/) or [Ruby Enterprise Edition](http://www.rubyenterpriseedition.com/download.html) programming language interpreter, version 1.8.4 to 1.8.7, but not 1.9.x
 * [Rake](http://github.com/jimweirich/rake) build tool for Ruby, version 0.8.3 or newer
 * [MySQL](http://www.mysql.com/downloads/mysql/) database server 5.x
-* [Ruby-MySQL](http://rubygems.org/gems/mysql) bindings 2.8.x
-
-You may also want to install these tools:
-
-* [Git](http://git-scm.com/) revision control system to checkout the source code
+* [Ruby-MySQL](http://rubygems.org/gems/mysql) bindings 2.7.x or 2.8.x
 * [Rubygems](http://rubygems.org/) package manager to easily install Ruby libraries
+
+### Operating system-specific examples for installing dependencies
+
+*NOTE*: The following example instructions assume a fresh install of their respective operating systems. Your actual installation procedure may be different depending on your system's current configuration.
+
+#### Ubuntu 10.04 LTS
+
+1. Install the operating system packages:
+
+       apt-get install -y build-essential irb libmysql-ruby libmysqlclient-dev libopenssl-ruby libreadline-ruby mysql-server rake rdoc ri ruby ruby-dev
+
+2. Install the `gem` package manager -- do not use the one packaged with the operating system:
+
+       URL="http://production.cf.rubygems.org/rubygems/rubygems-1.3.7.tgz"
+       PACKAGE=$(echo $URL | sed "s/\.[^\.]*$//; s/^.*\///")
+       pushd "/tmp"
+         CACHE=`mktemp -d install_rubygems.XXXXXXXXXX`
+         pushd "$CACHE"
+           wget -c -t10 -T20 -q "$URL"
+           tar xfz "$PACKAGE.tgz"
+           cd "$PACKAGE"
+           sudo ruby setup.rb
+         popd
+       popd
+
+3. Create `gem` as an alternative name for the `gem1.8` command:
+
+       update-alternatives --install /usr/bin/gem gem /usr/bin/gem1.8 1
+
+#### CentOS 5.5
+
+1. Install the [Extra Packages for Enterprise Linux (EPEL)](http://fedoraproject.org/wiki/EPEL) repository for `yum`:
+
+       rpm -Uvh http://download.fedora.redhat.com/pub/epel/5/i386/epel-release-5-3.noarch.rpm
+
+2. Install the operating system packages:
+
+       yum install -y mysql mysql-devel mysql-server ruby ruby-devel ruby-irb ruby-mysql ruby-rdoc ruby-ri
+
+3. Start MySQL and make it start automatically at boot:
+
+       service mysqld start
+       chkconfig mysqld on
+
+4. Install the `gem` package manager -- do not install RubyGems version 1.3.6 or newer because they are incompatible with the Ruby shipped with CentOS 5.5:
+
+       URL="http://production.cf.rubygems.org/rubygems/rubygems-1.3.5.tgz"
+       PACKAGE=$(echo $URL | sed "s/\.[^\.]*$//; s/^.*\///")
+       pushd "/tmp"
+         CACHE=`mktemp -d install_rubygems.XXXXXXXXXX`
+         pushd "$CACHE"
+           wget -c -t10 -T20 -q "$URL"
+           tar xfz "$PACKAGE.tgz"
+           cd "$PACKAGE"
+           sudo ruby setup.rb
+         popd
+       popd
+
+5. Install the `rake` gem:
+
+       gem install rake
 
 Installation
 ------------
 
 1. Download the Puppet Dashboard software:
 
-   1. Checkout the latest source code using Git:
+   1. Checkout the latest source code using the [Git](http://git-scm.com/) revision control system:
 
-            git clone git://github.com/reductivelabs/puppet-dashboard.git
+          git clone git://github.com/reductivelabs/puppet-dashboard.git
 
-   2. Or install the software using APT or RPM packages. See
-       `README_PACKAGES.markdown` for instructions.
+   2. Or install the software using APT or RPM packages. See `README_PACKAGES.markdown` for instructions.
 
 2. Create a `config/database.yml` file to specify Puppet Dashboard's database configuration. Please see the `config/database.yml.example` file for further details about database configurations and environments. These files paths are relative to the path of the Puppet Dashboard software containing this `README.markdown` file.
 
-
 3. Setup a MySQL database server, create a user and database for use with the Dashboard by either:
 
-   1. Using a `rake` task to create just the database using the configuration specified in your `config/database.yml`. You must `cd` into the directory with the Puppet Dashboard software containing this `README.markdown` file before running these commands:
+   1. Using a `rake` task to create just the database from settings in the `config/database.yml` file. You must `cd` into the directory with the Puppet Dashboard software containing this `README.markdown` file before running these commands:
 
-             rake RAILS_ENV=production db:create
+          rake RAILS_ENV=production db:create
 
    2. Or creating the database, user and privileges manually by running `mysql` as a privileged user (e.g. `root`) and executing commands like:
 
-             CREATE DATABASE dashboard CHARACTER SET utf8;
-             CREATE USER 'dashboard'@'localhost' IDENTIFIED BY 'my_password';
-             GRANT ALL PRIVILEGES ON dashboard.* TO 'dashboard'@'localhost';
+          CREATE DATABASE dashboard CHARACTER SET utf8;
+          CREATE USER 'dashboard'@'localhost' IDENTIFIED BY 'my_password';
+          GRANT ALL PRIVILEGES ON dashboard.* TO 'dashboard'@'localhost';
 
 4. Populate the database with the tables for the Puppet Dashboard.
 
    1. For typical use with the `production` environment:
 
-             rake RAILS_ENV=production db:migrate
+          rake RAILS_ENV=production db:migrate
 
    2. For developing the software using the `development` and `test` environments:
 
-             rake db:migrate db:test:prepare
+          rake db:migrate db:test:prepare
 
 Running
 -------
 
 There are many ways to run a Ruby web application like the Puppet Dashboard, we recommend:
 
-1. **Built-in webserver**: You can run a single instance of the application without any additional software. This is great for getting started quickly, but isn't recommended for production use because it's slow and can't handle multiple requests at the same time. You must `cd` into the directory with the Puppet Dashboard software containing this `README.markdown` file before running these commands:
+1. **Built-in webserver**: Ruby includes a built-in webserver that can run a single instance of the Puppet Dashboard application without any additional software. This is great for getting started quickly, but isn't recommended for production use because it's slow and can't handle multiple requests at the same time. You must `cd` into the directory with the Puppet Dashboard software containing this `README.markdown` file before running these commands:
 
    1. Start a `production` server on port 3000:
 
@@ -81,9 +136,9 @@ There are many ways to run a Ruby web application like the Puppet Dashboard, we 
 
            ./script/server -p 8080
 
-2. **Passenger**: You can compile this plugin for [Apache](http://httpd.apache.org/) or [Nginx](http://nginx.org/) to easily serve Ruby web apps quickly and with multiple instances -- it's great for production use. You can also use it with Ruby Enterprise Edition to reduce memory usage. For further information, please see [Passenger/](http://www.modrails.com/) and [Ruby Enterprise Edition](http://www.rubyenterpriseedition.com/) and the example apache configuration in `ext/passenger/dashboard-vhost.conf`.
+2. **Passenger**: This plugin for [Apache](http://httpd.apache.org/) or [Nginx](http://nginx.org/) makes it easy to multile Ruby web apps quickly and efficiently using multiple instances -- it's great for production use. If used along with Ruby Enterprise Edition, it can dramatically reduce the memry required to run Ruby web applications. For further information, please see [Passenger/](http://www.modrails.com/) and [Ruby Enterprise Edition](http://www.rubyenterpriseedition.com/) and the example apache configuration in `ext/passenger/dashboard-vhost.conf`.
 
-3. **Thin**: You can install this server, have it start multiple instances of your application as a cluster, and then put it behind a proxy like [Apache](http://httpd.apache.org/) or [Nginx](http://nginx.org/) -- it's fast and reliable. For further information, please see [Thin](http://code.macournoyer.com/thin/).
+3. **Thin**: This fast and reliable server can run multiple instances of the Puppet Dashboard application behind a proxy like [Apache](http://httpd.apache.org/) or [Nginx](http://nginx.org/) to appear as a single website -- it's great for production use. For further information, please see [Thin](http://code.macournoyer.com/thin/).
 
 Reporting
 ---------
@@ -181,6 +236,8 @@ The Puppet Dashboard can act as an external node classification tool, which will
    *NOTE:* Set the `external_nodes` value to the absolute path of the Puppet Dashboard's `bin/external_node` program. If the Puppet Dashboard is running on a different computer, you should copy this file to the Puppet Master to a local directory like `/etc/pupppet` and specify the path to it.
 
    *NOTE:* The `bin/external_node` program connects to the Puppet Dashboard at `localhost` on port `3000`. If your Puppet Dashboard is running on a different host or node, please modify this file.
+
+2. Restart the `puppetmasterd` process.
 
 Security
 --------
