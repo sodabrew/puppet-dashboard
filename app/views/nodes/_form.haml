@@ -17,7 +17,10 @@
     %h3 Parameters
     %table#parameters.inspector
       %tbody
-        = render :partial => 'parameters/parameter_input', :object => form.object.parameters.blank? ? form.object.parameters.build : form.object.parameters
+        - if form.object.parameters.blank?
+          = render :partial => 'parameters/parameter_input', :object => form.object.parameters.build
+        - else
+          = render :partial => 'parameters/parameter_input', :collection => form.object.parameters
       %tfoot
         %tr
           %td{:colspan => 2}
