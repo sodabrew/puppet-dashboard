@@ -5,20 +5,21 @@ v1.0.3
 ------
 
 * MIGRATION: Added cache with node's latest report and success status to improve performance.
-* Added rake tasks to dump and restore the database, see README for details.
-* Added database check to ensure it's running the latest schema.
-* Added support for accepting Puppet 2.6 reports, with limited support for displaying their contents.
-* Fixed and improved the README documentation with much more complete installation instructions.
-* Fixed node categorization, added new categories to "Nodes" sidebar and highlighting of errors.
-* Fixed node failures causing them to be listed as failed forever.
 * Fixed exceptions and messages shown if no items to display on groups, classes and reports pages.
-* Fixed styling of icons, warning sections, autocomplete, etc.
+* Fixed node failures causing them to be listed as failed forever.
+* Fixed unintended dependencies on external Puppet, Rake and JSON gems.
+* Fixed and improved the README documentation with better installation instructions.
 * Fixed chart rendering issues, including it being too wide to fit on the screen.
-* Fixed unintended dependencies on external Puppet and JSON gems.
 * Fixed confusing headers for node listings shown as part of other pages.
-* Improved reports by displaying logs sorted by severity level and highlighting these accordingly.
-* Improved performance of many pages by eliminating and optimizing database queries.
+* Fixed display of empty entries in nodes, reports, classes and groups
+* Fixed node categorization, added new categories to "Nodes" sidebar and highlighting of errors.
+* Fixed styling of buttons, icons, warning sections, autocomplete, etc.
+* Added database check to ensure it's running the latest schema.
+* Added rake tasks to dump and restore the database, see README for details.
+* Added support for accepting Puppet 2.6 reports, with limited support for displaying their contents.
 * Improved performance by concatenating JavaScript and CSS files together.
+* Improved performance of many pages by eliminating and optimizing database queries.
+* Improved reports by displaying logs colored and sorted by severity and metrics with totals in bold.
 * Removed unused checkboxes.
 
 v1.0.2
