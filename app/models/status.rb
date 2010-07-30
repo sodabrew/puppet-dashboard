@@ -20,14 +20,16 @@ class Status
     by_interval(:limit => 20).map(&:percent)
   end
 
+  # Default time in seconds for the interval
+  INTERVAL_CUTOFF = 30.days
+
   def self.by_interval(options={})
     return [] if options[:nodes] && options[:nodes].empty?
     interval = options[:of] || 1.day
 
     has_where = options[:start] || options[:node] || options[:nodes].present?
 
-    has_and = options[:start]
-    has_and &&= options[:node] or options[:nodes].present?
+    has_and = [options[:start], options[:node], options[:nodes]].compact.size > 1
 
     sql = <<-SQL
 
@@ -40,7 +42,7 @@ class Status
     SQL
 
     sql << "WHERE " if has_where
-    sql << "time >= \"#{options[:start].to_s(:db)}\"}\n" if options[:start]
+    sql << "time >= \"#{options[:start].to_s(:db)}\"\n" if options[:start]
     sql << "AND " if has_and
     sql << "node_id = #{options[:node].id} " if options[:node]
     sql << "node_id IN (#{options[:nodes].map(&:id).join(',')})\n" if options[:nodes].present?

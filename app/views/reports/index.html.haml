@@ -1,3 +1,5 @@
+- reports = paginate_scope(@reports, :per_page => 20)
+
 #main.full
   .header
     %h2
@@ -5,10 +7,10 @@
       - if @node
         %span.alt for
         = link_to @node.name, @node
-      %span.count== (#{@reports.total_entries})
+      %span.count== (#{reports.total_entries})
 
   .item
-    %table.main
+    %table.inspector
       %thead
         %tr
           %th.status
@@ -23,23 +25,24 @@
           %th Config retrieval
           %th Runtime
       %tbody
-        - @reports.each do |report|
-          %tr
-            = render 'report_status_td', :report => report
-            %td= link_to report.time.to_s(:short), report
-            - unless @node
-              %td= link_to_if report.node, report.host, report.node
-            %td= report.total_resources
-            %td= report.failed_resources
-            %td= report.failed_restarts
-            %td= report.skipped_resources
-            %td= report.config_retrieval_time
-            %td= report.total_time
-      - if @reports.total_pages > 1
-        %tfoot
-          %tr
-            %td{:colspan => @node ? 10 : 9}
-              .actionbar
-                = will_paginate(@reports)
-                %div{:style => 'clear:both;'}
-
+        - if reports.present?
+          - for report in reports
+            %tr
+              = report_status_td(report)
+              %td= link_to report.time.to_s, report
+              - unless @node
+                %td= link_to_if report.node, report.host, report.node
+              %td= report.total_resources
+              %td= report.failed_resources
+              %td= report.failed_restarts
+              %td= report.skipped_resources
+              %td= report.config_retrieval_time
+              %td= report.total_time
+          - if reports.total_pages > 1
+            %tfoot
+              %tr
+                %td{:colspan => @node ? 10 : 9}
+                  = pagination_for(reports)
+        - else
+          %td.empty{:colspan => @node ? 10 : 9}
+            &mdash; No reports found &mdash;

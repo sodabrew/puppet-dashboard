@@ -1,7 +1,8 @@
 .header
   %h2
     %span.status{:class => report.status}
-      = report.time.to_s(:long)
+      = report_status_icon(report)
+      = report.time.to_s
     - if report.node
       %span.alt for
       = link_to report.node.name, report.node
@@ -10,21 +11,29 @@
 
 .item
   .section
-    %h3 Metrics
-    - report.metrics.each do |name, metric|
-      .section
-        %h4= name.titleize
-        %table.inspector
-          = render metric
-
-  .section.clear
     %h3 Log
-    %table.inspector
-      %thead
-        %tr
-          %th Level
-          %th Message
-          %th Source
-          %th Time
-      %tbody
-        = render report.logs
+    .section
+      %table.inspector
+        %thead
+          %tr
+            %th Level
+            %th Message
+            %th Source
+            %th Time
+        %tbody
+          - if report.logs.present?
+            = render :partial => 'puppet/util/logs/log', :collection => puppet_log_sorter(report.logs.compact)
+          - else
+            %td.empty{:colspan => 4}
+              &mdash; No log messages in this report &mdash;
+  .section
+    %h3 Metrics
+    - if report.metrics.present?
+      - report.metrics.sort_by{|name, metric| name}.each do |name, metric|
+        - if metric.values.present?
+          .section
+            %h4= name.titleize
+            %table.inspector
+              = render metric
+    - else
+      &mdash; No metrics in this report &mdash;

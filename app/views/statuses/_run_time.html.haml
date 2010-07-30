@@ -1,12 +1,13 @@
-%h3 Run Time (ms)
-%p.legend The elapsed time in milliseconds for each of the last 30 Puppet runs.
-%table.inspector.data.runtime
-  %thead
-    %tr.labels
-      - reports.map{|r| r.time}.each do |time|
-        %th= time.strftime('%I:%M%p')
-  %tbody
-    %tr.runtimes
-      - reports.map{|r| r.total_time}.compact.each do |time|
-        %td= "%0.2f" % time.to_f
-.clear
+- if reports.size > 1
+  %h3 Run Time (ms)
+  %p.legend The elapsed time in milliseconds for each of the last 30 Puppet runs.
+  %table.inspector.data.runtime
+    %thead
+      %tr.labels
+        - reports.map{|r| r.time}.each do |time|
+          %th= time.strftime('%I:%M%p')
+    %tbody
+      %tr.runtimes
+        - reports.map{|r| r.total_time}.compact.each do |time|
+          %td= "%0.2f" % time.to_f
+  %br.clear

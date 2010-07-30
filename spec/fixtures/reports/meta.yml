@@ -1,0 +1,56 @@
+--- 
+puppet25/1_changed_0_failures.yml: 
+  version: 0.25.x
+  failed:  0
+  changed: 1
+  time: 2009-11-19 17:08:50.631428 -08:00
+  total: 3
+  total_time: 0.253255844116211
+puppet26/0_changed_0_failures.yml: 
+  version: 2.6.x
+  failed:  0
+  changed: 0
+  total: 7
+  time: 2010-07-08 12:35:46.027576 -04:00
+puppet26/report_error_exec_returns_non_zero.yaml: 
+  version: 2.6.x
+  failed: 1
+  changed: 1
+  total: 9
+  time: 2010-07-22 12:17:49.762707 -07:00
+puppet26/report_error_missing_dependency.yaml: 
+  version: 2.6.x
+  failed: 0
+  changed: 0
+  total: 0
+  time: 2010-07-22 12:16:04.059816 -07:00
+puppet26/report_error_on_package_service_and_files.yaml:
+  version: 2.6.x
+  failed: 3
+  changed: 3
+  total: 14
+  time: 2010-07-22 11:51:32.720867 -07:00
+puppet26/report_ok_exec_returns_zero.yaml:
+  version: 2.6.x
+  failed: 0
+  changed: 1
+  total: 9
+  time: 2010-07-22 12:19:01.602237 -07:00
+puppet26/report_ok_file_service_package.yaml:
+  version: 2.6.x
+  failed: 0
+  changed: 3
+  total: 13
+  time: 2010-07-22 12:13:47.371767 -07:00
+puppet26/report_ok_service_and_exec_already_in_correct_state.yaml:
+  version: 2.6.x
+  failed: 0
+  changed: 0
+  total: 9
+  time: 2010-07-22 12:21:10.151421 -07:00
+puppet26/report_ok_service_started_ok.yaml:
+  version: 2.6.x
+  failed: 0
+  changed: 2
+  total: 9
+  time: 2010-07-22 12:19:46.169915 -07:00

@@ -1,4 +1,20 @@
 %ul#global-navigation.navigation
-  %li{:class => active_if(request.url == root_url)}= link_to "Puppet Dashboard", root_path, :id => "logo"
-  %li{:class => active_if(%w[nodes node_groups node_classes].include?(controller_name))}
-    = link_to "Node Manager", nodes_path
+  %li
+    = link_to "Puppet Dashboard", root_path, :id => "logo"
+  %li{:class => active_if(request.url == release_notes_url)}
+    = link_to "v#{APP_VERSION}", release_notes_path
+  %li &raquo;
+  %li{:class => active_if(request.url == root_url)}
+    = link_to "Home", root_path
+  %li &bull;
+  %li{:class => active_if(controller_name == "nodes")}
+    = link_to "Nodes", nodes_path
+  %li &bull;
+  %li{:class => active_if(controller_name == "node_groups")}
+    = link_to "Groups", node_groups_path
+  %li &bull;
+  %li{:class => active_if(controller_name == "node_classes")}
+    = link_to "Classes", node_classes_path
+  %li &bull;
+  %li{:class => active_if(controller_name == "reports")}
+    = link_to "Reports", reports_path

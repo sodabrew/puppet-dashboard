@@ -1,5 +1,119 @@
+v1.0.3
+======
+3cbc8dc  [Bug #4329] Updated documentation with operating system-specific installation instructions.
+f7f5b83  Fixed exception in nodes/_form partial, it now uses :object or :collection as appropriate.
+6d0d39a  Fixed unwanted dependency on 'rake' gem, because 'rake' is often installed outside of RubyGems.
+c07300d  maint: Redo report metrics to always put total at the bottom
+e507743  maint: Make report metric totals last and bold
+bffdd9e  maint: CSS improved button spacing, hover style
+1e10b83  maint: Fixed display of empty entries
+daba9de  Updated RELEASE NOTES regarding Puppet 2.6 reports.
+616c681  [#4332] Using lighter yellow
+f85d1b3  [#4332] Use 2x default Puppet Run frequency for no longer reporting cutoff
+0a6e484  [#4332] Removing facets and replacing #ergo and #to_b
+eaf6491  [#4375] Added instructions for setting up the database using both a `rake` task and `mysql` console.
+65eb170  [#4332] Don't query Node.all twice, use #each
+fddaeb8  Updated RELEASE_NOTES.
+d03b130  Fixed '.timeline .date' CSS style to be wide enough for larger dates.
+f096ab7  Updated specs.
+59cfd0b  Added CSS styles for colorizing log entries by their severity level.
+d10378f  Improved '.section.error' and '.section.warning' CSS styles to reduce gap below the text.
+c80cb17  Added '.nowrap' style to easily stop text wrapping.
+5854d28  Improved '.pagination' CSS style by moving it to right side where it's more visible.
+ae65cb4  Fixed '.actionbar' CSS style to have a flat top and rounded bottom.
+fe45ac2  Added 'body item:last-child' style to eliminate big gap below these sections.
+4b3308f  Added '#sidebar .count.failure' CSS style to highlight errors in sidebar.
+c0d09a4  Improved '#sidebar .active' CSS style to be more visible.
+40cb05b  Fixed '.header h2.half' CSS style to shrink to its content, rather than cause unwanted wrapping on narrow screens.
+8939a30  [Bug #4332] Fixed node categories, failing nodes from being displayed forever, many performance problems.
+2d9ffcf  Extracted Node::NO_LONGER_REPORTING_CUTOFF as constant.
+4cbb3ac  Improved nodes/show by adding node_status_icon.
+dc70d65  [Bug #4374] Added pagination to node_classes#index, node_groups#index, reports#index and nodes/_nodes.
+fde96e6  Fixed  header for nodes listings: removed it from nodes/nodes partial, added specific ones to home and nodes/index.
+73cc839  Fixed statuses/run_failure partial to get only data it needs, simplified invocations.
+a537ef4  Switched date-time formatting to international form.
+55bf1eb  Improved puppet/util/logs/_log partial by adding classes to colorize logs by their level.
+dec66c0  Fixed puppet/util/logs/_log partial exceptions when rendering time, its improved formatting.
+a86e5fb  Improved reports/_report partial to sort logs by level and specified location associated partial.
+dc7a2ec  Removed unused checkboxes.
+1e3ccab  Fixed .clear and 'clear: both' CSS styles by unifying them to the same valid markup.
+e27ebe7  Normalized titles, their case and contents.
+ba9aacf  Removed pagination from nodes, groups, classes and reports controllers.
+e8af364  Added NodeClass::with_nodes_count and NodeGroup::with_nodes_count.
+ebb1225  Fixed exceptions and messages shown if missing entries on the groups, classes and reports listings.
+1661570  Added "Reports" to the main menu.
+16c4949  Fixed Status::by_interval exceptions when given :start or multiple options.
+b990cee  Added Status::INTERVAL_CUTOFF constant to specify how much status information to graph.
+e1c3e3d  Removed unused "collection" and "sidebar" partials.
+c6257d7  Added ApplicationHelper#paginate_scope to return a paginated scope based on current #items_per_page settings.
+e175547  Added ApplicationHelper#items_per_page to return number of items on a page for pagination.
+bb5e22d  Added ApplicationHelper#counter_class to return CSS class used to colorize a sidebar item as an error.
+8c47fae  Improved #report_status_icon to show errors, and added #node_status_icon to show icon for a node.
+1cb3e92  Improved ApplicationHelper#pagination_for to optionally display a "More" link.
+cf3ee73  Fixed chart width to fit on screen, for real this time.
+7811962  MIGRATION: Added :success and :last_report columns to Node and improved Report to set these.
+b46af2b  Added vendored 'facets' gem
+64cf395  maint: Fix button size for search
+b01b55c  maint: Add flash to the layout and update css
+92a0785  maint: Clarify wording in README
+b7f4b8a  maint: Fix indention of code block in README
+b8d57df  [#4306] Move report processor to ext/puppet
+819b1f4  [#4358] Added start-up check to ensure database is running the latest schema.
+04453b6  Refactored .gitignore: sorted contents, squashed duplicates and clarified paths.
+0289778  Updated .gitignore to add more entries.
+313096b  Removed unwanted 'taglist' file.
+f5d4e55  [#4324] Update report handling for 2.6.0 reports
+b619e5c  [Bug #4341] Fixed autocomplete styling so that these dropdowns are more visible.
+a617aa9  [Bug #4320] [Bug #4331] Reduced minimum width of content body so it will fit on smaller screens.
+0b35618  [#4330] Concatenated .js and .css files to speed up loading.
+7657a00  [Bug #4323] Fixed formatting of h2 headers in release notes.
+2b55e31  maint: Fixing CHANGELOG by removing duplicate version tags
+5bfbbc2  Added release note about fixing chart rendering issues.
+9c9cfeb  [Bug #4320] Fixed run-time chart rendering problems.
+4ed02f0  [#4316] Added version and release notes for v1.0.3, and fixed them for v1.0.2.
+cd43700  [#4317] Added `rake db:raw:dump` and `rake db:raw:restore` tasks, and documentation.
+5614372  [#4318] Added `rake spec:rcov:save` to save code coverage and `rake spec:rcov:diff` to view differences.
+388dd91  [#Bug 4307] Fixed unwanted dependency on JSON gem in specs.
+de5bcfd  [Bug #4305] Fixed documentation.
+7c2f79c  [#4309] Ensure that reports processing handles Puppet 0.25.x and 2.6.x
+2e27d7c  maint: Ignoring local Makefile
+236b07d  maint: Remove code that depends on puppet gem being installed
+dbdba7b  maint: Status icons in tables alligned middle again
+02a679d  Improved nodes page by only displaying "More..." if there are more reports.
+e53b264  Improved styling of node's "Dashboard Activity" log.
+57ecd76  Improved metric partial to sort values, display only seconds as floating point, and add label to seconds.
+7ca826f  Improved reports page by moving logs up and sorting metric sections.
+9c136c0  Improved report page to show log first and sort the metric sections.
+b869cfc  Improved tables.css by aligning text, specifying width and tightening padding.
+01c632e  Improved typography.css by making h3 tag larger.
+e4132f8  Wrote spec for ApplicationHelper#show.
+5a08679  Updated views to use new #report_status_* helpers.
+6fa3c45  Added ApplicationHelper#report_status_icon and #report_status_td helpers.
+ff5c4ff  Improved HTML BODY tag by adding classes based on controller and action.
+
+v1.0.2
+======
+ab2e031  maint: Add v1.0.2 to RELEASE_NOTES
+bbe0d9d  maint: Update CHANGELOG for v1.0.2
+798575b  maint: Add missing warning.png, minor CSS tweak for message box icons
+1264997  maint: Minor update to README's Reports section
+4a5a0a4  [Bug #4283] Hid "Register" and "Log in" links because authorization isn't implemented yet.
+1565e93  [Bug #4170] Fixed warnings to look like errors.
+7c38593  [Bug #4272] Fixed errors in documentation.
+11f369a  [Feature #4264] Added a release notes page.
+c297715  [Bug #4282] Fixed warnings produced by missing haml-3.0.13 gem specification.
+2ae0bad  GEM: Added vendored Maruku 0.6.0 library for rendering release notes Markdown.
+7d20359  [Fixed #4281] Renamed REALEASE_NOTES.md to RELEASE_NOTES.md
+f896b82  [Fixed #4271] Added missing "favicon.ico", the lack of which was filling logs with errors.
+fcbffd3  [Bug #4280] Fixed chart formatting.
+4f210cf  [Fixed #4276] Fixed exception on the node reports page, caused by unqualified path to partial.
+3d55aeb  [Fixed #4265] Chart headers displayed twice or none at all.
+
 v1.0.1
 ======
+4be5dcb  maint: Fix filename typo
+916ecc7  maint: Adding release notes
+f18dddd  maint: Updating CHANGELOG for v1.0.1
 aabe1c3  [#4216] Successful and failed scopes only return appropriate nodes
 3646ff3  maint: Updating documentation (with installation instructions)
 63ba904  [Bug #4163] [Bug #4166] [Bug #4169] Improved installation instructions.
@@ -119,547 +233,127 @@ e926fe7  Releasing v1.0.0rc1 (Yeaah!)
 ad6704b  [Bug #3322] Use local times, not UTC times
 e20bd0b  [Bug #3358] Do not specify hostname column width in tables
 c428643  Fix example conf for external_node script
+da48338  No longer blowing away groups and classes when updating node
+0667504  Ignoring semver file
+de657e1  Adding Ian Comfort as a contributor
+2fa2e95  Relax rake requirement to >= 0.8.3
+ae755db  Add link to Mike Zupan's install guide
+6b34e97  Fix database.yml example
+7307b5f  Updating contributors
+0705119  Remove extra layout line in nodes controller
+9ab62c6  [Bug ##3302] pagination breaks external node
+7c06dc0  Fix node reports index routing and re-add View More
+7c63eb2  Updating key/value table CSS
+420d8b9  Reorganize report show view
+81e378b  Reorganize node show view
+8770033  Reports use new UI
+28bf686  Fix number formatting in flot graphs
+7f4c8ec  Update README
+60f670d  Basic node search (by hostname only)
+bebda1d  Removing code from old UI
+30e3eab  In place edit for class names
+282bf5c  Render correct sidebar for class show
+44d8d9b  Add puppet dashboard logo
+bc4bf35  Add id to node index checkboxes
+0ef8937  Sane paginatino per-page size
+63d434b  Remove condition on Node.by_report_date
+d20c294  Adding run time to dashboard page
+edbfbf0  Minor updates to forms CSS and nodes forms
+7643292  Update dashboard page
+2a314cb  Update header drop down styles
+bb1a5c7  Minor style updates
+11e0a75  Updating node show and adding half width style
+b1b1091  Fixing default time format
+e95c202  Updates to form CSS
+1303cca  Update node manager tab active condition
+cf283ff  Add dropdown to main nav
+503bc00  Update Node Class views to new UI
+f02cc9a  Update Node Group views to new UI
+5fc4ee8  Updates to Nodes UI
+e4e390b  Working node group and class completion
+5837819  Basic working facebook-style group autocomplete
+7698cda  Adding fcbkcomplete jQuery plugin
+df58cf3  Small tweaks to index styles
+84d35b9  New Nodes index layout and general UI styles
+b56c64b  Simplifying timeline event view and css
+b4ef0e6  Truncate node name in dashboard list
+4788194  [Bugfix #3177] Nodes groups parameter not in external node
+ee5da5c  [BUGFIX #3146] README.markdown tweak
+f9388f2  Display details on parameter changes in history.
+4751ddd  A node's last_report returned the incorrect report, since changing the default_scope order of reports.
+a010410  Fix timestamp formatting on x axis for graphs Fix order of run success graph so it shows most recent runs.
+a83f05d  Make activity timeline more verbose.
+1fca6fc  Don't show run status graph if there are no reports.
+0eb3cf1  Show number of reports for a node in node's 'show' action.
+4ed3d15  Enabling pagination for node collections.
+277791a  Add node and report management rake tasks
+4a84db7  Fixed sorting of reports in default_scope of the model.
+3729cd0  Adding node rake task. This is for adding/modifying/removing nodes in the dashboard.
+a08d992  Add where named scope
+6835156  [Bugfix #3071] Node report list should show most recent first
+67e481d  Clean up environment.rb
+846da97  Fix failing nodes controller specs
+f0f0533  Add paginated reports and view more links
+06676b2  [BUGFIX #3024] Unsuccessful report raises error on #metrics
+a19dca3  [Feature #2978] Sort nodes based on domain name
+9be6623  Classes can be added when editing groups
+261f227  Releasing 0.2.1
 
 v0.2.1
 ======
-da48338  No longer blowing away groups and classes when updating node
-0667504  Ignoring semver file
-de657e1  Adding Ian Comfort as a contributor
-2fa2e95  Relax rake requirement to >= 0.8.3
-ae755db  Add link to Mike Zupan's install guide
-6b34e97  Fix database.yml example
-7307b5f  Updating contributors
-0705119  Remove extra layout line in nodes controller
-9ab62c6  [Bug ##3302] pagination breaks external node
-7c06dc0  Fix node reports index routing and re-add View More
-7c63eb2  Updating key/value table CSS
-420d8b9  Reorganize report show view
-81e378b  Reorganize node show view
-8770033  Reports use new UI
-28bf686  Fix number formatting in flot graphs
-7f4c8ec  Update README
-60f670d  Basic node search (by hostname only)
-bebda1d  Removing code from old UI
-30e3eab  In place edit for class names
-282bf5c  Render correct sidebar for class show
-44d8d9b  Add puppet dashboard logo
-bc4bf35  Add id to node index checkboxes
-0ef8937  Sane paginatino per-page size
-63d434b  Remove condition on Node.by_report_date
-d20c294  Adding run time to dashboard page
-edbfbf0  Minor updates to forms CSS and nodes forms
-7643292  Update dashboard page
-2a314cb  Update header drop down styles
-bb1a5c7  Minor style updates
-11e0a75  Updating node show and adding half width style
-b1b1091  Fixing default time format
-e95c202  Updates to form CSS
-1303cca  Update node manager tab active condition
-cf283ff  Add dropdown to main nav
-503bc00  Update Node Class views to new UI
-f02cc9a  Update Node Group views to new UI
-5fc4ee8  Updates to Nodes UI
-e4e390b  Working node group and class completion
-5837819  Basic working facebook-style group autocomplete
-7698cda  Adding fcbkcomplete jQuery plugin
-df58cf3  Small tweaks to index styles
-84d35b9  New Nodes index layout and general UI styles
-b56c64b  Simplifying timeline event view and css
-b4ef0e6  Truncate node name in dashboard list
-4788194  [Bugfix #3177] Nodes groups parameter not in external node
-ee5da5c  [BUGFIX #3146] README.markdown tweak
-f9388f2  Display details on parameter changes in history.
-4751ddd  A node's last_report returned the incorrect report, since changing the default_scope order of reports.
-a010410  Fix timestamp formatting on x axis for graphs Fix order of run success graph so it shows most recent runs.
-a83f05d  Make activity timeline more verbose.
-1fca6fc  Don't show run status graph if there are no reports.
-0eb3cf1  Show number of reports for a node in node's 'show' action.
-4ed3d15  Enabling pagination for node collections.
-277791a  Add node and report management rake tasks
-4a84db7  Fixed sorting of reports in default_scope of the model.
-3729cd0  Adding node rake task. This is for adding/modifying/removing nodes in the dashboard.
-a08d992  Add where named scope
-6835156  [Bugfix #3071] Node report list should show most recent first
-67e481d  Clean up environment.rb
-846da97  Fix failing nodes controller specs
-f0f0533  Add paginated reports and view more links
-06676b2  [BUGFIX #3024] Unsuccessful report raises error on #metrics
-a19dca3  [Feature #2978] Sort nodes based on domain name
-9be6623  Classes can be added when editing groups
-261f227  Releasing 0.2.1
+773bc5f  Fix nasty routing bug for hosts that contain a '.'
+a849c84  Releasing 0.2.0
 
 v0.2.0
 ======
-da48338  No longer blowing away groups and classes when updating node
-0667504  Ignoring semver file
-de657e1  Adding Ian Comfort as a contributor
-2fa2e95  Relax rake requirement to >= 0.8.3
-ae755db  Add link to Mike Zupan's install guide
-6b34e97  Fix database.yml example
-7307b5f  Updating contributors
-0705119  Remove extra layout line in nodes controller
-9ab62c6  [Bug ##3302] pagination breaks external node
-7c06dc0  Fix node reports index routing and re-add View More
-7c63eb2  Updating key/value table CSS
-420d8b9  Reorganize report show view
-81e378b  Reorganize node show view
-8770033  Reports use new UI
-28bf686  Fix number formatting in flot graphs
-7f4c8ec  Update README
-60f670d  Basic node search (by hostname only)
-bebda1d  Removing code from old UI
-30e3eab  In place edit for class names
-282bf5c  Render correct sidebar for class show
-44d8d9b  Add puppet dashboard logo
-bc4bf35  Add id to node index checkboxes
-0ef8937  Sane paginatino per-page size
-63d434b  Remove condition on Node.by_report_date
-d20c294  Adding run time to dashboard page
-edbfbf0  Minor updates to forms CSS and nodes forms
-7643292  Update dashboard page
-2a314cb  Update header drop down styles
-bb1a5c7  Minor style updates
-11e0a75  Updating node show and adding half width style
-b1b1091  Fixing default time format
-e95c202  Updates to form CSS
-1303cca  Update node manager tab active condition
-cf283ff  Add dropdown to main nav
-503bc00  Update Node Class views to new UI
-f02cc9a  Update Node Group views to new UI
-5fc4ee8  Updates to Nodes UI
-e4e390b  Working node group and class completion
-5837819  Basic working facebook-style group autocomplete
-7698cda  Adding fcbkcomplete jQuery plugin
-df58cf3  Small tweaks to index styles
-84d35b9  New Nodes index layout and general UI styles
-b56c64b  Simplifying timeline event view and css
-b4ef0e6  Truncate node name in dashboard list
-4788194  [Bugfix #3177] Nodes groups parameter not in external node
-ee5da5c  [BUGFIX #3146] README.markdown tweak
-f9388f2  Display details on parameter changes in history.
-4751ddd  A node's last_report returned the incorrect report, since changing the default_scope order of reports.
-a010410  Fix timestamp formatting on x axis for graphs Fix order of run success graph so it shows most recent runs.
-a83f05d  Make activity timeline more verbose.
-1fca6fc  Don't show run status graph if there are no reports.
-0eb3cf1  Show number of reports for a node in node's 'show' action.
-4ed3d15  Enabling pagination for node collections.
-277791a  Add node and report management rake tasks
-4a84db7  Fixed sorting of reports in default_scope of the model.
-3729cd0  Adding node rake task. This is for adding/modifying/removing nodes in the dashboard.
-a08d992  Add where named scope
-6835156  [Bugfix #3071] Node report list should show most recent first
-67e481d  Clean up environment.rb
-846da97  Fix failing nodes controller specs
-f0f0533  Add paginated reports and view more links
-06676b2  [BUGFIX #3024] Unsuccessful report raises error on #metrics
-a19dca3  [Feature #2978] Sort nodes based on domain name
-9be6623  Classes can be added when editing groups
-261f227  Releasing 0.2.1
-773bc5f  Fix nasty routing bug for hosts that contain a '.'
-a849c84  Releasing 0.2.0
+b62d71e  Update README
+d57764e  Sample external nodes script
+320c1eb  Lookup node by host name
+924d4f9  Tweak status report link text
+482448f  Tweak footer paddings
+c2d9194  Element footer (styled like table footer)
+7890b62  Move node sidebar Add button to table footer
+eb5d2c3  Add paginated reports and view more links
+49d7e02  Adding will paginate to vendor and gem.config
+f1cb4c1  [BUGFIX #2946] not showing failed icon
+6f0906c  [BUGFIX #2947] uneven lists on dashboard
+2130b97  Large update to stats and graphing
+1352421  [BUGFIX #2946] not showing failed icon
+8b17973  rake reports:import task imports report YAML files
+32c48a5  Extract data from report into reports table
+024fe93  Update install task to use file tasks
+24f37ab  More robust test of node activity feed
+3e83b56  Fix statuses controller spec
+66ca885  Updating CHANGELOG for 0.1.1
 
 v0.1.1
 ======
-da48338  No longer blowing away groups and classes when updating node
-0667504  Ignoring semver file
-de657e1  Adding Ian Comfort as a contributor
-2fa2e95  Relax rake requirement to >= 0.8.3
-ae755db  Add link to Mike Zupan's install guide
-6b34e97  Fix database.yml example
-7307b5f  Updating contributors
-0705119  Remove extra layout line in nodes controller
-9ab62c6  [Bug ##3302] pagination breaks external node
-7c06dc0  Fix node reports index routing and re-add View More
-7c63eb2  Updating key/value table CSS
-420d8b9  Reorganize report show view
-81e378b  Reorganize node show view
-8770033  Reports use new UI
-28bf686  Fix number formatting in flot graphs
-7f4c8ec  Update README
-60f670d  Basic node search (by hostname only)
-bebda1d  Removing code from old UI
-30e3eab  In place edit for class names
-282bf5c  Render correct sidebar for class show
-44d8d9b  Add puppet dashboard logo
-bc4bf35  Add id to node index checkboxes
-0ef8937  Sane paginatino per-page size
-63d434b  Remove condition on Node.by_report_date
-d20c294  Adding run time to dashboard page
-edbfbf0  Minor updates to forms CSS and nodes forms
-7643292  Update dashboard page
-2a314cb  Update header drop down styles
-bb1a5c7  Minor style updates
-11e0a75  Updating node show and adding half width style
-b1b1091  Fixing default time format
-e95c202  Updates to form CSS
-1303cca  Update node manager tab active condition
-cf283ff  Add dropdown to main nav
-503bc00  Update Node Class views to new UI
-f02cc9a  Update Node Group views to new UI
-5fc4ee8  Updates to Nodes UI
-e4e390b  Working node group and class completion
-5837819  Basic working facebook-style group autocomplete
-7698cda  Adding fcbkcomplete jQuery plugin
-df58cf3  Small tweaks to index styles
-84d35b9  New Nodes index layout and general UI styles
-b56c64b  Simplifying timeline event view and css
-b4ef0e6  Truncate node name in dashboard list
-4788194  [Bugfix #3177] Nodes groups parameter not in external node
-ee5da5c  [BUGFIX #3146] README.markdown tweak
-f9388f2  Display details on parameter changes in history.
-4751ddd  A node's last_report returned the incorrect report, since changing the default_scope order of reports.
-a010410  Fix timestamp formatting on x axis for graphs Fix order of run success graph so it shows most recent runs.
-a83f05d  Make activity timeline more verbose.
-1fca6fc  Don't show run status graph if there are no reports.
-0eb3cf1  Show number of reports for a node in node's 'show' action.
-4ed3d15  Enabling pagination for node collections.
-277791a  Add node and report management rake tasks
-4a84db7  Fixed sorting of reports in default_scope of the model.
-3729cd0  Adding node rake task. This is for adding/modifying/removing nodes in the dashboard.
-a08d992  Add where named scope
-6835156  [Bugfix #3071] Node report list should show most recent first
-67e481d  Clean up environment.rb
-846da97  Fix failing nodes controller specs
-f0f0533  Add paginated reports and view more links
-06676b2  [BUGFIX #3024] Unsuccessful report raises error on #metrics
-a19dca3  [Feature #2978] Sort nodes based on domain name
-9be6623  Classes can be added when editing groups
-261f227  Releasing 0.2.1
-773bc5f  Fix nasty routing bug for hosts that contain a '.'
-a849c84  Releasing 0.2.0
-b62d71e  Update README
-d57764e  Sample external nodes script
-320c1eb  Lookup node by host name
-924d4f9  Tweak status report link text
-482448f  Tweak footer paddings
-c2d9194  Element footer (styled like table footer)
-7890b62  Move node sidebar Add button to table footer
-eb5d2c3  Add paginated reports and view more links
-49d7e02  Adding will paginate to vendor and gem.config
-f1cb4c1  [BUGFIX #2946] not showing failed icon
-6f0906c  [BUGFIX #2947] uneven lists on dashboard
-2130b97  Large update to stats and graphing
-1352421  [BUGFIX #2946] not showing failed icon
-8b17973  rake reports:import task imports report YAML files
-32c48a5  Extract data from report into reports table
-024fe93  Update install task to use file tasks
-24f37ab  More robust test of node activity feed
-3e83b56  Fix statuses controller spec
-66ca885  Updating CHANGELOG for 0.1.1
-
-0.1.1
-=====
 df15ea5  Updating CHANGELOG for 0.1.1
+c1b5a52  Version bump 0.1.1
+1be1310  Add changelog generation task
+49109c2  [BUGFIX] Add migration for reports.success field
+40460d5  Use schema load in rake install
+522e62e  Start tracking schema.rb
 
 v0.1.0
 ======
-da48338  No longer blowing away groups and classes when updating node
-0667504  Ignoring semver file
-de657e1  Adding Ian Comfort as a contributor
-2fa2e95  Relax rake requirement to >= 0.8.3
-ae755db  Add link to Mike Zupan's install guide
-6b34e97  Fix database.yml example
-7307b5f  Updating contributors
-0705119  Remove extra layout line in nodes controller
-9ab62c6  [Bug ##3302] pagination breaks external node
-7c06dc0  Fix node reports index routing and re-add View More
-7c63eb2  Updating key/value table CSS
-420d8b9  Reorganize report show view
-81e378b  Reorganize node show view
-8770033  Reports use new UI
-28bf686  Fix number formatting in flot graphs
-7f4c8ec  Update README
-60f670d  Basic node search (by hostname only)
-bebda1d  Removing code from old UI
-30e3eab  In place edit for class names
-282bf5c  Render correct sidebar for class show
-44d8d9b  Add puppet dashboard logo
-bc4bf35  Add id to node index checkboxes
-0ef8937  Sane paginatino per-page size
-63d434b  Remove condition on Node.by_report_date
-d20c294  Adding run time to dashboard page
-edbfbf0  Minor updates to forms CSS and nodes forms
-7643292  Update dashboard page
-2a314cb  Update header drop down styles
-bb1a5c7  Minor style updates
-11e0a75  Updating node show and adding half width style
-b1b1091  Fixing default time format
-e95c202  Updates to form CSS
-1303cca  Update node manager tab active condition
-cf283ff  Add dropdown to main nav
-503bc00  Update Node Class views to new UI
-f02cc9a  Update Node Group views to new UI
-5fc4ee8  Updates to Nodes UI
-e4e390b  Working node group and class completion
-5837819  Basic working facebook-style group autocomplete
-7698cda  Adding fcbkcomplete jQuery plugin
-df58cf3  Small tweaks to index styles
-84d35b9  New Nodes index layout and general UI styles
-b56c64b  Simplifying timeline event view and css
-b4ef0e6  Truncate node name in dashboard list
-4788194  [Bugfix #3177] Nodes groups parameter not in external node
-ee5da5c  [BUGFIX #3146] README.markdown tweak
-f9388f2  Display details on parameter changes in history.
-4751ddd  A node's last_report returned the incorrect report, since changing the default_scope order of reports.
-a010410  Fix timestamp formatting on x axis for graphs Fix order of run success graph so it shows most recent runs.
-a83f05d  Make activity timeline more verbose.
-1fca6fc  Don't show run status graph if there are no reports.
-0eb3cf1  Show number of reports for a node in node's 'show' action.
-4ed3d15  Enabling pagination for node collections.
-277791a  Add node and report management rake tasks
-4a84db7  Fixed sorting of reports in default_scope of the model.
-3729cd0  Adding node rake task. This is for adding/modifying/removing nodes in the dashboard.
-a08d992  Add where named scope
-6835156  [Bugfix #3071] Node report list should show most recent first
-67e481d  Clean up environment.rb
-846da97  Fix failing nodes controller specs
-f0f0533  Add paginated reports and view more links
-06676b2  [BUGFIX #3024] Unsuccessful report raises error on #metrics
-a19dca3  [Feature #2978] Sort nodes based on domain name
-9be6623  Classes can be added when editing groups
-261f227  Releasing 0.2.1
-773bc5f  Fix nasty routing bug for hosts that contain a '.'
-a849c84  Releasing 0.2.0
-b62d71e  Update README
-d57764e  Sample external nodes script
-320c1eb  Lookup node by host name
-924d4f9  Tweak status report link text
-482448f  Tweak footer paddings
-c2d9194  Element footer (styled like table footer)
-7890b62  Move node sidebar Add button to table footer
-eb5d2c3  Add paginated reports and view more links
-49d7e02  Adding will paginate to vendor and gem.config
-f1cb4c1  [BUGFIX #2946] not showing failed icon
-6f0906c  [BUGFIX #2947] uneven lists on dashboard
-2130b97  Large update to stats and graphing
-1352421  [BUGFIX #2946] not showing failed icon
-8b17973  rake reports:import task imports report YAML files
-32c48a5  Extract data from report into reports table
-024fe93  Update install task to use file tasks
-24f37ab  More robust test of node activity feed
-3e83b56  Fix statuses controller spec
-66ca885  Updating CHANGELOG for 0.1.1
-c1b5a52  Version bump 0.1.1
-1be1310  Add changelog generation task
-49109c2  [BUGFIX] Add migration for reports.success field
-40460d5  Use schema load in rake install
-522e62e  Start tracking schema.rb
+87905c0  Updating changelog
+dae4172  Reordering of node view information, minor CSS tweak
+5475b16  Equal caption size to header
+b1cbc08  Increasing tick size in timeline graphs
+0cf3df1  Version bump 0.1.0
+e6ee999  Adding changelog
+86e93c3  Dashboard now requires MySQL
+cdc181b  Add status graphs to dashboard and status page
+3d4c34d  Adding runtime stats
+79f9d54  [Bugfix #2897] Add dependency to rake >= 0.8.4
+e81c542  [Bugfix #2912] Node class names allow "::"
+8b3ecba  Updating status javascript
+0100afd  Adding basic status info/graphs
+425849e  Fix bug in parameter assignment
 
 v0.0.2
 ======
-da48338  No longer blowing away groups and classes when updating node
-0667504  Ignoring semver file
-de657e1  Adding Ian Comfort as a contributor
-2fa2e95  Relax rake requirement to >= 0.8.3
-ae755db  Add link to Mike Zupan's install guide
-6b34e97  Fix database.yml example
-7307b5f  Updating contributors
-0705119  Remove extra layout line in nodes controller
-9ab62c6  [Bug ##3302] pagination breaks external node
-7c06dc0  Fix node reports index routing and re-add View More
-7c63eb2  Updating key/value table CSS
-420d8b9  Reorganize report show view
-81e378b  Reorganize node show view
-8770033  Reports use new UI
-28bf686  Fix number formatting in flot graphs
-7f4c8ec  Update README
-60f670d  Basic node search (by hostname only)
-bebda1d  Removing code from old UI
-30e3eab  In place edit for class names
-282bf5c  Render correct sidebar for class show
-44d8d9b  Add puppet dashboard logo
-bc4bf35  Add id to node index checkboxes
-0ef8937  Sane paginatino per-page size
-63d434b  Remove condition on Node.by_report_date
-d20c294  Adding run time to dashboard page
-edbfbf0  Minor updates to forms CSS and nodes forms
-7643292  Update dashboard page
-2a314cb  Update header drop down styles
-bb1a5c7  Minor style updates
-11e0a75  Updating node show and adding half width style
-b1b1091  Fixing default time format
-e95c202  Updates to form CSS
-1303cca  Update node manager tab active condition
-cf283ff  Add dropdown to main nav
-503bc00  Update Node Class views to new UI
-f02cc9a  Update Node Group views to new UI
-5fc4ee8  Updates to Nodes UI
-e4e390b  Working node group and class completion
-5837819  Basic working facebook-style group autocomplete
-7698cda  Adding fcbkcomplete jQuery plugin
-df58cf3  Small tweaks to index styles
-84d35b9  New Nodes index layout and general UI styles
-b56c64b  Simplifying timeline event view and css
-b4ef0e6  Truncate node name in dashboard list
-4788194  [Bugfix #3177] Nodes groups parameter not in external node
-ee5da5c  [BUGFIX #3146] README.markdown tweak
-f9388f2  Display details on parameter changes in history.
-4751ddd  A node's last_report returned the incorrect report, since changing the default_scope order of reports.
-a010410  Fix timestamp formatting on x axis for graphs Fix order of run success graph so it shows most recent runs.
-a83f05d  Make activity timeline more verbose.
-1fca6fc  Don't show run status graph if there are no reports.
-0eb3cf1  Show number of reports for a node in node's 'show' action.
-4ed3d15  Enabling pagination for node collections.
-277791a  Add node and report management rake tasks
-4a84db7  Fixed sorting of reports in default_scope of the model.
-3729cd0  Adding node rake task. This is for adding/modifying/removing nodes in the dashboard.
-a08d992  Add where named scope
-6835156  [Bugfix #3071] Node report list should show most recent first
-67e481d  Clean up environment.rb
-846da97  Fix failing nodes controller specs
-f0f0533  Add paginated reports and view more links
-06676b2  [BUGFIX #3024] Unsuccessful report raises error on #metrics
-a19dca3  [Feature #2978] Sort nodes based on domain name
-9be6623  Classes can be added when editing groups
-261f227  Releasing 0.2.1
-773bc5f  Fix nasty routing bug for hosts that contain a '.'
-a849c84  Releasing 0.2.0
-b62d71e  Update README
-d57764e  Sample external nodes script
-320c1eb  Lookup node by host name
-924d4f9  Tweak status report link text
-482448f  Tweak footer paddings
-c2d9194  Element footer (styled like table footer)
-7890b62  Move node sidebar Add button to table footer
-eb5d2c3  Add paginated reports and view more links
-49d7e02  Adding will paginate to vendor and gem.config
-f1cb4c1  [BUGFIX #2946] not showing failed icon
-6f0906c  [BUGFIX #2947] uneven lists on dashboard
-2130b97  Large update to stats and graphing
-1352421  [BUGFIX #2946] not showing failed icon
-8b17973  rake reports:import task imports report YAML files
-32c48a5  Extract data from report into reports table
-024fe93  Update install task to use file tasks
-24f37ab  More robust test of node activity feed
-3e83b56  Fix statuses controller spec
-66ca885  Updating CHANGELOG for 0.1.1
-c1b5a52  Version bump 0.1.1
-1be1310  Add changelog generation task
-49109c2  [BUGFIX] Add migration for reports.success field
-40460d5  Use schema load in rake install
-522e62e  Start tracking schema.rb
-87905c0  Updating changelog
-dae4172  Reordering of node view information, minor CSS tweak
-5475b16  Equal caption size to header
-b1cbc08  Increasing tick size in timeline graphs
-0cf3df1  Version bump 0.1.0
-e6ee999  Adding changelog
-86e93c3  Dashboard now requires MySQL
-cdc181b  Add status graphs to dashboard and status page
-3d4c34d  Adding runtime stats
-79f9d54  [Bugfix #2897] Add dependency to rake >= 0.8.4
-e81c542  [Bugfix #2912] Node class names allow "::"
-8b3ecba  Updating status javascript
-0100afd  Adding basic status info/graphs
-425849e  Fix bug in parameter assignment
-
-v0.0.1
-======
-da48338  No longer blowing away groups and classes when updating node
-0667504  Ignoring semver file
-de657e1  Adding Ian Comfort as a contributor
-2fa2e95  Relax rake requirement to >= 0.8.3
-ae755db  Add link to Mike Zupan's install guide
-6b34e97  Fix database.yml example
-7307b5f  Updating contributors
-0705119  Remove extra layout line in nodes controller
-9ab62c6  [Bug ##3302] pagination breaks external node
-7c06dc0  Fix node reports index routing and re-add View More
-7c63eb2  Updating key/value table CSS
-420d8b9  Reorganize report show view
-81e378b  Reorganize node show view
-8770033  Reports use new UI
-28bf686  Fix number formatting in flot graphs
-7f4c8ec  Update README
-60f670d  Basic node search (by hostname only)
-bebda1d  Removing code from old UI
-30e3eab  In place edit for class names
-282bf5c  Render correct sidebar for class show
-44d8d9b  Add puppet dashboard logo
-bc4bf35  Add id to node index checkboxes
-0ef8937  Sane paginatino per-page size
-63d434b  Remove condition on Node.by_report_date
-d20c294  Adding run time to dashboard page
-edbfbf0  Minor updates to forms CSS and nodes forms
-7643292  Update dashboard page
-2a314cb  Update header drop down styles
-bb1a5c7  Minor style updates
-11e0a75  Updating node show and adding half width style
-b1b1091  Fixing default time format
-e95c202  Updates to form CSS
-1303cca  Update node manager tab active condition
-cf283ff  Add dropdown to main nav
-503bc00  Update Node Class views to new UI
-f02cc9a  Update Node Group views to new UI
-5fc4ee8  Updates to Nodes UI
-e4e390b  Working node group and class completion
-5837819  Basic working facebook-style group autocomplete
-7698cda  Adding fcbkcomplete jQuery plugin
-df58cf3  Small tweaks to index styles
-84d35b9  New Nodes index layout and general UI styles
-b56c64b  Simplifying timeline event view and css
-b4ef0e6  Truncate node name in dashboard list
-4788194  [Bugfix #3177] Nodes groups parameter not in external node
-ee5da5c  [BUGFIX #3146] README.markdown tweak
-f9388f2  Display details on parameter changes in history.
-4751ddd  A node's last_report returned the incorrect report, since changing the default_scope order of reports.
-a010410  Fix timestamp formatting on x axis for graphs Fix order of run success graph so it shows most recent runs.
-a83f05d  Make activity timeline more verbose.
-1fca6fc  Don't show run status graph if there are no reports.
-0eb3cf1  Show number of reports for a node in node's 'show' action.
-4ed3d15  Enabling pagination for node collections.
-277791a  Add node and report management rake tasks
-4a84db7  Fixed sorting of reports in default_scope of the model.
-3729cd0  Adding node rake task. This is for adding/modifying/removing nodes in the dashboard.
-a08d992  Add where named scope
-6835156  [Bugfix #3071] Node report list should show most recent first
-67e481d  Clean up environment.rb
-846da97  Fix failing nodes controller specs
-f0f0533  Add paginated reports and view more links
-06676b2  [BUGFIX #3024] Unsuccessful report raises error on #metrics
-a19dca3  [Feature #2978] Sort nodes based on domain name
-9be6623  Classes can be added when editing groups
-261f227  Releasing 0.2.1
-773bc5f  Fix nasty routing bug for hosts that contain a '.'
-a849c84  Releasing 0.2.0
-b62d71e  Update README
-d57764e  Sample external nodes script
-320c1eb  Lookup node by host name
-924d4f9  Tweak status report link text
-482448f  Tweak footer paddings
-c2d9194  Element footer (styled like table footer)
-7890b62  Move node sidebar Add button to table footer
-eb5d2c3  Add paginated reports and view more links
-49d7e02  Adding will paginate to vendor and gem.config
-f1cb4c1  [BUGFIX #2946] not showing failed icon
-6f0906c  [BUGFIX #2947] uneven lists on dashboard
-2130b97  Large update to stats and graphing
-1352421  [BUGFIX #2946] not showing failed icon
-8b17973  rake reports:import task imports report YAML files
-32c48a5  Extract data from report into reports table
-024fe93  Update install task to use file tasks
-24f37ab  More robust test of node activity feed
-3e83b56  Fix statuses controller spec
-66ca885  Updating CHANGELOG for 0.1.1
-c1b5a52  Version bump 0.1.1
-1be1310  Add changelog generation task
-49109c2  [BUGFIX] Add migration for reports.success field
-40460d5  Use schema load in rake install
-522e62e  Start tracking schema.rb
-87905c0  Updating changelog
-dae4172  Reordering of node view information, minor CSS tweak
-5475b16  Equal caption size to header
-b1cbc08  Increasing tick size in timeline graphs
-0cf3df1  Version bump 0.1.0
-e6ee999  Adding changelog
-86e93c3  Dashboard now requires MySQL
-cdc181b  Add status graphs to dashboard and status page
-3d4c34d  Adding runtime stats
-79f9d54  [Bugfix #2897] Add dependency to rake >= 0.8.4
-e81c542  [Bugfix #2912] Node class names allow "::"
-8b3ecba  Updating status javascript
-0100afd  Adding basic status info/graphs
-425849e  Fix bug in parameter assignment
 a8d2b39  Version 0.0.2
 1c9bce1  Add reported_at to Node, updated by report creation
 bd878de  Adding rake to dependencies list
@@ -672,8 +366,8 @@ dfe9f21  has_parameters accepts options for has_many
 265988f  Add copy database.yml task to rake install
 75a6b0b  README is a markdown file (for github)
 
-0.0.1
-=====
+v0.0.1
+======
 8a6cf1d  Adding VERSION file
 b78e9da  Fix bug in node group graphing
 fe84f81  Update README for release

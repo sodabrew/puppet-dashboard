@@ -1,0 +1,156 @@
+--- !ruby/object:Puppet::Transaction::Report
+  external_times: 
+    !ruby/sym config_retrieval: 0.31462287902832
+  host: puppet.puppetlabs.vm
+  logs: 
+    - !ruby/object:Puppet::Util::Log
+      level: !ruby/sym info
+      message: Caching catalog for puppet.puppetlabs.vm
+      source: Puppet
+      tags: 
+        - info
+      time: 2010-07-22 14:42:39.593715 -04:00
+      version: &id001 2.6.0
+    - !ruby/object:Puppet::Util::Log
+      level: !ruby/sym info
+      message: Applying configuration version '1279824159'
+      source: Puppet
+      tags: 
+        - info
+      time: 2010-07-22 14:42:39.649394 -04:00
+      version: *id001
+  metrics: 
+    time: !ruby/object:Puppet::Util::Metric
+      label: Time
+      name: time
+      values: 
+        - - schedule
+          - Schedule
+          - 0.001273
+        - - config_retrieval
+          - Config retrieval
+          - 0.31462287902832
+        - - filebucket
+          - Filebucket
+          - 0.000227
+        - - file
+          - File
+          - 0.000868
+    resources: !ruby/object:Puppet::Util::Metric
+      label: Resources
+      name: resources
+      values: 
+        - - !ruby/sym total
+          - Total
+          - 8
+    changes: !ruby/object:Puppet::Util::Metric
+      label: Changes
+      name: changes
+      values: []
+    events: !ruby/object:Puppet::Util::Metric
+      label: Events
+      name: events
+      values: 
+        - - !ruby/sym total
+          - Total
+          - 0
+  resource_statuses: 
+    "Filebucket[puppet]": !ruby/object:Puppet::Resource::Status
+      evaluation_time: 0.000227
+      events: []
+      file: 
+      line: 
+      resource: "Filebucket[puppet]"
+      source_description: "/Filebucket[puppet]"
+      tags: 
+        - filebucket
+        - puppet
+      time: 2010-07-22 14:42:39.655854 -04:00
+      version: 1279824159
+    "Schedule[weekly]": !ruby/object:Puppet::Resource::Status
+      evaluation_time: 0.000195
+      events: []
+      file: 
+      line: 
+      resource: "Schedule[weekly]"
+      source_description: "/Schedule[weekly]"
+      tags: 
+        - schedule
+        - weekly
+      time: 2010-07-22 14:42:39.656464 -04:00
+      version: 1279824159
+    "Schedule[hourly]": !ruby/object:Puppet::Resource::Status
+      evaluation_time: 0.000197
+      events: []
+      file: 
+      line: 
+      resource: "Schedule[hourly]"
+      source_description: "/Schedule[hourly]"
+      tags: 
+        - schedule
+        - hourly
+      time: 2010-07-22 14:42:39.651841 -04:00
+      version: 1279824159
+    "Schedule[daily]": !ruby/object:Puppet::Resource::Status
+      evaluation_time: 0.000181
+      events: []
+      file: 
+      line: 
+      resource: "Schedule[daily]"
+      source_description: "/Schedule[daily]"
+      tags: 
+        - schedule
+        - daily
+      time: 2010-07-22 14:42:39.653704 -04:00
+      version: 1279824159
+    "Schedule[puppet]": !ruby/object:Puppet::Resource::Status
+      evaluation_time: 0.000303
+      events: []
+      file: 
+      line: 
+      resource: "Schedule[puppet]"
+      source_description: "/Schedule[puppet]"
+      tags: 
+        - schedule
+        - puppet
+      time: 2010-07-22 14:42:39.651127 -04:00
+      version: 1279824159
+    "Schedule[monthly]": !ruby/object:Puppet::Resource::Status
+      evaluation_time: 0.000196
+      events: []
+      file: 
+      line: 
+      resource: "Schedule[monthly]"
+      source_description: "/Schedule[monthly]"
+      tags: 
+        - schedule
+        - monthly
+      time: 2010-07-22 14:42:39.653043 -04:00
+      version: 1279824159
+    "File[/tmp/foo]": !ruby/object:Puppet::Resource::Status
+      evaluation_time: 0.000868
+      events: []
+      file: /etc/puppet/manifests/site.pp
+      line: 2
+      resource: "File[/tmp/foo]"
+      source_description: "/Stage[main]//Node[default]/File[/tmp/foo]"
+      tags: 
+        - file
+        - node
+        - default
+        - class
+      time: 2010-07-22 14:42:39.654436 -04:00
+      version: 1279824159
+    "Schedule[never]": !ruby/object:Puppet::Resource::Status
+      evaluation_time: 0.000201
+      events: []
+      file: 
+      line: 
+      resource: "Schedule[never]"
+      source_description: "/Schedule[never]"
+      tags: 
+        - schedule
+        - never
+      time: 2010-07-22 14:42:39.652458 -04:00
+      version: 1279824159
+  time: 2010-07-22 14:42:38.418873 -04:00

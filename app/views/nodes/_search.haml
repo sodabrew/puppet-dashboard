@@ -1,3 +1,5 @@
-- form_tag request.url, :class => 'search', :method => :get do
+- form_tag url_for(:action => action_name), :class => 'search', :method => :get do
   = text_field_tag 'q', params[:q]
+  = hidden_field_tag 'current', params[:current]
+  = hidden_field_tag 'successful', params[:successful]
   %button Search

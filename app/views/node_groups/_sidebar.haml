@@ -1,6 +1,0 @@
-.group
-  %h3 Groups
-  %ul
-    %li{:class => active_if(controller_name == 'node_classes' && action_name == 'index')}
-      = link_to "All", node_groups_path
-      %span.count= NodeGroup.count

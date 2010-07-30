@@ -27,7 +27,7 @@ class ApplicationController < ActionController::Base
   def require_user
     unless current_user
       store_location
-      flash[:notice] = "You must be logged in to access this page"
+      flash[:error] = "You must be logged in to access this page"
       redirect_to new_user_session_url
       return false
     end
@@ -36,7 +36,7 @@ class ApplicationController < ActionController::Base
   def require_no_user
     if current_user
       store_location
-      flash[:notice] = "You must be logged out to access this page"
+      flash[:error] = "You must be logged out to access this page"
       redirect_to account_url
       return false
     end
@@ -59,10 +59,4 @@ class ApplicationController < ActionController::Base
       params[param][:parameters] = {}
     end
   end
-
-  # Add pagination to the current InheritedResources collection.
-  def paginate_collection!
-    set_collection_ivar(get_collection_ivar.paginate(:page => params[:page]))
-  end
-
 end

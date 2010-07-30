@@ -1,11 +1,7 @@
-require "#{RAILS_ROOT}/lib/puppet/report"
-
 class Node < ActiveRecord::Base
   def self.per_page; 20 end # Pagination
 
   include NodeGroupGraph
-
-  default_scope :order => 'name ASC'
 
   validates_presence_of :name
   validates_uniqueness_of :name
@@ -16,8 +12,9 @@ class Node < ActiveRecord::Base
   has_many :node_groups, :through => :node_group_memberships
 
   has_many :reports, :dependent => :destroy
-  has_one :last_report, :class_name => 'Report', :order => 'time DESC'
+  belongs_to :last_report, :class_name => 'Report'
 
+  named_scope :with_last_report, :include => :last_report
   named_scope :by_report_date, :order => 'reported_at DESC'
 
   named_scope :search, lambda{|q| q.blank? ? {} : {:conditions => ['name LIKE ?', "%#{q}%"]} }
@@ -35,22 +32,56 @@ class Node < ActiveRecord::Base
   fires :removed, :on => :destroy
 
   # RH:TODO: Denormalize last report status into nodes table.
-  named_scope :successful, :select => 'DISTINCT `nodes`.name, `nodes`.*', :joins => 'INNER JOIN reports on reports.time = reported_at', :conditions => 'reports.success = 1 AND (`nodes`.id = reports.node_id)', :order => "reported_at DESC"
-  named_scope :failed, :select => 'DISTINCT `nodes`.name, `nodes`.*', :joins => 'LEFT OUTER JOIN reports on reports.time = reported_at', :conditions => 'reports.success = 0 AND (`nodes`.id = reports.node_id)', :order => "reported_at DESC"
 
+  # Return nodes based on their currentness and successfulness.
+  #
+  # The terms are:
+  # * currentness: +true+ uses the latest report (current) and +false+ uses any report.
+  # * successfulness: +true+ means a successful report, +false+ a failing report.
+  #
+  # Thus:
+  # * current and successful: Return only nodes that are currently successful.
+  # * current and failing: Return only nodes that are currently failing.
+  # * non-current and successful: Return any nodes that ever had a successful report.
+  # * non-current and failing: Return any nodes that ever had a failing report.
+  named_scope :by_currentness_and_successfulness, lambda {|currentness, successfulness|
+    if currentness
+      { :conditions => ['nodes.success = ?', successfulness] }
+    else
+      {
+        :conditions => ['reports.success = ?', successfulness],
+        :joins => :reports,
+        :group => 'nodes.id',
+      }
+    end
+  }
+
+  # Return nodes that have never reported.
   named_scope :unreported, :conditions => {:reported_at => nil}
-  named_scope :no_longer_reporting, :conditions => ['reported_at < ?', 30.minutes.ago]
 
-  def self.count_successful
-    successful.count(:name, :distinct => true)
+  # Seconds in the past since a node's last report for a node to be considered no longer reporting.
+  # Defaults to twice the default puppet run period to prevent timing errors.
+  NO_LONGER_REPORTING_CUTOFF = 1.hour
+
+  # Return nodes that haven't reported recently.
+  named_scope :no_longer_reporting, :conditions => ['reported_at < ?', NO_LONGER_REPORTING_CUTOFF.ago]
+
+  def self.count_by_currentness_and_successfulness(currentness, successfulness)
+    # FIXME The #length call is inefficient, but how do I make #count work since it lacks support for :having?
+    # self.by_currentness_and_successfulness(currentness, successfulness).count(:id, :distinct => :id)
+    self.by_currentness_and_successfulness(currentness, successfulness).length
   end
 
-  def self.count_failed
-    failed.count(:name, :distinct => true)
+  def self.label_for_currentness_and_successfulness(currentness, successfulness)
+    return "#{currentness ? 'Currently' : 'Ever'} #{successfulness ? (currentness ? 'successful' : 'succeeded') : (currentness ? 'failing' : 'failed')}"
   end
 
   def self.count_unreported
     unreported.count
+  end
+
+  def self.count_no_longer_reporting
+    no_longer_reporting.count
   end
 
   def to_param
@@ -128,5 +159,9 @@ class Node < ActiveRecord::Base
   def assign_node_groups
     return true unless @node_group_names
     self.node_groups = (@node_group_names || []).reject(&:blank?).map{|name| NodeGroup.find_by_name(name)}
+  end
+
+  def find_last_report
+    return Report.find_last_for(self)
   end
 end

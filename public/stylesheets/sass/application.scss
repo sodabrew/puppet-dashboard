@@ -43,17 +43,18 @@ $rounding_radius: 0.35em;
   background: -moz-linear-gradient(top, lighten($button_background, $button_gradient_percentage), darken($button_background, $button_gradient_percentage));
   background: -webkit-gradient(linear, center top, center bottom, from(lighten($button_background, $button_gradient_percentage)), to(darken($button_background, $button_gradient_percentage)));
   border: 1px solid #DDD;
-  border-color: #FFF #AAA #AAA #FFF;
+  border-color: #CCC #AAA #AAA #CCC;
   color: white;
   cursor: pointer;
-  font-size: 1.1em;
+  font-size: 1em;
   line-height: 1.5em;
   margin: 0.25em;
-  padding: 0 .5em;
+  padding: .15em .65em;
+  white-space: nowrap;
 
   &:hover {
     text-decoration: none;
-    color: yellow;
+    color: #FFFFCC;
     background: $button_hover_background -moz-linear-gradient(top, lighten($button_hover_background, $button_gradient_percentage), darken($button_hover_background, $button_gradient_percentage));
     background: $button_hover_background -webkit-gradient(linear, 0% 0%, 0% 100%, from(lighten($button_hover_background, $button_gradient_percentage), to(darken($button_hover_background, $button_gradient_percentage))));
   }
@@ -68,13 +69,86 @@ $rounding_radius: 0.35em;
   }
 }
 
+@mixin icony_section($icon_name, $header_foreground, $header_background, $section_foreground, $section_background, $border_color) {
+  @include rounded;
+  padding: 10px 10px 0;
+  background: $section_background;
+  border: 1px solid $border_color;
+  color: $section_foreground;
+
+  h3 {
+    margin: -10px -10px .5em;
+    padding: .5em 10px .5em 26px;
+    background: $header_background url('../images/icons/' + $icon_name + '.png') 5px center no-repeat;
+    color: $header_foreground;
+  }
+
+  p:last-child {
+    padding-bottom: 0;
+    margin-bottom: 0.75em;
+  }
+}
+
+@mixin reporty_level_row($background_color, $darken_amount: 3%) {
+    &:nth-child(even) td {
+        background: darken($background_color, $darken_amount);
+    }
+    td {
+        background: $background_color;
+    }
+}
+
 body {
   background: #e8eef0;
   color: #444;
-  min-width: 800px;
+  min-width: 400px;
 
   #content {
     padding: 1.5em 0 2em;
+  }
+
+  #header {
+    padding: 1em 0 0;
+
+    ul {
+      &#secondary-navigation {
+        float: right;
+        top: -1.5em;
+
+        li {
+          list-style-type: none;
+          float: left;
+          margin-right: 0.8em;
+        }
+      }
+
+      &.navigation {
+        li {
+          display: block;
+          float: left;
+          margin-right: 1em;
+
+          &.active > a,
+          &.active > a:hover {
+            font-weight: bold;
+          }
+        }
+      }
+    }
+
+    a#logo {
+      background: transparent url('../images/dashboard_logo.png') no-repeat top center;
+      text-indent: -9000px;
+      display: inline-block;
+      height: 23px;
+      width: 155px;
+      position: relative;
+      top: 1px;
+
+      &:hover {
+        background-position: bottom center;
+      }
+    }
   }
 
   #footer {
@@ -103,19 +177,18 @@ body {
       padding: 0 .25em;
       line-height: 1.75em;
     }
-  }
 
-  a#logo {
-    background: transparent url('../images/dashboard_logo.png') no-repeat top center;
-    text-indent: -9000px;
-    display: block;
-    height: 23px;
-    width: 155px;
-    position: relative;
-    top: 1px;
+    h2 {
+        &.half {
+            width: 0%;
+            margin-right: 5%;
+            float: left;
+            white-space: nowrap;
+        }
 
-    &:hover {
-      background-position: bottom center;
+        img {
+          vertical-align: -0.15em;
+        }
     }
   }
 
@@ -127,15 +200,13 @@ body {
   }
 
   ol.timeline li {
-    list-style-type: none;
-    padding-left: 20px;
-    margin-bottom: 5px;
-    position: relative;
+    list-style-type: disc;
+    margin-left: 2em;
 
     span.date {
       color: #666;
       display: inline-block;
-      width: 9em;
+      width: 12em;
     }
   }
 
@@ -207,6 +278,18 @@ body {
     @include buttony;
   }
 
+  a.button.warning, button.warning { background: #C66; }
+
+  .header a.button,
+  .header button {
+    font-size: 1.2em;
+    margin: .15em 0;
+  }
+
+  .header ul.actions {
+    margin-left: .25em;
+  }
+
   .actions {
     font-size: 12px;
   }
@@ -271,7 +354,7 @@ body {
             border: 0; }
 
           &.active {
-            background: #e2edf5; }
+            background: #FFFFCC; }
 
           a {
             padding: .25em .5em;
@@ -280,6 +363,10 @@ body {
 
           span.count {
             background: #DDD;
+
+            &.failure {
+                background: #DD9B9B;
+            }
           }
         }
       }
@@ -301,7 +388,7 @@ body {
   /* ACTIONBAR */
 
   .actionbar {
-    @include rounded;
+    @include rounded_bottom;
     background: #DDD;
     padding: 1px;
 
@@ -320,7 +407,8 @@ body {
     .pagination {
       font-size: 12px;
       padding: .1em .5em;
-      float: right;
+      float: left;
+      padding-left: 0.5em;
     }
 
     .dropdown {
@@ -347,12 +435,21 @@ body {
     clear: both;
   }
 
+  .nowrap {
+    white-space: nowrap;
+  }
+
   .item {
     @include rounded_bottom;
     background: #FFF;
     padding: 1em;
     margin-bottom: 1em;
     overflow: hidden;
+
+    &:last-child {
+        padding-bottom: 0;
+        margin-bottom: 0;
+    }
   }
 
   .half {
@@ -364,36 +461,94 @@ body {
   .section {
     margin-bottom: 1.5em;
 
-    &.error, &.warning {
-      @include rounded;
-      padding: 10px 10px 0;
+    &.error {
+      @include icony_section('failure', 
+        #433, #FCC, 
+        #433, #FDD, 
+        #FCC);
     }
 
-    &.error {
-      background: #FDD;
-      border: 1px solid #FCC;
-      color: #433;
-
-      h3 {
-        margin: -10px -10px .5em;
-        padding: .5em 10px .5em 26px;
-        background: #ffcccc url('../images/icons/failure.png') 8px center no-repeat;
-        color: #433;
-      }
+    &.failure {
+      @include icony_section('failure', 
+        #433, #FCC, 
+        #433, #FDD, 
+        #FCC);
     }
 
     &.warning {
-      background: #DDD;
-      border: 1px solid #CCC;
-      color: #444;
-
-      h3 {
-        margin: -10px -10px .5em;
-        padding: .5em 10px;
-        background: #cccccc url('../images/icons/warning.png') 8px center no-repeat;
-        color: #444;
-      }
+      @include icony_section('warning', 
+        #444, #DCC, 
+        #433, #EDD, 
+        #DCC);
     }
 
+    &.success {
+      @include icony_section('warning', 
+        #444, #CDC, 
+        #343, #DED, 
+        #CDC);
+    }
+
+    &.notice {
+      @include icony_section('notice', 
+        #444, #CCC, 
+        #333, #DDD, 
+        #CCC);
+    }
+
+    &#flash {
+      margin-left: auto;
+      margin-right: auto;
+      width: 50%;
+      position: relative;
+
+      & .close {
+        position: absolute;
+        top: 0;
+        right: 0;
+      }
+
+      & img {
+      vertical-align: top;
+      }
+    }
+  }
+
+  &.reports_show_action {
+    .section {
+      margin-left: 1em;
+    }
+
+    h4 {
+      color: #444;
+    }
+
+    table.inspector {
+      td.key {
+        text-align: right;
+        white-space: nowrap;
+      }
+    }
+  }
+
+  &.pages_release_notes_action {
+    .markeddown {
+        h2 {
+            margin-top: 1em;
+            margin-bottom: 0.15em;
+        }
+    }
+  }
+
+  &.reports_show_action {
+    tr.puppet_log {
+        &.puppet_log_level_err {
+            @include reporty_level_row(#FFD6D6);
+        }
+
+        &.puppet_log_level_warning {
+            @include reporty_level_row(#FFEBD6);
+        }
+    }
   }
 }

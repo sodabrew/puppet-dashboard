@@ -13,10 +13,10 @@
           %button Save
           %li= link_to 'Cancel', @node_class, :class => 'button'
 
-  - unless @node_class.nodes.empty?
-    .item
+  .item
+    - if @node_class.nodes.present?
       .section
-        %h3
-          Daily Run Status
-        = render 'statuses/run_failure', :statuses => Status.by_interval(:limit => 30, :nodes => @node_class.nodes)
+        = render 'statuses/run_failure', :nodes => @node_class.nodes
+    .section
+      %h3 Nodes in this class
       = render 'nodes/nodes', :nodes => @node_class.nodes

@@ -1,0 +1,356 @@
+--- !ruby/object:Puppet::Transaction::Report
+  external_times: 
+    !ruby/sym config_retrieval: 0.745099067687988
+  host: puppet.puppetlabs.vm
+  logs: 
+    - !ruby/object:Puppet::Util::Log
+      level: !ruby/sym info
+      message: Caching catalog for puppet.puppetlabs.vm
+      source: Puppet
+      tags: 
+        - info
+      time: 2010-07-22 12:13:48.938456 -07:00
+      version: &id001 2.6.0
+    - !ruby/object:Puppet::Util::Log
+      level: !ruby/sym info
+      message: Applying configuration version '1279826028'
+      source: Puppet
+      tags: 
+        - info
+      time: 2010-07-22 12:13:49.269981 -07:00
+      version: *id001
+    - !ruby/object:Puppet::Util::Log
+      file: &id002 /etc/puppet/manifests/site.pp
+      level: !ruby/sym notice
+      line: 20
+      message: &id005 enable changed 'false' to 'true'
+      source: &id006 "/Stage[main]//Node[default]/Service[mysqld]/enable"
+      tags: 
+        - notice
+        - service
+        - mysqld
+        - node
+        - default
+        - class
+      time: 2010-07-22 12:13:49.555021 -07:00
+      version: 1279826028
+    - !ruby/object:Puppet::Util::Log
+      file: *id002
+      level: !ruby/sym notice
+      line: 10
+      message: &id007 created
+      source: &id008 "/Stage[main]//Node[default]/File[/tmp/missingparent]/ensure"
+      tags: 
+        - notice
+        - file
+        - node
+        - default
+        - class
+      time: 2010-07-22 12:13:49.559010 -07:00
+      version: 1279826028
+    - !ruby/object:Puppet::Util::Log
+      file: *id002
+      level: !ruby/sym notice
+      line: 10
+      message: &id003 created
+      source: &id004 "/Stage[main]//Node[default]/File[/tmp/missingparent/child1]/ensure"
+      tags: 
+        - notice
+        - file
+        - node
+        - default
+        - class
+      time: 2010-07-22 12:13:49.562462 -07:00
+      version: 1279826028
+  metrics: 
+    time: !ruby/object:Puppet::Util::Metric
+      label: Time
+      name: time
+      values: 
+        - - schedule
+          - Schedule
+          - 0.001436
+        - - service
+          - Service
+          - 0.276322
+        - - config_retrieval
+          - Config retrieval
+          - 0.745099067687988
+        - - package
+          - Package
+          - 0.00075
+        - - filebucket
+          - Filebucket
+          - 0.000228
+        - - file
+          - File
+          - 0.007224
+    resources: !ruby/object:Puppet::Util::Metric
+      label: Resources
+      name: resources
+      values: 
+        - - !ruby/sym total
+          - Total
+          - 13
+        - - !ruby/sym changed
+          - Changed
+          - 3
+        - - !ruby/sym out_of_sync
+          - Out of sync
+          - 3
+    changes: !ruby/object:Puppet::Util::Metric
+      label: Changes
+      name: changes
+      values: 
+        - - !ruby/sym total
+          - Total
+          - 3
+    events: !ruby/object:Puppet::Util::Metric
+      label: Events
+      name: events
+      values: 
+        - - !ruby/sym total
+          - Total
+          - 3
+        - - success
+          - Success
+          - 3
+  resource_statuses: 
+    "Schedule[weekly]": !ruby/object:Puppet::Resource::Status
+      evaluation_time: 0.000208
+      events: []
+      file: 
+      line: 
+      resource: "Schedule[weekly]"
+      source_description: "/Schedule[weekly]"
+      tags: 
+        - schedule
+        - weekly
+      time: 2010-07-22 12:13:49.566659 -07:00
+      version: 1279826028
+    "Filebucket[puppet]": !ruby/object:Puppet::Resource::Status
+      evaluation_time: 0.000228
+      events: []
+      file: 
+      line: 
+      resource: "Filebucket[puppet]"
+      source_description: "/Filebucket[puppet]"
+      tags: 
+        - filebucket
+        - puppet
+      time: 2010-07-22 12:13:49.567409 -07:00
+      version: 1279826028
+    "Package[mysql-server]": !ruby/object:Puppet::Resource::Status
+      evaluation_time: 0.00075
+      events: []
+      file: *id002
+      line: 13
+      resource: "Package[mysql-server]"
+      source_description: "/Stage[main]//Node[default]/Package[mysql-server]"
+      tags: 
+        - package
+        - mysql-server
+        - node
+        - default
+        - class
+      time: 2010-07-22 12:13:49.276308 -07:00
+      version: 1279826028
+    "File[/tmp/missingparent/child1]": !ruby/object:Puppet::Resource::Status
+      change_count: 1
+      changed: true
+      evaluation_time: 0.002831
+      events: 
+        - !ruby/object:Puppet::Transaction::Event
+          default_log_level: !ruby/sym notice
+          desired_value: !ruby/sym directory
+          file: *id002
+          line: 10
+          message: *id003
+          name: !ruby/sym directory_created
+          previous_value: !ruby/sym absent
+          property: ensure
+          resource: "File[/tmp/missingparent/child1]"
+          source_description: *id004
+          status: success
+          tags: 
+            - file
+            - node
+            - default
+            - class
+          time: 2010-07-22 12:13:49.562391 -07:00
+          version: 1279826028
+      file: *id002
+      line: 10
+      out_of_sync: true
+      resource: "File[/tmp/missingparent/child1]"
+      source_description: "/Stage[main]//Node[default]/File[/tmp/missingparent/child1]"
+      tags: 
+        - file
+        - node
+        - default
+        - class
+      time: 2010-07-22 12:13:49.561315 -07:00
+      version: 1279826028
+    "File[/etc/localtime]": !ruby/object:Puppet::Resource::Status
+      evaluation_time: 0.000665
+      events: []
+      file: *id002
+      line: 5
+      resource: "File[/etc/localtime]"
+      source_description: "/Stage[main]//Node[default]/File[/etc/localtime]"
+      tags: 
+        - file
+        - node
+        - default
+        - class
+      time: 2010-07-22 12:13:49.565564 -07:00
+      version: 1279826028
+    "Schedule[hourly]": !ruby/object:Puppet::Resource::Status
+      evaluation_time: 0.000224
+      events: []
+      file: 
+      line: 
+      resource: "Schedule[hourly]"
+      source_description: "/Schedule[hourly]"
+      tags: 
+        - schedule
+        - hourly
+      time: 2010-07-22 12:13:49.275565 -07:00
+      version: 1279826028
+    "Schedule[daily]": !ruby/object:Puppet::Resource::Status
+      evaluation_time: 0.00029
+      events: []
+      file: 
+      line: 
+      resource: "Schedule[daily]"
+      source_description: "/Schedule[daily]"
+      tags: 
+        - schedule
+        - daily
+      time: 2010-07-22 12:13:49.568913 -07:00
+      version: 1279826028
+    "File[/tmp/foo]": !ruby/object:Puppet::Resource::Status
+      evaluation_time: 0.001115
+      events: []
+      file: *id002
+      line: 2
+      resource: "File[/tmp/foo]"
+      source_description: "/Stage[main]//Node[default]/File[/tmp/foo]"
+      tags: 
+        - file
+        - node
+        - default
+        - class
+      time: 2010-07-22 12:13:49.272662 -07:00
+      version: 1279826028
+    "Schedule[puppet]": !ruby/object:Puppet::Resource::Status
+      evaluation_time: 0.000236
+      events: []
+      file: 
+      line: 
+      resource: "Schedule[puppet]"
+      source_description: "/Schedule[puppet]"
+      tags: 
+        - schedule
+        - puppet
+      time: 2010-07-22 12:13:49.564740 -07:00
+      version: 1279826028
+    "Schedule[monthly]": !ruby/object:Puppet::Resource::Status
+      evaluation_time: 0.000218
+      events: []
+      file: 
+      line: 
+      resource: "Schedule[monthly]"
+      source_description: "/Schedule[monthly]"
+      tags: 
+        - schedule
+        - monthly
+      time: 2010-07-22 12:13:49.568173 -07:00
+      version: 1279826028
+    "Schedule[never]": !ruby/object:Puppet::Resource::Status
+      evaluation_time: 0.00026
+      events: []
+      file: 
+      line: 
+      resource: "Schedule[never]"
+      source_description: "/Schedule[never]"
+      tags: 
+        - schedule
+        - never
+      time: 2010-07-22 12:13:49.274323 -07:00
+      version: 1279826028
+    "Service[mysqld]": !ruby/object:Puppet::Resource::Status
+      change_count: 1
+      changed: true
+      evaluation_time: 0.276322
+      events: 
+        - !ruby/object:Puppet::Transaction::Event
+          default_log_level: !ruby/sym notice
+          desired_value: !ruby/sym "true"
+          file: *id002
+          line: 20
+          message: *id005
+          name: !ruby/sym service_enabled
+          previous_value: !ruby/sym "false"
+          property: enable
+          resource: "Service[mysqld]"
+          source_description: *id006
+          status: success
+          tags: 
+            - service
+            - mysqld
+            - node
+            - default
+            - class
+          time: 2010-07-22 12:13:49.554861 -07:00
+          version: 1279826028
+      file: *id002
+      line: 20
+      out_of_sync: true
+      resource: "Service[mysqld]"
+      source_description: "/Stage[main]//Node[default]/Service[mysqld]"
+      tags: 
+        - service
+        - mysqld
+        - node
+        - default
+        - class
+      time: 2010-07-22 12:13:49.280488 -07:00
+      version: 1279826028
+    "File[/tmp/missingparent]": !ruby/object:Puppet::Resource::Status
+      change_count: 1
+      changed: true
+      evaluation_time: 0.002613
+      events: 
+        - !ruby/object:Puppet::Transaction::Event
+          default_log_level: !ruby/sym notice
+          desired_value: !ruby/sym directory
+          file: *id002
+          line: 10
+          message: *id007
+          name: !ruby/sym directory_created
+          previous_value: !ruby/sym absent
+          property: ensure
+          resource: "File[/tmp/missingparent]"
+          source_description: *id008
+          status: success
+          tags: 
+            - file
+            - node
+            - default
+            - class
+          time: 2010-07-22 12:13:49.558928 -07:00
+          version: 1279826028
+      file: *id002
+      line: 10
+      out_of_sync: true
+      resource: "File[/tmp/missingparent]"
+      source_description: "/Stage[main]//Node[default]/File[/tmp/missingparent]"
+      tags: 
+        - file
+        - node
+        - default
+        - class
+      time: 2010-07-22 12:13:49.557831 -07:00
+      version: 1279826028
+  time: 2010-07-22 12:13:47.371767 -07:00

@@ -1,0 +1,2 @@
+%span{:title => report ? report_title_text(report) : 'No reports'}
+  = report ? (report.success? ? icon(:success) : icon(:failure)) : icon(:error)
