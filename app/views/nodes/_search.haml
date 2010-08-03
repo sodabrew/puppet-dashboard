@@ -1,5 +1,5 @@
 - form_tag url_for(:action => action_name), :class => 'search', :method => :get do
   = text_field_tag 'q', params[:q]
-  = hidden_field_tag 'current', params[:current]
-  = hidden_field_tag 'successful', params[:successful]
+  = hidden_field_tag('current', params[:current]) if params[:current].present?
+  = hidden_field_tag('successful', params[:successful]) if params[:successful].present?
   %button Search
