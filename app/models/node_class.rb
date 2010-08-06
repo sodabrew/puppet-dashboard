@@ -1,5 +1,8 @@
 class NodeClass < ActiveRecord::Base
-  has_many :node_class_memberships
+  has_many :node_group_class_memberships, :dependent => :destroy
+  has_many :node_class_memberships, :dependent => :destroy
+
+  has_many :node_groups, :through => :node_group_class_memberships
   has_many :nodes, :through => :node_class_memberships
 
   validates_presence_of :name

@@ -327,14 +327,34 @@ describe Node do
 
   describe "destroying" do
     before do
-      @node = Node.generate!(:name => 'sample_node')
-      @report = Report.generate!
+      @node = Node.generate!(:name => 'gonnadienode')
     end
 
-    subject { lambda { @node.destroy } }
+    it("should destroy dependent reports") do
+      @report = Report.generate_for(@node)
+      @node.destroy
+      Report.all.should_not include(@report)
+    end
 
-    it("destroys dependent reports") { should change(Report, :count).by(-1) }
+    it "should remove class memberships" do
+      node_class = NodeClass.generate!()
+      @node.node_classes << node_class
+
+      @node.destroy
+
+      node_class.nodes.should be_empty
+      node_class.node_class_memberships.should be_empty
+    end
+
+    it "should remove group memberships" do
+      node_group = NodeGroup.generate!()
+      @node.node_groups << node_group
+
+      @node.destroy
+
+      node_group.nodes.should be_empty
+      node_group.node_group_memberships.should be_empty
+    end
   end
-
 
 end
