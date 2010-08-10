@@ -17,7 +17,7 @@ doc/app
 log/*.log
 log/*.pid
 public/javascripts/all.js
-public/stylesheets/all.js
+public/stylesheets/all.css
 spec/rcov.opts
 spec/spec.opts
 tags
