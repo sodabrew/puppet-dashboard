@@ -258,8 +258,8 @@ describe Node do
     before do
       @node = Node.generate!
 
-      @node_group_a = NodeGroup.generate!
-      @node_group_b = NodeGroup.generate!
+      @node_group_a = NodeGroup.generate! :name => "A"
+      @node_group_b = NodeGroup.generate! :name => "B"
 
       @param_1 = Parameter.generate(:key => 'foo', :value => '1')
       @param_2 = Parameter.generate(:key => 'bar', :value => '2')
@@ -271,12 +271,33 @@ describe Node do
       @node.node_groups << @node_group_b
     end
 
-    it "should raise an error if the graph contains a cycle" do
-      @node_group_a1 = NodeGroup.generate!
-      @node_group_a1.node_groups << @node_group_a
-      @node_group_a.node_groups << @node_group_a1
+    describe "when a group is included twice" do
+      before do
+        @node_group_c = NodeGroup.generate!
+        @node_group_a.node_groups << @node_group_c
+        @node_group_b.node_groups << @node_group_c
+      end
 
-      lambda{@node.node_group_graph}.should raise_error(NodeGroupCycleError)
+      it "should return the correct graph" do
+        @node.node_group_graph.should == {@node_group_a => {@node_group_c => {}}, @node_group_b => {@node_group_c => {}}}
+      end
+
+      it "should return the correct list" do
+        @node.node_group_list.should == [@node, @node_group_a, @node_group_c, @node_group_b]
+      end
+    end
+
+    it "should handle cycles gracefully" do
+      NodeGroupEdge.new(:from => @node_group_a, :to => @node_group_b).save(false)
+      NodeGroupEdge.new(:from => @node_group_b, :to => @node_group_a).save(false)
+
+      @node.node_group_graph.should == {
+        @node_group_a => {
+          @node_group_b => {
+            @node_group_a => {} }},
+        @node_group_b => {
+          @node_group_a => {
+            @node_group_b => {} }}}
     end
 
     describe "handling parameters in the graph" do
