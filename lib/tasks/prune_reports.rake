@@ -1,20 +1,6 @@
 namespace :reports do
   desc 'prune old reports from the databases'
   task :prune => :environment do
-    if ENV['upto'] =~ /^\d+/
-      upto = ENV['upto']
-    else
-      puts 'You must specify how far up you want to prune (as an integer).'
-      exit 1
-    end
-
-    if ENV['unit']
-      unit = ENV['unit']
-    else
-      puts 'You must specify the unit of time. (min,hr,day,wk,mon,yr)'
-      exit 1
-    end
-
     units = {
       'min' => '60',
       'hr' => '3600',
@@ -23,11 +9,22 @@ namespace :reports do
       'mon' => '2592000',
       'yr' => '31536000'
     }
+    known_units = units.keys.join(',')
+
+    unless ENV['upto'] =~ /^\d+/ && ENV['unit']
+      puts "You must specify how far up you want to prune.  upto={some integer}"
+      puts "You must specify the unit of time. unit={#{known_units}}"
+      puts "Example: 'rake reports:prune upto=1 unit=month'"
+      exit 1
+    end
+
+    upto = ENV['upto']
+    unit = ENV['unit']
 
     if units.has_key?(unit)
       esec = Time.now.gmtime - upto.to_i * units[unit].to_i
     else
-      puts 'I don\'t know that unit.'
+      puts "I don't know that unit.  Known units are #{known_units}"
       exit 1
     end
 

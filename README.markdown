@@ -277,6 +277,23 @@ To restore the Puppet Dashboard from a file called `production.sql` to your `pro
 
     rake RAILS_ENV=production FILE=production.sql db:raw:restore
 
+Database cleanup
+----------------
+
+Reports will build up over time which you may want to delete because of space
+or data rentention policy issues.  A rake task is included to help with this,
+and as with the other rake tasks it should be run from the same directory
+this README.markdown file is in.
+
+### Prune
+
+To delete reports older than 1 month:
+
+    rake RAILS_ENV=production reports:prune upto=1 unit=mon
+
+If you run 'rake reports:prune' without any arguments or incorrect arguments it
+will print the available units.
+
 Contributors
 ------------
 
@@ -286,3 +303,4 @@ Contributors
 * Andrew Maier <andrew.maier@gatech.edu>
 * Scott Smith <scott@ohlol.net>
 * Ian Ward Comfort <icomfort@stanford.edu>
+* Matt Robinson <matt@puppetlabs.com>
