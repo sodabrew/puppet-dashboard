@@ -256,6 +256,20 @@ Third-party tools that can help secure a Puppet Dashboard include:
 
             http://username:password@hostname
 
+Debugging
+---------
+
+The log files will contain a lot of useful information to help you debug
+problems you might have.  You can find the logs in the log subfolder of the
+Puppet Dashboard install, which if you installed from packages is probably
+/usr/share/puppet-dashboard/log/{environment}.log
+
+If you installed from source it will be wherever you cloned your git
+repository.
+
+If you're running Puppet Dashboard using Apache and Phusion Passenger the
+Apache logs will contain Puppet Dashboard's logging.
+
 Database backups
 ----------------
 
