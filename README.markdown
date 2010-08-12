@@ -121,6 +121,26 @@ Installation
 
           rake db:migrate db:test:prepare
 
+Ownership and Permission Requirements
+-------------------------------------
+
+The easiest thing to do is make sure that the same user who will run the
+application owns all the files in the app.  Puppet Dashboard should **not** be
+run as root.  To do this:
+
+    sudo chown -R dashboarduser /dashboard/location
+
+Your dashboard location will be wherever you cloned the source to, or if you
+install using a package will probably be /usr/share/puppet-dashboard
+
+If you want to chown a minimal set of directories, you can also from **inside**
+the Puppet Dashboard directory run:
+
+    sudo chown -R db log public tmp
+
+If you've never succesfully run the server the log and tmp directories may not
+exist yet and you'll have to create them, then chown them
+
 Upgrading
 ---------
 
