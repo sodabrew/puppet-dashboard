@@ -14,19 +14,19 @@
       - else
         &mdash; No parameters &mdash;
 
-    .section
-      %h3 Classes
-      - unless @node_group.node_classes.blank?
-        = inspector_table @node_group.node_classes, :name, false, :link => true
-      - else
-        &mdash; No classes &mdash;
-
-    .section
+    .section.half
       %h3 Inherited groups
       - unless @node_group.node_groups.blank?
         = inspector_table @node_group.node_groups, :name, false, :link => true
       - else
         &mdash; No groups &mdash;
+
+    .section.half
+      %h3 Classes
+      - unless @node_group.node_classes.blank?
+        = inspector_table @node_group.node_classes, :name, false, :link => true
+      - else
+        &mdash; No classes &mdash;
 
   .item
     - if @node_group.nodes.present?

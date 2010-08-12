@@ -11,15 +11,14 @@
     - unless resource.description.blank?
       .description= simple_format h(resource.description)
 
-    - begin
-      - unless resource.compiled_parameters.blank?
-        = inspector_table resource.compiled_parameters, :key, :value, :link => false, :caption => 'Parameters'
-    - rescue NodeGroupCycleError => error
-      %h3 All parameters
-      %p.error
-        %strong Warning:
-        There appears to be a problem with your node groups.
-        = error.message
+    -# Conflicting parameters are okay here, since we just want to warn
+    - if resource.compiled_parameters(true).present?
+      - if resource.errors.on(:parameters)
+        %p.error
+          %strong Warning:
+          The following parameters have multiple conflicting values:
+          = [*resource.errors.on(:parameters)].join(", ")
+      = inspector_table resource.compiled_parameters(true), :key, :value, :link => false, :caption => 'Parameters'
         
 
     .section.half
@@ -38,6 +37,7 @@
 
     - unless resource.inherited_classes.empty?
       = inspector_table resource.inherited_classes, :name, false, :link => true, :caption => 'Inherited Classes'
+
 
     %br.clear
 

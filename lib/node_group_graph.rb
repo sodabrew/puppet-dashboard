@@ -11,7 +11,7 @@ module NodeGroupGraph
   def compile_node_group_graph(group=self, seen=[], all=[])
     return [nil,{}] if seen.include? group
     all << group
-    graph = Hash[*group.node_groups.map{|grp| [grp, compile_node_group_graph(grp, seen + [group], all).last]}.flatten]
+    graph = group.node_groups.map {|grp| {grp => compile_node_group_graph(grp, seen + [group], all).last}}.inject({},&:merge)
     [all.uniq, graph]
   end
 end

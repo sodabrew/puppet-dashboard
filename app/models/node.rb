@@ -116,25 +116,41 @@ class Node < ActiveRecord::Base
     TimelineEvent.for_node(self)
   end
 
+  # This wrapper method is just used to cache the result of the recursive method
+  def compiled_parameters(allow_conflicts=false)
+    unless @compiled_parameters
+      @compiled_parameters, @conflicts = compile_subgraph_parameters(self, node_group_graph)
+      @conflicts.each do |key|
+        errors.add(:parameters,key)
+      end
+    end
+    raise ParameterConflictError unless allow_conflicts or @conflicts.empty?
+    @compiled_parameters
+  end
+
   # Walks the graph of node groups for the given node, compiling parameters by
   # merging down (preferring parameters specified in node groups that are
   # nearer). Raises a ParameterConflictError if parameters at the same distance
   # from the node have the same name.
-  def compiled_parameters(graph=node_group_graph, depth=1, seen_parameters={0 => parameters.to_hash})
-    return @compiled_parameters if @compiled_parameters
-
-    seen_parameters[depth] ||= {}
-    graph.each do |parent, children_graph|
-      parent.parameters.each do |parameter|
-        raise ParameterConflictError if seen_parameters[depth][parameter.key] && seen_parameters[depth][parameter.key] != parameter.value
-        seen_parameters[depth][parameter.key] = parameter.value
-      end
-      compiled_parameters(children_graph, depth+1, seen_parameters)
+  def compile_subgraph_parameters(group,subgraph)
+    children = subgraph.map do |child,child_subgraph|
+      compile_subgraph_parameters(child,child_subgraph)
     end
-
-    return @compiled_parameters = parameters.to_hash.reverse_merge(seen_parameters.sort_by{|k,v| k}.inject({}){|results, array| depth, parameters = array; results.reverse_merge(parameters)})
+    # Pick-up conflicts that our children had
+    conflicts = children.map(&:last).inject(Set.new,&:merge)
+    params = group.parameters.to_hash
+    inherited = {}
+    # Now collect our inherited params and their conflicts
+    children.map(&:first).map {|h| [*h]}.flatten.each_slice(2) do |key,value|
+      conflicts.add(key) if inherited[key] && inherited[key] != value
+      inherited[key] = value
+    end
+    # Resolve all possible conflicts
+    conflicts.each do |key|
+      conflicts.delete(key) if params[key]
+    end
+    [params.reverse_merge(inherited), conflicts]
   end
-
 
   # Placeholder attributes
   

@@ -316,16 +316,34 @@ describe Node do
 
       it "should raise an error if there are parameter conflicts among children" do
         @param_2.update_attribute(:key, 'foo')
+
         lambda {@node.compiled_parameters}.should raise_error(ParameterConflictError)
+        @node.errors.on(:parameters).should == "foo"
       end
 
       it "should not raise an error if there are two sibling parameters with the same key and value" do
         @param_2.update_attributes(:key => @param_1.key, :value => @param_1.value)
+
         lambda {@node.compiled_parameters}.should_not raise_error(ParameterConflictError)
+        @node.errors.on(:parameters).should be_nil
+      end
+
+      it "should not raise an error if there are parameter conflicts that can be resolved at a higher level" do
+        @param_3 = Parameter.generate(:key => 'foo', :value => '3')
+        @param_4 = Parameter.generate(:key => 'foo', :value => '4')
+        @node_group_c = NodeGroup.generate!
+        @node_group_c.parameters << @param_3
+        @node_group_d = NodeGroup.generate!
+        @node_group_d.parameters << @param_4
+        @node_group_a.node_groups << @node_group_c << @node_group_d
+
+        lambda {@node.compiled_parameters}.should_not raise_error(ParameterConflictError)
+        @node.errors.on(:parameters).should be_nil
       end
 
       it "should include parameters of the node itself" do
         @node.parameters << Parameter.create(:key => "node_parameter", :value => "exist")
+
         @node.compiled_parameters["node_parameter"].should == "exist"
       end
     end
