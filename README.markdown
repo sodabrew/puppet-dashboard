@@ -121,6 +121,39 @@ Installation
 
           rake db:migrate db:test:prepare
 
+Upgrading
+---------
+
+### Code
+
+If you installed the code from source and you want to run the latest code, from
+the Puppet Dashboard source directory you can run
+
+    git pull
+
+If you prefer to run a specific version of Puppet Dashboard you can checkout a specific tag
+
+    git fetch
+    git checkout tag_name
+
+And you can list the tag names with:
+
+    git tag
+
+If you installed from a package, your package management system should be able
+to upgrade the code for you.  See README_PACKAGES.markdown for more info.
+
+### Database Schema
+
+Regardless of how you installed the code, after doing so you'll likely need to
+run the database migrations to get your database schema up to date.  You'll
+want to run this as the same user that you use to run Puppet Dashboard.
+
+    RAILS_ENV=production rake db:migrate
+
+After upgrading the code and running the migrations you'll need to restart your
+webserver.
+
 Running
 -------
 
