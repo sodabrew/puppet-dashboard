@@ -121,25 +121,20 @@ Installation
 
           rake db:migrate db:test:prepare
 
-Ownership and Permission Requirements
+Ownership and permission requirements
 -------------------------------------
 
-The easiest thing to do is make sure that the same user who will run the
-application owns all the files in the app.  Puppet Dashboard should **not** be
-run as root.  To do this:
+The Puppet Dashboard application requires that its files and directories have
+specific ownership and permissions.  Puppet Dashboard should **not** be run as
+`root`.
+
+The same user who will run the application should own all the files.  To do
+this:
 
     sudo chown -R dashboarduser /dashboard/location
 
-Your dashboard location will be wherever you cloned the source to, or if you
-install using a package will probably be /usr/share/puppet-dashboard
-
-If you want to chown a minimal set of directories, you can also from **inside**
-the Puppet Dashboard directory run:
-
-    sudo chown -R db log public tmp
-
-If you've never succesfully run the server the log and tmp directories may not
-exist yet and you'll have to create them, then chown them
+Your Puppet Dashboard location will be wherever you cloned the source to, or if you
+install using a package will probably be `/usr/share/puppet-dashboard`
 
 Upgrading
 ---------
@@ -161,7 +156,7 @@ And you can list the tag names with:
     git tag
 
 If you installed from a package, your package management system should be able
-to upgrade the code for you.  See README_PACKAGES.markdown for more info.
+to upgrade the code for you.  See `README_PACKAGES.markdown` for more info.
 
 ### Database Schema
 
@@ -286,7 +281,7 @@ The Puppet Dashboard can act as an external node classification tool, which will
           node_terminus  = exec
           external_nodes = /opt/dashboard/bin/external_node
 
-   *NOTE:* Set the `external_nodes` value to the absolute path of the Puppet Dashboard's `bin/external_node` program. If the Puppet Dashboard is running on a different computer, you should copy this file to the Puppet Master to a local directory like `/etc/pupppet` and specify the path to it.
+   *NOTE:* Set the `external_nodes` value to the absolute path of the Puppet Dashboard's `bin/external_node` program. If the Puppet Dashboard is running on a different computer, you should copy this file to the Puppet Master to a local directory like `/etc/puppet` and specify the path to it.
 
    *NOTE:* The `bin/external_node` program connects to the Puppet Dashboard at `localhost` on port `3000`. If your Puppet Dashboard is running on a different host or node, please modify this file.
 
@@ -315,7 +310,7 @@ Debugging
 The log files will contain a lot of useful information to help you debug
 problems you might have.  You can find the logs in the log subfolder of the
 Puppet Dashboard install, which if you installed from packages is probably
-/usr/share/puppet-dashboard/log/{environment}.log
+`/usr/share/puppet-dashboard/log/{environment}.log`
 
 If you installed from source it will be wherever you cloned your git
 repository.
@@ -350,7 +345,7 @@ Database cleanup
 Reports will build up over time which you may want to delete because of space
 or data rentention policy issues.  A rake task is included to help with this,
 and as with the other rake tasks it should be run from the same directory
-this README.markdown file is in.
+this `README.markdown` file is in.
 
 ### Prune
 
