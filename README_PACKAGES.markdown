@@ -42,8 +42,7 @@ the server from here or create a Passenger configuration.
 
 3.  Run the database migrations.  See README.markdown for more information
 
-4.  Restart your webserver
-
+4.  Restart your Puppet Dashboard server for these changes to take effect, which may require restarting your webserver
 RPM packages via Yum
 --------------------
 
@@ -64,8 +63,7 @@ RPM packages via Yum
 
        $ sudo yum install puppet-dashboard
 
-You will be prompted to install the Puppet Labs release key as part of the
-installation process.
+You will be prompted to install the Puppet Labs release key as part of the installation process.
 
 The Dashboard will be installed in `/usr/share/puppet-dashboard` and you run
 the server from here or create a Passenger configuration.
@@ -78,4 +76,4 @@ the server from here or create a Passenger configuration.
 
 2.  Run the database migrations.  See README.markdown for more information
 
-3.  Restart your webserver
+3.  Restart your Puppet Dashboard server for these changes to take effect, which may require restarting your webserver

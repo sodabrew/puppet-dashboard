@@ -124,50 +124,50 @@ Installation
 Ownership and permission requirements
 -------------------------------------
 
-The Puppet Dashboard application requires that its files and directories have
-specific ownership and permissions.  Puppet Dashboard should **not** be run as
-`root`.
+The Puppet Dashboard application requires that its files and directories have specific ownership and permissions.  Puppet Dashboard should **not** be run as `root`.
 
-The same user who will run the application should own all the files.  To do
-this:
+The same user who will run the application should own all the files.  To do this:
 
     sudo chown -R dashboarduser /dashboard/location
 
-Your Puppet Dashboard location will be wherever you cloned the source to, or if you
-install using a package will probably be `/usr/share/puppet-dashboard`
+Your Puppet Dashboard location will be wherever you cloned the source to, or if you install using a package will probably be `/usr/share/puppet-dashboard`
 
 Upgrading
 ---------
 
 ### Code
 
-If you installed the code from source and you want to run the latest code, from
-the Puppet Dashboard source directory you can run
+The Puppet Dashboard's code is constantly improving, and whether you're following along with the edge of the source code or using deployed packages, you can benefit from upgrading periodly for new features and bug fixes.
+
+#### Git
+
+If you installed the code from source and you want to run the latest code, from the Puppet Dashboard source directory you can run
 
     git pull
 
-If you prefer to run a specific version of Puppet Dashboard you can checkout a specific tag
+If you prefer to run a specific version of Puppet Dashboard you can checkout a specific tag, where TAG_NAME is the name of the `git` tag to use.
 
     git fetch
-    git checkout tag_name
+    git checkout TAG_NAME
 
 And you can list the tag names with:
 
+    git fetch
     git tag
 
-If you installed from a package, your package management system should be able
-to upgrade the code for you.  See `README_PACKAGES.markdown` for more info.
+#### Packages
+
+If you installed from a package, your package management system should be able to upgrade the code for you.  See `README_PACKAGES.markdown` for more information.
 
 ### Database Schema
 
-Regardless of how you installed the code, after doing so you'll likely need to
-run the database migrations to get your database schema up to date.  You'll
-want to run this as the same user that you use to run Puppet Dashboard.
+The Puppet Dashboard’s database schema changes as features are added and improved, and you need to update it after an upgrade. You may want to backup your database before you do this — see the ‘Database backups’ section of this documentation for further details.
+
+Regardless of how you installed the code, after doing so you'll likely need to run the database migrations to get your database schema up to date.  You'll want to run this as the same user that you use to run Puppet Dashboard.
 
     RAILS_ENV=production rake db:migrate
 
-After upgrading the code and running the migrations you'll need to restart your
-webserver.
+After upgrading the code and running the migrations you'll need to restart your Puppet Dashboard server for these changes to take effect, which may require restarting your webserver.
 
 Running
 -------
@@ -307,16 +307,13 @@ Third-party tools that can help secure a Puppet Dashboard include:
 Debugging
 ---------
 
-The log files will contain a lot of useful information to help you debug
-problems you might have.  You can find the logs in the log subfolder of the
-Puppet Dashboard install, which if you installed from packages is probably
-`/usr/share/puppet-dashboard/log/{environment}.log`
+The Puppet Dashboard may not start or may display warnings if misconfigured or if it encounters an error. Details about these errors are recorded to log files that will help diagnose and resolve the problem.
 
-If you installed from source it will be wherever you cloned your git
-repository.
+You can find the logs in the log subfolder of the Puppet Dashboard install, which if you installed from packages is probably `/usr/share/puppet-dashboard/log/{environment}.log`
 
-If you're running Puppet Dashboard using Apache and Phusion Passenger the
-Apache logs will contain Puppet Dashboard's logging.
+If you installed from source it will be wherever you cloned your git repository.
+
+If you're running Puppet Dashboard using Apache and Phusion Passenger the Apache logs will contain higher level information like severe errors describing why the why the Passenger application couldn't start (e.g. couldn't write to it's logs).
 
 Database backups
 ----------------
@@ -342,10 +339,7 @@ To restore the Puppet Dashboard from a file called `production.sql` to your `pro
 Database cleanup
 ----------------
 
-Reports will build up over time which you may want to delete because of space
-or data rentention policy issues.  A rake task is included to help with this,
-and as with the other rake tasks it should be run from the same directory
-this `README.markdown` file is in.
+Reports will build up over time which you may want to delete because of space or data rentention policy issues.  A rake task is included to help with this, and as with the other rake tasks it should be run from the same directory this `README.markdown` file is in.
 
 ### Prune
 
@@ -353,8 +347,7 @@ To delete reports older than 1 month:
 
     rake RAILS_ENV=production reports:prune upto=1 unit=mon
 
-If you run 'rake reports:prune' without any arguments or incorrect arguments it
-will print the available units.
+If you run 'rake reports:prune' without any arguments or incorrect arguments it will print the available units.
 
 Contributors
 ------------
