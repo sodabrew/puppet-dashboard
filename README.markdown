@@ -341,9 +341,7 @@ Database cleanup
 
 Reports will build up over time which you may want to delete because of space or data rentention policy issues.  A rake task is included to help with this, and as with the other rake tasks it should be run from the same directory this `README.markdown` file is in.
 
-### Prune
-
-To delete reports older than 1 month:
+For example, to delete reports older than 1 month:
 
     rake RAILS_ENV=production reports:prune upto=1 unit=mon
 
