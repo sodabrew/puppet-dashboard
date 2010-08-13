@@ -15,7 +15,6 @@ class NodeGroupEdge < ActiveRecord::Base
           "Creating a dependency from group '#{from.name}' to " \
           + (from.name == to.name ? "itself" : "group '#{to.name}'") \
           + " creates a cycle")
-        return false
       end
       group.node_groups.each { |grp|
         dfs(grp, seen + [group])
@@ -23,6 +22,5 @@ class NodeGroupEdge < ActiveRecord::Base
     end
 
     dfs(self.to,[self.from])
-    return true
   end
 end
