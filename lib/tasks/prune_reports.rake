@@ -1,5 +1,5 @@
 namespace :reports do
-  desc 'prune old reports from the databases.  will print help if run without arguments'
+  desc 'Prune old reports from the databases, will print help if run without arguments'
   task :prune => :environment do
     units = {
       'min' => '60',
@@ -13,50 +13,48 @@ namespace :reports do
 
     usage = %{
 USAGE:
-
   rake reports:prune upto=UPTO unit=UNIT
 
 OPTIONS:
-
-  upto: How far to prune as an integer
-  unit: The time units.  Valid units are #{known_units}
+  unit: The time units. Valid units are: #{known_units}
+  upto: Number of units to keep prune up to.
 
 EXAMPLE:
-
+  # Prune records upto 1 month old:
   rake reports:prune upto=1 unit=mon
-  rake reports:prune upto=2 unit=wk
-    }
+    }.strip
 
     unless ENV['upto'] || ENV['unit']
-      print usage
+      puts usage
       exit 0
     end
 
     errors = []
 
-    errors << "You must specify how far up you want to prune as an integer.  upto={some integer}"  \
-      unless ENV['upto'] =~ /^\d+$/ && upto = ENV['upto'].to_i
-    errors << "You must specify the unit of time. unit={#{known_units}}"  \
-      unless unit = ENV['unit']
-    errors << "I don't know that unit.  Valid units are #{known_units}"  \
-      if unit && !units.has_key?(unit)
+    if ENV['upto'] =~ /^\d+$/
+      upto = ENV['upto'].to_i
+    else
+      errors << "You must specify how far up you want to prune as an integer, e.g.: upto={some integer}" \
+    end
 
-    unless errors.empty?
-      errors.each { |error| puts "ERROR: " + error }
+    if unit = ENV['unit']
+      unless units.has_key?(unit)
+        errors << "I don't know that unit. Valid units are: #{known_units}" \
+      end
+    else
+      errors << "You must specify the unit of time, .e.g.: unit={#{known_units}}" \
+    end
+
+    if errors.present?
+      puts errors.map { |error| "ERROR: #{error}" }
+      puts
       puts usage
-
       exit 1
     end
-    esec = Time.now.gmtime - upto * units[unit].to_i
-    str_time = esec.strftime('%Y-%m-%d %H:%M:%S')
 
-    puts "Deleting reports before #{str_time} UTC"
-
-    num = Report.find(:all, :conditions =>
-      "created_at <= '#{esec.strftime('%Y-%m-%d %H:%M:%S')}'").size
-
-    if Report.delete_all("created_at < '#{str_time}'")
-      puts "Deleted #{num} reports."
-    end
+    cutoff = Time.now.gmtime - (upto * units[unit].to_i)
+    puts "Deleting reports before #{cutoff}..."
+    deleted_count = Report.delete_all(['time < ?', cutoff])
+    puts "Deleted #{deleted_count} reports."
   end
 end
