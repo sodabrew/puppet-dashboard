@@ -12,16 +12,12 @@ namespace :reports do
     known_units = units.keys.join(',')
 
     usage = %{
-USAGE:
-  rake reports:prune upto=UPTO unit=UNIT
-
-OPTIONS:
-  unit: The time units. Valid units are: #{known_units}
-  upto: Number of units to keep prune up to.
-
 EXAMPLE:
   # Prune records upto 1 month old:
   rake reports:prune upto=1 unit=mon
+
+UNITS:
+  Valid units of time are: #{known_units}
     }.strip
 
     unless ENV['upto'] || ENV['unit']
