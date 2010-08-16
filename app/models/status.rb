@@ -25,11 +25,17 @@ class Status
 
   def self.by_interval(options={})
     return [] if options[:nodes] && options[:nodes].empty?
-    interval = options[:of] || 1.day
+    #interval = options[:of] || 1.day
+    interval = 1.day
 
     has_where = options[:start] || options[:node] || options[:nodes].present?
 
     has_and = [options[:start], options[:node], options[:nodes]].compact.size > 1
+
+    offset = Time.now.utc_offset
+    offset_timestamp = "UNIX_TIMESTAMP(time) + #{offset}"
+    date = "DATE(FROM_UNIXTIME(#{offset_timestamp}))"
+    #start_time = "FROM_UNIXTIME(FLOOR((#{offset_timestamp})/#{interval})*#{interval}-#{offset})"
 
     sql = <<-SQL
 
@@ -37,7 +43,7 @@ class Status
       COUNT(*) - SUM(success)       as failed,
       COUNT(*)                      as total,
       SUM(success) / COUNT(*) * 100 as percent,
-      FROM_UNIXTIME(FLOOR(UNIX_TIMESTAMP(time) / #{interval}) * #{interval}) as start
+      #{date}                       as start
     FROM reports
     SQL
 
@@ -46,7 +52,8 @@ class Status
     sql << "AND " if has_and
     sql << "node_id = #{options[:node].id} " if options[:node]
     sql << "node_id IN (#{options[:nodes].map(&:id).join(',')})\n" if options[:nodes].present?
-    sql << "GROUP BY FLOOR(UNIX_TIMESTAMP(time) / #{interval})\n"
+    #sql << "GROUP BY #{start_time}"
+    sql << "GROUP BY #{date}"
     sql << "ORDER BY time DESC\n"
     sql << "LIMIT #{options[:limit]}" if options[:limit]
 
