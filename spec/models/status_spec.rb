@@ -6,8 +6,6 @@ describe Status  do
   describe ".by_interval" do
     context "when the interval is 1 day" do
       before do
-        @times = {}
-
         time = Time.now.beginning_of_day + 1.hours
         Report.generate!(:report => report_yaml_with(:time => time))
 

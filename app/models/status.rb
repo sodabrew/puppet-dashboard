@@ -23,28 +23,35 @@ class Status
   # Default time in seconds for the interval
   INTERVAL_CUTOFF = 30.days
 
+  # Returns an array of Statuses by date for either a :node, or :nodes or all nodes in the system.
+  #
+  # Options:
+  # * :node => Node to return Statuses for.
+  # * :nodes => Nodes to return Statuses for.
+  # * :start => Start Time of the range to query.
+  # * :limit => Limit the number of records to return.
   def self.by_interval(options={})
     return [] if options[:nodes] && options[:nodes].empty?
-    #interval = options[:of] || 1.day
     interval = 1.day
 
     has_where = options[:start] || options[:node] || options[:nodes].present?
 
     has_and = [options[:start], options[:node], options[:nodes]].compact.size > 1
 
+    # WARNING: This uses the local server time, regardless of what is set in the Rails config.
+    # This should be changed once we have a user-friendly settings file, or can get the browser
+    # time zone to this method.
     offset = Time.now.utc_offset
     offset_timestamp = "UNIX_TIMESTAMP(time) + #{offset}"
     date = "DATE(FROM_UNIXTIME(#{offset_timestamp}))"
-    #start_time = "FROM_UNIXTIME(FLOOR((#{offset_timestamp})/#{interval})*#{interval}-#{offset})"
 
     sql = <<-SQL
-
-    SELECT
-      COUNT(*) - SUM(success)       as failed,
-      COUNT(*)                      as total,
-      SUM(success) / COUNT(*) * 100 as percent,
-      #{date}                       as start
-    FROM reports
+      SELECT
+        COUNT(*) - SUM(success)       as failed,
+        COUNT(*)                      as total,
+        SUM(success) / COUNT(*) * 100 as percent,
+        #{date}                       as start
+      FROM reports
     SQL
 
     sql << "WHERE " if has_where
@@ -52,12 +59,11 @@ class Status
     sql << "AND " if has_and
     sql << "node_id = #{options[:node].id} " if options[:node]
     sql << "node_id IN (#{options[:nodes].map(&:id).join(',')})\n" if options[:nodes].present?
-    #sql << "GROUP BY #{start_time}"
     sql << "GROUP BY #{date}"
-    sql << "ORDER BY time DESC\n"
+    sql << "ORDER BY time ASC\n"
     sql << "LIMIT #{options[:limit]}" if options[:limit]
 
-    execute(sql).reverse
+    return execute(sql)
   end
 
   def self.runtime
