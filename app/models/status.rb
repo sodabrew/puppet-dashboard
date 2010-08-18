@@ -59,7 +59,7 @@ class Status
     sql << "AND " if has_and
     sql << "node_id = #{options[:node].id} " if options[:node]
     sql << "node_id IN (#{options[:nodes].map(&:id).join(',')})\n" if options[:nodes].present?
-    sql << "GROUP BY #{date}"
+    sql << "GROUP BY #{date}\n"
     sql << "ORDER BY time ASC\n"
     sql << "LIMIT #{options[:limit]}" if options[:limit]
 
