@@ -99,7 +99,7 @@ Installation
 
 2. Create a `config/database.yml` file to specify Puppet Dashboard's database configuration. Please see the `config/database.yml.example` file for further details about database configurations and environments. These files paths are relative to the path of the Puppet Dashboard software containing this `README.markdown` file.
 
-3. Setup a MySQL database server, create a user and database for use with the Dashboard by either:
+3. Setup a MySQL database server, create a user and database for use with the Puppet Dashboard by either:
 
    1. Using a `rake` task to create just the database from settings in the `config/database.yml` file. You must `cd` into the directory with the Puppet Dashboard software containing this `README.markdown` file before running these commands:
 
@@ -121,6 +121,54 @@ Installation
 
           rake db:migrate db:test:prepare
 
+Ownership and permission requirements
+-------------------------------------
+
+The Puppet Dashboard application requires that its files and directories have specific ownership and permissions.  Puppet Dashboard should **not** be run as `root`.
+
+The same user that will run the application should own all the files, for example:
+
+    sudo chown -R DASHBOARD_USER:DASHBOARD_GROUP /dashboard/location
+
+Your Puppet Dashboard location will be wherever you cloned the source to, or if you install using a package will probably be `/usr/share/puppet-dashboard`
+
+Upgrading
+---------
+
+### Code
+
+The Puppet Dashboard's code is constantly improving, and whether you're following along with the edge of the source code or using deployed packages, you can benefit from upgrading periodically for new features and bug fixes.
+
+#### Git
+
+If you installed the code from source and you want to run the latest code, from the Puppet Dashboard source directory you can run:
+
+    git pull
+
+If you prefer to run a specific version of Puppet Dashboard you can checkout a specific tag, where TAG_NAME is the name of the `git` tag to use.
+
+    git fetch
+    git checkout TAG_NAME
+
+And you can list the tag names with:
+
+    git fetch
+    git tag
+
+#### Packages
+
+If you installed from a package, your package management system should be able to upgrade the code for you.  See `README_PACKAGES.markdown` for more information.
+
+### Database Schema
+
+The Puppet Dashboard's database schema changes as features are added and improved, and you need to update it after an upgrade. You may want to backup your database before you do this — see the ‘Database backups' section of this documentation for further details.
+
+Regardless of how you installed the code, you need to run the database migrations to update your database schema. Run this command from the installation directory as the same user that you use to run Puppet Dashboard:
+
+    RAILS_ENV=production rake db:migrate
+
+After upgrading the code and running the migrations, you'll need to restart your Puppet Dashboard server for these changes to take effect, which may require restarting your webserver.
+
 Running
 -------
 
@@ -136,7 +184,7 @@ There are many ways to run a Ruby web application like the Puppet Dashboard, we 
 
            ./script/server -p 8080
 
-2. **Passenger**: This plugin for [Apache](http://httpd.apache.org/) or [Nginx](http://nginx.org/) makes it easy to multile Ruby web apps quickly and efficiently using multiple instances -- it's great for production use. If used along with Ruby Enterprise Edition, it can dramatically reduce the memry required to run Ruby web applications. For further information, please see [Passenger/](http://www.modrails.com/) and [Ruby Enterprise Edition](http://www.rubyenterpriseedition.com/) and the example apache configuration in `ext/passenger/dashboard-vhost.conf`.
+2. **Passenger**: This plugin for [Apache](http://httpd.apache.org/) or [Nginx](http://nginx.org/) makes it easy to run multiple Ruby web apps quickly and efficiently using multiple instances -- it's great for production use. If used along with Ruby Enterprise Edition, it can dramatically reduce the memory required to run Ruby web applications. For further information, please see [Passenger/](http://www.modrails.com/) and [Ruby Enterprise Edition](http://www.rubyenterpriseedition.com/) and the example apache configuration in `ext/passenger/dashboard-vhost.conf`.
 
 3. **Thin**: This fast and reliable server can run multiple instances of the Puppet Dashboard application behind a proxy like [Apache](http://httpd.apache.org/) or [Nginx](http://nginx.org/) to appear as a single website -- it's great for production use. For further information, please see [Thin](http://code.macournoyer.com/thin/).
 
@@ -223,7 +271,7 @@ The Puppet Dashboard can collect reports from your Puppet Master as they're crea
 
 
 External node classification
----------------------------------------------
+----------------------------
 
 The Puppet Dashboard can act as an external node classification tool, which will allow you to manage Puppet classes and parameters for your nodes using a web interface:
 
@@ -233,7 +281,7 @@ The Puppet Dashboard can act as an external node classification tool, which will
           node_terminus  = exec
           external_nodes = /opt/dashboard/bin/external_node
 
-   *NOTE:* Set the `external_nodes` value to the absolute path of the Puppet Dashboard's `bin/external_node` program. If the Puppet Dashboard is running on a different computer, you should copy this file to the Puppet Master to a local directory like `/etc/pupppet` and specify the path to it.
+   *NOTE:* Set the `external_nodes` value to the absolute path of the Puppet Dashboard's `bin/external_node` program. If the Puppet Dashboard is running on a different computer, you should copy this file to the Puppet Master to a local directory like `/etc/puppet` and specify the path to it.
 
    *NOTE:* The `bin/external_node` program connects to the Puppet Dashboard at `localhost` on port `3000`. If your Puppet Dashboard is running on a different host or node, please modify this file.
 
@@ -252,9 +300,20 @@ Third-party tools that can help secure a Puppet Dashboard include:
 
 2. Tunneling (e.g. `stunnel` or `ssh`) can provide an encrypted connection between hosts, e.g. if the Puppet Master and Puppet Dashboard are running on separate hosts, or if you want to access the web interface from your workstation.
 
-3. HTTP Basic Authentication proxy (e.g. `apache` using `.htaccess`) can require that a username/password is provided when accessing URLs. However, if you use this, you must include the HTTP Basic Authentication username and password in the URLs in the `puppet.conf`'s `reporturl` setting and in the `bin/external_nodes` file. A URL with HTTP Basic Authentication has the following format:
+3. HTTP Basic Authentication proxy (e.g. `apache` using `.htaccess`) can require that a username/password is provided when accessing URLs. However, if you use this, you must include the HTTP Basic Authentication username and password in the URLs in the `puppet.conf` file's `reporturl` setting and in the `bin/external_nodes` file. A URL with HTTP Basic Authentication has the following format:
 
             http://username:password@hostname
+
+Debugging
+---------
+
+The Puppet Dashboard may not start or may display warnings if misconfigured or if it encounters an error. Details about these errors are recorded to log files that will help diagnose and resolve the problem.
+
+You can find the logs in the `log` subdirectory of the Puppet Dashboard install, which will probably be in `/usr/share/puppet-dashboard/log/{environment}.log` if you installed from a package.
+
+If you installed from source, it will be wherever you cloned your git repository.
+
+If you're running Puppet Dashboard using Apache and Phusion Passenger, the Apache logs will contain higher-level information, like severe errors describing why the Passenger application couldn't start if it couldn't write to its logs.
 
 Database backups
 ----------------
@@ -277,6 +336,17 @@ To restore the Puppet Dashboard from a file called `production.sql` to your `pro
 
     rake RAILS_ENV=production FILE=production.sql db:raw:restore
 
+Database cleanup
+----------------
+
+Reports will build up over time which you may want to delete because of space or data retention policy issues. A `rake` task is included to help with this, and as with the other `rake` tasks it should be run from the same directory as this `README.markdown` file is in.
+
+For example, to delete reports older than 1 month:
+
+    rake RAILS_ENV=production reports:prune upto=1 unit=mon
+
+If you run 'rake reports:prune' without any arguments, or incorrect arguments, it will display further usage instructions.
+
 Contributors
 ------------
 
@@ -286,3 +356,5 @@ Contributors
 * Andrew Maier <andrew.maier@gatech.edu>
 * Scott Smith <scott@ohlol.net>
 * Ian Ward Comfort <icomfort@stanford.edu>
+* Matt Robinson <matt@puppetlabs.com>
+* Nick Lewis <nick@puppetlabs.com>

@@ -7,6 +7,8 @@ repositories hosted by Puppet Labs.
 DEB Packages via APT
 --------------------
 
+### Installation
+
 1. Add the following to your /etc/apt/sources.list file:
 
        deb http://apt.puppetlabs.com/ubuntu lucid main
@@ -28,8 +30,23 @@ DEB Packages via APT
 The Dashboard will be installed in `/usr/share/puppet-dashboard` and you run
 the server from here or create a Passenger configuration.
 
+### Upgrading
+
+1.  Run apt-get update
+
+       $ sudo apt-get update
+
+2.  Upgrade just Puppet Dashboard
+
+       $ sudo apt-get install puppet-dashboard
+
+3.  Run the database migrations.  See README.markdown for more information
+
+4.  Restart your Puppet Dashboard server for these changes to take effect, which may require restarting your webserver
 RPM packages via Yum
 --------------------
+
+### Installation
 
 1. Create a Yum repo entry for Puppet Labs
 
@@ -46,9 +63,17 @@ RPM packages via Yum
 
        $ sudo yum install puppet-dashboard
 
-You will be prompted to install the Puppet Labs release key as part of the
-installation process.
+You will be prompted to install the Puppet Labs release key as part of the installation process.
 
 The Dashboard will be installed in `/usr/share/puppet-dashboard` and you run
 the server from here or create a Passenger configuration.
 
+### Upgrading
+
+1. Upgrade via yum
+
+       $ sudo yum update puppet-dashboard
+
+2.  Run the database migrations.  See README.markdown for more information
+
+3.  Restart your Puppet Dashboard server for these changes to take effect, which may require restarting your webserver
