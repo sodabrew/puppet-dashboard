@@ -1,7 +1,7 @@
 # TODO figure out how to add these to exemplar.
 
 class Report
-  def self.generate_for(node, time, success)
+  def self.generate_for(node, time = Time.now, success = true)
     report = Report.new
     report.time = time
     report.success = success

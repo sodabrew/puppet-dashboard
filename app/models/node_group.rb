@@ -1,13 +1,16 @@
 class NodeGroup < ActiveRecord::Base
   include NodeGroupGraph
-  has_many :node_group_class_memberships
+  has_many :node_group_class_memberships, :dependent => :destroy
   has_many :node_classes, :through => :node_group_class_memberships
 
-  has_many :node_group_memberships
+  has_many :node_group_memberships, :dependent => :destroy
   has_many :nodes, :through => :node_group_memberships
 
-  has_many :node_group_edges, :foreign_key => 'from_id'
-  has_many :node_groups, :through => :node_group_edges, :source => :to
+  has_many :node_group_edges_out, :class_name => "NodeGroupEdge", :foreign_key => 'from_id', :dependent => :destroy
+  has_many :node_group_edges_in, :class_name => "NodeGroupEdge", :foreign_key => 'to_id', :dependent => :destroy
+
+  # TODO Want to add a list of groups have edges into us, may want to rename node_groups
+  has_many :node_groups, :through => :node_group_edges_out, :source => :to
 
   has_parameters
 
