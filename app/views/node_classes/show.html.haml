@@ -3,15 +3,8 @@
   .header
     %h2= @node_class.name
     %ul.actions
-      %li= link_to 'Edit', edit_node_class_path(@node_class), :class => "edit button in-place"
+      %li= link_to 'Edit', edit_node_class_path(@node_class), :class => "edit button"
       %li= link_to 'Destroy', @node_class, :confirm => 'Are you sure?', :method => :delete, :class => "delete button"
-  .in-place
-    -form_for @node_class do |f|
-      .header
-        = f.text_field :name
-        %ul.actions
-          %button Save
-          %li= link_to 'Cancel', @node_class, :class => 'button'
 
   .item
     - if @node_class.nodes.present?
