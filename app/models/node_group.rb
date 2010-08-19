@@ -37,9 +37,13 @@ class NodeGroup < ActiveRecord::Base
   end
 
   attr_accessor :node_group_names
-  after_save :assign_node_groups
+  before_validation :assign_node_groups
   def assign_node_groups
-    self.node_groups = (@node_group_names || []).map{|name| NodeGroup.find_by_name(name)}
+    begin
+      self.node_groups = (@node_group_names || []).map{|name| NodeGroup.find_by_name(name)}
+    rescue ActiveRecord::RecordInvalid => e
+      self.errors.add_to_base(e.message)
+      return false
+    end
   end
-
 end

@@ -22,12 +22,18 @@ describe NodesController do
     end
 
     context "as YAML" do
-      before { get :index, :format => "yaml" }
-      specify { response.should be_success }
-      it "should return YAML" do
+      it "should return YAML when the nodes are valid" do
+        get :index, :format => "yaml"
+
+        response.should be_success
         struct = yaml_from_response_body
         struct.size.should == 1
         struct.first["name"].should == @node.name
+      end
+
+      it "should propagate errors encountered when a node is invalid" do
+        Node.any_instance.stubs(:compiled_parameters).raises ParameterConflictError
+        lambda {get :index, :format => "yaml"}.should raise_error(ParameterConflictError)
       end
     end
   end

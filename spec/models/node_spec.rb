@@ -258,8 +258,8 @@ describe Node do
     before do
       @node = Node.generate!
 
-      @node_group_a = NodeGroup.generate!
-      @node_group_b = NodeGroup.generate!
+      @node_group_a = NodeGroup.generate! :name => "A"
+      @node_group_b = NodeGroup.generate! :name => "B"
 
       @param_1 = Parameter.generate(:key => 'foo', :value => '1')
       @param_2 = Parameter.generate(:key => 'bar', :value => '2')
@@ -271,12 +271,33 @@ describe Node do
       @node.node_groups << @node_group_b
     end
 
-    it "should raise an error if the graph contains a cycle" do
-      @node_group_a1 = NodeGroup.generate!
-      @node_group_a1.node_groups << @node_group_a
-      @node_group_a.node_groups << @node_group_a1
+    describe "when a group is included twice" do
+      before do
+        @node_group_c = NodeGroup.generate!
+        @node_group_a.node_groups << @node_group_c
+        @node_group_b.node_groups << @node_group_c
+      end
 
-      lambda{@node.node_group_graph}.should raise_error(NodeGroupCycleError)
+      it "should return the correct graph" do
+        @node.node_group_graph.should == {@node_group_a => {@node_group_c => {}}, @node_group_b => {@node_group_c => {}}}
+      end
+
+      it "should return the correct list" do
+        @node.node_group_list.should == [@node, @node_group_a, @node_group_c, @node_group_b]
+      end
+    end
+
+    it "should handle cycles gracefully" do
+      NodeGroupEdge.new(:from => @node_group_a, :to => @node_group_b).save(false)
+      NodeGroupEdge.new(:from => @node_group_b, :to => @node_group_a).save(false)
+
+      @node.node_group_graph.should == {
+        @node_group_a => {
+          @node_group_b => {
+            @node_group_a => {} }},
+        @node_group_b => {
+          @node_group_a => {
+            @node_group_b => {} }}}
     end
 
     describe "handling parameters in the graph" do
@@ -295,16 +316,34 @@ describe Node do
 
       it "should raise an error if there are parameter conflicts among children" do
         @param_2.update_attribute(:key, 'foo')
+
         lambda {@node.compiled_parameters}.should raise_error(ParameterConflictError)
+        @node.errors.on(:parameters).should == "foo"
       end
 
       it "should not raise an error if there are two sibling parameters with the same key and value" do
         @param_2.update_attributes(:key => @param_1.key, :value => @param_1.value)
+
         lambda {@node.compiled_parameters}.should_not raise_error(ParameterConflictError)
+        @node.errors.on(:parameters).should be_nil
+      end
+
+      it "should not raise an error if there are parameter conflicts that can be resolved at a higher level" do
+        @param_3 = Parameter.generate(:key => 'foo', :value => '3')
+        @param_4 = Parameter.generate(:key => 'foo', :value => '4')
+        @node_group_c = NodeGroup.generate!
+        @node_group_c.parameters << @param_3
+        @node_group_d = NodeGroup.generate!
+        @node_group_d.parameters << @param_4
+        @node_group_a.node_groups << @node_group_c << @node_group_d
+
+        lambda {@node.compiled_parameters}.should_not raise_error(ParameterConflictError)
+        @node.errors.on(:parameters).should be_nil
       end
 
       it "should include parameters of the node itself" do
         @node.parameters << Parameter.create(:key => "node_parameter", :value => "exist")
+
         @node.compiled_parameters["node_parameter"].should == "exist"
       end
     end
