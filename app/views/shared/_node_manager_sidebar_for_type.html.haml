@@ -16,4 +16,4 @@
         = link_to entry.name, send(path_for_show, entry)
         %span.count= entry.nodes_count
   .footer.actionbar
-    = link_to "Add #{label}", send(path_for_new), :class => 'button'
+    = link_to "Add #{label.downcase}", send(path_for_new), :class => 'button'
