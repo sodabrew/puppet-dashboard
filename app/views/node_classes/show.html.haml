@@ -12,4 +12,7 @@
         = render 'statuses/run_failure', :nodes => @node_class.nodes
     .section
       %h3 Nodes in this class
-      = render 'nodes/nodes', :nodes => @node_class.nodes
+      - if @node_class.nodes.present?
+        = render 'nodes/nodes', :nodes => @node_class.nodes
+      - else
+        = describe_no_matches_of 'No nodes found for this class'

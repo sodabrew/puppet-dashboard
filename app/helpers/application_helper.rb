@@ -172,4 +172,34 @@ module ApplicationHelper
       end
     end
   end
+
+  # Return HTML describing the search in params[:q] if present.
+  #
+  # Example: if params[:q] is "foo", will return:
+  #   'match "foo"'
+  def describe_search_if_present
+    if params[:q].present?
+      return "matching &ldquo;#{h params[:q]}&rdquo;"
+    end
+  end
+
+  # Return HTML describing that no matches were found. If +name+ is a symbol,
+  # it's used as the name of the collection that has no matching entries. If
+  # +name+ is a string, it's used as a complete message prefix.
+  #
+  # Examples:
+  #   params[:q] = 'foo'
+  #   describe_no_matches_of :reports
+  #   # => '-- No reports found matching "foo" --'
+  #
+  #   params[:q] = nil
+  #   describe_no_matches_of 'Specific message'
+  #   # => '-- Specific message --'
+  def describe_no_matches_of(name_or_message)
+    result = "&mdash; "
+    result << (name_or_message.kind_of?(String) ? name_or_message : "No #{name_or_message.to_s.downcase} found")
+    result << " #{describe_search_if_present}" if params[:q]
+    result << " &mdash;"
+    return result
+  end
 end

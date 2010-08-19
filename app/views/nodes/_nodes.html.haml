@@ -27,4 +27,4 @@
       = pagination_for nodes, more_link
     - else
       %td.empty{:colspan => 3}
-        &mdash; No nodes found &mdash;
+        = describe_no_matches_of :nodes

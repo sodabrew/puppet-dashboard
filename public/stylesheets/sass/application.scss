@@ -409,6 +409,11 @@ body {
       padding: .1em .5em;
       float: left;
       padding-left: 0.5em;
+
+      a,
+      span {
+        padding: 0 0.2em;
+      }
     }
 
     .dropdown {
@@ -529,6 +534,16 @@ body {
         white-space: nowrap;
       }
     }
+
+    tr.puppet_log {
+        &.puppet_log_level_err {
+            @include reporty_level_row(#FFD6D6);
+        }
+
+        &.puppet_log_level_warning {
+            @include reporty_level_row(#FFEBD6);
+        }
+    }
   }
 
   &.pages_release_notes_action {
@@ -537,17 +552,10 @@ body {
             margin-top: 1em;
             margin-bottom: 0.15em;
         }
-    }
-  }
 
-  &.reports_show_action {
-    tr.puppet_log {
-        &.puppet_log_level_err {
-            @include reporty_level_row(#FFD6D6);
-        }
-
-        &.puppet_log_level_warning {
-            @include reporty_level_row(#FFEBD6);
+        li {
+            list-style-position: outside;
+            margin-left: 1em;
         }
     }
   }

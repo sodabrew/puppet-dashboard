@@ -12,21 +12,21 @@
       - unless @node_group.parameters.blank?
         = inspector_table @node_group.parameters.to_hash
       - else
-        &mdash; No parameters &mdash;
+        = describe_no_matches_of 'No parameters'
 
     .section.half
       %h3 Inherited groups
       - unless @node_group.node_groups.blank?
         = inspector_table @node_group.node_groups, :name, false, :link => true
       - else
-        &mdash; No groups &mdash;
+        = describe_no_matches_of 'No groups'
 
     .section.half
       %h3 Classes
       - unless @node_group.node_classes.blank?
         = inspector_table @node_group.node_classes, :name, false, :link => true
       - else
-        &mdash; No classes &mdash;
+        = describe_no_matches_of 'No classes'
 
   .item
     - if @node_group.nodes.present?
@@ -34,4 +34,7 @@
         = render 'statuses/run_failure', :nodes => @node_group.nodes
     .section
       %h3 Nodes for this group
-      = render 'nodes/nodes', :nodes => @node_group.nodes
+      - if @node_group.nodes.present?
+        = render 'nodes/nodes', :nodes => @node_group.nodes
+      - else
+        = describe_no_matches_of 'No nodes found for this group'
