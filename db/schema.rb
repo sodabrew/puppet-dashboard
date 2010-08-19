@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100806181533) do
+ActiveRecord::Schema.define(:version => 20100810011613) do
 
   create_table "assignments", :force => true do |t|
     t.integer  "node_id"
@@ -80,7 +80,7 @@ ActiveRecord::Schema.define(:version => 20100806181533) do
 
   create_table "reports", :force => true do |t|
     t.integer  "node_id"
-    t.text     "report"
+    t.text     "report",     :limit => 16777215
     t.datetime "created_at"
     t.datetime "updated_at"
     t.boolean  "success"

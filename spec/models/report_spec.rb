@@ -15,6 +15,17 @@ describe Report do
         @report_data = YAML.load(@report_yaml).extend(ReportExtensions).extend(ReportExtensions)
       end
 
+      it "handles greater than 64k of report text without truncating" do
+        # can actually handle up to 16mb but that test is really slow
+        report = report_from_yaml
+        file_size = 65 * 1024
+        report.report.logs.first.instance_variable_set(:@message, "*" * file_size)
+        original_report_length = report.report.logs.first.message.length
+        report.save!
+        report.reload
+        report.report.logs.first.message.length.should == original_report_length
+      end
+
       it "sets success correctly based on whether the report contains failures" do
         report = report_model_from_yaml('failure.yml')
         report.save!
