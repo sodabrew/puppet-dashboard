@@ -3,26 +3,26 @@ require File.expand_path(File.join(File.dirname(__FILE__), *%w[.. .. spec_helper
 describe '/nodes/edit' do
   before :each do
     assigns[:node] = @node = Node.generate!
+    params[:id] = @node.name
   end
 
   def do_render
-    pending "Testing inherited resources views"
     render '/nodes/edit'
   end
 
   describe 'when errors are available' do
-    it 'should display errors in an error region' do
-      @node.name = nil
+    it 'should display errors if name is blank' do
+      @node.name = ''
       @node.valid?
       do_render
-      response.should have_tag('div[class=?]', 'errorExplanation')
+      response.should have_tag('div.errors')
     end
   end
 
   describe 'when no errors are available' do
     it 'should not display error messages' do
       do_render
-      response.should_not have_tag('div[class=?]', 'errorExplanation')
+      response.should_not have_tag('div.errors')
     end
   end
 
@@ -87,19 +87,19 @@ describe '/nodes/edit' do
 
     it 'should provide a means to edit the associated classes' do
       do_render
-      response.should have_tag('div[id=?]', 'node-classes')
+      response.should have_tag('input[id=node_class_names]')
     end
     
     it 'should show the associated classes' do
       do_render
-      response.should have_tag('div[id=?]', 'node-classes')
+      response.should have_tag('ul[id=existing_node_classes]')
     end
     
     it 'should show each associated class in the associated classes section' do
       do_render
-      response.should have_tag('div[id=?]', 'node-classes') do
+      response.should have_tag('ul#existing_node_classes') do
         @node.node_classes.each do |node_class|
-          with_tag('td', :text => Regexp.new(Regexp.escape(node_class.name)))
+          with_tag('li', :text => Regexp.new(Regexp.escape(node_class.name)))
         end
       end
     end

@@ -1,8 +1,8 @@
 #sidebar= render 'shared/node_manager_sidebar'
 #main
-  - form_for @node do |f|
+  - form_for @node, :url => node_path(params[:id])  do |f|
     = render f
     .element.actions
       %button Save changes
       or
-      = link_to 'Cancel', @node
+      = link_to 'Cancel', node_path(params[:id])
