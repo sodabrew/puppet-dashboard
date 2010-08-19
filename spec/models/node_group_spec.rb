@@ -58,7 +58,7 @@ describe NodeGroup do
       @node_group_a.save
 
       @node_group_a.should_not be_valid
-      @node_group_a.errors.full_messages.should include("Validation failed: Creating an edge from A to A creates a cycle")
+      @node_group_a.errors.full_messages.should include("Validation failed: Creating a dependency from group 'A' to itself creates a cycle")
       @node_group_a.node_groups.should be_empty
     end
 
@@ -68,7 +68,7 @@ describe NodeGroup do
       @node_group_a.save
 
       @node_group_a.should_not be_valid
-      @node_group_a.errors.full_messages.should include("Validation failed: Creating an edge from A to B creates a cycle")
+      @node_group_a.errors.full_messages.should include("Validation failed: Creating a dependency from group 'A' to group 'B' creates a cycle")
       @node_group_a.node_groups.should be_empty
     end
 
