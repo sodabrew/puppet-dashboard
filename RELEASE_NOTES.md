@@ -1,6 +1,29 @@
 Puppet Dashboard Release Notes
 ==============================
 
+v1.0.4
+------
+
+* MIGRATION: Fixed bug truncating very long reports and deleted these invalid reports. Please reimport your reports (see README) after migrating to readd these deleted reports.
+* MIGRATION: Fixed slow database queries on the home page and sidebar.
+* MIGRATION: Fixed orphaned records left behind when classes or groups were deleted, and deleted these orphans from the database.
+* Fixed default node search, it was incorrectly using the "ever failed" node query rather than the "all" nodes query.
+* Fixed run-failure chart to correctly count the reports by day.
+* Fixed report display and sorting to use the time the report was created by a client, rather than the time it was imported.
+* Fixed class validations to accept valid Puppet class names, including those with correctly-placed dashes and double-colons.
+* Fixed cycle exception caused when a node belonged to multiple groups that then inherited from the same other group.
+* Fixed parameter inheritance so that a node belonging to a group can see parameters inherited from the group's parents.
+* Fixed parameter collision to display errors if a parameter was defined differently by groups at the same level of inheritance (e.g. both parents).
+* Fixed exceptions on the node's create and edit forms if the user submitted the form with a blank name.
+* Fixed class edit form to use new-style form that can display error messages.
+* Fixed node,class and group listings to describe in-progress searches and non-matches correctly.
+* Fixed release notes styling to properly indent bullet points.
+* Improved graph legends to more prominently show their intervals.
+* Added documentation describing how to upgrade to a new Puppet Dashboard release.
+* Added documentation describing how to set the Puppet Dashboard's filesystem ownership and permissions.
+* Added documentation describing how to prune old reports and fixed the script for pruning these to use the time the report was created rather than imported.
+* Added documentation describing how to locate error logs to help debug and report problems.
+
 v1.0.3
 ------
 
