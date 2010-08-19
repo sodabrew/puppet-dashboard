@@ -138,4 +138,41 @@ describe ApplicationHelper do
       helper.paginate_scope([1,2,3]).should be_a_kind_of(WillPaginate::Collection)
     end
   end
+
+  describe "#describe_search_if_present" do
+    it "should describe a search" do
+      params[:q] = 'foo'
+      helper.describe_search_if_present.should == 'matching &ldquo;foo&rdquo;'
+    end
+
+    it "should return nil if no search" do
+      helper.describe_search_if_present.should be_nil
+    end
+  end
+
+  describe "#describe_no_matches_of" do
+    context "without search" do
+      it "should be able to describe no matches" do
+        helper.describe_no_matches_of(:reports).should == '&mdash; No reports found &mdash;'
+      end
+
+      it "should be able to emit a specific message" do
+        helper.describe_no_matches_of('Specific message').should == '&mdash; Specific message &mdash;'
+      end
+    end
+
+    context "with search" do
+      before do
+        params[:q] = 'foo'
+      end
+
+      it "should be able to describe no matches for the search" do
+        helper.describe_no_matches_of(:reports).should == '&mdash; No reports found matching &ldquo;foo&rdquo; &mdash;'
+      end
+
+      it "should be able to emit a specific message for a search" do
+        helper.describe_no_matches_of('Specific message').should == '&mdash; Specific message matching &ldquo;foo&rdquo; &mdash;'
+      end
+    end
+  end
 end

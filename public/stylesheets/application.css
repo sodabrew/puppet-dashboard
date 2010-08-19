@@ -244,6 +244,9 @@ body {
       padding: .1em .5em;
       float: left;
       padding-left: 0.5em; }
+      body .actionbar .pagination a,
+      body .actionbar .pagination span {
+        padding: 0 0.2em; }
     body .actionbar .dropdown {
       top: 1.75em; }
     body .actionbar ul {
@@ -374,9 +377,6 @@ body {
   body.reports_show_action table.inspector td.key {
     text-align: right;
     white-space: nowrap; }
-  body.pages_release_notes_action .markeddown h2 {
-    margin-top: 1em;
-    margin-bottom: 0.15em; }
   body.reports_show_action tr.puppet_log.puppet_log_level_err:nth-child(even) td {
     background: #ffc7c7; }
   body.reports_show_action tr.puppet_log.puppet_log_level_err td {
@@ -385,3 +385,9 @@ body {
     background: #ffe4c7; }
   body.reports_show_action tr.puppet_log.puppet_log_level_warning td {
     background: #ffebd6; }
+  body.pages_release_notes_action .markeddown h2 {
+    margin-top: 1em;
+    margin-bottom: 0.15em; }
+  body.pages_release_notes_action .markeddown li {
+    list-style-position: outside;
+    margin-left: 1em; }

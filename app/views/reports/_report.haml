@@ -25,7 +25,7 @@
             = render :partial => 'puppet/util/logs/log', :collection => puppet_log_sorter(report.logs.compact)
           - else
             %td.empty{:colspan => 4}
-              &mdash; No log messages in this report &mdash;
+              = describe_no_matches_of 'No log messages in this report'
   .section
     %h3 Metrics
     - if report.metrics.present?

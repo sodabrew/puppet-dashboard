@@ -26,14 +26,14 @@
       - unless resource.node_groups.empty?
         = inspector_table resource.node_groups, :name, false, :link => true
       - else
-        &mdash; No groups &mdash;
+        = describe_no_matches_of :groups
 
     .section.half
       %h3 Classes
       - unless resource.node_classes.empty?
         = inspector_table resource.node_classes, :name, false, :link => true
       - else
-        &mdash; No classes &mdash;
+        = describe_no_matches_of :classes
 
     - unless resource.inherited_classes.empty?
       = inspector_table resource.inherited_classes, :name, false, :link => true, :caption => 'Inherited Classes'
@@ -84,6 +84,6 @@
       - unless resource.timeline_events.empty?
         %ol.timeline= render resource.timeline_events.recent(10)
       - else
-        &mdash; No activity &mdash;
+        = describe_no_matches_of :activity
 
     %br.clear

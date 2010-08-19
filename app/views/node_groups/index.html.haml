@@ -3,7 +3,9 @@
 #sidebar= render 'shared/node_manager_sidebar'
 #main
   .header
-    %h2.half Groups
+    %h2.half
+      Groups
+      = describe_search_if_present
     = render 'shared/search' if action_name == "index"
     %br.clear
 
@@ -15,10 +17,18 @@
         %th.name
           Name
     %tbody
-      - for node_group in node_groups
-        %tr[node_group]
-          -# %td.check
-            -# = check_box_tag "check_all"
-          %td.name
-            = link_to h(node_group.name), node_group
-  = pagination_for node_groups
+      - if node_groups.present?
+        - for node_group in node_groups
+          %tr[node_group]
+            -# %td.check
+              -# = check_box_tag "check_all"
+            %td.name
+              = link_to h(node_group.name), node_group
+        - if node_groups.total_pages > 1
+          %tfoot
+            %tr
+              %td= pagination_for node_groups
+      - else
+        %tr
+          %td
+            = describe_no_matches_of :groups
