@@ -12,7 +12,7 @@ module NodesHelper
 
   def report_title_text(report)
     returning report.status.titleize do |str|
-      str << " " << time_ago_in_words(report.created_at) << " ago"
+      str << " " << time_ago_in_words(report.time) << " ago"
     end
   end
 
