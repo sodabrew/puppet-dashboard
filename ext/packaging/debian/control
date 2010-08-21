@@ -1,7 +1,7 @@
 Source: puppet-dashboard
 Section: web
 Priority: extra
-Maintainer: James Turnbull <james@lovedthanlost.net>
+Maintainer: James Turnbull <james@puppetlabs.com>
 Build-Depends: debhelper (>= 7), cdbs
 Build-Depends-Indep: po-debconf
 Standards-Version: 3.8.4

@@ -2,15 +2,15 @@
 %global initrddir /etc/rc.d/init.d
 
 Name:           puppet-dashboard
-Version:        1.0.0
-Release:        4%{?dist}
+Version:        1.0.3
+Release:        3%{?dist}
 Summary:        Systems Management web application
 Group:          Applications/System
 License:        GPLv2+
 URL:            http://www.puppetlabs.com
 Source0:        http://yum.puppetlabs.com/sources/%{name}-%{version}.tar.gz
 BuildArch:      noarch
-Requires:       ruby(abi) = 1.8, rubygems, rubygem(rake)
+Requires:       ruby(abi) = 1.8, rubygems, rubygem(rake), ruby-mysql
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 Requires(post): chkconfig
@@ -32,8 +32,11 @@ rm -rf %{buildroot}
 
 install -p -d -m0755 %{buildroot}%{_datadir}/%{name}
 install -p -d -m0755 %{buildroot}%{_datadir}/%{name}/vendor
+install -p -d -m0755 %{buildroot}%{_datadir}/%{name}/public
 install -p -d -m0755 %{buildroot}%{_defaultdocdir}/%{name}-%{version}
-cp -p -r app bin config db lib public Rakefile script spec %{buildroot}%{_datadir}/%{name}
+cp -p -r app bin config db ext lib public Rakefile script spec %{buildroot}%{_datadir}/%{name}
+install -Dp -m0644 VERSION %{buildroot}%{_datadir}/%{name}/VERSION
+install -Dp -m0644 config/database.yml.example %{buildroot}%{_datadir}/%{name}/config/database.yml
 
 # Add sysconfig and init script
 install -Dp -m0755 %{confdir}/%{name}.init %{buildroot}%{initrddir}/puppet-dashboard
@@ -41,7 +44,7 @@ install -Dp -m0644 %{confdir}/%{name}.sysconfig %{buildroot}%{_sysconfdir}/sysco
 
 # Not all plugins are installed from our source file.
 mkdir %{buildroot}%{_datadir}/%{name}/vendor/plugins
-for plugin in authlogic inherited_resources jrails object_daddy resources_controller rspec-rails timeline_fu will_paginate; do
+for plugin in authlogic inherited_resources jrails object_daddy resources_controller timeline_fu will_paginate; do
   cp -p -r vendor/plugins/$plugin %{buildroot}%{_datadir}/%{name}/vendor/plugins/$plugin
 done
 
@@ -80,11 +83,29 @@ rm -rf %{buildroot}
 %files
 %defattr(-,root,root,0755)
 %{_datadir}/%{name}
+%{_datadir}/%{name}/config/database.yml
 %{initrddir}/puppet-dashboard
 %{_sysconfdir}/sysconfig/puppet-dashboard
-%doc CHANGELOG COPYING README.markdown VERSION doc/README_FOR_APP doc/domain-model.graffle doc/domain-model.png
-
+%doc CHANGELOG COPYING README.markdown
 %changelog
+* Fri Jul 30 2010 James Turnbull <james@puppetlabs.com> - 1.0.3-3
+- Fixed database.yml error
+
+* Fri Jul 30 2010 James Turnbull <james@puppetlabs.com> - 1.0.3-2
+- Fixed VERSION issue
+
+* Thu Jul 29 2010 James Turnbull <james@puppetlabs.com> - 1.0.3-1
+- Incremented version
+
+* Sat Jul 15 2010 James Turnbull <james@puppetlabs.com> - 1.0.1-2
+- Added MySQL requires
+- Configured database.yml file
+
+* Fri Jul 14 2010 James Turnbull <james@puppetlabs.com> - 1.0.1-1
+- Removed rspec-rails plugin
+- Removed doc files
+- Updated for Puppet Labs 1.0.1 release
+
 * Mon May 03 2010 Todd Zullinger <tmz@pobox.com> - 1.0.0-4
 - Don't define %%_initrddir, rpm has defined it since the Red Hat Linux days
   (When RHEL-6 and Fedora-9 are the oldest supported releases, %%_initddir should
