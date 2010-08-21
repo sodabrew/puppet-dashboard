@@ -19,8 +19,8 @@
   %body{:class => body_classes}
     #wrap
       #header
-        = render :partial => 'shared/global_nav'
-        = render :partial => 'shared/secondary_nav'
+        = render 'shared/global_nav'
+        = render 'shared/secondary_nav'
       #content
         - [:success, :warning, :failure].each do |type|
           - if message = flash[type]

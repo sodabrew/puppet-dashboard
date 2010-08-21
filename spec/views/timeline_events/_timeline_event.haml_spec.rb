@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
-describe "/timeline_events/_timeline_event.haml" do
+describe "/timeline_events/_timeline_event.html.haml" do
   context "with a node" do
     before do
       @node = Node.generate!
