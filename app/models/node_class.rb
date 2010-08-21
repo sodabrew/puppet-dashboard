@@ -6,7 +6,8 @@ class NodeClass < ActiveRecord::Base
   has_many :nodes, :through => :node_class_memberships
 
   validates_presence_of :name
-  validates_format_of :name, :with => /\A([a-z][-\w]*)+(::[a-z][-\w]*)*\Z/, :message => "must contain a valid Puppet class name, e.g. 'foo' or 'foo::bar'"
+
+  validates_format_of :name, :with => /\A([a-z0-9][-\w]*)(::[a-z0-9][-\w]*)*\Z/, :message => "must contain a valid Puppet class name, e.g. 'foo' or 'foo::bar'"
   validates_uniqueness_of :name
 
   named_scope :search, lambda{|q| q.blank? ? {} : {:conditions => ['name LIKE ?', "%#{q}%"]} }
