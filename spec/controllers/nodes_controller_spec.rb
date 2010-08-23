@@ -32,6 +32,50 @@ describe NodesController do
     end
   end
 
+  describe "#show" do
+    integrate_views
+    before do
+      @node = Node.generate!
+    end
+
+    context "as HTML" do
+      before { get :show, :id => @node.name}
+      specify { response.should be_success }
+    end
+
+    context "as JSON" do
+      before { get :show, :id => @node.name, :format => "json" }
+      specify { response.should be_success }
+      it "should return JSON" do
+        struct = json_from_response_body
+        struct["name"].should == @node.name
+      end
+    end
+
+    context "as YAML" do
+      it "should return YAML when the node is valid" do
+        get :show, :id => @node.name, :format => "yaml"
+
+        response.should be_success
+        struct = yaml_from_response_body
+        struct["name"].should == @node.name
+      end
+
+      it "should propagate errors encountered when the node is invalid" do
+        Node.any_instance.stubs(:compiled_parameters).raises ParameterConflictError
+        lambda {get :index, :id => @node.name, :format => "yaml"}.should raise_error(ParameterConflictError)
+      end
+
+      it "should return YAML for an empty node when the node is not found" do
+        get :show, :id => "nonexistent", :format => "yaml"
+
+        response.should be_success
+        struct = yaml_from_response_body
+        struct.should == {'classes' => []}
+      end
+    end
+  end
+
   describe '#edit' do
     before :each do
       @node = Node.generate!
