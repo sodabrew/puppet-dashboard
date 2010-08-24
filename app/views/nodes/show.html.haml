@@ -58,14 +58,12 @@
                 %td= report.total_resources
                 %td= report.failed_resources
                 %td= report.total_time
-          %tfoot
-            %tr
-              %td{:colspan => @node ? 8 : 7}
-                .actionbar
-                  - if @node.reports.count > reports_limit
+          - if @node.reports.count > reports_limit
+            %tfoot
+              %tr
+                %td{:colspan => 5}
+                  .actionbar
                     = link_to "More &raquo;", reports_node_path(@node), :class => 'button'
-                  - else
-                    &nbsp;
 
     .section
       %h3 Dashboard activity
