@@ -152,12 +152,6 @@ class Node < ActiveRecord::Base
     [params.reverse_merge(inherited), conflicts]
   end
 
-  # Placeholder attributes
-  
-  def environment
-    'production'
-  end
-
   def status_class
     return 'no reports' unless last_report
     last_report.status
