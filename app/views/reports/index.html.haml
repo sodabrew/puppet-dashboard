@@ -27,11 +27,11 @@
       %tbody
         - if reports.present?
           - for report in reports
-            %tr.nowrap
+            %tr.nowrap[report]
               = report_status_td(report)
               %td= link_to report.time.to_s, report
               - unless @node
-                %td= link_to_if report.node, report.host, report.node
+                %td= link_to_if report.node, h(report.host), node_path(report.node)
               %td= report.total_resources
               %td= report.failed_resources
               %td= report.failed_restarts
@@ -45,4 +45,4 @@
                   = pagination_for(reports)
         - else
           %td.empty{:colspan => @node ? 10 : 9}
-            = describe_no_matches_of :reports
+            = describe_no_matches_for :reports

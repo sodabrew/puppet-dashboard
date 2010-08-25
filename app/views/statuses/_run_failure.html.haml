@@ -6,7 +6,7 @@
 - statuses = Status.by_interval(args)
 
 %h3 Daily run status
-%p.legend Number and status of runs during the <b>last #{Status::INTERVAL_CUTOFF/1.day} days</b>:
+%p.legend Number and status of runs during the <strong>last #{Status::INTERVAL_CUTOFF/1.day} days</strong>:
 
 - if statuses.present?
   %table.inspector.data.status.bar
@@ -23,4 +23,4 @@
           %td= status.failed
 - else
   %p 
-    = describe_no_matches_of :reports
+    = describe_no_matches_as 'No runs found to report'

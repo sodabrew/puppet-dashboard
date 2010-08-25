@@ -140,38 +140,44 @@ describe ApplicationHelper do
   end
 
   describe "#describe_search_if_present" do
-    it "should describe a search" do
+    it "should describe an active search" do
       params[:q] = 'foo'
       helper.describe_search_if_present.should == 'matching &ldquo;foo&rdquo;'
     end
 
-    it "should return nil if no search" do
+    it "should return nil if no search active" do
       helper.describe_search_if_present.should be_nil
     end
   end
 
-  describe "#describe_no_matches_of" do
-    context "without search" do
-      it "should be able to describe no matches" do
-        helper.describe_no_matches_of(:reports).should == '&mdash; No reports found &mdash;'
+  describe "#describe_no_matches_as" do
+    it "should return a no matches message" do
+      helper.describe_no_matches_as("Specific message").should == "<span class='nomatches'>&mdash; Specific message &mdash;</span>"
+    end
+  end
+
+  describe "#describe_no_matches_for" do
+    context "when not searchiing" do
+      it "should return a message for the listing" do
+        helper.describe_no_matches_for(:reports).should == "<span class='nomatches'>&mdash; No reports found &mdash;</span>"
       end
 
-      it "should be able to emit a specific message" do
-        helper.describe_no_matches_of('Specific message').should == '&mdash; Specific message &mdash;'
+      it "should return a message for the listing and subject" do
+        helper.describe_no_matches_for(:reports, :node).should == "<span class='nomatches'>&mdash; No reports found for this node &mdash;</span>"
       end
     end
 
-    context "with search" do
+    context "when searching" do
       before do
-        params[:q] = 'foo'
+        params[:q] = 'query'
       end
 
-      it "should be able to describe no matches for the search" do
-        helper.describe_no_matches_of(:reports).should == '&mdash; No reports found matching &ldquo;foo&rdquo; &mdash;'
+      it "should return a message for the listing plus the search" do
+        helper.describe_no_matches_for(:reports).should == "<span class='nomatches'>&mdash; No reports found matching &ldquo;query&rdquo; &mdash;</span>"
       end
 
-      it "should be able to emit a specific message for a search" do
-        helper.describe_no_matches_of('Specific message').should == '&mdash; Specific message matching &ldquo;foo&rdquo; &mdash;'
+      it "should return a message for the listing and subject plus the search" do
+        helper.describe_no_matches_for(:reports, :node).should == "<span class='nomatches'>&mdash; No reports found for this node matching &ldquo;query&rdquo; &mdash;</span>"
       end
     end
   end
