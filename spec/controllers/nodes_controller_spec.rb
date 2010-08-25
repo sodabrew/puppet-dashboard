@@ -34,21 +34,42 @@ describe NodesController do
 
   describe "#show" do
     integrate_views
+
     before do
       @node = Node.generate!
     end
 
     context "as HTML" do
-      before { get :show, :id => @node.name}
-      specify { response.should be_success }
+      it "should return HTML for an existing node" do
+        get :show, :id => @node.name
+
+        response.should be_success
+        assigns[:node].name.should == @node.name
+      end
+
+      it "should return 404 Record Not found an unknown node" do
+        # NOTE: Uncaught RecordNotFound exceptions cause Rails to render a 404
+        # Not Found response in production. We may want to add our own
+        # friendlier error handling, rather than letting Rails handle these.
+        lambda { get :show, :id => 'not_a_valid_node' }.should raise_error(ActiveRecord::RecordNotFound)
+      end
     end
 
     context "as JSON" do
-      before { get :show, :id => @node.name, :format => "json" }
-      specify { response.should be_success }
-      it "should return JSON" do
+      it "should return JSON for an existing node" do
+        get :show, :id => @node.name, :format => "json"
+
+        response.should be_success
+
         struct = json_from_response_body
         struct["name"].should == @node.name
+      end
+
+      it "should return an error for an unknown node" do
+        # NOTE: In the future, it may be better to return a JSON object that
+        # better describes the error. Currently we're raising RecordNotFound,
+        # which returns an HTML page.
+        lambda { get :show, :id => 'not_a_valid_node', :format => 'json' }.should raise_error(ActiveRecord::RecordNotFound)
       end
     end
 
