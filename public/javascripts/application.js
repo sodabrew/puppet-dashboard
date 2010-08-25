@@ -61,7 +61,7 @@ jQuery(document).ready(function(J) {
         show_ticks: false,
         start_at_zero: false,
         stroke_width: 3,
-        vertical_label_unit: "ms",
+        vertical_label_unit: "s",
       }
     );
 
