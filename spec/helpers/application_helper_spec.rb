@@ -2,7 +2,6 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe ApplicationHelper do
 
-  #Delete this example and add some real ones or delete this file
   it "should be included in the object returned by #helper" do
     included_modules = (class << helper; self; end).send :included_modules
     included_modules.should include(ApplicationHelper)
@@ -73,7 +72,7 @@ describe ApplicationHelper do
     end
   end
 
-  # Figure out how to test rendering from a partial
+  # TODO: Figure out how to test rendering from a partial
   describe "#report_status_td" do; end
   describe "#report_status_icon" do; end
   describe "#node_status_icon" do; end
@@ -157,7 +156,7 @@ describe ApplicationHelper do
   end
 
   describe "#describe_no_matches_for" do
-    context "when not searchiing" do
+    context "when not searching" do
       it "should return a message for the listing" do
         helper.describe_no_matches_for(:reports).should == "<span class='nomatches'>&mdash; No reports found &mdash;</span>"
       end
@@ -178,6 +177,106 @@ describe ApplicationHelper do
 
       it "should return a message for the listing and subject plus the search" do
         helper.describe_no_matches_for(:reports, :node).should == "<span class='nomatches'>&mdash; No reports found for this node matching &ldquo;query&rdquo; &mdash;</span>"
+      end
+    end
+  end
+
+  describe "tokenize_input_class" do
+    before :all do
+      @objects = Array.new(6) { NodeGroup.generate! }
+    end
+
+    context "when given a single input" do
+      context "and :objects is empty?" do
+        it "should give an empty JSON array for prePopulate" do
+          helper.tokenize_input_class({:class => '#class', :data_source => '/data.json', :objects => []}).should include('prePopulate: []')
+        end
+      end
+
+      context "and :objects is not empty?" do
+        it "should JSONify a single object" do
+          target = @objects.first
+          text = helper.tokenize_input_class({:class => '#class', :data_source => '/data.json', :objects => [target]})
+          json_data = get_prepopulate_json_data(text)
+
+          json_data.should include({"id" => target.id, "name" => target.name})
+        end
+
+        it "should JSONify multiple objects" do
+          text = helper.tokenize_input_class({:class => '#class', :data_source => '/data.json', :objects => @objects[0..2]})
+          json_data = get_prepopulate_json_data(text)
+          json_data.should have(3).items
+
+          (0..2).each do |idx|
+            json_data.should include({"id" => @objects[idx].id, "name" => @objects[idx].name})
+          end
+        end
+      end
+
+      def get_prepopulate_json_data(text)
+          json_data = ActiveSupport::JSON.decode(text[/prePopulate: (\[.*?\])/m, 1])
+      end
+    end
+
+    context "when given multiple inputs" do
+      context "and all :objects are empty?" do
+        it "should give empty JSON arrays for prePopulate" do
+          input_classes = []
+          (1..3).each do |idx|
+            input_classes << {:class => "#class#{idx}", :data_source => "/data#{idx}.json", :objects => []}
+          end
+          text = helper.tokenize_input_class(*input_classes)
+
+          get_json_struct_for_token_list(text, '#class1').should be_empty
+          get_json_struct_for_token_list(text, '#class2').should be_empty
+          get_json_struct_for_token_list(text, '#class3').should be_empty
+        end
+      end
+
+      context "and some :objects are empty?" do
+        before :all do
+          input_classes = []
+          input_classes << {:class => "#class1", :data_source => "/data1.json", :objects => []}
+          input_classes << {:class => "#class2", :data_source => "/data2.json", :objects => @objects[0..1]}
+          input_classes << {:class => "#class3", :data_source => "/data3.json", :objects => [@objects[2]]}
+          @text = helper.tokenize_input_class(*input_classes)
+        end
+
+        it "should be able to generate an empty JSON array" do
+          get_json_struct_for_token_list(@text, '#class1').should be_empty
+        end
+
+        it "should be able to generate multiple elements in the JSON array" do
+          get_json_struct_for_token_list(@text, '#class2').should include({"id" => @objects[0].id, "name" => @objects[0].name})
+          get_json_struct_for_token_list(@text, '#class2').should include({"id" => @objects[1].id, "name" => @objects[1].name})
+        end
+
+        it "should be able to generate a single element in the JSON array" do
+          get_json_struct_for_token_list(@text, '#class3').should include({"id" => @objects[2].id, "name" => @objects[2].name})
+        end
+      end
+
+      context "and no :objects are empty?" do
+        before :all do
+          input_classes = []
+          input_classes << {:class => "#class1", :data_source => "/data1.json", :objects => [@objects[0]]}
+          input_classes << {:class => "#class2", :data_source => "/data2.json", :objects => @objects[1..2]}
+          @text = helper.tokenize_input_class(*input_classes)
+        end
+
+        it "should be able to generate a single element JSON array" do
+          get_json_struct_for_token_list(@text, '#class1').should include({"id" => @objects[0].id, "name" => @objects[0].name})
+        end
+
+        it "should be able to generate a multiple element JSON array" do
+          get_json_struct_for_token_list(@text, '#class2').should include({"id" => @objects[1].id, "name" => @objects[1].name})
+          get_json_struct_for_token_list(@text, '#class2').should include({"id" => @objects[2].id, "name" => @objects[2].name})
+        end
+      end
+
+      def get_json_struct_for_token_list(text, selector)
+        json = text[/'#{selector}'.+?prePopulate: (\[.*?\])/m, 1]
+        ActiveSupport::JSON.decode(json)
       end
     end
   end

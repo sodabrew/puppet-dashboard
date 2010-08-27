@@ -205,4 +205,42 @@ module ApplicationHelper
     message << " #{describe_search_if_present}" if params[:q]
     return describe_no_matches_as(message)
   end
+
+  # Return a jQuery document ready Javascript block to add
+  # tokenizer/autocomplete functionality to one or more inputs.  The
+  # helper expects to be passed a hash per input to "tokenize".
+  #
+  # Each input is expected to be passed as a hash in the following form:
+  #   {
+  #     :class       => '#css_selector',
+  #     :data_source => '/get/data/here.json',
+  #     :objects     => [ data_to_pre_populate_input, ... ]
+  #   }
+  # Where each object must respond to id, and name.
+  #
+  # Example:
+  #   tokenize_input_classes(
+  #     {:class => '#node_class_ids', :data_source => '/node_classes.json', :objects => @node_classes},
+  #     {:class => '#node_group_ids', :data_source => '/node_groups.json',  :objects => @node_groups}
+  #   )
+  #
+  # This would result in a Javascript snippit such as the following:
+  #   jQuery(document).ready(function(J) {
+  #     J('#node_class_ids').tokenInput('/node_classes.json', {
+  #       prePopulate: [{"name":"another_class","id":2},{"name":"third_class","id":3}]
+  #     });
+  #     J('#node_group_ids').tokenInput('/node_groups.json', {
+  #       prePopulate: []
+  #     });
+  #   });
+  def tokenize_input_class(*inputs)
+    javascript = "jQuery(document).ready(function(J) {\n"
+    inputs.each do |input|
+      javascript << "  J('#{input[:class]}').tokenInput('#{input[:data_source]}', {\n"
+      javascript << "    prePopulate: #{input[:objects].map {|object| {:id => object.id, :name => object.name}}.to_json}\n"
+      javascript << "  });\n"
+    end
+    javascript << "});"
+    return javascript
+  end
 end
