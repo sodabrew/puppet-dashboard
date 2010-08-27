@@ -93,6 +93,9 @@ $.TokenList = function (input, settings) {
             }
         })
         .blur(function () {
+            if(selected_dropdown_item) {
+              add_token($(selected_dropdown_item));
+            }
             hide_dropdown();
         })
         .keydown(function (event) {
