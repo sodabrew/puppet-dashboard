@@ -71,7 +71,7 @@ $.TokenList = function (input, settings) {
 
     // Save the tokens
     var saved_tokens = [];
-    
+
     // Keep track of the number of tokens in the list
     var token_count = 0;
 
@@ -345,9 +345,9 @@ $.TokenList = function (input, settings) {
         // Save this token id
         var id_string = li_data.id + ","
         hidden_input.val(hidden_input.val() + id_string);
-        
+
         token_count++;
-        
+
         if(settings.tokenLimit != null && settings.tokenLimit >= token_count) {
             input_box.hide();
             hide_dropdown();
@@ -417,9 +417,9 @@ $.TokenList = function (input, settings) {
         } else {
             hidden_input.val(str.slice(0, start) + str.slice(end, str.length));
         }
-        
+
         token_count--;
-        
+
         if (settings.tokenLimit != null) {
             input_box
                 .show()
@@ -447,9 +447,9 @@ $.TokenList = function (input, settings) {
     }
 
     // Highlight the query part of the search term
-	function highlight_term(value, term) {
-		return value.replace(new RegExp("(?![^&;]+;)(?!<[^<>]*)(" + term + ")(?![^<>]*>)(?![^&;]+;)", "gi"), "<b>$1</b>");
-	}
+    function highlight_term(value, term) {
+        return value.replace(new RegExp("(?![^&;]+;)(?!<[^<>]*)(" + term + ")(?![^<>]*>)(?![^&;]+;)", "gi"), "<b>$1</b>");
+    }
 
     // Populate the results dropdown with some results
     function populate_dropdown (query, results) {
@@ -542,20 +542,20 @@ $.TokenList = function (input, settings) {
         if(cached_results) {
             populate_dropdown(query, cached_results);
         } else {
-			var queryStringDelimiter = settings.url.indexOf("?") < 0 ? "?" : "&";
-			var callback = function(results) {
-			  if($.isFunction(settings.onResult)) {
-			      results = settings.onResult.call(this, results);
-			  }
+            var queryStringDelimiter = settings.url.indexOf("?") < 0 ? "?" : "&";
+            var callback = function(results) {
+              if($.isFunction(settings.onResult)) {
+                  results = settings.onResult.call(this, results);
+              }
               cache.add(query, settings.jsonContainer ? results[settings.jsonContainer] : results);
               populate_dropdown(query, settings.jsonContainer ? results[settings.jsonContainer] : results);
             };
-            
+
             if(settings.method == "POST") {
-			    $.post(settings.url + queryStringDelimiter + settings.queryParam + "=" + query, {}, callback, settings.contentType);
-		    } else {
-		        $.get(settings.url + queryStringDelimiter + settings.queryParam + "=" + query, {}, callback, settings.contentType);
-		    }
+                $.post(settings.url + queryStringDelimiter + settings.queryParam + "=" + query, {}, callback, settings.contentType);
+            } else {
+                $.get(settings.url + queryStringDelimiter + settings.queryParam + "=" + query, {}, callback, settings.contentType);
+            }
         }
     }
 };
