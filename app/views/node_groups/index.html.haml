@@ -1,5 +1,3 @@
-- node_groups = paginate_scope(@node_groups)
-
 #sidebar= render 'shared/node_manager_sidebar'
 #main
   .header
@@ -17,17 +15,17 @@
         %th.name
           Name
     %tbody
-      - if node_groups.present?
-        - for node_group in node_groups
+      - if @node_groups.present?
+        - for node_group in @node_groups
           %tr[node_group]
             -# %td.check
               -# = check_box_tag "check_all"
             %td.name
               = link_to h(node_group.name), node_group
-        - if node_groups.total_pages > 1
+        - if @node_groups.total_pages > 1
           %tfoot
             %tr
-              %td= pagination_for node_groups
+              %td= pagination_for @node_groups
       - else
         %tr
           %td

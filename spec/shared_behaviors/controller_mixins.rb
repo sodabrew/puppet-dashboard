@@ -52,13 +52,22 @@ describe "without JSON pagination", :shared => true do
         # should be_a_kind_of(WillPaginate::Collection)
       # end
 
-      it "does not paginate" do
-        should_not be_a_kind_of(WillPaginate::Collection)
+      it "will paginate" do
+        should be_a_kind_of(WillPaginate::Collection)
       end
     end
 
     describe "as JSON" do
       before { get 'index', :format => 'json' }
+      subject { assigns[model.name.tableize] }
+
+      it "does not paginate" do
+        should_not be_a_kind_of(WillPaginate::Collection)
+      end
+    end
+
+    describe "as YAML" do
+      before { get 'index', :format => 'yaml' }
       subject { assigns[model.name.tableize] }
 
       it "does not paginate" do
