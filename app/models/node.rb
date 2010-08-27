@@ -158,7 +158,7 @@ class Node < ActiveRecord::Base
   end
 
   attr_accessor :node_class_ids
-  after_save :assign_node_classes
+  before_validation :assign_node_classes
   def assign_node_classes
     return true unless @node_class_ids
     self.node_classes = (@node_class_ids || []).map{|entry| entry.split(/[ ,]/)}.flatten.reject(&:blank?).uniq.map{|id| NodeClass.find(id)}
@@ -168,7 +168,7 @@ class Node < ActiveRecord::Base
   end
 
   attr_accessor :node_group_ids
-  after_save :assign_node_groups
+  before_validation :assign_node_groups
   def assign_node_groups
     return true unless @node_group_ids
     self.node_groups = (@node_group_ids || []).map{|entry| entry.split(/[ ,]/)}.flatten.reject(&:blank?).uniq.map{|id| NodeGroup.find(id)}
