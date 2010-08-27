@@ -66,7 +66,8 @@ $.TokenList = function (input, settings) {
         UP: 38,
         RIGHT: 39,
         DOWN: 40,
-        COMMA: 188
+        COMMA: 188,
+        SPACE: 32
     };
 
     // Save the tokens
@@ -158,6 +159,7 @@ $.TokenList = function (input, settings) {
 
                 case KEY.TAB:
                 case KEY.RETURN:
+                case KEY.SPACE:
                 case KEY.COMMA:
                   if(selected_dropdown_item) {
                     add_token($(selected_dropdown_item));
