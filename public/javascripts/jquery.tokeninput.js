@@ -253,33 +253,36 @@ $.TokenList = function (input, settings) {
     function init_list () {
         li_data = settings.prePopulate;
         if(li_data && li_data.length) {
-            for(var i in li_data) {
-                var this_token = $("<li><p>"+li_data[i].name+"</p> </li>")
-                    .addClass(settings.classes.token)
-                    .insertBefore(input_token);
+            $.each(
+                li_data,
+                function (i, element) {
+                    var this_token = $("<li><p>"+element.name+"</p> </li>")
+                        .addClass(settings.classes.token)
+                        .insertBefore(input_token);
 
-                $("<span>x</span>")
-                    .addClass(settings.classes.tokenDelete)
-                    .appendTo(this_token)
-                    .click(function () {
-                        delete_token($(this).parent());
-                        return false;
-                    });
+                    $("<span>x</span>")
+                        .addClass(settings.classes.tokenDelete)
+                        .appendTo(this_token)
+                        .click(function () {
+                            delete_token($(this).parent());
+                            return false;
+                        });
 
-                $.data(this_token.get(0), "tokeninput", {"id": li_data[i].id, "name": li_data[i].name});
+                    $.data(this_token.get(0), "tokeninput", {"id": element.id, "name": element.name});
 
-                // Clear input box and make sure it keeps focus
-                input_box
-                    .val("")
-                    .focus();
+                    // Clear input box and make sure it keeps focus
+                    input_box
+                        .val("")
+                        .focus();
 
-                // Don't show the help dropdown, they've got the idea
-                hide_dropdown();
+                    // Don't show the help dropdown, they've got the idea
+                    hide_dropdown();
 
-                // Save this token id
-                var id_string = li_data[i].id + ","
-                hidden_input.val(hidden_input.val() + id_string);
-            }
+                    // Save this token id
+                    var id_string = element.id + ","
+                    hidden_input.val(hidden_input.val() + id_string);
+                }
+            );
         }
     }
 
