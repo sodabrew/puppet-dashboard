@@ -31,7 +31,7 @@ describe '/nodes/edit' do
     response.should have_tag('form[id=?]', "edit_node_#{@node.id}")
   end
 
-  describe 'the node edit form' do
+  describe 'for the node edit form' do
     it 'should post to the update node action' do
       do_render
       response.should have_tag('form[id=?][method=?][action=?]', "edit_node_#{@node.id}", 'post', node_path(@node))
@@ -74,40 +74,67 @@ describe '/nodes/edit' do
       end
     end
   end
-  
-  describe 'class editing interface' do
-    before :all do
-      NodeClass.delete_all
-    end
-    
-    before :each do
-      @classes = Array.new(6) { NodeClass.generate! }
-      @node.node_classes << @classes[0..2]
-    end
 
-    it 'should provide a means to edit the associated classes' do
-      do_render
-      response.should have_tag('input[id=node_class_names]')
-    end
-    
-    it 'should show the associated classes' do
-      do_render
-      response.should have_tag('ul[id=existing_node_classes]')
-    end
-    
-    it 'should show each associated class in the associated classes section' do
-      do_render
-      response.should have_tag('ul#existing_node_classes') do
-        @node.node_classes.each do |node_class|
-          with_tag('li', :text => Regexp.new(Regexp.escape(node_class.name)))
+  describe 'editing interface' do
+    describe 'for classes' do
+      before :each do
+        @classes = Array.new(6) { NodeClass.generate! }
+        @node.node_classes << @classes[0..2]
+      end
+
+      it 'should provide a means to edit the associated classes' do
+        do_render
+        response.should have_tag('input#node_class_ids')
+      end
+
+      it 'should show the associated classes' do
+        do_render
+
+        response.should have_tag('#tokenizer') do
+          struct = get_json_struct_for_token_list('#node_class_ids')
+          struct.should have(3).items
+
+          (0..2).each do |idx|
+            struct.should include({"id" => @classes[idx].id, "name" => @classes[idx].name})
+          end
         end
       end
+
+      it 'should provide a remove link for each associated class'
+      it 'should show the classes available to be associated'
+      it 'should show non-associated classes in the classes available to be associated section'
+      it 'should provide an associate link for each available class'
     end
-    
-    it 'should provide a remove link for each associated class'
-    it 'should show the classes available to be associated'
-    it 'should show non-associated classes in the classes available to be associated section'
-    it 'should provide an associate link for each available class'
+
+    describe 'for groups' do
+      before :each do
+        @groups = Array.new(6) {NodeGroup.generate! }
+        @node.node_groups << @groups[0..3]
+      end
+
+      it 'should show the associated groups' do
+        do_render
+
+        response.should have_tag('#tokenizer') do
+          struct = get_json_struct_for_token_list('#node_group_ids')
+          struct.should have(4).items
+
+          (0..3).each do |idx|
+            struct.should include({"id" => @groups[idx].id, "name" => @groups[idx].name})
+          end
+        end
+      end
+
+      it 'should provide a remove link for each associated group'
+      it 'should show the groups available to be associated'
+      it 'should show non-associated groups in the groups available to be associated section'
+      it 'should provide an associate link for each available group'
+    end
+
+    def get_json_struct_for_token_list(selector)
+      json = response.body[/'#{selector}'.+?prePopulate: (\[.*?\])/m, 1]
+      ActiveSupport::JSON.decode(json)
+    end
   end
 
   it 'should link to view the node' do

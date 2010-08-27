@@ -350,13 +350,13 @@ describe Node do
   end
 
   describe "assigning nodes and groups" do
-    it "should not remove classes if node_class_names is unspecified" do
+    it "should not remove classes if node_class_ids is unspecified" do
       @node = Node.generate!
       @node.node_classes << NodeClass.generate!
       lambda {@node.update_attribute(:name, 'new_name')}.should_not change{@node.node_classes.size}
     end
 
-    it "should not remove groups if node_group_names is unspecified" do
+    it "should not remove groups if node_group_ids is unspecified" do
       @node = Node.generate!
       @node.node_groups << NodeGroup.generate!
       lambda {@node.update_attribute(:name, 'new_name')}.should_not change{@node.node_groups.size}

@@ -157,18 +157,24 @@ class Node < ActiveRecord::Base
     last_report.status
   end
 
-  attr_accessor :node_class_names
+  attr_accessor :node_class_ids
   after_save :assign_node_classes
   def assign_node_classes
-    return true unless @node_class_names
-    self.node_classes = (@node_class_names || []).reject(&:blank?).map{|name| NodeClass.find_by_name(name)}
+    return true unless @node_class_ids
+    self.node_classes = (@node_class_ids || []).map{|entry| entry.split(/[ ,]/)}.flatten.reject(&:blank?).uniq.map{|id| NodeClass.find(id)}
+  rescue ActiveRecord::RecordInvalid => e
+    self.errors.add_to_base(e.message)
+    return false
   end
 
-  attr_accessor :node_group_names
+  attr_accessor :node_group_ids
   after_save :assign_node_groups
   def assign_node_groups
-    return true unless @node_group_names
-    self.node_groups = (@node_group_names || []).reject(&:blank?).map{|name| NodeGroup.find_by_name(name)}
+    return true unless @node_group_ids
+    self.node_groups = (@node_group_ids || []).map{|entry| entry.split(/[ ,]/)}.flatten.reject(&:blank?).uniq.map{|id| NodeGroup.find(id)}
+  rescue ActiveRecord::RecordInvalid => e
+    self.errors.add_to_base(e.message)
+    return false
   end
 
   # Assigns the node's :last_report attribute. # FIXME

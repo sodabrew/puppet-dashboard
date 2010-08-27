@@ -54,7 +54,7 @@ describe NodeGroup do
     end
 
     it "should not allow a group to include itself" do
-      @node_group_a.node_group_names = "A"
+      @node_group_a.node_group_ids = [ @node_group_a.id.to_s ]
       @node_group_a.save
 
       @node_group_a.should_not be_valid
@@ -64,7 +64,7 @@ describe NodeGroup do
 
     it "should not allow a cycle to be formed" do
       @node_group_b.node_groups << @node_group_a
-      @node_group_a.node_group_names = "B"
+      @node_group_a.node_group_ids = [ @node_group_b.id.to_s ]
       @node_group_a.save
 
       @node_group_a.should_not be_valid
@@ -77,7 +77,7 @@ describe NodeGroup do
       @node_group_d = NodeGroup.generate!
       @node_group_a.node_groups << @node_group_c
       @node_group_b.node_groups << @node_group_c
-      @node_group_d.node_group_names = ["A","B"]
+      @node_group_d.node_group_ids = [@node_group_a.id.to_s, @node_group_b.id.to_s]
 
       @node_group_d.should be_valid
       @node_group_d.errors.should be_empty

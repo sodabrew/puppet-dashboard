@@ -33,20 +33,23 @@ class NodeGroup < ActiveRecord::Base
     super({:methods => :description, :only => [:name, :id]}.merge(options))
   end
 
-  attr_accessor :node_class_names
+  attr_accessor :node_class_ids
   after_save :assign_node_classes
   def assign_node_classes
-    self.node_classes = (@node_class_names || []).map{|name| NodeClass.find_by_name(name)}
+    return true unless @node_class_ids
+    self.node_classes = (@node_class_ids || []).map{|entry| entry.split(/[ ,]/)}.flatten.reject(&:blank?).uniq.map{|id| NodeClass.find(id)}
+  rescue ActiveRecord::RecordInvalid => e
+    self.errors.add_to_base(e.message)
+    return false
   end
 
-  attr_accessor :node_group_names
+  attr_accessor :node_group_ids
   before_validation :assign_node_groups
   def assign_node_groups
-    begin
-      self.node_groups = (@node_group_names || []).map{|name| NodeGroup.find_by_name(name)}
-    rescue ActiveRecord::RecordInvalid => e
-      self.errors.add_to_base(e.message)
-      return false
-    end
+    return true unless @node_group_ids
+    self.node_groups = (@node_group_ids || []).map{|entry| entry.split(/[ ,]/)}.flatten.reject(&:blank?).uniq.map{|id| NodeGroup.find(id)}
+  rescue ActiveRecord::RecordInvalid => e
+    self.errors.add_to_base(e.message)
+    return false
   end
 end
