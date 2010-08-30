@@ -28,12 +28,10 @@
 
   .element.node_classes
     = label_tag 'Classes'
-    = hidden_field_tag 'node[node_class_ids][]', '   '
     = text_field_tag 'node[node_class_ids][]', '', :id => 'node_class_ids'
 
   .element.node_groups
     = label_tag 'Groups'
-    = hidden_field_tag 'node[node_group_ids][]', '   '
     = text_field_tag 'node[node_group_ids][]', '', :id => 'node_group_ids'
 
   - class_data = {:class => '#node_class_ids', :data_source => '/node_classes.json', :objects => form.object.node_classes}
