@@ -1,3 +1,6 @@
+# USAGE: Your `describe` block must define a `model` method that returns the
+# ActiveRecord model class to use for describing this behavior.
+
 describe "with search by q and tag", :shared => true do
   before do
     @for_tag = model.generate(:name => 'for_tag')

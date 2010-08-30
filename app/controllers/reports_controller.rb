@@ -16,7 +16,11 @@ class ReportsController < InheritedResources::Base
   private
 
   def collection
-    get_collection_ivar || set_collection_ivar(request.format == :html ? end_of_association_chain.paginate(:page => params[:page]) : end_of_association_chain)
+    get_collection_ivar || set_collection_ivar(
+      request.format == :html ? 
+        end_of_association_chain.paginate(:page => params[:page]) : 
+        end_of_association_chain
+    )
   end
 
   def handle_raw_post
