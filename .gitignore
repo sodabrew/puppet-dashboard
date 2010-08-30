@@ -20,5 +20,6 @@ public/javascripts/all.js
 public/stylesheets/all.css
 spec/rcov.opts
 spec/spec.opts
+spec/watchr.rb
 tags
 tmp/*

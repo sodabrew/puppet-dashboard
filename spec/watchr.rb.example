@@ -1,0 +1,35 @@
+# SUMMARY: watchr provides a way to continuously run tests, it's an alternative to Autotest.
+# SETUP:
+#   1. Install the watchr library:
+#     gem install watchr
+#   2. Make a copy of the `watchr.rb` script and customize to taste:
+#     cp spec/watchr.rb{.example,}
+# USAGE: watchr spec/watchr.rb
+
+def run_spec_file(test_file)
+  output_header test_file
+  system %Q{./script/spec '#{test_file}' --diff unified --format nested --color}
+  output_footer test_file
+end
+
+def output_header(test_file)
+  puts "\n\n"
+  system "date"
+  puts test_file
+end
+
+def output_footer(test_file)
+  system %Q{echo -ne \a}
+end
+
+watch('app/(.*)\.rb') do |md|
+  test_file = "spec/#{md[1]}_spec.rb"
+
+  run_spec_file test_file
+end
+
+watch('spec/.*_spec\.rb') do |md|
+  test_file = "#{md[0]}"
+
+  run_spec_file test_file
+end
