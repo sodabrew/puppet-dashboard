@@ -1,4 +1,6 @@
 class NodeClass < ActiveRecord::Base
+  def self.per_page; 50 end # Pagination
+
   has_many :node_group_class_memberships, :dependent => :destroy
   has_many :node_class_memberships, :dependent => :destroy
 

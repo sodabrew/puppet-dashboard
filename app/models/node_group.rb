@@ -1,5 +1,8 @@
 class NodeGroup < ActiveRecord::Base
+  def self.per_page; 50 end # Pagination
+
   include NodeGroupGraph
+
   has_many :node_group_class_memberships, :dependent => :destroy
   has_many :node_classes, :through => :node_group_class_memberships
 

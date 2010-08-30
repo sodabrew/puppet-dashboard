@@ -1,5 +1,3 @@
-- reports = paginate_scope(@reports, :per_page => 20)
-
 #main.full
   .header
     %h2
@@ -7,7 +5,7 @@
       - if @node
         %span.alt for
         = link_to @node.name, @node
-      %span.count== (#{reports.total_entries})
+      %span.count== (#{@reports.total_entries})
 
   .item
     %table.inspector
@@ -25,8 +23,8 @@
           %th Config retrieval
           %th Runtime
       %tbody
-        - if reports.present?
-          - for report in reports
+        - if @reports.present?
+          - for report in @reports
             %tr.nowrap[report]
               = report_status_td(report)
               %td= link_to report.time.to_s, report
@@ -38,11 +36,11 @@
               %td= report.skipped_resources
               %td #{report.config_retrieval_time} s
               %td #{report.total_time} s
-          - if reports.total_pages > 1
+          - if @reports.total_pages > 1
             %tfoot
               %tr
                 %td{:colspan => @node ? 10 : 9}
-                  = pagination_for(reports)
+                  = pagination_for(@reports)
         - else
           %td.empty{:colspan => @node ? 10 : 9}
-            = describe_no_matches_for :reports
+            = describe_no_matches_for :@reports

@@ -6,7 +6,7 @@ describe "/node_groups/index.html.haml" do
   describe "successful render" do
     before do
       template.stubs(:action_name => 'index')
-      assigns[:node_groups] = @node_groups = [ NodeGroup.generate!, NodeGroup.generate! ]
+      assigns[:node_groups] = @node_groups = [ NodeGroup.generate!, NodeGroup.generate! ].paginate
       render
     end
 

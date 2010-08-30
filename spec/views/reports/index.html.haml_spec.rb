@@ -4,7 +4,7 @@ describe "/reports/index.html.haml" do
   describe "the response"  do
     before do
       @nodes = [Node.generate!, Node.generate!]
-      assigns[:reports] = @reports = @nodes.map { |node| Report.generate_for(node) }
+      assigns[:reports] = @reports = @nodes.map { |node| Report.generate_for(node) }.paginate
       render
     end
 
@@ -17,7 +17,7 @@ describe "/reports/index.html.haml" do
     before do
       @report = Report.generate!
       @report.stubs(:metrics).returns(nil)
-      assigns[:reports] = @reports = [ @report ]
+      assigns[:reports] = @reports = [ @report ].paginate
       render
     end
 

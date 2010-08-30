@@ -1,6 +1,12 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
+require 'shared_behaviors/controller_mixins'
+
 describe ReportsController do
+  def model; Report end
+
+  it_should_behave_like "without JSON pagination"
+
   describe "creating a report" do
     before do
       @yaml = File.read(Rails.root.join('spec', 'fixtures', 'sample_report.yml'))
