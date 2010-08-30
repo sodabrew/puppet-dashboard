@@ -36,4 +36,46 @@ describe NodeClass do
       node_group.node_group_class_memberships.reload.should be_empty
     end
   end
+
+  describe "helper" do
+    before :all do
+      NodeClass.delete_all
+
+      @classes = Array.new(3) {|idx| NodeClass.generate! :name => "class_#{idx}"}
+    end
+
+    describe "find_from_form_names" do
+      it "should work with a single name" do
+        classes = NodeClass.find_from_form_names("class_0")
+
+        classes.should include(@classes.first)
+      end
+
+      it "should work with multiple names" do
+        classes = NodeClass.find_from_form_names("class_0", "class_2")
+
+        classes.should include(@classes.first, @classes.last)
+      end
+    end
+
+    describe "find_from_form_ids" do
+      it "should work with a single id" do
+        classes = NodeClass.find_from_form_ids(@classes.first.id)
+
+        classes.should include(@classes.first)
+      end
+
+      it "should work with multiple ids" do
+        classes = NodeClass.find_from_form_ids(@classes.first.id, @classes.last.id)
+
+        classes.should include(@classes.first, @classes.last)
+      end
+
+      it "should work with comma separated ids" do
+        classes = NodeClass.find_from_form_ids("#{@classes.first.id},#{@classes.last.id}")
+
+        classes.should include(@classes.first, @classes.last)
+      end
+    end
+  end
 end

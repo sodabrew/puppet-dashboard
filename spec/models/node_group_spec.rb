@@ -84,4 +84,44 @@ describe NodeGroup do
       @node_group_d.node_groups.should include(@node_group_a,@node_group_b)
     end
   end
+
+  describe "helper" do
+    before :all do
+      NodeGroup.delete_all
+
+      @groups = Array.new(3) {|idx| NodeGroup.generate! :name => "Group #{idx}"}
+    end
+
+    describe "find_from_form_names" do
+      it "should work with a single name" do
+        group = NodeGroup.find_from_form_names("Group 0")
+
+        group.should include(@groups.first)
+      end
+
+      it "should work with multiple names" do
+        group = NodeGroup.find_from_form_names("Group 0", "Group 2")
+
+        group.should include(@groups.first, @groups.last)
+      end
+    end
+
+    describe "find_from_form_ids" do
+      it "should work with a single id" do
+        group = NodeGroup.find_from_form_ids(@groups.first.id)
+
+        group.should include(@groups.first)
+      end
+
+      it "should work with multiple ids" do
+        group = NodeGroup.find_from_form_ids(@groups.first.id, @groups.last.id)
+
+        group.should include(@groups.first, @groups.last)
+      end
+      it "should work with comma separated ids" do
+        group = NodeGroup.find_from_form_ids("#{@groups.first.id},#{@groups.last.id}")
+        group.should include(@groups.first, @groups.last)
+      end
+    end
+  end
 end

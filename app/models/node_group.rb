@@ -52,4 +52,12 @@ class NodeGroup < ActiveRecord::Base
     self.errors.add_to_base(e.message)
     return false
   end
+
+  def self.find_from_form_names(*names)
+    names.reject(&:blank?).map{|name| self.find_by_name(name)}.uniq
+  end
+
+  def self.find_from_form_ids(*ids)
+    ids.map{|entry| entry.to_s.split(/[ ,]/)}.flatten.reject(&:blank?).uniq.map{|id| self.find(id)}
+  end
 end
