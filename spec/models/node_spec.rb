@@ -143,7 +143,9 @@ describe Node do
     end
 
     describe 'when the node has classes' do
-      before { @node.node_classes << @node_classes.first }
+      before :each do
+        @node.node_classes << @node_classes.first
+      end
 
       it "should not include the node's classes" do
         @node.available_node_classes.should_not include(@node_classes.first)
@@ -163,7 +165,9 @@ describe Node do
     end
 
     describe 'when the node has groups' do
-      before { @node.node_groups << @node_groups.first }
+      before :each do
+        @node.node_groups << @node_groups.first
+      end
 
       it "should not include the node's groups" do
         @node.available_node_groups.should_not include(@node_groups.first)

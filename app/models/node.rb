@@ -84,10 +84,6 @@ class Node < ActiveRecord::Base
     no_longer_reporting.count
   end
 
-  def to_param
-    name.to_s
-  end
-
   def available_node_classes
     @available_node_classes ||= NodeClass.all(:order => :name) - node_classes - inherited_classes
   end

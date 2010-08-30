@@ -3,7 +3,7 @@ require File.expand_path(File.join(File.dirname(__FILE__), *%w[.. .. spec_helper
 describe '/nodes/edit' do
   before :each do
     assigns[:node] = @node = Node.generate!
-    params[:id] = @node.name
+    params[:id] = @node.id
   end
 
   def do_render

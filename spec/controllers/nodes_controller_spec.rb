@@ -114,7 +114,7 @@ describe NodesController do
     end
 
     def do_get
-      get :edit, :id => @node.name
+      get :edit, :id => @node.id
     end
 
     it 'should make the requested node available to the view' do
@@ -126,12 +126,18 @@ describe NodesController do
       do_get
       response.should render_template('edit')
     end
+
+    it 'should work when given a node name' do
+      get :edit, :id => @node.name
+
+      assigns[:node].should == @node
+    end
   end
 
   describe '#update' do
     before :each do
       @node = Node.generate!
-      @params = { :id => @node.name, :node => @node.attributes }
+      @params = { :id => @node.id, :node => @node.attributes }
     end
 
     def do_put
@@ -141,6 +147,13 @@ describe NodesController do
     it 'should fail when an invalid node id is given' do
       @params[:id] = 'unknown'
       lambda { do_put }.should raise_error(ActiveRecord::RecordNotFound)
+    end
+
+    it 'should work when given a node name' do
+      @params.merge!({:id => @node.name})
+
+      do_put
+      assigns[:node].should == @node
     end
 
     describe 'when a valid node id is given' do
