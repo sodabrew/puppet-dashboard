@@ -103,8 +103,12 @@ describe Report do
       @report = Report.generate_for(@node, 1.week.ago.to_date, true)
     end
 
-    it "should set the node's most recent report to the second most recent report" do
+    it "should set the node's most recent report to what is now the most recent report" do
       @newer_report = Report.generate_for(@node, Time.now, false)
+      @node.last_report.should == @newer_report
+      @node.reported_at.should == @newer_report.time
+      @node.success.should == @newer_report.success
+
       @newer_report.destroy
 
       @node.last_report.should == @report
