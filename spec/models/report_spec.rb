@@ -95,7 +95,33 @@ describe Report do
       report_yaml = File.read(report_file)
       Report.new(:report => report_yaml)
     end
-
   end
 
+  describe "when destroying the most recent report for a node" do
+    before do
+      @node = Node.generate
+      @report = Report.generate_for(@node, 1.week.ago.to_date, true)
+    end
+
+    it "should set the node's most recent report to what is now the most recent report" do
+      @newer_report = Report.generate_for(@node, Time.now, false)
+      @node.last_report.should == @newer_report
+      @node.reported_at.should == @newer_report.time
+      @node.success.should == @newer_report.success
+
+      @newer_report.destroy
+
+      @node.last_report.should == @report
+      @node.reported_at.should == @report.time
+      @node.success.should == @report.success
+    end
+
+    it "should clear the node's most recent report if there are no other reports" do
+      @report.destroy
+
+      @node.last_report.should == nil
+      @node.reported_at.should == nil
+      @node.success.should == false
+    end
+  end
 end

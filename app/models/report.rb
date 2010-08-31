@@ -8,6 +8,7 @@ class Report < ActiveRecord::Base
   validates_uniqueness_of :host, :scope => :time, :allow_nil => true
   before_validation :process_report
   after_save :update_node
+  after_destroy :replace_last_report
 
   delegate :logs, :metric_value, :to => :report
   delegate :total_resources, :failed_resources, :failed_restarts, :skipped_resources,
@@ -71,14 +72,12 @@ class Report < ActiveRecord::Base
 
   def update_node(force=false)
     if node && (force || (node.reported_at.nil? || (node.reported_at-1.second) <= self.time))
-      node.last_report = self unless node.last_report == self
-      node.reported_at = self.time
-      node.success = self.success?
-
-      # FIXME #update_without_callbacks doesn't update the object, and #save! is creating unwanted timeline events.
-      ### node.send :update_without_callbacks # do not create a timeline event
-      node.save!
+      node.assign_last_report(self)
     end
+  end
+
+  def replace_last_report
+    node.assign_last_report if node
   end
 
   def report_contains_metrics

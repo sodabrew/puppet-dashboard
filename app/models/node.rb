@@ -171,6 +171,21 @@ class Node < ActiveRecord::Base
     self.node_groups = (@node_group_names || []).reject(&:blank?).map{|name| NodeGroup.find_by_name(name)}
   end
 
+  # Assigns the node's :last_report attribute. # FIXME
+  def assign_last_report(report=nil)
+    report ||= find_last_report
+
+    unless self.last_report == report
+      self.last_report = report 
+      self.reported_at = report ? report.time : nil
+      self.success = report ? report.success? : false
+
+      # FIXME #update_without_callbacks doesn't update the object, and #save! is creating unwanted timeline events.
+      ### node.send :update_without_callbacks # do not create a timeline event
+      self.save!
+    end
+  end
+
   def find_last_report
     return Report.find_last_for(self)
   end
