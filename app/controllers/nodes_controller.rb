@@ -25,6 +25,19 @@ class NodesController < InheritedResources::Base
     scoped_index :no_longer_reporting
   end
 
+  def show
+    begin
+      show!
+    rescue ActiveRecord::RecordNotFound => e
+      if request.format == :yaml
+        node = {'classes' => []}
+        render :text => node.to_yaml, :content_type => 'application/x-yaml'
+      else
+        raise e
+      end
+    end
+  end
+
   # TODO: routing currently can't handle nested resources due to node's id
   # requirements
   def reports

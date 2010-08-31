@@ -38,6 +38,71 @@ describe NodesController do
     end
   end
 
+  describe "#show" do
+    integrate_views
+
+    before do
+      @node = Node.generate!
+    end
+
+    context "as HTML" do
+      it "should return HTML for an existing node" do
+        get :show, :id => @node.name
+
+        response.should be_success
+        assigns[:node].name.should == @node.name
+      end
+
+      it "should return 404 Record Not found an unknown node" do
+        # NOTE: Uncaught RecordNotFound exceptions cause Rails to render a 404
+        # Not Found response in production. We may want to add our own
+        # friendlier error handling, rather than letting Rails handle these.
+        lambda { get :show, :id => 'not_a_valid_node' }.should raise_error(ActiveRecord::RecordNotFound)
+      end
+    end
+
+    context "as JSON" do
+      it "should return JSON for an existing node" do
+        get :show, :id => @node.name, :format => "json"
+
+        response.should be_success
+
+        struct = json_from_response_body
+        struct["name"].should == @node.name
+      end
+
+      it "should return an error for an unknown node" do
+        # NOTE: In the future, it may be better to return a JSON object that
+        # better describes the error. Currently we're raising RecordNotFound,
+        # which returns an HTML page.
+        lambda { get :show, :id => 'not_a_valid_node', :format => 'json' }.should raise_error(ActiveRecord::RecordNotFound)
+      end
+    end
+
+    context "as YAML" do
+      it "should return YAML when the node is valid" do
+        get :show, :id => @node.name, :format => "yaml"
+
+        response.should be_success
+        struct = yaml_from_response_body
+        struct["name"].should == @node.name
+      end
+
+      it "should propagate errors encountered when the node is invalid" do
+        Node.any_instance.stubs(:compiled_parameters).raises ParameterConflictError
+        lambda {get :index, :id => @node.name, :format => "yaml"}.should raise_error(ParameterConflictError)
+      end
+
+      it "should return YAML for an empty node when the node is not found" do
+        get :show, :id => "nonexistent", :format => "yaml"
+
+        response.should be_success
+        struct = yaml_from_response_body
+        struct.should == {'classes' => []}
+      end
+    end
+  end
+
   describe '#edit' do
     before :each do
       @node = Node.generate!
