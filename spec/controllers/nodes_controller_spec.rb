@@ -88,9 +88,12 @@ describe NodesController do
         struct["name"].should == @node.name
       end
 
-      it "should propagate errors encountered when the node is invalid" do
+      it "should explain errors encountered when the node is invalid" do
         Node.any_instance.stubs(:compiled_parameters).raises ParameterConflictError
-        lambda {get :index, :id => @node.name, :format => "yaml"}.should raise_error(ParameterConflictError)
+        get :show, :id => @node.name, :format => "yaml"
+
+        response.should_not be_success
+        response.body.should =~ /has conflicting parameter\(s\)/
       end
 
       it "should return YAML for an empty node when the node is not found" do
