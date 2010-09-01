@@ -3,6 +3,7 @@
   .header
     %h2
       = node_status_icon(@node)
+      Node:
       = h @node.name
     %ul.actions
       %li= link_to 'Edit', edit_node_path(@node), :class => "edit button", :rel => 'inspect'
@@ -19,7 +20,7 @@
           The following parameters have multiple conflicting values:
           = [*@node.errors.on(:parameters)].join(", ")
       = inspector_table @node.compiled_parameters(true), :key, :value, :link => false, :caption => 'Parameters'
-        
+
 
     .section.half
       %h3 Groups

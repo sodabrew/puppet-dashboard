@@ -1,7 +1,9 @@
 #sidebar= render 'shared/node_manager_sidebar'
 #main
   .header
-    %h2= @node_class.name
+    %h2
+      Class:
+      = @node_class.name
     %ul.actions
       %li= link_to 'Edit', edit_node_class_path(@node_class), :class => "edit button"
       %li= link_to 'Destroy', @node_class, :confirm => 'Are you sure?', :method => :delete, :class => "delete button"
