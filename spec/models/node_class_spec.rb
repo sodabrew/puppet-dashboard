@@ -48,12 +48,14 @@ describe NodeClass do
       it "should work with a single name" do
         classes = NodeClass.find_from_form_names("class_0")
 
+        classes.size.should == 1
         classes.should include(@classes.first)
       end
 
       it "should work with multiple names" do
         classes = NodeClass.find_from_form_names("class_0", "class_2")
 
+        classes.size.should == 2
         classes.should include(@classes.first, @classes.last)
       end
     end
@@ -62,18 +64,21 @@ describe NodeClass do
       it "should work with a single id" do
         classes = NodeClass.find_from_form_ids(@classes.first.id)
 
+        classes.size.should == 1
         classes.should include(@classes.first)
       end
 
       it "should work with multiple ids" do
         classes = NodeClass.find_from_form_ids(@classes.first.id, @classes.last.id)
 
+        classes.size.should == 2
         classes.should include(@classes.first, @classes.last)
       end
 
       it "should work with comma separated ids" do
         classes = NodeClass.find_from_form_ids("#{@classes.first.id},#{@classes.last.id}")
 
+        classes.size.should == 2
         classes.should include(@classes.first, @classes.last)
       end
     end

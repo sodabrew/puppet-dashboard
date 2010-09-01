@@ -370,6 +370,7 @@ describe Node do
 
         @node.should be_valid
         @node.errors.should be_empty
+        @node.node_classes.size.should == 1
         @node.node_classes.should include(@classes.first)
       end
 
@@ -378,6 +379,7 @@ describe Node do
 
         @node.should be_valid
         @node.errors.should be_empty
+        @node.node_classes.size.should == 2
         @node.node_classes.should include(@classes.first, @classes.last)
       end
     end
@@ -388,6 +390,7 @@ describe Node do
 
         @node.should be_valid
         @node.errors.should be_empty
+        @node.node_classes.size.should == 1
         @node.node_classes.should include(@classes.first)
       end
 
@@ -396,6 +399,7 @@ describe Node do
 
         @node.should be_valid
         @node.errors.should be_empty
+        @node.node_classes.size.should == 2
         @node.node_classes.should include(@classes.first, @classes.last)
       end
     end
@@ -407,6 +411,7 @@ describe Node do
 
         @node.should be_valid
         @node.errors.should be_empty
+        @node.node_classes.size.should == 2
         @node.node_classes.should include(@classes.first, @classes.last)
       end
     end
@@ -432,6 +437,7 @@ describe Node do
 
         @node.should be_valid
         @node.errors.should be_empty
+        @node.node_groups.size.should == 1
         @node.node_groups.should include(@groups.first)
       end
 
@@ -440,6 +446,7 @@ describe Node do
 
         @node.should be_valid
         @node.errors.should be_empty
+        @node.node_groups.size.should == 2
         @node.node_groups.should include(@groups.first, @groups.last)
       end
     end
@@ -450,6 +457,7 @@ describe Node do
 
         @node.should be_valid
         @node.errors.should be_empty
+        @node.node_groups.size.should == 1
         @node.node_groups.should include(@groups.first)
       end
 
@@ -458,6 +466,7 @@ describe Node do
 
         @node.should be_valid
         @node.errors.should be_empty
+        @node.node_groups.size.should == 2
         @node.node_groups.should include(@groups.first, @groups.last)
       end
     end
@@ -473,6 +482,7 @@ describe Node do
 
         @node.should be_valid
         @node.errors.should be_empty
+        @node.node_groups.size.should == 2
         @node.node_groups.should include(@groups.first, @groups.last)
       end
     end

@@ -137,6 +137,7 @@ describe NodeGroup do
 
           @node_group.should be_valid
           @node_group.errors.should be_empty
+          @node_group.node_classes.size.should == 1
           @node_group.node_classes.should include(@node_class_a)
         end
       end
@@ -147,6 +148,7 @@ describe NodeGroup do
 
           @node_group.should be_valid
           @node_group.errors.should be_empty
+          @node_group.node_classes.size.should == 2
           @node_group.node_classes.should include(@node_class_a, @node_class_b)
         end
       end
@@ -159,6 +161,7 @@ describe NodeGroup do
 
           @node_group.should be_valid
           @node_group.errors.should be_empty
+          @node_group.node_classes.size.should == 1
           @node_group.node_classes.should include(@node_class_a)
         end
       end
@@ -169,6 +172,7 @@ describe NodeGroup do
 
           @node_group.should be_valid
           @node_group.errors.should be_empty
+          @node_group.node_classes.size.should == 2
           @node_group.node_classes.should include(@node_class_a, @node_class_b)
         end
       end
@@ -181,6 +185,7 @@ describe NodeGroup do
 
         @node_group.should be_valid
         @node_group.errors.should be_empty
+        @node_group.node_classes.size.should == 2
         @node_group.node_classes.should include(@node_class_a, @node_class_b)
       end
     end
@@ -203,6 +208,7 @@ describe NodeGroup do
       it "should work with multiple names" do
         group = NodeGroup.find_from_form_names("Group 0", "Group 2")
 
+        group.size.should == 2
         group.should include(@groups.first, @groups.last)
       end
     end
@@ -211,18 +217,21 @@ describe NodeGroup do
       it "should work with a single id" do
         group = NodeGroup.find_from_form_ids(@groups.first.id)
 
+        group.size.should == 1
         group.should include(@groups.first)
       end
 
       it "should work with multiple ids" do
         group = NodeGroup.find_from_form_ids(@groups.first.id, @groups.last.id)
 
+        group.size.should == 2
         group.should include(@groups.first, @groups.last)
       end
 
       it "should work with comma separated ids" do
         group = NodeGroup.find_from_form_ids("#{@groups.first.id},#{@groups.last.id}")
 
+        group.size.should == 2
         group.should include(@groups.first, @groups.last)
       end
     end
