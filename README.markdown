@@ -358,3 +358,4 @@ Contributors
 * Ian Ward Comfort <icomfort@stanford.edu>
 * Matt Robinson <matt@puppetlabs.com>
 * Nick Lewis <nick@puppetlabs.com>
+* Jacob Helwig <jacob@puppetlabs.com>
