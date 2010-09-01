@@ -2,6 +2,7 @@
 #main
   .header
     %h2
+      Node:
       = node_status_icon(@node)
       = h @node.name
     %ul.actions
@@ -19,7 +20,7 @@
           The following parameters have multiple conflicting values:
           = [*@node.errors.on(:parameters)].join(", ")
       = inspector_table @node.compiled_parameters(true), :key, :value, :link => false, :caption => 'Parameters'
-        
+
 
     .section.half
       %h3 Groups
