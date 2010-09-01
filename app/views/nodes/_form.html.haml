@@ -28,17 +28,12 @@
 
   .element.node_classes
     = label_tag 'Classes'
-    = hidden_field_tag 'node[node_class_names][]', '   '
-    = text_field_tag 'node[node_class_names][]', '', :id => 'node_class_names'
-    %ul#existing_node_classes
-      - form.object.node_classes.each do |klass|
-        %li= klass.name
+    = text_field_tag 'node[node_class_ids][]', '', :id => 'node_class_ids'
 
   .element.node_groups
     = label_tag 'Groups'
-    = hidden_field_tag 'node[node_group_names][]', '   '
-    = text_field_tag 'node[node_group_names][]', '', :id => 'node_group_names'
-    %ul#existing_node_groups
-      - form.object.node_groups.each do |group|
-        %li= group.name
+    = text_field_tag 'node[node_group_ids][]', '', :id => 'node_group_ids'
 
+  - class_data = {:class => '#node_class_ids', :data_source => '/node_classes.json', :objects => form.object.node_classes}
+  - group_data = {:class => '#node_group_ids', :data_source => '/node_groups.json',  :objects => form.object.node_groups}
+  %script#tokenizer{:type => "text/javascript"}= tokenize_input_class(class_data, group_data)

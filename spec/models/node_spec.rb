@@ -140,6 +140,10 @@ describe Node do
 
   describe '#available_node_classes' do
     before do
+      Node.destroy_all
+      NodeClass.destroy_all
+      NodeGroup.destroy_all
+
       @node = Node.new
       @node_classes = Array.new(3){ NodeClass.generate! }
     end
@@ -161,6 +165,7 @@ describe Node do
   describe '#available_node_groups' do
     before do
       @node = Node.new
+      NodeGroup.delete_all
       @node_groups = Array.new(3){ NodeGroup.generate! }
     end
 
@@ -349,19 +354,142 @@ describe Node do
     end
   end
 
-  describe "assigning nodes and groups" do
-    it "should not remove classes if node_class_names is unspecified" do
-      @node = Node.generate!
-      @node.node_classes << NodeClass.generate!
+  describe "when assigning classes" do
+    before :each do
+      Node.delete_all
+      NodeClass.delete_all
+
+      @node    = Node.generate!
+      @classes = Array.new(3) { NodeClass.generate! }
+    end
+
+    it "should not remove classes if node_class_ids and node_class_names are unspecified" do
+      @node.node_classes << @classes.first
       lambda {@node.update_attribute(:name, 'new_name')}.should_not change{@node.node_classes.size}
     end
 
-    it "should not remove groups if node_group_names is unspecified" do
-      @node = Node.generate!
-      @node.node_groups << NodeGroup.generate!
+    describe "via node_class_ids" do
+      it "should be able to assign a single class" do
+        @node.node_class_ids = @classes.first.id
+
+        @node.should be_valid
+        @node.errors.should be_empty
+        @node.node_classes.size.should == 1
+        @node.node_classes.should include(@classes.first)
+      end
+
+      it "should be able to assign multiple classes" do
+        @node.node_class_ids = [@classes.first.id, @classes.last.id]
+
+        @node.should be_valid
+        @node.errors.should be_empty
+        @node.node_classes.size.should == 2
+        @node.node_classes.should include(@classes.first, @classes.last)
+      end
+    end
+
+    describe "via node_class_names" do
+      it "should be able to assign a single class" do
+        @node.node_class_names = @classes.first.name
+
+        @node.should be_valid
+        @node.errors.should be_empty
+        @node.node_classes.size.should == 1
+        @node.node_classes.should include(@classes.first)
+      end
+
+      it "should be able to assign multiple classes" do
+        @node.node_class_names = [@classes.first.name, @classes.last.name]
+
+        @node.should be_valid
+        @node.errors.should be_empty
+        @node.node_classes.size.should == 2
+        @node.node_classes.should include(@classes.first, @classes.last)
+      end
+    end
+
+    describe "via node_class_ids, and node_class_names" do
+      it "should assign all specified classes" do
+        @node.node_class_names = @classes.first.name
+        @node.node_class_ids   = @classes.last.id
+
+        @node.should be_valid
+        @node.errors.should be_empty
+        @node.node_classes.size.should == 2
+        @node.node_classes.should include(@classes.first, @classes.last)
+      end
+    end
+  end
+
+  describe "when assigning groups" do
+    before :each do
+      Node.delete_all
+      NodeGroup.delete_all
+
+      @node   = Node.generate!
+      @groups = Array.new(3) { NodeGroup.generate! }
+    end
+
+    it "should not remove groups if node_group_ids and node_group_names are unspecified" do
+      @node.node_groups << @groups.first
       lambda {@node.update_attribute(:name, 'new_name')}.should_not change{@node.node_groups.size}
     end
 
+    describe "via node_group_ids" do
+      it "should be able to assign a single group" do
+        @node.node_group_ids = @groups.first.id
+
+        @node.should be_valid
+        @node.errors.should be_empty
+        @node.node_groups.size.should == 1
+        @node.node_groups.should include(@groups.first)
+      end
+
+      it "should be able to assign multiple groups" do
+        @node.node_group_ids = [@groups.first.id, @groups.last.id]
+
+        @node.should be_valid
+        @node.errors.should be_empty
+        @node.node_groups.size.should == 2
+        @node.node_groups.should include(@groups.first, @groups.last)
+      end
+    end
+
+    describe "via node_group_names" do
+      it "should be able to assign a single group" do
+        @node.node_group_names = @groups.first.name
+
+        @node.should be_valid
+        @node.errors.should be_empty
+        @node.node_groups.size.should == 1
+        @node.node_groups.should include(@groups.first)
+      end
+
+      it "should be able to assign multiple groups" do
+        @node.node_group_names = [@groups.first.name, @groups.last.name]
+
+        @node.should be_valid
+        @node.errors.should be_empty
+        @node.node_groups.size.should == 2
+        @node.node_groups.should include(@groups.first, @groups.last)
+      end
+    end
+
+    describe "via node_group_ids, and node_group_names" do
+      before :each do
+        @groups = Array.new(3) { NodeGroup.generate! }
+      end
+
+      it "should assign all specified groups" do
+        @node.node_group_names = @groups.first.name
+        @node.node_group_ids   = @groups.last.id
+
+        @node.should be_valid
+        @node.errors.should be_empty
+        @node.node_groups.size.should == 2
+        @node.node_groups.should include(@groups.first, @groups.last)
+      end
+    end
   end
 
   describe "destroying" do
@@ -395,5 +523,4 @@ describe Node do
       node_group.node_group_memberships.should be_empty
     end
   end
-
 end

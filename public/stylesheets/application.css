@@ -14,7 +14,8 @@ body {
   color: #444;
   min-width: 400px;
   /* SIDEBAR */
-  /* ACTIONBAR */ }
+  /* ACTIONBAR */
+  /* Facebook-style token autocompletion */ }
   body #content {
     padding: 1.5em 0 2em; }
   body #header {
@@ -391,3 +392,14 @@ body {
   body.pages_release_notes_action .markeddown li {
     list-style-position: outside;
     margin-left: 1em; }
+  body ul.token-input-list-facebook {
+    width: 100%; }
+  body div.token-input-dropdown-facebook.token-input-dropdown-facebook {
+    background-color: #FFFFED;
+    width: 450px; }
+  body div.token-input-dropdown-facebook ul li.token-input-dropdown-item-facebook, body div.token-input-dropdown-facebook ul li.token-input-dropdown-item2-facebook {
+    background-color: #FFFFED;
+    list-style-type: none; }
+  body div.token-input-dropdown-facebook ul li.token-input-selected-dropdown-item-facebook {
+    background-color: #FFFDA4;
+    color: #000; }

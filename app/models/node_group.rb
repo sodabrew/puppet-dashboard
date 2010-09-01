@@ -34,19 +34,40 @@ class NodeGroup < ActiveRecord::Base
   end
 
   attr_accessor :node_class_names
-  after_save :assign_node_classes
+  attr_accessor :node_class_ids
+  before_validation :assign_node_classes
   def assign_node_classes
-    self.node_classes = (@node_class_names || []).map{|name| NodeClass.find_by_name(name)}
+    return true unless @node_class_ids || @node_class_names
+    node_classes = []
+    node_classes << NodeClass.find_from_form_names(*@node_class_names) if @node_class_names
+    node_classes << NodeClass.find_from_form_ids(*@node_class_ids)     if @node_class_ids
+
+    self.node_classes = node_classes.flatten.uniq
+  rescue ActiveRecord::RecordInvalid => e
+    self.errors.add_to_base(e.message)
+    return false
   end
 
   attr_accessor :node_group_names
+  attr_accessor :node_group_ids
   before_validation :assign_node_groups
   def assign_node_groups
-    begin
-      self.node_groups = (@node_group_names || []).map{|name| NodeGroup.find_by_name(name)}
-    rescue ActiveRecord::RecordInvalid => e
-      self.errors.add_to_base(e.message)
-      return false
-    end
+    return true unless @node_group_ids || @node_group_names
+    node_groups = []
+    node_groups << NodeGroup.find_from_form_names(*@node_group_names) if @node_group_names
+    node_groups << NodeGroup.find_from_form_ids(*@node_group_ids)     if @node_group_ids
+
+    self.node_groups = node_groups.flatten.uniq
+  rescue ActiveRecord::RecordInvalid => e
+    self.errors.add_to_base(e.message)
+    return false
+  end
+
+  def self.find_from_form_names(*names)
+    names.reject(&:blank?).map{|name| self.find_by_name(name)}.uniq
+  end
+
+  def self.find_from_form_ids(*ids)
+    ids.map{|entry| entry.to_s.split(/[ ,]/)}.flatten.reject(&:blank?).uniq.map{|id| self.find(id)}
   end
 end

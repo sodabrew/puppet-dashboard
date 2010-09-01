@@ -559,4 +559,32 @@ body {
         }
     }
   }
+
+  /* Facebook-style token autocompletion */
+
+  ul.token-input-list-facebook {
+    width: 100%;
+  }
+  
+  div.token-input-dropdown-facebook {
+    &.token-input-dropdown-facebook {
+      background-color: #FFFFED;
+      width: 450px;
+    }
+
+    ul {
+      li {
+        &.token-input-dropdown-item-facebook, 
+        &.token-input-dropdown-item2-facebook {
+          background-color: #FFFFED;
+          list-style-type: none;
+        }
+
+        &.token-input-selected-dropdown-item-facebook {
+          background-color: #FFFDA4;
+          color: #000;
+        }
+      }
+    }
+  }
 }
