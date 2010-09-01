@@ -25,3 +25,4 @@ binary-install/puppet-dashboard::
 	rm -f debian/puppet-dashboard/.autotest
 	find debian/puppet-dashboard -name '.gitignore' -type f | xargs rm -f
 	find debian/puppet-dashboard -name '.git' -type d | xargs rm -rf
+	chown -R www-data:www-data debian/puppet-dashboard/usr/share/puppet-dashboard/public
