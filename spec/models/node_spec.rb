@@ -140,6 +140,10 @@ describe Node do
 
   describe '#available_node_classes' do
     before do
+      Node.destroy_all
+      NodeClass.destroy_all
+      NodeGroup.destroy_all
+
       @node = Node.new
       @node_classes = Array.new(3){ NodeClass.generate! }
     end
