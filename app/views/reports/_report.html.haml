@@ -2,6 +2,7 @@
   %h2
     %span.status{:class => report.status}
       = report_status_icon(report)
+      Report:
       = report.time.to_s
     - if report.node
       %span.alt for

@@ -2,8 +2,8 @@
 #main
   .header
     %h2
-      Node:
       = node_status_icon(@node)
+      Node:
       = h @node.name
     %ul.actions
       %li= link_to 'Edit', edit_node_path(@node), :class => "edit button", :rel => 'inspect'
