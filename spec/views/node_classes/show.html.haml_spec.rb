@@ -10,6 +10,6 @@ describe "/node_classes/show.html.haml" do
     end
 
     specify { response.should be_a_success }
-    it { should have_tag('h2', @node_class.name) }
+    it { should have_tag('h2', "Class:\n#{@node_class.name}") }
   end
 end

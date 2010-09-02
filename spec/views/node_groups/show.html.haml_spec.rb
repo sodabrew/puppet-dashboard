@@ -10,6 +10,6 @@ describe "/node_groups/show.html.haml" do
     end
 
     specify { response.should be_success }
-    it { should have_tag('h2', @node_group.name) }
+    it { should have_tag('h2', "Group:\n#{@node_group.name}") }
   end
 end
