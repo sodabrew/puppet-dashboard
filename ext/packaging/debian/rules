@@ -1,6 +1,10 @@
 #!/usr/bin/make -f
 # -*- makefile -*-
 
+# Uncomment these fllowing lines to display lots of debugging information during the build process:
+### export DH_VERBOSE=1
+### export DH_OPTIONS=-v
+
 include /usr/share/cdbs/1/rules/debhelper.mk
 
 DEB_UPSTREAM_VERSION := $(shell echo $(DEB_VERSION) | cut -d- -f1 )
@@ -9,8 +13,9 @@ TARBALL = $(DEB_SOURCE_PACKAGE)_$(DEB_UPSTREAM_VERSION).orig.tar.gz
 GIT_REVISION := $(shell echo $(DEB_UPSTREAM_VERSION) | awk -F"~" '{ print $$2 }' | sed 's/git//' )
 GIT_URL := http://github.com/reductivelabs/puppet-dashboard.git
 
-
-binary-install/puppet-dashboard::
+build-install::
+	# Copy in example "database.yml" file
+	cp ../../config/database.yml.example debian/doc/examples/
 	# Clean up the "extra" license files
 	rm -f debian/puppet-dashboard/usr/share/puppet-dashboard/doc/README_FOR_APP
 	rm -f debian/puppet-dashboard/usr/share/puppet-dashboard/vendor/plugins/*/*LICENSE
@@ -25,4 +30,3 @@ binary-install/puppet-dashboard::
 	rm -f debian/puppet-dashboard/.autotest
 	find debian/puppet-dashboard -name '.gitignore' -type f | xargs rm -f
 	find debian/puppet-dashboard -name '.git' -type d | xargs rm -rf
-	chown -R www-data:www-data debian/puppet-dashboard/usr/share/puppet-dashboard/public

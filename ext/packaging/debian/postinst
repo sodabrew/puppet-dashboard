@@ -1,0 +1,9 @@
+#!/bin/sh -e
+
+if [ "$1" = "configure" ]; then
+    for item in config/environment.rb public log tmp; do
+        chown -R www-data:www-data /usr/share/puppet-dashboard/${item}
+    done
+fi
+
+#DEBHELPER#
