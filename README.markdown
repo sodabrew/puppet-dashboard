@@ -27,7 +27,7 @@ The Puppet Dashboard will run on most Unix, Linux and Mac OS X systems once its 
 
 ### Operating system-specific examples for installing dependencies
 
-*NOTE*: The following example instructions assume a fresh install of their respective operating systems. Your actual installation procedure may be different depending on your system's current configuration.
+*NOTE*: The following example instructions assume a fresh install of their respective operating systems. Your actual installation procedure may be different depending on your system's current configuration.  All commands are assumed to be run using an sh compatible shell (sh, Bash, Dash, Zsh, etc.), unless otherwise noted.
 
 #### Ubuntu 10.04 LTS
 
@@ -35,19 +35,18 @@ The Puppet Dashboard will run on most Unix, Linux and Mac OS X systems once its 
 
        apt-get install -y build-essential irb libmysql-ruby libmysqlclient-dev libopenssl-ruby libreadline-ruby mysql-server rake rdoc ri ruby ruby-dev
 
-2. Install the `gem` package manager -- do not use the one packaged with the operating system:
+2. Install the `gem` package manager, using the following shell script -- do not use the `rubygems` packaged with the operating system:
 
-       URL="http://production.cf.rubygems.org/rubygems/rubygems-1.3.7.tgz"
-       PACKAGE=$(echo $URL | sed "s/\.[^\.]*$//; s/^.*\///")
-       pushd "/tmp"
-         CACHE=`mktemp -d install_rubygems.XXXXXXXXXX`
-         pushd "$CACHE"
-           wget -c -t10 -T20 -q "$URL"
-           tar xfz "$PACKAGE.tgz"
-           cd "$PACKAGE"
-           sudo ruby setup.rb
-         popd
-       popd
+       (
+         URL="http://production.cf.rubygems.org/rubygems/rubygems-1.3.7.tgz"
+         PACKAGE=$(echo $URL | sed "s/\.[^\.]*$//; s/^.*\///")
+
+         cd $(mktemp -d /tmp/install_rubygems.XXXXXXXXXX) && \
+         wget -c -t10 -T20 -q $URL && \
+         tar xfz $PACKAGE.tgz && \
+         cd $PACKAGE && \
+         sudo ruby setup.rb
+       )
 
 3. Create `gem` as an alternative name for the `gem1.8` command:
 
@@ -68,19 +67,18 @@ The Puppet Dashboard will run on most Unix, Linux and Mac OS X systems once its 
        service mysqld start
        chkconfig mysqld on
 
-4. Install the `gem` package manager -- do not install RubyGems version 1.3.6 or newer because they are incompatible with the Ruby shipped with CentOS 5.5:
+4. Install the `gem` package manager, using the following shell script -- do not install RubyGems version 1.3.6 or newer because they are incompatible with the Ruby shipped with CentOS 5.5:
 
-       URL="http://production.cf.rubygems.org/rubygems/rubygems-1.3.5.tgz"
-       PACKAGE=$(echo $URL | sed "s/\.[^\.]*$//; s/^.*\///")
-       pushd "/tmp"
-         CACHE=`mktemp -d install_rubygems.XXXXXXXXXX`
-         pushd "$CACHE"
-           wget -c -t10 -T20 -q "$URL"
-           tar xfz "$PACKAGE.tgz"
-           cd "$PACKAGE"
-           sudo ruby setup.rb
-         popd
-       popd
+       (
+         URL="http://production.cf.rubygems.org/rubygems/rubygems-1.3.5.tgz"
+         PACKAGE=$(echo $URL | sed "s/\.[^\.]*$//; s/^.*\///")
+
+         cd $(mktemp -d /tmp/install_rubygems.XXXXXXXXXX) && \
+         wget -c -t10 -T20 -q $URL && \
+         tar xfz $PACKAGE.tgz && \
+         cd $PACKAGE && \
+         sudo ruby setup.rb
+       )
 
 5. Install the `rake` gem:
 
