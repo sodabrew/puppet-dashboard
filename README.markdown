@@ -55,9 +55,7 @@ The Puppet Dashboard will run on most Unix, Linux and Mac OS X systems once its 
 
 #### CentOS 5.5
 
-1. Install the [Extra Packages for Enterprise Linux (EPEL)](http://fedoraproject.org/wiki/EPEL) repository for `yum`:
-
-       rpm -Uvh http://download.fedora.redhat.com/pub/epel/5/i386/epel-release-5-3.noarch.rpm
+1. Install the [Extra Packages for Enterprise Linux (EPEL)](http://fedoraproject.org/wiki/EPEL) repository for `yum`.  Please see [the EPEL Wiki](https://fedoraproject.org/wiki/EPEL/FAQ#howtouse) for specific instructions.
 
 2. Install the operating system packages:
 
