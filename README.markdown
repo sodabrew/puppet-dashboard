@@ -31,93 +31,95 @@ The Puppet Dashboard will run on most Unix, Linux and Mac OS X systems once its 
 
 #### Ubuntu 10.04 LTS
 
-1. Install the operating system packages:
+1.  Install the operating system packages:
 
-       apt-get install -y build-essential irb libmysql-ruby libmysqlclient-dev libopenssl-ruby libreadline-ruby mysql-server rake rdoc ri ruby ruby-dev
+        apt-get install -y build-essential irb libmysql-ruby libmysqlclient-dev \
+          libopenssl-ruby libreadline-ruby mysql-server rake rdoc ri ruby ruby-dev
 
-2. Install the `gem` package manager, using the following shell script -- do not use the `rubygems` packaged with the operating system:
+2.  Install the `gem` package manager, using the following shell script -- do not use the `rubygems` packaged with the operating system:
 
-       (
-         URL="http://production.cf.rubygems.org/rubygems/rubygems-1.3.7.tgz"
-         PACKAGE=$(echo $URL | sed "s/\.[^\.]*$//; s/^.*\///")
+        (
+          URL="http://production.cf.rubygems.org/rubygems/rubygems-1.3.7.tgz"
+          PACKAGE=$(echo $URL | sed "s/\.[^\.]*$//; s/^.*\///")
 
-         cd $(mktemp -d /tmp/install_rubygems.XXXXXXXXXX) && \
-         wget -c -t10 -T20 -q $URL && \
-         tar xfz $PACKAGE.tgz && \
-         cd $PACKAGE && \
-         sudo ruby setup.rb
-       )
+          cd $(mktemp -d /tmp/install_rubygems.XXXXXXXXXX) && \
+          wget -c -t10 -T20 -q $URL && \
+          tar xfz $PACKAGE.tgz && \
+          cd $PACKAGE && \
+          sudo ruby setup.rb
+        )
 
-3. Create `gem` as an alternative name for the `gem1.8` command:
+3.  Create `gem` as an alternative name for the `gem1.8` command:
 
-       update-alternatives --install /usr/bin/gem gem /usr/bin/gem1.8 1
+        update-alternatives --install /usr/bin/gem gem /usr/bin/gem1.8 1
 
 #### CentOS 5.5
 
-1. Install the [Extra Packages for Enterprise Linux (EPEL)](http://fedoraproject.org/wiki/EPEL) repository for `yum`:
+1.  Install the [Extra Packages for Enterprise Linux (EPEL)](http://fedoraproject.org/wiki/EPEL) repository for `yum`:
 
-       rpm -Uvh http://download.fedora.redhat.com/pub/epel/5/i386/epel-release-5-3.noarch.rpm
+        rpm -Uvh http://download.fedora.redhat.com/pub/epel/5/i386/epel-release-5-3.noarch.rpm
 
-2. Install the operating system packages:
+2.  Install the operating system packages:
 
-       yum install -y mysql mysql-devel mysql-server ruby ruby-devel ruby-irb ruby-mysql ruby-rdoc ruby-ri
+        yum install -y mysql mysql-devel mysql-server ruby ruby-devel ruby-irb \
+          ruby-mysql ruby-rdoc ruby-ri
 
-3. Start MySQL and make it start automatically at boot:
+3.  Start MySQL and make it start automatically at boot:
 
-       service mysqld start
-       chkconfig mysqld on
+        service mysqld start
+        chkconfig mysqld on
 
-4. Install the `gem` package manager, using the following shell script -- do not install RubyGems version 1.3.6 or newer because they are incompatible with the Ruby shipped with CentOS 5.5:
+4.  Install the `gem` package manager, using the following shell script -- do not install RubyGems version 1.3.6 or newer because they are incompatible with the Ruby shipped with CentOS 5.5:
 
-       (
-         URL="http://production.cf.rubygems.org/rubygems/rubygems-1.3.5.tgz"
-         PACKAGE=$(echo $URL | sed "s/\.[^\.]*$//; s/^.*\///")
+        (
+          URL="http://production.cf.rubygems.org/rubygems/rubygems-1.3.5.tgz"
+          PACKAGE=$(echo $URL | sed "s/\.[^\.]*$//; s/^.*\///")
 
-         cd $(mktemp -d /tmp/install_rubygems.XXXXXXXXXX) && \
-         wget -c -t10 -T20 -q $URL && \
-         tar xfz $PACKAGE.tgz && \
-         cd $PACKAGE && \
-         sudo ruby setup.rb
-       )
+          cd $(mktemp -d /tmp/install_rubygems.XXXXXXXXXX) && \
+          wget -c -t10 -T20 -q $URL && \
+          tar xfz $PACKAGE.tgz && \
+          cd $PACKAGE && \
+          sudo ruby setup.rb
+        )
 
-5. Install the `rake` gem:
+5.  Install the `rake` gem:
 
-       gem install rake
+        gem install rake
 
 Installation
 ------------
 
-1. Download the Puppet Dashboard software:
+1.  Download the Puppet Dashboard software:
 
-   1. Checkout the latest source code using the [Git](http://git-scm.com/) revision control system:
+    1.  Checkout the latest source code using the [Git](http://git-scm.com/) revision control system:
 
-          git clone git://github.com/reductivelabs/puppet-dashboard.git
+            git clone git://github.com/reductivelabs/puppet-dashboard.git
 
-   2. Or install the software using APT or RPM packages. See `README_PACKAGES.markdown` for instructions.
+    2.  Or install the software using APT or RPM packages. See `README_PACKAGES.markdown` for instructions.
 
-2. Create a `config/database.yml` file to specify Puppet Dashboard's database configuration. Please see the `config/database.yml.example` file for further details about database configurations and environments. These files paths are relative to the path of the Puppet Dashboard software containing this `README.markdown` file.
+2.  Create a `config/database.yml` file to specify Puppet Dashboard's database configuration. Please see the `config/database.yml.example` file for further details about database configurations and environments. These files paths are relative to the path of the Puppet Dashboard software containing this `README.markdown` file.
 
-3. Setup a MySQL database server, create a user and database for use with the Puppet Dashboard by either:
+3.  Setup a MySQL database server, create a user and database for use with the Puppet Dashboard by either:
 
-   1. Using a `rake` task to create just the database from settings in the `config/database.yml` file. You must `cd` into the directory with the Puppet Dashboard software containing this `README.markdown` file before running these commands:
+    1.  Using a `rake` task to create just the database from settings in the `config/database.yml` file. You must `cd` into the directory with the Puppet Dashboard software containing this `README.markdown` file before running these commands:
 
-          rake RAILS_ENV=production db:create
+            rake RAILS_ENV=production db:create
 
-   2. Or creating the database, user and privileges manually by running `mysql` as a privileged user (e.g. `root`) and executing commands like:
+    2.  Or creating the database, user and privileges manually by running `mysql` as a privileged user (e.g. `root`) and executing commands like:
 
-          CREATE DATABASE dashboard CHARACTER SET utf8;
-          CREATE USER 'dashboard'@'localhost' IDENTIFIED BY 'my_password';
-          GRANT ALL PRIVILEGES ON dashboard.* TO 'dashboard'@'localhost';
+            CREATE DATABASE dashboard CHARACTER SET utf8;
+            CREATE USER 'dashboard'@'localhost' IDENTIFIED BY 'my_password';
+            GRANT ALL PRIVILEGES ON dashboard.* TO 'dashboard'@'localhost';
 
-4. Populate the database with the tables for the Puppet Dashboard.
+4.  Populate the database with the tables for the Puppet Dashboard.
 
-   1. For typical use with the `production` environment:
+    1.  For typical use with the `production` environment:
 
-          rake RAILS_ENV=production db:migrate
+            rake RAILS_ENV=production db:migrate
 
-   2. For developing the software using the `development` and `test` environments:
+    2.  For developing the software using the `development` and `test` environments:
 
-          rake db:migrate db:test:prepare
+            rake db:migrate db:test:prepare
 
 Ownership and permission requirements
 -------------------------------------
@@ -172,19 +174,19 @@ Running
 
 There are many ways to run a Ruby web application like the Puppet Dashboard, we recommend:
 
-1. **Built-in webserver**: Ruby includes a built-in webserver that can run a single instance of the Puppet Dashboard application without any additional software. This is great for getting started quickly, but isn't recommended for production use because it's slow and can't handle multiple requests at the same time. You must `cd` into the directory with the Puppet Dashboard software containing this `README.markdown` file before running these commands:
+1.  **Built-in webserver**: Ruby includes a built-in webserver that can run a single instance of the Puppet Dashboard application without any additional software. This is great for getting started quickly, but isn't recommended for production use because it's slow and can't handle multiple requests at the same time. You must `cd` into the directory with the Puppet Dashboard software containing this `README.markdown` file before running these commands:
 
-   1. Start a `production` server on port 3000:
+    1.  Start a `production` server on port 3000:
 
-           ./script/server -e production
+            ./script/server -e production
 
-   2. Or start a `development` server on port 8080, where the `development` environment is used by default:
+    2.  Or start a `development` server on port 8080, where the `development` environment is used by default:
 
-           ./script/server -p 8080
+            ./script/server -p 8080
 
-2. **Passenger**: This plugin for [Apache](http://httpd.apache.org/) or [Nginx](http://nginx.org/) makes it easy to run multiple Ruby web apps quickly and efficiently using multiple instances -- it's great for production use. If used along with Ruby Enterprise Edition, it can dramatically reduce the memory required to run Ruby web applications. For further information, please see [Passenger/](http://www.modrails.com/) and [Ruby Enterprise Edition](http://www.rubyenterpriseedition.com/) and the example apache configuration in `ext/passenger/dashboard-vhost.conf`.
+2.  **Passenger**: This plugin for [Apache](http://httpd.apache.org/) or [Nginx](http://nginx.org/) makes it easy to run multiple Ruby web apps quickly and efficiently using multiple instances -- it's great for production use. If used along with Ruby Enterprise Edition, it can dramatically reduce the memory required to run Ruby web applications. For further information, please see [Passenger/](http://www.modrails.com/) and [Ruby Enterprise Edition](http://www.rubyenterpriseedition.com/) and the example apache configuration in `ext/passenger/dashboard-vhost.conf`.
 
-3. **Thin**: This fast and reliable server can run multiple instances of the Puppet Dashboard application behind a proxy like [Apache](http://httpd.apache.org/) or [Nginx](http://nginx.org/) to appear as a single website -- it's great for production use. For further information, please see [Thin](http://code.macournoyer.com/thin/).
+3.  **Thin**: This fast and reliable server can run multiple instances of the Puppet Dashboard application behind a proxy like [Apache](http://httpd.apache.org/) or [Nginx](http://nginx.org/) to appear as a single website -- it's great for production use. For further information, please see [Thin](http://code.macournoyer.com/thin/).
 
 Reporting
 ---------
@@ -209,63 +211,63 @@ The Puppet Dashboard can collect reports from your Puppet Master as they're crea
 
 ##### On your clients
 
-1. Make your clients send reports by setting `report` to `true` in the `[puppetd]` block of your `puppet.conf`, e.g.:
+1.  Make your clients send reports by setting `report` to `true` in the `[puppetd]` block of your `puppet.conf`, e.g.:
 
         [puppetd]
-            report = true
+          report = true
 
 ##### On your Puppet Master
 
-1. Identify your Puppet Master's `libdir` by running the following command, it will probably be `/var/lib/puppet`:
+1.  Identify your Puppet Master's `libdir` by running the following command, it will probably be `/var/lib/puppet`:
 
         puppetmasterd --configprint libdir
 
-2. Create a directory for custom report libraries, e.g. run the following command, but replace `LIBDIR` with the path you found in step 1:
+2.  Create a directory for custom report libraries, e.g. run the following command, but replace `LIBDIR` with the path you found in step 1:
 
         mkdir -p LIBDIR/puppet/reports/
 
-3. Create a custom report processor file on your Puppet Master by copying the Puppet Dashboard's `ext/puppet/puppet_dashboard.rb` file to `LIBDIR/puppet/reports`. E.g.,
+3.  Create a custom report processor file on your Puppet Master by copying the Puppet Dashboard's `ext/puppet/puppet_dashboard.rb` file to `LIBDIR/puppet/reports`. E.g.,
 
         cp ext/puppet/puppet_dashboard.rb LIBDIR/puppet/reports
 
-   This report processor will assume that your Puppet Dashboard server is running at `localhost` on port `3000`, which is the default if it was started using `script/server`. If you need to specify different values, edit the `ext/puppet/puppet_dashboard.rb` file.
+    This report processor will assume that your Puppet Dashboard server is running at `localhost` on port `3000`, which is the default if it was started using `script/server`. If you need to specify different values, edit the `ext/puppet/puppet_dashboard.rb` file.
 
-   *NOTE:* In Puppet Dashboard versions prior to 1.0.3, this file was located at `lib/puppet/puppet_dashboard.rb`
+    *NOTE:* In Puppet Dashboard versions prior to 1.0.3, this file was located at `lib/puppet/puppet_dashboard.rb`
 
-5. Add a `puppet_dashboard` value to the `reports` setting in the `[puppetmasterd]` section of your `puppet.conf` file, e.g.:
+5.  Add a `puppet_dashboard` value to the `reports` setting in the `[puppetmasterd]` section of your `puppet.conf` file, e.g.:
 
         [puppetmasterd]
-            reports = puppet_dashboard
+          reports = puppet_dashboard
 
-6. Restart the `puppetmasterd` process.
+6.  Restart the `puppetmasterd` process.
 
 #### Puppet 2.6.x
 
 ##### On your clients
 
-1. Make your clients send reports by setting `report` to `true` in the `[agent]` block of your `puppet.conf`, e.g.:
+1.  Make your clients send reports by setting `report` to `true` in the `[agent]` block of your `puppet.conf`, e.g.:
 
         [agent]
-            report = true
+          report = true
 
-   *NOTE:* The `puppet.conf` block name changed in 2.6.x from `[puppetd]` to `[agent]`
+    *NOTE:* The `puppet.conf` block name changed in 2.6.x from `[puppetd]` to `[agent]`
 
 ##### On your Puppet Master
 
-1. Modify your Puppet Master to send reports to the Puppet Dashboard. Do this by adding an `http` value to the `reports` setting in the `master` section of your `puppet.conf` file. For example, a `puppet.conf` for sending reports to a Puppet Dashboard server running at `localhost` on port `3000` may look like:
+1.  Modify your Puppet Master to send reports to the Puppet Dashboard. Do this by adding an `http` value to the `reports` setting in the `master` section of your `puppet.conf` file. For example, a `puppet.conf` for sending reports to a Puppet Dashboard server running at `localhost` on port `3000` may look like:
 
         [master]
-            reports = http, store
+          reports = http, store
 
-   If your Puppet Dashboard is at a different hostname or port, specify a `reporturl` setting with its URL, e.g.:
+    If your Puppet Dashboard is at a different hostname or port, specify a `reporturl` setting with its URL, e.g.:
 
         [master]
-            reports = http, store
-            reporturl = http://mydashboard.server:1234/reports
+          reports = http, store
+          reporturl = http://mydashboard.server:1234/reports
 
-   *NOTE:* The `/reports` portion of the `reporturl` is required.
+    *NOTE:* The `/reports` portion of the `reporturl` is required.
 
-2. Restart the `puppetmasterd` process.
+2.  Restart the `puppetmasterd` process.
 
 
 External node classification
@@ -273,17 +275,17 @@ External node classification
 
 The Puppet Dashboard can act as an external node classification tool, which will allow you to manage Puppet classes and parameters for your nodes using a web interface:
 
-1. Modify your Puppet Master's `puppet.conf` file by adding lines like these:
+1.  Modify your Puppet Master's `puppet.conf` file by adding lines like these:
 
         [puppetmasterd]
           node_terminus  = exec
           external_nodes = /opt/dashboard/bin/external_node
 
-   *NOTE:* Set the `external_nodes` value to the absolute path of the Puppet Dashboard's `bin/external_node` program. If the Puppet Dashboard is running on a different computer, you should copy this file to the Puppet Master to a local directory like `/etc/puppet` and specify the path to it.
+    *NOTE:* Set the `external_nodes` value to the absolute path of the Puppet Dashboard's `bin/external_node` program. If the Puppet Dashboard is running on a different computer, you should copy this file to the Puppet Master to a local directory like `/etc/puppet` and specify the path to it.
 
-   *NOTE:* The `bin/external_node` program connects to the Puppet Dashboard at `localhost` on port `3000`. If your Puppet Dashboard is running on a different host or node, please modify this file.
+    *NOTE:* The `bin/external_node` program connects to the Puppet Dashboard at `localhost` on port `3000`. If your Puppet Dashboard is running on a different host or node, please modify this file.
 
-2. Restart the `puppetmasterd` process.
+2.  Restart the `puppetmasterd` process.
 
 Security
 --------
@@ -294,13 +296,13 @@ The Puppet Dashboard does not currently provide authentication, authorization or
 
 Third-party tools that can help secure a Puppet Dashboard include:
 
-1. Host firewalling (e.g. `iptables`) can limit what hosts can access to the port that the Puppet Dashboard runs on, for example, only allowing the computer running the Puppet Master to connect.
+1.  Host firewalling (e.g. `iptables`) can limit what hosts can access to the port that the Puppet Dashboard runs on, for example, only allowing the computer running the Puppet Master to connect.
 
-2. Tunneling (e.g. `stunnel` or `ssh`) can provide an encrypted connection between hosts, e.g. if the Puppet Master and Puppet Dashboard are running on separate hosts, or if you want to access the web interface from your workstation.
+2.  Tunneling (e.g. `stunnel` or `ssh`) can provide an encrypted connection between hosts, e.g. if the Puppet Master and Puppet Dashboard are running on separate hosts, or if you want to access the web interface from your workstation.
 
-3. HTTP Basic Authentication proxy (e.g. `apache` using `.htaccess`) can require that a username/password is provided when accessing URLs. However, if you use this, you must include the HTTP Basic Authentication username and password in the URLs in the `puppet.conf` file's `reporturl` setting and in the `bin/external_nodes` file. A URL with HTTP Basic Authentication has the following format:
+3.  HTTP Basic Authentication proxy (e.g. `apache` using `.htaccess`) can require that a username/password is provided when accessing URLs. However, if you use this, you must include the HTTP Basic Authentication username and password in the URLs in the `puppet.conf` file's `reporturl` setting and in the `bin/external_nodes` file. A URL with HTTP Basic Authentication has the following format:
 
-            http://username:password@hostname
+        http://username:password@hostname
 
 Debugging
 ---------
