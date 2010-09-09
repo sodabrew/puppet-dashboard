@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100811204545) do
+ActiveRecord::Schema.define(:version => 20100909191050) do
 
   create_table "assignments", :force => true do |t|
     t.integer  "node_id"
