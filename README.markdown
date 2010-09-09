@@ -27,7 +27,7 @@ The Puppet Dashboard will run on most Unix, Linux and Mac OS X systems once its 
 
 ### Operating system-specific examples for installing dependencies
 
-*NOTE*: The following example instructions assume a fresh install of their respective operating systems. Your actual installation procedure may be different depending on your system's current configuration.  All commands are assumed to be run using an sh compatible shell (sh, Bash, Dash, Zsh, etc.), unless otherwise noted.
+*IMPORTANT*: The following example instructions assume a fresh install of their respective operating systems. Your actual installation procedure may be different depending on your system's current configuration. All commands must be run from an `sh`-compatible shell (such as `bash`, `dash` or `zsh`), unless otherwise noted.
 
 #### Ubuntu 10.04 LTS
 
@@ -69,7 +69,7 @@ The Puppet Dashboard will run on most Unix, Linux and Mac OS X systems once its 
         service mysqld start
         chkconfig mysqld on
 
-4.  Install the `gem` package manager, using the following shell script -- do not install RubyGems version 1.3.6 or newer because they are incompatible with the Ruby shipped with CentOS 5.5:
+4.  Install the `gem` package manager, using the following shell script -- do not install RubyGems version 1.3.6 or newer because they are incompatible with the version of Ruby shipped with CentOS 5.5:
 
         (
           URL="http://production.cf.rubygems.org/rubygems/rubygems-1.3.5.tgz"
