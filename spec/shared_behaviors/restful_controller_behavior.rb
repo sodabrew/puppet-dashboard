@@ -2,21 +2,21 @@ shared_examples_for 'a RESTful controller with an index action' do
   before :each do
     path_name_setup
   end
-    
+
   describe "handling GET /plural (index)" do
     before(:each) do
       @object = stub(@model_name)
       @objects = [@object]
       @model_class.stubs(:find).returns(@objects)
       do_login if needs_login?
-      
+
       find_target_setup :plural
     end
-    
+
     def do_get
       get :index, {}.merge(nesting_params)
     end
-  
+
     it "should be successful" do
       do_get
       response.should be_success
@@ -26,24 +26,24 @@ shared_examples_for 'a RESTful controller with an index action' do
       do_get
       response.should render_template('index')
     end
-    
+
     if has_parent?
       it 'should find the parent object' do
         @parent_class.expects(:find).with(parent_id).returns(@parent)
         do_get
       end
     end
-    
+
     it "should find the objects" do
       @find_target.expects(:find).returns(@objects)
       do_get
     end
-  
+
     it "should make the found objects available to the view" do
       do_get
       assigns[@model_plural.to_sym].should == @objects
     end
-    
+
     if has_parent?
       it 'should make the parent object available to the view' do
         do_get
@@ -57,17 +57,17 @@ shared_examples_for 'a RESTful controller with a show action' do
   before :each do
     path_name_setup
   end
-    
+
   describe "handling GET /plural/1 (show)" do
     before(:each) do
       @obj_id = '1'
       @obj = stub(@model_name)
       @model_class.stubs(:find).returns(@obj)
       do_login if needs_login?
-      
+
       find_target_setup
     end
-  
+
     def do_get
       get :show, { :id => @obj_id }.merge(nesting_params)
     end
@@ -76,24 +76,24 @@ shared_examples_for 'a RESTful controller with a show action' do
       do_get
       response.should be_success
     end
-  
+
     it "should render the show template" do
       do_get
       response.should render_template('show')
     end
-  
+
     if has_parent?
       it 'should find the parent object' do
         @parent_class.expects(:find).with(parent_id).returns(@parent)
         do_get
       end
     end
-    
+
     it "should find the object requested" do
       @find_target.expects(:find).with(@obj_id, anything).returns(@obj)
       do_get
     end
-  
+
     it "should make the found object available to the view" do
       do_get
       assigns[@model_singular.to_sym].should equal(@obj)
@@ -112,7 +112,7 @@ shared_examples_for 'a RESTful controller with a new action' do
   before :each do
     path_name_setup
   end
-    
+
   describe "handling GET /plural/new" do
     before(:each) do
       @obj = stub(@model_name)
@@ -120,7 +120,7 @@ shared_examples_for 'a RESTful controller with a new action' do
       @model_class.stubs(:new).returns(@obj)
       do_login if needs_login?
     end
-  
+
     def do_get
       get :new, {}.merge(nesting_params)
     end
@@ -129,22 +129,22 @@ shared_examples_for 'a RESTful controller with a new action' do
       do_get
       response.should be_success
     end
-  
+
     it "should render the new template" do
       do_get
       response.should render_template('new')
     end
-  
+
     it "should create a new object" do
       @model_class.expects(:new).returns(@obj)
       do_get
     end
-  
+
     it "should not save the new object" do
       @obj.expects(:save).never
       do_get
     end
-  
+
     it "should make the new object available to the view" do
       do_get
       assigns[@model_singular.to_sym].should equal(@obj)
@@ -156,7 +156,7 @@ shared_examples_for 'a RESTful controller with a create action' do
   before :each do
     path_name_setup
   end
-    
+
   describe "handling POST /plural (create)" do
     before(:each) do
       @obj = @model_class.new
@@ -164,20 +164,20 @@ shared_examples_for 'a RESTful controller with a create action' do
       @obj.stubs(:id).returns(@obj_id)
       @model_class.stubs(:new).returns(@obj)
       do_login if needs_login?
-      
+
       object_path_setup
     end
-  
+
     def post_with_successful_save
       @obj.expects(:save).returns(true)
       post :create, { @model_singular.to_sym => {} }.merge(nesting_params)
     end
-  
+
     def post_with_failed_save
       @obj.expects(:save).returns(false)
       post :create, { @model_singular.to_sym => {} }.merge(nesting_params)
     end
-  
+
     it "should create a new object" do
       @model_class.expects(:new).with({}).returns(@obj)
       post_with_successful_save
@@ -199,14 +199,14 @@ shared_examples_for 'a RESTful controller with an edit action' do
   before :each do
     path_name_setup
   end
-    
+
   describe "handling GET /plural/1/edit (edit)" do
     before(:each) do
       @obj = stub(@model_name)
       @model_class.stubs(:find).returns(@obj)
       do_login if needs_login?
     end
-  
+
     def do_get
       get :edit, { :id => "1" }.merge(nesting_params)
     end
@@ -215,17 +215,17 @@ shared_examples_for 'a RESTful controller with an edit action' do
       do_get
       response.should be_success
     end
-  
+
     it "should render the edit template" do
       do_get
       response.should render_template('edit')
     end
-  
+
     it "should find the object requested" do
       @model_class.expects(:find).returns(@obj)
       do_get
     end
-  
+
     it "should make the found object available to the view" do
       do_get
       assigns[@model_singular.to_sym].should equal(@obj)
@@ -237,35 +237,35 @@ shared_examples_for 'a RESTful controller with an update action' do
   before :each do
     path_name_setup
   end
-    
+
   describe "handling PUT /plural/1 (update)" do
     before(:each) do
       @obj_id = '1'
       @obj = stub(@model_name, :to_s => @obj_id)
       @model_class.stubs(:find).returns(@obj)
       do_login if needs_login?
-      
+
       object_path_setup
       find_target_setup
     end
-  
+
     def put_with_successful_update
       @obj.expects(:update_attributes).returns(true)
       put :update, { :id => @obj_id }.merge(nesting_params)
     end
-  
+
     def put_with_failed_update
       @obj.expects(:update_attributes).returns(false)
       put :update, { :id => @obj_id }.merge(nesting_params)
     end
-  
+
     if has_parent?
       it 'should find the parent object' do
         @parent_class.expects(:find).with(parent_id).returns(@parent)
         do_get
       end
     end
-    
+
     it "should find the object requested" do
       @find_target.expects(:find).with(@obj_id).returns(@obj)
       put_with_successful_update
@@ -287,7 +287,7 @@ shared_examples_for 'a RESTful controller with an update action' do
         assigns[@parent_name.to_sym].should == @parent
       end
     end
-    
+
     it "should redirect to the object on a successful update" do
       put_with_successful_update
       response.should redirect_to(self.send("#{@object_path_method}_url".to_sym, *@url_args))
@@ -304,18 +304,18 @@ shared_examples_for 'a RESTful controller with a destroy action' do
   before :each do
     path_name_setup
   end
-    
+
   describe "handling DELETE /plural/1 (destroy)" do
     before(:each) do
       @obj_id = '1'
       @obj = stub(@model_name, :destroy => true)
       @model_class.stubs(:find).returns(@obj)
       do_login if needs_login?
-      
+
       object_path_setup :plural
       find_target_setup
     end
-  
+
     def do_delete
       delete :destroy, { :id => @obj_id }.merge(nesting_params)
     end
@@ -326,17 +326,17 @@ shared_examples_for 'a RESTful controller with a destroy action' do
         do_get
       end
     end
-    
+
     it "should find the object requested" do
       @find_target.expects(:find).with(@obj_id).returns(@obj)
       do_delete
     end
-  
+
     it "should call destroy on the found object" do
       @obj.expects(:destroy).returns(true)
       do_delete
     end
-  
+
     it "should redirect to the object list" do
       do_delete
       response.should redirect_to(self.send("#{@object_path_method}_url".to_sym, *@url_args))
@@ -346,7 +346,7 @@ end
 
 
 shared_examples_for 'a RESTful controller' do
-  
+
   it_should_behave_like 'a RESTful controller with an index action'
   it_should_behave_like 'a RESTful controller with a show action'
   it_should_behave_like 'a RESTful controller with a new action'
@@ -354,103 +354,103 @@ shared_examples_for 'a RESTful controller' do
   it_should_behave_like 'a RESTful controller with an edit action'
   it_should_behave_like 'a RESTful controller with an update action'
   it_should_behave_like 'a RESTful controller with a destroy action'
-      
+
 end
 
 shared_examples_for 'a controller with login restrictions' do
   describe "when user is not logged in" do
     before :each do
-      controller.stubs(:authorized?).returns(false)    
+      controller.stubs(:authorized?).returns(false)
     end
-  
+
     it 'GET /plural (index) should not be accessible' do
       get :index
       response.should redirect_to(new_wants_you_to_url)
     end
 
     it 'GET /plural/1 (show) should not be accessible' do
-      get :show, :id => "1"    
+      get :show, :id => "1"
       response.should redirect_to(new_wants_you_to_url)
     end
-    
+
     it 'GET /plural/new should not be accessible' do
-      get :new 
+      get :new
       response.should redirect_to(new_wants_you_to_url)
     end
-    
+
     it 'GET /plural/1/edit (edit) should not be accessible' do
-      get :edit, :id => 1 
+      get :edit, :id => 1
       response.should redirect_to(new_wants_you_to_url)
     end
-  
+
     it 'POST /plural (create) should not be accessible' do
       post :create, {}
       response.should redirect_to(new_wants_you_to_url)
     end
-  
+
     it 'PUT /plural/1 (update) should not be accessible' do
       put :update, :id => '1'
       response.should redirect_to(new_wants_you_to_url)
     end
-  
+
     it 'DELETE /plural/1 (destroy) should not be accessible' do
       delete :destroy, :id => '1'
       response.should redirect_to(new_wants_you_to_url)
     end
-  
+
     describe "request saving" do
       before :each do
         request.stubs(:request_uri).returns('fake_address')
       end
-      
+
       it 'GET /plural (index) should save the requested URL' do
         get :index
         session[:return_to].should == 'fake_address'
       end
-  
+
       it 'GET /plural/1 (show) should save the requested URL' do
-        get :show, :id => "1"    
+        get :show, :id => "1"
         session[:return_to].should == 'fake_address'
       end
-  
+
       it 'GET /plural/new should save the requested URL' do
-        get :new 
+        get :new
         session[:return_to].should == 'fake_address'
       end
-  
+
       it 'GET /plural/1/edit (edit) should save the requested URL' do
-        get :edit, :id => 1 
+        get :edit, :id => 1
         session[:return_to].should == 'fake_address'
       end
-  
+
       it 'POST /plural (create)  should save the requested URL' do
         post :create, {}
         session[:return_to].should == 'fake_address'
       end
-  
+
       it 'PUT /plural/1 (update) should save the requested URL' do
         put :update, :id => '1'
         session[:return_to].should == 'fake_address'
       end
-  
+
       it 'DELETE /plural/1 (destroy) should save the requested URL' do
         delete :destroy, :id => '1'
         session[:return_to].should == 'fake_address'
-      end  
+      end
     end
   end
 end
 
 
-shared_examples_for 'a RESTful controller requiring login' do  
+shared_examples_for 'a RESTful controller requiring login' do
   def do_login
     login_as Login.find(:first)
   end
-  
+
   def needs_login?
     true
   end
-  
+
   it_should_behave_like 'a RESTful controller'
   it_should_behave_like 'a controller with login restrictions'
 end
@@ -491,7 +491,7 @@ def path_name_setup
   @model_plural   ||= @plural_path                                  # => 'foos'
   @model_singular ||= @singular_path                                # => 'foo'
   @model_class    ||= @model_name.constantize                       # => Foo
-  
+
   if has_parent?
     @parent_name  = parent_type.camelize
     @parent_class = @parent_name.constantize
@@ -507,7 +507,7 @@ def find_target_setup(arity = :singular)
     else
       raise "Don't know what to make parent association return"
   end
-  
+
   @find_target = @model_class
   if has_parent?
     @parent_association = stub("#{@parent_name} #{@model_plural}", :find => find_return)
@@ -544,19 +544,19 @@ shared_examples_for 'a RESTful controller with XML support' do
     @model_singular      ||= @singular_path                                              # => 'foo'
     @model_class         ||= @model_name.constantize                                     # => Foo
   end
-    
+
   describe "handling GET /plural.xml (index)" do
     before(:each) do
       @obj = stub(@model_name, :to_xml => "XML")
       @model_class.stubs(:find).returns(@obj)
       do_login if needs_login?
     end
-  
+
     def do_get
       @request.env["HTTP_ACCEPT"] = "application/xml"
       get :index
     end
-  
+
     it "should be successful" do
       do_get
       response.should be_success
@@ -566,7 +566,7 @@ shared_examples_for 'a RESTful controller with XML support' do
       @model_class.expects(:find).with(:all).returns(@obj)
       do_get
     end
-  
+
     it "should render the found objects as xml" do
       @obj.expects(:to_xml).returns("XML")
       do_get
@@ -580,7 +580,7 @@ shared_examples_for 'a RESTful controller with XML support' do
       @model_class.stubs(:find).returns(@obj)
       do_login if needs_login?
     end
-  
+
     def do_get
       @request.env["HTTP_ACCEPT"] = "application/xml"
       get :show, :id => "1"
@@ -590,12 +590,12 @@ shared_examples_for 'a RESTful controller with XML support' do
       do_get
       response.should be_success
     end
-  
+
     it "should find the object requested" do
       @model_class.expects(:find).with("1").returns(@obj)
       do_get
     end
-  
+
     it "should render the found object as xml" do
       @obj.expects(:to_xml).returns("XML")
       do_get
@@ -604,14 +604,14 @@ shared_examples_for 'a RESTful controller with XML support' do
   end
 end
 
-shared_examples_for 'a RESTful controller with XML support requiring login' do  
+shared_examples_for 'a RESTful controller with XML support requiring login' do
   def do_login
     login_as Login.find(:first)
   end
-  
+
   def needs_login?
     true
   end
-  
+
   it_should_behave_like 'a RESTful controller with XML support'
 end

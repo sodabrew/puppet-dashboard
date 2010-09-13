@@ -5,11 +5,11 @@ describe Assignment do
     before :each do
       @assignment = Assignment.new
     end
-    
+
     it 'should have a service id' do
       @assignment.should respond_to(:service_id)
     end
-    
+
     it 'should allow setting and retrieving the service id' do
       @assignment.service_id = 1
       @assignment.service_id.should == 1
@@ -18,18 +18,18 @@ describe Assignment do
     it 'should have a node id' do
       @assignment.should respond_to(:node_id)
     end
-    
+
     it 'should allow setting and retrieving the node id' do
       @assignment.node_id = 1
       @assignment.node_id.should == 1
     end
   end
-  
+
   describe 'validations' do
     before :each do
       @assignment = Assignment.new
     end
-    
+
     it 'should not be valid without a service' do
       @assignment.service = nil
       @assignment.valid?
@@ -54,12 +54,12 @@ describe Assignment do
       @assignment.errors.should_not be_invalid(:node)
     end
   end
-  
+
   describe 'relationships' do
     before :each do
       @assignment = Assignment.new
     end
-    
+
     it 'should belong to a service' do
       @assignment.should respond_to(:service)
     end
@@ -69,7 +69,7 @@ describe Assignment do
       @assignment.service = @service
       @assignment.service.should == @service
     end
-    
+
     it 'should belong to a node' do
       @assignment.should respond_to(:node)
     end
