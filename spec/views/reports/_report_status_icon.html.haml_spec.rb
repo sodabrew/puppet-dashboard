@@ -4,7 +4,7 @@ describe "/reports/_report_status_icon.html.haml" do
   include ReportsHelper
 
   describe "successful render" do
-    before do
+    before :each do
       assigns[:report] = @report = Report.generate!
       template.stubs(:resource => @report)
       render :locals => {:report => @report}

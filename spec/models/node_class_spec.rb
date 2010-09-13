@@ -38,9 +38,7 @@ describe NodeClass do
   end
 
   describe "helper" do
-    before :all do
-      NodeClass.delete_all
-
+    before :each do
       @classes = Array.new(3) {|idx| NodeClass.generate! :name => "class_#{idx}"}
     end
 

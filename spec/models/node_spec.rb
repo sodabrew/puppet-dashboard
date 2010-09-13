@@ -19,9 +19,7 @@ describe Node do
   end
 
   describe "::by_currentness_and_successfulness" do
-    before do
-      Node.destroy_all
-
+    before :each do
       later = 1.week.ago.to_date
       sooner = Date.today
 
@@ -48,10 +46,6 @@ describe Node do
         Report.generate_for(node, sooner, false)
         node.reload
       end
-    end
-
-    after do
-      Node.destroy_all
     end
 
     [
@@ -139,11 +133,7 @@ describe Node do
   end
 
   describe '#available_node_classes' do
-    before do
-      Node.destroy_all
-      NodeClass.destroy_all
-      NodeGroup.destroy_all
-
+    before :each do
       @node = Node.new
       @node_classes = Array.new(3){ NodeClass.generate! }
     end
@@ -163,9 +153,8 @@ describe Node do
   end
 
   describe '#available_node_groups' do
-    before do
+    before :each do
       @node = Node.new
-      NodeGroup.delete_all
       @node_groups = Array.new(3){ NodeGroup.generate! }
     end
 
@@ -208,7 +197,7 @@ describe Node do
   end
 
   describe "#inherited_classes" do
-    before do
+    before :each do
       @node = Node.generate!
       @node_group = NodeGroup.generate!
       @inherited_class = NodeClass.generate!
@@ -222,7 +211,7 @@ describe Node do
   end
 
   describe "#all_classes" do
-    before do
+    before :each do
       @node = Node.generate!
       @node.stubs(:inherited_classes).returns([:inherited_class])
       @node.stubs(:node_classes).returns([:local_class])
@@ -260,7 +249,7 @@ describe Node do
   end
 
   describe "handling the node group graph" do
-    before do
+    before :each do
       @node = Node.generate!
 
       @node_group_a = NodeGroup.generate! :name => "A"
@@ -277,7 +266,7 @@ describe Node do
     end
 
     describe "when a group is included twice" do
-      before do
+      before :each do
         @node_group_c = NodeGroup.generate!
         @node_group_a.node_groups << @node_group_c
         @node_group_b.node_groups << @node_group_c
@@ -356,9 +345,6 @@ describe Node do
 
   describe "when assigning classes" do
     before :each do
-      Node.delete_all
-      NodeClass.delete_all
-
       @node    = Node.generate!
       @classes = Array.new(3) { NodeClass.generate! }
     end
@@ -423,9 +409,6 @@ describe Node do
 
   describe "when assigning groups" do
     before :each do
-      Node.delete_all
-      NodeGroup.delete_all
-
       @node   = Node.generate!
       @groups = Array.new(3) { NodeGroup.generate! }
     end
@@ -493,7 +476,7 @@ describe Node do
   end
 
   describe "destroying" do
-    before do
+    before :each do
       @node = Node.generate!(:name => 'gonnadienode')
     end
 

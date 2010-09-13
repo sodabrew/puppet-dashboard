@@ -2,7 +2,7 @@
 # ActiveRecord model class to use for describing this behavior.
 
 describe "with search by q and tag", :shared => true do
-  before do
+  before :each do
     @for_tag = model.generate(:name => 'for_tag')
     @for_q = model.generate(:name => 'for_q')
     model.generate(:name => 'without_search')

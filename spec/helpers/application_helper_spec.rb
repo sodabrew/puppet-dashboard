@@ -47,7 +47,7 @@ describe ApplicationHelper do
   end
 
  describe "#pagination_for" do
-    before do
+    before :each do
       @template.stubs( :request => request, :params => params, :url_for => 'someurl')
     end
 
@@ -102,7 +102,7 @@ describe ApplicationHelper do
 
   describe "#items_per_page" do
     context "when using defaults" do
-      before do
+      before :each do
         @per_page = ENV['ITEMS_PER_PAGE']
         ENV.delete('ITEMS_PER_PAGE')
       end
@@ -117,7 +117,7 @@ describe ApplicationHelper do
     end
 
     context "when overriden by environmental variable" do
-      before do
+      before :each do
         @per_page = 51;
         ENV['ITEMS_PER_PAGE'] = @per_page.to_s
       end
@@ -167,7 +167,7 @@ describe ApplicationHelper do
     end
 
     context "when searching" do
-      before do
+      before :each do
         params[:q] = 'query'
       end
 
@@ -182,7 +182,7 @@ describe ApplicationHelper do
   end
 
   describe "tokenize_input_class" do
-    before :all do
+    before :each do
       @objects = Array.new(6) { NodeGroup.generate! }
     end
 
@@ -234,7 +234,7 @@ describe ApplicationHelper do
       end
 
       context "and some :objects are empty?" do
-        before :all do
+        before :each do
           input_classes = []
           input_classes << {:class => "#class1", :data_source => "/data1.json", :objects => []}
           input_classes << {:class => "#class2", :data_source => "/data2.json", :objects => @objects[0..1]}
@@ -257,7 +257,7 @@ describe ApplicationHelper do
       end
 
       context "and no :objects are empty?" do
-        before :all do
+        before :each do
           input_classes = []
           input_classes << {:class => "#class1", :data_source => "/data1.json", :objects => [@objects[0]]}
           input_classes << {:class => "#class2", :data_source => "/data2.json", :objects => @objects[1..2]}

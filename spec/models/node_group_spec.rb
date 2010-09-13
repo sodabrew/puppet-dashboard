@@ -48,7 +48,7 @@ describe NodeGroup do
   end
 
   describe "when including groups" do
-    before do
+    before :each do
       @node_group_a = NodeGroup.generate! :name => "A"
       @node_group_b = NodeGroup.generate! :name => "B"
     end
@@ -122,9 +122,6 @@ describe NodeGroup do
 
   describe "when including classes" do
     before :each do
-      NodeGroup.delete_all
-      NodeClass.delete_all
-
       @node_group   = NodeGroup.generate!
       @node_class_a = NodeClass.generate! :name => "class_a"
       @node_class_b = NodeClass.generate! :name => "class_b"
@@ -192,9 +189,7 @@ describe NodeGroup do
   end
 
   describe "helper" do
-    before :all do
-      NodeGroup.delete_all
-
+    before :each do
       @groups = Array.new(3) {|idx| NodeGroup.generate! :name => "Group #{idx}"}
     end
 

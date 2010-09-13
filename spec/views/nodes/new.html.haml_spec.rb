@@ -4,7 +4,7 @@ describe "/nodes/new.html.haml" do
   include NodesHelper
 
   describe "successful render" do
-    before do
+    before :each do
       assigns[:node] = @node = Node.spawn
       render
     end

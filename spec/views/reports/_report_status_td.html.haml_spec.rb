@@ -4,7 +4,7 @@ describe "/reports/_report_status_td.html.haml" do
   include ReportsHelper
 
   describe "successful render" do
-    before do
+    before :each do
       assigns[:report] = @report = Report.generate!
       render :locals => {:report => @report}
     end

@@ -19,7 +19,7 @@
 # Example,
 #
 #   describe MyNestedController, 'routing' do
-#     before do
+#     before :each do
 #       @parent_controller = 'employers'
 #     end
 #     it_should_behave_like 'a nested RESTful controller with routes'

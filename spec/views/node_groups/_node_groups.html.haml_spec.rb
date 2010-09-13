@@ -4,7 +4,7 @@ describe "/node_groups/_node_groups.html.haml" do
   include NodeGroupsHelper
 
   describe "successful render" do
-    before do
+    before :each do
       @node_groups = assigns[:node_groups] = [NodeGroup.generate!]
       render :locals => {:node_groups => @node_groups}
     end
