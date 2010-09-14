@@ -8,7 +8,7 @@ describe ReportsController do
   it_should_behave_like "without JSON pagination"
 
   describe "creating a report" do
-    before do
+    before :each do
       @yaml = File.read(Rails.root.join('spec', 'fixtures', 'sample_report.yml'))
     end
 
@@ -43,7 +43,7 @@ describe ReportsController do
     end
 
     describe "with a POST without a report, the response code" do
-      before do
+      before :each do
         post(:create, :report => "" )
       end
 

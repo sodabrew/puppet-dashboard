@@ -2,7 +2,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
 describe "/timeline_events/_timeline_event.html.haml" do
   context "with a node" do
-    before do
+    before :each do
       @node = Node.generate!
       @node.name.swapcase!
       @node.save!
@@ -17,7 +17,7 @@ describe "/timeline_events/_timeline_event.html.haml" do
     end
 
     context "when this node is the subject" do
-      before do
+      before :each do
         subject = @node.timeline_events.first(:conditions => {:subject_type => "Node", :event_type => "created"})
         template.stubs(:timeline_event => subject)
         render
@@ -32,7 +32,7 @@ describe "/timeline_events/_timeline_event.html.haml" do
 
     context "when something else is the subject" do
       context "and is linkable" do
-        before do
+        before :each do
           subject = @node.timeline_events.first(:conditions => {:subject_type => "NodeClass", :event_type => "added_to"})
           template.stubs(:timeline_event => subject)
           render
@@ -50,7 +50,7 @@ describe "/timeline_events/_timeline_event.html.haml" do
       end
 
       context "and is not linkable" do
-        before do
+        before :each do
           subject = @node.timeline_events.first(:conditions => {:subject_type => "Parameter", :event_type => "added_to"})
           template.stubs(:timeline_event => subject)
           render
@@ -69,7 +69,7 @@ describe "/timeline_events/_timeline_event.html.haml" do
     end
 
     context "without an assigned node" do
-      before do
+      before :each do
         template.stubs(:timeline_event => @node.timeline_events.first)
         assigns[:node] = nil
         render
@@ -84,7 +84,7 @@ describe "/timeline_events/_timeline_event.html.haml" do
   end
 
   context "wihtout a timeline_event" do
-    before do
+    before :each do
       template.stubs(:timeline_event => nil)
       render
     end

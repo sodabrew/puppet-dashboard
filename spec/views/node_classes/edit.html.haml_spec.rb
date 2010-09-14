@@ -4,7 +4,7 @@ describe "/node_classes/edit.html.haml" do
   include NodeClassesHelper
 
   describe "successful render" do
-    before do
+    before :each do
       assigns[:node_class] = @node_class = NodeClass.generate!
       render
     end

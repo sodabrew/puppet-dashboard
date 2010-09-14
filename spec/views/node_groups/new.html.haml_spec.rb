@@ -4,7 +4,7 @@ describe "/node_groups/new.html.haml" do
   include NodeGroupsHelper
 
   describe "successful render" do
-    before do
+    before :each do
       assigns[:node_group] = @node_group = NodeGroup.spawn
       render
     end

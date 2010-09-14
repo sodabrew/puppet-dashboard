@@ -2,7 +2,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
 describe "/reports/index.html.haml" do
   describe "the response"  do
-    before do
+    before :each do
       @nodes = [Node.generate!, Node.generate!]
       assigns[:reports] = @reports = @nodes.map { |node| Report.generate_for(node) }.paginate
       render
@@ -14,7 +14,7 @@ describe "/reports/index.html.haml" do
   end
 
   describe "the response with a report lacking metrics" do
-    before do
+    before :each do
       @report = Report.generate!
       @report.stubs(:metrics).returns(nil)
       assigns[:reports] = @reports = [ @report ].paginate

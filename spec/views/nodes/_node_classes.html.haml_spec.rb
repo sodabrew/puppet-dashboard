@@ -4,7 +4,7 @@ describe "/nodes/_node_classes.html.haml" do
   include NodesHelper
 
   describe "successful render" do
-    before do
+    before :each do
       assigns[:node] = @node = Node.generate!
       render :locals => {:node => @node}
     end

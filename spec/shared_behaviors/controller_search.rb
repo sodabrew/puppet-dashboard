@@ -29,7 +29,7 @@ end
 
 describe "without JSON pagination", :shared => true do
   describe "GET index" do
-    before do
+    before :each do
       @for_tag = NodeGroup.generate(:name => 'for_tag')
       @for_q = NodeGroup.generate(:name => 'for_q')
       NodeGroup.generate(:name => 'without_search')

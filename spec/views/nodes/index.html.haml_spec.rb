@@ -30,7 +30,7 @@ describe '/nodes/index' do
   end
 
   describe "search fields" do
-    before do
+    before :each do
       template.stubs(
         :action_name => 'index',
         :parent => nil

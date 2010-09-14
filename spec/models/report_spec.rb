@@ -7,7 +7,7 @@ describe Report do
     include DescribeReports
 
     describe "on creation" do
-      before do
+      before :each do
         @now = Time.now
         Time.stubs(:now).returns(@now)
         @node = Node.generate
@@ -69,7 +69,7 @@ describe Report do
     end
 
     describe "deserializing the report" do
-      before do
+      before :each do
         @yaml_file = File.join RAILS_ROOT, "spec", "fixtures", "sample_report.yml"
         @loading_yaml = proc { YAML.load_file(@yaml_file) }
       end
@@ -98,7 +98,7 @@ describe Report do
   end
 
   describe "when destroying the most recent report for a node" do
-    before do
+    before :each do
       @node = Node.generate
       @report = Report.generate_for(@node, 1.week.ago.to_date, true)
     end

@@ -2,7 +2,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe NodesController do
   describe "#index" do
-    before do
+    before :each do
       @node = Node.generate!
     end
 
@@ -41,7 +41,7 @@ describe NodesController do
   describe "#show" do
     integrate_views
 
-    before do
+    before :each do
       @node = Node.generate!
     end
 
@@ -200,7 +200,7 @@ describe NodesController do
       end
     end
 
-    before do
+    before :each do
       @node = Node.generate!
       Node.stubs(:find_by_name! => @node)
       Report.stubs(:assign_to_node => false)
@@ -279,7 +279,7 @@ describe NodesController do
     end
 
     shared_examples_for "a scope_index action" do
-      before do
+      before :each do
         @results = [Node.generate!(:name => action)]
         @results.stubs(:with_last_report => @results, :by_report_date => @results)
         Node.stubs(action => @results)
