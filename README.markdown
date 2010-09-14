@@ -9,7 +9,7 @@ The Puppet Dashboard is a web interface for [Puppet](http://www.puppetlabs.com/)
 Source, community and support
 -----------------------------
 
-* [Puppet Dashboard source code](http://github.com/reductivelabs/puppet-dashboard)
+* [Puppet Dashboard source code](http://github.com/puppetlabs/puppet-dashboard)
 * [Puppet Dashboard issue tracker](http://projects.puppetlabs.com/projects/dashboard)
 * [Puppet Dashboard mailing list](http://groups.google.com/group/puppet-dashboard)
 * [Puppet users mailing list](http://groups.google.com/group/puppet-users)
@@ -91,7 +91,7 @@ Installation
 
     1.  Checkout the latest source code using the [Git](http://git-scm.com/) revision control system:
 
-            git clone git://github.com/reductivelabs/puppet-dashboard.git
+            git clone git://github.com/puppetlabs/puppet-dashboard.git
 
     2.  Or install the software using APT or RPM packages. See `README_PACKAGES.markdown` for instructions.
 
