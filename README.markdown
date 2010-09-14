@@ -224,6 +224,10 @@ The Puppet Dashboard can collect reports from your Puppet Master as they're crea
 
         mkdir -p LIBDIR/puppet/reports/
 
+    For example, if `puppetmasterd --configprint libdir` prints `/var/lib/puppet/lib`, then you should run:
+
+        mkdir -p /var/lib/puppet/lib/puppet/reports/
+
 3.  Create a custom report processor file on your Puppet Master by copying the Puppet Dashboard's `ext/puppet/puppet_dashboard.rb` file to `LIBDIR/puppet/reports`. E.g.,
 
         cp ext/puppet/puppet_dashboard.rb LIBDIR/puppet/reports
