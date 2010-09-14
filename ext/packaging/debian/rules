@@ -7,7 +7,7 @@ DEB_UPSTREAM_VERSION := $(shell echo $(DEB_VERSION) | cut -d- -f1 )
 TARBALL = $(DEB_SOURCE_PACKAGE)_$(DEB_UPSTREAM_VERSION).orig.tar.gz
 
 GIT_REVISION := $(shell echo $(DEB_UPSTREAM_VERSION) | awk -F"~" '{ print $$2 }' | sed 's/git//' )
-GIT_URL := http://github.com/reductivelabs/puppet-dashboard.git
+GIT_URL := http://github.com/puppetlabs/puppet-dashboard.git
 
 
 binary-install/puppet-dashboard::

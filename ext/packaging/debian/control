@@ -5,7 +5,7 @@ Maintainer: James Turnbull <james@lovedthanlost.net>
 Build-Depends: debhelper (>= 7), cdbs
 Build-Depends-Indep: po-debconf
 Standards-Version: 3.8.4
-Homepage: http://github.com/reductivelabs/puppet-dashboard
+Homepage: http://github.com/puppetlabs/puppet-dashboard
 
 Package: puppet-dashboard
 Architecture: all
