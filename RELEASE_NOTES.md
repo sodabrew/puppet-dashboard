@@ -7,7 +7,7 @@ v1.0.4
 * MIGRATION: Fixed truncation of long reports and deleted these invalid records. Please reimport your reports (see README) after migrating to readd these deleted reports.
 * MIGRATION: Fixed slow database queries on the home page, reports listing page, and site-wide sidebar.
 * MIGRATION: Fixed orphaned records left behind when classes or groups were deleted, and removed these orphans from the database.
-* MIGRATION: Fixed duplicate membership records by removing them, e.g. a node belongs to the same class or group multiple times.
+* MIGRATION: Fixed duplicate membership records by removing them and preventing new ones from being added, e.g. a node belongs to the same class or group multiple times.
 * Fixed user interface for specifying classes and groups to work with standards-compliant browsers, autocomplete on keystroke rather than submitting, etc.
 * Fixed default node search, it was incorrectly using the "ever failed" node query rather than the "all" nodes query.
 * Fixed run-failure chart to correctly count the reports by day.
@@ -19,9 +19,9 @@ v1.0.4
 * Fixed parameter collision to display errors if the same parameter was defined differently by groups at the same level of inheritance (e.g. both parents).
 * Fixed class edit form to use new-style form that can display error messages.
 * Fixed node to recalculate its latest report if the current report record was deleted.
-* Fixed external node classifier to return a special result when asked for an unknown nodes so that Puppet can classify it.
+* Fixed external node classifier to return a special result when asked for an unknown node so that Puppet can classify it.
 * Fixed node, class, and group listing pages to describe the current search and non-matches correctly.
-* Fixed documentation for adding the EPEL repository for CentOS and RHEL hosts.
+* Fixed documentation for adding the EPEL repository on CentOS and RHEL hosts.
 * Fixed documentation to use sh-compatible commands and explain that this is the expected shell for commands.
 * Fixed exceptions on the node's create and edit forms if the user submitted the form with a blank name.
 * Fixed release notes styling to properly indent bullet points.
