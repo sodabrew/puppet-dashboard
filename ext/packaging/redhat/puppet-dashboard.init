@@ -17,7 +17,7 @@ RETVAL=0
 
 start() {
         echo -n $"Starting $prog: "
-        /usr/bin/ruby ${DASHBOARD_HOME}/script/server >/dev/null 2>&1 &
+        su puppet-dashboard -c '/usr/bin/ruby ${DASHBOARD_HOME}/script/server -e production' >/dev/null 2>&1 &
         RETVAL=$?
         if [ $RETVAL = 0 ]
         then
