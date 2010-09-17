@@ -3,7 +3,7 @@
     %span.status{:class => report.status}
       = report_status_icon(report)
       Report:
-      = report.time.to_s
+      = report.time
     - if report.node
       %span.alt for
       = link_to report.node.name, report.node

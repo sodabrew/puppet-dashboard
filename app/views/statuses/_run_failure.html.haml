@@ -13,7 +13,7 @@
     %thead
       %tr.labels
         - statuses.each do |status|
-          %th= status.start.strftime("%m/%d/%y")
+          %th= status.start.to_s(:date)
     %tbody
       %tr.succeeded
         - statuses.each do |status|
