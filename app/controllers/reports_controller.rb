@@ -18,7 +18,7 @@ class ReportsController < InheritedResources::Base
   def collection
     get_collection_ivar || set_collection_ivar(
       request.format == :html ? 
-        end_of_association_chain.paginate(:page => params[:page]) : 
+        paginate_scope(end_of_association_chain) : 
         end_of_association_chain
     )
   end
