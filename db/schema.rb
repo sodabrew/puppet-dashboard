@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100909191050) do
+ActiveRecord::Schema.define(:version => 20100916183948) do
 
   create_table "assignments", :force => true do |t|
     t.integer  "node_id"
@@ -89,7 +89,7 @@ ActiveRecord::Schema.define(:version => 20100909191050) do
   end
 
   add_index "reports", ["node_id", "success"], :name => "index_reports_on_node_id_and_success"
-  add_index "reports", ["time"], :name => "index_reports_on_time"
+  add_index "reports", ["time", "node_id", "success"], :name => "index_reports_on_time_and_node_id_and_success"
 
   create_table "services", :force => true do |t|
     t.string   "name"
