@@ -67,7 +67,7 @@
             - @node.reports.limit(reports_limit).each do |report|
               %tr
                 = report_status_td(report)
-                %td= link_to report.time.to_s, report
+                %td= link_to report.time, report
                 %td= report.total_resources
                 %td= report.failed_resources
                 %td= report.total_time

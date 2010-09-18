@@ -23,7 +23,7 @@
           %td.hostname
             = link_to h(node.name), node
           %td.latest_report
-            = node.last_report ? node.last_report.time.to_s : "Has not reported"
+            = node.last_report ? node.last_report.time : "Has not reported"
       = pagination_for nodes, more_link
     - else
       %td.empty{:colspan => 3}

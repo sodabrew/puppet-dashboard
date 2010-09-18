@@ -27,7 +27,7 @@
           - for report in @reports
             %tr.nowrap[report]
               = report_status_td(report)
-              %td= link_to report.time.to_s, report
+              %td= link_to report.time, report
               - unless @node
                 %td= link_to_if report.node, h(report.host), node_path(report.node)
               %td= report.total_resources
