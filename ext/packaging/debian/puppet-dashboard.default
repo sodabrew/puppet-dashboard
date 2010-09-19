@@ -1,0 +1,9 @@
+# IMPORTANT: Be sure you have checked the values below, and configured
+# /etc/puppet-dashboard/database.yml appropriately.
+
+# Uncomment the line below to start Puppet Dashboard.
+#dashboard_enabled=yes
+
+DASHBOARD_HOME=/usr/share/puppet-dashboard
+DASHBOARD_RUBY=/usr/bin/ruby
+DASHBOARD_ENVIRONMENT=production
