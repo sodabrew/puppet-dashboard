@@ -28,36 +28,36 @@ Puppet installations and is written using the Ruby on Rails framework.
 %build
 
 %install
-rm -rf %{buildroot}
+rm -rf $RPM_BUILD_ROOT
 
-install -p -d -m0755 %{buildroot}%{_datadir}/%{name}
-install -p -d -m0755 %{buildroot}%{_datadir}/%{name}/vendor
-install -p -d -m0755 %{buildroot}%{_datadir}/%{name}/public
-install -p -d -m0755 %{buildroot}%{_defaultdocdir}/%{name}-%{version}
-cp -p -r app bin config db ext lib public Rakefile script spec %{buildroot}%{_datadir}/%{name}
-install -Dp -m0644 VERSION %{buildroot}%{_datadir}/%{name}/VERSION
-install -Dp -m0644 config/database.yml.example %{buildroot}%{_datadir}/%{name}/config/database.yml
+install -p -d -m0755 $RPM_BUILD_ROOT/%{_datadir}/%{name}
+install -p -d -m0755 $RPM_BUILD_ROOT/%{_datadir}/%{name}/vendor
+install -p -d -m0755 $RPM_BUILD_ROOT/%{_datadir}/%{name}/public
+install -p -d -m0755 $RPM_BUILD_ROOT/%{_defaultdocdir}/%{name}-%{version}
+cp -p -r app bin config db ext lib public Rakefile script spec $RPM_BUILD_ROOT/%{_datadir}/%{name}
+install -Dp -m0644 VERSION $RPM_BUILD_ROOT/%{_datadir}/%{name}/VERSION
+install -Dp -m0644 config/database.yml.example $RPM_BUILD_ROOT/%{_datadir}/%{name}/config/database.yml
 
 # Add sysconfig and init script
-install -Dp -m0755 %{confdir}/%{name}.init %{buildroot}%{initrddir}/puppet-dashboard
-install -Dp -m0644 %{confdir}/%{name}.sysconfig %{buildroot}%{_sysconfdir}/sysconfig/puppet-dashboard
+install -Dp -m0755 %{confdir}/%{name}.init $RPM_BUILD_ROOT/%{initrddir}/puppet-dashboard
+install -Dp -m0644 %{confdir}/%{name}.sysconfig $RPM_BUILD_ROOT/%{_sysconfdir}/sysconfig/puppet-dashboard
 
 # Not all plugins are installed from our source file.
-mkdir %{buildroot}%{_datadir}/%{name}/vendor/plugins
+mkdir $RPM_BUILD_ROOT/%{_datadir}/%{name}/vendor/plugins
 for plugin in authlogic inherited_resources jrails object_daddy resources_controller timeline_fu will_paginate; do
-  cp -p -r vendor/plugins/$plugin %{buildroot}%{_datadir}/%{name}/vendor/plugins/$plugin
+  cp -p -r vendor/plugins/$plugin $RPM_BUILD_ROOT/%{_datadir}/%{name}/vendor/plugins/$plugin
 done
 
-cp -p -r vendor/gems %{buildroot}%{_datadir}/%{name}/vendor
-cp -p -r vendor/rails %{buildroot}%{_datadir}/%{name}/vendor
+cp -p -r vendor/gems $RPM_BUILD_ROOT/%{_datadir}/%{name}/vendor
+cp -p -r vendor/rails $RPM_BUILD_ROOT/%{_datadir}/%{name}/vendor
 
-chmod a+x %{buildroot}%{_datadir}/%{name}/script/* 
+chmod a+x $RPM_BUILD_ROOT/%{_datadir}/%{name}/script/*
 
-for file in $(find %{buildroot} -size 0) ; do
+for file in $(find $RPM_BUILD_ROOT/ -size 0) ; do
     rm -f "$file"
 done
 
-rm -f -r %{buildroot}%{_datadir}/%{name}/.git
+rm -f -r $RPM_BUILD_ROOT/%{_datadir}/%{name}/.git
 
 mv CHANGELOG timestamp
 iconv -f ISO-8859-1 -t UTF-8 -o CHANGELOG timestamp
