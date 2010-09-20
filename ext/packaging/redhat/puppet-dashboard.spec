@@ -71,7 +71,8 @@ rm -f -r $RPM_BUILD_ROOT/%{_datadir}/%{name}/.git
 
 mv CHANGELOG timestamp
 iconv -f ISO-8859-1 -t UTF-8 -o CHANGELOG timestamp
-touch -r timestamp CHANGELOG 
+touch -r timestamp CHANGELOG
+rm timestamp
 
 %post
 /sbin/chkconfig --add puppet-dashboard || :
@@ -87,9 +88,6 @@ if [ "$1" -ge 1 ]; then
   /sbin/service puppet-dashboard condrestart >/dev/null 2>&1 || :
 fi
 
-%clean
-rm -rf %{buildroot}
-
 %files
 %defattr(-,root,root,0755)
 %{_datadir}/%{name}
@@ -102,6 +100,7 @@ rm -rf %{buildroot}
 %attr(-,puppet-dashboard,puppet-dashboard) %dir %{_datadir}/%{name}/tmp
 
 %doc CHANGELOG COPYING README.markdown
+
 %changelog
 * Fri Jul 30 2010 James Turnbull <james@puppetlabs.com> - 1.0.3-3
 - Fixed database.yml error
