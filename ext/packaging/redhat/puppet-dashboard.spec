@@ -93,7 +93,7 @@ rm -rf %{buildroot}
 %files
 %defattr(-,root,root,0755)
 %{_datadir}/%{name}
-%{_datadir}/%{name}/config/database.yml
+%config(noreplace) %{_datadir}/%{name}/config/database.yml
 %{initrddir}/puppet-dashboard
 %{_sysconfdir}/sysconfig/puppet-dashboard
 %attr(-,puppet-dashboard,puppet-dashboard) %{_datadir}/%{name}/config/environment.rb
