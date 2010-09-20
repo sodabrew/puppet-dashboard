@@ -12,6 +12,56 @@ namespace :package do
     end
   end
 
+  desc "Create .rpm from this git repository."
+  task :rpm => [:environment, :build_environment] do
+    unless File.exists?(File.expand_path('~/.rpmmacros'))
+      puts <<-HERE
+!! You must setup a ~/.rpmmacros file.
+!! You can do this by running:
+
+    rake package:rpm:create_rpmmacros
+
+      HERE
+    end
+
+    version = File.open('VERSION', 'r').read.sub(/^v/, '').chomp
+    sh "git archive --format=tar --prefix=puppet-dashboard-#{version}/ HEAD | gzip > ~/rpmbuild/SOURCES/puppet-dashboard-#{version}.tar.gz"
+    cd File.expand_path("~/rpmbuild/SPECS") do
+      cp File.join(RAILS_ROOT, 'ext', 'packaging', 'redhat', 'puppet-dashboard.spec'), 'puppet-dashboard.spec'
+
+      cmd = 'rpmbuild -ba'
+      cmd << ' --sign' unless ENV['UNSIGNED'] == '1'
+      cmd << ' puppet-dashboard.spec'
+      sh cmd
+    end
+  end
+
+  namespace :rpm do
+    desc "Create ~/.rpmmacros and related directories"
+    task :create_rpmmacros do
+      rpmmacro_file = File.expand_path("~/.rpmmacros")
+      unless File.exists?(rpmmacro_file)
+        rpmmacro = "
+%{_topdir} #{File.expand_path("~/rpmbuild")}
+%{_builddir} %{_topdir}/BUILD
+%{_rpmdir} %{_topdir}/RPMS
+%{_sourcedir} %{_topdir}/SOURCES
+%{_specdir} %{_topdir}/SPECS
+%{_srcrpmdir} %{_topdir}/SRPMS
+%{_buildrootdir} %{_topdir}/BUILDROOT
+
+%{buildroot} %{_buildrootdir}/%{name}-%{version}-%{release}.%{_arch}
+$RPM_BUILD_ROOT %{buildroot}
+"
+        File.open(rpmmacro_file, "w") {|f| f.write(rpmmacro)}
+      end
+
+      %w{builddir rpmdir sourcedir specdir srcrpmdir buildrootdir}.each do |dir|
+        sh %Q|mkdir -p $(rpmbuild -E '%{_#{dir}}' #{File.join(RAILS_ROOT, 'ext', 'packaging', 'redhat', 'puppet-dashboard.spec')} 2> /dev/null)|
+      end
+    end
+  end
+
   task :build_environment do
     unless ENV['FORCE'] == '1'
       modified = `git status --porcelain | sed -e '/^\?/d'`
