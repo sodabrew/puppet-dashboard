@@ -13,14 +13,22 @@ BuildArch:      noarch
 Requires:       ruby(abi) = 1.8, rubygems, rubygem-rake, ruby-mysql
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
-Requires(post): chkconfig
-Requires(preun): chkconfig
-Requires(preun): initscripts
+Requires(pre):    shadow-utils
+Requires(post):   chkconfig
+Requires(preun):  chkconfig
+Requires(preun):  initscripts
 Requires(postun): initscripts
 
 %description
 Puppet Dashboard is a systems management web application for managing
 Puppet installations and is written using the Ruby on Rails framework.
+
+%pre
+getent group puppet-dashboard > /dev/null || groupadd -r puppet-dashboard
+getent passwd puppet-dashboard > /dev/null || \
+  useradd -r -g puppet-dashboard -d %{_datadir}/puppet-dashboard -s /sbin/nologin \
+  -c "Puppet Dashboard" puppet-dashboard
+exit 0
 
 %prep
 %setup -q
@@ -31,8 +39,10 @@ Puppet installations and is written using the Ruby on Rails framework.
 rm -rf $RPM_BUILD_ROOT
 
 install -p -d -m0755 $RPM_BUILD_ROOT/%{_datadir}/%{name}
-install -p -d -m0755 $RPM_BUILD_ROOT/%{_datadir}/%{name}/vendor
+install -p -d -m0755 $RPM_BUILD_ROOT/%{_datadir}/%{name}/log
 install -p -d -m0755 $RPM_BUILD_ROOT/%{_datadir}/%{name}/public
+install -p -d -m0755 $RPM_BUILD_ROOT/%{_datadir}/%{name}/tmp
+install -p -d -m0755 $RPM_BUILD_ROOT/%{_datadir}/%{name}/vendor
 install -p -d -m0755 $RPM_BUILD_ROOT/%{_defaultdocdir}/%{name}-%{version}
 cp -p -r app bin config db ext lib public Rakefile script spec $RPM_BUILD_ROOT/%{_datadir}/%{name}
 install -Dp -m0644 VERSION $RPM_BUILD_ROOT/%{_datadir}/%{name}/VERSION
@@ -86,6 +96,11 @@ rm -rf %{buildroot}
 %{_datadir}/%{name}/config/database.yml
 %{initrddir}/puppet-dashboard
 %{_sysconfdir}/sysconfig/puppet-dashboard
+%attr(-,puppet-dashboard,puppet-dashboard) %{_datadir}/%{name}/config/environment.rb
+%attr(-,puppet-dashboard,puppet-dashboard) %dir %{_datadir}/%{name}/log
+%attr(-,puppet-dashboard,puppet-dashboard) %dir %{_datadir}/%{name}/public
+%attr(-,puppet-dashboard,puppet-dashboard) %dir %{_datadir}/%{name}/tmp
+
 %doc CHANGELOG COPYING README.markdown
 %changelog
 * Fri Jul 30 2010 James Turnbull <james@puppetlabs.com> - 1.0.3-3
