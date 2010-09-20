@@ -8,7 +8,17 @@ namespace :package do
       cp File.join(RAILS_ROOT, 'config', 'database.yml.example'), File.join('debian', 'doc', 'examples')
       cmd = 'dpkg-buildpackage -a'
       cmd << ' -us -uc' if ENV['UNSIGNED'] == '1'
-      sh cmd
+
+      begin
+        sh cmd
+      rescue
+        puts <<-HERE
+!! Building the .deb failed!
+!! Perhaps you want to run:
+
+    rake package:deb UNSIGNED=1
+        HERE
+      end
     end
   end
 
@@ -32,7 +42,17 @@ namespace :package do
       cmd = 'rpmbuild -ba'
       cmd << ' --sign' unless ENV['UNSIGNED'] == '1'
       cmd << ' puppet-dashboard.spec'
-      sh cmd
+
+      begin
+        sh cmd
+      rescue
+        puts <<-HERE
+!! Building the '.rpm's failed!
+!! Perhaps you want to run:
+
+    rake package:rpm UNSIGNED=1
+        HERE
+      end
     end
   end
 
