@@ -45,21 +45,15 @@ install -p -d -m0755 $RPM_BUILD_ROOT/%{_datadir}/%{name}/tmp
 install -p -d -m0755 $RPM_BUILD_ROOT/%{_datadir}/%{name}/vendor
 install -p -d -m0755 $RPM_BUILD_ROOT/%{_defaultdocdir}/%{name}-%{version}
 cp -p -r app bin config db ext lib public Rakefile script spec $RPM_BUILD_ROOT/%{_datadir}/%{name}
-install -Dp -m0644 VERSION $RPM_BUILD_ROOT/%{_datadir}/%{name}/VERSION
 install -Dp -m0644 config/database.yml.example $RPM_BUILD_ROOT/%{_datadir}/%{name}/config/database.yml
+install -Dp -m0644 RELEASE_NOTES.md $RPM_BUILD_ROOT/%{_datadir}/%{name}/RELEASE_NOTES.md
+install -Dp -m0644 VERSION $RPM_BUILD_ROOT/%{_datadir}/%{name}/VERSION
 
 # Add sysconfig and init script
 install -Dp -m0755 %{confdir}/%{name}.init $RPM_BUILD_ROOT/%{initrddir}/puppet-dashboard
 install -Dp -m0644 %{confdir}/%{name}.sysconfig $RPM_BUILD_ROOT/%{_sysconfdir}/sysconfig/puppet-dashboard
 
-# Not all plugins are installed from our source file.
-mkdir $RPM_BUILD_ROOT/%{_datadir}/%{name}/vendor/plugins
-for plugin in authlogic inherited_resources jrails object_daddy resources_controller timeline_fu will_paginate; do
-  cp -p -r vendor/plugins/$plugin $RPM_BUILD_ROOT/%{_datadir}/%{name}/vendor/plugins/$plugin
-done
-
-cp -p -r vendor/gems $RPM_BUILD_ROOT/%{_datadir}/%{name}/vendor
-cp -p -r vendor/rails $RPM_BUILD_ROOT/%{_datadir}/%{name}/vendor
+cp -p -r vendor $RPM_BUILD_ROOT/%{_datadir}/%{name}/
 
 chmod a+x $RPM_BUILD_ROOT/%{_datadir}/%{name}/script/*
 
@@ -99,7 +93,7 @@ fi
 %attr(-,puppet-dashboard,puppet-dashboard) %dir %{_datadir}/%{name}/public
 %attr(-,puppet-dashboard,puppet-dashboard) %dir %{_datadir}/%{name}/tmp
 
-%doc CHANGELOG COPYING README.markdown
+%doc CHANGELOG COPYING README.markdown README_PACKAGES.markdown
 
 %changelog
 * Fri Jul 30 2010 James Turnbull <james@puppetlabs.com> - 1.0.3-3
