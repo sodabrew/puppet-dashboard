@@ -34,6 +34,6 @@
     = label_tag 'Groups'
     = text_field_tag 'node[node_group_ids][]', '', :id => 'node_group_ids'
 
-  - class_data = {:class => '#node_class_ids', :data_source => '/node_classes.json', :objects => form.object.node_classes}
-  - group_data = {:class => '#node_group_ids', :data_source => '/node_groups.json',  :objects => form.object.node_groups}
+  - class_data = {:class => '#node_class_ids', :data_source => node_classes_path(:format => :json), :objects => form.object.node_classes}
+  - group_data = {:class => '#node_group_ids', :data_source => node_groups_path(:format => :json),  :objects => form.object.node_groups}
   %script#tokenizer{:type => "text/javascript"}= tokenize_input_class(class_data, group_data)
