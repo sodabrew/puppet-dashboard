@@ -44,7 +44,7 @@ class NodesController < InheritedResources::Base
     @node = Node.find_by_name!(params[:id])
     @reports = @node.reports
     respond_to do |format|
-      format.html { render 'reports/index' }
+      format.html { @reports = paginate_scope(@reports); render 'reports/index' }
       format.yaml { render :text => @reports.to_yaml, :content_type => 'application/x-yaml' }
       format.json { render :json => @reports.to_json }
     end

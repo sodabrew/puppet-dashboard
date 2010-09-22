@@ -136,23 +136,6 @@ module ApplicationHelper
     (count > 0 && measures_failure) ? 'failure' : 'success'
   end
 
-  ITEMS_PER_PAGE_DEFAULT = 50
-
-  # Return the number of items to put on a paginated page. Override the default
-  # value by setting the ITEMS_PER_PAGE environmental variable.
-  def items_per_page
-    ENV['ITEMS_PER_PAGE'].try(:to_i) || ITEMS_PER_PAGE_DEFAULT
-  end
-
-  # Return a paginated +scope+.
-  def paginate_scope(scope, opts={})
-    opts.reverse_merge!(
-      :page     => params[:page],
-      :per_page => items_per_page
-    )
-    return scope.paginate(opts)
-  end
-
   # Return +collection+ of Puppet::Util::Log objects sorted by their severity level.
   def puppet_log_sorter(collection)
     collection.sort_by do |instance|

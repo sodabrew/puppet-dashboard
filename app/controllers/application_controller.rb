@@ -3,6 +3,7 @@
 
 class ApplicationController < ActionController::Base
   include InheritedResources::DSL
+  include PaginateScopeHelper
 
   helper :all # include all helpers, all the time
   protect_from_forgery # See ActionController::RequestForgeryProtection for details

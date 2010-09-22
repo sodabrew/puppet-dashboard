@@ -1,6 +1,8 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe NodesController do
+  integrate_views
+
   describe "#index" do
     before :each do
       @node = Node.generate!
@@ -165,7 +167,7 @@ describe NodesController do
 
         it 'should render the update action' do
           do_put
-          response.should render_template('update')
+          response.should render_template('edit')
         end
       end
 
@@ -194,6 +196,12 @@ describe NodesController do
       specify { response.should be_success }
     end
 
+    shared_examples_for "a paginated reports collection" do
+      it "should be paginated" do
+        assigns[:reports].should be_a_kind_of(WillPaginate::Collection)
+      end
+    end
+
     shared_examples_for "an un-paginated reports collection" do
       it "should not be paginated" do
         assigns[:reports].should_not be_a_kind_of(WillPaginate::Collection)
@@ -212,7 +220,7 @@ describe NodesController do
       before { get :reports, :node => 123 }
 
       it_should_behave_like "a successful reports rendering"
-      it_should_behave_like "an un-paginated reports collection"
+      it_should_behave_like "a paginated reports collection"
     end
 
     context "for YAML" do
