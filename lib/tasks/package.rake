@@ -22,7 +22,7 @@ namespace :package do
     end
   end
 
-  desc "Create .rpm from this git repository."
+  desc "Create .rpm from this git repository, optionally set UNSIGNED=1 to leave unsigned.."
   task :rpm => [:environment, :build_environment] do
     unless File.exists?(File.expand_path('~/.rpmmacros'))
       puts <<-HERE
