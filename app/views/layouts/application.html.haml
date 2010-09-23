@@ -3,7 +3,7 @@
   %head
     - page_title = yield(:page_title)
     %title= [ page_title, 'Puppet Node Manager'].compact.join(' - ')
-    %link{ :href => "/images/favicon.ico", :rel => "shortcut icon" }
+    %link{ :href => image_path("favicon.ico"), :rel => "shortcut icon" }
     %meta{ :content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type" }
 
     = javascript_include_tag 'jquery.min'
