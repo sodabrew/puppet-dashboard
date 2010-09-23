@@ -62,15 +62,15 @@ namespace :package do
       rpmmacro_file = File.expand_path("~/.rpmmacros")
       unless File.exists?(rpmmacro_file)
         rpmmacro = "
-%{_topdir} #{File.expand_path("~/rpmbuild")}
-%{_builddir} %{_topdir}/BUILD
-%{_rpmdir} %{_topdir}/RPMS
-%{_sourcedir} %{_topdir}/SOURCES
-%{_specdir} %{_topdir}/SPECS
-%{_srcrpmdir} %{_topdir}/SRPMS
-%{_buildrootdir} %{_topdir}/BUILDROOT
+%_topdir %(echo $HOME)/rpmbuild
+%_builddir %{_topdir}/BUILD
+%_rpmdir %{_topdir}/RPMS
+%_sourcedir %{_topdir}/SOURCES
+%_specdir %{_topdir}/SPECS
+%_srcrpmdir %{_topdir}/SRPMS
+%_buildrootdir %{_topdir}/BUILDROOT
 
-%{buildroot} %{_buildrootdir}/%{name}-%{version}-%{release}.%{_arch}
+%buildroot %{_buildrootdir}/%{name}-%{version}-%{release}.%{_arch}
 $RPM_BUILD_ROOT %{buildroot}
 "
         File.open(rpmmacro_file, "w") {|f| f.write(rpmmacro)}
