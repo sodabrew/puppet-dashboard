@@ -1,5 +1,5 @@
 namespace :package do
-  desc "Create .deb from this git repository, optionallyh set UNSIGNED=1 to leave unsigned."
+  desc "Create .deb from this git repository, optionally set UNSIGNED=1 to leave unsigned."
   task :deb => [:environment, :build_environment] do
     build_dir = create_workspace('deb')
 
