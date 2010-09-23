@@ -11,7 +11,7 @@ URL:            http://www.puppetlabs.com
 Source0:        http://yum.puppetlabs.com/sources/%{name}-%{version}.tar.gz
 BuildArch:      noarch
 Requires:       ruby(abi) = 1.8, rubygems, rubygem-rake, ruby-mysql
-BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
+BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-%(id -un)
 
 Requires(pre):    shadow-utils
 Requires(post):   chkconfig
