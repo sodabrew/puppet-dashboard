@@ -93,7 +93,7 @@ fi
 %attr(-,puppet-dashboard,puppet-dashboard) %dir %{_datadir}/%{name}/public
 %attr(-,puppet-dashboard,puppet-dashboard) %dir %{_datadir}/%{name}/tmp
 
-%doc CHANGELOG COPYING README.markdown README_PACKAGES.markdown
+%doc CHANGELOG COPYING README.markdown README_PACKAGES.markdown RELEASE_NOTES.md
 
 %changelog
 * Fri Jul 30 2010 James Turnbull <james@puppetlabs.com> - 1.0.3-3
