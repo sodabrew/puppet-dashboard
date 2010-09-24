@@ -5,7 +5,6 @@ namespace :package do
 
     cd build_dir do
       cp_r File.join('ext', 'packaging', 'debian'), '.'
-      cp File.join(RAILS_ROOT, 'config', 'database.yml.example'), File.join('debian', 'doc', 'examples')
       cmd = 'dpkg-buildpackage -a'
       cmd << ' -us -uc' if ENV['UNSIGNED'] == '1'
 

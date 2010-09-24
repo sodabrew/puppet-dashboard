@@ -17,5 +17,5 @@ script usr/share/puppet-dashboard
 spec usr/share/puppet-dashboard
 vendor/plugins usr/share/puppet-dashboard/vendor
 vendor/gems usr/share/puppet-dashboard/vendor
-vendor/rails /usr/share/puppet-dashboard/vendor
+vendor/rails usr/share/puppet-dashboard/vendor
 debian/conf/*.template usr/share/puppet-dashboard/templates

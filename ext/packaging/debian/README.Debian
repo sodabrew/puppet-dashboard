@@ -15,7 +15,7 @@ Installation
 
     sudo apt-get install mysql-server
 
-1. Create a `/usr/share/puppet-dashboard/config/database.yml` file. Please see the `database.yml.example` file in that `config` directory for an example and instructions. 
+1. Create an `/etc/puppet-dashboard/database.yml` file. Please see `/usr/share/doc/puppet-dashboard/examples/database.yml.example` for an example.
 
 2. Create the database by running the following commands from the Puppet Dashboard directory:
 
@@ -25,6 +25,6 @@ Installation
 
     rake RAILS_ENV=production db:migrate
 
-4. Run the Puppet Dashboard server, e.g. run the following commands from the Puppet Dashboard directory, e.g.:
+4. Start the Puppet Dashboard server:
 
-    su www-data -c './script/server -d -e production'
+    sudo service puppet-dashboard start
