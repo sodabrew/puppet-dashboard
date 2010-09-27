@@ -85,12 +85,12 @@ fi
 %files
 %defattr(-,root,root,0755)
 %{_datadir}/%{name}
-%config(noreplace) %{_datadir}/%{name}/config/database.yml
+%attr(0640,puppet-dashboard,puppet-dashboard) %config(noreplace) %{_datadir}/%{name}/config/database.yml
 %{initrddir}/puppet-dashboard
 %{_sysconfdir}/sysconfig/puppet-dashboard
 %attr(-,puppet-dashboard,puppet-dashboard) %{_datadir}/%{name}/config/environment.rb
+%attr(-,puppet-dashboard,puppet-dashboard) %{_datadir}/%{name}/public
 %attr(-,puppet-dashboard,puppet-dashboard) %dir %{_datadir}/%{name}/log
-%attr(-,puppet-dashboard,puppet-dashboard) %dir %{_datadir}/%{name}/public
 %attr(-,puppet-dashboard,puppet-dashboard) %dir %{_datadir}/%{name}/tmp
 
 %doc CHANGELOG COPYING README.markdown README_PACKAGES.markdown RELEASE_NOTES.md
