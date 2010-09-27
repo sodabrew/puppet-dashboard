@@ -12,31 +12,69 @@ if [ -f /etc/sysconfig/puppet-dashboard ]; then
     . /etc/sysconfig/puppet-dashboard
 fi
 
-prog=puppet-dashboard
+DASHBOARD_HOME=${DASHBOARD_HOME:-/usr/share/puppet-dashboard}
+DASHBOARD_USER=${DASHBOARD_USER:-puppet-dashboard}
+DASHBOARD_RUBY=${DASHBOARD_RUBY:-/usr/bin/ruby}
+DASHBOARD_ENVIRONMENT=${DASHBOARD_ENVIRONMENT:-production}
+DASHBOARD_IFACE=${DASHBOARD_IFACE:-0.0.0.0}
+DASHBOARD_PORT=${DASHBOARD_PORT:-3000}
+
+PIDFILE=/var/run/puppet-dashboard.pid
 RETVAL=0
 
+check_status() {
+        pidofproc -p ${PIDFILE} ${DASHBOARD_RUBY} > /dev/null
+}
+
 start() {
-        echo -n $"Starting $prog: "
-        su puppet-dashboard -c '/usr/bin/ruby ${DASHBOARD_HOME}/script/server -e production' >/dev/null 2>&1 &
+        echo -n $"Starting Puppet Dashboard: "
+
+        # Don't start it twice.
+        check_status
         RETVAL=$?
-        if [ $RETVAL = 0 ]
-        then
-            echo $! > /var/run/puppet-dashboard.pid
+        if [ $RETVAL = 0 ]; then
+            echo -n "Already running"
+            echo_success
+            echo
+            exit 0
+        fi
+
+        # This is a dirty, dirty hack, but it's rather difficult to get
+        # script/server to daemonize in any way, and still give us useful
+        # debugging output (or a real exit code) if it fails to start.
+        # Also: We don't have reliable access to start-stop-daemon.
+
+        su -s /bin/sh -c "${DASHBOARD_RUBY} ${DASHBOARD_HOME}/script/server -e ${DASHBOARD_ENVIRONMENT} -p ${DASHBOARD_PORT} -b ${DASHBOARD_IFACE}" ${DASHBOARD_USER} &
+        local PID=$!
+        echo $PID > ${PIDFILE}
+
+        sleep 5
+
+        check_status
+        RETVAL=$?
+
+        if [ $RETVAL = 0 ]; then
             echo_success
         else
             echo_failure
-        fi 
+        fi
 
         echo
-
         return $RETVAL
 }
+
 stop() {
-        echo -n $"Stopping $prog: "
-        killproc puppet-dashboard
+        echo -n $"Stopping Puppet Dashboard: "
+        killproc -p ${PIDFILE} puppet-dashboard
         RETVAL=$?
+        if [ $RETVAL = 0 ]; then
+            echo_success
+        else
+            echo_failure
+        fi
+
         echo
-        [ $RETVAL = 0 ] && rm -f /var/run/puppet-dashboard.pid
+        exit $RETVAL
 }
 
 # See how we were called.
@@ -51,8 +89,18 @@ case "$1" in
         stop
         start
         ;;
+    status)
+        echo -n 'Puppet Dashboard is '
+        pidofproc -p ${PIDFILE} ${DASHBOARD_RUBY} > /dev/null
+        RETVAL=$?
+        if [ $RETVAL = 0 ]; then
+            echo 'running'
+        else
+            echo 'stopped'
+        fi
+        ;;
     *)
-        echo $"Usage: $prog {start|stop|restart}"
+        echo "Usage: $0 {start|stop|restart}"
         exit 1
 esac
 
