@@ -306,6 +306,20 @@ Third-party tools that can help secure a Puppet Dashboard include:
 
         http://username:password@hostname
 
+Performance
+-----------
+
+The Puppet Dashboard slows down as it manages more data. Here are ways to make it run faster, from easiest to hardest:
+
+*  Clear the Ruby on Rails logs. You can zero all these logs by running `rake log:clear`, or use a tool like `logrotate` to archive old files in the `logs` directory.
+*  Optimize your database by running `rake RAILS_ENV=production db:raw:optimize` from your Puppet Dashboard directory, this will reorganize and reanalyze your database for faster queries.
+*  Run the application in `production` mode, e.g. by running `./script/server -e production`. The default `development` mode is significantly slower because it doesn't cache and logs more details.
+*  Run the application using multiple processes to handle more concurrent requests. You can use Phusion Passenger, or clusters of Thin or Unicorn servers to serve multiple concurrent requests.
+*  Prune your old reports, see the "Database cleanup" section in this document.
+*  Run on a machine with a fast, local database.
+*  Run on a machine with enough processing power and memory.
+*  Run on a machine with fast backplane, controllers and disks.
+
 Debugging
 ---------
 
