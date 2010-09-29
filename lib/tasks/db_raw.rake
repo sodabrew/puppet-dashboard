@@ -49,6 +49,20 @@ namespace :db do
 
       Rake::Task['db:migrate'].invoke
     end
+
+    desc "Optimize database tables to speed up queries. WARNING: May take a while."
+    task :optimize => :environment do
+      case ActiveRecord::Base.connection
+      when ActiveRecord::ConnectionAdapters::MysqlAdapter
+        puts "Optimizing tables, this may take a while:"
+        for table in ActiveRecord::Base.connection.select_values('SHOW TABLES').sort
+          puts "* #{table}"
+          ActiveRecord::Base.connection.execute("OPTIMIZE TABLE #{table}")
+        end
+      else
+        raise "Don't know how to optimize for database engine: #{ActiveRecord::Base.connection.adapter_name}"
+      end
+    end
   end
 
   # Return string escaped for use in shell.
