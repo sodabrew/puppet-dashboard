@@ -41,7 +41,7 @@ class NodesController < InheritedResources::Base
   # TODO: routing currently can't handle nested resources due to node's id
   # requirements
   def reports
-    @node = Node.find_by_name!(params[:id])
+    @node = resource
     @reports = @node.reports
     respond_to do |format|
       format.html { @reports = paginate_scope(@reports); render 'reports/index' }
