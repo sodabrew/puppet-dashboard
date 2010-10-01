@@ -18,7 +18,7 @@ describe Node do
 
   end
 
-  describe "::by_currentness_and_successfulness" do
+  describe "statuses" do
     before :each do
       later = 1.week.ago.to_date
       sooner = Date.today
@@ -59,10 +59,16 @@ describe Node do
         let(:successfulness) { successfulness }
         let(:inclusions) { inclusions }
 
-        subject { Node.by_currentness_and_successfulness(currentness, successfulness).map(&:name).sort }
+        describe "::by_currentness_and_successfulness" do
+          it "should exactly match: #{inclusions.join(', ')}" do
+            Node.by_currentness_and_successfulness(currentness, successfulness).map(&:name).sort.should == inclusions.sort
+          end
+        end
 
-        it "should exactly match: #{inclusions.join(', ')}" do
-          should == inclusions.sort
+        describe "::count_by_currentness_and_successfulness" do
+          it "should count the expected nodes" do
+            Node.count_by_currentness_and_successfulness(currentness, successfulness).should == inclusions.size
+          end
         end
       end
     end
