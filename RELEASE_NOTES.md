@@ -1,8 +1,19 @@
 Puppet Dashboard Release Notes
 ==============================
 
-v1.0.4
-------
+v1.0.4rc2
+---------
+
+* MIGRATION: Fixed slow database queries and improved table indexes when counting nodes and selecting nodes over time.
+* Fixed node's reports listing page to not throw exceptions.
+* Fixed .rpm and .deb packages to include all required files, declare all dependencies, set correct permissions and include working startup scripts.
+* Fixed views to display all dates and times in the same timezone and format.
+* Fixed views to generate all internal links relative to RAILS_ROOT enabling the site to be served from sub-URIs (Ex: example.com/dashboard/).
+* Added documentation describing some simple ways to improve the application's performance, see README.
+* Added task to optimize the database tables which can be run using `rake RAILS_ENV=production db:raw:optimize`.
+
+v1.0.4rc1
+---------
 
 * MIGRATION: Fixed truncation of long reports and deleted these invalid records. Please reimport your reports (see README) after migrating to readd these deleted reports.
 * MIGRATION: Fixed slow database queries on the home page, reports listing page, and site-wide sidebar.
