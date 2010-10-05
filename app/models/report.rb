@@ -2,11 +2,12 @@ class Report < ActiveRecord::Base
   def self.per_page; 20 end # Pagination
   belongs_to :node
 
+  before_validation :ensure_valid_format
+  before_validation :process_report
   validate :report_contains_metrics
   validates_presence_of :host
   validates_presence_of :time
   validates_uniqueness_of :host, :scope => :time, :allow_nil => true
-  before_validation :process_report
   after_save :update_node
   after_destroy :replace_last_report
 
@@ -54,6 +55,15 @@ class Report < ActiveRecord::Base
 
   private
 
+  def ensure_valid_format
+    begin
+      report
+    rescue ActiveRecord::SerializationTypeMismatch
+      errors.add_to_base("The report is in an invalid format")
+      false
+    end
+  end
+
   def process_report
     set_attributes
     assign_to_node
@@ -81,6 +91,8 @@ class Report < ActiveRecord::Base
   end
 
   def report_contains_metrics
-    report.metrics.present?
+    has_metrics = report.metrics.present?
+    errors.add_to_base("The report contains no metrics") unless has_metrics
+    has_metrics
   end
 end
