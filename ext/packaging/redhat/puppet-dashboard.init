@@ -36,7 +36,7 @@ start() {
             echo -n "Already running"
             echo_success
             echo
-            exit 0
+            return 0
         fi
 
         # This is a dirty, dirty hack, but it's rather difficult to get
@@ -74,20 +74,22 @@ stop() {
         fi
 
         echo
-        exit $RETVAL
+        return $RETVAL
 }
 
 # See how we were called.
 case "$1" in
     start)
         start
+        exit $?
         ;;
     stop)
         stop
+        exit $?
         ;;
     restart)
-        stop
-        start
+        stop && start
+        exit $?
         ;;
     status)
         echo -n 'Puppet Dashboard is '
