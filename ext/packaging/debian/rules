@@ -12,7 +12,7 @@ override_dh_install:
 	install -d debian/puppet-dashboard/etc/puppet-dashboard
 	install -d debian/puppet-dashboard/usr/share/puppet-dashboard
 	install -d debian/puppet-dashboard/usr/share/doc/puppet-dashboard/examples
-	cp -r app config db ext lib public script spec vendor VERSION CHANGELOG COPYING LICENSE README.markdown README_PACKAGES.markdown RELEASE_NOTES.md Rakefile debian/puppet-dashboard/usr/share/puppet-dashboard/
+	cp -r app bin config db ext lib public script spec vendor VERSION CHANGELOG COPYING LICENSE README.markdown README_PACKAGES.markdown RELEASE_NOTES.md Rakefile debian/puppet-dashboard/usr/share/puppet-dashboard/
 	install config/database.yml.example debian/puppet-dashboard/etc/puppet-dashboard/database.yml
 	install config/database.yml.example debian/puppet-dashboard/usr/share/doc/puppet-dashboard/examples/database.yml.example
 	# Clean up the "extra" license files
