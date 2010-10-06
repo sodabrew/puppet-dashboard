@@ -1,5 +1,2 @@
-var/log/puppet-dashboard
-var/cache/puppet-dashboard
-var/lib/puppet-dashboard
-etc/puppet-dashboard
+usr/share/puppet-dashboard/log
 usr/share/puppet-dashboard/tmp
