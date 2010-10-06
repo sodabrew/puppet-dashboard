@@ -67,9 +67,11 @@ class Node < ActiveRecord::Base
   named_scope :no_longer_reporting, :conditions => ['reported_at < ?', NO_LONGER_REPORTING_CUTOFF.ago]
 
   def self.count_by_currentness_and_successfulness(currentness, successfulness)
-    # FIXME The #length call is inefficient, but how do I make #count work since it lacks support for :having?
-    # self.by_currentness_and_successfulness(currentness, successfulness).count(:id, :distinct => :id)
-    self.by_currentness_and_successfulness(currentness, successfulness).length
+    if currentness
+      self.by_currentness_and_successfulness(currentness, successfulness).count
+    else
+      Report.count_by_sql(['SELECT COUNT(node_id) FROM (SELECT DISTINCT node_id FROM reports WHERE success = ?) as tmp', successfulness])
+    end
   end
 
   def self.label_for_currentness_and_successfulness(currentness, successfulness)
