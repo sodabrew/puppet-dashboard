@@ -109,4 +109,9 @@ $RPM_BUILD_ROOT %{buildroot}
 
     return build
   end
+
+  # Resolve an RPM macro.
+  def rpm_macro_value(macro)
+    `rpmbuild -E '%#{macro}' #{File.join(RAILS_ROOT, 'ext', 'packaging', 'redhat', 'puppet-dashboard.spec')} 2> /dev/null`.chomp
+  end
 end
