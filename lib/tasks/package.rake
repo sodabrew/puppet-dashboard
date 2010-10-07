@@ -7,6 +7,7 @@ namespace :package do
       cp_r File.join('ext', 'packaging', 'debian'), '.'
       cmd = 'dpkg-buildpackage -a'
       cmd << ' -us -uc' if ENV['UNSIGNED'] == '1'
+      cmd << " -k#{ENV['KEY_ID']}" if ENV['KEY_ID']
 
       begin
         sh cmd
@@ -17,6 +18,11 @@ namespace :package do
 !! Perhaps you want to run:
 
     rake package:deb UNSIGNED=1
+
+!! Or provide a specific key id:
+
+    rake package:deb KEY_ID=4BD6EC30
+
         HERE
       end
     end
