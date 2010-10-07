@@ -1,5 +1,5 @@
 namespace :package do
-  desc "Create .deb from this git repository, optionally set UNSIGNED=1 to leave unsigned."
+  desc "Create .deb from this git repository, set KEY_ID=your_key to use a specific key or UNSIGNED=1 to leave unsigned."
   task :deb => :build_environment do
     build_dir = create_workspace('deb')
 
@@ -19,16 +19,17 @@ namespace :package do
 
     rake package:deb UNSIGNED=1
 
-!! Or provide a specific key id:
+!! Or provide a specific key id, e.g.:
 
     rake package:deb KEY_ID=4BD6EC30
+    rake package:deb KEY_ID=me@example.com
 
         HERE
       end
     end
   end
 
-  desc "Create .rpm from this git repository, optionally set UNSIGNED=1 to leave unsigned.."
+  desc "Create .rpm from this git repository, set UNSIGNED=1 to leave unsigned."
   task :rpm => :build_environment do
     unless File.exists?(File.expand_path('~/.rpmmacros'))
       puts <<-HERE
