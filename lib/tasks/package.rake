@@ -34,8 +34,8 @@ namespace :package do
     end
 
     version = File.open('VERSION', 'r').read.sub(/^v/, '').chomp
-    sh "git archive --format=tar --prefix=puppet-dashboard-#{version}/ HEAD | gzip > ~/rpmbuild/SOURCES/puppet-dashboard-#{version}.tar.gz"
-    cd File.expand_path("~/rpmbuild/SPECS") do
+    sh "git archive --format=tar --prefix=puppet-dashboard-#{version}/ HEAD | gzip > #{rpm_macro_value('_sourcedir')}/puppet-dashboard-#{version}.tar.gz"
+    cd File.expand_path(rpm_macro_value('_specdir')) do
       cp File.join(RAILS_ROOT, 'ext', 'packaging', 'redhat', 'puppet-dashboard.spec'), 'puppet-dashboard.spec'
 
       cmd = 'rpmbuild -ba'
@@ -75,8 +75,8 @@ $RPM_BUILD_ROOT %{buildroot}
         File.open(rpmmacro_file, "w") {|f| f.write(rpmmacro)}
       end
 
-      %w{builddir rpmdir sourcedir specdir srcrpmdir buildrootdir}.each do |dir|
-        sh %Q|mkdir -p $(rpmbuild -E '%{_#{dir}}' #{File.join(RAILS_ROOT, 'ext', 'packaging', 'redhat', 'puppet-dashboard.spec')} 2> /dev/null)|
+      %w{_builddir _rpmdir _sourcedir _specdir _srcrpmdir _buildrootdir}.each do |dir|
+        sh %Q|mkdir -p #{rpm_macro_value(dir)}|
       end
     end
   end
