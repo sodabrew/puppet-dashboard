@@ -10,6 +10,7 @@ namespace :package do
 
       begin
         sh cmd
+        puts "** Created package: "+ latest_file(File.expand_path(File.join(RAILS_ROOT, 'tmp', 'packages', 'deb', '*.deb')))
       rescue
         puts <<-HERE
 !! Building the .deb failed!
@@ -44,6 +45,7 @@ namespace :package do
 
       begin
         sh cmd
+        puts "** Created package: "+ latest_file(File.expand_path(File.join(rpm_macro_value('_rpmdir'), 'noarch', 'puppet-dashboard*.rpm')))
       rescue
         puts <<-HERE
 !! Building the '.rpm's failed!
@@ -108,6 +110,12 @@ $RPM_BUILD_ROOT %{buildroot}
     sh "git checkout-index -a -f --prefix=#{build}/"
 
     return build
+  end
+
+  # Return the file with the latest mtime matching the String filename glob (e.g. "foo/*.bar").
+  def latest_file(glob)
+    require 'find'
+    return FileList[glob].map{|path| [path, File.mtime(path)]}.sort_by(&:last).map(&:first).last
   end
 
   # Resolve an RPM macro.
