@@ -1,6 +1,6 @@
 namespace :package do
   desc "Create .deb from this git repository, optionally set UNSIGNED=1 to leave unsigned."
-  task :deb => [:environment, :build_environment] do
+  task :deb => :build_environment do
     build_dir = create_workspace('deb')
 
     cd build_dir do
@@ -22,7 +22,7 @@ namespace :package do
   end
 
   desc "Create .rpm from this git repository, optionally set UNSIGNED=1 to leave unsigned.."
-  task :rpm => [:environment, :build_environment] do
+  task :rpm => :build_environment do
     unless File.exists?(File.expand_path('~/.rpmmacros'))
       puts <<-HERE
 !! You must setup a ~/.rpmmacros file.
