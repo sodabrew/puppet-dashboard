@@ -1,6 +1,6 @@
 namespace :package do
   desc "Create .deb from this git repository, optionally set UNSIGNED=1 to leave unsigned."
-  task :deb => [:environment, :build_environment] do
+  task :deb => :build_environment do
     build_dir = create_workspace('deb')
 
     cd build_dir do
@@ -10,6 +10,7 @@ namespace :package do
 
       begin
         sh cmd
+        puts "** Created package: "+ latest_file(File.expand_path(File.join(RAILS_ROOT, 'tmp', 'packages', 'deb', '*.deb')))
       rescue
         puts <<-HERE
 !! Building the .deb failed!
@@ -22,7 +23,7 @@ namespace :package do
   end
 
   desc "Create .rpm from this git repository, optionally set UNSIGNED=1 to leave unsigned.."
-  task :rpm => [:environment, :build_environment] do
+  task :rpm => :build_environment do
     unless File.exists?(File.expand_path('~/.rpmmacros'))
       puts <<-HERE
 !! You must setup a ~/.rpmmacros file.
@@ -34,8 +35,8 @@ namespace :package do
     end
 
     version = File.open('VERSION', 'r').read.sub(/^v/, '').chomp
-    sh "git archive --format=tar --prefix=puppet-dashboard-#{version}/ HEAD | gzip > ~/rpmbuild/SOURCES/puppet-dashboard-#{version}.tar.gz"
-    cd File.expand_path("~/rpmbuild/SPECS") do
+    sh "git archive --format=tar --prefix=puppet-dashboard-#{version}/ HEAD | gzip > #{rpm_macro_value('_sourcedir')}/puppet-dashboard-#{version}.tar.gz"
+    cd File.expand_path(rpm_macro_value('_specdir')) do
       cp File.join(RAILS_ROOT, 'ext', 'packaging', 'redhat', 'puppet-dashboard.spec'), 'puppet-dashboard.spec'
 
       cmd = 'rpmbuild -ba'
@@ -44,6 +45,7 @@ namespace :package do
 
       begin
         sh cmd
+        puts "** Created package: "+ latest_file(File.expand_path(File.join(rpm_macro_value('_rpmdir'), 'noarch', 'puppet-dashboard*.rpm')))
       rescue
         puts <<-HERE
 !! Building the '.rpm's failed!
@@ -75,8 +77,8 @@ $RPM_BUILD_ROOT %{buildroot}
         File.open(rpmmacro_file, "w") {|f| f.write(rpmmacro)}
       end
 
-      %w{builddir rpmdir sourcedir specdir srcrpmdir buildrootdir}.each do |dir|
-        sh %Q|mkdir -p $(rpmbuild -E '%{_#{dir}}' #{File.join(RAILS_ROOT, 'ext', 'packaging', 'redhat', 'puppet-dashboard.spec')} 2> /dev/null)|
+      %w{_builddir _rpmdir _sourcedir _specdir _srcrpmdir _buildrootdir}.each do |dir|
+        sh %Q|mkdir -p #{rpm_macro_value(dir)}|
       end
     end
   end
@@ -108,5 +110,16 @@ $RPM_BUILD_ROOT %{buildroot}
     sh "git checkout-index -a -f --prefix=#{build}/"
 
     return build
+  end
+
+  # Return the file with the latest mtime matching the String filename glob (e.g. "foo/*.bar").
+  def latest_file(glob)
+    require 'find'
+    return FileList[glob].map{|path| [path, File.mtime(path)]}.sort_by(&:last).map(&:first).last
+  end
+
+  # Resolve an RPM macro.
+  def rpm_macro_value(macro)
+    `rpmbuild -E '%#{macro}' #{File.join(RAILS_ROOT, 'ext', 'packaging', 'redhat', 'puppet-dashboard.spec')} 2> /dev/null`.chomp
   end
 end
