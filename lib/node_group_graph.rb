@@ -1,3 +1,5 @@
+require 'ostruct'
+
 module NodeGroupGraph
   # Returns a hash of all the groups for this group/node, direct or inherited.
   # Each key is a group, and each value is the Set of groups from which we inherit
@@ -30,6 +32,49 @@ module NodeGroupGraph
     @node_class_list = all
   end
 
+  # Collects all the parameters of the node, starting at the "most distant" groups
+  # and working its ways up to the node itself. If there is a conflict between two
+  # groups at the same level, the conflict is deferred to the next level. If the
+  # conflict reaches the top without being resolved, a ParameterConflictError is
+  # raised.
+  def compiled_parameters(allow_conflicts=false)
+    unless @compiled_parameters
+      @compiled_parameters = self.walk_groups do |group,parents|
+        # Pick-up conflicts that our parents had
+        parent_params = parents.map(&:parameters).flatten
+        conflicts = parents.map(&:conflicts).inject(Set.new,&:merge)
+
+        params = {}
+        group.parameters.to_hash.each do |key,value|
+          params[key] = OpenStruct.new :name => key, :value => value, :sources => Set[group]
+        end
+
+        #Now collect our inherited params and their conflicts
+        inherited = {}
+        parent_params.each do |parameter|
+          if inherited[parameter.name] && inherited[parameter.name].value != parameter.value
+            conflicts.add(parameter.name)
+            inherited[parameter.name].sources << parameter.sources.first
+          else
+            inherited[parameter.name] = OpenStruct.new :name => parameter.name, :value => parameter.value, :sources => parameter.sources
+          end
+        end
+
+        # Resolve all conflicts resolved by the node/group itself
+        conflicts.delete_if {|key| params[key]}
+
+        OpenStruct.new :parameters => params.reverse_merge(inherited).values, :conflicts => conflicts
+      end
+      @compiled_parameters.conflicts.each { |key| errors.add(:parameters,key) }
+    end
+    raise ParameterConflictError unless allow_conflicts or @compiled_parameters.conflicts.empty?
+    @compiled_parameters.parameters
+  end
+
+  def parameter_list
+    compiled_parameters.map{|param| {param.name => param.value} }.inject({},&:merge)
+  end
+
   def walk_groups(&block)
     walk(:node_groups,&block)
   end
@@ -38,17 +83,7 @@ module NodeGroupGraph
     walk(:node_group_children,&block)
   end
 
-  def node_group_graph
-    @node_group_graph ||= compile_node_group_graph.last
-  end
-
   private
-  def compile_node_group_graph(group=self, seen=[], all=[])
-    return [nil,{}] if seen.include? group
-    all << group
-    graph = group.node_groups.map {|grp| {grp => compile_node_group_graph(grp, seen + [group], all).last}}.inject({},&:merge)
-    [all.uniq, graph]
-  end
 
   def walk(method,&block)
     def yield_children(seen,method,&block)

@@ -1,27 +1,30 @@
 - nodes = paginate_scope(local_assigns[:nodes])
 - more_link = local_assigns[:more_link]
+- container = local_assigns[:container]
 
 %table.main
   %thead
     %tr
-      -# %th.check
-        -# = check_box_tag "check_all"
       %th.status
       %th.hostname
         Hostname
+      - unless container.nil?
+        %th Source groups
       %th.latest_report.desc
         &darr; Latest report
   %tbody
     - if nodes.present?
-      - for node in nodes
+      - nodes.each do |node|
+        - sources = container.node_list[node] unless container.nil?
         %tr[node]{:class => "#{'active' if node == @node}"}
-          -# %td.check
-            -# = check_box_tag dom_id(node)
           %td.status{:class => node.status_class}
             %span{:title => node_title_text(node)}
               = node_status_icon(node)
           %td.hostname
             = link_to h(node.name), node
+          - unless container.nil?
+            %td
+              = sources.map{|s| link_to(s.name,s)}.join(", ") unless sources.include?(container)
           %td.latest_report
             = node.last_report ? node.last_report.time : "Has not reported"
       = pagination_for nodes, more_link
