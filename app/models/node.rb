@@ -113,7 +113,7 @@ class Node < ActiveRecord::Base
   end
 
   def inherited_classes
-    (node_group_list - [self]).map(&:node_classes).flatten.uniq
+    (node_group_list.keys - [self]).map(&:node_classes).flatten.uniq
   end
 
   def all_classes

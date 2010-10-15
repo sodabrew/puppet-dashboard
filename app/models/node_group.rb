@@ -12,8 +12,12 @@ class NodeGroup < ActiveRecord::Base
   has_many :node_group_edges_out, :class_name => "NodeGroupEdge", :foreign_key => 'from_id', :dependent => :destroy
   has_many :node_group_edges_in, :class_name => "NodeGroupEdge", :foreign_key => 'to_id', :dependent => :destroy
 
-  # TODO Want to add a list of groups have edges into us, may want to rename node_groups
-  has_many :node_groups, :through => :node_group_edges_out, :source => :to
+  has_many :node_group_children, :class_name => "NodeGroup", :through => :node_group_edges_in, :source => :from
+  has_many :node_group_parents, :class_name => "NodeGroup", :through => :node_group_edges_out, :source => :to
+
+  # Alias for compatibility with Node
+  alias :node_groups :node_group_parents
+  alias :node_groups= :node_group_parents=
 
   has_parameters
 
@@ -69,5 +73,31 @@ class NodeGroup < ActiveRecord::Base
 
   def self.find_from_form_ids(*ids)
     ids.map{|entry| entry.to_s.split(/[ ,]/)}.flatten.reject(&:blank?).uniq.map{|id| self.find(id)}
+  end
+
+  def node_group_child_list
+    return @node_group_child_list if @node_group_child_list
+    all = {}
+    self.walk_child_groups do |group,children|
+      children.each do |child|
+        all[child] ||= Set.new
+        all[child] << group
+      end
+      group
+    end
+    @node_group_child_list = all
+  end
+
+  def node_list
+    return @node_list if @node_list
+    all = {}
+    self.walk_child_groups do |group,_|
+      group.nodes.each do |node|
+        all[node] ||= Set.new
+        all[node] << group
+      end
+      group
+    end
+    @node_list = all
   end
 end

@@ -279,7 +279,7 @@ describe Node do
 
   describe "handling the node group graph" do
     before :each do
-      @node = Node.generate!
+      @node = Node.generate! :name => "Sample"
 
       @node_group_a = NodeGroup.generate! :name => "A"
       @node_group_b = NodeGroup.generate! :name => "B"
@@ -296,17 +296,26 @@ describe Node do
 
     describe "when a group is included twice" do
       before :each do
-        @node_group_c = NodeGroup.generate!
+        @node_group_c = NodeGroup.generate! :name => "C"
+        @node_group_d = NodeGroup.generate! :name => "D"
+        @node_group_c.node_groups << @node_group_d
         @node_group_a.node_groups << @node_group_c
         @node_group_b.node_groups << @node_group_c
       end
 
       it "should return the correct graph" do
-        @node.node_group_graph.should == {@node_group_a => {@node_group_c => {}}, @node_group_b => {@node_group_c => {}}}
+        @node.node_group_graph.should == {
+          @node_group_a => {
+            @node_group_c => {@node_group_d => {}}
+          },
+          @node_group_b => {
+            @node_group_c => {@node_group_d => {}}
+          }
+        }
       end
 
       it "should return the correct list" do
-        @node.node_group_list.should == [@node, @node_group_a, @node_group_c, @node_group_b]
+        @node.node_group_list.should == {@node_group_a => Set[@node], @node_group_c => Set[@node_group_a,@node_group_b], @node_group_b => Set[@node], @node_group_d => Set[@node_group_c]}
       end
     end
 
