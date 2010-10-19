@@ -1,12 +1,12 @@
-puppet-dashboard (1.0.4rc2-1) lucid; urgency=low
-
-  * 1.0.4rc2-1 maintenance release
-
- -- James Turnbull <james@puppetlabs.com>  Wed, 01 Sep 2010 16:59:19 -0700
-
 puppet-dashboard (1.0.4-1) lucid; urgency=low
 
   * 1.0.4-1 maintenance release
+
+ -- James Turnbull <james@puppetlabs.com>  Tue, 19 Oct 2010 15:11:54 -0700
+
+puppet-dashboard (1.0.4rc2-1) lucid; urgency=low
+
+  * 1.0.4rc2-1 maintenance release
 
  -- James Turnbull <james@puppetlabs.com>  Wed, 01 Sep 2010 16:59:19 -0700
 

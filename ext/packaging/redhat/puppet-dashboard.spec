@@ -2,7 +2,7 @@
 %global initrddir /etc/rc.d/init.d
 
 Name:           puppet-dashboard
-Version:        1.0.4rc2
+Version:        1.0.4
 Release:        1%{?dist}
 Summary:        Systems Management web application
 Group:          Applications/System
