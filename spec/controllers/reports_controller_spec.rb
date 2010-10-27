@@ -51,6 +51,16 @@ describe ReportsController do
 
       it { should == "406" }
     end
+
+    describe "with a POST with invalid report data, the response code" do
+      before :each do
+        post(:create, :report => "foo bar baz bad data invalid")
+      end
+
+      subject { response.code }
+
+      it { should == "406" }
+    end
   end
 
  def post_with_body(action, body, headers)

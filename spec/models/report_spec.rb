@@ -32,8 +32,25 @@ describe Report do
         Report.find(report.id).should_not be_success
       end
 
-      it "is not created if a report for the same host exists with the same time" do
+      it "should properly create a valid report" do
+        report = report_model_from_yaml('success.yml')
+        report.save!
+        Report.find(report.id).should be_success
+      end
 
+      it "should consider a blank report to be invalid" do
+        Report.create(:report => '').should_not be_valid
+      end
+
+      it "should consider a report in incorrect format to be invalid" do
+        Report.create(:report => 'foo bar baz bad data invalid').should_not be_valid
+      end
+
+      it "should consider a report in correct format to be valid" do
+        report_from_yaml.should be_valid
+      end
+
+      it "is not created if a report for the same host exists with the same time" do
         Report.create(:report => @report_yaml)
         lambda {
           Report.create(:report => @report_yaml)
