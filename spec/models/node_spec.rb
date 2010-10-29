@@ -512,4 +512,25 @@ describe Node do
       node_group.node_group_memberships.should be_empty
     end
   end
+
+  describe "facts" do
+    before :each do
+      @node = Node.generate!(:name => 'gonaddynode')
+      @sample_pson = '{"name":"foo","timestamp":"Fri Oct 29 10:33:53 -0700 2010","expiration":"Fri Oct 29 11:03:53 -0700 2010","values":{"a":"1","b":"2"}}'
+    end
+
+    it "should return facts from an external REST call" do
+      PuppetHttps.stubs(:get).with("https://localhost:8140/production/facts/gonaddynode", 'pson').returns(
+        @sample_pson)
+      timestamp = Time.parse("Fri Oct 29 10:33:53 -0700 2010")
+      @node.facts.should == { :timestamp => timestamp, :values => { "a" => "1", "b" => "2" }}
+    end
+
+    it "should properly CGI escape the node name in the REST call" do
+      @node.name = '&/='
+      PuppetHttps.expects(:get).with("https://localhost:8140/production/facts/%26%2F%3D", 'pson').returns(
+        @sample_pson)
+      @node.facts
+    end
+  end
 end

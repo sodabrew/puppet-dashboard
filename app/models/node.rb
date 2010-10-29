@@ -1,3 +1,5 @@
+require 'puppet_https'
+
 class Node < ActiveRecord::Base
   def self.per_page; 20 end # Pagination
 
@@ -206,5 +208,13 @@ class Node < ActiveRecord::Base
 
   def find_last_report
     return Report.find_last_for(self)
+  end
+
+  def facts
+    pson_data = PuppetHttps.get("https://localhost:8140/production/facts/#{CGI.escape(self.name)}", 'pson')
+    data = JSON.parse(pson_data)
+    { :timestamp => Time.parse(data['timestamp']),
+      :values => data['values']
+    }
   end
 end
