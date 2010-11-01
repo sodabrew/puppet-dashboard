@@ -211,7 +211,7 @@ class Node < ActiveRecord::Base
   end
 
   def facts
-    pson_data = PuppetHttps.get("https://localhost:8140/production/facts/#{CGI.escape(self.name)}", 'pson')
+    pson_data = PuppetHttps.get("https://#{SETTINGS.inventory_server}:#{SETTINGS.inventory_port}/production/facts/#{CGI.escape(self.name)}", 'pson')
     data = JSON.parse(pson_data)
     { :timestamp => Time.parse(data['timestamp']),
       :values => data['values']

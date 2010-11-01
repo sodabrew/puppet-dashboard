@@ -3,15 +3,15 @@ require 'net/https'
 
 class PuppetHttps
   def self.certificate_path
-    'certificate' # TODO: make configurable
+    SETTINGS.certificate_path
   end
 
   def self.private_key_path
-    'id_rsa' # TODO: make configurable
+    SETTINGS.private_key_path
   end
 
   def self.public_key_path
-    'id_rsa.pub' # TODO: make configurable
+    SETTINGS.public_key_path
   end
 
   def self.make_ssl_request(url, req)
