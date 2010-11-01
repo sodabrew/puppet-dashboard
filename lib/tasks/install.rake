@@ -18,8 +18,13 @@ task :create_key_pair => :environment do
   key = OpenSSL::PKey::RSA.new(SETTINGS.key_length)
 
   FileUtils.mkdir_p(File.dirname(PuppetHttps.private_key_path))
-  File.open(PuppetHttps.private_key_path, 'w') do |file|
-    file.print key
+  old_umask = File.umask(0226) # user read and group read only
+  begin
+    File.open(PuppetHttps.private_key_path, 'w') do |file|
+      file.print key
+    end
+  ensure
+    File.umask(old_umask)
   end
   FileUtils.mkdir_p(File.dirname(PuppetHttps.public_key_path))
   File.open(PuppetHttps.public_key_path, 'w') do |file|
