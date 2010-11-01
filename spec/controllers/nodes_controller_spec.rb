@@ -191,6 +191,42 @@ describe NodesController do
     end
   end
 
+  describe "#facts" do
+    before :each do
+      @time = Time.now
+      @node = Node.generate! :name => "testnode"
+      Node.any_instance.stubs(:facts).returns({:timestamp => @time, :values => {"foo" => "1", "bar" => "2"}})
+    end
+
+    def do_get
+      get :facts, :id => @node.name
+    end
+
+    it "should fail gracefully when connections are refused" do
+      Node.any_instance.stubs(:facts).raises(Errno::ECONNREFUSED)
+
+      do_get
+      response.body.should =~ /Could not retrieve facts from inventory service: Connection refused/
+    end
+
+    it "should fail gracefully when other errors occur" do
+      Node.any_instance.stubs(:facts).raises("some error")
+
+      do_get
+      response.body.should =~ /Could not retrieve facts from inventory service: some error/
+    end
+
+    it "should render a table when facts are fetched" do
+      do_get
+      response.body.should =~ /<table.*>/
+    end
+
+    it "should include the inventory timestamp in the rendered table" do
+      do_get
+      response.body.should =~ /Current inventory for testnode as of #{@time}/
+    end
+  end
+
   describe "#reports" do
     shared_examples_for "a successful reports rendering" do
       specify { response.should be_success }

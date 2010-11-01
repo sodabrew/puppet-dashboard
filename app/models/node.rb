@@ -211,9 +211,10 @@ class Node < ActiveRecord::Base
   end
 
   def facts
+    return @facts if @facts
     pson_data = PuppetHttps.get("https://#{SETTINGS.inventory_server}:#{SETTINGS.inventory_port}/production/facts/#{CGI.escape(self.name)}", 'pson')
     data = JSON.parse(pson_data)
-    { :timestamp => Time.parse(data['timestamp']),
+    @facts = { :timestamp => Time.parse(data['timestamp']),
       :values => data['values']
     }
   end
