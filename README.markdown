@@ -382,6 +382,15 @@ You will also need to configure auth.conf on the master to allow Dashboard to co
     method find
     allow dashboard
 
+Using the Inventory Service Custom Queries
+----------------------------------------------------
+
+In order to connect to the inventory service you will need to configure auth.conf on the puppet master running the inventory service to allow Dashboard to connect to the inventory terminus:
+
+    path /inventory
+    method search
+    allow dashboard
+
 Contributors
 ------------
 
@@ -394,3 +403,4 @@ Contributors
 * Matt Robinson <matt@puppetlabs.com>
 * Nick Lewis <nick@puppetlabs.com>
 * Jacob Helwig <jacob@puppetlabs.com>
+* Paul Berry <paul@puppetlabs.com>
