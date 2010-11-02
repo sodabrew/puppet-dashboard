@@ -191,6 +191,33 @@ describe NodesController do
     end
   end
 
+  describe "#search" do
+    before :each do
+      @params = {}
+    end
+
+    it "should strip empty search parameters" do
+      expected_param = {'facts' => 'foo', 'comparator' => 'eq', 'value' => 'bar'}
+      @params['search_params'] = [
+        {'facts' => '', 'comparator' => '', 'values' => ''},
+        {'facts' => 'foo', 'comparator' => '', 'values' => ''},
+        {'facts' => '', 'comparator' => 'eq', 'values' => ''},
+        {'facts' => '', 'comparator' => '', 'values' => 'bar'},
+        expected_param,
+      ]
+
+      Node.expects(:find_from_inventory_search).with([expected_param])
+      get :search, @params
+    end
+
+    it "should not search with no parameters" do
+      @params['search_params'] = []
+
+      Node.expects(:find_from_inventory_search).never
+      get :search, @params
+    end
+  end
+
   describe "#facts" do
     before :each do
       @time = Time.now

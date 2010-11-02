@@ -15,7 +15,8 @@ ActionController::Routing::Routes.draw do |map|
      :successful => :get,
      :failed     => :get,
      :unreported => :get,
-     :no_longer_reporting => :get},
+     :no_longer_reporting => :get,
+     :search => :get},
     :requirements => {:id => /[^\/]+/}
 
   map.resource :user_session
