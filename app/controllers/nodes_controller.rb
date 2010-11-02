@@ -38,6 +38,18 @@ class NodesController < InheritedResources::Base
     end
   end
 
+  def facts
+    respond_to do |format|
+      format.html {
+        begin
+          render :partial => 'nodes/facts', :locals => {:node => resource, :facts => resource.facts}
+        rescue => e
+          render :text => "Could not retrieve facts from inventory service: #{e.message}"
+        end
+      }
+    end
+  end
+
   # TODO: routing currently can't handle nested resources due to node's id
   # requirements
   def reports

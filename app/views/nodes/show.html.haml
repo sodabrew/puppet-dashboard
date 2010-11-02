@@ -19,7 +19,8 @@
           %strong Warning:
           The following parameters have multiple conflicting values:
           = [*@node.errors.on(:parameters)].join(", ")
-      = inspector_table @node.compiled_parameters(true), :key, :value, :link => false, :caption => 'Parameters'
+      %h3 Parameters
+      = inspector_table @node.compiled_parameters(true), :key, :value, :link => false
 
 
     .section.half
@@ -35,10 +36,18 @@
         = inspector_table @node.node_classes, :name, false, :link => true
       - else
         = describe_no_matches_for :classes
+      - unless @node.inherited_classes.empty?
+        %h3 Inherited Classes
+        = inspector_table @node.inherited_classes, :name, false, :link => true
 
-    - unless @node.inherited_classes.empty?
-      = inspector_table @node.inherited_classes, :name, false, :link => true, :caption => 'Inherited Classes'
+    %br.clear
 
+    .section
+      %h3 Inventory
+      %div#inventory
+        = image_tag "loading.gif"
+        = "Loading node inventory"
+      %script{:type => 'text/javascript'}= load_asynchronously("div#inventory", facts_node_path(@node))
 
     %br.clear
 
