@@ -37,7 +37,7 @@ class PuppetHttps
 
   def self.get(url, accept)
     url = URI.parse(url)
-    req = Net::HTTP::Get.new(url.path, "Accept" => accept)
+    req = Net::HTTP::Get.new("#{url.path}?#{url.query}", "Accept" => accept)
     res = make_ssl_request(url, req)
     res.body
   end

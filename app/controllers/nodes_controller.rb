@@ -25,6 +25,18 @@ class NodesController < InheritedResources::Base
     scoped_index :no_longer_reporting
   end
 
+  def search
+    index! do |format|
+      format.html {
+        @search_params = params['search_params'] || []
+        @search_params.delete_if {|param| param.values.any?(&:blank?)}
+        nodes = @search_params.empty? ? [] : Node.find_from_inventory_search(@search_params)
+        set_collection_ivar(nodes)
+        render :inventory_search
+      }
+    end
+  end
+
   def show
     begin
       show!
