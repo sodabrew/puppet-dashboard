@@ -104,24 +104,8 @@ class Node < ActiveRecord::Base
     name.to_s
   end
 
-  def available_node_classes
-    @available_node_classes ||= NodeClass.all(:order => :name) - node_classes - inherited_classes
-  end
-
-  def available_node_groups
-    @available_node_groups ||= NodeGroup.all(:order => :name) - node_groups
-  end
-
-  def inherited_classes
-    (node_group_list.keys - [self]).map(&:node_classes).flatten.uniq
-  end
-
-  def all_classes
-    node_classes | inherited_classes
-  end
-
   def configuration
-    { 'name' => name, 'classes' => all_classes.collect(&:name), 'parameters' => parameter_list }
+    { 'name' => name, 'classes' => all_node_classes.collect(&:name), 'parameters' => parameter_list }
   end
 
   def to_yaml(opts={})

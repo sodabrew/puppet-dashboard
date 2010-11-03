@@ -33,16 +33,20 @@ class NodeClass < ActiveRecord::Base
     ids.map{|entry| entry.to_s.split(/[ ,]/)}.flatten.reject(&:blank?).uniq.map{|id| self.find(id)}
   end
 
-  def node_list
-    return @node_list if @node_list
+  def all_nodes
+    nodes_with_sources.keys
+  end
+
+  def nodes_with_sources
+    return @nodes_with_sources if @nodes_with_sources
     all = {}
-    self.walk_groups do |group,_|
+    self.walk_parent_groups do |group,_|
       group.nodes.each do |node|
         all[node] ||= Set.new
         all[node] << group
       end
       group
     end
-    @node_list = all
+    @nodes_with_sources = all
   end
 end

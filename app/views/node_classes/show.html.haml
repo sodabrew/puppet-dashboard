@@ -9,12 +9,12 @@
       %li= link_to 'Destroy', @node_class, :confirm => 'Are you sure?', :method => :delete, :class => "delete button"
 
   .item
-    - if @node_class.nodes.present?
+    - if @node_class.all_nodes.present?
       .section
-        = render 'statuses/run_failure', :nodes => @node_class.nodes
+        = render 'statuses/run_failure', :nodes => @node_class.all_nodes
     .section
       %h3 Nodes in this class
-      - if @node_class.nodes.present?
-        = render 'nodes/nodes', :nodes => @node_class.node_list.map(&:first), :container => @node_class
+      - if @node_class.all_nodes.present?
+        = render 'nodes/nodes', :nodes => @node_class.all_nodes, :container => @node_class
       - else
         = describe_no_matches_for :nodes, :class

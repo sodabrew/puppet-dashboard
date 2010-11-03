@@ -1,35 +1,43 @@
 require 'ostruct'
 
 module NodeGroupGraph
+  def all_node_groups
+    node_groups_with_sources.keys
+  end
+
   # Returns a hash of all the groups for this group/node, direct or inherited.
   # Each key is a group, and each value is the Set of groups from which we inherit
   # that group.
-  def node_group_list
-    return @node_group_list if @node_group_list
+  def node_groups_with_sources
+    return @node_groups_with_sources if @node_groups_with_sources
     all = {}
-    self.walk_groups do |group,parents|
+    self.walk_parent_groups do |group,parents|
       parents.each do |parent|
         all[parent] ||= Set.new
         all[parent] << group
       end
       group
     end
-    @node_group_list = all
+    @node_groups_with_sources = all
+  end
+
+  def all_node_classes
+    node_classes_with_sources.keys
   end
 
   # Returns a hash of all the classes for this group/node, direct or inherited.
   # Each key is a class, and each value is the Set of groups from which we inherit
   # that class.
-  def node_class_list
-    return @node_class_list if @node_class_list
+  def node_classes_with_sources
+    return @node_classes_with_sources if @node_classes_with_sources
     all = {}
-    self.walk_groups do |group,_|
+    self.walk_parent_groups do |group,_|
       group.node_classes.each do |node_class|
         all[node_class] ||= Set.new
         all[node_class] << group
       end
     end
-    @node_class_list = all
+    @node_classes_with_sources = all
   end
 
   # Collects all the parameters of the node, starting at the "most distant" groups
@@ -39,7 +47,7 @@ module NodeGroupGraph
   # raised.
   def compiled_parameters(allow_conflicts=false)
     unless @compiled_parameters
-      @compiled_parameters = self.walk_groups do |group,parents|
+      @compiled_parameters = self.walk_parent_groups do |group,parents|
         # Pick-up conflicts that our parents had
         parent_params = parents.map(&:parameters).flatten
         conflicts = parents.map(&:conflicts).inject(Set.new,&:merge)
@@ -75,7 +83,7 @@ module NodeGroupGraph
     compiled_parameters.map{|param| {param.name => param.value} }.inject({},&:merge)
   end
 
-  def walk_groups(&block)
+  def walk_parent_groups(&block)
     walk(:node_groups,&block)
   end
 

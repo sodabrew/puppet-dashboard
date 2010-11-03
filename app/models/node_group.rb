@@ -75,8 +75,8 @@ class NodeGroup < ActiveRecord::Base
     ids.map{|entry| entry.to_s.split(/[ ,]/)}.flatten.reject(&:blank?).uniq.map{|id| self.find(id)}
   end
 
-  def node_group_child_list
-    return @node_group_child_list if @node_group_child_list
+  def node_group_children_with_sources
+    return @node_group_children_with_sources if @node_group_children_with_sources
     all = {}
     self.walk_child_groups do |group,children|
       children.each do |child|
@@ -85,11 +85,15 @@ class NodeGroup < ActiveRecord::Base
       end
       group
     end
-    @node_group_child_list = all
+    @node_group_children_with_sources = all
   end
 
-  def node_list
-    return @node_list if @node_list
+  def all_nodes
+    nodes_with_sources.keys
+  end
+
+  def nodes_with_sources
+    return @nodes_with_sources if @nodes_with_sources
     all = {}
     self.walk_child_groups do |group,_|
       group.nodes.each do |node|
@@ -98,6 +102,6 @@ class NodeGroup < ActiveRecord::Base
       end
       group
     end
-    @node_list = all
+    @nodes_with_sources = all
   end
 end

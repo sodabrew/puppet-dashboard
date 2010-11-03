@@ -15,7 +15,7 @@
   %tbody
     - if nodes.present?
       - nodes.each do |node|
-        - sources = container.node_list[node] unless container.nil?
+        - sources = container.nodes_with_sources[node] unless container.nil?
         %tr[node]{:class => "#{'active' if node == @node}"}
           %td.status{:class => node.status_class}
             %span{:title => node_title_text(node)}
@@ -25,7 +25,7 @@
           - unless container.nil?
             %td
               - if sources.include?(container)
-                = container.name
+                = node.name
               - else
                 = sources.map{|s| link_to(s.name,s)}.join(", ")
           %td.latest_report
