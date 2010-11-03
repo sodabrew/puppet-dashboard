@@ -9,7 +9,7 @@
       %th.hostname
         Hostname
       - unless container.nil?
-        %th Source groups
+        %th Source
       %th.latest_report.desc
         &darr; Latest report
   %tbody
@@ -24,7 +24,10 @@
             = link_to h(node.name), node
           - unless container.nil?
             %td
-              = sources.map{|s| link_to(s.name,s)}.join(", ") unless sources.include?(container)
+              - if sources.include?(container)
+                = container.name
+              - else
+                = sources.map{|s| link_to(s.name,s)}.join(", ")
           %td.latest_report
             = node.last_report ? node.last_report.time : "Has not reported"
       = pagination_for nodes, more_link

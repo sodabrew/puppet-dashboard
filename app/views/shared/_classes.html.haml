@@ -5,13 +5,16 @@
       %thead
         %tr
           %th.name Class
-          %th Source groups
+          %th Source
       %tbody
         - resource.node_class_list.each do |node_class,parents|
           %tr
             %td.name
               %strong= link_to(node_class.name,node_class)
             %td
-              = parents.map{|p| link_to(p.name,p)}.join(", ") unless parents.include?(resource)
+              - if parents.include?(resource)
+                = resource.name
+              - else
+                = parents.map{|p| link_to(p.name,p)}.join(", ")
   - else
     = describe_no_matches_as 'No classes'

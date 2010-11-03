@@ -12,15 +12,18 @@
         %tr
           %th Key
           %th Value
-          %th Source groups
+          %th Source
       %tbody
         - resource.compiled_parameters(true).each do |param|
           %tr
-            %td{:style => ("background-color: pink;" if sources.size > 1)}
+            %td{:style => ("background-color: pink;" if param.sources.size > 1)}
               %tt= param.name
             %td
               %tt= param.value
             %td
-              = param.sources.map{|source| link_to(source.name,node_group_path(source.id))}.join(", ") unless param.sources == Set[resource]
+              - if param.sources == Set[resource]
+                = resource.name
+              - else
+                = param.sources.map{|source| link_to(source.name,node_group_path(source.id))}.join(", ")
   - else
     = describe_no_matches_as 'No parameters'
