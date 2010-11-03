@@ -42,14 +42,15 @@
 
     %br.clear
 
-    .section
-      %h3 Inventory
-      %div#inventory
-        = image_tag "loading.gif"
-        = "Loading node inventory"
-      %script{:type => 'text/javascript'}= load_asynchronously("div#inventory", facts_node_path(@node))
+    - if SETTINGS.experimental_inventory_service
+      .section
+        %h3 Inventory
+        %div#inventory
+          = image_tag "loading.gif"
+          = "Loading node inventory"
+        %script{:type => 'text/javascript'}= load_asynchronously("div#inventory", facts_node_path(@node))
 
-    %br.clear
+      %br.clear
 
     - reports = @node.reports.limit(30).order('time ASC')
     - unless reports.empty?
