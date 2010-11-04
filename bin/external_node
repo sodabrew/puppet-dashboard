@@ -12,14 +12,31 @@ require 'yaml'
 require 'uri'
 require 'net/http'
 
-BASE="http://localhost:3000"
+DASHBOARD_URL="http://dashboard:3000"
+
+# These settings are only used when connecting to dashboard over https (SSL)
+CERT_PATH = "/etc/puppet/ssl/certs/puppet.pem"
+PKEY_PATH = "/etc/puppet/ssl/private_keys/puppet.pem"
+CA_PATH   = "/etc/puppet/ssl/certs/ca.pem"
+
 NODE = ARGV.first
 
-url = URI.parse("#{BASE}/nodes/#{NODE}")
-req = Net::HTTP::Get.new(url.path, 'Accept' => 'text/yaml')
-res = Net::HTTP.start(url.host, url.port) {|http| http.request(req) }
+uri = URI.parse("#{DASHBOARD_URL}/nodes/#{NODE}")
+require 'net/https' if uri.scheme == 'https'
 
-case res
-when Net::HTTPSuccess; puts res.body; exit 0
-else; STDERR.puts "Error: #{res.code} #{res.message.strip}\n#{res.body}"; exit 1
+http = Net::HTTP.new(uri.host, uri.port)
+if uri.scheme == 'https'
+  cert = File.read(CERT_PATH)
+  pkey = File.read(PKEY_PATH)
+  http.use_ssl = true
+  http.cert = OpenSSL::X509::Certificate.new(cert)
+  http.key = OpenSSL::PKey::RSA.new(pkey)
+  http.ca_file = CA_PATH
+  http.verify_mode = OpenSSL::SSL::VERIFY_PEER
+end
+result = http.start { http.request_get(uri.path, 'Accept' => 'text/yaml') }
+
+case result
+when Net::HTTPSuccess; puts result.body; exit 0
+else; STDERR.puts "Error: #{result.code} #{result.message.strip}\n#{result.body}"; exit 1
 end

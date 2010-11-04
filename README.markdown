@@ -182,7 +182,9 @@ There are many ways to run a Ruby web application like the Puppet Dashboard, we 
 
             ./script/server -p 8080
 
-2.  **Passenger**: This plugin for [Apache](http://httpd.apache.org/) or [Nginx](http://nginx.org/) makes it easy to run multiple Ruby web apps quickly and efficiently using multiple instances -- it's great for production use. If used along with Ruby Enterprise Edition, it can dramatically reduce the memory required to run Ruby web applications. For further information, please see [Passenger/](http://www.modrails.com/) and [Ruby Enterprise Edition](http://www.rubyenterpriseedition.com/) and the example apache configuration in `ext/passenger/dashboard-vhost.conf`.
+2.  **Passenger**: This plugin for [Apache](http://httpd.apache.org/) or [Nginx](http://nginx.org/) makes it easy to run multiple Ruby web apps quickly and efficiently using multiple instances -- it's great for production use. If used along with Ruby Enterprise Edition, it can dramatically reduce the memory required to run Ruby web applications. For further information, including installation and configuration instructions please see [Passenger/](http://www.modrails.com/) and [Ruby Enterprise Edition](http://www.rubyenterpriseedition.com/) and the example apache configuration in `ext/passenger/dashboard-vhost.conf`.
+
+You will need to change the Passenger path depending on the version of Passenger you have installed. Also, DocumentRoot, ServerName, and Directory must be changed to match your Puppet Dashboard install directory.
 
 3.  **Thin**: This fast and reliable server can run multiple instances of the Puppet Dashboard application behind a proxy like [Apache](http://httpd.apache.org/) or [Nginx](http://nginx.org/) to appear as a single website -- it's great for production use. For further information, please see [Thin](http://code.macournoyer.com/thin/).
 
@@ -287,6 +289,8 @@ The Puppet Dashboard can act as an external node classification tool, which will
 
     *NOTE:* The `bin/external_node` program connects to the Puppet Dashboard at `localhost` on port `3000`. If your Puppet Dashboard is running on a different host or node, please modify this file.
 
+    *NOTE:* If you have Dashboard set up to use HTTPS, change the DASHBOARD_URL in `external_node` to the `https` prefix and the correct port number (443, by default). You may also need to change the CERT_PATH, and PKEY_PATH variables if your puppet master's hostname is not `puppet` or if your ssldir is not `/etc/puppet/ssl`.
+
 2.  Restart the `puppetmasterd` process.
 
 Security
@@ -294,7 +298,7 @@ Security
 
 *WARNING:* The Puppet Dashboard provides access to sensitive information and can make changes to your Puppet-managed infrastructure. You must restrict access to it to protect it!
 
-The Puppet Dashboard does not currently provide authentication, authorization or encryption -- although work on these is in progress.
+The Puppet Dashboard does not currently provide authentication or authorization -- although work on these is in progress.
 
 Third-party tools that can help secure a Puppet Dashboard include:
 
@@ -305,6 +309,8 @@ Third-party tools that can help secure a Puppet Dashboard include:
 3.  HTTP Basic Authentication proxy (e.g. `apache` using `.htaccess`) can require that a username/password is provided when accessing URLs. However, if you use this, you must include the HTTP Basic Authentication username and password in the URLs in the `puppet.conf` file's `reporturl` setting and in the `bin/external_nodes` file. A URL with HTTP Basic Authentication has the following format:
 
         http://username:password@hostname
+
+4.  HTTPS (SSL) Encryption is supported when running Dashboard under Apache and Passenger. The example configuration in `ext/passenger/dashboard-vhost.conf` includes a commented-out vhost configured to use SSL. You may need to change the Apache directives SSLCertificateFile, SSLCertificateKeyFile, SSLCACertificateFile, and SSLCARevocationFile to the paths of the files created by the `cert` rake tasks. (See `Generating certs and connecting to the puppet master` for how to create these files)
 
 Performance
 -----------
@@ -368,13 +374,13 @@ Generating certs and connecting to the puppet master
 
 In order to connect to the puppet master (to retrieve node facts), the Dashboard must be configured with the correct SSL certificates.  To do this, run the following commands:
 
-    rake create_key_pair
+    rake cert:create_key_pair
 
-    rake cert_request
+    rake cert:request
 
 Then instruct the master to sign the certificate request (using "puppet cert"), and then run the command:
 
-    rake cert_retrieve
+    rake cert:retrieve
 
 You will also need to configure auth.conf on the master to allow Dashboard to connect to the facts terminus:
 
