@@ -2,35 +2,15 @@ require 'uri'
 require 'net/https'
 
 class PuppetHttps
-  def self.ca_certificate_path
-    SETTINGS.ca_certificate_path
-  end
-
-  def self.ca_crl_path
-    SETTINGS.ca_crl_path
-  end
-
-  def self.certificate_path
-    SETTINGS.certificate_path
-  end
-
-  def self.private_key_path
-    SETTINGS.private_key_path
-  end
-
-  def self.public_key_path
-    SETTINGS.public_key_path
-  end
-
   def self.make_ssl_request(url, req, authenticate)
     connection = Net::HTTP.new(url.host, url.port)
     connection.use_ssl = true
     if authenticate
-      if File.exists?(certificate_path)
-        connection.cert = OpenSSL::X509::Certificate.new(File.read(certificate_path))
+      if File.exists?(SETTINGS.certificate_path)
+        connection.cert = OpenSSL::X509::Certificate.new(File.read(SETTINGS.certificate_path))
       end
-      if File.exists?(private_key_path)
-        connection.key = OpenSSL::PKey::RSA.new(File.read(private_key_path))
+      if File.exists?(SETTINGS.private_key_path)
+        connection.key = OpenSSL::PKey::RSA.new(File.read(SETTINGS.private_key_path))
       end
     end
     connection.start { |http| http.request(req) }
