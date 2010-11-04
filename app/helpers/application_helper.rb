@@ -51,9 +51,9 @@ module ApplicationHelper
             (value.respond_to?(:call) ? value.call(c) : c.send(value)) : 
             false
         ]
-      }.flatten
+      }
 
-      collection = Hash[*collection_hash_values]
+      collection = collection_hash_values
     end
 
     key ||= :key; value ||= :value
@@ -225,5 +225,12 @@ module ApplicationHelper
     end
     javascript << "});"
     return javascript
+  end
+
+  # Asynchronously loads data from a URL and injects it into the element specified. The
+  # element must be in the DOM before the query, or it may fail. Element should be
+  # specified in CSS selector form (eg. "#element" for the object with id="element").
+  def load_asynchronously(element, url)
+    javascript = "jQuery.get('#{url}', function(data) { jQuery('#{element}').html(data) })"
   end
 end

@@ -25,6 +25,18 @@ class NodesController < InheritedResources::Base
     scoped_index :no_longer_reporting
   end
 
+  def search
+    index! do |format|
+      format.html {
+        @search_params = params['search_params'] || []
+        @search_params.delete_if {|param| param.values.any?(&:blank?)}
+        nodes = @search_params.empty? ? [] : Node.find_from_inventory_search(@search_params)
+        set_collection_ivar(nodes)
+        render :inventory_search
+      }
+    end
+  end
+
   def show
     begin
       show!
@@ -35,6 +47,18 @@ class NodesController < InheritedResources::Base
     rescue ParameterConflictError => e
       raise e unless request.format == :yaml
       render :text => "Node \"#{resource.name}\" has conflicting parameter(s): #{resource.errors.on(:parameters).to_a.to_sentence}", :content_type => 'text/plain', :status => 500
+    end
+  end
+
+  def facts
+    respond_to do |format|
+      format.html {
+        begin
+          render :partial => 'nodes/facts', :locals => {:node => resource, :facts => resource.facts}
+        rescue => e
+          render :text => "Could not retrieve facts from inventory service: #{e.message}"
+        end
+      }
     end
   end
 

@@ -1,0 +1,23 @@
+- @index = 0
+#sidebar= render 'shared/node_manager_sidebar'
+#main
+
+  .header
+    %h2.half Search nodes
+    %br.clear
+
+  .item
+    .section
+      - form_tag url_for(:action => :search), :method => :get, :id => "search_params" do
+        = render :partial => 'nodes/inventory_parameter', :collection => @search_params
+        = render 'nodes/inventory_parameter'
+        = link_to_function("+", :id => "add_button", :class => "add button") { |page|  page.insert_html :before, 'add_button', :partial => 'nodes/inventory_parameter' }
+        %br
+        %button#search_button Search
+
+    - if @nodes
+      .section
+        = render 'statuses/run_failure', :nodes => @nodes
+      .section
+        %h3 Nodes
+        = render 'nodes/nodes', :nodes => @nodes

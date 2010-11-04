@@ -363,6 +363,34 @@ For example, to delete reports older than 1 month:
 
 If you run 'rake reports:prune' without any arguments, or incorrect arguments, it will display further usage instructions.
 
+Generating certs and connecting to the puppet master
+----------------------------------------------------
+
+In order to connect to the puppet master (to retrieve node facts), the Dashboard must be configured with the correct SSL certificates.  To do this, run the following commands:
+
+    rake create_key_pair
+
+    rake cert_request
+
+Then instruct the master to sign the certificate request (using "puppet cert"), and then run the command:
+
+    rake cert_retrieve
+
+You will also need to configure auth.conf on the master to allow Dashboard to connect to the facts terminus:
+
+    path /facts
+    method find
+    allow dashboard
+
+Using the Inventory Service Custom Queries
+----------------------------------------------------
+
+In order to connect to the inventory service you will need to configure auth.conf on the puppet master running the inventory service to allow Dashboard to connect to the inventory terminus:
+
+    path /inventory
+    method search
+    allow dashboard
+
 Contributors
 ------------
 
@@ -375,3 +403,4 @@ Contributors
 * Matt Robinson <matt@puppetlabs.com>
 * Nick Lewis <nick@puppetlabs.com>
 * Jacob Helwig <jacob@puppetlabs.com>
+* Paul Berry <paul@puppetlabs.com>

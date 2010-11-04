@@ -1,0 +1,36 @@
+#===[ Settings ]=========================================================
+#
+# This file is meant for storing setting information that is never
+# published or committed to a revision control system.
+#
+# Do not modify this "config/settings-sample.yml" file directly -- you
+# should copy it to "config/settings.yml" and customize it there.
+#
+#---[ Values ]----------------------------------------------------------
+
+# Node name to use when contacting the inventory service.  This is the
+# CN that is used in Dashboard's certificate.
+cn_name: 'dashboard'
+
+certificate_path: 'certs/dashboard.cert.pem'
+
+private_key_path: 'certs/dashboard.private_key.pem'
+
+public_key_path: 'certs/dashboard.public_key.pem'
+
+# Hostname of the certificate authority.
+ca_server: 'puppet'
+
+# Port for the certificate authority.
+ca_port: 8140
+
+# Key length for SSL certificates
+key_length: 1024
+
+# Hostname of the inventory server.
+inventory_server: 'puppet'
+
+# Port for the inventory server.
+inventory_port: 8140
+
+#===[ fin ]=============================================================

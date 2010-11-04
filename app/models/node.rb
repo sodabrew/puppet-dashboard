@@ -1,3 +1,5 @@
+require 'puppet_https'
+
 class Node < ActiveRecord::Base
   def self.per_page; 20 end # Pagination
 
@@ -84,6 +86,18 @@ class Node < ActiveRecord::Base
 
   def self.count_no_longer_reporting
     no_longer_reporting.count
+  end
+
+  def self.find_from_inventory_search(search_params)
+    query_string = search_params.
+      map {|param| "facts.#{CGI::escape param["fact"]}.#{param["comparator"]}=#{CGI::escape param["value"]}" }.
+      join("&")
+
+    url = "https://#{SETTINGS.inventory_server}:#{SETTINGS.inventory_port}/production/inventory/search?#{query_string}"
+    matches = JSON.parse(PuppetHttps.get(url, 'pson'))
+    nodes = Node.find_all_by_name(matches)
+    found = nodes.map(&:name).map(&:downcase)
+    nodes.concat matches.reject {|match| found.include? match.downcase}.map {|match| Node.create!(:name => match)}
   end
 
   def to_param
@@ -206,5 +220,14 @@ class Node < ActiveRecord::Base
 
   def find_last_report
     return Report.find_last_for(self)
+  end
+
+  def facts
+    return @facts if @facts
+    pson_data = PuppetHttps.get("https://#{SETTINGS.inventory_server}:#{SETTINGS.inventory_port}/production/facts/#{CGI.escape(self.name)}", 'pson')
+    data = JSON.parse(pson_data)
+    @facts = { :timestamp => Time.parse(data['timestamp']),
+      :values => data['values']
+    }
   end
 end

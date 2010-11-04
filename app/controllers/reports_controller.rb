@@ -10,7 +10,13 @@ class ReportsController < InheritedResources::Base
       return
     end
 
-    create!
+    create! do |success,failure|
+      failure.html do
+        Rails.logger.debug "WARNING! ReportsController#create failed:"
+        @report.errors.full_messages.each { |msg| Rails.logger.debug msg }
+        render :status => 406
+      end
+    end
   end
 
   private

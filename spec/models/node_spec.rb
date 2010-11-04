@@ -74,6 +74,29 @@ describe Node do
     end
   end
 
+  describe "::find_from_inventory_search" do
+    before :each do
+      @foo = Node.generate :name => "foo"
+      @bar = Node.generate :name => "bar"
+    end
+
+    it "should find the nodes that match the list of names given" do
+      PuppetHttps.stubs(:get).returns('["foo", "bar"]')
+      Node.find_from_inventory_search('').should =~ [@foo, @bar]
+    end
+
+    it "should create nodes that don't exist" do
+      PuppetHttps.stubs(:get).returns('["foo", "bar", "baz"]')
+      Node.find_from_inventory_search('').map(&:name).should =~ ['foo', 'bar', 'baz']
+    end
+
+    it "should look-up nodes case-insensitively" do
+      baz = Node.generate :name => "BAZ"
+      PuppetHttps.stubs(:get).returns('["foo", "BAR", "baz"]')
+      Node.find_from_inventory_search('').should =~ [@foo, @bar, baz]
+    end
+  end
+
   # describe ".successful" do
     # include DescribeReports
 
@@ -510,6 +533,29 @@ describe Node do
 
       node_group.nodes.should be_empty
       node_group.node_group_memberships.should be_empty
+    end
+  end
+
+  describe "facts" do
+    before :each do
+      @node = Node.generate!(:name => 'gonaddynode')
+      @sample_pson = '{"name":"foo","timestamp":"Fri Oct 29 10:33:53 -0700 2010","expiration":"Fri Oct 29 11:03:53 -0700 2010","values":{"a":"1","b":"2"}}'
+      SETTINGS.stubs(:inventory_server).returns('fred')
+      SETTINGS.stubs(:inventory_port).returns(12345)
+    end
+
+    it "should return facts from an external REST call" do
+      PuppetHttps.stubs(:get).with("https://fred:12345/production/facts/gonaddynode", 'pson').returns(
+        @sample_pson)
+      timestamp = Time.parse("Fri Oct 29 10:33:53 -0700 2010")
+      @node.facts.should == { :timestamp => timestamp, :values => { "a" => "1", "b" => "2" }}
+    end
+
+    it "should properly CGI escape the node name in the REST call" do
+      @node.name = '&/='
+      PuppetHttps.expects(:get).with("https://fred:12345/production/facts/%26%2F%3D", 'pson').returns(
+        @sample_pson)
+      @node.facts
     end
   end
 end
