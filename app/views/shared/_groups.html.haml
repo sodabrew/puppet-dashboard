@@ -1,0 +1,20 @@
+.section.half
+  %h3 Groups
+  - unless resource.all_node_groups.empty?
+    %table.inspector
+      %thead
+        %tr
+          %th Group
+          %th Source
+      %tbody
+        - resource.node_groups_with_sources.each do |group,sources|
+          %tr
+            %td
+              %strong= link_to(group.name,group)
+            %td
+              - if sources.include?(resource)
+                = resource.name
+              - else
+                = sources.map{|source| link_to(source.name,source)}.join(", ")
+  - else
+    = describe_no_matches_as 'No groups'

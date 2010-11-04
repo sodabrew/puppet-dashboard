@@ -12,8 +12,12 @@ class NodeGroup < ActiveRecord::Base
   has_many :node_group_edges_out, :class_name => "NodeGroupEdge", :foreign_key => 'from_id', :dependent => :destroy
   has_many :node_group_edges_in, :class_name => "NodeGroupEdge", :foreign_key => 'to_id', :dependent => :destroy
 
-  # TODO Want to add a list of groups have edges into us, may want to rename node_groups
-  has_many :node_groups, :through => :node_group_edges_out, :source => :to
+  has_many :node_group_children, :class_name => "NodeGroup", :through => :node_group_edges_in, :source => :from
+  has_many :node_group_parents, :class_name => "NodeGroup", :through => :node_group_edges_out, :source => :to
+
+  # Alias for compatibility with Node
+  alias :node_groups :node_group_parents
+  alias :node_groups= :node_group_parents=
 
   has_parameters
 

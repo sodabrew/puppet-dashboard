@@ -161,46 +161,6 @@ describe Node do
     end
   end
 
-  describe '#available_node_classes' do
-    before :each do
-      @node = Node.new
-      @node_classes = Array.new(3){ NodeClass.generate! }
-    end
-
-    it "should include all available classes" do
-      @node.available_node_classes.should == @node_classes
-    end
-
-    describe 'when the node has classes' do
-      before { @node.node_classes << @node_classes.first }
-
-      it "should not include the node's classes" do
-        @node.available_node_classes.should_not include(@node_classes.first)
-      end
-
-    end
-  end
-
-  describe '#available_node_groups' do
-    before :each do
-      @node = Node.new
-      @node_groups = Array.new(3){ NodeGroup.generate! }
-    end
-
-    it "should include all available groups" do
-      @node.available_node_groups.should == @node_groups
-    end
-
-    describe 'when the node has groups' do
-      before { @node.node_groups << @node_groups.first }
-
-      it "should not include the node's groups" do
-        @node.available_node_groups.should_not include(@node_groups.first)
-      end
-
-    end
-  end
-
   it 'should be able to compute a configuration' do
     Node.new.should respond_to(:configuration)
   end
@@ -220,34 +180,12 @@ describe Node do
     end
 
     it "should return the node's compiled parameters in the returned parameters list" do
-      @node.stubs(:compiled_parameters).returns({'a' => 'b', 'c' => 'd'})
-      @node.configuration['parameters'].should == { 'a' => 'b', 'c' => 'd' }  
+      @node.stubs(:compiled_parameters).returns [
+        OpenStruct.new(:name => 'a', :value => 'b', :sources => Set[:foo]),
+        OpenStruct.new(:name => 'c', :value => 'd', :sources => Set[:bar])
+      ]
+      @node.configuration['parameters'].should == { 'a' => 'b', 'c' => 'd' }
     end
-  end
-
-  describe "#inherited_classes" do
-    before :each do
-      @node = Node.generate!
-      @node_group = NodeGroup.generate!
-      @inherited_class = NodeClass.generate!
-      @node_group.node_classes << @inherited_class
-      @node.node_groups << @node_group
-    end
-
-    it "should inherit classes from its groups" do
-      @node.inherited_classes.should include(@inherited_class)
-    end
-  end
-
-  describe "#all_classes" do
-    before :each do
-      @node = Node.generate!
-      @node.stubs(:inherited_classes).returns([:inherited_class])
-      @node.stubs(:node_classes).returns([:local_class])
-    end
-
-    it { @node.all_classes.should include(:inherited_class) }
-    it { @node.all_classes.should include(:local_class) }
   end
 
   describe "#parameters=" do
@@ -279,7 +217,7 @@ describe Node do
 
   describe "handling the node group graph" do
     before :each do
-      @node = Node.generate!
+      @node = Node.generate! :name => "Sample"
 
       @node_group_a = NodeGroup.generate! :name => "A"
       @node_group_b = NodeGroup.generate! :name => "B"
@@ -296,37 +234,25 @@ describe Node do
 
     describe "when a group is included twice" do
       before :each do
-        @node_group_c = NodeGroup.generate!
+        @node_group_c = NodeGroup.generate! :name => "C"
+        @node_group_d = NodeGroup.generate! :name => "D"
+        @node_group_c.node_groups << @node_group_d
         @node_group_a.node_groups << @node_group_c
         @node_group_b.node_groups << @node_group_c
       end
 
-      it "should return the correct graph" do
-        @node.node_group_graph.should == {@node_group_a => {@node_group_c => {}}, @node_group_b => {@node_group_c => {}}}
+      it "should return the correct groups and sources" do
+        @node.node_groups_with_sources.should == {@node_group_a => Set[@node], @node_group_c => Set[@node_group_a,@node_group_b], @node_group_b => Set[@node], @node_group_d => Set[@node_group_c]}
       end
-
-      it "should return the correct list" do
-        @node.node_group_list.should == [@node, @node_group_a, @node_group_c, @node_group_b]
-      end
-    end
-
-    it "should handle cycles gracefully" do
-      NodeGroupEdge.new(:from => @node_group_a, :to => @node_group_b).save(false)
-      NodeGroupEdge.new(:from => @node_group_b, :to => @node_group_a).save(false)
-
-      @node.node_group_graph.should == {
-        @node_group_a => {
-          @node_group_b => {
-            @node_group_a => {} }},
-        @node_group_b => {
-          @node_group_a => {
-            @node_group_b => {} }}}
     end
 
     describe "handling parameters in the graph" do
 
       it "should return the compiled parameters" do
-        @node.compiled_parameters.should == {'foo' => '1', 'bar' => '2'}
+        @node.compiled_parameters.should == [
+          OpenStruct.new(:name => 'foo', :value => '1', :sources => Set[@node_group_a]),
+          OpenStruct.new(:name => 'bar', :value => '2', :sources => Set[@node_group_b])
+        ]
       end
 
       it "should ensure that parameters nearer to the node are retained" do
@@ -334,7 +260,10 @@ describe Node do
         @node_group_a1.parameters << Parameter.create(:key => 'foo', :value => '2')
         @node_group_a.node_groups << @node_group_a1
 
-        @node.compiled_parameters.should == {'foo' => '1', 'bar' => '2'}
+        @node.compiled_parameters.should == [
+          OpenStruct.new(:name => 'foo', :value => '1', :sources => Set[@node_group_a]),
+          OpenStruct.new(:name => 'bar', :value => '2', :sources => Set[@node_group_b])
+        ]
       end
 
       it "should raise an error if there are parameter conflicts among children" do
@@ -367,7 +296,22 @@ describe Node do
       it "should include parameters of the node itself" do
         @node.parameters << Parameter.create(:key => "node_parameter", :value => "exist")
 
-        @node.compiled_parameters["node_parameter"].should == "exist"
+        @node.compiled_parameters.first.name.should == "node_parameter"
+        @node.compiled_parameters.first.value.should == "exist"
+      end
+
+      it "should retain the history of its parameters" do
+        @node_group_c = NodeGroup.generate! :name => "C"
+        @node_group_d = NodeGroup.generate! :name => "D"
+        @node_group_c.parameters << Parameter.generate(:key => 'foo', :value => '3')
+        @node_group_d.parameters << Parameter.generate(:key => 'foo', :value => '4')
+        @node_group_a.node_groups << @node_group_c
+        @node_group_a.node_groups << @node_group_d
+
+        @node.compiled_parameters.should == [
+          OpenStruct.new(:name => 'foo', :value => '1', :sources => Set[@node_group_a]),
+          OpenStruct.new(:name => 'bar', :value => '2', :sources => Set[@node_group_b])
+        ]
       end
     end
   end

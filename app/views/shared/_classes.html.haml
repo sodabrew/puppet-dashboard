@@ -1,0 +1,20 @@
+.section.half
+  %h3 Classes
+  - unless resource.all_node_classes.empty?
+    %table.inspector
+      %thead
+        %tr
+          %th.name Class
+          %th Source
+      %tbody
+        - resource.node_classes_with_sources.each do |node_class,sources|
+          %tr
+            %td.name
+              %strong= link_to(node_class.name,node_class)
+            %td
+              - if sources.include?(resource)
+                = resource.name
+              - else
+                = sources.map{|source| link_to(source.name,source)}.join(", ")
+  - else
+    = describe_no_matches_as 'No classes'

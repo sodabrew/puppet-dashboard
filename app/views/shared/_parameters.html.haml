@@ -1,0 +1,29 @@
+.section
+  %h3 Parameters
+  - # Conflicting parameters are okay here, since we just want to warn
+  - unless resource.compiled_parameters(true).empty?
+    - if resource.errors.on(:parameters)
+      %p.error
+        %strong Warning:
+        The following parameters have multiple conflicting values:
+        = [*resource.errors.on(:parameters)].join(", ")
+    %table.inspector
+      %thead
+        %tr
+          %th Key
+          %th Value
+          %th Source
+      %tbody
+        - resource.compiled_parameters(true).each do |param|
+          %tr
+            %td{:style => ("background-color: pink;" if param.sources.size > 1)}
+              %tt= param.name
+            %td
+              %tt= param.value
+            %td
+              - if param.sources == Set[resource]
+                = resource.name
+              - else
+                = param.sources.map{|source| link_to(source.name,node_group_path(source.id))}.join(", ")
+  - else
+    = describe_no_matches_as 'No parameters'

@@ -1,7 +1,0 @@
-%ul.node_groups
-  - node.node_groups.each do |node_group|
-    %li[node_group]= link_to node_group.name, '#', :class => 'remove-node-group'
-#available-groups
-  %ul.node_groups
-    - node.available_node_groups.each do |node_group|
-      %li[node_group]= link_to node_group.name, '#', :class => 'add-node-group'
