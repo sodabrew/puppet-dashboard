@@ -21,6 +21,23 @@ module NodeGroupGraph
     @node_groups_with_sources = all
   end
 
+  def all_node_group_children
+    node_group_children_with_sources.keys
+  end
+
+  def node_group_children_with_sources
+    return @node_group_children_with_sources if @node_group_children_with_sources
+    all = {}
+    self.walk_child_groups do |group,children|
+      children.each do |child|
+        all[child] ||= Set.new
+        all[child] << group
+      end
+      group
+    end
+    @node_group_children_with_sources = all
+  end
+
   def all_node_classes
     node_classes_with_sources.keys
   end
@@ -38,6 +55,22 @@ module NodeGroupGraph
       end
     end
     @node_classes_with_sources = all
+  end
+
+  def all_nodes
+    nodes_with_sources.keys
+  end
+
+  def nodes_with_sources
+    return @nodes_with_sources if @nodes_with_sources
+    all = {}
+    self.walk_child_groups do |group,_|
+      group.nodes.each do |node|
+        all[node] ||= Set.new
+        all[node] << group
+      end
+    end
+    @nodes_with_sources = all
   end
 
   # Collects all the parameters of the node, starting at the "most distant" groups

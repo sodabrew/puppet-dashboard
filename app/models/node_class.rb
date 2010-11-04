@@ -6,7 +6,7 @@ class NodeClass < ActiveRecord::Base
   has_many :node_group_class_memberships, :dependent => :destroy
   has_many :node_class_memberships, :dependent => :destroy
 
-  has_many :node_groups, :through => :node_group_class_memberships
+  has_many :node_group_children, :class_name => "NodeGroup", :through => :node_group_class_memberships, :source => :node_group
   has_many :nodes, :through => :node_class_memberships
 
   validates_presence_of :name
@@ -31,22 +31,5 @@ class NodeClass < ActiveRecord::Base
 
   def self.find_from_form_ids(*ids)
     ids.map{|entry| entry.to_s.split(/[ ,]/)}.flatten.reject(&:blank?).uniq.map{|id| self.find(id)}
-  end
-
-  def all_nodes
-    nodes_with_sources.keys
-  end
-
-  def nodes_with_sources
-    return @nodes_with_sources if @nodes_with_sources
-    all = {}
-    self.walk_parent_groups do |group,_|
-      group.nodes.each do |node|
-        all[node] ||= Set.new
-        all[node] << group
-      end
-      group
-    end
-    @nodes_with_sources = all
   end
 end
