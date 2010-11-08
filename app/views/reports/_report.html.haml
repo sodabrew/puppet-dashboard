@@ -21,6 +21,8 @@
               %th Name
               %th Property
               %th Message
+              %th File
+              %th Line
           %tbody
             - report.report.resource_statuses.sort_by {|name,status| status.time}.each do |name,status|
               - if status.events.empty?
@@ -28,12 +30,16 @@
                   %td= name
                   %td
                   %td
+                  %td= wrap_on_slashes(status.file)
+                  %td= status.line
               - else
                 - status.events.each do |event|
                   %tr{:class => "status #{event.status}"}
                     %td= name
                     %td= event.property
                     %td= event.message
+                    %td= event.file
+                    %td= event.line
   .section
     %h3 Log
     .section
@@ -43,6 +49,8 @@
             %th Level
             %th Message
             %th Source
+            %th File
+            %th Line
             %th Time
         %tbody
           - if report.logs.present?
