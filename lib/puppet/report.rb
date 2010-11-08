@@ -33,7 +33,12 @@ module Puppet #:nodoc:
         end
         result
       end
+    end
 
+    class Event
+      attr_reader :name, :default_log_level, :property, :line, :resource,
+        :desired_value, :time, :tags, :version, :source_description, :file,
+        :status, :previous_value, :message
     end
   end
 

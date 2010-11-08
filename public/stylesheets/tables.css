@@ -70,6 +70,14 @@ table tbody td.status.failure {
   color: red;
 }
 
+table#events tbody tr.status.failure {
+  background-color: #ffc7c7;
+}
+
+table#events tbody tr.status.changed {
+  background-color: #FF9;
+}
+
 table.inspector td.key,
 table.inspector td.value {
   vertical-align: top;
