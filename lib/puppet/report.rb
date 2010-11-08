@@ -28,9 +28,9 @@ module Puppet #:nodoc:
       #
       def metric_value(*keys)
         return nil unless metrics
-        result = metrics.with_indifferent_access
+        result = metrics
         keys.each do |key|
-          result = result[key]
+          result = result[key.to_sym] || result[key.to_s]
           break unless result
         end
         result
