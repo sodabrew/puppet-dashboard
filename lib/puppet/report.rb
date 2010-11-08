@@ -13,7 +13,7 @@ module Puppet #:nodoc:
       def skipped_resources;  metric_value(:resources, :skipped_resources) || 0; end
       def changed_resources;  metric_value(:changes,   :total)             || 0; end
 
-      def failed?;  failed_resources  > 0 end
+      def failed?;  failed_resources  > 0 || metrics.empty? end
       def changed?; changed_resources > 0 end
 
       # Puppet 0.25.x does not report individual status items
@@ -114,6 +114,7 @@ module ReportExtensions #:nodoc:
 
       def total_time
         times = metric_value(:time)
+        return 0 unless times
         times.values.map(&:last).sum
       end
 

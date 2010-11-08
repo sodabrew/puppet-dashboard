@@ -4,7 +4,6 @@ class Report < ActiveRecord::Base
 
   before_validation :ensure_valid_format
   before_validation :process_report
-  validate :report_contains_metrics
   validates_presence_of :host
   validates_presence_of :time
   validates_uniqueness_of :host, :scope => :time, :allow_nil => true
@@ -50,6 +49,8 @@ class Report < ActiveRecord::Base
   def config_retrieval_time
     if value = metric_value(:time, :config_retrieval)
       TOTAL_TIME_FORMAT % value
+    else
+      TOTAL_TIME_FORMAT % 0
     end
   end
 
@@ -88,11 +89,5 @@ class Report < ActiveRecord::Base
 
   def replace_last_report
     node.assign_last_report if node
-  end
-
-  def report_contains_metrics
-    has_metrics = report.metrics.present?
-    errors.add_to_base("The report contains no metrics") unless has_metrics
-    has_metrics
   end
 end
