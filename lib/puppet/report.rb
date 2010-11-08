@@ -13,8 +13,6 @@ module Puppet #:nodoc:
       def skipped_resources;  metric_value(:resources, :skipped_resources) || 0; end
       def changed_resources;  metric_value(:changes,   :total)             || 0; end
 
-      def total_time; metric_value(:time, :total); end
-
       def failed?;  failed_resources  > 0 end
       def changed?; changed_resources > 0 end
 
@@ -78,6 +76,8 @@ module ReportExtensions #:nodoc:
         obj.metrics.each{|_, metric| metric.extend Puppet25::Util::Metric} if obj.metrics.respond_to?(:each)
       end
 
+      def total_time; metric_value(:time, :total); end
+
       def version
         "0.25.x"
       end
@@ -105,6 +105,11 @@ module ReportExtensions #:nodoc:
 
       def changed_statuses
         resource_statuses.reject { |name, status| not status.changed }
+      end
+
+      def total_time
+        times = metric_value(:time)
+        times.values.map(&:last).sum
       end
 
       def version

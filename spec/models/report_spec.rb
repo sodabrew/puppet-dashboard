@@ -114,6 +114,16 @@ describe Report do
     end
 
     describe "when retrieving report data" do
+      it "should get the total time for 0.25.x reports" do
+        report = report_from_yaml("puppet25/1_changed_0_failures.yml")
+        report.total_time.should == "0.25"
+      end
+
+      it "should get the total time for 2.6.x reports" do
+        report = report_from_yaml("puppet26/0_changed_0_failures.yml")
+        report.total_time.should == "0.11"
+      end
+
       it "should get the config retrieval time for 0.25.x reports" do
         report = report_from_yaml("puppet25/1_changed_0_failures.yml")
         report.config_retrieval_time.should == "0.19"
