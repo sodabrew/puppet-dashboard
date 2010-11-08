@@ -440,6 +440,11 @@ body {
     clear: both;
   }
 
+  .wrap {
+    word-wrap: break-word;
+    word-break: break-all;
+  }
+
   .nowrap {
     white-space: nowrap;
   }

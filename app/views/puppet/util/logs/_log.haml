@@ -5,5 +5,9 @@
     %code= h log.message
   %td
     %code= h log.source
+  %td
+    %code= wrap_on_slashes(log.file)
+  %td
+    %code= h log.line
   %td.nowrap
     %code= log.time

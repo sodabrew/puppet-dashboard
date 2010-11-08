@@ -64,7 +64,7 @@ describe Puppet::Transaction::Report do
 
   describe_reports ".total_time" do
     subject { report.total_time }
-    it { should == info[:total_time] }
+    it { should == info[:total_time] if info[:total_time] }
   end
 
   describe_reports ".time" do

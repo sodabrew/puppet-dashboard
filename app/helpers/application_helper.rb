@@ -156,6 +156,10 @@ module ApplicationHelper
     end
   end
 
+  def wrap_on_slashes(str)
+    (h str).gsub("/","/<wbr />")
+  end
+
   # Return HTML describing the search if one is present in params[:q].
   def describe_search_if_present
     if params[:q].present?
