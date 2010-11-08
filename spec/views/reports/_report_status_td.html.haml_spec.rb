@@ -10,6 +10,6 @@ describe "/reports/_report_status_td.html.haml" do
     end
 
     specify { response.should be_success }
-    it { should have_tag('td.status.success img[src=?]', /.+success.+/) }
+    it { should have_tag('td.status.changed img[src=?]', /.+changed.+/) }
   end
 end

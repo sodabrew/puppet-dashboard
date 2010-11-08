@@ -310,7 +310,7 @@ describe NodesController do
         struct = json_from_response_body
         struct.size.should == 1
 
-        for key in %w[host id node_id success]
+        for key in %w[host id node_id status]
           struct.first[key].should == @report.send(key)
         end
 

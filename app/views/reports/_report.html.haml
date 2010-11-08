@@ -56,7 +56,7 @@
           - if report.logs.present?
             = render :partial => 'puppet/util/logs/log', :collection => puppet_log_sorter(report.logs.compact)
           - else
-            %td.empty{:colspan => 4}
+            %td.empty{:colspan => 6}
               = describe_no_matches_for 'log messages', :report
   .section
     %h3 Metrics

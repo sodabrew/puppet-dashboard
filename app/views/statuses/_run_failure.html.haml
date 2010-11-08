@@ -15,9 +15,12 @@
         - statuses.each do |status|
           %th= status.start.to_s(:date)
     %tbody
-      %tr.succeeded
+      %tr.unchanged
         - statuses.each do |status|
-          %td= status.total - status.failed
+          %td= status.unchanged
+      %tr.changed
+        - statuses.each do |status|
+          %td= status.changed
       %tr.failed
         - statuses.each do |status|
           %td= status.failed

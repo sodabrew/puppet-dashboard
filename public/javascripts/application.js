@@ -72,20 +72,23 @@ jQuery(document).ready(function(J) {
     J("<div id='"+id+"' style='height: 150px; width: auto;'></div>").insertAfter(J(this));
 
     var label_data = J(this).find("tr.labels th").mapHtml();
-    var succeeded_data = J(this).find("tr.succeeded td").mapHtmlInt();
+    var changed_data = J(this).find("tr.changed td").mapHtmlInt();
+    var unchanged_data = J(this).find("tr.unchanged td").mapHtmlInt();
     var failed_data = J(this).find("tr.failed td").mapHtmlInt();
 
-    var succeeded_data_label = J.map(succeeded_data, function(item, index){return item+" successful"});
+    var changed_data_label = J.map(changed_data, function(item, index){return item+" changed"});
+    var unchanged_data_label = J.map(unchanged_data, function(item, index){return item+" unchanged"});
     var failed_data_label = J.map(failed_data, function(item, index){return item+" failed"});
 
     new Grafico.StackedBarGraph($(id),
       {
-        succeeded: succeeded_data,
+        unchanged: unchanged_data,
+        changed: changed_data,
         failed: failed_data
       },
       {
-        colors: { succeeded: "#0C3", failed: "#901" },
-        datalabels: { succeeded: succeeded_data_label, failed: failed_data_label },
+        colors: { changed: "orange", unchanged: "#0C3", failed: "#901" },
+        datalabels: { changed: changed_data_label, unchanged: unchanged_data_label, failed: failed_data_label },
         font_size: 9,
         grid: false,
         label_color: '#666',

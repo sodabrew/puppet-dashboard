@@ -22,7 +22,7 @@ class Node < ActiveRecord::Base
   named_scope :search, lambda{|q| q.blank? ? {} : {:conditions => ['name LIKE ?', "%#{q}%"]} }
 
   # ordering scopes for has_scope
-  named_scope :by_latest_report, proc { |order| 
+  named_scope :by_latest_report, proc { |order|
     direction = {1 => 'ASC', 0 => 'DESC'}[order]
     direction ? {:order => "reported_at #{direction}"} : {}
   }
@@ -32,8 +32,6 @@ class Node < ActiveRecord::Base
   fires :created, :on => :create
   fires :updated, :on => :update
   fires :removed, :on => :destroy
-
-  # RH:TODO: Denormalize last report status into nodes table.
 
   # Return nodes based on their currentness and successfulness.
   #
@@ -47,11 +45,12 @@ class Node < ActiveRecord::Base
   # * non-current and successful: Return any nodes that ever had a successful report.
   # * non-current and failing: Return any nodes that ever had a failing report.
   named_scope :by_currentness_and_successfulness, lambda {|currentness, successfulness|
+    operator = successfulness ? '!=' : '='
     if currentness
-      { :conditions => ['nodes.success = ? AND last_report_id is not NULL', successfulness] }
+      { :conditions => ["nodes.status #{operator} 'failed' AND nodes.last_report_id is not NULL"]  }
     else
       {
-        :conditions => ['reports.success = ?', successfulness],
+        :conditions => ["reports.status #{operator} 'failed'"],
         :joins => :reports,
         :group => 'nodes.id',
       }
@@ -69,10 +68,11 @@ class Node < ActiveRecord::Base
   named_scope :no_longer_reporting, :conditions => ['reported_at < ?', NO_LONGER_REPORTING_CUTOFF.ago]
 
   def self.count_by_currentness_and_successfulness(currentness, successfulness)
+    operator = successfulness ? '!=' : '='
     if currentness
       self.by_currentness_and_successfulness(currentness, successfulness).count
     else
-      Report.count_by_sql(['SELECT COUNT(node_id) FROM (SELECT DISTINCT node_id FROM reports WHERE success = ?) as tmp', successfulness])
+      Report.count_by_sql(["SELECT COUNT(node_id) FROM (SELECT DISTINCT node_id FROM reports WHERE status #{operator} 'failed') as tmp"])
     end
   end
 
@@ -162,9 +162,9 @@ class Node < ActiveRecord::Base
     report ||= find_last_report
 
     unless self.last_report == report
-      self.last_report = report 
+      self.last_report = report
       self.reported_at = report ? report.time : nil
-      self.success = report ? report.success? : false
+      self.status = report ? report.status : 'unchanged'
 
       # FIXME #update_without_callbacks doesn't update the object, and #save! is creating unwanted timeline events.
       ### node.send :update_without_callbacks # do not create a timeline event

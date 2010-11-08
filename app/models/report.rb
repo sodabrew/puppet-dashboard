@@ -29,10 +29,6 @@ class Report < ActiveRecord::Base
     rep
   end
 
-  def status
-    failed? ? 'failure' : 'success'
-  end
-
   def metrics
     return unless report && report.metrics
     @metrics ||= report.metrics.with_indifferent_access
@@ -72,9 +68,9 @@ class Report < ActiveRecord::Base
   end
 
   def set_attributes
-    self.success = !report.failed?
-    self.time    = report.time
-    self.host    = report.host
+    self.status = failed? ? 'failed' : changed? ? 'changed' : 'unchanged'
+    self.time   = report.time
+    self.host   = report.host
   end
 
   def assign_to_node
