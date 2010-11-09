@@ -52,11 +52,6 @@ describe Puppet::Transaction::Report do
     it { should == info[:failed] }
   end
 
-  describe_reports "#failed?" do
-    subject { report.failed? }
-    it { should == info[:failed] > 0 }
-  end
-
   describe_reports "#total_resources" do
     subject { report.total_resources }
     it { should == info[:total] }
@@ -130,4 +125,22 @@ describe Puppet::Transaction::Report do
     Report.new(:report => report_yaml).report
   end
 
+  it "should consider a report with metrics and no failing resources to be a success" do
+    rep = Report.generate
+    rep.report.stubs(:failed_resources).returns(0)
+    rep.should_not be_failed
+  end
+
+  it "should consider a report with failing resources to be a failure" do
+    rep = Report.generate
+    rep.report.stubs(:failed_resources).returns(1)
+    rep.should be_failed
+  end
+
+  it "should consider a report with no metrics and no failing resources to be a failure" do
+    rep = Report.generate
+    rep.report.stubs(:failed_resources).returns(0)
+    rep.report.stubs(:metrics).returns({})
+    rep.should be_failed
+  end
 end
