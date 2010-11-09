@@ -317,7 +317,6 @@ Performance
 
 The Puppet Dashboard slows down as it manages more data. Here are ways to make it run faster, from easiest to hardest:
 
-*  Clear the Ruby on Rails logs. You can zero all these logs by running `rake log:clear`, or use a tool like `logrotate` to archive old files in the `logs` directory.
 *  Optimize your database by running `rake RAILS_ENV=production db:raw:optimize` from your Puppet Dashboard directory, this will reorganize and reanalyze your database for faster queries.
 *  Run the application in `production` mode, e.g. by running `./script/server -e production`. The default `development` mode is significantly slower because it doesn't cache and logs more details.
 *  Run the application using multiple processes to handle more concurrent requests. You can use Phusion Passenger, or clusters of Thin or Unicorn servers to serve multiple concurrent requests.
@@ -331,7 +330,7 @@ Debugging
 
 The Puppet Dashboard may not start or may display warnings if misconfigured or if it encounters an error. Details about these errors are recorded to log files that will help diagnose and resolve the problem.
 
-You can find the logs in the `log` subdirectory of the Puppet Dashboard install, which will probably be in `/usr/share/puppet-dashboard/log/{environment}.log` if you installed from a package.
+You can find the logs in the `log` subdirectory of the Puppet Dashboard install, which will probably be in `/usr/share/puppet-dashboard/log/{environment}.log` if you installed from a package. You may want to customize your log rotation in `config/environment.rb`, if you would like to devote more or less disk to archival of logs.
 
 If you installed from source, it will be wherever you cloned your git repository.
 
