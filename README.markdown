@@ -222,7 +222,18 @@ The Puppet Dashboard can collect reports from your Puppet Master as they're crea
 
         puppetmasterd --configprint libdir
 
-2.  Create a directory for custom report libraries, e.g. run the following command, but replace `LIBDIR` with the path you found in step 1:
+2.  If a puppet agent is also running on the puppet master:
+
+    a. Determine if the puppet agent is using pluginsync.  You can find this out by running the following command:
+
+        puppetd --configprint pluginsync
+
+    b. If the value of pluginsync is true, you will need to ensure that the puppet agent uses a different libdir than the puppet master.  You can do this by putting the following lines in your `puppet.conf`:
+
+        [puppetd]
+            libdir = $vardir/agent_lib
+
+3.  Create a directory for custom report libraries, e.g. run the following command, but replace `LIBDIR` with the path you found in step 1:
 
         mkdir -p LIBDIR/puppet/reports/
 
@@ -230,7 +241,7 @@ The Puppet Dashboard can collect reports from your Puppet Master as they're crea
 
         mkdir -p /var/lib/puppet/lib/puppet/reports/
 
-3.  Create a custom report processor file on your Puppet Master by copying the Puppet Dashboard's `ext/puppet/puppet_dashboard.rb` file to `LIBDIR/puppet/reports`. E.g.,
+4.  Create a custom report processor file on your Puppet Master by copying the Puppet Dashboard's `ext/puppet/puppet_dashboard.rb` file to `LIBDIR/puppet/reports`. E.g.,
 
         cp ext/puppet/puppet_dashboard.rb LIBDIR/puppet/reports
 
