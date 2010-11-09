@@ -46,6 +46,8 @@ describe Node do
         Report.generate_for(node, sooner, false)
         node.reload
       end
+
+      @never_reported = Node.generate!(:name => 'never_reported')
     end
 
     [
