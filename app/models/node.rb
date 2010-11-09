@@ -48,7 +48,7 @@ class Node < ActiveRecord::Base
   # * non-current and failing: Return any nodes that ever had a failing report.
   named_scope :by_currentness_and_successfulness, lambda {|currentness, successfulness|
     if currentness
-      { :conditions => ['nodes.success = ?', successfulness] }
+      { :conditions => ['nodes.success = ? AND last_report_id is not NULL', successfulness] }
     else
       {
         :conditions => ['reports.success = ?', successfulness],
