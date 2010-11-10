@@ -23,27 +23,39 @@ describe Node do
       later = 1.week.ago.to_date
       sooner = Date.today
 
-      @always_suceeding = Node.generate!(:name => 'always_suceeding').tap do |node|
-        Report.generate_for(node, later, true)
-        Report.generate_for(node, sooner, true)
+      @ever_changed = Node.generate!(:name => 'ever_changed').tap do |node|
+        Report.generate_for(node, later, 'changed')
+        Report.generate_for(node, sooner, 'changed')
         node.reload
       end
 
-      @currently_succeeding = Node.generate!(:name => 'currently_succeeding').tap do |node|
-        Report.generate_for(node, later, false)
-        Report.generate_for(node, sooner, true)
+      @ever_unchanged = Node.generate!(:name => 'ever_unchanged').tap do |node|
+        Report.generate_for(node, later, 'unchanged')
+        Report.generate_for(node, sooner, 'unchanged')
         node.reload
       end
 
-      @always_failing = Node.generate!(:name => 'always_failing').tap do |node|
-        Report.generate_for(node, later, false)
-        Report.generate_for(node, sooner, false)
+      @just_changed = Node.generate!(:name => 'just_changed').tap do |node|
+        Report.generate_for(node, later, 'failed')
+        Report.generate_for(node, sooner, 'changed')
         node.reload
       end
 
-      @currently_failing = Node.generate!(:name => 'currently_failing').tap do |node|
-        Report.generate_for(node, later, true)
-        Report.generate_for(node, sooner, false)
+      @just_unchanged = Node.generate!(:name => 'just_unchanged').tap do |node|
+        Report.generate_for(node, later, 'failed')
+        Report.generate_for(node, sooner, 'unchanged')
+        node.reload
+      end
+
+      @ever_failed = Node.generate!(:name => 'ever_failed').tap do |node|
+        Report.generate_for(node, later, 'failed')
+        Report.generate_for(node, sooner, 'failed')
+        node.reload
+      end
+
+      @just_failed = Node.generate!(:name => 'just_failed').tap do |node|
+        Report.generate_for(node, later, 'unchanged')
+        Report.generate_for(node, sooner, 'failed')
         node.reload
       end
 
@@ -51,10 +63,10 @@ describe Node do
     end
 
     [
-      [true,  true,  %w[always_suceeding currently_succeeding]],
-      [true,  false, %w[always_failing currently_failing]],
-      [false, true,  %w[always_suceeding currently_succeeding currently_failing]],
-      [false, false, %w[currently_succeeding always_failing currently_failing]],
+      [true,  true,  %w[ever_changed ever_unchanged just_changed just_unchanged]],
+      [true,  false, %w[ever_failed just_failed]],
+      [false, true,  %w[ever_changed ever_unchanged just_changed just_unchanged just_failed]],
+      [false, false, %w[just_changed just_unchanged ever_failed just_failed]],
     ].each do |currentness, successfulness, inclusions|
       context "when #{currentness ? 'current' : 'ever'} and #{successfulness ? 'successful' : 'failed'}" do
         let(:currentness) { currentness }

@@ -11,6 +11,6 @@ describe "/reports/_report_status_icon.html.haml" do
     end
 
     specify { response.should be_success }
-    it { should have_tag('span img[src=?]', /.+success.+/) }
+    it { should have_tag('span img[src=?]', /.+changed.+/) }
   end
 end
