@@ -40,5 +40,9 @@ inventory_port: 8140
 # Amount of time in seconds since last report before a node is considered no longer reporting
 no_longer_reporting_cutoff: 3600
 
+# How many days of history to display on the "Daily Run Status" graph
+daily_run_history_length: 30
+
 use_external_node_classification: true
+
 #===[ fin ]=============================================================

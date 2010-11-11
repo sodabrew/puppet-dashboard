@@ -8,7 +8,7 @@ describe "/statuses/_run_failure.html.haml" do
       response.should be_success
     end
 
-    it "should display thirty days of data" do
+    it "should display the specified number of days of data" do
       @node = Node.create!(:name => "node")
 
       32.times do |n|
@@ -20,10 +20,12 @@ describe "/statuses/_run_failure.html.haml" do
         @node.reports.create!(:report => report)
       end
 
+      SETTINGS.stubs(:daily_run_history_length).returns(20)
+
       assigns[:node] = @node
       render
 
-      response.should have_tag("tr.labels th", :count => 30)
+      response.should have_tag("tr.labels th", :count => 20)
     end
   end
 end
