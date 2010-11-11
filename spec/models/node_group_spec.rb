@@ -28,7 +28,7 @@ describe NodeGroup do
 
       @group.destroy
 
-      node_class.node_groups.reload.should be_empty
+      node_class.node_group_children.reload.should be_empty
       node_class.node_group_class_memberships.reload.should be_empty
     end
 

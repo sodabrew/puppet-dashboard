@@ -13,9 +13,7 @@ module Puppet #:nodoc:
       def skipped_resources;  metric_value(:resources, :skipped_resources) || 0; end
       def changed_resources;  metric_value(:changes,   :total)             || 0; end
 
-      def total_time; metric_value(:time, :total); end
-
-      def failed?;  failed_resources  > 0 end
+      def failed?;  failed_resources  > 0 || metrics.empty? end
       def changed?; changed_resources > 0 end
 
       # Puppet 0.25.x does not report individual status items
@@ -28,14 +26,19 @@ module Puppet #:nodoc:
       #
       def metric_value(*keys)
         return nil unless metrics
-        result = metrics.with_indifferent_access
+        result = metrics
         keys.each do |key|
-          result = result[key]
+          result = result[key.to_sym] || result[key.to_s]
           break unless result
         end
         result
       end
+    end
 
+    class Event
+      attr_reader :name, :default_log_level, :property, :line, :resource,
+        :desired_value, :time, :tags, :version, :source_description, :file,
+        :status, :previous_value, :message
     end
   end
 
@@ -78,6 +81,8 @@ module ReportExtensions #:nodoc:
         obj.metrics.each{|_, metric| metric.extend Puppet25::Util::Metric} if obj.metrics.respond_to?(:each)
       end
 
+      def total_time; metric_value(:time, :total); end
+
       def version
         "0.25.x"
       end
@@ -105,6 +110,12 @@ module ReportExtensions #:nodoc:
 
       def changed_statuses
         resource_statuses.reject { |name, status| not status.changed }
+      end
+
+      def total_time
+        times = metric_value(:time)
+        return 0 unless times
+        times.values.map(&:last).sum
       end
 
       def version

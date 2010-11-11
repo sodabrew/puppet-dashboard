@@ -1,9 +1,10 @@
 class Status
-  attr_reader :failed, :total, :percent, :start
+  attr_reader :changed, :unchanged, :failed, :total, :start
   def initialize(datum)
+    @changed = datum["changed"].to_i
+    @unchanged = datum["unchanged"].to_i
     @failed = datum["failed"].to_i
     @total = datum["total"].to_i
-    @percent = datum["percent"].to_f
     @start = datum["start"].to_time
   end
  
@@ -13,11 +14,6 @@ class Status
 
   def self.recent(options={})
     by_interval options.merge(:start => 1.hour.ago)
-  end
-
-  def self.sparkline
-    # return [12.5, 10.5, 13.4, 11.4, 13.2, 12.3, 13.4, 14.3]
-    by_interval(:limit => 20).map(&:percent)
   end
 
   # Default time in seconds for the interval
@@ -47,9 +43,10 @@ class Status
 
     sql = <<-SQL
       SELECT
-        COUNT(*) - SUM(success)       as failed,
         COUNT(*)                      as total,
-        SUM(success) / COUNT(*) * 100 as percent,
+        SUM(CASE status when "unchanged" then 1 else 0 end) as unchanged,
+        SUM(CASE status when "changed" then 1 else 0 end) as changed,
+        SUM(CASE status when "failed" then 1 else 0 end) as failed,
         #{date}                       as start
       FROM reports
     SQL

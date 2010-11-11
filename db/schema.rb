@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100916183948) do
+ActiveRecord::Schema.define(:version => 20101109001012) do
 
   create_table "assignments", :force => true do |t|
     t.integer  "node_id"
@@ -65,8 +65,8 @@ ActiveRecord::Schema.define(:version => 20100916183948) do
     t.datetime "updated_at"
     t.string   "url"
     t.datetime "reported_at"
-    t.boolean  "success",        :default => false
     t.integer  "last_report_id"
+    t.string   "status"
   end
 
   create_table "parameters", :force => true do |t|
@@ -80,16 +80,16 @@ ActiveRecord::Schema.define(:version => 20100916183948) do
 
   create_table "reports", :force => true do |t|
     t.integer  "node_id"
-    t.text     "report",     :limit => 16777215
+    t.text     "report",     :limit => 2147483647
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "success"
     t.string   "host"
     t.datetime "time"
+    t.string   "status"
   end
 
-  add_index "reports", ["node_id", "success"], :name => "index_reports_on_node_id_and_success"
-  add_index "reports", ["time", "node_id", "success"], :name => "index_reports_on_time_and_node_id_and_success"
+  add_index "reports", ["node_id"], :name => "index_reports_on_node_id_and_success"
+  add_index "reports", ["time", "node_id", "status"], :name => "index_reports_on_time_and_node_id_and_status"
 
   create_table "services", :force => true do |t|
     t.string   "name"

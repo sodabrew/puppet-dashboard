@@ -182,7 +182,9 @@ There are many ways to run a Ruby web application like the Puppet Dashboard, we 
 
             ./script/server -p 8080
 
-2.  **Passenger**: This plugin for [Apache](http://httpd.apache.org/) or [Nginx](http://nginx.org/) makes it easy to run multiple Ruby web apps quickly and efficiently using multiple instances -- it's great for production use. If used along with Ruby Enterprise Edition, it can dramatically reduce the memory required to run Ruby web applications. For further information, please see [Passenger/](http://www.modrails.com/) and [Ruby Enterprise Edition](http://www.rubyenterpriseedition.com/) and the example apache configuration in `ext/passenger/dashboard-vhost.conf`.
+2.  **Passenger**: This plugin for [Apache](http://httpd.apache.org/) or [Nginx](http://nginx.org/) makes it easy to run multiple Ruby web apps quickly and efficiently using multiple instances -- it's great for production use. If used along with Ruby Enterprise Edition, it can dramatically reduce the memory required to run Ruby web applications. For further information, including installation and configuration instructions please see [Passenger/](http://www.modrails.com/) and [Ruby Enterprise Edition](http://www.rubyenterpriseedition.com/) and the example apache configuration in `ext/passenger/dashboard-vhost.conf`.
+
+You will need to change the Passenger path depending on the version of Passenger you have installed. Also, DocumentRoot, ServerName, and Directory must be changed to match your Puppet Dashboard install directory.
 
 3.  **Thin**: This fast and reliable server can run multiple instances of the Puppet Dashboard application behind a proxy like [Apache](http://httpd.apache.org/) or [Nginx](http://nginx.org/) to appear as a single website -- it's great for production use. For further information, please see [Thin](http://code.macournoyer.com/thin/).
 
@@ -220,7 +222,18 @@ The Puppet Dashboard can collect reports from your Puppet Master as they're crea
 
         puppetmasterd --configprint libdir
 
-2.  Create a directory for custom report libraries, e.g. run the following command, but replace `LIBDIR` with the path you found in step 1:
+2.  If a puppet agent is also running on the puppet master:
+
+    a. Determine if the puppet agent is using pluginsync.  You can find this out by running the following command:
+
+        puppetd --configprint pluginsync
+
+    b. If the value of pluginsync is true, you will need to ensure that the puppet agent uses a different libdir than the puppet master.  You can do this by putting the following lines in your `puppet.conf`:
+
+        [puppetd]
+            libdir = $vardir/agent_lib
+
+3.  Create a directory for custom report libraries, e.g. run the following command, but replace `LIBDIR` with the path you found in step 1:
 
         mkdir -p LIBDIR/puppet/reports/
 
@@ -228,7 +241,7 @@ The Puppet Dashboard can collect reports from your Puppet Master as they're crea
 
         mkdir -p /var/lib/puppet/lib/puppet/reports/
 
-3.  Create a custom report processor file on your Puppet Master by copying the Puppet Dashboard's `ext/puppet/puppet_dashboard.rb` file to `LIBDIR/puppet/reports`. E.g.,
+4.  Create a custom report processor file on your Puppet Master by copying the Puppet Dashboard's `ext/puppet/puppet_dashboard.rb` file to `LIBDIR/puppet/reports`. E.g.,
 
         cp ext/puppet/puppet_dashboard.rb LIBDIR/puppet/reports
 
@@ -287,6 +300,8 @@ The Puppet Dashboard can act as an external node classification tool, which will
 
     *NOTE:* The `bin/external_node` program connects to the Puppet Dashboard at `localhost` on port `3000`. If your Puppet Dashboard is running on a different host or node, please modify this file.
 
+    *NOTE:* If you have Dashboard set up to use HTTPS, change the DASHBOARD_URL in `external_node` to the `https` prefix and the correct port number (443, by default). You may also need to change the CERT_PATH, and PKEY_PATH variables if your puppet master's hostname is not `puppet` or if your ssldir is not `/etc/puppet/ssl`.
+
 2.  Restart the `puppetmasterd` process.
 
 Security
@@ -294,7 +309,7 @@ Security
 
 *WARNING:* The Puppet Dashboard provides access to sensitive information and can make changes to your Puppet-managed infrastructure. You must restrict access to it to protect it!
 
-The Puppet Dashboard does not currently provide authentication, authorization or encryption -- although work on these is in progress.
+The Puppet Dashboard does not currently provide authentication or authorization -- although work on these is in progress.
 
 Third-party tools that can help secure a Puppet Dashboard include:
 
@@ -306,12 +321,13 @@ Third-party tools that can help secure a Puppet Dashboard include:
 
         http://username:password@hostname
 
+4.  HTTPS (SSL) Encryption is supported when running Dashboard under Apache and Passenger. The example configuration in `ext/passenger/dashboard-vhost.conf` includes a commented-out vhost configured to use SSL. You may need to change the Apache directives SSLCertificateFile, SSLCertificateKeyFile, SSLCACertificateFile, and SSLCARevocationFile to the paths of the files created by the `cert` rake tasks. (See `Generating certs and connecting to the puppet master` for how to create these files)
+
 Performance
 -----------
 
 The Puppet Dashboard slows down as it manages more data. Here are ways to make it run faster, from easiest to hardest:
 
-*  Clear the Ruby on Rails logs. You can zero all these logs by running `rake log:clear`, or use a tool like `logrotate` to archive old files in the `logs` directory.
 *  Optimize your database by running `rake RAILS_ENV=production db:raw:optimize` from your Puppet Dashboard directory, this will reorganize and reanalyze your database for faster queries.
 *  Run the application in `production` mode, e.g. by running `./script/server -e production`. The default `development` mode is significantly slower because it doesn't cache and logs more details.
 *  Run the application using multiple processes to handle more concurrent requests. You can use Phusion Passenger, or clusters of Thin or Unicorn servers to serve multiple concurrent requests.
@@ -325,7 +341,7 @@ Debugging
 
 The Puppet Dashboard may not start or may display warnings if misconfigured or if it encounters an error. Details about these errors are recorded to log files that will help diagnose and resolve the problem.
 
-You can find the logs in the `log` subdirectory of the Puppet Dashboard install, which will probably be in `/usr/share/puppet-dashboard/log/{environment}.log` if you installed from a package.
+You can find the logs in the `log` subdirectory of the Puppet Dashboard install, which will probably be in `/usr/share/puppet-dashboard/log/{environment}.log` if you installed from a package. You may want to customize your log rotation in `config/environment.rb`, if you would like to devote more or less disk to archival of logs.
 
 If you installed from source, it will be wherever you cloned your git repository.
 
@@ -368,13 +384,13 @@ Generating certs and connecting to the puppet master
 
 In order to connect to the puppet master (to retrieve node facts), the Dashboard must be configured with the correct SSL certificates.  To do this, run the following commands:
 
-    rake create_key_pair
+    rake cert:create_key_pair
 
-    rake cert_request
+    rake cert:request
 
 Then instruct the master to sign the certificate request (using "puppet cert"), and then run the command:
 
-    rake cert_retrieve
+    rake cert:retrieve
 
 You will also need to configure auth.conf on the master to allow Dashboard to connect to the facts terminus:
 

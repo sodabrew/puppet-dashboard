@@ -261,6 +261,9 @@ body {
     position: relative; }
   body .clear {
     clear: both; }
+  body .wrap {
+    word-wrap: break-word;
+    word-break: break-all; }
   body .nowrap {
     white-space: nowrap; }
   body .item {

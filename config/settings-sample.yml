@@ -12,6 +12,10 @@
 # CN that is used in Dashboard's certificate.
 cn_name: 'dashboard'
 
+ca_crl_path: 'certs/dashboard.ca_crl.pem'
+
+ca_certificate_path: 'certs/dashboard.ca_cert.pem'
+
 certificate_path: 'certs/dashboard.cert.pem'
 
 private_key_path: 'certs/dashboard.private_key.pem'

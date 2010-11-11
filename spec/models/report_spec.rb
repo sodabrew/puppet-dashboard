@@ -12,7 +12,7 @@ describe Report do
         Time.stubs(:now).returns(@now)
         @node = Node.generate
         @report_yaml = File.read(File.join(RAILS_ROOT, "spec/fixtures/sample_report.yml"))
-        @report_data = YAML.load(@report_yaml).extend(ReportExtensions).extend(ReportExtensions)
+        @report_data = YAML.load(@report_yaml).extend(ReportExtensions)
       end
 
       it "handles greater than 64k of report text without truncating" do
@@ -26,16 +26,16 @@ describe Report do
         report.report.logs.first.message.length.should == original_report_length
       end
 
-      it "sets success correctly based on whether the report contains failures" do
+      it "sets status correctly based on whether the report contains failures" do
         report = report_model_from_yaml('failure.yml')
         report.save!
-        Report.find(report.id).should_not be_success
+        Report.find(report.id).status.should == 'failed'
       end
 
       it "should properly create a valid report" do
         report = report_model_from_yaml('success.yml')
         report.save!
-        Report.find(report.id).should be_success
+        Report.find(report.id).status.should == 'unchanged'
       end
 
       it "should consider a blank report to be invalid" do
@@ -112,25 +112,47 @@ describe Report do
       report_yaml = File.read(report_file)
       Report.new(:report => report_yaml)
     end
+
+    describe "when retrieving report data" do
+      it "should get the total time for 0.25.x reports" do
+        report = report_from_yaml("puppet25/1_changed_0_failures.yml")
+        report.total_time.should == "0.25"
+      end
+
+      it "should get the total time for 2.6.x reports" do
+        report = report_from_yaml("puppet26/0_changed_0_failures.yml")
+        report.total_time.should == "0.11"
+      end
+
+      it "should get the config retrieval time for 0.25.x reports" do
+        report = report_from_yaml("puppet25/1_changed_0_failures.yml")
+        report.config_retrieval_time.should == "0.19"
+      end
+
+      it "should get the config retrieval time for 2.6.x reports" do
+        report = report_from_yaml("puppet26/0_changed_0_failures.yml")
+        report.config_retrieval_time.should == "0.11"
+      end
+    end
   end
 
   describe "when destroying the most recent report for a node" do
     before :each do
       @node = Node.generate
-      @report = Report.generate_for(@node, 1.week.ago.to_date, true)
+      @report = Report.generate_for(@node, 1.week.ago.to_date, 'unchanged')
     end
 
     it "should set the node's most recent report to what is now the most recent report" do
-      @newer_report = Report.generate_for(@node, Time.now, false)
+      @newer_report = Report.generate_for(@node, Time.now, 'failed')
       @node.last_report.should == @newer_report
       @node.reported_at.should == @newer_report.time
-      @node.success.should == @newer_report.success
+      @node.status.should == @newer_report.status
 
       @newer_report.destroy
 
       @node.last_report.should == @report
       @node.reported_at.should == @report.time
-      @node.success.should == @report.success
+      @node.status.should == @report.status
     end
 
     it "should clear the node's most recent report if there are no other reports" do
@@ -138,7 +160,7 @@ describe Report do
 
       @node.last_report.should == nil
       @node.reported_at.should == nil
-      @node.success.should == false
+      @node.status.should == 'unchanged'
     end
   end
 end

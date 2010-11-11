@@ -9,34 +9,37 @@
       %li= link_to 'Destroy', @node_group, :confirm => 'Are you sure?', :method => :delete, :class => "delete button"
 
   .item
-    .section
-      %h3 Parameters
-      - unless @node_group.parameters.blank?
-        = inspector_table @node_group.parameters.to_hash
-      - else
-        = describe_no_matches_as 'No parameters'
+    = render 'shared/parameters', :resource => @node_group
+    = render 'shared/groups', :resource => @node_group
+    = render 'shared/classes', :resource => @node_group
 
     .section.half
-      %h3 Inherited groups
-      - unless @node_group.node_groups.blank?
-        = inspector_table @node_group.node_groups, :name, false, :link => true
+      %h3 Derived groups
+      - unless @node_group.node_group_children_with_sources.empty?
+        %table.inspector
+          %thead
+            %tr
+              %th Group
+              %th Source
+          %tbody
+            - @node_group.node_group_children_with_sources.each do |group,sources|
+              %tr
+                %td
+                  %strong= link_to(group.name,group)
+                %td
+                  - if sources.include?(@node_group)
+                    = group.name
+                  - else
+                    = sources.map{|p| link_to(p.name,p)}.join(", ")
       - else
-        = describe_no_matches_as 'No groups'
-
-    .section.half
-      %h3 Classes
-      - unless @node_group.node_classes.blank?
-        = inspector_table @node_group.node_classes, :name, false, :link => true
-      - else
-        = describe_no_matches_as 'No classes'
-
+        = describe_no_matches_as 'No child groups'
   .item
-    - if @node_group.nodes.present?
+    - if @node_group.all_nodes.present?
       .section
-        = render 'statuses/run_failure', :nodes => @node_group.nodes
+        = render 'statuses/run_failure', :nodes => @node_group.all_nodes
     .section
       %h3 Nodes for this group
-      - if @node_group.nodes.present?
-        = render 'nodes/nodes', :nodes => @node_group.nodes
+      - if @node_group.all_nodes.present?
+        = render 'nodes/nodes', :nodes => @node_group.all_nodes, :container => @node_group
       - else
         = describe_no_matches_for :nodes, :group

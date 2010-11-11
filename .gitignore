@@ -14,7 +14,7 @@ db/*.sqlite3
 db/dump.sql
 doc/api
 doc/app
-log/*.log
+log/*.log*
 log/*.pid
 public/javascripts/all.js
 public/stylesheets/all.css

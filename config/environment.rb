@@ -5,6 +5,7 @@ RAILS_GEM_VERSION = '2.3.4' unless defined? RAILS_GEM_VERSION
 
 # Bootstrap the Rails environment, frameworks, and default configuration
 require File.join(File.dirname(__FILE__), 'boot')
+require 'activesupport'
 
 Rails::Initializer.run do |config|
   config.gem 'rack'
@@ -13,6 +14,9 @@ Rails::Initializer.run do |config|
   config.gem 'will_paginate'
   config.gem 'has_scope'
   config.gem 'maruku'
+
+  # Change this to adjust log rotation. Logger.new(log_file, number_of_logs, max_log_size).
+  config.logger = Logger.new("#{RAILS_ROOT}/log/#{RAILS_ENV}.log", 50, 10.megabytes)
 
   # Settings in config/environments/* take precedence over those specified here.
   # Application configuration should go into files in config/initializers

@@ -10,7 +10,7 @@ describe "/reports/show.html.haml" do
     end
 
     specify { response.should be_success }
-    it { should have_tag('.status img[src=?]', /.+success.+/) }
+    it { should have_tag('.status img[src=?]', /.+changed.+/) }
     it { should have_tag('a[href=?]', node_path(@report.node)) }
   end
 end

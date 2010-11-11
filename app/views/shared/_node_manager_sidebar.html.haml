@@ -17,8 +17,9 @@
       = link_to "Not currently reporting", no_longer_reporting_nodes_path
       - count = Node.count_no_longer_reporting
       %span.count{:class => counter_class(count, true)}= count
-    %li
-      = link_to "Custom query", search_nodes_path
+    - if SETTINGS.experimental_inventory_service
+      %li
+        = link_to "Custom query", search_nodes_path
   .footer.actionbar
     = link_to "Add node", new_node_path, :class => 'button'
 

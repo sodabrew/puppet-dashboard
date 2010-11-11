@@ -22,7 +22,7 @@ class Node < ActiveRecord::Base
   named_scope :search, lambda{|q| q.blank? ? {} : {:conditions => ['name LIKE ?', "%#{q}%"]} }
 
   # ordering scopes for has_scope
-  named_scope :by_latest_report, proc { |order| 
+  named_scope :by_latest_report, proc { |order|
     direction = {1 => 'ASC', 0 => 'DESC'}[order]
     direction ? {:order => "reported_at #{direction}"} : {}
   }
@@ -32,8 +32,6 @@ class Node < ActiveRecord::Base
   fires :created, :on => :create
   fires :updated, :on => :update
   fires :removed, :on => :destroy
-
-  # RH:TODO: Denormalize last report status into nodes table.
 
   # Return nodes based on their currentness and successfulness.
   #
@@ -47,11 +45,12 @@ class Node < ActiveRecord::Base
   # * non-current and successful: Return any nodes that ever had a successful report.
   # * non-current and failing: Return any nodes that ever had a failing report.
   named_scope :by_currentness_and_successfulness, lambda {|currentness, successfulness|
+    operator = successfulness ? '!=' : '='
     if currentness
-      { :conditions => ['nodes.success = ?', successfulness] }
+      { :conditions => ["nodes.status #{operator} 'failed' AND nodes.last_report_id is not NULL"]  }
     else
       {
-        :conditions => ['reports.success = ?', successfulness],
+        :conditions => ["reports.status #{operator} 'failed'"],
         :joins => :reports,
         :group => 'nodes.id',
       }
@@ -69,10 +68,11 @@ class Node < ActiveRecord::Base
   named_scope :no_longer_reporting, :conditions => ['reported_at < ?', NO_LONGER_REPORTING_CUTOFF.ago]
 
   def self.count_by_currentness_and_successfulness(currentness, successfulness)
+    operator = successfulness ? '!=' : '='
     if currentness
       self.by_currentness_and_successfulness(currentness, successfulness).count
     else
-      Report.count_by_sql(['SELECT COUNT(node_id) FROM (SELECT DISTINCT node_id FROM reports WHERE success = ?) as tmp', successfulness])
+      Report.count_by_sql(["SELECT COUNT(node_id) FROM (SELECT DISTINCT node_id FROM reports WHERE status #{operator} 'failed') as tmp"])
     end
   end
 
@@ -104,24 +104,8 @@ class Node < ActiveRecord::Base
     name.to_s
   end
 
-  def available_node_classes
-    @available_node_classes ||= NodeClass.all(:order => :name) - node_classes - inherited_classes
-  end
-
-  def available_node_groups
-    @available_node_groups ||= NodeGroup.all(:order => :name) - node_groups
-  end
-
-  def inherited_classes
-    (node_group_list - [self]).map(&:node_classes).flatten.uniq
-  end
-
-  def all_classes
-    node_classes | inherited_classes
-  end
-
   def configuration
-    { 'name' => name, 'classes' => all_classes.collect(&:name), 'parameters' => compiled_parameters }
+    { 'name' => name, 'classes' => all_node_classes.collect(&:name), 'parameters' => parameter_list }
   end
 
   def to_yaml(opts={})
@@ -132,40 +116,10 @@ class Node < ActiveRecord::Base
     TimelineEvent.for_node(self)
   end
 
-  # This wrapper method is just used to cache the result of the recursive method
-  def compiled_parameters(allow_conflicts=false)
-    unless @compiled_parameters
-      @compiled_parameters, @conflicts = compile_subgraph_parameters(self, node_group_graph)
-      @conflicts.each do |key|
-        errors.add(:parameters,key)
-      end
-    end
-    raise ParameterConflictError unless allow_conflicts or @conflicts.empty?
-    @compiled_parameters
-  end
+  # Placeholder attributes
 
-  # Walks the graph of node groups for the given node, compiling parameters by
-  # merging down (preferring parameters specified in node groups that are
-  # nearer). Raises a ParameterConflictError if parameters at the same distance
-  # from the node have the same name.
-  def compile_subgraph_parameters(group,subgraph)
-    children = subgraph.map do |child,child_subgraph|
-      compile_subgraph_parameters(child,child_subgraph)
-    end
-    # Pick-up conflicts that our children had
-    conflicts = children.map(&:last).inject(Set.new,&:merge)
-    params = group.parameters.to_hash
-    inherited = {}
-    # Now collect our inherited params and their conflicts
-    children.map(&:first).map {|h| [*h]}.flatten.each_slice(2) do |key,value|
-      conflicts.add(key) if inherited[key] && inherited[key] != value
-      inherited[key] = value
-    end
-    # Resolve all possible conflicts
-    conflicts.each do |key|
-      conflicts.delete(key) if params[key]
-    end
-    [params.reverse_merge(inherited), conflicts]
+  def environment
+    'production'
   end
 
   def status_class
@@ -208,9 +162,9 @@ class Node < ActiveRecord::Base
     report ||= find_last_report
 
     unless self.last_report == report
-      self.last_report = report 
+      self.last_report = report
       self.reported_at = report ? report.time : nil
-      self.success = report ? report.success? : false
+      self.status = report ? report.status : 'unchanged'
 
       # FIXME #update_without_callbacks doesn't update the object, and #save! is creating unwanted timeline events.
       ### node.send :update_without_callbacks # do not create a timeline event
