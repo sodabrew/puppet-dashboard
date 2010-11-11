@@ -167,8 +167,8 @@ describe Node do
 
   describe "no_longer_reporting" do
     it "should return all nodes whose latest report is more than 1 hour ago" do
-      old = node = Node.generate(:reported_at => 2.hours.ago)
-      new = node = Node.generate(:reported_at => 10.minutes.ago)
+      old = node = Node.generate(:reported_at => 2.hours.ago, :name => "old")
+      new = node = Node.generate(:reported_at => 10.minutes.ago, :name => "new")
 
       Node.no_longer_reporting.should include(old)
       Node.no_longer_reporting.should_not include(new)

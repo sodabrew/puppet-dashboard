@@ -37,4 +37,6 @@ inventory_server: 'puppet'
 # Port for the inventory server.
 inventory_port: 8140
 
+# Amount of time in seconds since last report before a node is considered no longer reporting
+no_longer_reporting_cutoff: 3600
 #===[ fin ]=============================================================
