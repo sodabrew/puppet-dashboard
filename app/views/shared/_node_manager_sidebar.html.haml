@@ -23,5 +23,6 @@
   .footer.actionbar
     = link_to "Add node", new_node_path, :class => 'button'
 
-- for type in [NodeClass, NodeGroup]
-  = render "shared/node_manager_sidebar_for_type", :type => type
+- if SETTINGS.use_external_node_classification
+  - for type in [NodeClass, NodeGroup]
+    = render "shared/node_manager_sidebar_for_type", :type => type

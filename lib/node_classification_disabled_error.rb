@@ -1,0 +1,2 @@
+class NodeClassificationDisabledError < StandardError
+end
