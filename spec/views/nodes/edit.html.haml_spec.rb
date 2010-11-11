@@ -82,12 +82,22 @@ describe '/nodes/edit' do
         @node.node_classes << @classes[0..2]
       end
 
-      it 'should provide a means to edit the associated classes' do
+      it 'should provide a means to edit the associated classes when using node classification' do
+        SETTINGS.stubs(:use_external_node_classification).returns(true)
+
         do_render
         response.should have_tag('input#node_class_ids')
       end
 
-      it 'should show the associated classes' do
+      it 'should not provide a means to edit the associated classes when not using node classification' do
+        SETTINGS.stubs(:use_external_node_classification).returns(false)
+
+        do_render
+        response.should_not have_tag('input#node_class_ids')
+      end
+
+      it 'should show the associated classes when using node classification' do
+        SETTINGS.stubs(:use_external_node_classification).returns(true)
         do_render
 
         response.should have_tag('#tokenizer') do
@@ -98,6 +108,13 @@ describe '/nodes/edit' do
             struct.should include({"id" => @classes[idx].id, "name" => @classes[idx].name})
           end
         end
+      end
+
+      it 'should not show the associated classes when not using node classification' do
+        SETTINGS.stubs(:use_external_node_classification).returns(false)
+        do_render
+
+        response.should_not have_tag('#node_class_ids')
       end
 
       it 'should provide a remove link for each associated class'
@@ -112,7 +129,8 @@ describe '/nodes/edit' do
         @node.node_groups << @groups[0..3]
       end
 
-      it 'should show the associated groups' do
+      it 'should show the associated groups when using node classification' do
+        SETTINGS.stubs(:use_external_node_classification).returns(true)
         do_render
 
         response.should have_tag('#tokenizer') do
@@ -123,6 +141,13 @@ describe '/nodes/edit' do
             struct.should include({"id" => @groups[idx].id, "name" => @groups[idx].name})
           end
         end
+      end
+
+      it 'should not show associated groups when not using node classification' do
+        SETTINGS.stubs(:use_external_node_classification).returns(false)
+        do_render
+
+        response.should_not have_tag('#node_group_ids')
       end
 
       it 'should provide a remove link for each associated group'
