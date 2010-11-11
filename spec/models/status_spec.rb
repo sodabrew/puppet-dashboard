@@ -18,4 +18,39 @@ describe Status  do
       end
     end
   end
+
+  describe ".within_daily_run_history" do
+    context "when the daily_run_history_length is 1 day" do
+      before :each do
+        time = Time.now.beginning_of_day + 1.hours
+        Report.generate!(:report => report_yaml_with(:time => time))
+
+        time = Time.now.beginning_of_day - 1.hours
+        Report.generate!(:report => report_yaml_with(:time => time))
+
+        SETTINGS.stubs(:daily_run_history_length).returns(1)
+      end
+
+      it "should return reports for the correct day only" do
+        Status.within_daily_run_history.first.total.should == 1
+      end
+    end
+
+    context "when the daily_run_history_length is 0 days" do
+      before :each do
+        time = Time.now.beginning_of_day + 1.hours
+        Report.generate!(:report => report_yaml_with(:time => time))
+
+        time = Time.now.beginning_of_day - 1.hours
+        Report.generate!(:report => report_yaml_with(:time => time))
+
+        SETTINGS.stubs(:daily_run_history_length).returns(0)
+      end
+
+      it "should not return any history" do
+        Status.within_daily_run_history.should == []
+      end
+    end
+  end
+
 end

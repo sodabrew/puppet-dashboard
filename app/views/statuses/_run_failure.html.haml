@@ -1,12 +1,12 @@
 - nodes = local_assigns[:nodes]
 - node = local_assigns[:node]
-- args = {:start => Status::INTERVAL_CUTOFF.ago, :limit => Status::INTERVAL_CUTOFF/1.day}
+- args = {}
 - args[:node] = node if node
 - args[:nodes] = nodes if nodes
-- statuses = Status.by_interval(args)
+- statuses = Status.within_daily_run_history(args)
 
 %h3 Daily run status
-%p.legend Number and status of runs during the <strong>last #{Status::INTERVAL_CUTOFF/1.day} days</strong>:
+%p.legend Number and status of runs during the <strong>last #{SETTINGS.daily_run_history_length} days</strong>:
 
 - if statuses.present?
   %table.inspector.data.status.bar

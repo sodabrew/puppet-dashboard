@@ -16,9 +16,6 @@ class Status
     by_interval options.merge(:start => 1.hour.ago)
   end
 
-  # Default time in seconds for the interval
-  INTERVAL_CUTOFF = 30.days
-
   # Returns an array of Statuses by date for either a :node, or :nodes or all nodes in the system.
   #
   # Options:
@@ -61,6 +58,10 @@ class Status
     sql << "LIMIT #{options[:limit]}" if options[:limit]
 
     return execute(sql)
+  end
+
+  def self.within_daily_run_history(options={})
+    self.by_interval( options.merge( :start => SETTINGS.daily_run_history_length.days.ago, :limit => SETTINGS.daily_run_history_length ) )
   end
 
   def self.runtime
