@@ -18,7 +18,7 @@
         %p
           = pluralize @no_longer_reporting_nodes.length, 'node'
           = @no_longer_reporting_nodes.length == 1 ? 'has' : 'have'
-          not reported in the last #{time_ago_in_words Node::NO_LONGER_REPORTING_CUTOFF.ago}:
+          not reported in the last #{time_ago_in_words SETTINGS.no_longer_reporting_cutoff.seconds.ago}:
           = succeed '.' do
             = truncated_node_sentence(@no_longer_reporting_nodes, :more_link => no_longer_reporting_nodes_path)
 
