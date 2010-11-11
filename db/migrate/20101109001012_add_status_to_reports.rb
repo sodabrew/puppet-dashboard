@@ -12,6 +12,10 @@ class AddStatusToReports < ActiveRecord::Migration
     end
   end
 
+  class Node < ActiveRecord::Base
+    belongs_to :last_report, :class_name => 'Report'
+  end
+
   def self.up
     add_column :reports, :status, :string
     add_index :reports, [:time, :node_id, :status]
