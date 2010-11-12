@@ -13,9 +13,6 @@ require 'activesupport'
 #   # Read from default "config/settings.yml" and "config/settings.yml.example" files:
 #   SETTINGS = SettingsReader.read
 #
-#   # Read a specific file:
-#   SETTINGS = SettingsReader.read("myfile.yml")
-#
 class SettingsReader
   # Return an OpenStruct object with setting information. The settings are read
   # from an ERB-parsed YAML file.
@@ -29,7 +26,6 @@ class SettingsReader
   def self.read(*args)
     opts = args.extract_options!
     verbose = opts[:verbose] != false
-    given_file = args.first
 
     normal_file = "config/settings.yml"
     sample_file = "config/settings.yml.example"
@@ -37,9 +33,7 @@ class SettingsReader
 
     message = "** SettingsReader - "
 
-    if object = self.filename_to_ostruct(given_file)
-      message << "loaded '#{given_file}'"
-    elsif object = self.filename_to_ostruct(File.join(rails_root, normal_file))
+    if object = self.filename_to_ostruct(File.join(rails_root, normal_file))
       message << "loaded '#{normal_file}'"
     elsif object = self.filename_to_ostruct(File.join(rails_root, sample_file))
       message << "loaded '#{sample_file}'"
