@@ -12,7 +12,7 @@ require 'yaml'
 require 'uri'
 require 'net/http'
 
-DASHBOARD_URL="http://dashboard:3000"
+DASHBOARD_URL = "http://dashboard:3000"
 
 # These settings are only used when connecting to dashboard over https (SSL)
 CERT_PATH = "/etc/puppet/ssl/certs/puppet.pem"
@@ -21,7 +21,8 @@ CA_PATH   = "/etc/puppet/ssl/certs/ca.pem"
 
 NODE = ARGV.first
 
-uri = URI.parse("#{DASHBOARD_URL}/nodes/#{NODE}")
+url = ENV['EXTERNAL_NODE_URL'] || DASHBOARD_URL
+uri = URI.parse("#{url}/nodes/#{NODE}")
 require 'net/https' if uri.scheme == 'https'
 
 http = Net::HTTP.new(uri.host, uri.port)
