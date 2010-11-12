@@ -13,7 +13,17 @@ class ApplicationController < ActionController::Base
 
   helper_method :current_user_session, :current_user
 
+  before_filter :set_timezone
+
   private
+
+  def set_timezone
+    if SETTINGS.time_zone
+      time_zone_obj = ActiveSupport::TimeZone.new(SETTINGS.time_zone)
+      raise Exception.new("Invalid timezone #{SETTINGS.time_zone.inspect}") unless time_zone_obj
+      Time.zone = time_zone_obj
+    end
+  end
 
   def current_user_session
     return @current_user_session if defined?(@current_user_session)
