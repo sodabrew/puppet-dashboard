@@ -13,13 +13,13 @@ FILE
 
   it "should use settings.yml if it exists" do
     File.stubs(:read).with {|filename| File.basename(filename) == "settings.yml"}.returns(@settings_file)
-    File.stubs(:read).with {|filename| File.basename(filename) == "settings-sample.yml"}.returns(@sample_file)
+    File.stubs(:read).with {|filename| File.basename(filename) == "settings.yml.example"}.returns(@sample_file)
 
     SettingsReader.read.should == OpenStruct.new("foo" => "bar")
   end
 
-  it "should use settings-sample.yml if settings.yml does not exist" do
-    File.stubs(:read).with {|filename| File.basename(filename) == "settings-sample.yml"}.returns(@sample_file)
+  it "should use settings.yml.example if settings.yml does not exist" do
+    File.stubs(:read).with {|filename| File.basename(filename) == "settings.yml.example"}.returns(@sample_file)
 
     SettingsReader.read.should == OpenStruct.new("bat" => "baz")
   end

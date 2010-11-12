@@ -10,7 +10,7 @@ require 'activesupport'
 # Reads settings from an ERB-parsed YAML file and returns an OpenStruct object.
 #
 # Examples:
-#   # Read from default "config/settings.yml" and "config/settings-sample.yml" files:
+#   # Read from default "config/settings.yml" and "config/settings.yml.example" files:
 #   SETTINGS = SettingsReader.read
 #
 #   # Read a specific file:
@@ -22,7 +22,7 @@ class SettingsReader
   #
   # Arguments:
   # * Filename to read settings from. Optional, if not given will try
-  #   "config/setting.yml" and "config/setting-sample.yml".
+  #   "config/setting.yml" and "config/setting.yml.example".
   #
   # Options:
   # * :verbose => Print status to screen on error. Defaults to true.
@@ -32,7 +32,7 @@ class SettingsReader
     given_file = args.first
 
     normal_file = "config/settings.yml"
-    sample_file = "config/settings-sample.yml"
+    sample_file = "config/settings.yml.example"
     rails_root = RAILS_ROOT rescue File.dirname(File.dirname(__FILE__))
 
     message = "** SettingsReader - "
