@@ -3,7 +3,7 @@
 # This file is meant for storing setting information that is never
 # published or committed to a revision control system.
 #
-# Do not modify this "config/settings-sample.yml" file directly -- you
+# Do not modify this "config/settings.yml.example" file directly -- you
 # should copy it to "config/settings.yml" and customize it there.
 #
 #---[ Values ]----------------------------------------------------------
