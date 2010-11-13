@@ -61,7 +61,7 @@ class Node < ActiveRecord::Base
   named_scope :unreported, :conditions => {:reported_at => nil}
 
   # Return nodes that haven't reported recently.
-  named_scope :no_longer_reporting, :conditions => ['reported_at < ?', SETTINGS.no_longer_reporting_cutoff.seconds.ago]
+  named_scope :no_longer_reporting, lambda{{:conditions => ['reported_at < ?', SETTINGS.no_longer_reporting_cutoff.seconds.ago] }}
 
   def self.count_by_currentness_and_successfulness(currentness, successfulness)
     operator = successfulness ? '!=' : '='
