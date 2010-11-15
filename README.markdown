@@ -305,7 +305,7 @@ The Puppet Dashboard can act as an external node classification tool, which will
     If you would prefer not to edit the external_node script, you may override these settings using environment variables: PUPPET_DASHBOARD_URL, PUPPET_CERT_PATH, PUPPET_PKEY_PATH, PUPPET_CA_PATH. For example:
         [puppetmasterd]
           node_terminus  = exec
-          external_nodes = env PUPPET_DASHBOARD_URL=http://dashboard.localdomain:8000 /opt/dashboard/bin/external_node
+          external_nodes = /usr/bin/env PUPPET_DASHBOARD_URL=http://dashboard.localdomain:8000 /opt/dashboard/bin/external_node
 
 
 2.  Restart the `puppetmasterd` process.
