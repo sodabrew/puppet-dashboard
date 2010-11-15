@@ -45,4 +45,11 @@ daily_run_history_length: 30
 
 use_external_node_classification: true
 
+# Uncomment the following line to set a local time zone.  Run
+# "rake time:zones:local" for the name of your local time zone.
+#time_zone: 'Pacific Time (US & Canada)'
+
+# Look at http://ruby-doc.org/core/classes/Time.html#M000298 for the strftime formatting
+date_format: '%Y-%m-%d %H:%M %Z'
+
 #===[ fin ]=============================================================

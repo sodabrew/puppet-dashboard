@@ -5,9 +5,9 @@ class Status
     @unchanged = datum["unchanged"].to_i
     @failed = datum["failed"].to_i
     @total = datum["total"].to_i
-    @start = datum["start"].to_time
+    @start = Time.parse(datum["start"])
   end
- 
+
   def self.latest(options={})
     by_interval(options.merge(:limit => 1)).first
   end
@@ -49,7 +49,7 @@ class Status
     SQL
 
     sql << "WHERE " if has_where
-    sql << "time >= \"#{options[:start].to_s(:db)}\"\n" if options[:start]
+    sql << "time >= \"#{options[:start].getutc.to_s(:db)}\"\n" if options[:start]
     sql << "AND " if has_and
     sql << "node_id = #{options[:node].id} " if options[:node]
     sql << "node_id IN (#{options[:nodes].map(&:id).join(',')})\n" if options[:nodes].present?

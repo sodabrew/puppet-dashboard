@@ -167,6 +167,7 @@ describe Node do
 
   describe "no_longer_reporting" do
     it "should return all nodes whose latest report is more than 1 hour ago" do
+      SETTINGS.expects(:no_longer_reporting_cutoff).at_least_once.returns(1.hour.to_i)
       old = node = Node.generate(:reported_at => 2.hours.ago, :name => "old")
       new = node = Node.generate(:reported_at => 10.minutes.ago, :name => "new")
 
