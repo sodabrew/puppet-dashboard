@@ -50,6 +50,7 @@ use_external_node_classification: true
 #time_zone: 'Pacific Time (US & Canada)'
 
 # Look at http://ruby-doc.org/core/classes/Time.html#M000298 for the strftime formatting
-date_format: '%Y-%m-%d %H:%M %Z'
+datetime_format: '%Y-%m-%d %H:%M %Z'
+date_format: '%Y-%m-%d'
 
 #===[ fin ]=============================================================
