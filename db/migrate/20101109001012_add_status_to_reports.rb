@@ -13,7 +13,7 @@ class AddStatusToReports < ActiveRecord::Migration
   end
 
   class Node < ActiveRecord::Base
-    belongs_to :last_report, :class_name => 'Report'
+    belongs_to :last_report, :class_name => 'AddStatusToReports::Report'
   end
 
   def self.up
