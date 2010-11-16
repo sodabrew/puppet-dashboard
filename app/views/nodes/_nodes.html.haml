@@ -14,7 +14,7 @@
         &darr; Latest report
   %tbody
     - if nodes.present?
-      - nodes.each do |node|
+      - nodes.sort {|a,b| (b.reported_at || Time.at(0)) <=> (a.reported_at || Time.at(0))}.each do |node|
         - sources = container.nodes_with_sources[node] unless container.nil?
         %tr[node]{:class => "#{'active' if node == @node}"}
           %td.status{:class => node.status_class}

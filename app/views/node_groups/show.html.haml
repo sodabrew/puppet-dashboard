@@ -22,7 +22,7 @@
               %th Group
               %th Source
           %tbody
-            - @node_group.node_group_children_with_sources.each do |group,sources|
+            - @node_group.node_group_children_with_sources.sort.each do |group,sources|
               %tr
                 %td
                   %strong= link_to(group.name,group)

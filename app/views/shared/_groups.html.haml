@@ -7,7 +7,7 @@
           %th Group
           %th Source
       %tbody
-        - resource.node_groups_with_sources.each do |group,sources|
+        - resource.node_groups_with_sources.sort.each do |group,sources|
           %tr
             %td
               %strong= link_to(group.name,group)
