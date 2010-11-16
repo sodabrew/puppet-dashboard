@@ -5,7 +5,7 @@ class Status
     @unchanged = datum["unchanged"].to_i
     @failed = datum["failed"].to_i
     @total = datum["total"].to_i
-    @start = Time.parse(datum["start"])
+    @start = Time.zone.parse(datum["start"])
   end
 
   def self.latest(options={})
@@ -34,7 +34,7 @@ class Status
     # WARNING: This uses the local server time, regardless of what is set in the Rails config.
     # This should be changed once we have a user-friendly settings file, or can get the browser
     # time zone to this method.
-    offset = Time.now.utc_offset
+    offset = Time.zone.now.utc_offset
     offset_timestamp = "UNIX_TIMESTAMP(time) + #{offset}"
     date = "DATE(FROM_UNIXTIME(#{offset_timestamp}))"
 
