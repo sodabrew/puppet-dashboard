@@ -83,7 +83,13 @@ class NodesController < InheritedResources::Base
   protected
 
   def resource
-    get_resource_ivar || set_resource_ivar(end_of_association_chain.find_by_name!(params[:id]))
+    node = get_resource_ivar
+    return node if node
+
+    node ||= end_of_association_chain.find(params[:id]) rescue nil
+    node ||= end_of_association_chain.find_by_name!(params[:id])
+
+    set_resource_ivar(node)
   end
 
   # Render the index using the +scope_name+ (e.g. :successful for Node.successful).

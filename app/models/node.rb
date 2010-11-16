@@ -96,10 +96,6 @@ class Node < ActiveRecord::Base
     nodes.concat matches.reject {|match| found.include? match.downcase}.map {|match| Node.create!(:name => match)}
   end
 
-  def to_param
-    name.to_s
-  end
-
   def configuration
     { 'name' => name, 'classes' => all_node_classes.collect(&:name), 'parameters' => parameter_list }
   end
