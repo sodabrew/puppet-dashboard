@@ -5,9 +5,9 @@ class Status
     @unchanged = datum["unchanged"].to_i
     @failed = datum["failed"].to_i
     @total = datum["total"].to_i
-    @start = datum["start"].to_time
+    @start = Time.zone.parse(datum["start"])
   end
- 
+
   def self.latest(options={})
     by_interval(options.merge(:limit => 1)).first
   end
@@ -15,9 +15,6 @@ class Status
   def self.recent(options={})
     by_interval options.merge(:start => 1.hour.ago)
   end
-
-  # Default time in seconds for the interval
-  INTERVAL_CUTOFF = 30.days
 
   # Returns an array of Statuses by date for either a :node, or :nodes or all nodes in the system.
   #
@@ -37,7 +34,7 @@ class Status
     # WARNING: This uses the local server time, regardless of what is set in the Rails config.
     # This should be changed once we have a user-friendly settings file, or can get the browser
     # time zone to this method.
-    offset = Time.now.utc_offset
+    offset = Time.zone.now.utc_offset
     offset_timestamp = "UNIX_TIMESTAMP(time) + #{offset}"
     date = "DATE(FROM_UNIXTIME(#{offset_timestamp}))"
 
@@ -52,7 +49,7 @@ class Status
     SQL
 
     sql << "WHERE " if has_where
-    sql << "time >= \"#{options[:start].to_s(:db)}\"\n" if options[:start]
+    sql << "time >= \"#{options[:start].getutc.to_s(:db)}\"\n" if options[:start]
     sql << "AND " if has_and
     sql << "node_id = #{options[:node].id} " if options[:node]
     sql << "node_id IN (#{options[:nodes].map(&:id).join(',')})\n" if options[:nodes].present?
@@ -61,6 +58,10 @@ class Status
     sql << "LIMIT #{options[:limit]}" if options[:limit]
 
     return execute(sql)
+  end
+
+  def self.within_daily_run_history(options={})
+    self.by_interval( options.merge( :start => SETTINGS.daily_run_history_length.days.ago, :limit => SETTINGS.daily_run_history_length ) )
   end
 
   def self.runtime

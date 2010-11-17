@@ -296,11 +296,17 @@ The Puppet Dashboard can act as an external node classification tool, which will
           node_terminus  = exec
           external_nodes = /opt/dashboard/bin/external_node
 
-    *NOTE:* Set the `external_nodes` value to the absolute path of the Puppet Dashboard's `bin/external_node` program. If the Puppet Dashboard is running on a different computer, you should copy this file to the Puppet Master to a local directory like `/etc/puppet` and specify the path to it.
+    Set the `external_nodes` value to the absolute path of the Puppet Dashboard's `bin/external_node` program. If the Puppet Dashboard is running on a different computer, you should copy this file to the Puppet Master to a local directory like `/etc/puppet` and specify the path to it.
 
-    *NOTE:* The `bin/external_node` program connects to the Puppet Dashboard at `localhost` on port `3000`. If your Puppet Dashboard is running on a different host or node, please modify this file.
+    The `bin/external_node` program connects to the Puppet Dashboard at `localhost` on port `3000`. If your Puppet Dashboard is running on a different host or node, please modify this file.
 
-    *NOTE:* If you have Dashboard set up to use HTTPS, change the DASHBOARD_URL in `external_node` to the `https` prefix and the correct port number (443, by default). You may also need to change the CERT_PATH, and PKEY_PATH variables if your puppet master's hostname is not `puppet` or if your ssldir is not `/etc/puppet/ssl`.
+    If you have Dashboard set up to use HTTPS, change the DASHBOARD_URL in `external_node` to the `https` prefix and the correct port number (443, by default). You may also need to change the CERT_PATH, PKEY_PATH, and CA_PATH variables if your puppet master's hostname is not `puppet` or if your ssldir is not `/etc/puppet/ssl`.
+
+    If you would prefer not to edit the external_node script, you may override these settings using environment variables: PUPPET_DASHBOARD_URL, PUPPET_CERT_PATH, PUPPET_PKEY_PATH, PUPPET_CA_PATH. For example:
+        [puppetmasterd]
+          node_terminus  = exec
+          external_nodes = /usr/bin/env PUPPET_DASHBOARD_URL=http://dashboard.localdomain:8000 /opt/dashboard/bin/external_node
+
 
 2.  Restart the `puppetmasterd` process.
 

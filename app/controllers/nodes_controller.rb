@@ -6,7 +6,10 @@ class NodesController < InheritedResources::Base
   layout lambda {|c| c.request.xhr? ? false : 'application' }
 
   def index
+    raise NodeClassificationDisabledError.new if !SETTINGS.use_external_node_classification and request.format == :yaml
     scoped_index
+  rescue NodeClassificationDisabledError => e
+    render :text => "Node classification has been disabled", :content_type => 'text/plain', :status => 403
   end
 
   def successful
@@ -39,6 +42,7 @@ class NodesController < InheritedResources::Base
 
   def show
     begin
+      raise NodeClassificationDisabledError.new if !SETTINGS.use_external_node_classification and request.format == :yaml
       show!
     rescue ActiveRecord::RecordNotFound => e
       raise e unless request.format == :yaml
@@ -47,6 +51,8 @@ class NodesController < InheritedResources::Base
     rescue ParameterConflictError => e
       raise e unless request.format == :yaml
       render :text => "Node \"#{resource.name}\" has conflicting parameter(s): #{resource.errors.on(:parameters).to_a.to_sentence}", :content_type => 'text/plain', :status => 500
+    rescue NodeClassificationDisabledError => e
+      render :text => "Node classification has been disabled", :content_type => 'text/plain', :status => 403
     end
   end
 
@@ -77,7 +83,13 @@ class NodesController < InheritedResources::Base
   protected
 
   def resource
-    get_resource_ivar || set_resource_ivar(end_of_association_chain.find_by_name!(params[:id]))
+    node = get_resource_ivar
+    return node if node
+
+    node ||= end_of_association_chain.find(params[:id]) rescue nil
+    node ||= end_of_association_chain.find_by_name!(params[:id])
+
+    set_resource_ivar(node)
   end
 
   # Render the index using the +scope_name+ (e.g. :successful for Node.successful).

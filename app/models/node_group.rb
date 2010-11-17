@@ -24,6 +24,8 @@ class NodeGroup < ActiveRecord::Base
   validates_presence_of :name
   validates_uniqueness_of :name
 
+  default_scope :order => 'name ASC'
+
   named_scope :search, lambda{|q| q.blank? ? {} : {:conditions => ['name LIKE ?', "%#{q}%"]} }
 
   named_scope :with_nodes_count,

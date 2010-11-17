@@ -14,6 +14,8 @@ class NodeClass < ActiveRecord::Base
   validates_format_of :name, :with => /\A([a-z0-9][-\w]*)(::[a-z0-9][-\w]*)*\Z/, :message => "must contain a valid Puppet class name, e.g. 'foo' or 'foo::bar'"
   validates_uniqueness_of :name
 
+  default_scope :order => 'name ASC'
+
   named_scope :search, lambda{|q| q.blank? ? {} : {:conditions => ['name LIKE ?', "%#{q}%"]} }
 
   named_scope :with_nodes_count,

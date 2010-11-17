@@ -24,18 +24,35 @@ describe NodesController do
     end
 
     context "as YAML" do
-      it "should return YAML when the nodes are valid" do
-        get :index, :format => "yaml"
+      context "when using node classification" do
+        before :each do
+          SETTINGS.stubs(:use_external_node_classification).returns(true)
+        end
 
-        response.should be_success
-        struct = yaml_from_response_body
-        struct.size.should == 1
-        struct.first["name"].should == @node.name
+        it "should return YAML when the nodes are valid" do
+          get :index, :format => "yaml"
+
+          response.should be_success
+          struct = yaml_from_response_body
+          struct.size.should == 1
+          struct.first["name"].should == @node.name
+        end
+
+        it "should propagate errors encountered when a node is invalid" do
+          Node.any_instance.stubs(:compiled_parameters).raises ParameterConflictError
+          lambda {get :index, :format => "yaml"}.should raise_error(ParameterConflictError)
+        end
       end
 
-      it "should propagate errors encountered when a node is invalid" do
-        Node.any_instance.stubs(:compiled_parameters).raises ParameterConflictError
-        lambda {get :index, :format => "yaml"}.should raise_error(ParameterConflictError)
+      context "when not using node classification" do
+        it "should raise an error and respond 403" do
+          SETTINGS.stubs(:use_external_node_classification).returns(false)
+          get :index, :format => "yaml"
+
+          response.body.should =~ /Node classification has been disabled/
+          response.should_not be_success
+          response.response_code.should == 403
+        end
       end
     end
   end
@@ -82,28 +99,45 @@ describe NodesController do
     end
 
     context "as YAML" do
-      it "should return YAML when the node is valid" do
-        get :show, :id => @node.name, :format => "yaml"
+      context "when using node classification" do
+        before :each do
+          SETTINGS.stubs(:use_external_node_classification).returns(true)
+        end
 
-        response.should be_success
-        struct = yaml_from_response_body
-        struct["name"].should == @node.name
+        it "should return YAML when the node is valid" do
+          get :show, :id => @node.name, :format => "yaml"
+
+          response.should be_success
+          struct = yaml_from_response_body
+          struct["name"].should == @node.name
+        end
+
+        it "should explain errors encountered when the node is invalid" do
+          Node.any_instance.stubs(:compiled_parameters).raises ParameterConflictError
+          get :show, :id => @node.name, :format => "yaml"
+
+          response.should_not be_success
+          response.body.should =~ /has conflicting parameter\(s\)/
+        end
+
+        it "should return YAML for an empty node when the node is not found" do
+          get :show, :id => "nonexistent", :format => "yaml"
+
+          response.should be_success
+          struct = yaml_from_response_body
+          struct.should == {'classes' => []}
+        end
       end
 
-      it "should explain errors encountered when the node is invalid" do
-        Node.any_instance.stubs(:compiled_parameters).raises ParameterConflictError
-        get :show, :id => @node.name, :format => "yaml"
+      context "when not using node classification" do
+        it "should raise an error and respond 403" do
+          SETTINGS.stubs(:use_external_node_classification).returns(false)
+          get :show, :id => @node.name, :format => "yaml"
 
-        response.should_not be_success
-        response.body.should =~ /has conflicting parameter\(s\)/
-      end
-
-      it "should return YAML for an empty node when the node is not found" do
-        get :show, :id => "nonexistent", :format => "yaml"
-
-        response.should be_success
-        struct = yaml_from_response_body
-        struct.should == {'classes' => []}
+          response.body.should =~ /Node classification has been disabled/
+          response.should_not be_success
+          response.response_code.should == 403
+        end
       end
     end
   end
@@ -114,7 +148,7 @@ describe NodesController do
     end
 
     def do_get
-      get :edit, :id => @node.name
+      get :edit, :id => @node.id
     end
 
     it 'should make the requested node available to the view' do
@@ -126,12 +160,18 @@ describe NodesController do
       do_get
       response.should render_template('edit')
     end
+
+    it 'should work when given a node name' do
+      get :edit, :id => @node.name
+
+      assigns[:node].should == @node
+    end
   end
 
   describe '#update' do
     before :each do
       @node = Node.generate!
-      @params = { :id => @node.name, :node => @node.attributes }
+      @params = { :id => @node.id, :node => @node.attributes }
     end
 
     def do_put
@@ -141,6 +181,13 @@ describe NodesController do
     it 'should fail when an invalid node id is given' do
       @params[:id] = 'unknown'
       lambda { do_put }.should raise_error(ActiveRecord::RecordNotFound)
+    end
+
+    it 'should work when given a node name' do
+      @params.merge!({:id => @node.name})
+
+      do_put
+      assigns[:node].should == @node
     end
 
     describe 'when a valid node id is given' do
@@ -367,15 +414,20 @@ describe NodesController do
       end
 
       context "as YAML" do
-        before { get action, action_params.merge(:format => "yaml") }
+        context "when using node classification" do
+          before :each do
+            SETTINGS.stubs(:use_external_node_classification).returns(true)
+            get action, action_params.merge(:format => "yaml")
+          end
 
-        it_should_behave_like "a successful scoped_index rendering"
-        it_should_behave_like "an un-paginated nodes collection"
+          it_should_behave_like "a successful scoped_index rendering"
+          it_should_behave_like "an un-paginated nodes collection"
 
-        it "should return YAML" do
-          struct = yaml_from_response_body
-          struct.size.should == 1
-          struct.first["name"].should == action
+          it "should return YAML" do
+            struct = yaml_from_response_body
+            struct.size.should == 1
+            struct.first["name"].should == action
+          end
         end
       end
 

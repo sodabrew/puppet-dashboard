@@ -3,7 +3,7 @@
 # This file is meant for storing setting information that is never
 # published or committed to a revision control system.
 #
-# Do not modify this "config/settings-sample.yml" file directly -- you
+# Do not modify this "config/settings.yml.example" file directly -- you
 # should copy it to "config/settings.yml" and customize it there.
 #
 #---[ Values ]----------------------------------------------------------
@@ -36,5 +36,21 @@ inventory_server: 'puppet'
 
 # Port for the inventory server.
 inventory_port: 8140
+
+# Amount of time in seconds since last report before a node is considered no longer reporting
+no_longer_reporting_cutoff: 3600
+
+# How many days of history to display on the "Daily Run Status" graph
+daily_run_history_length: 30
+
+use_external_node_classification: true
+
+# Uncomment the following line to set a local time zone.  Run
+# "rake time:zones:local" for the name of your local time zone.
+#time_zone: 'Pacific Time (US & Canada)'
+
+# Look at http://ruby-doc.org/core/classes/Time.html#M000298 for the strftime formatting
+datetime_format: '%Y-%m-%d %H:%M %Z'
+date_format: '%Y-%m-%d'
 
 #===[ fin ]=============================================================
