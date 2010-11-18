@@ -44,11 +44,11 @@ module ApplicationHelper
 
       collection_hash_values = collection.map{ |c|
         [
-          key.respond_to?(:call) ? 
-            key.call(c) : 
+          key.respond_to?(:call) ?
+            key.call(c) :
             link_to_if(options[:link], c.send(key), c),
-          value ? 
-            (value.respond_to?(:call) ? value.call(c) : c.send(value)) : 
+          value ?
+            (value.respond_to?(:call) ? value.call(c) : c.send(value)) :
             false
         ]
       }
@@ -94,7 +94,7 @@ module ApplicationHelper
   def header_for(form)
     content_tag(:h2, :class => "header") do
       (form.object.new_record? ? "Add" : "Edit") + " " + form.object.class.name.titleize.downcase
-		end
+    end
   end
 
   include WillPaginate::ViewHelpers
