@@ -239,11 +239,6 @@ describe NodesController do
         end
 
         describe 'and the data provided make the node valid' do
-          it 'should note the update success in flash' do
-            do_put
-            flash[:notice].should match(/success/i)
-          end
-
           it 'should update the node with the data provided' do
             @params[:node]['name'] = 'new name'
             do_put
