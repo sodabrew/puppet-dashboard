@@ -21,7 +21,8 @@
       %li
         = link_to "Custom query", search_nodes_path
   .footer.actionbar
-    = link_to "Add node", new_node_path, :class => 'button'
+    - if SETTINGS.use_external_node_classification
+      = link_to "Add node", new_node_path, :class => 'button'
 
 - if SETTINGS.use_external_node_classification
   - for type in [NodeClass, NodeGroup]

@@ -5,9 +5,10 @@
       = node_status_icon(@node)
       Node:
       = h @node.name
-    %ul.actions
-      %li= link_to 'Edit', edit_node_path(@node), :class => "edit button", :rel => 'inspect'
-      %li= link_to 'Destroy', @node, :confirm => 'Are you sure?', :method => :delete, :class => "delete button"
+    - if SETTINGS.use_external_node_classification
+      %ul.actions
+        %li= link_to 'Edit', edit_node_path(@node), :class => "edit button", :rel => 'inspect'
+        %li= link_to 'Destroy', @node, :confirm => 'Are you sure?', :method => :delete, :class => "delete button"
   .item
     - unless @node.description.blank?
       .description= simple_format h(@node.description)
