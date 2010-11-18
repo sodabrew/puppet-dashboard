@@ -3,7 +3,7 @@ require 'erb'
 require 'ostruct'
 
 require 'rubygems'
-require 'activesupport'
+require 'active_support'
 
 # = SettingsReader
 #
