@@ -7,13 +7,11 @@ ActionController::Routing::Routes.draw do |map|
     groups.resources :nodes, :requirements => {:id => /.*/}
   end
 
-  map.resources :nodes, 
+  map.resources :nodes,
     :member => {
       :facts => :get,
       :reports => :get},
     :collection => {
-     :successful => :get,
-     :failed     => :get,
      :unreported => :get,
      :no_longer_reporting => :get,
      :search => :get},

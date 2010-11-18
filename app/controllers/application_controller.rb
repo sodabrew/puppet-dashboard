@@ -17,6 +17,14 @@ class ApplicationController < ActionController::Base
 
   private
 
+  def raise_unless_using_external_node_classification
+    raise NodeClassificationDisabledError.new unless SETTINGS.use_external_node_classification
+  end
+
+  rescue_from NodeClassificationDisabledError do |e|
+    render :text => "Node classification has been disabled", :content_type => 'text/plain', :status => 403
+  end
+
   def set_timezone
     if SETTINGS.time_zone
       time_zone_obj = ActiveSupport::TimeZone.new(SETTINGS.time_zone)

@@ -2,14 +2,13 @@ class NodesController < InheritedResources::Base
   belongs_to :node_class, :optional => true
   belongs_to :node_group, :optional => true
   respond_to :html, :yaml, :json
+  before_filter :raise_unless_using_external_node_classification, :only => [:new, :edit, :create, :update, :destroy]
 
   layout lambda {|c| c.request.xhr? ? false : 'application' }
 
   def index
     raise NodeClassificationDisabledError.new if !SETTINGS.use_external_node_classification and request.format == :yaml
     scoped_index
-  rescue NodeClassificationDisabledError => e
-    render :text => "Node classification has been disabled", :content_type => 'text/plain', :status => 403
   end
 
   def successful

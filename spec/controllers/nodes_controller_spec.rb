@@ -143,97 +143,128 @@ describe NodesController do
   end
 
   describe '#edit' do
-    before :each do
-      @node = Node.generate!
-    end
-
     def do_get
       get :edit, :id => @node.id
     end
 
-    it 'should make the requested node available to the view' do
-      do_get
-      assigns[:node].should == @node
+    describe "when using node classification" do
+      before :each do
+        SETTINGS.stubs(:use_external_node_classification).returns(true)
+        @node = Node.generate!
+
+        it 'should make the requested node available to the view' do
+          do_get
+          assigns[:node].should == @node
+        end
+
+        it 'should render the edit template' do
+          do_get
+          response.should render_template('edit')
+        end
+
+        it 'should work when given a node name' do
+          get :edit, :id => @node.name
+
+          assigns[:node].should == @node
+        end
+      end
     end
 
-    it 'should render the edit template' do
-      do_get
-      response.should render_template('edit')
-    end
+    describe "when not using node classification" do
+      before :each do
+        SETTINGS.stubs(:use_external_node_classification).returns(false)
+        @node = Node.generate!
+      end
 
-    it 'should work when given a node name' do
-      get :edit, :id => @node.name
+      it 'should render 403 text' do
+        do_get
 
-      assigns[:node].should == @node
+        response.body.should =~ /Node classification has been disabled/
+        response.should_not be_success
+        response.response_code.should == 403
+      end
     end
   end
 
   describe '#update' do
-    before :each do
-      @node = Node.generate!
-      @params = { :id => @node.id, :node => @node.attributes }
-    end
-
     def do_put
       put :update, @params
     end
 
-    it 'should fail when an invalid node id is given' do
-      @params[:id] = 'unknown'
-      lambda { do_put }.should raise_error(ActiveRecord::RecordNotFound)
-    end
-
-    it 'should work when given a node name' do
-      @params.merge!({:id => @node.name})
-
-      do_put
-      assigns[:node].should == @node
-    end
-
-    describe 'when a valid node id is given' do
-
-      describe 'and the data provided would make the node invalid' do
-        before :each do
-          @params[:node]['name'] = nil
-        end
-
-        it 'should make the node available to the view' do
-          do_put
-          assigns[:node].should == @node
-        end
-
-        it 'should not save the node' do
-          do_put
-          Node.find(@node.id).name.should_not be_nil
-        end
-
-        it 'should have errors on the node' do
-          do_put
-          assigns[:node].errors[:name].should_not be_blank
-        end
-
-        it 'should render the update action' do
-          do_put
-          response.should render_template('edit')
-        end
+    describe "when using node classification" do
+      before :each do
+        SETTINGS.stubs(:use_external_node_classification).returns(true)
+        @node = Node.generate!
+        @params = { :id => @node.id, :node => @node.attributes }
       end
 
-      describe 'and the data provided make the node valid' do
-        it 'should note the update success in flash' do
-          do_put
-          flash[:notice].should match(/success/i)
+      it 'should fail when an invalid node id is given' do
+        @params[:id] = 'unknown'
+        lambda { do_put }.should raise_error(ActiveRecord::RecordNotFound)
+      end
+
+      it 'should work when given a node name' do
+        @params.merge!({:id => @node.name})
+
+        do_put
+        assigns[:node].should == @node
+      end
+
+      describe 'when a valid node id is given' do
+
+        describe 'and the data provided would make the node invalid' do
+          before :each do
+            @params[:node]['name'] = nil
+          end
+
+          it 'should make the node available to the view' do
+            do_put
+            assigns[:node].should == @node
+          end
+
+          it 'should not save the node' do
+            do_put
+            Node.find(@node.id).name.should_not be_nil
+          end
+
+          it 'should have errors on the node' do
+            do_put
+            assigns[:node].errors[:name].should_not be_blank
+          end
+
+          it 'should render the update action' do
+            do_put
+            response.should render_template('edit')
+          end
         end
 
-        it 'should update the node with the data provided' do
-          @params[:node]['name'] = 'new name'
-          do_put
-          Node.find(@node.id).name.should == 'new name'
-        end
+        describe 'and the data provided make the node valid' do
+          it 'should update the node with the data provided' do
+            @params[:node]['name'] = 'new name'
+            do_put
+            Node.find(@node.id).name.should == 'new name'
+          end
 
-        it 'should have a valid node' do
-          do_put
-          assigns[:node].should be_valid
+          it 'should have a valid node' do
+            do_put
+            assigns[:node].should be_valid
+          end
         end
+      end
+    end
+
+    describe "when not using node classification" do
+      before :each do
+        SETTINGS.stubs(:use_external_node_classification).returns(false)
+        @node = Node.generate!
+      end
+
+      it 'should render 403 text' do
+        do_put
+
+        response.body.should =~ /Node classification has been disabled/
+        response.should_not be_success
+        response.response_code.should == 403
       end
     end
   end
