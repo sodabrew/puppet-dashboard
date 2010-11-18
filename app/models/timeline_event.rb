@@ -6,7 +6,7 @@ class TimelineEvent < ActiveRecord::Base
   named_scope :for_node, lambda { |node| {:conditions =>
     [ "(subject_id = :id AND subject_type = :klass) OR (secondary_subject_id = :id AND secondary_subject_type = :klass)",
       {:id => node.id, :klass => node.class.name} ] } }
-  named_scope :recent, :order => 'created_at DESC', :limit => 10
+  named_scope :recent, :order => 'created_at DESC, id DESC', :limit => 10
 
   def subject_name
     subject ? subject.name : "A #{subject_type.downcase}"
