@@ -1,6 +1,10 @@
 %ul#global-navigation.navigation
   %li
-    = link_to "Puppet Dashboard", root_path, :id => "logo"
+    - if SETTINGS.custom_logo_url
+      %a{:href => root_path, :id => "logo", :style => "background-image:none"}
+        %img{:src => SETTINGS.custom_logo_url, :height => '23', :width => '155', :alt => "Puppet Dashboard" }
+    - else
+      %a{:href => root_path, :id => "logo", :style => "text-indent: -9000px;"} Puppet Dashboard
   %li{:class => active_if(request.url == release_notes_url)}
     = link_to "v#{APP_VERSION}", release_notes_path
   %li &raquo;
