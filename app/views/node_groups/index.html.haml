@@ -22,10 +22,9 @@
               -# = check_box_tag "check_all"
             %td.name
               = link_to h(node_group.name), node_group
-        - if @node_groups.total_pages > 1
-          %tfoot
-            %tr
-              %td= pagination_for @node_groups
+        %tfoot
+          %tr
+            %td= pagination_for @node_groups
       - else
         %tr
           %td
