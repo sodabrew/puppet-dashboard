@@ -101,12 +101,35 @@ module ApplicationHelper
 
   # Return HTML with pagination controls for displaying an ActiveRecord +scope+.
   def pagination_for(scope, more_link=nil)
-    if scope.respond_to?(:total_pages) && scope.total_pages > 1
-      content_tag(:div, :class => 'actionbar') do
+    content_tag(:div, :class => 'actionbar') do
+      if scope.respond_to?(:total_pages) && scope.total_pages > 1
         [
-          more_link ? content_tag(:span, :class => 'pagination') { link_to('More &raquo;', more_link) } : will_paginate(scope),
-          tag(:br, :class=> 'clear')
+        more_link ? content_tag(:span, :class => 'pagination') { link_to('More &raquo;', more_link) } : will_paginate(scope),
+        content_tag(:div, :class => 'pagination') do
+          ' | '
+        end
         ]
+      else
+        []
+      end +
+      [
+        pagination_sizer_for(scope),
+        tag(:br, :class=> 'clear')
+      ]
+    end
+  end
+
+  def pagination_sizer_for(scope)
+    return nil if ! scope.first
+    return nil if ! scope.first.class.respond_to? :per_page
+    content_tag(:div, :class => 'pagination') do
+      [content_tag(:span){ "Per page: " }] +
+      [scope.first.class.per_page, 100, :all].map do |n|
+        if (params[:per_page] || scope.per_page.to_s) == n.to_s
+          content_tag(:span, :class => "current"){ n }
+        else
+          link_to(n, {:per_page => n})
+        end
       end
     end
   end

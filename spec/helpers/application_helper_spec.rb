@@ -61,7 +61,37 @@ describe ApplicationHelper do
     context "when not given paginated records" do
       subject { helper.pagination_for([]) }
 
-      it { should be_nil }
+      it { should have_tag('div.actionbar') }
+      it { should_not have_tag('a', /Next/) }
+    end
+
+    describe "when rendering the page size control" do
+      it "should use the default per_page setting" do
+        foo = Class.new do
+          def self.per_page; 51 ; end
+        end
+        paginated_results = [foo.new].paginate
+        helper.pagination_for(paginated_results).should have_tag('a', /51/)
+      end
+
+      it "should render spans instead of links for the current pagination size" do
+        foo = Class.new do
+          def self.per_page; 51 ; end
+        end
+        paginated_results = [foo.new].paginate(:per_page => 100)
+        helper.pagination_for(paginated_results).should have_tag('span', /100/)
+      end
+
+      it "should render spans instead of links for the current pagination size supplied in the url" do
+        foo = Class.new do
+          def self.per_page; 51 ; end
+        end
+        params[:per_page] = "all"
+        paginated_results = [foo.new]
+        helper.pagination_for(paginated_results).should have_tag('span', /all/)
+      end
+
+
     end
 
   end
