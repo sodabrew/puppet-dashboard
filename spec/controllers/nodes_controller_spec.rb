@@ -333,22 +333,6 @@ describe NodesController do
   end
 
   describe "#reports" do
-    shared_examples_for "a successful reports rendering" do
-      specify { response.should be_success }
-    end
-
-    shared_examples_for "a paginated reports collection" do
-      it "should be paginated" do
-        assigns[:reports].should be_a_kind_of(WillPaginate::Collection)
-      end
-    end
-
-    shared_examples_for "an un-paginated reports collection" do
-      it "should not be paginated" do
-        assigns[:reports].should_not be_a_kind_of(WillPaginate::Collection)
-      end
-    end
-
     before :each do
       @node = Node.generate!
       Node.stubs(:find_by_name! => @node)
@@ -360,15 +344,21 @@ describe NodesController do
     context "for HTML" do
       before { get :reports, :node => 123 }
 
-      it_should_behave_like "a successful reports rendering"
-      it_should_behave_like "a paginated reports collection"
+      specify { response.should be_success }
+
+      it "should be paginated" do
+        assigns[:reports].should be_a_kind_of(WillPaginate::Collection)
+      end
     end
 
     context "for YAML" do
       before { get :reports, :node => 123, :format => "yaml" }
 
-      it_should_behave_like "a successful reports rendering"
-      it_should_behave_like "an un-paginated reports collection"
+      specify { response.should be_success }
+
+      it "should not be paginated" do
+        assigns[:reports].should_not be_a_kind_of(WillPaginate::Collection)
+      end
 
       it "should return YAML" do
         response.body.should =~ %r{ruby/object:Report}
@@ -381,8 +371,11 @@ describe NodesController do
     context "for JSON" do
       before { get :reports, :node => 123, :format => "json" }
 
-      it_should_behave_like "a successful reports rendering"
-      it_should_behave_like "an un-paginated reports collection"
+      specify { response.should be_success }
+
+      it "should not be paginated" do
+        assigns[:reports].should_not be_a_kind_of(WillPaginate::Collection)
+      end
 
       it "should return JSON" do
         struct = json_from_response_body
@@ -406,42 +399,21 @@ describe NodesController do
 
   # Relies on #action returning name of a NodesController action, e.g. as "successful".
   describe "#scoped_index" do
-    shared_examples_for "a successful scoped_index rendering" do
-      specify { response.should be_success }
-
-      it "should assign only appropriate records" do
-        assigns[:nodes].size.should == 1
-        assigns[:nodes].first.name.should == action
-      end
-    end
-
-    shared_examples_for "a paginated nodes collection" do
-      it "should be paginated" do
-        assigns[:nodes].should be_a_kind_of(WillPaginate::Collection)
-      end
-    end
-
-    shared_examples_for "an un-paginated nodes collection" do
-      it "should not be paginated" do
-        assigns[:nodes].should_not be_a_kind_of(WillPaginate::Collection)
-      end
-    end
-
-    shared_examples_for "a scope_index action" do
-      before :each do
-        @results = [Node.generate!(:name => action)]
-        @results.stubs(:with_last_report => @results, :by_report_date => @results)
-        Node.stubs(action => @results)
-        Node.stubs(:by_currentness_and_successfulness => @results)
-      end
-
+    shared_examples_for "a scoped_index action" do
       context "as HTML" do
         before { get action, action_params }
 
-        it_should_behave_like "a successful scoped_index rendering"
+        specify { response.should be_success }
+
+        it "should assign only appropriate records" do
+          assigns[:nodes].size.should == 1
+          assigns[:nodes].first.name.should == "foo"
+        end
+
         # NOTE: Once upon a time, these were paginated but were breaking the graphs
-        # it_should_behave_like "a paginated nodes collection"
-        it_should_behave_like "an un-paginated nodes collection"
+        it "should not be paginated" do
+          assigns[:nodes].should_not be_a_kind_of(WillPaginate::Collection)
+        end
       end
 
       context "as YAML" do
@@ -451,13 +423,20 @@ describe NodesController do
             get action, action_params.merge(:format => "yaml")
           end
 
-          it_should_behave_like "a successful scoped_index rendering"
-          it_should_behave_like "an un-paginated nodes collection"
+          specify { response.should be_success }
+
+          it "should assign only appropriate records" do
+            assigns[:nodes].size.should == 1
+          end
+
+          it "should not be paginated" do
+            assigns[:nodes].should_not be_a_kind_of(WillPaginate::Collection)
+          end
 
           it "should return YAML" do
             struct = yaml_from_response_body
             struct.size.should == 1
-            struct.first["name"].should == action
+            struct.first["name"].should == "foo"
           end
         end
       end
@@ -465,23 +444,46 @@ describe NodesController do
       context "as JSON" do
         before { get action, action_params.merge(:format => "json") }
 
-        it_should_behave_like "a successful scoped_index rendering"
-        it_should_behave_like "an un-paginated nodes collection"
+        specify { response.should be_success }
+
+        it "should assign only appropriate records" do
+          assigns[:nodes].size.should == 1
+        end
+
+        it "should not be paginated" do
+          assigns[:nodes].should_not be_a_kind_of(WillPaginate::Collection)
+        end
 
         it "should return JSON" do
           struct = json_from_response_body
           struct.size.should == 1
-          struct.first["name"].should == action
+          struct.first["name"].should == "foo"
         end
       end
     end
 
-    for action in %w[unreported no_longer_reporting]
-      describe action do
-        let(:action) { action }
-        let(:action_params) { {} }
-        it_should_behave_like "a scope_index action"
+    describe "#unreported" do
+      before :each do
+        @node = Node.generate!(:name => "foo")
       end
+
+      let(:action) { "unreported" }
+      let(:action_params) { {} }
+
+      it_should_behave_like "a scoped_index action"
+    end
+
+    describe "#no_longer_reporting" do
+      before :each do
+        SETTINGS.stubs(:no_longer_reporting_cutoff).returns(60)
+        @node = Node.generate!(:name => "foo")
+        @last_report = Report.generate_for(@node, 1.hour.ago)
+      end
+
+      let(:action) { "no_longer_reporting" }
+      let(:action_params) { {} }
+
+      it_should_behave_like "a scoped_index action"
     end
 
     describe "#successful" do
@@ -501,10 +503,16 @@ describe NodesController do
     end
 
     describe "current and successful" do
-      let(:action) { "index" }
-      let(:action_params) { {:current => true, :successful => true} }
+      before :each do
+        SETTINGS.stubs(:no_longer_reporting_cutoff).returns(3600)
+        @node = Node.generate!(:name => "foo")
+        @last_report = Report.generate_for(@node, 5.minutes.ago, "unchanged")
+      end
 
-      it_should_behave_like "a scope_index action"
+      let(:action) { "index" }
+      let(:action_params) { {:current => "true", :successful => "true"} }
+
+      it_should_behave_like "a scoped_index action"
     end
   end
 end
