@@ -14,18 +14,19 @@
           -# = check_box_tag "check_all"
         %th.name
           Name
-    %tbody
-      - if @node_classes.present?
+    - if @node_classes.present?
+      %tbody
         - for node_class in @node_classes
           %tr[node_class]
             -# %td.check
               -# = check_box_tag "check_all"
             %td.name
               = link_to h(node_class.name), node_class
-        %tfoot
-          %tr
-            %td= pagination_for @node_classes
-      - else
+      %tfoot
+        %tr
+          %td= pagination_for @node_classes
+    - else
+      %tbody
         %tr
           %td
             = describe_no_matches_for :classes
