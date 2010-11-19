@@ -296,6 +296,32 @@ describe NodesController do
     end
   end
 
+  describe "#hide" do
+    it "should hide the node" do
+      @node = Node.generate!
+      @node.hidden.should == false
+
+      put :hide, :id => @node.name
+
+      response.should redirect_to(node_path(@node))
+      @node.reload
+      @node.hidden.should == true
+    end
+  end
+
+  describe "#unhide" do
+    it "should unhide the node" do
+      @node = Node.generate! :hidden => true
+      @node.hidden.should == true
+
+      put :unhide, :id => @node.name
+
+      response.should redirect_to(node_path(@node))
+      @node.reload
+      @node.hidden.should == false
+    end
+  end
+
   describe "#facts" do
     before :each do
       @time = Time.now
@@ -462,30 +488,6 @@ describe NodesController do
       end
     end
 
-    describe "#unreported" do
-      before :each do
-        @node = Node.generate!(:name => "foo")
-      end
-
-      let(:action) { "unreported" }
-      let(:action_params) { {} }
-
-      it_should_behave_like "a scoped_index action"
-    end
-
-    describe "#no_longer_reporting" do
-      before :each do
-        SETTINGS.stubs(:no_longer_reporting_cutoff).returns(60)
-        @node = Node.generate!(:name => "foo")
-        @last_report = Report.generate_for(@node, 1.hour.ago)
-      end
-
-      let(:action) { "no_longer_reporting" }
-      let(:action_params) { {} }
-
-      it_should_behave_like "a scoped_index action"
-    end
-
     describe "#successful" do
       it "should redirect to current and successful" do
         get :successful
@@ -502,11 +504,52 @@ describe NodesController do
       end
     end
 
+    describe "#unreported" do
+      before :each do
+        @node = Node.generate!(:name => "foo")
+        @hidden_node = Node.generate!(:name => "bar", :hidden => true)
+      end
+
+      let(:action) { "unreported" }
+      let(:action_params) { {} }
+
+      it_should_behave_like "a scoped_index action"
+    end
+
+    describe "#no_longer_reporting" do
+      before :each do
+        SETTINGS.stubs(:no_longer_reporting_cutoff).returns(60)
+        @node = Node.generate!(:name => "foo")
+        @hidden_node = Node.generate!(:name => "bar", :hidden => true)
+        Report.generate_for(@node, 1.hour.ago)
+        Report.generate_for(@hidden_node, 1.hour.ago)
+      end
+
+      let(:action) { "no_longer_reporting" }
+      let(:action_params) { {} }
+
+      it_should_behave_like "a scoped_index action"
+    end
+
+    describe "#hidden" do
+      before :each do
+        @node = Node.generate!(:name => "foo", :hidden => true)
+        @unhidden_node = Node.generate!(:name => "bar")
+      end
+
+      let(:action) { "hidden" }
+      let(:action_params) { {} }
+
+      it_should_behave_like "a scoped_index action"
+    end
+
     describe "current and successful" do
       before :each do
         SETTINGS.stubs(:no_longer_reporting_cutoff).returns(3600)
         @node = Node.generate!(:name => "foo")
-        @last_report = Report.generate_for(@node, 5.minutes.ago, "unchanged")
+        @hidden_node = Node.generate!(:name => "bar", :hidden => true)
+        Report.generate_for(@node, 5.minutes.ago, "unchanged")
+        Report.generate_for(@hidden_node, 5.minutes.ago, "unchanged")
       end
 
       let(:action) { "index" }
