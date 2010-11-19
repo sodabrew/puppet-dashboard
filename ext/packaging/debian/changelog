@@ -1,4 +1,4 @@
-puppet-dashboard (1.0.4-1) lucid; urgency=low
+puppet-dashboard (1.0.4-1) intrepid jaunty karmic lucid meerkat narwhal; urgency=low
 
   * 1.0.4-1 maintenance release
 
