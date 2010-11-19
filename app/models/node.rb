@@ -57,6 +57,8 @@ class Node < ActiveRecord::Base
     end
   }
 
+  named_scope :reported, :conditions => ["reported_at IS NOT NULL"]
+
   # Return nodes that have never reported.
   named_scope :unreported, :conditions => {:reported_at => nil}
 

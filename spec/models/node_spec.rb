@@ -105,13 +105,23 @@ describe Node do
     end
   end
 
+  describe ".reported" do
+    it "should return all nodes with a latest report" do
+      unreported_node = Node.generate
+      reported_node = Node.generate
+      Report.generate_for(reported_node)
 
+      Node.reported.should == [reported_node]
+    end
+  end
 
   describe ".unreported" do
     it "should return all nodes whose latest report was unreported" do
-      node = Node.generate
+      unreported_node = Node.generate
+      reported_node = Node.generate
+      Report.generate_for(reported_node)
 
-      Node.unreported.should include(node)
+      Node.unreported.should == [unreported_node]
     end
   end
 
