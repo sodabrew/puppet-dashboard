@@ -33,7 +33,7 @@
             = truncated_node_sentence(@unreported_nodes, :more_link => unreported_nodes_path)
 
     .section
-      = render 'statuses/run_failure', :statuses => @statuses
+      = render 'statuses/run_failure', :nodes => @unhidden_nodes
     .section
       %h3 Recently-reported nodes
-      = render 'nodes/nodes', :nodes => @nodes, :more_link => nodes_path(:page => 2)
+      = render 'nodes/nodes', :nodes => @recently_reported_nodes, :more_link => nodes_path(:page => 2)

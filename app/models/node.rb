@@ -63,25 +63,12 @@ class Node < ActiveRecord::Base
   # Return nodes that haven't reported recently.
   named_scope :no_longer_reporting, lambda{{:conditions => ['reported_at < ?', SETTINGS.no_longer_reporting_cutoff.seconds.ago] }}
 
-  def self.count_by_currentness_and_successfulness(currentness, successfulness)
-    operator = successfulness ? '!=' : '='
-    if currentness
-      self.by_currentness_and_successfulness(currentness, successfulness).count
-    else
-      Report.count_by_sql(["SELECT COUNT(node_id) FROM (SELECT DISTINCT node_id FROM reports WHERE status #{operator} 'failed') as tmp"])
-    end
-  end
+  named_scope :hidden, :conditions => {:hidden => true}
+
+  named_scope :unhidden, :conditions => {:hidden => false}
 
   def self.label_for_currentness_and_successfulness(currentness, successfulness)
     return "#{currentness ? 'Currently' : 'Ever'} #{successfulness ? (currentness ? 'successful' : 'succeeded') : (currentness ? 'failing' : 'failed')}"
-  end
-
-  def self.count_unreported
-    unreported.count
-  end
-
-  def self.count_no_longer_reporting
-    no_longer_reporting.count
   end
 
   def self.find_from_inventory_search(search_params)

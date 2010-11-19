@@ -9,11 +9,14 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :nodes,
     :member => {
+      :hide => :put,
+      :unhide => :put,
       :facts => :get,
       :reports => :get},
     :collection => {
      :unreported => :get,
      :no_longer_reporting => :get,
+     :hidden => :get,
      :search => :get},
     :requirements => {:id => /[^\/]+/}
 

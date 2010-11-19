@@ -78,12 +78,6 @@ describe Node do
             Node.by_currentness_and_successfulness(currentness, successfulness).map(&:name).sort.should == inclusions.sort
           end
         end
-
-        describe "::count_by_currentness_and_successfulness" do
-          it "should count the expected nodes" do
-            Node.count_by_currentness_and_successfulness(currentness, successfulness).should == inclusions.size
-          end
-        end
       end
     end
   end

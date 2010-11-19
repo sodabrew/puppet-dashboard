@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101109001012) do
+ActiveRecord::Schema.define(:version => 20101118222325) do
 
   create_table "assignments", :force => true do |t|
     t.integer  "node_id"
@@ -67,6 +67,7 @@ ActiveRecord::Schema.define(:version => 20101109001012) do
     t.datetime "reported_at"
     t.integer  "last_report_id"
     t.string   "status"
+    t.boolean  "hidden",         :default => false
   end
 
   create_table "parameters", :force => true do |t|
