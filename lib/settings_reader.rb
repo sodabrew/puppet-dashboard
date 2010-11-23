@@ -45,6 +45,11 @@ class SettingsReader
     return OpenStruct.new(settings)
   end
 
+  def self.default_settings
+    rails_root = RAILS_ROOT rescue File.dirname(File.dirname(__FILE__))
+    OpenStruct.new(self.filename_to_hash(File.join(rails_root, "config/settings.yml.example")))
+  end
+
   # Return an OpenStruct object by reading the +filename+ and parsing it with ERB and YAML.
   def self.filename_to_hash(filename)
     return YAML.load(ERB.new(File.read(filename)).result) rescue {}
