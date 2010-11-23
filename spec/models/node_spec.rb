@@ -78,12 +78,6 @@ describe Node do
             Node.by_currentness_and_successfulness(currentness, successfulness).map(&:name).sort.should == inclusions.sort
           end
         end
-
-        describe "::count_by_currentness_and_successfulness" do
-          it "should count the expected nodes" do
-            Node.count_by_currentness_and_successfulness(currentness, successfulness).should == inclusions.size
-          end
-        end
       end
     end
   end
@@ -111,57 +105,23 @@ describe Node do
     end
   end
 
-  # describe ".successful" do
-    # include DescribeReports
+  describe ".reported" do
+    it "should return all nodes with a latest report" do
+      unreported_node = Node.generate
+      reported_node = Node.generate
+      Report.generate_for(reported_node)
 
-    # it "should return all nodes whose latest report was successful" do
-      # report = Report.generate
-      # report.update_attribute(:success, true)
-
-      # Node.successful.should include(report.node)
-    # end
-
-    # it "should not return failed nodes" do
-      # successful_report = report_model_from_yaml('success.yml')
-      # successful_report.save!
-      # successful_node = successful_report.node
-
-      # failed_report = report_model_from_yaml('failure.yml')
-      # failed_report.save!
-      # failed_node = failed_report.node
-
-      # Node.successful.should_not include(failed_report.node)
-    # end
-  # end
-
-  # describe ".failed" do
-    # include DescribeReports
-
-    # it "should return all nodes whose latest report failed" do
-      # report = Report.generate
-      # report.update_attribute(:success, false)
-
-      # Node.failed.should include(report.node)
-    # end
-
-    # it "should not return successful nodes" do
-      # successful_report = report_model_from_yaml('success.yml')
-      # successful_report.save!
-      # successful_node = successful_report.node
-
-      # failed_report = report_model_from_yaml('failure.yml')
-      # failed_report.save!
-      # failed_node = failed_report.node
-
-      # Node.failed.should_not include(successful_report.node)
-    # end
-  # end
+      Node.reported.should == [reported_node]
+    end
+  end
 
   describe ".unreported" do
     it "should return all nodes whose latest report was unreported" do
-      node = Node.generate
+      unreported_node = Node.generate
+      reported_node = Node.generate
+      Report.generate_for(reported_node)
 
-      Node.unreported.should include(node)
+      Node.unreported.should == [unreported_node]
     end
   end
 
@@ -176,8 +136,22 @@ describe Node do
     end
   end
 
-  it 'should be able to compute a configuration' do
-    Node.new.should respond_to(:configuration)
+  describe "" do
+    before :each do
+      @nodes = {:hidden   => Node.generate!(:hidden => true),
+                :unhidden => Node.generate!(:hidden => false)
+      }
+    end
+
+    [:hidden, :unhidden].each do |hiddenness|
+      describe hiddenness do
+        it "should find all #{hiddenness} nodes" do
+          nodes = Node.send(hiddenness)
+          nodes.length.should == 1
+          nodes.first.should == @nodes[hiddenness]
+        end
+      end
+    end
   end
 
   describe 'when computing a configuration' do
