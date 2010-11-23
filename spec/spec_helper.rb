@@ -15,4 +15,10 @@ Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each {|f| require f}
 
 Spec::Runner.configure do |config|
   config.mock_with :mocha
+  config.prepend_before :each do
+    verbosity = $VERBOSE
+    $VERBOSE = nil
+    SETTINGS = SettingsReader.default_settings
+    $VERBOSE = verbosity
+  end
 end
