@@ -90,6 +90,29 @@ $RPM_BUILD_ROOT %{buildroot}
     end
   end
 
+  desc "Create a release .tar.gz"
+  task :tar do
+    version        = File.open('VERSION', 'r').read.sub(/^v/, '').chomp
+    work           = File.expand_path(File.join(RAILS_ROOT, 'tmp', 'packages', 'tar'))
+    release_prefix = "puppet-dashboard-#{version}"
+    release_file   = File.join work, "#{release_prefix}.tar.gz"
+
+    mkdir_p work
+    if File.exists?(release_file)
+      puts <<-HERE
+!! Release tar.gz file already exists: #{release_prefix}.tar.gz
+!! Please move or remove this file before proceeding.
+      HERE
+      raise
+    end
+
+    sh %Q{git archive --format=tar --prefix=#{release_prefix}/ HEAD | gzip > "#{release_file}"}
+
+    puts <<-HERE
+Saved release to: #{release_file}
+    HERE
+  end
+
   task :build_environment do
     unless ENV['FORCE'] == '1'
       modified = `git status --porcelain | sed -e '/^\?/d'`
