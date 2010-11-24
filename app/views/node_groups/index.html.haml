@@ -14,19 +14,19 @@
           -# = check_box_tag "check_all"
         %th.name
           Name
-    %tbody
-      - if @node_groups.present?
+    - if @node_groups.present?
+      %tbody
         - for node_group in @node_groups
           %tr[node_group]
             -# %td.check
               -# = check_box_tag "check_all"
             %td.name
               = link_to h(node_group.name), node_group
-        - if @node_groups.total_pages > 1
-          %tfoot
-            %tr
-              %td= pagination_for @node_groups
-      - else
+      %tfoot
+        %tr
+          %td= pagination_for @node_groups
+    - else
+      %tbody
         %tr
           %td
             = describe_no_matches_for :groups

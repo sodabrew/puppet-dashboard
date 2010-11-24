@@ -143,97 +143,128 @@ describe NodesController do
   end
 
   describe '#edit' do
-    before :each do
-      @node = Node.generate!
-    end
-
     def do_get
       get :edit, :id => @node.id
     end
 
-    it 'should make the requested node available to the view' do
-      do_get
-      assigns[:node].should == @node
+    describe "when using node classification" do
+      before :each do
+        SETTINGS.stubs(:use_external_node_classification).returns(true)
+        @node = Node.generate!
+
+        it 'should make the requested node available to the view' do
+          do_get
+          assigns[:node].should == @node
+        end
+
+        it 'should render the edit template' do
+          do_get
+          response.should render_template('edit')
+        end
+
+        it 'should work when given a node name' do
+          get :edit, :id => @node.name
+
+          assigns[:node].should == @node
+        end
+      end
     end
 
-    it 'should render the edit template' do
-      do_get
-      response.should render_template('edit')
-    end
+    describe "when not using node classification" do
+      before :each do
+        SETTINGS.stubs(:use_external_node_classification).returns(false)
+        @node = Node.generate!
+      end
 
-    it 'should work when given a node name' do
-      get :edit, :id => @node.name
+      it 'should render 403 text' do
+        do_get
 
-      assigns[:node].should == @node
+        response.body.should =~ /Node classification has been disabled/
+        response.should_not be_success
+        response.response_code.should == 403
+      end
     end
   end
 
   describe '#update' do
-    before :each do
-      @node = Node.generate!
-      @params = { :id => @node.id, :node => @node.attributes }
-    end
-
     def do_put
       put :update, @params
     end
 
-    it 'should fail when an invalid node id is given' do
-      @params[:id] = 'unknown'
-      lambda { do_put }.should raise_error(ActiveRecord::RecordNotFound)
-    end
-
-    it 'should work when given a node name' do
-      @params.merge!({:id => @node.name})
-
-      do_put
-      assigns[:node].should == @node
-    end
-
-    describe 'when a valid node id is given' do
-
-      describe 'and the data provided would make the node invalid' do
-        before :each do
-          @params[:node]['name'] = nil
-        end
-
-        it 'should make the node available to the view' do
-          do_put
-          assigns[:node].should == @node
-        end
-
-        it 'should not save the node' do
-          do_put
-          Node.find(@node.id).name.should_not be_nil
-        end
-
-        it 'should have errors on the node' do
-          do_put
-          assigns[:node].errors[:name].should_not be_blank
-        end
-
-        it 'should render the update action' do
-          do_put
-          response.should render_template('edit')
-        end
+    describe "when using node classification" do
+      before :each do
+        SETTINGS.stubs(:use_external_node_classification).returns(true)
+        @node = Node.generate!
+        @params = { :id => @node.id, :node => @node.attributes }
       end
 
-      describe 'and the data provided make the node valid' do
-        it 'should note the update success in flash' do
-          do_put
-          flash[:notice].should match(/success/i)
+      it 'should fail when an invalid node id is given' do
+        @params[:id] = 'unknown'
+        lambda { do_put }.should raise_error(ActiveRecord::RecordNotFound)
+      end
+
+      it 'should work when given a node name' do
+        @params.merge!({:id => @node.name})
+
+        do_put
+        assigns[:node].should == @node
+      end
+
+      describe 'when a valid node id is given' do
+
+        describe 'and the data provided would make the node invalid' do
+          before :each do
+            @params[:node]['name'] = nil
+          end
+
+          it 'should make the node available to the view' do
+            do_put
+            assigns[:node].should == @node
+          end
+
+          it 'should not save the node' do
+            do_put
+            Node.find(@node.id).name.should_not be_nil
+          end
+
+          it 'should have errors on the node' do
+            do_put
+            assigns[:node].errors[:name].should_not be_blank
+          end
+
+          it 'should render the update action' do
+            do_put
+            response.should render_template('edit')
+          end
         end
 
-        it 'should update the node with the data provided' do
-          @params[:node]['name'] = 'new name'
-          do_put
-          Node.find(@node.id).name.should == 'new name'
-        end
+        describe 'and the data provided make the node valid' do
+          it 'should update the node with the data provided' do
+            @params[:node]['name'] = 'new name'
+            do_put
+            Node.find(@node.id).name.should == 'new name'
+          end
 
-        it 'should have a valid node' do
-          do_put
-          assigns[:node].should be_valid
+          it 'should have a valid node' do
+            do_put
+            assigns[:node].should be_valid
+          end
         end
+      end
+    end
+
+    describe "when not using node classification" do
+      before :each do
+        SETTINGS.stubs(:use_external_node_classification).returns(false)
+        @node = Node.generate!
+      end
+
+      it 'should render 403 text' do
+        do_put
+
+        response.body.should =~ /Node classification has been disabled/
+        response.should_not be_success
+        response.response_code.should == 403
       end
     end
   end
@@ -262,6 +293,32 @@ describe NodesController do
 
       Node.expects(:find_from_inventory_search).never
       get :search, @params
+    end
+  end
+
+  describe "#hide" do
+    it "should hide the node" do
+      @node = Node.generate!
+      @node.hidden.should == false
+
+      put :hide, :id => @node.name
+
+      response.should redirect_to(node_path(@node))
+      @node.reload
+      @node.hidden.should == true
+    end
+  end
+
+  describe "#unhide" do
+    it "should unhide the node" do
+      @node = Node.generate! :hidden => true
+      @node.hidden.should == true
+
+      put :unhide, :id => @node.name
+
+      response.should redirect_to(node_path(@node))
+      @node.reload
+      @node.hidden.should == false
     end
   end
 
@@ -302,22 +359,6 @@ describe NodesController do
   end
 
   describe "#reports" do
-    shared_examples_for "a successful reports rendering" do
-      specify { response.should be_success }
-    end
-
-    shared_examples_for "a paginated reports collection" do
-      it "should be paginated" do
-        assigns[:reports].should be_a_kind_of(WillPaginate::Collection)
-      end
-    end
-
-    shared_examples_for "an un-paginated reports collection" do
-      it "should not be paginated" do
-        assigns[:reports].should_not be_a_kind_of(WillPaginate::Collection)
-      end
-    end
-
     before :each do
       @node = Node.generate!
       Node.stubs(:find_by_name! => @node)
@@ -329,15 +370,21 @@ describe NodesController do
     context "for HTML" do
       before { get :reports, :node => 123 }
 
-      it_should_behave_like "a successful reports rendering"
-      it_should_behave_like "a paginated reports collection"
+      specify { response.should be_success }
+
+      it "should be paginated" do
+        assigns[:reports].should be_a_kind_of(WillPaginate::Collection)
+      end
     end
 
     context "for YAML" do
       before { get :reports, :node => 123, :format => "yaml" }
 
-      it_should_behave_like "a successful reports rendering"
-      it_should_behave_like "an un-paginated reports collection"
+      specify { response.should be_success }
+
+      it "should not be paginated" do
+        assigns[:reports].should_not be_a_kind_of(WillPaginate::Collection)
+      end
 
       it "should return YAML" do
         response.body.should =~ %r{ruby/object:Report}
@@ -350,8 +397,11 @@ describe NodesController do
     context "for JSON" do
       before { get :reports, :node => 123, :format => "json" }
 
-      it_should_behave_like "a successful reports rendering"
-      it_should_behave_like "an un-paginated reports collection"
+      specify { response.should be_success }
+
+      it "should not be paginated" do
+        assigns[:reports].should_not be_a_kind_of(WillPaginate::Collection)
+      end
 
       it "should return JSON" do
         struct = json_from_response_body
@@ -375,42 +425,21 @@ describe NodesController do
 
   # Relies on #action returning name of a NodesController action, e.g. as "successful".
   describe "#scoped_index" do
-    shared_examples_for "a successful scoped_index rendering" do
-      specify { response.should be_success }
-
-      it "should assign only appropriate records" do
-        assigns[:nodes].size.should == 1
-        assigns[:nodes].first.name.should == action
-      end
-    end
-
-    shared_examples_for "a paginated nodes collection" do
-      it "should be paginated" do
-        assigns[:nodes].should be_a_kind_of(WillPaginate::Collection)
-      end
-    end
-
-    shared_examples_for "an un-paginated nodes collection" do
-      it "should not be paginated" do
-        assigns[:nodes].should_not be_a_kind_of(WillPaginate::Collection)
-      end
-    end
-
-    shared_examples_for "a scope_index action" do
-      before :each do
-        @results = [Node.generate!(:name => action)]
-        @results.stubs(:with_last_report => @results, :by_report_date => @results)
-        Node.stubs(action => @results)
-        Node.stubs(:by_currentness_and_successfulness => @results)
-      end
-
+    shared_examples_for "a scoped_index action" do
       context "as HTML" do
         before { get action, action_params }
 
-        it_should_behave_like "a successful scoped_index rendering"
+        specify { response.should be_success }
+
+        it "should assign only appropriate records" do
+          assigns[:nodes].size.should == 1
+          assigns[:nodes].first.name.should == "foo"
+        end
+
         # NOTE: Once upon a time, these were paginated but were breaking the graphs
-        # it_should_behave_like "a paginated nodes collection"
-        it_should_behave_like "an un-paginated nodes collection"
+        it "should not be paginated" do
+          assigns[:nodes].should_not be_a_kind_of(WillPaginate::Collection)
+        end
       end
 
       context "as YAML" do
@@ -420,13 +449,20 @@ describe NodesController do
             get action, action_params.merge(:format => "yaml")
           end
 
-          it_should_behave_like "a successful scoped_index rendering"
-          it_should_behave_like "an un-paginated nodes collection"
+          specify { response.should be_success }
+
+          it "should assign only appropriate records" do
+            assigns[:nodes].size.should == 1
+          end
+
+          it "should not be paginated" do
+            assigns[:nodes].should_not be_a_kind_of(WillPaginate::Collection)
+          end
 
           it "should return YAML" do
             struct = yaml_from_response_body
             struct.size.should == 1
-            struct.first["name"].should == action
+            struct.first["name"].should == "foo"
           end
         end
       end
@@ -434,22 +470,21 @@ describe NodesController do
       context "as JSON" do
         before { get action, action_params.merge(:format => "json") }
 
-        it_should_behave_like "a successful scoped_index rendering"
-        it_should_behave_like "an un-paginated nodes collection"
+        specify { response.should be_success }
+
+        it "should assign only appropriate records" do
+          assigns[:nodes].size.should == 1
+        end
+
+        it "should not be paginated" do
+          assigns[:nodes].should_not be_a_kind_of(WillPaginate::Collection)
+        end
 
         it "should return JSON" do
           struct = json_from_response_body
           struct.size.should == 1
-          struct.first["name"].should == action
+          struct.first["name"].should == "foo"
         end
-      end
-    end
-
-    for action in %w[unreported no_longer_reporting]
-      describe action do
-        let(:action) { action }
-        let(:action_params) { {} }
-        it_should_behave_like "a scope_index action"
       end
     end
 
@@ -469,11 +504,58 @@ describe NodesController do
       end
     end
 
-    describe "current and successful" do
-      let(:action) { "index" }
-      let(:action_params) { {:current => true, :successful => true} }
+    describe "#unreported" do
+      before :each do
+        @node = Node.generate!(:name => "foo")
+        @hidden_node = Node.generate!(:name => "bar", :hidden => true)
+      end
 
-      it_should_behave_like "a scope_index action"
+      let(:action) { "unreported" }
+      let(:action_params) { {} }
+
+      it_should_behave_like "a scoped_index action"
+    end
+
+    describe "#no_longer_reporting" do
+      before :each do
+        SETTINGS.stubs(:no_longer_reporting_cutoff).returns(60)
+        @node = Node.generate!(:name => "foo")
+        @hidden_node = Node.generate!(:name => "bar", :hidden => true)
+        Report.generate_for(@node, 1.hour.ago)
+        Report.generate_for(@hidden_node, 1.hour.ago)
+      end
+
+      let(:action) { "no_longer_reporting" }
+      let(:action_params) { {} }
+
+      it_should_behave_like "a scoped_index action"
+    end
+
+    describe "#hidden" do
+      before :each do
+        @node = Node.generate!(:name => "foo", :hidden => true)
+        @unhidden_node = Node.generate!(:name => "bar")
+      end
+
+      let(:action) { "hidden" }
+      let(:action_params) { {} }
+
+      it_should_behave_like "a scoped_index action"
+    end
+
+    describe "current and successful" do
+      before :each do
+        SETTINGS.stubs(:no_longer_reporting_cutoff).returns(3600)
+        @node = Node.generate!(:name => "foo")
+        @hidden_node = Node.generate!(:name => "bar", :hidden => true)
+        Report.generate_for(@node, 5.minutes.ago, "unchanged")
+        Report.generate_for(@hidden_node, 5.minutes.ago, "unchanged")
+      end
+
+      let(:action) { "index" }
+      let(:action_params) { {:current => "true", :successful => "true"} }
+
+      it_should_behave_like "a scoped_index action"
     end
   end
 end

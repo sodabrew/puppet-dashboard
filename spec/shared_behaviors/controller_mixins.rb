@@ -4,6 +4,7 @@
 describe "with search by q and tag", :shared => true do
   describe "when searching" do
     before :each do
+      SETTINGS.stubs(:use_external_node_classification).returns(true)
       @for_tag = model.generate(:name => 'for_tag')
       @for_q = model.generate(:name => 'for_q')
       model.generate(:name => 'without_search')
@@ -50,7 +51,10 @@ describe "without JSON pagination", :shared => true do
   describe "without JSON pagination" do
     describe "GET index" do
       describe "as HTML" do
-        before { get 'index', :format => 'html' }
+        before do
+          SETTINGS.stubs(:use_external_node_classification).returns(true)
+          get 'index', :format => 'html'
+        end
         subject { assigns[model.name.tableize] }
 
         # NOTE: Once upon a time, the collection was paginated until it was realized that this broke the charts.

@@ -2,14 +2,13 @@ class NodesController < InheritedResources::Base
   belongs_to :node_class, :optional => true
   belongs_to :node_group, :optional => true
   respond_to :html, :yaml, :json
+  before_filter :raise_unless_using_external_node_classification, :only => [:new, :edit, :create, :update, :destroy]
 
   layout lambda {|c| c.request.xhr? ? false : 'application' }
 
   def index
     raise NodeClassificationDisabledError.new if !SETTINGS.use_external_node_classification and request.format == :yaml
-    scoped_index
-  rescue NodeClassificationDisabledError => e
-    render :text => "Node classification has been disabled", :content_type => 'text/plain', :status => 403
+    scoped_index :unhidden
   end
 
   def successful
@@ -21,11 +20,15 @@ class NodesController < InheritedResources::Base
   end
 
   def unreported
-    scoped_index :unreported
+    scoped_index :unhidden, :unreported
   end
 
   def no_longer_reporting
-    scoped_index :no_longer_reporting
+    scoped_index :unhidden, :no_longer_reporting
+  end
+
+  def hidden
+    scoped_index :hidden
   end
 
   def search
@@ -53,6 +56,24 @@ class NodesController < InheritedResources::Base
       render :text => "Node \"#{resource.name}\" has conflicting parameter(s): #{resource.errors.on(:parameters).to_a.to_sentence}", :content_type => 'text/plain', :status => 500
     rescue NodeClassificationDisabledError => e
       render :text => "Node classification has been disabled", :content_type => 'text/plain', :status => 403
+    end
+  end
+
+  def hide
+    respond_to do |format|
+      resource.hidden = true
+      resource.save!
+
+      format.html { redirect_to node_path(resource) }
+    end
+  end
+
+  def unhide
+    respond_to do |format|
+      resource.hidden = false
+      resource.save!
+
+      format.html { redirect_to node_path(resource) }
     end
   end
 
@@ -93,13 +114,13 @@ class NodesController < InheritedResources::Base
   end
 
   # Render the index using the +scope_name+ (e.g. :successful for Node.successful).
-  def scoped_index(scope_name=nil)
+  def scoped_index(*scope_names)
     index! do |format|
       scope = end_of_association_chain
       if params[:q]
         scope = scope.search(params[:q])
       end
-      if scope_name
+      scope_names.each do |scope_name|
         scope = scope.send(scope_name)
       end
       if params[:current].present? or params[:successful].present?

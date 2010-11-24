@@ -53,4 +53,7 @@ use_external_node_classification: true
 datetime_format: '%Y-%m-%d %H:%M %Z'
 date_format: '%Y-%m-%d'
 
+# Set this to the URL of an image. The image will be scaled to 155x23 pixels.
+#custom_logo_url: 'http://www.puppetlabs.com/images/puppet-short.png'
+
 #===[ fin ]=============================================================

@@ -3,7 +3,7 @@ require 'erb'
 require 'ostruct'
 
 require 'rubygems'
-require 'activesupport'
+require 'active_support'
 
 # = SettingsReader
 #
@@ -43,6 +43,11 @@ class SettingsReader
     RAILS_DEFAULT_LOGGER.info(message) rescue nil
 
     return OpenStruct.new(settings)
+  end
+
+  def self.default_settings
+    rails_root = RAILS_ROOT rescue File.dirname(File.dirname(__FILE__))
+    OpenStruct.new(self.filename_to_hash(File.join(rails_root, "config/settings.yml.example")))
   end
 
   # Return an OpenStruct object by reading the +filename+ and parsing it with ERB and YAML.

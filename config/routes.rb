@@ -7,15 +7,16 @@ ActionController::Routing::Routes.draw do |map|
     groups.resources :nodes, :requirements => {:id => /.*/}
   end
 
-  map.resources :nodes, 
+  map.resources :nodes,
     :member => {
+      :hide => :put,
+      :unhide => :put,
       :facts => :get,
       :reports => :get},
     :collection => {
-     :successful => :get,
-     :failed     => :get,
      :unreported => :get,
      :no_longer_reporting => :get,
+     :hidden => :get,
      :search => :get},
     :requirements => {:id => /[^\/]+/}
 

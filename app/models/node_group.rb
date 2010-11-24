@@ -76,4 +76,8 @@ class NodeGroup < ActiveRecord::Base
   def self.find_from_form_ids(*ids)
     ids.map{|entry| entry.to_s.split(/[ ,]/)}.flatten.reject(&:blank?).uniq.map{|id| self.find(id)}
   end
+
+  def <=>(rhs)
+    self.name <=> rhs.name
+  end
 end
