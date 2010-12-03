@@ -19,6 +19,24 @@ class ReportsController < InheritedResources::Base
     end
   end
 
+  def diff
+    @my_report = Report.find(params[:id])
+    @baseline_report = Report.find(params[:baseline_id])
+    @diff = @baseline_report.diff(@my_report)
+  end
+
+  def diff_summary
+    diff
+    @resources = {}
+    @baseline_report.resources.each do |resource|
+      if @diff[resource]
+        @resources[resource] = :failed
+      else
+        @resources[resource] = :pass
+      end
+    end
+  end
+
   private
 
   def collection

@@ -11,6 +11,10 @@
 
 ActiveRecord::Schema.define(:version => 20101118222325) do
 
+  create_table "Times", :id => false, :force => true do |t|
+    t.datetime "time"
+  end
+
   create_table "assignments", :force => true do |t|
     t.integer  "node_id"
     t.integer  "service_id"
