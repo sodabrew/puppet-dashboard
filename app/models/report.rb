@@ -50,7 +50,28 @@ class Report < ActiveRecord::Base
     end
   end
 
+  def diff(comparison_report)
+    diff_stuff = {}
+    comparison_report.report.resource_statuses.each do |name, value|
+      my_properties = events_to_hash( self.report.resource_statuses[name].events )
+      their_properties = events_to_hash( value.events )
+      my_properties.keys.each do |property|
+        if my_properties[property] != their_properties[property]
+          diff_stuff[ [name, property.to_sym] ] = [ my_properties[property], their_properties[property] ]
+        end
+      end
+    end
+    diff_stuff
+  end
+
   private
+
+  def events_to_hash(events)
+    events.inject({}) do |hash, event|
+      hash[event.property] = event.previous_value
+      hash
+    end
+  end
 
   def ensure_valid_format
     begin

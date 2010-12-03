@@ -163,4 +163,126 @@ describe Report do
       @node.status.should == 'unchanged'
     end
   end
+
+  describe "when diffing inspection reports" do
+    before :each do
+      @report_yaml = <<-'HEREDOC'
+--- !ruby/object:Puppet::Transaction::Report
+  host: mattmac.puppetlabs.lan
+  kind: inspect
+  logs: []
+  metrics: {}
+  resource_statuses: 
+    "File[/tmp/foo]": !ruby/object:Puppet::Resource::Status
+      events: 
+        - !ruby/object:Puppet::Transaction::Event
+          default_log_level: !ruby/sym notice
+          file: &id001 /Users/matthewrobinson/work/puppet/test_data/genreportm/manifests/site.pp
+          line: 5
+          message: inspected value is :file
+          previous_value: !ruby/sym file
+          property: ensure
+          resource: "File[/tmp/foo]"
+          status: audit
+          tags: 
+            - &id002 file
+            - &id003 class
+          time: 2010-12-03 12:18:40.039434 -08:00
+          version: 1291407517
+        - !ruby/object:Puppet::Transaction::Event
+          default_log_level: !ruby/sym notice
+          file: *id001
+          line: 5
+          message: "inspected value is \"{md5}foo\""
+          previous_value: "{md5}foo"
+          property: content
+          resource: "File[/tmp/foo]"
+          status: audit
+          tags: 
+            - *id002
+            - *id003
+          time: 2010-12-03 12:08:59.061376 -08:00
+          version: 1291406846
+        - !ruby/object:Puppet::Transaction::Event
+          default_log_level: !ruby/sym notice
+          file: *id001
+          line: 5
+          message: inspected value is nil
+          property: target
+          resource: "File[/tmp/foo]"
+          status: audit
+          tags: 
+            - *id002
+            - *id003
+          time: 2010-12-03 12:08:59.061413 -08:00
+          version: 1291406846
+HEREDOC
+      @report_yaml2 = <<-'HEREDOC'
+--- !ruby/object:Puppet::Transaction::Report
+  host: mattmac.puppetlabs.lan
+  kind: inspect
+  logs: []
+  metrics: {}
+  resource_statuses: 
+    "File[/tmp/foo]": !ruby/object:Puppet::Resource::Status
+      events: 
+        - !ruby/object:Puppet::Transaction::Event
+          default_log_level: !ruby/sym notice
+          file: &id001 /Users/matthewrobinson/work/puppet/test_data/genreportm/manifests/site.pp
+          line: 5
+          message: inspected value is :directory
+          previous_value: !ruby/sym directory
+          property: ensure
+          resource: "File[/tmp/foo]"
+          status: audit
+          tags: 
+            - &id002 file
+            - &id003 class
+          time: 2010-12-03 12:18:40.039434 -08:00
+          version: 1291407517
+        - !ruby/object:Puppet::Transaction::Event
+          default_log_level: !ruby/sym notice
+          file: *id001
+          line: 5
+          message: "inspected value is \"{md5}bar\""
+          previous_value: "{md5}bar"
+          property: content
+          resource: "File[/tmp/foo]"
+          status: audit
+          tags: 
+            - *id002
+            - *id003
+          time: 2010-12-03 12:08:59.061376 -08:00
+          version: 1291406846
+        - !ruby/object:Puppet::Transaction::Event
+          default_log_level: !ruby/sym notice
+          file: *id001
+          line: 5
+          message: inspected value is nil
+          property: target
+          resource: "File[/tmp/foo]"
+          status: audit
+          tags: 
+            - *id002
+            - *id003
+          time: 2010-12-03 12:08:59.061413 -08:00
+          version: 1291406846
+HEREDOC
+    end
+
+    it "should produce an empty diff for the same report twice" do
+      report1 = Report.create(:report => @report_yaml)
+      report2 = Report.create(:report => @report_yaml)
+      report1.diff(report2).should == {}
+    end
+
+    it "should show diff for the different reports" do
+      report1 = Report.create(:report => @report_yaml)
+      report2 = Report.create(:report => @report_yaml2)
+      report1.diff(report2).should == {
+        ['File[/tmp/foo]', :ensure] => [:file, :directory],
+        ['File[/tmp/foo]', :content] => ["{md5}foo", "{md5}bar"]
+      }
+    end
+  end
 end
