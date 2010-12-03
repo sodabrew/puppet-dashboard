@@ -24,7 +24,11 @@ ActionController::Routing::Routes.draw do |map|
   map.resource :account, :controller => "users"
   map.resources :users
 
-  map.resources :reports
+  map.resources :reports,
+    :member => {
+      :diff => :get,
+      :diff_summary => :get,
+    }
 
   map.release_notes '/release_notes', :controller => :pages, :action => :release_notes
 

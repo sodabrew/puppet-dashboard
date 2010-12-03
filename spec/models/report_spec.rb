@@ -280,8 +280,10 @@ HEREDOC
       report1 = Report.create(:report => @report_yaml)
       report2 = Report.create(:report => @report_yaml2)
       report1.diff(report2).should == {
-        ['File[/tmp/foo]', :ensure] => [:file, :directory],
-        ['File[/tmp/foo]', :content] => ["{md5}foo", "{md5}bar"]
+        'File[/tmp/foo]' => {
+          :ensure => [:file, :directory],
+          :content => ["{md5}foo", "{md5}bar"],
+        }
       }
     end
   end

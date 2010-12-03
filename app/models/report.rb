@@ -57,11 +57,16 @@ class Report < ActiveRecord::Base
       their_properties = events_to_hash( value.events )
       my_properties.keys.each do |property|
         if my_properties[property] != their_properties[property]
-          diff_stuff[ [name, property.to_sym] ] = [ my_properties[property], their_properties[property] ]
+          diff_stuff[name] ||= {}
+          diff_stuff[name][property.to_sym] = [ my_properties[property], their_properties[property] ]
         end
       end
     end
     diff_stuff
+  end
+
+  def resources
+    self.report.resource_statuses.keys
   end
 
   private

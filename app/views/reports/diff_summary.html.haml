@@ -1,0 +1,11 @@
+%table.inspector
+  %thead
+    %tr
+      %th Resource
+      %th Status
+  %tbody
+    - @resources.each do |resource, status|
+      %tr{:class => status}
+        %td= h resource
+        %td= h status
+= link_to "Details", :id => @my_report, :action => "diff", :baseline_id => @baseline_report
