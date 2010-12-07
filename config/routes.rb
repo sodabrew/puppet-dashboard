@@ -30,6 +30,8 @@ ActionController::Routing::Routes.draw do |map|
       :diff_summary => :get,
     }
 
+  map.upload "reports/upload", :controller => :reports, :action => "upload", :conditions => { :method => :post }
+
   map.release_notes '/release_notes', :controller => :pages, :action => :release_notes
 
   map.root :controller => :pages, :action => :home
