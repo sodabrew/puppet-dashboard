@@ -278,9 +278,9 @@ The Puppet Dashboard can collect reports from your Puppet Master as they're crea
 
         [master]
           reports = http, store
-          reporturl = http://mydashboard.server:1234/reports
+          reporturl = http://mydashboard.server:1234/reports/upload
 
-    *NOTE:* The `/reports` portion of the `reporturl` is required.
+    *NOTE:* The `/reports/upload` portion of the `reporturl` is required.
 
 2.  Restart the `puppetmasterd` process.
 

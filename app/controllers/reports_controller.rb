@@ -1,10 +1,18 @@
 class ReportsController < InheritedResources::Base
   belongs_to :node, :optional => true, :finder => :find_by_url!
-  protect_from_forgery :except => :create
+  protect_from_forgery :except => [:create, :upload]
 
-  before_filter :handle_raw_post, :only => :create
+  before_filter :handle_raw_post, :only => [:create, :upload]
 
   def create
+    if SETTINGS.disable_legacy_report_upload_url
+      render :text => "Access Denied, this url has been disabled, try /reports/upload", :status => 403
+    else
+      upload
+    end
+  end
+
+  def upload
     if params[:report][:report].blank?
       render :status => 406
       return

@@ -8,7 +8,7 @@ Puppet::Reports.register_report(:puppet_dashboard) do
 
   def process
     Net::HTTP.start(HOST, PORT) do |conn|
-      conn.post "/reports", "report=" + CGI.escape(self.to_yaml)
+      conn.post "/reports/upload", "report=" + CGI.escape(self.to_yaml)
     end
   end
 end

@@ -56,4 +56,9 @@ date_format: '%Y-%m-%d'
 # Set this to the URL of an image. The image will be scaled to 155x23 pixels.
 #custom_logo_url: 'http://www.puppetlabs.com/images/puppet-short.png'
 
+# We will be deprecating using "http://dashboard_servername/reports" as the puppet master's reporturl.
+# Set this to 'true' once you have changed all your puppet masters to send reports to
+# "http://dashboard_servername/reports/upload"
+disable_legacy_report_upload_url: false
+
 #===[ fin ]=============================================================
