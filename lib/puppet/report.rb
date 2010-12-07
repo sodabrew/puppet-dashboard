@@ -7,20 +7,6 @@ module Puppet #:nodoc:
     class Report
       attr_reader :logs, :metrics, :host, :time
 
-      def total_resources;    metric_value(:resources, :total)             || 0; end
-      def failed_resources;   metric_value(:resources, :failed)            || 0; end
-      def failed_restarts;    metric_value(:resources, :failed_restarts)   || 0; end
-      def skipped_resources;  metric_value(:resources, :skipped_resources) || 0; end
-      def changed_resources;  metric_value(:changes,   :total)             || 0; end
-
-      def failed_resources?;  failed_resources  > 0 || metrics.empty? end
-      def changed_resources?; changed_resources > 0 end
-
-      # Puppet 0.25.x does not report individual status items
-      def changed_statuses; nil end
-
-      def version; nil end
-
       # Returns the metric value at the key found by traversing the metrics hash
       # tree. Returns nil if any intermediary results are nil.
       #
@@ -81,10 +67,15 @@ module ReportExtensions #:nodoc:
         obj.metrics.each{|_, metric| metric.extend Puppet25::Util::Metric} if obj.metrics.respond_to?(:each)
       end
 
-      def total_time; metric_value(:time, :total); end
+      # 0.25 reports don't have resource statuses, but returning an empty list
+      # here makes the interface consistent with 2.6
+      def resource_statuses
+        []
+      end
 
-      def version
-        "0.25.x"
+      # 0.25 reports don't have kind but this makes the interface more consistent
+      def kind
+        nil
       end
     end
 
@@ -106,26 +97,14 @@ module ReportExtensions #:nodoc:
       end
 
       # Attributes in 2.6.x but not 0.25.x
-      attr_reader :external_times, :resource_statuses
-
-      def changed_statuses
-        resource_statuses.reject { |name, status| not status.changed }
-      end
-
-      def total_time
-        times = metric_value(:time)
-        return 0 unless times
-        times.values.map(&:last).sum
-      end
-
-      def version
-        "2.6.x"
-      end
+      attr_reader :external_times, :resource_statuses, :kind
     end
 
     module Resource
       module Status
-        attr_reader :source_description, :evaluation_time, :resource, :tags, :file, :events, :time, :line, :version, :changed
+        attr_reader :source_description, :evaluation_time, :resource, :tags,
+          :file, :events, :time, :line, :version, :changed, :change_count,
+          :out_of_sync
       end
     end
 

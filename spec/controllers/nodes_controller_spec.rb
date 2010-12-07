@@ -1,6 +1,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe NodesController do
+  include ReportSupport
   integrate_views
 
   describe "#index" do
@@ -363,7 +364,7 @@ describe NodesController do
       @node = Node.generate!
       Node.stubs(:find_by_name! => @node)
       Report.stubs(:assign_to_node => false)
-      @report = Report.generate!(:node => @node)
+      @report = Report.create_from_yaml(report_yaml_with(:host => @node.name))
       @node.reports = [@report]
     end
 
@@ -456,8 +457,8 @@ describe NodesController do
         SETTINGS.stubs(:no_longer_reporting_cutoff).returns(60)
         @node = Node.generate!(:name => "foo")
         @hidden_node = Node.generate!(:name => "bar", :hidden => true)
-        Report.generate_for(@node, 1.hour.ago)
-        Report.generate_for(@hidden_node, 1.hour.ago)
+        Report.create!(:time => 1.hour.ago, :host => @node.name, :status => "failed")
+        Report.create!(:time => 1.hour.ago, :host => @hidden_node.name, :status => "failed")
       end
 
       let(:action) { "no_longer_reporting" }
@@ -483,8 +484,8 @@ describe NodesController do
         SETTINGS.stubs(:no_longer_reporting_cutoff).returns(3600)
         @node = Node.generate!(:name => "foo")
         @hidden_node = Node.generate!(:name => "bar", :hidden => true)
-        Report.generate_for(@node, 5.minutes.ago, "unchanged")
-        Report.generate_for(@hidden_node, 5.minutes.ago, "unchanged")
+        Report.generate!(:host => @node.name, :time => 5.minutes.ago, :status => "unchanged")
+        Report.generate!(:host => @hidden_node.name, :time => 5.minutes.ago, :status => "unchanged")
       end
 
       let(:action) { "index" }

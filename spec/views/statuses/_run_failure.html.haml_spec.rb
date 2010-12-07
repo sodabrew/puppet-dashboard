@@ -1,6 +1,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
 describe "/statuses/_run_failure.html.haml" do
+  include ReportSupport
 
   describe "successful render" do
     specify do
@@ -12,12 +13,9 @@ describe "/statuses/_run_failure.html.haml" do
       @node = Node.create!(:name => "node")
 
       32.times do |n|
-        report = Puppet::Transaction::Report.new
-        report.stubs(:failed_resources?).returns(false)
-        report.stubs(:time).returns n.days.ago
-        report.stubs(:host).returns "node"
+        report_yaml = report_yaml_with(:host => "node", :time => n.days.ago)
 
-        @node.reports.create!(:report => report)
+        Report.create_from_yaml(report_yaml)
       end
 
       SETTINGS.stubs(:daily_run_history_length).returns(20)

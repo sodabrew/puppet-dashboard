@@ -18,12 +18,17 @@ class ReportsController < InheritedResources::Base
       return
     end
 
-    create! do |success,failure|
-      failure.html do
+    begin
+      report = Report.create_from_yaml(params[:report][:report])
+      unless report.valid?
         Rails.logger.debug "WARNING! ReportsController#create failed:"
-        @report.errors.full_messages.each { |msg| Rails.logger.debug msg }
+        report.errors.full_messages.each { |msg| Rails.logger.debug msg }
         render :status => 406
       end
+    rescue ArgumentError => e
+      Rails.logger.debug "WARNING! ReportsController#create failed:"
+      Rails.logger.debug e.message
+      render :status => 406
     end
   end
 

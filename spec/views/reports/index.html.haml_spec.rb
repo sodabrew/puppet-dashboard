@@ -16,7 +16,6 @@ describe "/reports/index.html.haml" do
   describe "the response with a report lacking metrics" do
     before :each do
       @report = Report.generate!
-      @report.stubs(:metrics).returns(nil)
       assigns[:reports] = @reports = [ @report ].paginate
       render
     end

@@ -5,7 +5,7 @@ describe "/reports/_report_status_td.html.haml" do
 
   describe "successful render" do
     before :each do
-      assigns[:report] = @report = Report.generate!
+      assigns[:report] = @report = Report.generate!(:status => "changed")
       render :locals => {:report => @report}
     end
 

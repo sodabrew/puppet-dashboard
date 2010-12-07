@@ -24,38 +24,38 @@ describe Node do
       sooner = Date.today
 
       @ever_changed = Node.generate!(:name => 'ever_changed').tap do |node|
-        Report.generate_for(node, later, 'changed')
-        Report.generate_for(node, sooner, 'changed')
+        Report.generate!(:host => node.name, :time => later, :status => 'changed')
+        Report.generate!(:host => node.name, :time => sooner, :status => 'changed')
         node.reload
       end
 
       @ever_unchanged = Node.generate!(:name => 'ever_unchanged').tap do |node|
-        Report.generate_for(node, later, 'unchanged')
-        Report.generate_for(node, sooner, 'unchanged')
+        Report.generate!(:host => node.name, :time => later, :status => 'unchanged')
+        Report.generate!(:host => node.name, :time => sooner, :status => 'unchanged')
         node.reload
       end
 
       @just_changed = Node.generate!(:name => 'just_changed').tap do |node|
-        Report.generate_for(node, later, 'failed')
-        Report.generate_for(node, sooner, 'changed')
+        Report.generate!(:host => node.name, :time => later, :status => 'failed')
+        Report.generate!(:host => node.name, :time => sooner, :status => 'changed')
         node.reload
       end
 
       @just_unchanged = Node.generate!(:name => 'just_unchanged').tap do |node|
-        Report.generate_for(node, later, 'failed')
-        Report.generate_for(node, sooner, 'unchanged')
+        Report.generate!(:host => node.name, :time => later, :status => 'failed')
+        Report.generate!(:host => node.name, :time => sooner, :status => 'unchanged')
         node.reload
       end
 
       @ever_failed = Node.generate!(:name => 'ever_failed').tap do |node|
-        Report.generate_for(node, later, 'failed')
-        Report.generate_for(node, sooner, 'failed')
+        Report.generate!(:host => node.name, :time => later, :status => 'failed')
+        Report.generate!(:host => node.name, :time => sooner, :status => 'failed')
         node.reload
       end
 
       @just_failed = Node.generate!(:name => 'just_failed').tap do |node|
-        Report.generate_for(node, later, 'unchanged')
-        Report.generate_for(node, sooner, 'failed')
+        Report.generate!(:host => node.name, :time => later, :status => 'unchanged')
+        Report.generate!(:host => node.name, :time => sooner, :status => 'failed')
         node.reload
       end
 
@@ -109,7 +109,7 @@ describe Node do
     it "should return all nodes with a latest report" do
       unreported_node = Node.generate
       reported_node = Node.generate
-      Report.generate_for(reported_node)
+      Report.generate!(:host => reported_node.name)
 
       Node.reported.should == [reported_node]
     end
@@ -119,7 +119,7 @@ describe Node do
     it "should return all nodes whose latest report was unreported" do
       unreported_node = Node.generate
       reported_node = Node.generate
-      Report.generate_for(reported_node)
+      Report.generate!(:host => reported_node.name)
 
       Node.unreported.should == [unreported_node]
     end
@@ -443,7 +443,7 @@ describe Node do
     end
 
     it("should destroy dependent reports") do
-      @report = Report.generate_for(@node)
+      @report = Report.generate!(:host => @node.name)
       @node.destroy
       Report.all.should_not include(@report)
     end
