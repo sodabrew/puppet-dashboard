@@ -8,7 +8,7 @@ module DescribeReports
   #
   # Example:
   #
-  #     describe_reports "#changed?" do subject { report.changed? } it { should
+  #     describe_reports "#changed_resources?" do subject { report.changed_resources? } it { should
   #     == info[:changed] > 0} end
   #
   def describe_reports(*args, &block)

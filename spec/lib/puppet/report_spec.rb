@@ -42,8 +42,8 @@ describe Puppet::Transaction::Report do
     it { should == info[:changed] }
   end
 
-  describe_reports "#changed?" do
-    subject { report.changed? }
+  describe_reports "#changed_resources?" do
+    subject { report.changed_resources? }
     it { should == info[:changed] > 0}
   end
 
@@ -128,19 +128,19 @@ describe Puppet::Transaction::Report do
   it "should consider a report with metrics and no failing resources to be a success" do
     rep = Report.generate
     rep.report.stubs(:failed_resources).returns(0)
-    rep.should_not be_failed
+    rep.failed_resources?.should == false
   end
 
   it "should consider a report with failing resources to be a failure" do
     rep = Report.generate
     rep.report.stubs(:failed_resources).returns(1)
-    rep.should be_failed
+    rep.failed_resources?.should == true
   end
 
   it "should consider a report with no metrics and no failing resources to be a failure" do
     rep = Report.generate
     rep.report.stubs(:failed_resources).returns(0)
     rep.report.stubs(:metrics).returns({})
-    rep.should be_failed
+    rep.failed_resources?.should == true
   end
 end

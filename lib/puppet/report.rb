@@ -13,8 +13,8 @@ module Puppet #:nodoc:
       def skipped_resources;  metric_value(:resources, :skipped_resources) || 0; end
       def changed_resources;  metric_value(:changes,   :total)             || 0; end
 
-      def failed?;  failed_resources  > 0 || metrics.empty? end
-      def changed?; changed_resources > 0 end
+      def failed_resources?;  failed_resources  > 0 || metrics.empty? end
+      def changed_resources?; changed_resources > 0 end
 
       # Puppet 0.25.x does not report individual status items
       def changed_statuses; nil end

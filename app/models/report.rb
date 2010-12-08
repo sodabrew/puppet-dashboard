@@ -12,7 +12,7 @@ class Report < ActiveRecord::Base
 
   delegate :logs, :metric_value, :to => :report
   delegate :total_resources, :failed_resources, :failed_restarts, :skipped_resources,
-           :changed_resources, :failed?, :changed?,
+           :changed_resources, :failed_resources?, :changed_resources?,
            :to => :report
 
   default_scope :order => 'time DESC'
@@ -94,7 +94,7 @@ class Report < ActiveRecord::Base
   end
 
   def set_attributes
-    self.status = failed? ? 'failed' : changed? ? 'changed' : 'unchanged'
+    self.status = failed_resources? ? 'failed' : changed_resources? ? 'changed' : 'unchanged'
     self.time   = report.time
     self.host   = report.host
   end

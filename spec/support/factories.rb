@@ -9,7 +9,7 @@ class Report
     report.node = node
     report.stubs(:process_report => true)
     report.stubs(
-      :failed? => report.status == 'failed',
+      :failed_resources? => report.status == 'failed',
       :total_resources => 1,
       :failed_resources => report.status == 'failed' ? 1 : 0,
       :failed_restarts => 0,

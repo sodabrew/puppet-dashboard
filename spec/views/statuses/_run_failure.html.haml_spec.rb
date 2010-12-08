@@ -13,7 +13,7 @@ describe "/statuses/_run_failure.html.haml" do
 
       32.times do |n|
         report = Puppet::Transaction::Report.new
-        report.stubs(:failed?).returns(false)
+        report.stubs(:failed_resources?).returns(false)
         report.stubs(:time).returns n.days.ago
         report.stubs(:host).returns "node"
 
