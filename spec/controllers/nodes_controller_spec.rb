@@ -376,51 +376,6 @@ describe NodesController do
         assigns[:reports].should be_a_kind_of(WillPaginate::Collection)
       end
     end
-
-    context "for YAML" do
-      before { get :reports, :node => 123, :format => "yaml" }
-
-      specify { response.should be_success }
-
-      it "should not be paginated" do
-        assigns[:reports].should_not be_a_kind_of(WillPaginate::Collection)
-      end
-
-      it "should return YAML" do
-        response.body.should =~ %r{ruby/object:Report}
-        struct = yaml_from_response_body
-        struct.size.should == 1
-        struct.first.should == @report
-      end
-    end
-
-    context "for JSON" do
-      before { get :reports, :node => 123, :format => "json" }
-
-      specify { response.should be_success }
-
-      it "should not be paginated" do
-        assigns[:reports].should_not be_a_kind_of(WillPaginate::Collection)
-      end
-
-      it "should return JSON" do
-        struct = json_from_response_body
-        struct.size.should == 1
-
-        for key in %w[host id node_id status]
-          struct.first[key].should == @report.send(key)
-        end
-
-        struct.first['report']['metrics']['resources']['values'].tap do |values|
-          @report.total_resources.should == values.find{|t| t.first['total']}[2]
-          @report.failed_resources.should == values.find{|t| t.first['failed']}[2]
-        end
-
-        struct.first['report']['metrics']['time']['values'].tap do |values|
-          @report.total_time.should == (Report::TOTAL_TIME_FORMAT % values.find{|t| t.first['total']}[2].to_s)
-        end
-      end
-    end
   end
 
   # Relies on #action returning name of a NodesController action, e.g. as "successful".
@@ -464,26 +419,6 @@ describe NodesController do
             struct.size.should == 1
             struct.first["name"].should == "foo"
           end
-        end
-      end
-
-      context "as JSON" do
-        before { get action, action_params.merge(:format => "json") }
-
-        specify { response.should be_success }
-
-        it "should assign only appropriate records" do
-          assigns[:nodes].size.should == 1
-        end
-
-        it "should not be paginated" do
-          assigns[:nodes].should_not be_a_kind_of(WillPaginate::Collection)
-        end
-
-        it "should return JSON" do
-          struct = json_from_response_body
-          struct.size.should == 1
-          struct.first["name"].should == "foo"
         end
       end
     end
