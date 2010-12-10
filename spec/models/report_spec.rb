@@ -13,6 +13,17 @@ describe Report do
         @report_data = YAML.load(@report_yaml).extend(ReportExtensions)
       end
 
+      it "should recover from errors without polluting the database" do
+        Report.count.should == 0
+        yaml = <<HEREDOC
+--- !ruby/object:Puppet::Transaction::Report
+  time: 2010-07-08 12:35:46.027576 -04:00
+  host: localhost.localdomain
+HEREDOC
+        lambda { Report.create_from_yaml(yaml) }.should raise_exception
+        Report.count.should == 0
+      end
+
       it "sets status correctly based on whether the report contains failures" do
         report = Report.create_from_yaml(File.read(File.join(Rails.root, 'spec/fixtures/reports/failure.yml')))
         report.status.should == 'failed'
