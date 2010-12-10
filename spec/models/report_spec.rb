@@ -211,6 +211,49 @@ HEREDOC
     end
   end
 
+  describe "#create_from_yaml for a 2.5 report" do
+    it "should populate report related tables from a yaml report" do
+      Time.zone = 'UTC'
+      @node = Node.generate(:name => 'sample_node')
+      @report_yaml = File.read(File.join(RAILS_ROOT, "spec/fixtures/reports/puppet25/1_changed_0_failures.yml"))
+      Report.create_from_yaml(@report_yaml)
+      Report.count.should == 1
+      report = Report.first
+      report.node.should == @node
+      report.metrics.map {|t| [t.category, t.name, "%0.2f" % t.value]}.should =~ [
+        ['time',      'config_retrieval' ,  '0.19'],
+        ['time',      'file'             ,  '0.07'],
+        ['time',      'total'            ,  '0.25'],
+        ['resources', 'out_of_sync'      ,  '1.00'],
+        ['resources', 'scheduled'        ,  '1.00'],
+        ['resources', 'skipped'          ,  '0.00'],
+        ['resources', 'applied'          ,  '1.00'],
+        ['resources', 'restarted'        ,  '0.00'],
+        ['resources', 'failed_restarts'  ,  '0.00'],
+        ['resources', 'failed'           ,  '0.00'],
+        ['resources', 'total'            ,  '3.00'],
+        ['changes',   'total'            ,  '1.00'],
+      ]
+
+      report.resource_statuses.count.should == 0
+      report.events.count.should == 0
+      report.logs.map { |t| [
+        t.level,
+        t.message,
+        t.source,
+        t.tags.sort,
+        t.time.strftime("%Y-%m-%d %H:%M:%S"),
+        t.file,
+        t.line,
+      ] }.should =~ [
+        ['info', "Applying configuration version '1258679330'", 'Puppet', ['info'], '2009-11-20 01:08:50', nil, nil],
+        ['info', 'Adding /tmp/puppet_test(6d0007e52f7afb7d5a0650b0ffb8a4d1)', 'Filebucket[/tmp/puppet/var/clientbucket]', ['info'], '2009-11-20 01:08:50', nil, nil],
+        ['info', 'Filebucketed /tmp/puppet_test to puppet with sum 6d0007e52f7afb7d5a0650b0ffb8a4d1', '//Node[default]/File[/tmp/puppet_test]', ['class', 'default', 'file', 'info', 'main', 'node'], '2009-11-20 01:08:50', '/tmp/puppet/manifests/site.pp', 4],
+        ['notice', "content changed '{md5}6d0007e52f7afb7d5a0650b0ffb8a4d1' to 'unknown checksum'", '//Node[default]/File[/tmp/puppet_test]/content', ['class', 'content', 'default', 'file', 'main', 'node', 'notice'], '2009-11-20 01:08:50', '/tmp/puppet/manifests/site.pp', 4]
+      ]
+    end
+  end
+
   describe "#create_from_yaml for a 2.6 report" do
     it "should populate report related tables from a yaml report" do
       @node = Node.generate(:name => 'puppet.puppetlabs.vm')
