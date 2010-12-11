@@ -13,22 +13,14 @@ class ReportsController < InheritedResources::Base
   end
 
   def upload
-    if params[:report][:report].blank?
-      render :status => 406
-      return
-    end
-
     begin
-      report = Report.create_from_yaml(params[:report][:report])
-      unless report.valid?
-        Rails.logger.debug "WARNING! ReportsController#create failed:"
-        report.errors.full_messages.each { |msg| Rails.logger.debug msg }
-        render :status => 406
-      end
-    rescue ArgumentError => e
-      Rails.logger.debug "WARNING! ReportsController#create failed:"
+      Report.create_from_yaml(params[:report][:report])
+      render :text => "Report successfully uploaded"
+    rescue => e
+      error_text = "ERROR! ReportsController#upload failed:"
+      Rails.logger.debug error_text
       Rails.logger.debug e.message
-      render :status => 406
+      render :text => "#{error_text} #{e.message}", :status => 406
     end
   end
 

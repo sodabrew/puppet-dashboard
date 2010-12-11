@@ -11,10 +11,6 @@
 
 ActiveRecord::Schema.define(:version => 20101206225510) do
 
-  create_table "Times", :id => false, :force => true do |t|
-    t.datetime "time"
-  end
-
   create_table "assignments", :force => true do |t|
     t.integer  "node_id"
     t.integer  "service_id"
@@ -85,7 +81,7 @@ ActiveRecord::Schema.define(:version => 20101206225510) do
 
   create_table "old_reports", :force => true do |t|
     t.integer  "node_id"
-    t.text     "report",     :limit => 2147483647
+    t.text     "report",     :limit => 16777215
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "host"
