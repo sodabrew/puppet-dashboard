@@ -68,7 +68,7 @@ class Report < ActiveRecord::Base
     comparison_report.resource_statuses.each do |resource_status|
       resource_type = resource_status.resource_type
       title = resource_status.title
-      name = "#{resource_type}[#{title}]"
+      name = resource_status.name
       my_properties = events_to_hash( self.resource_statuses.find_by_resource_type_and_title(resource_type, title).events )
       their_properties = events_to_hash( resource_status.events )
       my_properties.keys.each do |property|
