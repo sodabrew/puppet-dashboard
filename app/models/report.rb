@@ -51,7 +51,7 @@ class Report < ActiveRecord::Base
   TOTAL_TIME_FORMAT = "%0.2f"
 
   def total_time
-    TOTAL_TIME_FORMAT % metric_value("time", "total_time")
+    TOTAL_TIME_FORMAT % metric_value("time", "total")
   end
 
   def config_retrieval_time

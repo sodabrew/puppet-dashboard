@@ -1,85 +1,110 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe Report do
-  describe "#report" do
-    include DescribeReports
+  include DescribeReports
 
-    describe "on creation" do
-      before :each do
-        @now = Time.now
-        Time.stubs(:now).returns(@now)
-        @node = Node.generate
-        @report_yaml = File.read(File.join(RAILS_ROOT, "spec/fixtures/sample_report.yml"))
-        @report_data = YAML.load(@report_yaml).extend(ReportExtensions)
-      end
-
-      it "should recover from errors without polluting the database" do
-        Report.count.should == 0
-        yaml = <<HEREDOC
---- !ruby/object:Puppet::Transaction::Report
-  time: 2010-07-08 12:35:46.027576 -04:00
-  host: localhost.localdomain
-HEREDOC
-        lambda { Report.create_from_yaml(yaml) }.should raise_exception
-        Report.count.should == 0
-      end
-
-      it "sets status correctly based on whether the report contains failures" do
-        report = Report.create_from_yaml(File.read(File.join(Rails.root, 'spec/fixtures/reports/failure.yml')))
-        report.status.should == 'failed'
-      end
-
-      it "should properly create a valid report" do
-        report = Report.create_from_yaml(File.read(File.join(Rails.root, 'spec/fixtures/reports/success.yml')))
-        report.status.should == 'unchanged'
-      end
-
-      it "should consider a blank report to be invalid" do
-        lambda { Report.create_from_yaml('') }.should raise_error(ArgumentError)
-      end
-
-      it "should consider a report in incorrect format to be invalid" do
-        lambda { Report.create_from_yaml('foo bar baz bad data invalid') }.should raise_error(ArgumentError)
-      end
-
-      it "should consider a report in correct format to be valid" do
-        report_from_yaml.should be_valid
-      end
-
-      it "is not created if a report for the same host exists with the same time" do
-        Report.create_from_yaml(@report_yaml)
-        lambda {
-          Report.create_from_yaml(@report_yaml)
-        }.should raise_error(ActiveRecord::RecordInvalid)
-        Report.count.should == 1
-      end
-
-      it "creates a node by host if none exists" do
-        lambda {
-          Report.create_from_yaml(@report_yaml)
-        }.should change { Node.count(:conditions => {:name => @report_data.host}) }.by(1)
-      end
-
-      it "updates the node's reported_at timestamp" do
-        node = Node.generate(:name => @report_data.host)
-        report = Report.create_from_yaml(@report_yaml)
-        node.reload
-        node.reported_at.should be_close(@report_data.time.in_time_zone, 1.second)
-      end
-
-      it "does not create a timeline event for the node" do
-        pending "FIXME figure out why Report#update_node can't save an object with #update_without_callbacks any more"
-        node = Node.generate(:name => @report_data.host)
-        lambda {
-          Report.create(:report => @report_yaml)
-          node.reload
-        }.should_not change(TimelineEvent, :count)
-      end
+  describe "on creation" do
+    before :each do
+      @now = Time.now
+      Time.stubs(:now).returns(@now)
+      @node = Node.generate
+      @report_yaml = File.read(File.join(RAILS_ROOT, "spec/fixtures/sample_report.yml"))
+      @report_data = YAML.load(@report_yaml).extend(ReportExtensions)
     end
 
-    def report_from_yaml(path="puppet25/1_changed_0_failures.yml" )
-      report_yaml = File.read(Rails.root.join('spec', 'fixtures', 'reports', path))
-      Report.create_from_yaml(report_yaml)
+    it "should recover from errors without polluting the database" do
+      Report.count.should == 0
+      yaml = <<HEREDOC
+--- !ruby/object:Puppet::Transaction::Report
+time: 2010-07-08 12:35:46.027576 -04:00
+host: localhost.localdomain
+HEREDOC
+      lambda { Report.create_from_yaml(yaml) }.should raise_exception
+      Report.count.should == 0
+    end
+
+    it "sets status correctly based on whether the report contains failures" do
+      report = Report.create_from_yaml(File.read(File.join(Rails.root, 'spec/fixtures/reports/failure.yml')))
+      report.status.should == 'failed'
+    end
+
+    it "should properly create a valid report" do
+      report = Report.create_from_yaml(File.read(File.join(Rails.root, 'spec/fixtures/reports/success.yml')))
+      report.status.should == 'unchanged'
+    end
+
+    it "should consider a blank report to be invalid" do
+      lambda { Report.create_from_yaml('') }.should raise_error(ArgumentError)
+    end
+
+    it "should consider a report in incorrect format to be invalid" do
+      lambda { Report.create_from_yaml('foo bar baz bad data invalid') }.should raise_error(ArgumentError)
+    end
+
+    it "should consider a report in correct format to be valid" do
+      report_yaml = File.read(Rails.root.join('spec', 'fixtures', 'reports', "puppet25/1_changed_0_failures.yml"))
+      Report.create_from_yaml(report_yaml).should be_valid
+    end
+
+    it "is not created if a report for the same host exists with the same time" do
+      Report.create_from_yaml(@report_yaml)
+      lambda {
+        Report.create_from_yaml(@report_yaml)
+      }.should raise_error(ActiveRecord::RecordInvalid)
+      Report.count.should == 1
+    end
+
+    it "creates a node by host if none exists" do
+      lambda {
+        Report.create_from_yaml(@report_yaml)
+      }.should change { Node.count(:conditions => {:name => @report_data.host}) }.by(1)
+    end
+
+    it "updates the node's reported_at timestamp" do
+      node = Node.generate(:name => @report_data.host)
+      report = Report.create_from_yaml(@report_yaml)
+      node.reload
+      node.reported_at.should be_close(@report_data.time.in_time_zone, 1.second)
+    end
+
+    it "does not create a timeline event for the node" do
+      pending "FIXME figure out why Report#update_node can't save an object with #update_without_callbacks any more"
+      node = Node.generate(:name => @report_data.host)
+      lambda {
+        Report.create(:report => @report_yaml)
+        node.reload
+      }.should_not change(TimelineEvent, :count)
+    end
+  end
+
+  describe "metrics methods" do
+    before :each do
+      @report_yaml = File.read(File.join(RAILS_ROOT, "spec/fixtures/reports/puppet26/report_ok_service_started_ok.yaml"))
+      @report = Report.create_from_yaml(@report_yaml)
+    end
+
+    it "should get the correct value for total_resources" do
+      @report.total_resources.should == 9
+    end
+
+    it "should get the correct value for failed_resources" do
+      @report.failed_resources.should == 0
+    end
+
+    it "should get the correct value for failed_restarts" do
+      @report.failed_restarts.should == 0
+    end
+
+    it "should get the correct value for skipped_resources" do
+      @report.skipped_resources.should == 0
+    end
+
+    it "should get the correct value for changed_resources" do
+      @report.changed_resources.should == 2
+    end
+
+    it "should get the correct value for total_time" do
+      @report.total_time.should == '1.82'
     end
   end
 
