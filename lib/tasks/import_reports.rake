@@ -15,7 +15,7 @@ namespace :reports do
     pbar = ProgressBar.new("Importing:", reports.size, STDOUT)
     reports.each do |report|
       data = File.read(report)
-      success = data.blank? ? false : Report.create(:report => data).valid?
+      success = Report.create_from_yaml(data) rescue false
       skipped += 1 unless success
       pbar.inc
     end
