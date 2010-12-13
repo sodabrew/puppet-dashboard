@@ -4,7 +4,7 @@ describe "/reports/index.html.haml" do
   describe "the response"  do
     before :each do
       @nodes = [Node.generate!, Node.generate!]
-      assigns[:reports] = @reports = @nodes.map { |node| Report.generate_for(node) }.paginate
+      assigns[:reports] = @reports = @nodes.map { |node| Report.generate!(:host => node.name) }.paginate
       render
     end
 
