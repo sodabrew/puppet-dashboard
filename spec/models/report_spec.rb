@@ -236,8 +236,8 @@ HEREDOC
     end
   end
 
-  describe "#create_from_yaml for a 2.5 report" do
-    it "should populate report related tables from a yaml report" do
+  describe "#create_from_yaml" do
+    it "should populate report related tables from a 2.6. yaml report" do
       Time.zone = 'UTC'
       @node = Node.generate(:name => 'sample_node')
       @report_yaml = File.read(File.join(RAILS_ROOT, "spec/fixtures/reports/puppet25/1_changed_0_failures.yml"))
@@ -277,81 +277,79 @@ HEREDOC
         ['notice', "content changed '{md5}6d0007e52f7afb7d5a0650b0ffb8a4d1' to 'unknown checksum'", '//Node[default]/File[/tmp/puppet_test]/content', ['class', 'content', 'default', 'file', 'main', 'node', 'notice'], '2009-11-20 01:08:50', '/tmp/puppet/manifests/site.pp', 4]
       ]
     end
-  end
 
-  describe "#create_from_yaml for a 2.6 report" do
-    it "should populate report related tables from a yaml report" do
-      @node = Node.generate(:name => 'puppet.puppetlabs.vm')
-      @report_yaml = File.read(File.join(RAILS_ROOT, "spec/fixtures/reports/puppet26/report_ok_service_started_ok.yaml"))
-      file = '/etc/puppet/manifests/site.pp'
-      Report.create_from_yaml(@report_yaml)
-      Report.count.should == 1
-      report = Report.first
-      report.node.should == @node
-      report.metrics.map {|t| [t.category, t.name, "%0.2f" % t.value]}.should =~ [
-        ['time',      'schedule'         ,  '0.00'],
-        ['time',      'config_retrieval' ,  '0.16'],
-        ['time',      'filebucket'       ,  '0.00'],
-        ['time',      'service'          ,  '1.56'],
-        ['time',      'exec'             ,  '0.10'],
-        ['time',      'total'       ,  '1.82'],
-        ['resources', 'total'            ,  '9.00'],
-        ['resources', 'changed'          ,  '2.00'],
-        ['resources', 'out_of_sync'      ,  '2.00'],
-        ['changes',   'total'            ,  '2.00'],
-        ['events',    'total'            ,  '2.00'],
-        ['events',    'success'          ,  '2.00']
-      ]
+      it "should populate report related tables from a 2.6. yaml report" do
+        @node = Node.generate(:name => 'puppet.puppetlabs.vm')
+        @report_yaml = File.read(File.join(RAILS_ROOT, "spec/fixtures/reports/puppet26/report_ok_service_started_ok.yaml"))
+        file = '/etc/puppet/manifests/site.pp'
+        Report.create_from_yaml(@report_yaml)
+        Report.count.should == 1
+        report = Report.first
+        report.node.should == @node
+        report.metrics.map {|t| [t.category, t.name, "%0.2f" % t.value]}.should =~ [
+          ['time',      'schedule'         ,  '0.00'],
+          ['time',      'config_retrieval' ,  '0.16'],
+          ['time',      'filebucket'       ,  '0.00'],
+          ['time',      'service'          ,  '1.56'],
+          ['time',      'exec'             ,  '0.10'],
+          ['time',      'total'       ,  '1.82'],
+          ['resources', 'total'            ,  '9.00'],
+          ['resources', 'changed'          ,  '2.00'],
+          ['resources', 'out_of_sync'      ,  '2.00'],
+          ['changes',   'total'            ,  '2.00'],
+          ['events',    'total'            ,  '2.00'],
+          ['events',    'success'          ,  '2.00']
+        ]
 
-      report.resource_statuses.map { |t| [
-        t.resource_type,
-        t.title,
-        "%0.2f" % t.evaluation_time,
-        t.file,
-        t.line,
-        #t.source_description,
-        t.tags.sort,
-        #t.time,
-        t.change_count
-      ] }.should =~ [
-        [ 'Filebucket' ,  'puppet'  ,  "0.00" ,  nil ,  nil ,  ['filebucket' ,  'puppet']   ,  0 ],
-        [ 'Schedule'   ,  'puppet'  ,  "0.00" ,  nil ,  nil ,  ['puppet'     ,  'schedule'] ,  0 ],
-        [ 'Schedule'   ,  'weekly'  ,  "0.00" ,  nil ,  nil ,  ['schedule'   ,  'weekly']   ,  0 ],
-        [ 'Schedule'   ,  'daily'   ,  "0.00" ,  nil ,  nil ,  ['daily'      ,  'schedule'] ,  0 ],
-        [ 'Schedule'   ,  'hourly'  ,  "0.00" ,  nil ,  nil ,  ['hourly'     ,  'schedule'] ,  0 ],
-        [ 'Schedule'   ,  'monthly' ,  "0.00" ,  nil ,  nil ,  ['monthly'    ,  'schedule'] ,  0 ],
-        [ 'Schedule'   ,  'never'   ,  "0.00" ,  nil ,  nil ,  ['never'      ,  'schedule'] ,  0 ],
-        [ 'Service'    ,  'mysqld'  ,  "1.56" ,  file,  8 ,  ['class'      ,  'default'   ,  'mysqld' ,  'node' ,  'service'] ,  1 ],
-        [ 'Exec'    ,  '/bin/true'  ,  "0.10" ,  file ,  9 ,  ['class'      ,  'default'   ,  'exec' ,  'node' ] ,  1 ],
-      ]
-      report.events.map { |t| [
-        t.property,
-        t.previous_value,
-        t.desired_value,
-        #t.message,
-        t.name,
-        #t.source_description,
-        t.status,
-        t.tags.sort,
-      ] }.should =~ [
-        [ 'returns' , :notrun  , ['0']    , 'executed_command' , 'success' , ['class' , 'default' , 'exec'   , 'node']            ],
-        [ 'ensure'  , :stopped , :running , 'service_started'  , 'success' , ['class' , 'default' , 'mysqld' , 'node' , 'service']],
-      ]
+        report.resource_statuses.map { |t| [
+          t.resource_type,
+          t.title,
+          "%0.2f" % t.evaluation_time,
+          t.file,
+          t.line,
+          #t.source_description,
+          t.tags.sort,
+          #t.time,
+          t.change_count
+        ] }.should =~ [
+          [ 'Filebucket' ,  'puppet'  ,  "0.00" ,  nil ,  nil ,  ['filebucket' ,  'puppet']   ,  0 ],
+          [ 'Schedule'   ,  'puppet'  ,  "0.00" ,  nil ,  nil ,  ['puppet'     ,  'schedule'] ,  0 ],
+          [ 'Schedule'   ,  'weekly'  ,  "0.00" ,  nil ,  nil ,  ['schedule'   ,  'weekly']   ,  0 ],
+          [ 'Schedule'   ,  'daily'   ,  "0.00" ,  nil ,  nil ,  ['daily'      ,  'schedule'] ,  0 ],
+          [ 'Schedule'   ,  'hourly'  ,  "0.00" ,  nil ,  nil ,  ['hourly'     ,  'schedule'] ,  0 ],
+          [ 'Schedule'   ,  'monthly' ,  "0.00" ,  nil ,  nil ,  ['monthly'    ,  'schedule'] ,  0 ],
+          [ 'Schedule'   ,  'never'   ,  "0.00" ,  nil ,  nil ,  ['never'      ,  'schedule'] ,  0 ],
+          [ 'Service'    ,  'mysqld'  ,  "1.56" ,  file,  8 ,  ['class'      ,  'default'   ,  'mysqld' ,  'node' ,  'service'] ,  1 ],
+          [ 'Exec'    ,  '/bin/true'  ,  "0.10" ,  file ,  9 ,  ['class'      ,  'default'   ,  'exec' ,  'node' ] ,  1 ],
+        ]
+        report.events.map { |t| [
+          t.property,
+          t.previous_value,
+          t.desired_value,
+          #t.message,
+          t.name,
+          #t.source_description,
+          t.status,
+          t.tags.sort,
+        ] }.should =~ [
+          [ 'returns' , :notrun  , ['0']    , 'executed_command' , 'success' , ['class' , 'default' , 'exec'   , 'node']            ],
+          [ 'ensure'  , :stopped , :running , 'service_started'  , 'success' , ['class' , 'default' , 'mysqld' , 'node' , 'service']],
+        ]
 
-      report.logs.map { |t| [
-        t.level,
-        t.message,
-        t.source,
-        t.tags.sort,
-        #t.time,
-        t.file,
-        t.line,
-      ] }.should =~ [
-        ['info', 'Caching catalog for puppet.puppetlabs.vm',    'Puppet', ['info'], nil, nil ],
-        ['info', "Applying configuration version '1279826342'", 'Puppet', ['info'], nil, nil ],
-        ['notice', 'executed successfully', "/Stage[main]//Node[default]/Exec[/bin/true]/returns", ['class', 'default', 'exec', 'node', 'notice'], file, 9 ],
-        ['notice', "ensure changed 'stopped' to 'running'", '/Stage[main]//Node[default]/Service[mysqld]/ensure', ['class', 'default', 'mysqld', 'node', 'notice', 'service'], file, 8 ],
-      ]
+        report.logs.map { |t| [
+          t.level,
+          t.message,
+          t.source,
+          t.tags.sort,
+          #t.time,
+          t.file,
+          t.line,
+        ] }.should =~ [
+          ['info', 'Caching catalog for puppet.puppetlabs.vm',    'Puppet', ['info'], nil, nil ],
+          ['info', "Applying configuration version '1279826342'", 'Puppet', ['info'], nil, nil ],
+          ['notice', 'executed successfully', "/Stage[main]//Node[default]/Exec[/bin/true]/returns", ['class', 'default', 'exec', 'node', 'notice'], file, 9 ],
+          ['notice', "ensure changed 'stopped' to 'running'", '/Stage[main]//Node[default]/Service[mysqld]/ensure', ['class', 'default', 'mysqld', 'node', 'notice', 'service'], file, 8 ],
+        ]
     end
   end
 
