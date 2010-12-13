@@ -8,7 +8,7 @@ module DescribeReports
   #
   # Example:
   #
-  #     describe_reports "#changed?" do subject { report.changed? } it { should
+  #     describe_reports "#changed_resources?" do subject { report.changed_resources? } it { should
   #     == info[:changed] > 0} end
   #
   def describe_reports(*args, &block)
@@ -32,18 +32,6 @@ module DescribeReports
         end
       end
     end
-  end
-
-  def report_from_yaml(path)
-    report_model_from_yaml(path).report
-  end
-
-  def report_model_from_yaml(path)
-    report_root = Rails.root.join('spec', 'fixtures', 'reports')
-    report_file = report_root.join(path)
-    raise "No such file #{report_file}" unless File.exists?(report_file)
-    report_yaml = File.read(report_file)
-    Report.new(:report => report_yaml)
   end
 
 end

@@ -1,6 +1,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe NodesController do
+  include ReportSupport
   integrate_views
 
   describe "#index" do
@@ -363,7 +364,7 @@ describe NodesController do
       @node = Node.generate!
       Node.stubs(:find_by_name! => @node)
       Report.stubs(:assign_to_node => false)
-      @report = Report.generate!(:node => @node)
+      @report = Report.create_from_yaml(report_yaml_with(:host => @node.name))
       @node.reports = [@report]
     end
 
@@ -374,51 +375,6 @@ describe NodesController do
 
       it "should be paginated" do
         assigns[:reports].should be_a_kind_of(WillPaginate::Collection)
-      end
-    end
-
-    context "for YAML" do
-      before { get :reports, :node => 123, :format => "yaml" }
-
-      specify { response.should be_success }
-
-      it "should not be paginated" do
-        assigns[:reports].should_not be_a_kind_of(WillPaginate::Collection)
-      end
-
-      it "should return YAML" do
-        response.body.should =~ %r{ruby/object:Report}
-        struct = yaml_from_response_body
-        struct.size.should == 1
-        struct.first.should == @report
-      end
-    end
-
-    context "for JSON" do
-      before { get :reports, :node => 123, :format => "json" }
-
-      specify { response.should be_success }
-
-      it "should not be paginated" do
-        assigns[:reports].should_not be_a_kind_of(WillPaginate::Collection)
-      end
-
-      it "should return JSON" do
-        struct = json_from_response_body
-        struct.size.should == 1
-
-        for key in %w[host id node_id status]
-          struct.first[key].should == @report.send(key)
-        end
-
-        struct.first['report']['metrics']['resources']['values'].tap do |values|
-          @report.total_resources.should == values.find{|t| t.first['total']}[2]
-          @report.failed_resources.should == values.find{|t| t.first['failed']}[2]
-        end
-
-        struct.first['report']['metrics']['time']['values'].tap do |values|
-          @report.total_time.should == (Report::TOTAL_TIME_FORMAT % values.find{|t| t.first['total']}[2].to_s)
-        end
       end
     end
   end
@@ -466,26 +422,6 @@ describe NodesController do
           end
         end
       end
-
-      context "as JSON" do
-        before { get action, action_params.merge(:format => "json") }
-
-        specify { response.should be_success }
-
-        it "should assign only appropriate records" do
-          assigns[:nodes].size.should == 1
-        end
-
-        it "should not be paginated" do
-          assigns[:nodes].should_not be_a_kind_of(WillPaginate::Collection)
-        end
-
-        it "should return JSON" do
-          struct = json_from_response_body
-          struct.size.should == 1
-          struct.first["name"].should == "foo"
-        end
-      end
     end
 
     describe "#successful" do
@@ -521,8 +457,8 @@ describe NodesController do
         SETTINGS.stubs(:no_longer_reporting_cutoff).returns(60)
         @node = Node.generate!(:name => "foo")
         @hidden_node = Node.generate!(:name => "bar", :hidden => true)
-        Report.generate_for(@node, 1.hour.ago)
-        Report.generate_for(@hidden_node, 1.hour.ago)
+        Report.create!(:time => 1.hour.ago, :host => @node.name, :status => "failed")
+        Report.create!(:time => 1.hour.ago, :host => @hidden_node.name, :status => "failed")
       end
 
       let(:action) { "no_longer_reporting" }
@@ -548,8 +484,8 @@ describe NodesController do
         SETTINGS.stubs(:no_longer_reporting_cutoff).returns(3600)
         @node = Node.generate!(:name => "foo")
         @hidden_node = Node.generate!(:name => "bar", :hidden => true)
-        Report.generate_for(@node, 5.minutes.ago, "unchanged")
-        Report.generate_for(@hidden_node, 5.minutes.ago, "unchanged")
+        Report.generate!(:host => @node.name, :time => 5.minutes.ago, :status => "unchanged")
+        Report.generate!(:host => @hidden_node.name, :time => 5.minutes.ago, :status => "unchanged")
       end
 
       let(:action) { "index" }

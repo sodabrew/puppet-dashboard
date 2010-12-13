@@ -11,7 +11,7 @@
     %li= link_to 'Destroy', @report, :confirm => 'Are you sure?', :method => :delete, :class => "delete button"
 
 .item
-  - if report.report.respond_to? :resource_statuses
+  - if report.resource_statuses.present?
     .section
       %h3 Events
       .section
@@ -24,10 +24,10 @@
               %th File
               %th Line
           %tbody
-            - report.report.resource_statuses.sort_by {|name,status| status.time}.each do |name,status|
+            - report.resource_statuses.sort_by(&:time).each do |status|
               - if status.events.empty?
                 %tr
-                  %td= name
+                  %td= status.name
                   %td
                   %td
                   %td= wrap_on_slashes(status.file)
@@ -35,11 +35,11 @@
               - else
                 - status.events.each do |event|
                   %tr{:class => "status #{event.status}"}
-                    %td= name
+                    %td= status.name
                     %td= event.property
                     %td= event.message
-                    %td= event.file
-                    %td= event.line
+                    %td= status.file
+                    %td= status.line
   .section
     %h3 Log
     .section
@@ -61,11 +61,10 @@
   .section
     %h3 Metrics
     - if report.metrics.present?
-      - report.metrics.sort_by{|name, metric| name}.each do |name, metric|
-        - if metric.values.present?
-          .section
-            %h4= name.titleize
-            %table.inspector
-              = render metric
+      - report.metrics.group_by(&:category).sort.each do |category, metrics_in_category|
+        .section
+          %h4= category.titleize
+          %table.inspector
+            = render :partial => 'metrics/metrics_table', :locals => {:metrics => metrics_in_category}
     - else
       &mdash; No metrics in this report &mdash;

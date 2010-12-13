@@ -1,27 +1,27 @@
---- !ruby/object:Puppet::Transaction::Report 
+--- !ruby/object:Puppet::Transaction::Report
 host: sample_node
-logs: 
-- !ruby/object:Puppet::Util::Log 
+logs:
+- !ruby/object:Puppet::Util::Log
   level: :info
   message: Applying configuration version '1258679330'
   source: Puppet
-  tags: 
+  tags:
   - info
   time: 2009-11-19 17:08:50.557829 -08:00
-- !ruby/object:Puppet::Util::Log 
+- !ruby/object:Puppet::Util::Log
   level: :info
   message: Adding /tmp/puppet_test(6d0007e52f7afb7d5a0650b0ffb8a4d1)
   source: Filebucket[/tmp/puppet/var/clientbucket]
-  tags: 
+  tags:
   - info
   time: 2009-11-19 17:08:50.605975 -08:00
-- !ruby/object:Puppet::Util::Log 
+- !ruby/object:Puppet::Util::Log
   file: /tmp/puppet/manifests/site.pp
   level: :info
   line: 4
   message: Filebucketed /tmp/puppet_test to puppet with sum 6d0007e52f7afb7d5a0650b0ffb8a4d1
   source: //Node[default]/File[/tmp/puppet_test]
-  tags: 
+  tags:
   - file
   - node
   - default
@@ -30,13 +30,13 @@ logs:
   - info
   time: 2009-11-19 17:08:50.607171 -08:00
   version: 1258679330
-- !ruby/object:Puppet::Util::Log 
+- !ruby/object:Puppet::Util::Log
   file: /tmp/puppet/manifests/site.pp
   level: :notice
   line: 4
   message: content changed '{md5}6d0007e52f7afb7d5a0650b0ffb8a4d1' to 'unknown checksum'
   source: //Node[default]/File[/tmp/puppet_test]/content
-  tags: 
+  tags:
   - file
   - node
   - default
@@ -46,11 +46,11 @@ logs:
   - notice
   time: 2009-11-19 17:08:50.625690 -08:00
   version: 1258679330
-metrics: 
-  time: !ruby/object:Puppet::Util::Metric 
+metrics:
+  time: !ruby/object:Puppet::Util::Metric
     label: Time
     name: time
-    values: 
+    values:
     - - :config_retrieval
       - Config retrieval
       - 0.185256958007812
@@ -60,10 +60,10 @@ metrics:
     - - :file
       - File
       - 0.0679988861083984
-  resources: !ruby/object:Puppet::Util::Metric 
+  resources: !ruby/object:Puppet::Util::Metric
     label: Resources
     name: resources
-    values: 
+    values:
     - - :out_of_sync
       - Out of sync
       - 1
@@ -88,10 +88,10 @@ metrics:
     - - :failed
       - Failed
       - 0
-  changes: !ruby/object:Puppet::Util::Metric 
+  changes: !ruby/object:Puppet::Util::Metric
     label: Changes
     name: changes
-    values: 
+    values:
     - - :total
       - Total
       - 1

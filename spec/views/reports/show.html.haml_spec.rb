@@ -5,7 +5,8 @@ describe "/reports/show.html.haml" do
 
   describe "successful render" do
     before :each do
-      assigns[:report] = @report = Report.generate!
+      report_yaml = File.read(File.join(Rails.root, "spec/fixtures/reports/puppet26/report_ok_service_started_ok.yaml"))
+      assigns[:report] = @report = Report.create_from_yaml(report_yaml)
       render
     end
 

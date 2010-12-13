@@ -139,10 +139,10 @@ class Node < ActiveRecord::Base
   end
 
   # Assigns the node's :last_report attribute. # FIXME
-  def assign_last_report(report=nil)
+  def assign_last_report(report=nil, force=false)
     report ||= find_last_report
 
-    unless self.last_report == report
+    if force || self.last_report != report
       self.last_report = report
       self.reported_at = report ? report.time : nil
       self.status = report ? report.status : 'unchanged'

@@ -11,10 +11,10 @@ describe PagesController do
       @hidden_node                     = Node.generate!(:name => "hidden", :hidden => true)
       @unreported_hidden_node          = Node.generate!(:name => "unreported_hidden", :hidden => true)
       @no_longer_reporting_hidden_node = Node.generate!(:name => "no_longer_reporting_hidden", :hidden => true)
-      Report.generate_for(@currently_failing_node, 5.minutes.ago, "failed")
-      Report.generate_for(@no_longer_reporting_node, 2.hours.ago, "unchanged")
-      Report.generate_for(@hidden_node, 5.minutes.ago, "failed")
-      Report.generate_for(@no_longer_reporting_hidden_node, 2.hours.ago, "failed")
+      Report.generate(:host => @currently_failing_node.name, :time => 5.minutes.ago, :status => "failed")
+      Report.generate(:host => @no_longer_reporting_node.name, :time => 2.hours.ago, :status => "unchanged")
+      Report.generate(:host => @hidden_node.name, :time => 5.minutes.ago, :status => "failed")
+      Report.generate(:host => @no_longer_reporting_hidden_node.name, :time => 2.hours.ago, :status => "failed")
     end
 
     it "should properly categorize nodes" do
