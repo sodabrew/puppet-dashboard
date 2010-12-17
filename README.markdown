@@ -87,13 +87,22 @@ The Puppet Dashboard will run on most Unix, Linux and Mac OS X systems once its 
 Installation
 ------------
 
-1.  Download the Puppet Dashboard software:
+1.  Download the Puppet Dashboard software using one of the following methods:
 
-    1.  Checkout the latest source code using the [Git](http://git-scm.com/) revision control system:
+    1.  Install the software using APT or RPM packages. See `README_PACKAGES.markdown` for instructions.  This should be the easiest option for upgrading between stable versions as they are released.
+
+    2.  Checkout the latest source code using the [Git](http://git-scm.com/) revision control system.  Please be aware that the initial checkout will be at the head of development, so may not be as well tested as the most recently tagged and released version.  If you want to do development and submit code for dashboard this is probably what you want, but may not be suitable for running your production environment.  The git checkout command below will checkout the most recently tagged and stable version, which isn't necessary if you really want to test or develop against the bleeding edge code.
 
             git clone git://github.com/puppetlabs/puppet-dashboard.git
+            cd puppet-dashboard
+            git checkout v1.0.4
 
-    2.  Or install the software using APT or RPM packages. See `README_PACKAGES.markdown` for instructions.
+    3.  Download the most recent release of Puppet Dashboard, extract it and move it to your install location (this may be different on your system).  This options makes upgrading more difficult since you'll have to manually manage files when upgrading, but may be a good option if you want to avoid repository setup or using git and just want to try out dashboard.
+
+           wget --no-check-certificate https://github.com/puppetlabs/puppet-dashboard/tarball/v1.0.4 
+           tar -xzvf puppetlabs-puppet-dashboard-v1.0.4-0-g071acf4.tar.gz
+           mv puppetlabs-puppet-dashboard-071acf4 /usr/share/puppet-dashboard
+
 
 2.  Create a `config/database.yml` file to specify Puppet Dashboard's database configuration. Please see the `config/database.yml.example` file for further details about database configurations and environments. These files paths are relative to the path of the Puppet Dashboard software containing this `README.markdown` file.
 
