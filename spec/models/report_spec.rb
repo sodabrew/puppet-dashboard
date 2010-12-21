@@ -12,17 +12,6 @@ describe Report do
       @report_data = YAML.load(@report_yaml).extend(ReportExtensions)
     end
 
-    it "should recover from errors without polluting the database" do
-      Report.count.should == 0
-      yaml = <<HEREDOC
---- !ruby/object:Puppet::Transaction::Report
-time: 2010-07-08 12:35:46.027576 -04:00
-host: localhost.localdomain
-HEREDOC
-      lambda { Report.create_from_yaml(yaml) }.should raise_exception
-      Report.count.should == 0
-    end
-
     it "sets status correctly based on whether the report contains failures" do
       report = Report.create_from_yaml(File.read(File.join(Rails.root, 'spec/fixtures/reports/failure.yml')))
       report.status.should == 'failed'
@@ -108,26 +97,6 @@ HEREDOC
     end
   end
 
-  describe "#failed_resources?" do
-    it "should consider a report with metrics and no failing resources to be a success" do
-      rep = Report.generate
-      rep.metrics.stubs(:empty?).returns(false)
-      rep.stubs(:failed_resources).returns(0)
-      rep.should_not be_failed_resources
-    end
-
-    it "should consider a report with failing resources to be a failure" do
-      rep = Report.generate
-      rep.metrics.create(:category => "resources", :name => "failed", :value => 2)
-      rep.should be_failed_resources
-    end
-
-    it "should consider a report with no metrics and no failing resources to be a failure" do
-      rep = Report.generate
-      rep.should be_failed_resources
-    end
-  end
-
   describe "when destroying the most recent report for a node" do
     before :each do
       @node = Node.generate!
@@ -172,10 +141,22 @@ HEREDOC
   metrics: {}
   resource_statuses: 
     "File[/tmp/foo]": !ruby/object:Puppet::Resource::Status
+      evaluation_time: 0.000868
+      file: &id001 /Users/matthewrobinson/work/puppet/test_data/genreportm/manifests/site.pp
+      line: 5
+      resource: "File[/tmp/foo]"
+      source_description: "/Stage[main]//Node[default]/File[/tmp/foo]"
+      tags:
+        - &id002 file
+        - node
+        - default
+        - &id003 class
+      time: 2010-07-22 14:42:39.654436 -04:00
+      version: 1291407517
       events: 
         - !ruby/object:Puppet::Transaction::Event
           default_log_level: !ruby/sym notice
-          file: &id001 /Users/matthewrobinson/work/puppet/test_data/genreportm/manifests/site.pp
+          file: *id001
           line: 5
           message: inspected value is :#{file_ensure}
           previous_value: !ruby/sym #{file_ensure}
@@ -183,8 +164,8 @@ HEREDOC
           resource: "File[/tmp/foo]"
           status: audit
           tags: 
-            - &id002 file
-            - &id003 class
+            - *id002
+            - *id003
           time: 2010-12-03 12:18:40.039434 -08:00
           version: 1291407517
         - !ruby/object:Puppet::Transaction::Event
@@ -237,7 +218,7 @@ HEREDOC
   end
 
   describe "#create_from_yaml" do
-    it "should populate report related tables from a 2.6. yaml report" do
+    it "should populate report related tables from a 0.25 yaml report" do
       Time.zone = 'UTC'
       @node = Node.generate(:name => 'sample_node')
       @report_yaml = File.read(File.join(RAILS_ROOT, "spec/fixtures/reports/puppet25/1_changed_0_failures.yml"))
@@ -278,7 +259,7 @@ HEREDOC
       ]
     end
 
-      it "should populate report related tables from a 2.6. yaml report" do
+      it "should populate report related tables from a 2.6 yaml report" do
         @node = Node.generate(:name => 'puppet.puppetlabs.vm')
         @report_yaml = File.read(File.join(RAILS_ROOT, "spec/fixtures/reports/puppet26/report_ok_service_started_ok.yaml"))
         file = '/etc/puppet/manifests/site.pp'
