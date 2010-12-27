@@ -59,16 +59,15 @@ class Report < ActiveRecord::Base
 
   def diff(comparison_report)
     diff_stuff = {}
-    comparison_report.resource_statuses.each do |resource_status|
-      resource_type = resource_status.resource_type
-      title = resource_status.title
-      name = resource_status.name
-      my_properties = events_to_hash( self.resource_statuses.find_by_resource_type_and_title(resource_type, title).events )
-      their_properties = events_to_hash( resource_status.events )
-      my_properties.keys.each do |property|
-        if my_properties[property] != their_properties[property]
-          diff_stuff[name] ||= {}
-          diff_stuff[name][property.to_sym] = [ my_properties[property], their_properties[property] ]
+    comparison_resources = resources_to_hash(comparison_report.resource_statuses)
+    our_resources = resources_to_hash(resource_statuses)
+    (comparison_resources.keys | our_resources.keys).each do |resource_name|
+      comparison_resource = comparison_resources[resource_name] || {}
+      our_resource = our_resources[resource_name] || {}
+      (comparison_resource.keys | our_resource.keys).each do |property|
+        if our_resource[property] != comparison_resource[property]
+          diff_stuff[resource_name] ||= {}
+          diff_stuff[resource_name][property.to_sym] = [ our_resource[property], comparison_resource[property] ]
         end
       end
     end
@@ -119,6 +118,14 @@ class Report < ActiveRecord::Base
   end
 
   private
+
+  def resources_to_hash(resources)
+    hash = {}
+    resources.each do |resource_status|
+      hash[resource_status.name] = events_to_hash(resource_status.events)
+    end
+    hash
+  end
 
   def events_to_hash(events)
     events.inject({}) do |hash, event|
