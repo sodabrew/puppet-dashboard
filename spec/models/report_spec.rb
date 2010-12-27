@@ -132,20 +132,20 @@ describe Report do
   end
 
   describe "when diffing inspection reports" do
-    def generate_report(time, file_ensure, file_content)
-      Report.create_from_yaml <<-HEREDOC
+    def generate_report(time, file_ensure, file_content, resource_name = "/tmp/foo")
+      report_yaml = <<-HEREDOC
 --- !ruby/object:Puppet::Transaction::Report
   host: mattmac.puppetlabs.lan
   kind: inspect
   logs: []
   metrics: {}
   resource_statuses: 
-    "File[/tmp/foo]": !ruby/object:Puppet::Resource::Status
+    "File[#{resource_name}]": !ruby/object:Puppet::Resource::Status
       evaluation_time: 0.000868
       file: &id001 /Users/matthewrobinson/work/puppet/test_data/genreportm/manifests/site.pp
       line: 5
-      resource: "File[/tmp/foo]"
-      source_description: "/Stage[main]//Node[default]/File[/tmp/foo]"
+      resource: "File[#{resource_name}]"
+      source_description: "/Stage[main]//Node[default]/File[#{resource_name}]"
       tags:
         - &id002 file
         - node
@@ -161,13 +161,16 @@ describe Report do
           message: inspected value is :#{file_ensure}
           previous_value: !ruby/sym #{file_ensure}
           property: ensure
-          resource: "File[/tmp/foo]"
+          resource: "File[#{resource_name}]"
           status: audit
           tags: 
             - *id002
             - *id003
           time: 2010-12-03 12:18:40.039434 -08:00
           version: 1291407517
+HEREDOC
+      if file_content
+        report_yaml << <<-HEREDOC
         - !ruby/object:Puppet::Transaction::Event
           default_log_level: !ruby/sym notice
           file: *id001
@@ -175,28 +178,17 @@ describe Report do
           message: "inspected value is \\"{md5}#{file_content}\\""
           previous_value: "{md5}#{file_content}"
           property: content
-          resource: "File[/tmp/foo]"
+          resource: "File[#{resource_name}]"
           status: audit
           tags: 
             - *id002
             - *id003
           time: 2010-12-03 12:08:59.061376 -08:00
           version: 1291406846
-        - !ruby/object:Puppet::Transaction::Event
-          default_log_level: !ruby/sym notice
-          file: *id001
-          line: 5
-          message: inspected value is nil
-          property: target
-          resource: "File[/tmp/foo]"
-          status: audit
-          tags: 
-            - *id002
-            - *id003
-          time: 2010-12-03 12:08:59.061413 -08:00
-          version: 1291406846
-  time: #{time}
 HEREDOC
+      end
+      report_yaml << "  time: #{time}\n"
+      Report.create_from_yaml report_yaml
     end
 
     it "should produce an empty diff for the same report twice" do
@@ -212,6 +204,38 @@ HEREDOC
         'File[/tmp/foo]' => {
           :ensure => [:file, :directory],
           :content => ["{md5}foo", "{md5}bar"],
+        }
+      }
+    end
+
+    it "should output nils appropriately for resources that are missing from either report" do
+      report1 = generate_report(Time.now, "file", "foo", "/tmp/foo")
+      report2 = generate_report(1.week.ago, "file", "foo", "/tmp/bar")
+      report1.diff(report2).should == {
+        'File[/tmp/foo]' => {
+          :ensure => [:file, nil],
+          :content => ["{md5}foo", nil],
+        },
+        'File[/tmp/bar]' => {
+          :ensure => [nil, :file],
+          :content => [nil, "{md5}foo"],
+        }
+      }
+    end
+
+    it "should output nils appropriately for properties that are missing from either report" do
+      report1 = generate_report(Time.now, "file", "foo")
+      report2 = generate_report(1.week.ago, "absent", nil)
+      report1.diff(report2).should == {
+        'File[/tmp/foo]' => {
+          :ensure => [:file, :absent],
+          :content => ["{md5}foo", nil],
+        }
+      }
+      report2.diff(report1).should == {
+        'File[/tmp/foo]' => {
+          :ensure => [:absent, :file],
+          :content => [nil, "{md5}foo"],
         }
       }
     end
