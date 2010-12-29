@@ -117,6 +117,15 @@ class Report < ActiveRecord::Base
     end
   end
 
+  def baseline?
+    self.node.baseline_report == self
+  end
+
+  def baseline!
+    self.node.baseline_report = self
+    self.node.save!
+  end
+
   private
 
   def resources_to_hash(resources)
