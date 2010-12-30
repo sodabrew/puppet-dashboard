@@ -1,8 +1,0 @@
-- form_for @user, :url => account_path do |f|
-  %h2 Sign Up for Puppet Node Manager
-  = f.error_messages :header_tag => :h3
-  = render f
-  .element.buttons
-    = f.submit "Sign up", :class => "button"
-    or
-    = link_to "Sign In", new_user_session_path

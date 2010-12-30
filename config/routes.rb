@@ -20,10 +20,6 @@ ActionController::Routing::Routes.draw do |map|
      :search => :get},
     :requirements => {:id => /[^\/]+/}
 
-  map.resource :user_session
-  map.resource :account, :controller => "users"
-  map.resources :users
-
   map.resources :reports,
     :member => {
       :diff => :get,
