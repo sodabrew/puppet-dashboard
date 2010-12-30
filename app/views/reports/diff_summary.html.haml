@@ -1,3 +1,8 @@
+.header
+  %h2
+    = render 'report_title', :report => @my_report
+    compared against 
+    = render 'report_title', :report => @baseline_report
 %table.inspector
   %thead
     %tr

@@ -1,12 +1,6 @@
 .header
   %h2
-    %span.status{:class => report.status}
-      = report_status_icon(report)
-      Report:
-      = report.time
-    - if report.node
-      %span.alt for
-      = link_to report.node.name, report.node
+    = render 'report_title', :report => report
   %ul.actions
     - if report.kind == "inspect" and ! report.baseline?
       %li= link_to "Make Baseline", {:id => report, :action => "make_baseline"}, :method => :put, :confirm => 'Are you sure?', :class => "button"
