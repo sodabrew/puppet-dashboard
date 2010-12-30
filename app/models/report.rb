@@ -20,6 +20,7 @@ class Report < ActiveRecord::Base
 
   named_scope :inspections, :conditions => {:kind => "inspect"}
   named_scope :applies,     :conditions => {:kind => "apply"  }
+  named_scope :baselines,   :include => :node, :conditions => ['nodes.baseline_report_id = reports.id']
 
   def self.find_last_for(node)
     self.first(:conditions => {:node_id => node.id}, :order => 'time DESC', :limit => 1)

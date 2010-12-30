@@ -259,6 +259,8 @@ HEREDOC
 
         @report.reload
         @report.should be_baseline
+
+        Report.baselines.should == [@report]
       end
 
       it "should unset other reports' baseline?" do
@@ -275,6 +277,8 @@ HEREDOC
 
         @report.reload
         @report.should_not be_baseline
+
+        Report.baselines.should == [@report2]
       end
     end
 
