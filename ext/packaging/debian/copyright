@@ -90,10 +90,6 @@ Files: vendor/gems/thoughtbot-shoulda
 Copyright: (c) 2007, Tammer Saleh, Thoughtbot, Inc
 License: MIT
 
-Files: vendor/gems/has_scope
-Copyright: (c) 2009 Plataforma Tecnologia
-License: MIT
-
 Files: vendor/rails
 Copyright: (c) 2004-2009 David Heinemeier Hansson <david@loudthinking.com>
 License: MIT
