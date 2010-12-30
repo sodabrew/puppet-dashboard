@@ -5,7 +5,11 @@
       %th Status
   %tbody
     - @resources.each do |resource, status|
-      %tr{:class => status}
-        %td= h resource
+      %tr{:class => "status #{status}"}
+        %td
+          - if status == :failure
+            = link_to h(resource), :id => @my_report, :action => "diff", :baseline_id => @baseline_report, :anchor => h(resource)
+          - else
+            = h(resource)
         %td= h status
 = link_to "Details", :id => @my_report, :action => "diff", :baseline_id => @baseline_report
