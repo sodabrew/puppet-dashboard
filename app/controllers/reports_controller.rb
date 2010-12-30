@@ -42,6 +42,12 @@ class ReportsController < InheritedResources::Base
     end
   end
 
+  def make_baseline
+    report = Report.find( params[:id] )
+    report.baseline!
+    redirect_to report
+  end
+
   private
 
   def collection

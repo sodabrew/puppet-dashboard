@@ -8,7 +8,9 @@
       %span.alt for
       = link_to report.node.name, report.node
   %ul.actions
-    %li= link_to 'Destroy', @report, :confirm => 'Are you sure?', :method => :delete, :class => "delete button"
+    - if report.kind == "inspect" and ! report.baseline?
+      %li= link_to "Make Baseline", {:id => report, :action => "make_baseline"}, :method => :put, :confirm => 'Are you sure?', :class => "button"
+    %li= link_to 'Destroy', report, :confirm => 'Are you sure?', :method => :delete, :class => "delete button"
 
 .item
   - if report.resource_statuses.present?
