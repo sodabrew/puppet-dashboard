@@ -12,7 +12,7 @@
       $.noConflict();
 
     = stylesheet_link_tag 'reset', 'layout', 'forms', 'tables', 'jquery.ui.autocomplete.css', 'typography', 'links', 'token-input-facebook', 'tipsy', 'application', :cache => 'all'
-    = javascript_include_tag 'prototype', 'jrails', 'jquery-ui.min', 'jquery.tokeninput', 'excanvas.min', 'raphael-min', 'grafico.min', 'jquery.form', 'jquery.placeholders', 'jquery.ui.autocomplete', 'jquery.ui.autocomplete.ext', 'jquery.tipsy', 'search', 'application', :cache => 'all'
+    = javascript_include_tag 'prototype', 'jquery-ui.min', 'jquery.tokeninput', 'excanvas.min', 'raphael-min', 'grafico.min', 'jquery.form', 'jquery.placeholders', 'jquery.ui.autocomplete', 'jquery.ui.autocomplete.ext', 'jquery.tipsy', 'search', 'application', :cache => 'all'
 
   - body_classes = [ "#{controller.controller_name}_controller", "#{controller.controller_name}_#{controller.action_name}_action" ]
   - body_classes << "#{controller.controller_name}_form_action" if %w[new create edit update].include?(controller.action_name)

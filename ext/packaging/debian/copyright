@@ -38,16 +38,8 @@ License: MIT
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
 
-Files: vendor/plugins/jrails
-Copyright: (c) 2008 Aaron Eisenberger
-License: MIT
-
 Files: vendor/plugins/object_daddy
 Copyright: (c) 2007, Flawed Logic, OG Consulting, Rick Bradley, Yossef Mendelssohn
-License: MIT
-
-Files: vendor/plugins/resources_controller
-Copyright: (c) 2008 Ian White
 License: MIT
 
 Files: vendor/plugins/rspec-rails
@@ -82,16 +74,8 @@ Files: vendor/gems/rspec
 Copyright: (c) 2005-2009 The RSpec Development Team
 License: MIT
 
-Files: vendor/gems/stringex
-Copyright: (c) 2008 Lucky Sneaks
-License: MIT
-
 Files: vendor/gems/thoughtbot-shoulda
 Copyright: (c) 2007, Tammer Saleh, Thoughtbot, Inc
-License: MIT
-
-Files: vendor/gems/has_scope
-Copyright: (c) 2009 Plataforma Tecnologia
 License: MIT
 
 Files: vendor/rails

@@ -21,7 +21,6 @@ class Node < ActiveRecord::Base
 
   named_scope :search, lambda{|q| q.blank? ? {} : {:conditions => ['name LIKE ?', "%#{q}%"]} }
 
-  # ordering scopes for has_scope
   named_scope :by_latest_report, proc { |order|
     direction = {1 => 'ASC', 0 => 'DESC'}[order]
     direction ? {:order => "reported_at #{direction}"} : {}

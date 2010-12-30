@@ -11,7 +11,6 @@ Rails::Initializer.run do |config|
   config.gem 'rack'
   config.gem 'haml'
   config.gem 'will_paginate'
-  config.gem 'has_scope'
   config.gem 'maruku'
 
   # Change this to adjust log rotation. Logger.new(log_file, number_of_logs, max_log_size).
