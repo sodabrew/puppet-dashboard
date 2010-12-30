@@ -38,10 +38,6 @@ License: MIT
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
 
-Files: vendor/plugins/jrails
-Copyright: (c) 2008 Aaron Eisenberger
-License: MIT
-
 Files: vendor/plugins/object_daddy
 Copyright: (c) 2007, Flawed Logic, OG Consulting, Rick Bradley, Yossef Mendelssohn
 License: MIT
