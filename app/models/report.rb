@@ -18,6 +18,9 @@ class Report < ActiveRecord::Base
 
   default_scope :order => 'time DESC'
 
+  named_scope :inspections, :conditions => {:kind => "inspect"}
+  named_scope :applies,     :conditions => {:kind => "apply"  }
+
   def self.find_last_for(node)
     self.first(:conditions => {:node_id => node.id}, :order => 'time DESC', :limit => 1)
   end

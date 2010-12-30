@@ -240,6 +240,14 @@ HEREDOC
       }
     end
 
+    describe ".inspections" do
+      it "should include inspect reports" do
+        @report = generate_report(Time.now, "file", "foo")
+        @report.save!
+        Report.inspections.should == [@report]
+      end
+    end
+
     describe "baseline!" do
       before do
         @report  = generate_report(Time.now, "file", "foo")
