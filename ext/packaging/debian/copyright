@@ -82,10 +82,6 @@ Files: vendor/gems/rspec
 Copyright: (c) 2005-2009 The RSpec Development Team
 License: MIT
 
-Files: vendor/gems/stringex
-Copyright: (c) 2008 Lucky Sneaks
-License: MIT
-
 Files: vendor/gems/thoughtbot-shoulda
 Copyright: (c) 2007, Tammer Saleh, Thoughtbot, Inc
 License: MIT
