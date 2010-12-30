@@ -62,10 +62,6 @@ Files: vendor/plugins/will_paginate
 Copyright: (c) 2007 PJ Hyett and Mislav Marohnic
 License: MIT
 
-Files: vendor/plugins/authlogic
-Copyright: (c) 2009 Ben Johnson of Binary Logic
-License: MIT
-
 Files: vendor/gems/haml
 Copyright: (c) 2006-2009 Hampton Catlin, Nathan Weizenbaum, and Chris Eppstein
 License: MIT
