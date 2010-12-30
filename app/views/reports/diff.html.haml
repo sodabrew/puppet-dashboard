@@ -1,3 +1,8 @@
+.header
+  %h2
+    = render 'report_title', :report => @my_report
+    compared against 
+    = render 'report_title', :report => @baseline_report
 %table.inspector
   %thead
     %tr
@@ -10,7 +15,7 @@
       - properties_hash.each do |property, expected_actual|
         - expected, actual = expected_actual
         %tr
-          %td= h resource
+          %td{:id => h(resource)}= h resource
           %td= h property
           %td= h expected
           %td= h actual

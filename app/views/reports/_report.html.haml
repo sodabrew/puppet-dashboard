@@ -1,16 +1,17 @@
 .header
   %h2
-    %span.status{:class => report.status}
-      = report_status_icon(report)
-      Report:
-      = report.time
-    - if report.node
-      %span.alt for
-      = link_to report.node.name, report.node
+    = render 'report_title', :report => report
   %ul.actions
-    %li= link_to 'Destroy', @report, :confirm => 'Are you sure?', :method => :delete, :class => "delete button"
+    - if report.kind == "inspect" and ! report.baseline?
+      %li= link_to "Make Baseline", {:id => report, :action => "make_baseline"}, :method => :put, :confirm => 'Are you sure?', :class => "button"
+    %li= link_to 'Destroy', report, :confirm => 'Are you sure?', :method => :delete, :class => "delete button"
 
 .item
+  - if report.kind == "inspect"
+    .section
+      %h3= "Compare with baseline:"
+      - form_tag({:id => report, :action => "diff_summary"}, :method => :get) do
+        %p= select_tag( "baseline_id", options_from_collection_for_select( Report.baselines, :id, :long_name ) ) + submit_tag("compare")
   - if report.resource_statuses.present?
     .section
       %h3 Events

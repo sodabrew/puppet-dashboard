@@ -171,7 +171,7 @@ module ReportExtensions #:nodoc:
       end
 
       # Attributes in 2.6.x but not 0.25.x
-      attr_reader :external_times, :resource_statuses, :kind
+      attr_reader :external_times, :resource_statuses
 
       def to_hash
         hash = super
@@ -180,7 +180,7 @@ module ReportExtensions #:nodoc:
       end
 
       def kind
-        "apply"
+        @kind || "apply"
       end
 
       def report_format

@@ -1,0 +1,6 @@
+%span.status{:class => report.status}
+  = report_status_icon(report)
+  Report: 
+  = link_to report.time, report
+%span.alt for
+= link_to report.node.name, report.node

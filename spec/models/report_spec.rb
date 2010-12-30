@@ -191,10 +191,10 @@ HEREDOC
       Report.create_from_yaml report_yaml
     end
 
-    it "should produce an empty diff for the same report twice" do
+    it "should produce a diff with no changes for the same report twice" do
       report1 = generate_report(Time.now, "file", "foo")
       report2 = generate_report(1.week.ago, "file", "foo")
-      report1.diff(report2).should == {}
+      report1.diff(report2).should == { "File[/tmp/foo]" => {} }
     end
 
     it "should show diff for the different reports" do
@@ -239,6 +239,49 @@ HEREDOC
         }
       }
     end
+
+    describe ".inspections" do
+      it "should include inspect reports" do
+        @report = generate_report(Time.now, "file", "foo")
+        @report.save!
+        Report.inspections.should == [@report]
+      end
+    end
+
+    describe "baseline!" do
+      before do
+        @report  = generate_report(Time.now, "file", "foo")
+        @report2 = generate_report(1.week.ago, "absent", nil)
+      end
+
+      it "should set baseline?" do
+        @report.baseline!
+
+        @report.reload
+        @report.should be_baseline
+
+        Report.baselines.should == [@report]
+      end
+
+      it "should unset other reports' baseline?" do
+        @report.should_not be_baseline
+        @report2.should_not be_baseline
+
+        @report.baseline!
+        @report.reload
+        @report.should be_baseline
+        @report2.should_not be_baseline
+
+        @report2.baseline!
+        @report2.should be_baseline
+
+        @report.reload
+        @report.should_not be_baseline
+
+        Report.baselines.should == [@report2]
+      end
+    end
+
   end
 
   describe "#create_from_yaml" do
@@ -357,6 +400,7 @@ HEREDOC
         ]
     end
   end
+
 
   describe "When destroying" do
     it "should destroy all dependent model objects" do

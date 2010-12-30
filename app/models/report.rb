@@ -18,6 +18,10 @@ class Report < ActiveRecord::Base
 
   default_scope :order => 'time DESC'
 
+  named_scope :inspections, :conditions => {:kind => "inspect"}
+  named_scope :applies,     :conditions => {:kind => "apply"  }
+  named_scope :baselines,   :include => :node, :conditions => ['nodes.baseline_report_id = reports.id']
+
   def self.find_last_for(node)
     self.first(:conditions => {:node_id => node.id}, :order => 'time DESC', :limit => 1)
   end
@@ -65,17 +69,13 @@ class Report < ActiveRecord::Base
       comparison_resource = comparison_resources[resource_name] || {}
       our_resource = our_resources[resource_name] || {}
       (comparison_resource.keys | our_resource.keys).each do |property|
+        diff_stuff[resource_name] ||= {}
         if our_resource[property] != comparison_resource[property]
-          diff_stuff[resource_name] ||= {}
           diff_stuff[resource_name][property.to_sym] = [ our_resource[property], comparison_resource[property] ]
         end
       end
     end
     diff_stuff
-  end
-
-  def resources
-    self.report.resource_statuses.keys
   end
 
   def self.attribute_hash_from(report_hash)
@@ -115,6 +115,19 @@ class Report < ActiveRecord::Base
     if node && (node.reported_at.nil? || (node.reported_at-1.second) <= self.time)
       node.assign_last_report(self)
     end
+  end
+
+  def long_name
+    "#{node.name} at #{time}"
+  end
+
+  def baseline?
+    self.node.baseline_report == self
+  end
+
+  def baseline!
+    self.node.baseline_report = self
+    self.node.save!
   end
 
   private
