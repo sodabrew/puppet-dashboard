@@ -121,6 +121,10 @@ class Report < ActiveRecord::Base
     end
   end
 
+  def long_name
+    "#{node.name} at #{time}"
+  end
+
   def baseline?
     self.node.baseline_report == self
   end
