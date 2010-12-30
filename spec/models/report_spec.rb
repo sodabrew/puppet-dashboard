@@ -191,10 +191,10 @@ HEREDOC
       Report.create_from_yaml report_yaml
     end
 
-    it "should produce an empty diff for the same report twice" do
+    it "should produce a diff with no changes for the same report twice" do
       report1 = generate_report(Time.now, "file", "foo")
       report2 = generate_report(1.week.ago, "file", "foo")
-      report1.diff(report2).should == {}
+      report1.diff(report2).should == { "File[/tmp/foo]" => {} }
     end
 
     it "should show diff for the different reports" do

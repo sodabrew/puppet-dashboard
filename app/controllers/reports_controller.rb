@@ -33,9 +33,9 @@ class ReportsController < InheritedResources::Base
   def diff_summary
     diff
     @resources = {}
-    @baseline_report.resources.each do |resource|
-      if @diff[resource]
-        @resources[resource] = :failed
+    @diff.each do |resource, differences|
+      if ! differences.empty?
+        @resources[resource] = :failure
       else
         @resources[resource] = :pass
       end
