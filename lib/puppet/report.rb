@@ -194,7 +194,8 @@ module ReportExtensions #:nodoc:
             "time" => time,
             "change_count" => change_count || 0,
             "out_of_sync" => out_of_sync,
-            "events" => events.map(&:to_hash)
+            "events" => events.map(&:to_hash),
+            "version" => version
           }
         end
       end

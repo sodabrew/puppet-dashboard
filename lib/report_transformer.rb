@@ -67,6 +67,9 @@ class ReportTransformer::OneToTwo < ReportTransformer::ReportTransformation
     end
 
     report["status"] = failed_resources?(report) ? 'failed' : changed_resources?(report) ? 'changed' : 'unchanged'
+    report["resource_statuses"].each do |resource_status|
+      resource_status.delete("version")
+    end
     report
   end
 
