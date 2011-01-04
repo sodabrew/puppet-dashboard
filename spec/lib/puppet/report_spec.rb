@@ -32,12 +32,10 @@ describe Puppet::Transaction::Report do
       it "should produce a hash of the report" do
         hash = @report.to_hash
         hash.should be_a(Hash)
+        hash.keys.should =~ %w{host time logs metrics report_format}
         hash["report_format"].should == 0
         hash["host"].should == "sample_node"
         hash["time"].should == Time.parse("2009-11-19 17:08:50.631428 -08:00")
-        hash["kind"].should == "apply"
-        hash["puppet_version"].should == "0.25.x"
-        hash["configuration_version"].should == "1258679330"
       end
 
       it "should include the logs" do

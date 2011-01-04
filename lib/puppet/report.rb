@@ -25,9 +25,6 @@ module Puppet #:nodoc:
           "report_format" => report_format,
           "host" => host,
           "time" => time,
-          "kind" => kind,
-          "puppet_version" => puppet_version,
-          "configuration_version" => configuration_version,
           "logs" => logs.map(&:to_hash),
           "metrics" => metrics.values.map(&:to_hash).inject({},&:merge)
         }
@@ -176,6 +173,9 @@ module ReportExtensions #:nodoc:
       def to_hash
         hash = super
         hash["resource_statuses"] = resource_statuses.values.map(&:to_hash)
+        hash["kind"] = kind
+        hash["puppet_version"] = puppet_version
+        hash["configuration_version"] = configuration_version
         hash
       end
 
