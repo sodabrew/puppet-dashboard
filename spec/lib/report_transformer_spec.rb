@@ -31,7 +31,7 @@ describe ReportTransformer do
 
   describe "when converting from version 0 to version 1" do
     before do
-      @report = {"report_format" => 0}
+      @report = {"report_format" => 0, "logs" => []}
     end
     it "should add an empty array for resource_statuses" do
       report = ReportTransformer::ZeroToOne.apply(@report)

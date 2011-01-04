@@ -31,7 +31,28 @@ class ReportTransformer::ZeroToOne < ReportTransformer::ReportTransformation
 
   def self.transform(report)
     report["resource_statuses"] = []
+    report["kind"] = "apply"
+    report["configuration_version"] = configuration_version_from_log_objects(report) || configuration_version_from_log_message(report)
+    report["puppet_version"] = "0.25.x"
     report
+  end
+
+  def self.configuration_version_from_log_objects(report)
+    report["logs"].each do |log|
+      if log["version"] and log["source"] != "Puppet"
+        return log["version"].to_s
+      end
+    end
+    nil
+  end
+
+  def self.configuration_version_from_log_message(report)
+    report["logs"].each do |log|
+      if log["message"] =~ /^Applying configuration version '(.*)'$/
+        return $1
+      end
+    end
+    nil
   end
 end
 

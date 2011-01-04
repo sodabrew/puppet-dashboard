@@ -133,20 +133,8 @@ module ReportExtensions #:nodoc:
         []
       end
 
-      def kind
-        "apply"
-      end
-
       def report_format
         0
-      end
-
-      def puppet_version
-        "0.25.x"
-      end
-
-      def configuration_version
-        configuration_version_from_log_objects || configuration_version_from_log_message
       end
     end
 
