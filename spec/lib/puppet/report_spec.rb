@@ -110,18 +110,6 @@ describe Puppet::Transaction::Report do
           }
         }
       end
-
-      describe "#configuration_version_from_log_objects" do
-        it "should return the configuration version" do
-          @report.configuration_version_from_log_objects.should == "1258679330"
-        end
-      end
-
-      describe "#configuration_version_from_log_message" do
-        it "should return the configuration version" do
-          @report.configuration_version_from_log_message.should == "1258679330"
-        end
-      end
     end
 
     describe "for a format 1 report" do
@@ -397,24 +385,6 @@ describe Puppet::Transaction::Report do
             "version"            => 1279826342
           }
         }
-      end
-
-      describe "#configuration_version_from_log_objects" do
-        it "should return the configuration version" do
-          @report.configuration_version_from_log_objects.should == "1279826342"
-        end
-      end
-
-      describe "#configuration_version_from_log_message" do
-        it "should return the configuration version" do
-          @report.configuration_version_from_log_message.should == "1279826342"
-        end
-      end
-
-      describe "#configuration_version_from_resource_statuses" do
-        it "should return the configuration version" do
-          @report.configuration_version_from_resource_statuses.should == "1279826342"
-        end
       end
     end
   end

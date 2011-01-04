@@ -233,7 +233,7 @@ HEREDOC
 
     describe ".inspections" do
       it "should include inspect reports" do
-        pending # generate_report uses YAML, which is currently being reworked.
+        pending # This test is using a version 1 inspect report, which should never happen.
         @report = generate_report(Time.now, "file", "foo")
         @report.save!
         Report.inspections.should == [@report]
@@ -395,11 +395,9 @@ HEREDOC
           ['notice', "ensure changed 'stopped' to 'running'", '/Stage[main]//Node[default]/Service[mysqld]/ensure', ['class', 'default', 'mysqld', 'node', 'notice', 'service'], file, 8 ],
         ]
 
-      pending {
-        report.configuration_version.should == '1279826342'
-        report.puppet_version.should == '2.6.0'
-        report.status.should == 'changed'
-      }
+      report.configuration_version.should == '1279826342'
+      report.puppet_version.should == '2.6.0'
+      report.status.should == 'changed'
     end
   end
 

@@ -29,24 +29,6 @@ module Puppet #:nodoc:
           "metrics" => metrics.values.map(&:to_hash).inject({},&:merge)
         }
       end
-
-      def configuration_version_from_log_objects
-        logs.each do |log|
-          if log.version and log.source != "Puppet"
-            return log.version.to_s
-          end
-        end
-        nil
-      end
-
-      def configuration_version_from_log_message
-        logs.each do |log|
-          if log.message =~ /^Applying configuration version '(.*)'$/
-            return $1
-          end
-        end
-        nil
-      end
     end
 
     class Event
@@ -149,32 +131,8 @@ module ReportExtensions #:nodoc:
         hash
       end
 
-      def kind
-        @kind || "apply"
-      end
-
       def report_format
         1
-      end
-
-      def puppet_version
-        logs.each do |log|
-          if log.version and log.source == "Puppet"
-            return log.version
-          end
-        end
-        "2.6.x"
-      end
-
-      def configuration_version
-        configuration_version_from_resource_statuses || configuration_version_from_log_objects || configuration_version_from_log_message 
-      end
-
-      def configuration_version_from_resource_statuses
-        resource_statuses.values.each do |resource_status|
-          return resource_status.version.to_s if resource_status.version
-        end
-        nil
       end
     end
 
