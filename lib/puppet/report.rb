@@ -142,9 +142,6 @@ module ReportExtensions #:nodoc:
       def to_hash
         hash = super
         hash["resource_statuses"] = resource_statuses.values.map(&:to_hash)
-        hash["kind"] = kind
-        hash["puppet_version"] = puppet_version
-        hash["configuration_version"] = configuration_version
         hash
       end
 

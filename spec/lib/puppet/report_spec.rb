@@ -120,7 +120,7 @@ describe Puppet::Transaction::Report do
       end
     end
 
-    describe "for a 2.6.x report" do
+    describe "for a format 1 report" do
       before do
         @report = YAML.load_file(Rails.root.join('spec', 'fixtures', 'reports', 'puppet26', 'report_ok_service_started_ok.yaml'))
         @report.extend(ReportExtensions)
@@ -129,12 +129,10 @@ describe Puppet::Transaction::Report do
       it "should produce a hash of the report" do
         hash = @report.to_hash
         hash.should be_a(Hash)
+        hash.keys.should =~ %w{host time logs metrics resource_statuses report_format}
         hash["report_format"].should == 1
         hash["host"].should == "puppet.puppetlabs.vm"
         hash["time"].should == Time.parse("2010-07-22 12:19:46.169915 -07:00")
-        hash["kind"].should == "apply"
-        hash["puppet_version"].should == "2.6.0"
-        hash["configuration_version"].should == "1279826342"
       end
 
       it "should include the logs" do
