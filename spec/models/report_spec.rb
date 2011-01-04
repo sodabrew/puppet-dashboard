@@ -55,15 +55,6 @@ describe Report do
       node.reload
       node.reported_at.should be_close(@report_data.time.in_time_zone, 1.second)
     end
-
-    it "does not create a timeline event for the node" do
-      pending "FIXME figure out why Report#update_node can't save an object with #update_without_callbacks any more"
-      node = Node.generate(:name => @report_data.host)
-      lambda {
-        Report.create(:report => @report_yaml)
-        node.reload
-      }.should_not change(TimelineEvent, :count)
-    end
   end
 
   describe "metrics methods" do
