@@ -215,10 +215,10 @@ describe Puppet::Transaction::Report do
 
       it "should include the resource statuses and events" do
         hash = @report.to_hash
-        hash["resource_statuses"].should be_an(Array)
+        hash["resource_statuses"].should be_a(Hash)
         resource_statuses = hash["resource_statuses"]
-        resource_statuses.should =~ [
-          {
+        resource_statuses.should == {
+          "Schedule[monthly]" => {
             "line"               => nil,
             "change_count"       => 0,
             "resource_type"      => "Schedule",
@@ -235,7 +235,7 @@ describe Puppet::Transaction::Report do
             "events"             => [],
             "version"            => 1279826342
           },
-          {
+          "Filebucket[puppet]" => {
             "line"               => nil,
             "change_count"       => 0,
             "resource_type"      => "Filebucket",
@@ -252,7 +252,7 @@ describe Puppet::Transaction::Report do
             "events"             => [],
             "version"            => 1279826342
           },
-          {
+          "Service[mysqld]" => {
             "line"               => 8,
             "change_count"       => 1,
             "resource_type"      => "Service",
@@ -282,7 +282,7 @@ describe Puppet::Transaction::Report do
             }],
             "version"            => 1279826342
           },
-          {
+          "Schedule[never]" => {
             "line"               => nil,
             "change_count"       => 0,
             "resource_type"      => "Schedule",
@@ -299,7 +299,7 @@ describe Puppet::Transaction::Report do
             "events"             => [],
             "version"            => 1279826342
           },
-          {
+          "Schedule[weekly]" => {
             "line"               => nil,
             "change_count"       => 0,
             "resource_type"      => "Schedule",
@@ -316,7 +316,7 @@ describe Puppet::Transaction::Report do
             "events"             => [],
             "version"            => 1279826342
           },
-          {
+          "Exec[/bin/true]" => {
             "line"               => 9,
             "change_count"       => 1,
             "resource_type"      => "Exec",
@@ -345,7 +345,7 @@ describe Puppet::Transaction::Report do
             }],
             "version"            => 1279826342
           },
-          {
+          "Schedule[puppet]" => {
             "line"               => nil,
             "change_count"       => 0,
             "resource_type"      => "Schedule",
@@ -362,7 +362,7 @@ describe Puppet::Transaction::Report do
             "events"             => [],
             "version"            => 1279826342
           },
-          {
+          "Schedule[daily]" => {
             "line"            => nil,
             "change_count"    => 0,
             "resource_type"   => "Schedule",
@@ -379,7 +379,7 @@ describe Puppet::Transaction::Report do
             "events"             => [],
             "version"            => 1279826342
           },
-          {
+          "Schedule[hourly]" => {
             "line"            => nil,
             "change_count"    => 0,
             "resource_type"   => "Schedule",
@@ -396,7 +396,7 @@ describe Puppet::Transaction::Report do
             "events"             => [],
             "version"            => 1279826342
           }
-          ]
+        }
       end
 
       describe "#configuration_version_from_log_objects" do

@@ -33,9 +33,9 @@ describe ReportTransformer do
     before do
       @report = {"report_format" => 0, "logs" => []}
     end
-    it "should add an empty array for resource_statuses" do
+    it "should add an empty hash for resource_statuses" do
       report = ReportTransformer::ZeroToOne.apply(@report)
-      report["resource_statuses"].should == []
+      report["resource_statuses"].should == {}
     end
   end
 

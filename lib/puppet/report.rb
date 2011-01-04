@@ -142,7 +142,10 @@ module ReportExtensions #:nodoc:
 
       def to_hash
         hash = super
-        hash["resource_statuses"] = resource_statuses.values.map(&:to_hash)
+        hash["resource_statuses"] = {}
+        resource_statuses.each do |key, value|
+          hash["resource_statuses"][key] = value.to_hash
+        end
         hash
       end
 

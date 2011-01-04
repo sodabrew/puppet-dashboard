@@ -30,7 +30,7 @@ class ReportTransformer::ZeroToOne < ReportTransformer::ReportTransformation
   end
 
   def self.transform(report)
-    report["resource_statuses"] = []
+    report["resource_statuses"] = {}
     report["kind"] = "apply"
     report["configuration_version"] = configuration_version_from_log_objects(report) || configuration_version_from_log_message(report)
     report["puppet_version"] = "0.25.x"
@@ -67,7 +67,7 @@ class ReportTransformer::OneToTwo < ReportTransformer::ReportTransformation
     end
 
     report["status"] = failed_resources?(report) ? 'failed' : changed_resources?(report) ? 'changed' : 'unchanged'
-    report["resource_statuses"].each do |resource_status|
+    report["resource_statuses"].values.each do |resource_status|
       resource_status.delete("version")
     end
     report["logs"].each do |log|
