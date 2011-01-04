@@ -99,6 +99,7 @@ module Puppet #:nodoc:
           "source" => source,
           "tags" => tags,
           "time" => time,
+          "version" => version
         }
       end
     end

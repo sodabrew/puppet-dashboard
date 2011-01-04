@@ -51,6 +51,7 @@ describe Puppet::Transaction::Report do
           "time" => Time.parse("2009-11-19 17:08:50.557829 -08:00"),
           "file" => nil,
           "line" => nil,
+          "version" => nil
         },
         {
           "line" => nil,
@@ -59,7 +60,8 @@ describe Puppet::Transaction::Report do
           "tags" => ["info"],
           "file" => nil,
           "source" => "Filebucket[/tmp/puppet/var/clientbucket]",
-          "message" => "Adding /tmp/puppet_test(6d0007e52f7afb7d5a0650b0ffb8a4d1)"
+          "message" => "Adding /tmp/puppet_test(6d0007e52f7afb7d5a0650b0ffb8a4d1)",
+          "version" => nil
         },
         {
           "level" => "info",
@@ -69,6 +71,7 @@ describe Puppet::Transaction::Report do
           "time" => Time.parse("2009-11-19 17:08:50.607171 -08:00"),
           "file" => "/tmp/puppet/manifests/site.pp",
           "line" => 4,
+          "version" => 1258679330,
         },
         {
           "line" => 4,
@@ -77,7 +80,8 @@ describe Puppet::Transaction::Report do
           "tags" => ["file", "node", "default", "class", "main", "content", "notice"],
           "file" => "/tmp/puppet/manifests/site.pp",
           "source" => "//Node[default]/File[/tmp/puppet_test]/content",
-          "message" => "content changed '{md5}6d0007e52f7afb7d5a0650b0ffb8a4d1' to 'unknown checksum'"
+          "message" => "content changed '{md5}6d0007e52f7afb7d5a0650b0ffb8a4d1' to 'unknown checksum'",
+          "version" => 1258679330
         }]
       end
 
@@ -147,7 +151,8 @@ describe Puppet::Transaction::Report do
           "file" => nil,
           "message" => "Caching catalog for puppet.puppetlabs.vm",
           "source" => "Puppet",
-          "time" => Time.parse("2010-07-22 12:19:47.204207 -07:00")
+          "time" => Time.parse("2010-07-22 12:19:47.204207 -07:00"),
+          "version" => "2.6.0"
         },
         {
           "line" => nil,
@@ -156,7 +161,8 @@ describe Puppet::Transaction::Report do
           "tags" => ["info"],
           "file" => nil,
           "source" => "Puppet",
-          "message" => "Applying configuration version '1279826342'"
+          "message" => "Applying configuration version '1279826342'",
+          "version" => "2.6.0"
         },
         {
           "line" => 9,
@@ -165,7 +171,8 @@ describe Puppet::Transaction::Report do
           "tags" => ["notice", "exec", "node", "default", "class"],
           "file" => "/etc/puppet/manifests/site.pp",
           "source" => "/Stage[main]//Node[default]/Exec[/bin/true]/returns",
-          "message" => "executed successfully"
+          "message" => "executed successfully",
+          "version" => 1279826342
         },
         {
           "line" => 8,
@@ -174,7 +181,8 @@ describe Puppet::Transaction::Report do
           "tags" => ["notice", "service", "mysqld", "node", "default", "class"],
           "file" => "/etc/puppet/manifests/site.pp",
           "source" => "/Stage[main]//Node[default]/Service[mysqld]/ensure",
-          "message" => "ensure changed 'stopped' to 'running'"
+          "message" => "ensure changed 'stopped' to 'running'",
+          "version" => 1279826342
         }]
       end
 

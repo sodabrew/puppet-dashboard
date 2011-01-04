@@ -70,6 +70,9 @@ class ReportTransformer::OneToTwo < ReportTransformer::ReportTransformation
     report["resource_statuses"].each do |resource_status|
       resource_status.delete("version")
     end
+    report["logs"].each do |log|
+      log.delete("version")
+    end
     report
   end
 
