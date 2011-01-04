@@ -122,27 +122,8 @@ module ReportExtensions #:nodoc:
 
   module Puppet25
     module Report
-      def self.extended(obj)
-        obj.logs.each{|log| log.extend Puppet25::Util::Log} if obj.logs.respond_to?(:each)
-        obj.metrics.each{|_, metric| metric.extend Puppet25::Util::Metric} if obj.metrics.respond_to?(:each)
-      end
-
-      # 0.25 reports don't have resource statuses, but returning an empty list
-      # here makes the interface consistent with 2.6
-      def resource_statuses
-        []
-      end
-
       def report_format
         0
-      end
-    end
-
-    module Util
-      module Metric
-      end
-
-      module Log
       end
     end
   end
