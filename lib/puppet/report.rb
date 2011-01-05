@@ -70,7 +70,7 @@ module Puppet #:nodoc:
     end
 
     class Log
-      attr_reader :file, :level, :line, :message, :source, :tags, :time, :version
+      attr_reader :file, :level, :line, :message, :source, :tags, :time
 
       def to_hash
         {
@@ -80,8 +80,7 @@ module Puppet #:nodoc:
           "message" => message,
           "source" => source,
           "tags" => tags,
-          "time" => time,
-          "version" => version
+          "time" => time
         }
       end
     end
@@ -89,6 +88,27 @@ module Puppet #:nodoc:
 
   module Resource
     class Status
+      attr_reader :source_description, :evaluation_time, :resource, :tags,
+      :file, :events, :time, :line, :changed, :change_count,
+      :out_of_sync
+
+      def to_hash
+        resource =~ /^(.+?)\[(.+)\]$/
+        resource_type, title = $1, $2
+        {
+          "resource_type" => resource_type,
+          "title" => title,
+          "evaluation_time" => evaluation_time,
+          "file" => file,
+          "line" => line,
+          "source_description" => source_description,
+          "tags" => tags,
+          "time" => time,
+          "change_count" => change_count || 0,
+          "out_of_sync" => out_of_sync,
+          "events" => events.map(&:to_hash)
+        }
+      end
     end
   end
 end
@@ -96,27 +116,44 @@ end
 module ReportExtensions #:nodoc:
   def self.extended(obj)
     case
+    when obj.instance_variables.include?('@report_format')
+      obj.extend ReportFormat2::Report
     when obj.instance_variables.include?("@resource_statuses")
-      obj.extend Puppet26::Report
+      obj.extend ReportFormat1::Report
     else
-      obj.extend Puppet25::Report
+      obj.extend ReportFormat0::Report
     end
   end
 
-  module Puppet25
+  module ReportFormat0
     module Report
+      def self.extended(obj)
+        obj.logs.each{|log| log.extend ReportFormat0::Util::Log} if obj.logs.respond_to?(:each)
+      end
+
       def report_format
         0
       end
     end
+
+    module Util
+      module Log
+        attr_reader :version
+
+        def to_hash
+          hash = super
+          hash["version"] = version
+          hash
+        end
+      end
+    end
   end
 
-  module Puppet26
+  module ReportFormat1
     module Report
       def self.extended(obj)
-        obj.logs.each{|log| log.extend Puppet26::Util::Log} if obj.logs.respond_to?(:each)
-        obj.metrics.each{|_, metric| metric.extend Puppet26::Util::Metric} if obj.metrics.respond_to?(:each)
-        obj.resource_statuses.each{|_, status| status.extend Puppet26::Resource::Status} if obj.resource_statuses.respond_to?(:each)
+        obj.logs.each{|log| log.extend ReportFormat1::Util::Log} if obj.logs.respond_to?(:each)
+        obj.resource_statuses.each{|_, status| status.extend ReportFormat1::Resource::Status} if obj.resource_statuses.respond_to?(:each)
       end
 
       # Attributes in 2.6.x but not 0.25.x
@@ -138,36 +175,54 @@ module ReportExtensions #:nodoc:
 
     module Resource
       module Status
-        attr_reader :source_description, :evaluation_time, :resource, :tags,
-          :file, :events, :time, :line, :version, :changed, :change_count,
-          :out_of_sync
+        attr_reader :version
 
         def to_hash
-          resource =~ /^(.+?)\[(.+)\]$/
-          resource_type, title = $1, $2
-          {
-            "resource_type" => resource_type,
-            "title" => title,
-            "evaluation_time" => evaluation_time,
-            "file" => file,
-            "line" => line,
-            "source_description" => source_description,
-            "tags" => tags,
-            "time" => time,
-            "change_count" => change_count || 0,
-            "out_of_sync" => out_of_sync,
-            "events" => events.map(&:to_hash),
-            "version" => version
-          }
+          hash = super
+          hash["version"] = version
+          hash
         end
       end
     end
 
     module Util
-      module Metric
+      module Log
+        attr_reader :version
+
+        def to_hash
+          hash = super
+          hash["version"] = version
+          hash
+        end
+      end
+    end
+  end
+
+  module ReportFormat2
+    module Report
+      attr_reader :report_format
+
+      def self.extended(obj)
+        obj.resource_statuses.each{|_, status| status.extend ReportFormat2::Resource::Status} if obj.resource_statuses.respond_to?(:each)
       end
 
-      module Log
+      attr_reader :resource_statuses, :kind, :puppet_version, :configuration_version
+
+      def to_hash
+        hash = super
+        hash["resource_statuses"] = {}
+        resource_statuses.each do |key, value|
+          hash["resource_statuses"][key] = value.to_hash
+        end
+        hash["kind"] = kind
+        hash["puppet_version"] = puppet_version
+        hash["configuration_version"] = configuration_version
+        hash
+      end
+    end
+
+    module Resource
+      module Status
       end
     end
   end

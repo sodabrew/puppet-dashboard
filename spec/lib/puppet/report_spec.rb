@@ -387,5 +387,74 @@ describe Puppet::Transaction::Report do
         }
       end
     end
+
+    describe "for a format 2 report" do
+      before do
+        report_yaml = <<HEREDOC
+--- !ruby/object:Puppet::Transaction::Report
+  host: localhost
+  time: 2010-07-22 12:19:47.204207 -07:00
+  logs: []
+  metrics:
+    time: !ruby/object:Puppet::Util::Metric
+      name: time
+      label: Time
+      values:
+        - - config_retrieval
+          - Config retrieval
+          - 0.25
+        - - total
+          - Total
+          - 0.5
+    resources: !ruby/object:Puppet::Util::Metric
+      name: resources
+      label: Resources
+      values:
+        - - failed
+          - Failed
+          - 1
+        - - out_of_sync
+          - Out of sync
+          - 2
+        - - changed
+          - Changed
+          - 3
+        - - total
+          - Total
+          - 4
+    events: !ruby/object:Puppet::Util::Metric
+      name: events
+      label: Events
+      values:
+        - - total
+          - Total
+          - 0
+    changes: !ruby/object:Puppet::Util::Metric
+      name: changes
+      label: Changes
+      values:
+        - - total
+          - Total
+          - 0
+  resource_statuses: {}
+  configuration_version: 12345
+  report_format: 2
+  puppet_version: 2.6.5
+  kind: apply
+  status: unchanged
+HEREDOC
+        @report = YAML.load(report_yaml)
+        @report.extend(ReportExtensions)
+      end
+
+      it "should produce a hash of the report" do
+        hash = @report.to_hash
+        hash.should be_a(Hash)
+        hash.keys.should =~ %w{host time logs metrics resource_statuses kind configuration_version puppet_version report_format}
+        hash["report_format"].should == 2
+        hash["host"].should == "localhost"
+        hash["time"].should == Time.parse("2010-07-22 12:19:47.204207 -07:00")
+      end
+    end
   end
 end

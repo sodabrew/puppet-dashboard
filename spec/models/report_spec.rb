@@ -126,6 +126,7 @@ describe Report do
     def generate_report(time, file_ensure, file_content, resource_name = "/tmp/foo")
       report_yaml = <<-HEREDOC
 --- !ruby/object:Puppet::Transaction::Report
+  report_format: 2
   host: mattmac.puppetlabs.lan
   kind: inspect
   logs: []
@@ -143,7 +144,6 @@ describe Report do
         - default
         - &id003 class
       time: 2010-07-22 14:42:39.654436 -04:00
-      version: 1291407517
       events: 
         - !ruby/object:Puppet::Transaction::Event
           default_log_level: !ruby/sym notice
@@ -158,7 +158,6 @@ describe Report do
             - *id002
             - *id003
           time: 2010-12-03 12:18:40.039434 -08:00
-          version: 1291407517
 HEREDOC
       if file_content
         report_yaml << <<-HEREDOC
@@ -175,7 +174,6 @@ HEREDOC
             - *id002
             - *id003
           time: 2010-12-03 12:08:59.061376 -08:00
-          version: 1291406846
 HEREDOC
       end
       report_yaml << "  time: #{time}\n"
@@ -233,7 +231,6 @@ HEREDOC
 
     describe ".inspections" do
       it "should include inspect reports" do
-        pending # This test is using a version 1 inspect report, which should never happen.
         @report = generate_report(Time.now, "file", "foo")
         @report.save!
         Report.inspections.should == [@report]
