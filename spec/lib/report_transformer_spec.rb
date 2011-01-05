@@ -147,5 +147,12 @@ describe ReportTransformer do
       report = ReportTransformer::OneToTwo.apply(@report)
       @report['kind'].should == 'apply'
     end
+
+    it "should set resource out_of_sync_counts based on change_counts" do
+      report = ReportTransformer::OneToTwo.apply(@report)
+      @report["resource_statuses"].values.each do |resource_status|
+        resource_status["out_of_sync_count"].should == resource_status["change_count"]
+      end
+    end
   end
 end

@@ -54,6 +54,7 @@ class ReportTransformer::OneToTwo < ReportTransformer::ReportTransformation
     report["kind"] = "apply"
     report["puppet_version"] ||= puppet_version(report) # If it started as a v0 report, we've already filled in puppet_version
     report["resource_statuses"].values.each do |resource_status|
+      resource_status["out_of_sync_count"] = resource_status["change_count"]
       resource_status.delete("version")
     end
     report["logs"].each do |log|
