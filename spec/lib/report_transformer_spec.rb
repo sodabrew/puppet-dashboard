@@ -161,5 +161,45 @@ describe ReportTransformer do
         key.should == "#{resource_status['resource_type']}[#{resource_status['title']}]"
       end
     end
+
+    it "should interpret desired_value as historical_value and set audited=true for audit events" do
+      desired_values = {}
+      @report["resource_statuses"].each do |key, resource_status|
+        resource_status["events"].each do |event|
+          event["status"] = 'audit'
+          desired_values[key] = event["desired_value"]
+        end
+      end
+      report = ReportTransformer::OneToTwo.apply(@report)
+      report["resource_statuses"].each do |key, resource_status|
+        resource_status["events"].each do |event|
+          event["audited"].should == true
+          event["historical_value"].should == desired_values[key]
+          event.keys.should include("desired_value")
+          event["desired_value"].should == nil
+        end
+      end
+    end
+
+    %w{success failure noop}.each do |status|
+      it "should leave desired_value alone and set audited=false for #{status} events" do
+        desired_values = {}
+        @report["resource_statuses"].each do |key, resource_status|
+          resource_status["events"].each do |event|
+            event["status"] = status
+            desired_values[key] = event["desired_value"]
+          end
+        end
+        report = ReportTransformer::OneToTwo.apply(@report)
+        report["resource_statuses"].each do |key, resource_status|
+          resource_status["events"].each do |event|
+            event["audited"].should == false
+            event["desired_value"].should == desired_values[key]
+            event.keys.should include("historical_value")
+            event["historical_value"].should == nil
+          end
+        end
+      end
+    end
   end
 end

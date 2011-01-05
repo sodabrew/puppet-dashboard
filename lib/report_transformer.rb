@@ -57,6 +57,15 @@ class ReportTransformer::OneToTwo < ReportTransformer::ReportTransformation
       key =~ /^(.+?)\[(.+)\]$/
       resource_status["resource_type"], resource_status["title"] = $1, $2
       resource_status["out_of_sync_count"] = resource_status["change_count"]
+      resource_status["events"].each do |event|
+        event["audited"] = event["status"] == "audit"
+        if event["audited"]
+          event["historical_value"] = event["desired_value"]
+          event["desired_value"] = nil
+        else
+          event["historical_value"] = nil
+        end
+      end
       resource_status.delete("version")
     end
     report["logs"].each do |log|
