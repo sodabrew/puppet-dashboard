@@ -131,5 +131,16 @@ describe ReportTransformer do
       report = ReportTransformer::OneToTwo.apply(@report)
       @report["configuration_version"].should == '1279826342'
     end
+
+    it "should infer puppet version from log version" do
+      report = ReportTransformer::OneToTwo.apply(@report)
+      @report["puppet_version"].should == '2.6.0'
+    end
+
+    it "should guess 2.6.x if no puppet version available from logs" do
+      @report["logs"] = []
+      report = ReportTransformer::OneToTwo.apply(@report)
+      @report["puppet_version"].should == '2.6.x'
+    end
   end
 end
