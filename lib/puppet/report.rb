@@ -93,11 +93,7 @@ module Puppet #:nodoc:
       :out_of_sync
 
       def to_hash
-        resource =~ /^(.+?)\[(.+)\]$/
-        resource_type, title = $1, $2
         {
-          "resource_type" => resource_type,
-          "title" => title,
           "evaluation_time" => evaluation_time,
           "file" => file,
           "line" => line,
@@ -223,6 +219,14 @@ module ReportExtensions #:nodoc:
 
     module Resource
       module Status
+        attr_reader :resource_type, :title
+
+        def to_hash
+          hash = super
+          hash["resource_type"] = resource_type
+          hash["title"] = title
+          hash
+        end
       end
     end
   end

@@ -136,7 +136,8 @@ describe Report do
       evaluation_time: 0.000868
       file: &id001 /Users/matthewrobinson/work/puppet/test_data/genreportm/manifests/site.pp
       line: 5
-      resource: "File[#{resource_name}]"
+      resource_type: File
+      title: #{resource_name}
       source_description: "/Stage[main]//Node[default]/File[#{resource_name}]"
       tags:
         - &id002 file

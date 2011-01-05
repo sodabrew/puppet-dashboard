@@ -209,8 +209,6 @@ describe Puppet::Transaction::Report do
           "Schedule[monthly]" => {
             "line"               => nil,
             "change_count"       => 0,
-            "resource_type"      => "Schedule",
-            "title"              => "monthly",
             "time"               => Time.parse("2010-07-22 12:19:47.260865 -07:00"),
             "evaluation_time"    => 0.000432,
             "tags"               => [
@@ -226,8 +224,6 @@ describe Puppet::Transaction::Report do
           "Filebucket[puppet]" => {
             "line"               => nil,
             "change_count"       => 0,
-            "resource_type"      => "Filebucket",
-            "title"              => "puppet",
             "time"               => Time.parse("2010-07-22 12:19:47.365218 -07:00"),
             "evaluation_time"    => 0.000237,
             "tags"               => [
@@ -243,8 +239,6 @@ describe Puppet::Transaction::Report do
           "Service[mysqld]" => {
             "line"               => 8,
             "change_count"       => 1,
-            "resource_type"      => "Service",
-            "title"              => "mysqld",
             "time"               => Time.parse("2010-07-22 12:19:47.367360 -07:00"),
             "evaluation_time"    => 1.555161,
             "tags"               => [
@@ -273,8 +267,6 @@ describe Puppet::Transaction::Report do
           "Schedule[never]" => {
             "line"               => nil,
             "change_count"       => 0,
-            "resource_type"      => "Schedule",
-            "title"              => "never",
             "time"               => Time.parse("2010-07-22 12:19:47.365927 -07:00"),
             "evaluation_time"    => 0.000196,
             "tags"               => [
@@ -290,8 +282,6 @@ describe Puppet::Transaction::Report do
           "Schedule[weekly]" => {
             "line"               => nil,
             "change_count"       => 0,
-            "resource_type"      => "Schedule",
-            "title"              => "weekly",
             "time"               => Time.parse("2010-07-22 12:19:47.364377 -07:00"),
             "evaluation_time"    => 0.00033,
             "tags"               => [
@@ -307,8 +297,6 @@ describe Puppet::Transaction::Report do
           "Exec[/bin/true]" => {
             "line"               => 9,
             "change_count"       => 1,
-            "resource_type"      => "Exec",
-            "title"              => "/bin/true",
             "time"               => Time.parse("2010-07-22 12:19:47.262652 -07:00"),
             "evaluation_time"    => 0.100309,
             "tags"               => [
@@ -336,8 +324,6 @@ describe Puppet::Transaction::Report do
           "Schedule[puppet]" => {
             "line"               => nil,
             "change_count"       => 0,
-            "resource_type"      => "Schedule",
-            "title"              => "puppet",
             "time"               => Time.parse("2010-07-22 12:19:48.923135 -07:00"),
             "evaluation_time"    => 0.000243,
             "tags"               => [
@@ -353,8 +339,6 @@ describe Puppet::Transaction::Report do
           "Schedule[daily]" => {
             "line"            => nil,
             "change_count"    => 0,
-            "resource_type"   => "Schedule",
-            "title"           => "daily",
             "time"            => Time.parse("2010-07-22 12:19:47.366606 -07:00"),
             "evaluation_time" => 0.000216,
             "tags"            => [
@@ -370,8 +354,6 @@ describe Puppet::Transaction::Report do
           "Schedule[hourly]" => {
             "line"            => nil,
             "change_count"    => 0,
-            "resource_type"   => "Schedule",
-            "title"           => "hourly",
             "time"            => Time.parse("2010-07-22 12:19:47.261846 -07:00"),
             "evaluation_time" => 0.000255,
             "tags"            => [

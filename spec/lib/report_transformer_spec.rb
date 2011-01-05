@@ -154,5 +154,12 @@ describe ReportTransformer do
         resource_status["out_of_sync_count"].should == resource_status["change_count"]
       end
     end
+
+    it "should infer resource_type and title from the keys in the resource_statuses hash" do
+      report = ReportTransformer::OneToTwo.apply(@report)
+      report["resource_statuses"].each do |key, resource_status|
+        key.should == "#{resource_status['resource_type']}[#{resource_status['title']}]"
+      end
+    end
   end
 end
