@@ -201,5 +201,12 @@ describe ReportTransformer do
         end
       end
     end
+
+    it "should translate metric names to strings" do
+      @report["metrics"]["time"][:file] = 3.125
+      report = ReportTransformer::OneToTwo.apply(@report)
+      report["metrics"]["time"]["file"].should == 3.125
+      report["metrics"]["time"].keys.should_not include(:file)
+    end
   end
 end

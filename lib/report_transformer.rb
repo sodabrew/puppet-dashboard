@@ -45,7 +45,14 @@ class ReportTransformer::OneToTwo < ReportTransformer::ReportTransformation
   end
 
   def self.transform(report)
-    if report["metrics"] and report["metrics"]["time"] and !report["metrics"]["time"]["total"]
+    report["metrics"].keys.each do |metric_category|
+      new_metrics = {}
+      report["metrics"][metric_category].each do |metric_name, value|
+        new_metrics[metric_name.to_s] = value
+      end
+      report["metrics"][metric_category] = new_metrics
+    end
+    if report["metrics"]["time"] and !report["metrics"]["time"]["total"]
       report["metrics"]["time"]["total"] = report["metrics"]["time"].values.sum
     end
 
