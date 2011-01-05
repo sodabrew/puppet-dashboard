@@ -99,5 +99,37 @@ describe ReportTransformer do
       report = ReportTransformer::OneToTwo.apply(@report)
       @report["status"].should == "unchanged"
     end
+
+    it "should infer configuration version from resource statuses if possible" do
+      @report["resource_statuses"].values.each do |resource_status|
+        if resource_status["version"] == 1279826342
+          resource_status["version"] = 12345
+        end
+      end
+      report = ReportTransformer::OneToTwo.apply(@report)
+      @report["configuration_version"].should == '12345'
+    end
+
+    it "should infer configuration version from log objects if not possible through resource statuses" do
+      @report["resource_statuses"] = {}
+      @report["logs"].each do |log|
+        if log["version"] == 1279826342
+          log["version"] = 12345
+        end
+      end
+      report = ReportTransformer::OneToTwo.apply(@report)
+      @report["configuration_version"].should == '12345'
+    end
+
+    it "should infer configuration version from log message as a last resort" do
+      @report["resource_statuses"] = {}
+      @report["logs"].each do |log|
+        if log["version"] == 1279826342
+          log["version"] = nil
+        end
+      end
+      report = ReportTransformer::OneToTwo.apply(@report)
+      @report["configuration_version"].should == '1279826342'
+    end
   end
 end
