@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110105015322) do
+ActiveRecord::Schema.define(:version => 20110105231833) do
 
   create_table "assignments", :force => true do |t|
     t.integer  "node_id"
@@ -82,7 +82,7 @@ ActiveRecord::Schema.define(:version => 20110105015322) do
 
   create_table "old_reports", :force => true do |t|
     t.integer  "node_id"
-    t.text     "report",     :limit => 16777215
+    t.text     "report",     :limit => 2147483647
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "host"
@@ -132,7 +132,6 @@ ActiveRecord::Schema.define(:version => 20110105015322) do
     t.string   "message"
     t.string   "name"
     t.string   "property"
-    t.string   "source_description"
     t.string   "status"
     t.string   "tags"
     t.datetime "time"
@@ -141,13 +140,12 @@ ActiveRecord::Schema.define(:version => 20110105015322) do
   add_index "resource_events", ["resource_status_id"], :name => "index_resource_events_on_resource_status_id"
 
   create_table "resource_statuses", :force => true do |t|
-    t.integer  "report_id",                                         :null => false
+    t.integer  "report_id",                                        :null => false
     t.string   "resource_type"
     t.string   "title"
-    t.decimal  "evaluation_time",    :precision => 12, :scale => 6
+    t.decimal  "evaluation_time",   :precision => 12, :scale => 6
     t.string   "file"
     t.integer  "line"
-    t.string   "source_description"
     t.string   "tags"
     t.datetime "time"
     t.integer  "change_count"

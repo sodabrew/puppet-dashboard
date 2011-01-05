@@ -215,7 +215,6 @@ describe Puppet::Transaction::Report do
               "schedule",
               "monthly"
             ],
-            "source_description" => "/Schedule[monthly]",
             "file"               => nil,
             "out_of_sync"        => nil,
             "events"             => [],
@@ -230,7 +229,6 @@ describe Puppet::Transaction::Report do
               "filebucket",
               "puppet"
             ],
-            "source_description" => "/Filebucket[puppet]",
             "file"               => nil,
             "out_of_sync"        => nil,
             "events"             => [],
@@ -248,7 +246,6 @@ describe Puppet::Transaction::Report do
               "default",
               "class"
             ],
-            "source_description" => "/Stage[main]//Node[default]/Service[mysqld]",
             "file"               => "/etc/puppet/manifests/site.pp",
             "out_of_sync"        => true,
             "events"             => [{
@@ -257,7 +254,6 @@ describe Puppet::Transaction::Report do
               "message"            => "ensure changed 'stopped' to 'running'",
               "name"               => "service_started",
               "property"           => "ensure",
-              "source_description" => "/Stage[main]//Node[default]/Service[mysqld]/ensure",
               "status"             => "success",
               "tags"               => ["service", "mysqld", "node", "default", "class"],
               "time"               => Time.parse("2010-07-22 12:19:48.921431 -07:00")
@@ -273,7 +269,6 @@ describe Puppet::Transaction::Report do
               "schedule",
               "never"
             ],
-            "source_description" => "/Schedule[never]",
             "file"               => nil,
             "out_of_sync"        => nil,
             "events"             => [],
@@ -288,7 +283,6 @@ describe Puppet::Transaction::Report do
             "schedule",
             "weekly"
             ],
-            "source_description" => "/Schedule[weekly]",
             "file"               => nil,
             "out_of_sync"        => nil,
             "events"             => [],
@@ -305,7 +299,6 @@ describe Puppet::Transaction::Report do
               "default",
               "class"
             ],
-            "source_description" => "/Stage[main]//Node[default]/Exec[/bin/true]",
             "file"               => "/etc/puppet/manifests/site.pp",
             "out_of_sync"        => true,
             "events"             => [{
@@ -314,7 +307,6 @@ describe Puppet::Transaction::Report do
               "message"            => "executed successfully",
               "name"               => "executed_command",
               "property"           => "returns",
-              "source_description" => "/Stage[main]//Node[default]/Exec[/bin/true]/returns",
               "status"             => "success",
               "tags"               => ["exec", "node", "default", "class"],
               "time"               => Time.parse("2010-07-22 12:19:47.360626 -07:00")
@@ -330,7 +322,6 @@ describe Puppet::Transaction::Report do
               "schedule",
               "puppet"
             ],
-            "source_description" => "/Schedule[puppet]",
             "file"               => nil,
             "out_of_sync"        => nil,
             "events"             => [],
@@ -345,7 +336,6 @@ describe Puppet::Transaction::Report do
               "schedule",
               "daily"
             ],
-            "source_description" => "/Schedule[daily]",
             "file"               => nil,
             "out_of_sync"        => nil,
             "events"             => [],
@@ -360,7 +350,6 @@ describe Puppet::Transaction::Report do
               "schedule",
               "hourly"
             ],
-            "source_description" => "/Schedule[hourly]",
             "file"               => nil,
             "out_of_sync"        => nil,
             "events"             => [],

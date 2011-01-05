@@ -33,7 +33,7 @@ module Puppet #:nodoc:
 
     class Event
       attr_reader :name, :default_log_level, :property, :line, :resource,
-        :desired_value, :time, :tags, :version, :source_description, :file,
+        :desired_value, :time, :tags, :version, :file,
         :status, :previous_value, :message
 
       def to_hash
@@ -43,7 +43,6 @@ module Puppet #:nodoc:
           "message"            => message,
           "name"               => name.to_s,
           "property"           => property,
-          "source_description" => source_description,
           "status"             => status,
           "tags"               => tags,
           "time"               => time
@@ -88,7 +87,7 @@ module Puppet #:nodoc:
 
   module Resource
     class Status
-      attr_reader :source_description, :evaluation_time, :resource, :tags,
+      attr_reader :evaluation_time, :resource, :tags,
       :file, :events, :time, :line, :changed, :change_count,
       :out_of_sync
 
@@ -97,7 +96,6 @@ module Puppet #:nodoc:
           "evaluation_time" => evaluation_time,
           "file" => file,
           "line" => line,
-          "source_description" => source_description,
           "tags" => tags,
           "time" => time,
           "change_count" => change_count || 0,
