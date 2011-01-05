@@ -37,6 +37,22 @@ describe ReportTransformer do
       report = ReportTransformer::ZeroToOne.apply(@report)
       report["resource_statuses"].should == {}
     end
+    it "should add Puppet version to logs whose source is Puppet" do
+      @report["logs"] = [{'file'=>nil, 'line'=>nil, 'level'=>:info, 'message'=>'hello', 'source'=>'Puppet', 'tags'=>%w{foo bar}, 'time'=>Time.parse("2011-01-01")}]
+      report = ReportTransformer::ZeroToOne.apply(@report)
+      report["logs"][0]["version"].should == "0.25.x"
+    end
+    it "should set version to nil on logs whose source is not Puppet" do
+      @report["logs"] = [{'file'=>nil, 'line'=>nil, 'level'=>:info, 'message'=>'hello', 'source'=>'File[/foo]', 'tags'=>%w{foo bar}, 'time'=>Time.parse("2011-01-01")}]
+      report = ReportTransformer::ZeroToOne.apply(@report)
+      report["logs"][0].keys.should include("version")
+      report["logs"][0]["version"].should == nil
+    end
+    it "should not set version to on logs that already have a version" do
+      @report["logs"] = [{'file'=>nil, 'line'=>nil, 'level'=>:info, 'message'=>'hello', 'source'=>'File[/foo]', 'tags'=>%w{foo bar}, 'time'=>Time.parse("2011-01-01"), 'version'=>32768}]
+      report = ReportTransformer::ZeroToOne.apply(@report)
+      report["logs"][0]["version"].should == 32768
+    end
   end
 
   describe "when converting from version 1 to version 2" do

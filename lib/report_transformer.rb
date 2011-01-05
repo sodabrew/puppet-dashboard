@@ -32,6 +32,9 @@ class ReportTransformer::ZeroToOne < ReportTransformer::ReportTransformation
   def self.transform(report)
     report["resource_statuses"] = {}
     report["puppet_version"] = "0.25.x"
+    report["logs"].each do |log|
+      log["version"] ||= log["source"] == "Puppet" ? "0.25.x" : nil
+    end
     report
   end
 end
