@@ -32,8 +32,8 @@ module Puppet #:nodoc:
     end
 
     class Event
-      attr_reader :name, :default_log_level, :property, :line, :resource,
-        :desired_value, :time, :tags, :version, :file,
+      attr_reader :name, :property,
+        :desired_value, :time,
         :status, :previous_value, :message
 
       def to_hash
@@ -44,7 +44,6 @@ module Puppet #:nodoc:
           "name"               => name.to_s,
           "property"           => property,
           "status"             => status,
-          "tags"               => tags,
           "time"               => time
         }
       end

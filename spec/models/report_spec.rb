@@ -368,14 +368,11 @@ HEREDOC
           t.property,
           t.previous_value,
           t.desired_value,
-          #t.message,
           t.name,
-          #t.source_description,
           t.status,
-          t.tags.sort,
         ] }.should =~ [
-          [ 'returns' , :notrun  , ['0']    , 'executed_command' , 'success' , ['class' , 'default' , 'exec'   , 'node']            ],
-          [ 'ensure'  , :stopped , :running , 'service_started'  , 'success' , ['class' , 'default' , 'mysqld' , 'node' , 'service']],
+          [ 'returns' , :notrun  , ['0']    , 'executed_command' , 'success' ],
+          [ 'ensure'  , :stopped , :running , 'service_started'  , 'success' ],
         ]
 
         report.logs.map { |t| [

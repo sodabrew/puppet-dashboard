@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110105233640) do
+ActiveRecord::Schema.define(:version => 20110105234202) do
 
   create_table "assignments", :force => true do |t|
     t.integer  "node_id"
@@ -133,7 +133,6 @@ ActiveRecord::Schema.define(:version => 20110105233640) do
     t.string   "name"
     t.string   "property"
     t.string   "status"
-    t.string   "tags"
     t.datetime "time"
     t.string   "historical_value"
     t.boolean  "audited"

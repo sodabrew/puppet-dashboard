@@ -255,7 +255,6 @@ describe Puppet::Transaction::Report do
               "name"               => "service_started",
               "property"           => "ensure",
               "status"             => "success",
-              "tags"               => ["service", "mysqld", "node", "default", "class"],
               "time"               => Time.parse("2010-07-22 12:19:48.921431 -07:00")
             }],
             "version"            => 1279826342
@@ -308,7 +307,6 @@ describe Puppet::Transaction::Report do
               "name"               => "executed_command",
               "property"           => "returns",
               "status"             => "success",
-              "tags"               => ["exec", "node", "default", "class"],
               "time"               => Time.parse("2010-07-22 12:19:47.360626 -07:00")
             }],
             "version"            => 1279826342
