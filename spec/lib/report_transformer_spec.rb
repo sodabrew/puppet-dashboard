@@ -142,5 +142,10 @@ describe ReportTransformer do
       report = ReportTransformer::OneToTwo.apply(@report)
       @report["puppet_version"].should == '2.6.x'
     end
+
+    it "should set kind to 'apply'" do
+      report = ReportTransformer::OneToTwo.apply(@report)
+      @report['kind'].should == 'apply'
+    end
   end
 end
