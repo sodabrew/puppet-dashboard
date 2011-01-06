@@ -207,6 +207,7 @@ describe Puppet::Transaction::Report do
         resource_statuses = hash["resource_statuses"]
         resource_statuses.should == {
           "Schedule[monthly]" => {
+            "skipped"            => nil,
             "line"               => nil,
             "change_count"       => 0,
             "time"               => Time.parse("2010-07-22 12:19:47.260865 -07:00"),
@@ -221,6 +222,7 @@ describe Puppet::Transaction::Report do
             "version"            => 1279826342
           },
           "Filebucket[puppet]" => {
+            "skipped"            => nil,
             "line"               => nil,
             "change_count"       => 0,
             "time"               => Time.parse("2010-07-22 12:19:47.365218 -07:00"),
@@ -235,6 +237,7 @@ describe Puppet::Transaction::Report do
             "version"            => 1279826342
           },
           "Service[mysqld]" => {
+            "skipped"            => nil,
             "line"               => 8,
             "change_count"       => 1,
             "time"               => Time.parse("2010-07-22 12:19:47.367360 -07:00"),
@@ -260,6 +263,7 @@ describe Puppet::Transaction::Report do
             "version"            => 1279826342
           },
           "Schedule[never]" => {
+            "skipped"            => nil,
             "line"               => nil,
             "change_count"       => 0,
             "time"               => Time.parse("2010-07-22 12:19:47.365927 -07:00"),
@@ -274,6 +278,7 @@ describe Puppet::Transaction::Report do
             "version"            => 1279826342
           },
           "Schedule[weekly]" => {
+            "skipped"            => nil,
             "line"               => nil,
             "change_count"       => 0,
             "time"               => Time.parse("2010-07-22 12:19:47.364377 -07:00"),
@@ -288,6 +293,7 @@ describe Puppet::Transaction::Report do
             "version"            => 1279826342
           },
           "Exec[/bin/true]" => {
+            "skipped"            => nil,
             "line"               => 9,
             "change_count"       => 1,
             "time"               => Time.parse("2010-07-22 12:19:47.262652 -07:00"),
@@ -312,6 +318,7 @@ describe Puppet::Transaction::Report do
             "version"            => 1279826342
           },
           "Schedule[puppet]" => {
+            "skipped"            => nil,
             "line"               => nil,
             "change_count"       => 0,
             "time"               => Time.parse("2010-07-22 12:19:48.923135 -07:00"),
@@ -326,6 +333,7 @@ describe Puppet::Transaction::Report do
             "version"            => 1279826342
           },
           "Schedule[daily]" => {
+            "skipped"         => nil,
             "line"            => nil,
             "change_count"    => 0,
             "time"            => Time.parse("2010-07-22 12:19:47.366606 -07:00"),
@@ -340,6 +348,7 @@ describe Puppet::Transaction::Report do
             "version"            => 1279826342
           },
           "Schedule[hourly]" => {
+            "skipped"         => nil,
             "line"            => nil,
             "change_count"    => 0,
             "time"            => Time.parse("2010-07-22 12:19:47.261846 -07:00"),

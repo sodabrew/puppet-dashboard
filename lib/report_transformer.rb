@@ -70,6 +70,7 @@ class ReportTransformer::OneToTwo < ReportTransformer::ReportTransformation
     report["resource_statuses"].each do |key, resource_status|
       key =~ /^(.+?)\[(.+)\]$/
       resource_status["resource_type"], resource_status["title"] = $1, $2
+      resource_status["skipped"] ||= false # ensure that we represent falsehood as "false", not "nil"
       resource_status["out_of_sync_count"] = resource_status["change_count"]
       resource_status["events"].each do |event|
         event["audited"] = event["status"] == "audit"

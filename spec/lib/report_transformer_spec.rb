@@ -215,5 +215,12 @@ describe ReportTransformer do
       report["metrics"].should == {}
       report["status"].should == 'failed'
     end
+
+    it "should set skipped to false on any resources that weren't skipped" do
+      report = ReportTransformer::OneToTwo.apply(@report)
+      report["resource_statuses"].values.each do |resource_status|
+        resource_status["skipped"].should == false
+      end
+    end
   end
 end
