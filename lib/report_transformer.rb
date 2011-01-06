@@ -56,7 +56,14 @@ class ReportTransformer::OneToTwo < ReportTransformer::ReportTransformation
       report["metrics"]["time"]["total"] = report["metrics"]["time"].values.sum
     end
 
-    report["status"] = failed_resources?(report) ? 'failed' : changed_resources?(report) ? 'changed' : 'unchanged'
+    report["status"] = case
+      when has_no_metrics?(report) || failed_resources?(report)
+        'failed'
+      when changed_resources?(report)
+        'changed'
+      else
+        'unchanged'
+      end
     report["configuration_version"] = configuration_version_from_resource_statuses(report) || configuration_version_from_log_objects(report) || configuration_version_from_log_message(report)
     report["kind"] = "apply"
     report["puppet_version"] ||= puppet_version(report) # If it started as a v0 report, we've already filled in puppet_version
@@ -81,13 +88,24 @@ class ReportTransformer::OneToTwo < ReportTransformer::ReportTransformation
     report
   end
 
+  def self.has_no_metrics?(report)
+    report["metrics"].empty?
+  end
+
   def self.failed_resources?(report)
-    return true if report["metrics"].empty?
-    (report["metrics"]["resources"] and report["metrics"]["resources"]["failed"] or 0) > 0
+    if report["metrics"]["resources"] and report["metrics"]["resources"]["failed"]
+      report["metrics"]["resources"]["failed"] > 0
+    else
+      false
+    end
   end
 
   def self.changed_resources?(report)
-    (report["metrics"] and report["metrics"]["changes"] and report["metrics"]["changes"]["total"] or 0) > 0
+    if report["metrics"]["changes"] and report["metrics"]["changes"]["total"]
+      report["metrics"]["changes"]["total"] > 0
+    else
+      false
+    end
   end
 
   def self.puppet_version(report)
