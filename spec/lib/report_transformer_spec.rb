@@ -208,5 +208,12 @@ describe ReportTransformer do
       report["metrics"]["time"]["file"].should == 3.125
       report["metrics"]["time"].keys.should_not include(:file)
     end
+
+    it "should not add any metrics to a failed report" do
+      @report["metrics"] = {} # a pre-version-2 report with no metrics is considered a failure
+      report = ReportTransformer::OneToTwo.apply(@report)
+      report["metrics"].should == {}
+      report["status"].should == 'failed'
+    end
   end
 end
