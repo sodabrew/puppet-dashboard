@@ -55,15 +55,6 @@ describe Report do
       node.reload
       node.reported_at.should be_close(@report_data.time.in_time_zone, 1.second)
     end
-
-    it "does not create a timeline event for the node" do
-      pending "FIXME figure out why Report#update_node can't save an object with #update_without_callbacks any more"
-      node = Node.generate(:name => @report_data.host)
-      lambda {
-        Report.create(:report => @report_yaml)
-        node.reload
-      }.should_not change(TimelineEvent, :count)
-    end
   end
 
   describe "metrics methods" do
@@ -135,6 +126,7 @@ describe Report do
     def generate_report(time, file_ensure, file_content, resource_name = "/tmp/foo")
       report_yaml = <<-HEREDOC
 --- !ruby/object:Puppet::Transaction::Report
+  report_format: 2
   host: mattmac.puppetlabs.lan
   kind: inspect
   logs: []
@@ -144,7 +136,8 @@ describe Report do
       evaluation_time: 0.000868
       file: &id001 /Users/matthewrobinson/work/puppet/test_data/genreportm/manifests/site.pp
       line: 5
-      resource: "File[#{resource_name}]"
+      resource_type: File
+      title: #{resource_name}
       source_description: "/Stage[main]//Node[default]/File[#{resource_name}]"
       tags:
         - &id002 file
@@ -152,7 +145,6 @@ describe Report do
         - default
         - &id003 class
       time: 2010-07-22 14:42:39.654436 -04:00
-      version: 1291407517
       events: 
         - !ruby/object:Puppet::Transaction::Event
           default_log_level: !ruby/sym notice
@@ -167,7 +159,6 @@ describe Report do
             - *id002
             - *id003
           time: 2010-12-03 12:18:40.039434 -08:00
-          version: 1291407517
 HEREDOC
       if file_content
         report_yaml << <<-HEREDOC
@@ -184,7 +175,6 @@ HEREDOC
             - *id002
             - *id003
           time: 2010-12-03 12:08:59.061376 -08:00
-          version: 1291406846
 HEREDOC
       end
       report_yaml << "  time: #{time}\n"
@@ -324,6 +314,10 @@ HEREDOC
         ['info', 'Filebucketed /tmp/puppet_test to puppet with sum 6d0007e52f7afb7d5a0650b0ffb8a4d1', '//Node[default]/File[/tmp/puppet_test]', ['class', 'default', 'file', 'info', 'main', 'node'], '2009-11-20 01:08:50', '/tmp/puppet/manifests/site.pp', 4],
         ['notice', "content changed '{md5}6d0007e52f7afb7d5a0650b0ffb8a4d1' to 'unknown checksum'", '//Node[default]/File[/tmp/puppet_test]/content', ['class', 'content', 'default', 'file', 'main', 'node', 'notice'], '2009-11-20 01:08:50', '/tmp/puppet/manifests/site.pp', 4]
       ]
+
+      report.configuration_version.should == '1258679330'
+      report.puppet_version.should == '0.25.x'
+      report.status.should == 'changed'
     end
 
       it "should populate report related tables from a 2.6 yaml report" do
@@ -374,14 +368,11 @@ HEREDOC
           t.property,
           t.previous_value,
           t.desired_value,
-          #t.message,
           t.name,
-          #t.source_description,
           t.status,
-          t.tags.sort,
         ] }.should =~ [
-          [ 'returns' , :notrun  , ['0']    , 'executed_command' , 'success' , ['class' , 'default' , 'exec'   , 'node']            ],
-          [ 'ensure'  , :stopped , :running , 'service_started'  , 'success' , ['class' , 'default' , 'mysqld' , 'node' , 'service']],
+          [ 'returns' , :notrun  , ['0']    , 'executed_command' , 'success' ],
+          [ 'ensure'  , :stopped , :running , 'service_started'  , 'success' ],
         ]
 
         report.logs.map { |t| [
@@ -398,6 +389,10 @@ HEREDOC
           ['notice', 'executed successfully', "/Stage[main]//Node[default]/Exec[/bin/true]/returns", ['class', 'default', 'exec', 'node', 'notice'], file, 9 ],
           ['notice', "ensure changed 'stopped' to 'running'", '/Stage[main]//Node[default]/Service[mysqld]/ensure', ['class', 'default', 'mysqld', 'node', 'notice', 'service'], file, 8 ],
         ]
+
+      report.configuration_version.should == '1279826342'
+      report.puppet_version.should == '2.6.0'
+      report.status.should == 'changed'
     end
   end
 

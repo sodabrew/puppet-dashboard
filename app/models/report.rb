@@ -95,16 +95,18 @@ class Report < ActiveRecord::Base
   end
 
   def self.create_from_yaml(report_yaml)
-      raw_report = YAML.load(report_yaml)
+    raw_report = YAML.load(report_yaml)
 
-      unless raw_report.is_a? Puppet::Transaction::Report
-        raise ArgumentError, "The supplied report is in invalid format '#{raw_report.class}', expected 'Puppet::Transaction::Report'"
-      end
+    unless raw_report.is_a? Puppet::Transaction::Report
+      raise ArgumentError, "The supplied report is in invalid format '#{raw_report.class}', expected 'Puppet::Transaction::Report'"
+    end
 
-      raw_report.extend(ReportExtensions)
-      report_hash = ReportTransformer.apply(raw_report.to_hash)
+    raw_report.extend(ReportExtensions)
+    report_hash = ReportTransformer.apply(raw_report.to_hash)
 
-      Report.create!(Report.attribute_hash_from(report_hash))
+    report_hash["resource_statuses"] = report_hash["resource_statuses"].values
+
+    Report.create!(Report.attribute_hash_from(report_hash))
   end
 
   def assign_to_node

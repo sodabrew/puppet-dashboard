@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101230054456) do
+ActiveRecord::Schema.define(:version => 20110106002514) do
 
   create_table "assignments", :force => true do |t|
     t.integer  "node_id"
@@ -132,26 +132,27 @@ ActiveRecord::Schema.define(:version => 20101230054456) do
     t.string   "message"
     t.string   "name"
     t.string   "property"
-    t.string   "source_description"
     t.string   "status"
-    t.string   "tags"
     t.datetime "time"
+    t.string   "historical_value"
+    t.boolean  "audited"
   end
 
   add_index "resource_events", ["resource_status_id"], :name => "index_resource_events_on_resource_status_id"
 
   create_table "resource_statuses", :force => true do |t|
-    t.integer  "report_id",                                         :null => false
+    t.integer  "report_id",                                        :null => false
     t.string   "resource_type"
     t.string   "title"
-    t.decimal  "evaluation_time",    :precision => 12, :scale => 6
+    t.decimal  "evaluation_time",   :precision => 12, :scale => 6
     t.string   "file"
     t.integer  "line"
-    t.string   "source_description"
     t.string   "tags"
     t.datetime "time"
     t.integer  "change_count"
     t.boolean  "out_of_sync"
+    t.integer  "out_of_sync_count"
+    t.boolean  "skipped"
   end
 
   add_index "resource_statuses", ["report_id"], :name => "index_resource_statuses_on_report_id"

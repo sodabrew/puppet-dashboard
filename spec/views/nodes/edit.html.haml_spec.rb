@@ -116,11 +116,6 @@ describe '/nodes/edit' do
 
         response.should_not have_tag('#node_class_ids')
       end
-
-      it 'should provide a remove link for each associated class'
-      it 'should show the classes available to be associated'
-      it 'should show non-associated classes in the classes available to be associated section'
-      it 'should provide an associate link for each available class'
     end
 
     describe 'for groups' do
@@ -149,11 +144,6 @@ describe '/nodes/edit' do
 
         response.should_not have_tag('#node_group_ids')
       end
-
-      it 'should provide a remove link for each associated group'
-      it 'should show the groups available to be associated'
-      it 'should show non-associated groups in the groups available to be associated section'
-      it 'should provide an associate link for each available group'
     end
 
     def get_json_struct_for_token_list(selector)

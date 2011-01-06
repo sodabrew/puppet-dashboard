@@ -10,25 +10,6 @@ describe '/nodes/index' do
     render '/nodes/index'
   end
 
-  it 'should render successfully' do
-    pending "Testing inherited resources views"
-    do_render
-  end
-
-  it 'should have a list of nodes' do
-    pending "Only in layout"
-    do_render
-    response.should have_tag('tr.node', :count => @nodes.size)
-  end
-
-  describe 'each node' do
-    it 'should have a heading with the node name' do
-      pending "Only in layout"
-      do_render
-      response.should have_tag('tr.node td.name', :text => @nodes.first.name)
-    end
-  end
-
   describe "search fields" do
     before :each do
       template.stubs(
