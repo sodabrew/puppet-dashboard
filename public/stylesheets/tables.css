@@ -70,11 +70,14 @@ table tbody td.status.failure {
   color: red;
 }
 
-table#events tbody tr.status.failure {
+table tbody tr.status.failure td {
+  background-color: #ffb7b7;
+}
+table tbody tr:nth-child(even).status.failure td {
   background-color: #ffc7c7;
 }
 
-table#events tbody tr.status.changed {
+table tbody tr.status.changed {
   background-color: #FF9;
 }
 

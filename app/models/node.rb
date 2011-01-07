@@ -15,13 +15,13 @@ class Node < ActiveRecord::Base
 
   has_many :reports, :dependent => :destroy
   belongs_to :last_report, :class_name => 'Report'
+  belongs_to :baseline_report, :class_name => 'Report'
 
   named_scope :with_last_report, :include => :last_report
   named_scope :by_report_date, :order => 'reported_at DESC'
 
   named_scope :search, lambda{|q| q.blank? ? {} : {:conditions => ['name LIKE ?', "%#{q}%"]} }
 
-  # ordering scopes for has_scope
   named_scope :by_latest_report, proc { |order|
     direction = {1 => 'ASC', 0 => 'DESC'}[order]
     direction ? {:order => "reported_at #{direction}"} : {}
@@ -142,7 +142,7 @@ class Node < ActiveRecord::Base
   def assign_last_report(report=nil)
     report ||= find_last_report
 
-    unless self.last_report == report
+    if self.last_report != report
       self.last_report = report
       self.reported_at = report ? report.time : nil
       self.status = report ? report.status : 'unchanged'

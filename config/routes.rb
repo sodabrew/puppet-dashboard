@@ -20,11 +20,14 @@ ActionController::Routing::Routes.draw do |map|
      :search => :get},
     :requirements => {:id => /[^\/]+/}
 
-  map.resource :user_session
-  map.resource :account, :controller => "users"
-  map.resources :users
+  map.resources :reports,
+    :member => {
+      :diff => :get,
+      :diff_summary => :get,
+      :make_baseline => :put,
+    }
 
-  map.resources :reports
+  map.upload "reports/upload", :controller => :reports, :action => "upload", :conditions => { :method => :post }
 
   map.release_notes '/release_notes', :controller => :pages, :action => :release_notes
 

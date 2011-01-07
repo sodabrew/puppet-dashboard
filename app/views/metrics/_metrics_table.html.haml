@@ -1,0 +1,14 @@
+- metrics = local_assigns[:metrics]
+- values, total = metrics.partition{|metric| metric.name != "total"}
+- values = values.sort_by(&:name)
+- values.concat(total)
+%tbody
+  - values.each do |metric|
+    %tr
+      %td.key{:class => metric.name}= metric.name.titleize
+      %td.value{:class => metric.name}
+        - if metric.category == "time"
+          = "%0.2f" % metric.value.to_f
+          seconds
+        - else
+          = metric.value.to_i

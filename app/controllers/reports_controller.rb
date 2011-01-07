@@ -1,22 +1,51 @@
 class ReportsController < InheritedResources::Base
   belongs_to :node, :optional => true, :finder => :find_by_url!
-  protect_from_forgery :except => :create
+  protect_from_forgery :except => [:create, :upload]
 
-  before_filter :handle_raw_post, :only => :create
+  before_filter :handle_raw_post, :only => [:create, :upload]
 
   def create
-    if params[:report][:report].blank?
-      render :status => 406
-      return
+    if SETTINGS.disable_legacy_report_upload_url
+      render :text => "Access Denied, this url has been disabled, try /reports/upload", :status => 403
+    else
+      upload
     end
+  end
 
-    create! do |success,failure|
-      failure.html do
-        Rails.logger.debug "WARNING! ReportsController#create failed:"
-        @report.errors.full_messages.each { |msg| Rails.logger.debug msg }
-        render :status => 406
+  def upload
+    begin
+      Report.create_from_yaml(params[:report][:report])
+      render :text => "Report successfully uploaded"
+    rescue => e
+      error_text = "ERROR! ReportsController#upload failed:"
+      Rails.logger.debug error_text
+      Rails.logger.debug e.message
+      render :text => "#{error_text} #{e.message}", :status => 406
+    end
+  end
+
+  def diff
+    @my_report = Report.find(params[:id])
+    @baseline_report = Report.find(params[:baseline_id])
+    @diff = @baseline_report.diff(@my_report)
+  end
+
+  def diff_summary
+    diff
+    @resources = {}
+    @diff.each do |resource, differences|
+      if ! differences.empty?
+        @resources[resource] = :failure
+      else
+        @resources[resource] = :pass
       end
     end
+  end
+
+  def make_baseline
+    report = Report.find( params[:id] )
+    report.baseline!
+    redirect_to report
   end
 
   private

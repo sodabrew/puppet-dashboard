@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101118222325) do
+ActiveRecord::Schema.define(:version => 20101230054456) do
 
   create_table "assignments", :force => true do |t|
     t.integer  "node_id"
@@ -17,6 +17,15 @@ ActiveRecord::Schema.define(:version => 20101118222325) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  create_table "metrics", :force => true do |t|
+    t.integer "report_id",                                :null => false
+    t.string  "category"
+    t.string  "name"
+    t.decimal "value",     :precision => 12, :scale => 6
+  end
+
+  add_index "metrics", ["report_id"], :name => "index_metrics_on_report_id"
 
   create_table "node_class_memberships", :force => true do |t|
     t.integer  "node_id"
@@ -67,7 +76,18 @@ ActiveRecord::Schema.define(:version => 20101118222325) do
     t.datetime "reported_at"
     t.integer  "last_report_id"
     t.string   "status"
-    t.boolean  "hidden",         :default => false
+    t.boolean  "hidden",             :default => false
+    t.integer  "baseline_report_id"
+  end
+
+  create_table "old_reports", :force => true do |t|
+    t.integer  "node_id"
+    t.text     "report",     :limit => 16777215
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "host"
+    t.datetime "time"
+    t.string   "status"
   end
 
   create_table "parameters", :force => true do |t|
@@ -79,18 +99,62 @@ ActiveRecord::Schema.define(:version => 20101118222325) do
     t.datetime "updated_at"
   end
 
+  create_table "report_logs", :force => true do |t|
+    t.integer  "report_id", :null => false
+    t.string   "level"
+    t.string   "message"
+    t.string   "source"
+    t.string   "tags"
+    t.datetime "time"
+    t.string   "file"
+    t.integer  "line"
+  end
+
+  add_index "report_logs", ["report_id"], :name => "index_report_logs_on_report_id"
+
   create_table "reports", :force => true do |t|
     t.integer  "node_id"
-    t.text     "report",     :limit => 2147483647
-    t.datetime "created_at"
-    t.datetime "updated_at"
     t.string   "host"
     t.datetime "time"
     t.string   "status"
+    t.string   "kind"
+    t.string   "puppet_version"
+    t.string   "configuration_version"
   end
 
-  add_index "reports", ["node_id"], :name => "index_reports_on_node_id_and_success"
+  add_index "reports", ["node_id"], :name => "index_reports_on_node_id"
   add_index "reports", ["time", "node_id", "status"], :name => "index_reports_on_time_and_node_id_and_status"
+
+  create_table "resource_events", :force => true do |t|
+    t.integer  "resource_status_id", :null => false
+    t.string   "previous_value"
+    t.string   "desired_value"
+    t.string   "message"
+    t.string   "name"
+    t.string   "property"
+    t.string   "source_description"
+    t.string   "status"
+    t.string   "tags"
+    t.datetime "time"
+  end
+
+  add_index "resource_events", ["resource_status_id"], :name => "index_resource_events_on_resource_status_id"
+
+  create_table "resource_statuses", :force => true do |t|
+    t.integer  "report_id",                                         :null => false
+    t.string   "resource_type"
+    t.string   "title"
+    t.decimal  "evaluation_time",    :precision => 12, :scale => 6
+    t.string   "file"
+    t.integer  "line"
+    t.string   "source_description"
+    t.string   "tags"
+    t.datetime "time"
+    t.integer  "change_count"
+    t.boolean  "out_of_sync"
+  end
+
+  add_index "resource_statuses", ["report_id"], :name => "index_resource_statuses_on_report_id"
 
   create_table "services", :force => true do |t|
     t.string   "name"
@@ -108,25 +172,6 @@ ActiveRecord::Schema.define(:version => 20101118222325) do
     t.integer  "subject_id"
     t.integer  "actor_id"
     t.integer  "secondary_subject_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "users", :force => true do |t|
-    t.string   "login",                              :null => false
-    t.string   "email"
-    t.string   "crypted_password",                   :null => false
-    t.string   "password_salt",                      :null => false
-    t.string   "persistence_token",                  :null => false
-    t.string   "single_access_token",                :null => false
-    t.string   "perishable_token",                   :null => false
-    t.integer  "login_count",         :default => 0, :null => false
-    t.integer  "failed_login_count",  :default => 0, :null => false
-    t.datetime "last_request_at"
-    t.datetime "current_login_at"
-    t.datetime "last_login_at"
-    t.string   "current_login_ip"
-    t.string   "last_login_ip"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
