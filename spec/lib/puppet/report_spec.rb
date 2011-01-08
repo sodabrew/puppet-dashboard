@@ -217,7 +217,6 @@ describe Puppet::Transaction::Report do
               "monthly"
             ],
             "file"               => nil,
-            "out_of_sync"        => nil,
             "events"             => [],
             "version"            => 1279826342
           },
@@ -232,7 +231,6 @@ describe Puppet::Transaction::Report do
               "puppet"
             ],
             "file"               => nil,
-            "out_of_sync"        => nil,
             "events"             => [],
             "version"            => 1279826342
           },
@@ -250,7 +248,6 @@ describe Puppet::Transaction::Report do
               "class"
             ],
             "file"               => "/etc/puppet/manifests/site.pp",
-            "out_of_sync"        => true,
             "events"             => [{
               "previous_value"     => :stopped,
               "desired_value"      => :running,
@@ -273,7 +270,6 @@ describe Puppet::Transaction::Report do
               "never"
             ],
             "file"               => nil,
-            "out_of_sync"        => nil,
             "events"             => [],
             "version"            => 1279826342
           },
@@ -288,7 +284,6 @@ describe Puppet::Transaction::Report do
             "weekly"
             ],
             "file"               => nil,
-            "out_of_sync"        => nil,
             "events"             => [],
             "version"            => 1279826342
           },
@@ -305,7 +300,6 @@ describe Puppet::Transaction::Report do
               "class"
             ],
             "file"               => "/etc/puppet/manifests/site.pp",
-            "out_of_sync"        => true,
             "events"             => [{
               "previous_value"     => :notrun,
               "desired_value"      => ["0"],
@@ -328,7 +322,6 @@ describe Puppet::Transaction::Report do
               "puppet"
             ],
             "file"               => nil,
-            "out_of_sync"        => nil,
             "events"             => [],
             "version"            => 1279826342
           },
@@ -343,7 +336,6 @@ describe Puppet::Transaction::Report do
               "daily"
             ],
             "file"               => nil,
-            "out_of_sync"        => nil,
             "events"             => [],
             "version"            => 1279826342
           },
@@ -358,7 +350,6 @@ describe Puppet::Transaction::Report do
               "hourly"
             ],
             "file"               => nil,
-            "out_of_sync"        => nil,
             "events"             => [],
             "version"            => 1279826342
           }
@@ -428,7 +419,7 @@ HEREDOC
       it "should produce a hash of the report" do
         hash = @report.to_hash
         hash.should be_a(Hash)
-        hash.keys.should =~ %w{host time logs metrics resource_statuses kind configuration_version puppet_version report_format}
+        hash.keys.should =~ %w{host time logs metrics resource_statuses kind configuration_version puppet_version report_format status}
         hash["report_format"].should == 2
         hash["host"].should == "localhost"
         hash["time"].should == Time.parse("2010-07-22 12:19:47.204207 -07:00")
