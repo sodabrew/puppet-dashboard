@@ -52,7 +52,7 @@ module Puppet #:nodoc:
 
   module Util
     class Metric
-      attr_reader :type, :name, :values, :label
+      attr_reader :name, :values
 
       # Return a specific value
       def [](name)
@@ -88,7 +88,7 @@ module Puppet #:nodoc:
     class Status
       attr_reader :evaluation_time, :resource, :tags,
       :file, :events, :time, :line, :changed, :change_count,
-      :out_of_sync, :skipped
+      :skipped
 
       def to_hash
         {
@@ -98,7 +98,6 @@ module Puppet #:nodoc:
           "tags" => tags,
           "time" => time,
           "change_count" => change_count || 0,
-          "out_of_sync" => out_of_sync,
           "events" => events.map(&:to_hash),
           "skipped" => skipped
         }
@@ -151,7 +150,7 @@ module ReportExtensions #:nodoc:
       end
 
       # Attributes in 2.6.x but not 0.25.x
-      attr_reader :external_times, :resource_statuses
+      attr_reader :resource_statuses
 
       def to_hash
         hash = super
@@ -197,10 +196,13 @@ module ReportExtensions #:nodoc:
       attr_reader :report_format
 
       def self.extended(obj)
-        obj.resource_statuses.each{|_, status| status.extend ReportFormat2::Resource::Status} if obj.resource_statuses.respond_to?(:each)
+        obj.resource_statuses.each do |_, status| 
+          status.extend ReportFormat2::Resource::Status
+          status.events.each {|event| event.extend ReportFormat2::Transaction::Event}
+        end if obj.resource_statuses
       end
 
-      attr_reader :resource_statuses, :kind, :puppet_version, :configuration_version
+      attr_reader :resource_statuses, :kind, :puppet_version, :configuration_version, :status
 
       def to_hash
         hash = super
@@ -209,6 +211,7 @@ module ReportExtensions #:nodoc:
           hash["resource_statuses"][key] = value.to_hash
         end
         hash["kind"] = kind
+        hash["status"] = status
         hash["puppet_version"] = puppet_version
         hash["configuration_version"] = configuration_version
         hash
@@ -217,12 +220,26 @@ module ReportExtensions #:nodoc:
 
     module Resource
       module Status
-        attr_reader :resource_type, :title
+        attr_reader :resource_type, :title, :out_of_sync_count
 
         def to_hash
           hash = super
           hash["resource_type"] = resource_type
+          hash["out_of_sync_count"] = out_of_sync_count
           hash["title"] = title
+          hash
+        end
+      end
+    end
+
+    module Transaction
+      module Event
+        attr_reader :audited, :historical_value
+
+        def to_hash
+          hash = super
+          hash["audited"] = audited
+          hash["historical_value"] = historical_value
           hash
         end
       end

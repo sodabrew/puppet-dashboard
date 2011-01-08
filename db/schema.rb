@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110106002514) do
+ActiveRecord::Schema.define(:version => 20110107233911) do
 
   create_table "assignments", :force => true do |t|
     t.integer  "node_id"
@@ -150,7 +150,6 @@ ActiveRecord::Schema.define(:version => 20110106002514) do
     t.string   "tags"
     t.datetime "time"
     t.integer  "change_count"
-    t.boolean  "out_of_sync"
     t.integer  "out_of_sync_count"
     t.boolean  "skipped"
   end

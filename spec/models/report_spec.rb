@@ -275,7 +275,7 @@ HEREDOC
   end
 
   describe "#create_from_yaml" do
-    it "should populate report related tables from a 0.25 yaml report" do
+    it "should populate report related tables from a version 0 yaml report" do
       Time.zone = 'UTC'
       @node = Node.generate(:name => 'sample_node')
       @report_yaml = File.read(File.join(RAILS_ROOT, "spec/fixtures/reports/puppet25/1_changed_0_failures.yml"))
@@ -320,7 +320,7 @@ HEREDOC
       report.status.should == 'changed'
     end
 
-      it "should populate report related tables from a 2.6 yaml report" do
+      it "should populate report related tables from a version 1 yaml report" do
         @node = Node.generate(:name => 'puppet.puppetlabs.vm')
         @report_yaml = File.read(File.join(RAILS_ROOT, "spec/fixtures/reports/puppet26/report_ok_service_started_ok.yaml"))
         file = '/etc/puppet/manifests/site.pp'
@@ -334,7 +334,7 @@ HEREDOC
           ['time',      'filebucket'       ,  '0.00'],
           ['time',      'service'          ,  '1.56'],
           ['time',      'exec'             ,  '0.10'],
-          ['time',      'total'       ,  '1.82'],
+          ['time',      'total'            ,  '1.82'],
           ['resources', 'total'            ,  '9.00'],
           ['resources', 'changed'          ,  '2.00'],
           ['resources', 'out_of_sync'      ,  '2.00'],
@@ -361,8 +361,8 @@ HEREDOC
           [ 'Schedule'   ,  'hourly'  ,  "0.00" ,  nil ,  nil ,  ['hourly'     ,  'schedule'] ,  0 ],
           [ 'Schedule'   ,  'monthly' ,  "0.00" ,  nil ,  nil ,  ['monthly'    ,  'schedule'] ,  0 ],
           [ 'Schedule'   ,  'never'   ,  "0.00" ,  nil ,  nil ,  ['never'      ,  'schedule'] ,  0 ],
-          [ 'Service'    ,  'mysqld'  ,  "1.56" ,  file,  8 ,  ['class'      ,  'default'   ,  'mysqld' ,  'node' ,  'service'] ,  1 ],
-          [ 'Exec'    ,  '/bin/true'  ,  "0.10" ,  file ,  9 ,  ['class'      ,  'default'   ,  'exec' ,  'node' ] ,  1 ],
+          [ 'Service'    ,  'mysqld'  ,  "1.56" ,  file,  8   ,  ['class'      ,  'default'   ,  'mysqld' ,  'node' ,  'service'] ,  1 ],
+          [ 'Exec'       ,'/bin/true' ,  "0.10" ,  file ,  9  ,  ['class'      ,  'default'   ,  'exec' ,  'node' ] ,  1 ],
         ]
         report.events.map { |t| [
           t.property,
@@ -393,6 +393,103 @@ HEREDOC
       report.configuration_version.should == '1279826342'
       report.puppet_version.should == '2.6.0'
       report.status.should == 'changed'
+    end
+
+    it "should populate report related tables from a version 2 report" do
+      @node = Node.generate(:name => 'paul-berrys-macbook-pro-3.local')
+      @report_yaml = File.read(File.join(RAILS_ROOT, "spec/fixtures/reports/version2/example.yaml"))
+      file = '/Users/pberry/puppet_labs/test_data/master/manifests/site.pp'
+      Report.create_from_yaml(@report_yaml)
+      Report.count.should == 1
+
+      report = Report.first
+      report.node.should == @node
+      report.status.should == 'changed'
+      report.configuration_version.should == '1293756667'
+      report.puppet_version.should == '2.6.4'
+
+      report.metrics.map {|t| [t.category, t.name, "%0.2f" % t.value]}.should =~ [
+        ['time',      'schedule'         ,  '0.00'],
+        ['time',      'config_retrieval' ,  '0.07'],
+        ['time',      'filebucket'       ,  '0.00'],
+        ['time',      'file'             ,  '0.01'],
+        ['time',      'total'            ,  '0.08'],
+        ['resources', 'total'            , '12.00'],
+        ['resources', 'out_of_sync'      ,  '4.00'],
+        ['resources', 'changed'          ,  '3.00'],
+        ['changes',   'total'            ,  '3.00'],
+        ['events',    'total'            ,  '4.00'],
+        ['events',    'success'          ,  '3.00'],
+        ['events',    'audit'            ,  '1.00']
+      ]
+
+      report.resource_statuses.map { |t| [
+        t.resource_type,
+        t.title,
+        "%0.3f" % t.evaluation_time,
+        t.file,
+        t.line,
+        t.tags.sort,
+        #t.time,
+        t.change_count,
+        t.out_of_sync_count,
+      ] }.should =~ [
+        [ 'Filebucket' ,  'puppet'  ,  "0.000" ,  nil ,  nil ,  ['filebucket' ,  'puppet']   ,  0 , 0 ],
+        [ 'Schedule'   ,  'monthly' ,  "0.000" ,  nil ,  nil ,  ['monthly'    ,  'schedule'] ,  0 , 0 ],
+        [ 'File' , '/tmp/unchanged' ,  "0.001" ,  file,  7   ,  ['class'      ,  'file']     ,  0 , 0 ],
+        [ 'File' , '/tmp/noop'      ,  "0.001" ,  file,  7   ,  ['class'      ,  'file']     ,  0 , 1 ],
+        [ 'Schedule'   ,  'never'   ,  "0.000" ,  nil ,  nil ,  ['never'      ,  'schedule'] ,  0 , 0 ],
+        [ 'Schedule'   ,  'weekly'  ,  "0.000" ,  nil ,  nil ,  ['schedule'   ,  'weekly']   ,  0 , 0 ],
+        [ 'File' , '/tmp/removed'   ,  "0.004" ,  file,  7   ,  ['class'      ,  'file']     ,  1 , 1 ],
+        [ 'File' , '/tmp/created'   ,  "0.001" ,  file,  7   ,  ['class'      ,  'file']     ,  1 , 1 ],
+        [ 'Schedule'   ,  'puppet'  ,  "0.000" ,  nil ,  nil ,  ['puppet'     ,  'schedule'] ,  0 , 0 ],
+        [ 'Schedule'   ,  'daily'   ,  "0.000" ,  nil ,  nil ,  ['daily'      ,  'schedule'] ,  0 , 0 ],
+        [ 'File' , '/tmp/changed'   ,  "0.001" ,  file,  7   ,  ['class'      ,  'file']     ,  1 , 1 ],
+        [ 'Schedule'   ,  'hourly'  ,  "0.000" ,  nil ,  nil ,  ['hourly'     ,  'schedule'] ,  0 , 0 ],
+      ]
+      report.events.map { |t| [
+        t.property,
+        t.previous_value.to_s,
+        t.desired_value.to_s,
+        t.historical_value.to_s,
+        #t.message,
+        t.name,
+        t.status,
+        t.audited,
+      ] }.should =~ [
+        [ 'owner'  , '0'     , ''       , '501' , 'owner_changed' , 'audit'   , true  ],
+        [ 'mode'   , '640'   , '644'    , ''    , 'mode_changed'  , 'noop'    , false ],
+        [ 'ensure' , 'file'  , 'absent' , ''    , 'file_removed'  , 'success' , false ],
+        [ 'ensure' , 'absent', 'present', ''    , 'file_created'  , 'success' , false ],
+        [ 'mode'   , '640'   , '644'    , ''    , 'mode_changed'  , 'success' , false ],
+      ]
+
+      report.logs.map { |t| [
+        t.level,
+        t.message,
+        t.source,
+        t.tags.sort,
+        #t.time,
+        t.file,
+        t.line,
+      ] }.should =~ [
+        ['debug', 'Using cached certificate for ca', 'Puppet', ['debug'], nil, nil],
+        ['debug', 'Using cached certificate for paul-berrys-macbook-pro-3.local', 'Puppet', ['debug'], nil, nil],
+        ['debug', 'Using cached certificate_revocation_list for ca', 'Puppet', ['debug'], nil, nil],
+        ['debug', 'catalog supports formats: b64_zlib_yaml dot marshal pson raw yaml; using pson', 'Puppet', ['debug'], nil, nil],
+        ['info', 'Caching catalog for paul-berrys-macbook-pro-3.local', 'Puppet', ['info'], nil, nil],
+        ['debug', 'Creating default schedules', 'Puppet', ['debug'], nil, nil],
+        ['debug', 'Loaded state in 0.00 seconds', 'Puppet', ['debug'], nil, nil],
+        ['info', "Applying configuration version '1293756667'", 'Puppet', ['info'], nil, nil],
+        ['notice', "audit change: previously recorded value pberry has been changed to root", "/Stage[main]//File[/tmp/unchanged]/owner", ['class', 'file', 'notice'], file, 7],
+        ['notice', "mode changed '640' to '644'", "/Stage[main]//File[/tmp/changed]/mode", ['class', 'file', 'notice'], file, 7],
+        ['debug', 'Finishing transaction 2166421680', 'Puppet', ['debug'], nil, nil],
+        ['info', "FileBucket got a duplicate file /private/tmp/removed ({md5}d41d8cd98f00b204e9800998ecf8427e)", 'Puppet', ['info'], nil, nil],
+        ['info', 'Filebucketed /tmp/removed to puppet with sum d41d8cd98f00b204e9800998ecf8427e', "/Stage[main]//File[/tmp/removed]", ['class', 'file', 'info'], file, 7],
+        ['debug', 'Removing existing file for replacement with absent', "/Stage[main]//File[/tmp/removed]", ['class', 'debug', 'file'], file, 7],
+        ['notice', 'removed', "/Stage[main]//File[/tmp/removed]/ensure", ['class', 'file', 'notice'], file, 7],
+        ['notice', 'created', "/Stage[main]//File[/tmp/created]/ensure", ['class', 'file', 'notice'], file, 7],
+      ]
     end
   end
 
