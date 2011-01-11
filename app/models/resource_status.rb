@@ -6,6 +6,21 @@ class ResourceStatus < ActiveRecord::Base
 
   serialize :tags, Array
 
+  named_scope :inspections, { :joins => :report, :conditions => "reports.kind = 'inspect'" }
+
+  named_scope :by_file_content, lambda {|content|
+    {
+      :conditions => ["resource_statuses.resource_type = 'File' AND resource_events.property = 'content' AND resource_events.previous_value = ?", "{md5}#{content}"],
+      :joins => :events,
+    }
+  }
+
+  named_scope :by_file_title, lambda {|title|
+    {
+      :conditions => ["resource_type = 'File' AND title = ?", title],
+    }
+  }
+
   def name
     "#{resource_type}[#{title}]"
   end
