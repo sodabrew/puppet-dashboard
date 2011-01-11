@@ -25,6 +25,9 @@ ActionController::Routing::Routes.draw do |map|
       :diff => :get,
       :diff_summary => :get,
       :make_baseline => :put,
+    },
+    :collection => {
+      :search => :get,
     }
 
   map.upload "reports/upload", :controller => :reports, :action => "upload", :conditions => { :method => :post }
