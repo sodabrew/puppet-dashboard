@@ -11,9 +11,12 @@ describe PaginateScopeHelper do
       helper.paginate_scope([1,2,3]).per_page.should == 2
     end
 
-    it "should not paginate if the per_page parameter is 'all'" do
+    it "should use only one page if the per_page parameter is 'all'" do
       params[:per_page] = 'all'
-      helper.paginate_scope([1,2,3]).should_not be_a_kind_of(WillPaginate::Collection)
+      paginated_scope = helper.paginate_scope([1,2,3])
+      paginated_scope.should be_a_kind_of(WillPaginate::Collection)
+      paginated_scope.total_pages.should == 1
+      paginated_scope.per_page.should == 3
     end
   end
 end

@@ -6,7 +6,7 @@ module PaginateScopeHelper
     elsif params[:per_page] != "all"
       scope.paginate( opts.reverse_merge(:page => params[:page], :per_page => params[:per_page]) )
     else
-      scope
+      scope.paginate( opts.reverse_merge(:page => 1, :per_page => scope.count) )
     end
   end
 end

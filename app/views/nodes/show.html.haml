@@ -69,7 +69,7 @@
               %tr
                 %td{:colspan => 5}
                   .actionbar
-                    = link_to "More &raquo;", reports_node_path(@node), :class => 'button'
+                    = link_to "More &raquo;", reports_node_path(@node, :kind => "apply"), :class => 'button'
 
       - if @node.reports.inspections.count > 0
         .section
@@ -98,7 +98,7 @@
                 %tr
                   %td{:colspan => 5}
                     .actionbar
-                      = link_to "More &raquo;", reports_node_path(@node), :class => 'button'
+                      = link_to "More &raquo;", reports_node_path(@node, :kind => "inspect"), :class => 'button'
 
     .section
       %h3 Dashboard activity
