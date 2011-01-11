@@ -21,6 +21,8 @@
       = link_to "Hidden", hidden_nodes_path
       - count = Node.hidden.count
       %span.count{:class => counter_class(count, false)}= count
+    %li
+      = link_to "File Search", search_reports_path
     - if SETTINGS.experimental_inventory_service
       %li
         = link_to "Custom query", search_nodes_path
