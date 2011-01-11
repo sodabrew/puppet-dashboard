@@ -113,7 +113,7 @@ class Report < ActiveRecord::Base
   end
 
   def update_node
-    if node && (node.reported_at.nil? || (node.reported_at-1.second) <= self.time)
+    if kind == "apply" && (node.reported_at.nil? || (node.reported_at-1.second) <= self.time)
       node.assign_last_report(self)
     end
   end
@@ -127,6 +127,7 @@ class Report < ActiveRecord::Base
   end
 
   def baseline!
+    raise IncorrectReportKind.new("expected 'inspect', got '#{self.kind}'") unless self.kind == "inspect"
     self.node.baseline_report = self
     self.node.save!
   end
