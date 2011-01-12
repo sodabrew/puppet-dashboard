@@ -27,10 +27,6 @@ class Status
     return [] if options[:nodes] && options[:nodes].empty?
     interval = 1.day
 
-    has_where = options[:start] || options[:node] || options[:nodes].present?
-
-    has_and = [options[:start], options[:node], options[:nodes]].compact.size > 1
-
     # WARNING: This uses the local server time, regardless of what is set in the Rails config.
     # This should be changed once we have a user-friendly settings file, or can get the browser
     # time zone to this method.
@@ -48,11 +44,10 @@ class Status
       FROM reports
     SQL
 
-    sql << "WHERE " if has_where
-    sql << "time >= \"#{options[:start].getutc.to_s(:db)}\"\n" if options[:start]
-    sql << "AND " if has_and
-    sql << "node_id = #{options[:node].id} " if options[:node]
-    sql << "node_id IN (#{options[:nodes].map(&:id).join(',')})\n" if options[:nodes].present?
+    sql << "WHERE kind = 'apply' "
+    sql << "AND time >= \"#{options[:start].getutc.to_s(:db)}\"\n" if options[:start]
+    sql << "AND node_id = #{options[:node].id} " if options[:node]
+    sql << "AND node_id IN (#{options[:nodes].map(&:id).join(',')})\n" if options[:nodes].present?
     sql << "GROUP BY #{date}\n"
     sql << "ORDER BY time ASC\n"
     sql << "LIMIT #{options[:limit]}" if options[:limit]

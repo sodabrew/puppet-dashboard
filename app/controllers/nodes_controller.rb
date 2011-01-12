@@ -93,7 +93,7 @@ class NodesController < InheritedResources::Base
   # requirements
   def reports
     @node = resource
-    @reports = @node.reports
+    @reports = params[:kind] == "inspect" ? @node.reports.inspections : @node.reports.applies
     respond_to do |format|
       format.html { @reports = paginate_scope(@reports); render 'reports/index' }
     end

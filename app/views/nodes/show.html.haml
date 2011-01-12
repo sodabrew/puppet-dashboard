@@ -35,7 +35,7 @@
 
       %br.clear
 
-    - reports = @node.reports.limit(30).order('time ASC')
+    - reports = @node.reports.applies.limit(30).order('time ASC')
     - unless reports.empty?
       .section
         = render 'statuses/run_failure', :node => @node
@@ -69,36 +69,36 @@
               %tr
                 %td{:colspan => 5}
                   .actionbar
-                    = link_to "More &raquo;", reports_node_path(@node), :class => 'button'
+                    = link_to "More &raquo;", reports_node_path(@node, :kind => "apply"), :class => 'button'
 
-      - if @node.reports.inspections.count > 0
-        .section
-          %h3
-            Recent inspections
-            - if @node.baseline_report
-              = link_to "Baseline: #{@node.baseline_report.time}", @node.baseline_report
-            %span.count== (#{@node.reports.inspections.count})
-            - reports_limit = 10
-          %table.inspector
-            %thead
+    - if @node.reports.inspections.count > 0
+      .section
+        %h3
+          Recent inspections
+          - if @node.baseline_report
+            = link_to "Baseline: #{@node.baseline_report.time}", @node.baseline_report
+          %span.count== (#{@node.reports.inspections.count})
+          - reports_limit = 10
+        %table.inspector
+          %thead
+            %tr
+              %th.status
+              %th Reported at
+              %th Total
+              %th Runtime
+          %tbody
+            - @node.reports.inspections.limit(reports_limit).each do |report|
               %tr
-                %th.status
-                %th Reported at
-                %th Total
-                %th Runtime
-            %tbody
-              - @node.reports.inspections.limit(reports_limit).each do |report|
-                %tr
-                  = report_status_td(report)
-                  %td= link_to report.time, report
-                  %td= report.total_resources
-                  %td= report.total_time
-            - if @node.reports.inspections.count > reports_limit
-              %tfoot
-                %tr
-                  %td{:colspan => 5}
-                    .actionbar
-                      = link_to "More &raquo;", reports_node_path(@node), :class => 'button'
+                = report_status_td(report)
+                %td= link_to report.time, report
+                %td= report.total_resources
+                %td= report.total_time
+          - if @node.reports.inspections.count > reports_limit
+            %tfoot
+              %tr
+                %td{:colspan => 5}
+                  .actionbar
+                    = link_to "More &raquo;", reports_node_path(@node, :kind => "inspect"), :class => 'button'
 
     .section
       %h3 Dashboard activity

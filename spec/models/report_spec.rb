@@ -49,11 +49,32 @@ describe Report do
       }.should change { Node.count(:conditions => {:name => @report_data.host}) }.by(1)
     end
 
-    it "updates the node's reported_at timestamp" do
+    it "updates the node's reported_at timestamp for apply reports" do
       node = Node.generate(:name => @report_data.host)
       report = Report.create_from_yaml(@report_yaml)
       node.reload
       node.reported_at.should be_close(@report_data.time.in_time_zone, 1.second)
+    end
+
+    it "does not update the node's reported_at timestamp for inspect reports" do
+      node = Node.generate
+      report = Report.generate!(:kind => "inspect", :host => node.name)
+      node.reload
+      node.reported_at.should == nil
+    end
+
+    it "should update the node's last report for apply reports" do
+      node = Node.generate!
+      report = Report.create!(:host => node.name, :time => Time.now, :kind => "apply")
+      node.reload
+      node.last_report.should == report
+    end
+
+    it "should not update the node's last report for inspect reports" do
+      node = Node.generate
+      report = Report.create!(:host => node.name, :time => Time.now, :kind => "inspect")
+      node.reload
+      node.last_report.should_not == report
     end
   end
 
@@ -91,11 +112,32 @@ describe Report do
   describe "when destroying the most recent report for a node" do
     before :each do
       @node = Node.generate!
-      @report = Report.create!(:host => @node.name, :time => 1.week.ago.to_date, :status => 'unchanged')
+      @report = Report.generate!(:host => @node.name, :time => 1.week.ago.to_date, :status => 'unchanged', :kind => "apply")
     end
 
-    it "should set the node's most recent report to what is now the most recent report" do
-      @newer_report = Report.create!(:host => @node.name, :time => Time.now, :status => 'failed')
+    it "should set the node's most recent report to what is now the most recent apply report" do
+      @newer_report = Report.generate!(:host => @node.name, :time => Time.now, :status => 'failed', :kind => "apply")
+      # Time objects store higher resolution than time from the database, so we need to reload
+      # so time matches what the node has
+      @newer_report.reload
+      @node.reload
+      @node.last_report.should == @newer_report
+      @node.reported_at.should == @newer_report.time
+      @node.status.should == @newer_report.status
+
+      @newer_report.destroy
+      @node.reload
+
+      @node.last_report.should == @report
+      @node.reported_at.should == @report.time
+      @node.status.should == @report.status
+    end
+
+    it "should not set the node's most recent report to an inspect report" do
+      @inspect_report = Report.generate!(:host => @node.name, :time => 3.days.ago.to_date, :kind => "inspect")
+      @inspect_report.reload
+
+      @newer_report = Report.generate!(:host => @node.name, :time => Time.now, :status => 'failed', :kind => "apply")
       # Time objects store higher resolution than time from the database, so we need to reload
       # so time matches what the node has
       @newer_report.reload
@@ -269,6 +311,13 @@ HEREDOC
         @report.should_not be_baseline
 
         Report.baselines.should == [@report2]
+      end
+
+      it "should not make non-inspection reports baselines" do
+        @apply_report = Report.generate!(:kind => "apply")
+        lambda { @apply_report.baseline! }.should raise_error(IncorrectReportKind)
+
+        @apply_report.should_not be_baseline
       end
     end
 

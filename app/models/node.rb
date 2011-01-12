@@ -50,7 +50,7 @@ class Node < ActiveRecord::Base
       { :conditions => ["nodes.status #{operator} 'failed' AND nodes.last_report_id is not NULL"]  }
     else
       {
-        :conditions => ["reports.status #{operator} 'failed'"],
+        :conditions => ["reports.kind = 'apply' AND reports.status #{operator} 'failed'"],
         :joins => :reports,
         :group => 'nodes.id',
       }
@@ -140,7 +140,7 @@ class Node < ActiveRecord::Base
 
   # Assigns the node's :last_report attribute. # FIXME
   def assign_last_report(report=nil)
-    report ||= find_last_report
+    report ||= Report.applies.find_last_for(self)
 
     if self.last_report != report
       self.last_report = report
@@ -151,10 +151,6 @@ class Node < ActiveRecord::Base
       ### node.send :update_without_callbacks # do not create a timeline event
       self.save!
     end
-  end
-
-  def find_last_report
-    return Report.find_last_for(self)
   end
 
   def facts

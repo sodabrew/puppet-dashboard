@@ -33,6 +33,12 @@ describe Status  do
         Status.by_interval(:start => Time.zone.parse("2009-11-11 00:00 PST")).
           map(&:start).should == ["2009-11-11 00:00 PST", "2009-11-12 00:00 PST"].map {|time| Time.zone.parse time}
       end
+
+      it "should not count inspect reports" do
+        Report.generate(:time => Time.zone.parse("2009-11-10 12:00 PST"), :kind => "inspect")
+
+        Status.by_interval(:limit => 1, :start => Time.zone.parse("2009-11-10 00:00 PST")).map(&:total).should == [2]
+      end
     end
   end
 

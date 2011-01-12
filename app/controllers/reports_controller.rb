@@ -4,6 +4,18 @@ class ReportsController < InheritedResources::Base
 
   before_filter :handle_raw_post, :only => [:create, :upload]
 
+  def index
+    index! do |success,failure|
+      success.html do
+        if params[:kind] == "inspect"
+          @reports = paginate_scope Report.inspections
+        else
+          @reports = paginate_scope Report.applies
+        end
+      end
+    end
+  end
+
   def create
     if SETTINGS.disable_legacy_report_upload_url
       render :text => "Access Denied, this url has been disabled, try /reports/upload", :status => 403

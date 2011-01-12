@@ -10,16 +10,15 @@ class Report < ActiveRecord::Base
   accepts_nested_attributes_for :metrics, :resource_statuses, :logs
 
   before_validation :assign_to_node
-  validates_presence_of :host
-  validates_presence_of :time
+  validates_presence_of :host, :time, :kind
   validates_uniqueness_of :host, :scope => :time, :allow_nil => true
   after_save :update_node
   after_destroy :replace_last_report
 
-  default_scope :order => 'time DESC'
+  default_scope :order => 'time DESC', :include => :node
 
-  named_scope :inspections, :conditions => {:kind => "inspect"}
-  named_scope :applies,     :conditions => {:kind => "apply"  }
+  named_scope :inspections, :conditions => {:kind => "inspect"}, :include => :metrics
+  named_scope :applies,     :conditions => {:kind => "apply"  }, :include => :metrics
   named_scope :baselines,   :include => :node, :conditions => ['nodes.baseline_report_id = reports.id']
 
   def self.find_last_for(node)
@@ -57,7 +56,7 @@ class Report < ActiveRecord::Base
   end
 
   def metric_value(category, name)
-    metric = metrics.find_by_category_and_name(category, name)
+    metric = metrics.detect {|m| m.category == category and m.name == name }
     (metric and metric.value) or 0
   end
 
@@ -114,7 +113,7 @@ class Report < ActiveRecord::Base
   end
 
   def update_node
-    if node && (node.reported_at.nil? || (node.reported_at-1.second) <= self.time)
+    if kind == "apply" && (node.reported_at.nil? || (node.reported_at-1.second) <= self.time)
       node.assign_last_report(self)
     end
   end
@@ -128,6 +127,7 @@ class Report < ActiveRecord::Base
   end
 
   def baseline!
+    raise IncorrectReportKind.new("expected 'inspect', got '#{self.kind}'") unless self.kind == "inspect"
     self.node.baseline_report = self
     self.node.save!
   end

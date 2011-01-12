@@ -59,6 +59,11 @@ describe Node do
         node.reload
       end
 
+      @only_inspections = Node.generate!(:name => 'only_inspections').tap do |node|
+        Report.generate!(:host => node.name, :time => later, :kind => 'inspect', :status => "unchanged")
+        node.reload
+      end
+
       @never_reported = Node.generate!(:name => 'never_reported')
     end
 
