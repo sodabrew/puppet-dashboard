@@ -10,8 +10,7 @@ class Report < ActiveRecord::Base
   accepts_nested_attributes_for :metrics, :resource_statuses, :logs
 
   before_validation :assign_to_node
-  validates_presence_of :host
-  validates_presence_of :time
+  validates_presence_of :host, :time, :kind
   validates_uniqueness_of :host, :scope => :time, :allow_nil => true
   after_save :update_node
   after_destroy :replace_last_report

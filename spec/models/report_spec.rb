@@ -91,11 +91,11 @@ describe Report do
   describe "when destroying the most recent report for a node" do
     before :each do
       @node = Node.generate!
-      @report = Report.create!(:host => @node.name, :time => 1.week.ago.to_date, :status => 'unchanged')
+      @report = Report.generate!(:host => @node.name, :time => 1.week.ago.to_date, :status => 'unchanged')
     end
 
     it "should set the node's most recent report to what is now the most recent report" do
-      @newer_report = Report.create!(:host => @node.name, :time => Time.now, :status => 'failed')
+      @newer_report = Report.generate!(:host => @node.name, :time => Time.now, :status => 'failed')
       # Time objects store higher resolution than time from the database, so we need to reload
       # so time matches what the node has
       @newer_report.reload
