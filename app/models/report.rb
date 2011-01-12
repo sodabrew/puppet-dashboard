@@ -15,10 +15,10 @@ class Report < ActiveRecord::Base
   after_save :update_node
   after_destroy :replace_last_report
 
-  default_scope :order => 'time DESC'
+  default_scope :order => 'time DESC', :include => :node
 
-  named_scope :inspections, :conditions => {:kind => "inspect"}
-  named_scope :applies,     :conditions => {:kind => "apply"  }
+  named_scope :inspections, :conditions => {:kind => "inspect"}, :include => :metrics
+  named_scope :applies,     :conditions => {:kind => "apply"  }, :include => :metrics
   named_scope :baselines,   :include => :node, :conditions => ['nodes.baseline_report_id = reports.id']
 
   def self.find_last_for(node)
@@ -56,7 +56,7 @@ class Report < ActiveRecord::Base
   end
 
   def metric_value(category, name)
-    metric = metrics.find_by_category_and_name(category, name)
+    metric = metrics.detect {|m| m.category == category and m.name == name }
     (metric and metric.value) or 0
   end
 
