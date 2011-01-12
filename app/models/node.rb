@@ -50,7 +50,7 @@ class Node < ActiveRecord::Base
       { :conditions => ["nodes.status #{operator} 'failed' AND nodes.last_report_id is not NULL"]  }
     else
       {
-        :conditions => ["reports.status #{operator} 'failed'"],
+        :conditions => ["reports.kind = 'apply' AND reports.status #{operator} 'failed'"],
         :joins => :reports,
         :group => 'nodes.id',
       }
