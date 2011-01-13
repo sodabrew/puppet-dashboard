@@ -16,7 +16,11 @@
         %button Search
 
     .section
-      - if @files.present?
+      - if @files.nil?
+        - # blank
+      - elsif @files.empty?
+        No matching files found.
+      - else
         %table.inspector
           %thead
             %tr

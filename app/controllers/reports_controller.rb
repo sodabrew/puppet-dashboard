@@ -70,7 +70,7 @@ class ReportsController < InheritedResources::Base
     elsif params[:file_content].present?
       @files = inspected_resources.by_file_content(params[:file_content])
     else
-      @files = []
+      @files = nil
     end
   end
 
