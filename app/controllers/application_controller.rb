@@ -15,6 +15,10 @@ class ApplicationController < ActionController::Base
 
   private
 
+  def raise_if_enable_read_only_mode
+    raise ReadOnlyEnabledError.new if SETTINGS.enable_read_only_mode
+  end
+
   def raise_unless_using_external_node_classification
     raise NodeClassificationDisabledError.new unless SETTINGS.use_external_node_classification
   end

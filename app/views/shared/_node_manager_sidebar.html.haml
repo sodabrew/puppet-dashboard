@@ -27,7 +27,7 @@
       %li
         = link_to "Custom query", search_nodes_path
   .footer.actionbar
-    - if SETTINGS.use_external_node_classification
+    - if SETTINGS.use_external_node_classification && !SETTINGS.enable_read_only_mode
       = link_to "Add node", new_node_path, :class => 'button'
 
 - if SETTINGS.use_external_node_classification
