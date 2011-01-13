@@ -9,14 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110113012919) do
-
-  create_table "assignments", :force => true do |t|
-    t.integer  "node_id"
-    t.integer  "service_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
+ActiveRecord::Schema.define(:version => 20110113183616) do
 
   create_table "metrics", :force => true do |t|
     t.integer "report_id",                                :null => false
@@ -155,14 +148,6 @@ ActiveRecord::Schema.define(:version => 20110113012919) do
   end
 
   add_index "resource_statuses", ["report_id"], :name => "index_resource_statuses_on_report_id"
-
-  create_table "services", :force => true do |t|
-    t.string   "name"
-    t.string   "type"
-    t.text     "description"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
 
   create_table "timeline_events", :force => true do |t|
     t.string   "event_type"
