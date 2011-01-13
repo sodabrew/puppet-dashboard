@@ -35,7 +35,7 @@ describe Report do
       Report.create_from_yaml(report_yaml).should be_valid
     end
 
-    it "is not created if a report for the same host exists with the same time" do
+    it "is not created if a report for the same host exists with the same time and kind" do
       Report.create_from_yaml(@report_yaml)
       lambda {
         Report.create_from_yaml(@report_yaml)
