@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110107233911) do
+ActiveRecord::Schema.define(:version => 20110113012919) do
 
   create_table "assignments", :force => true do |t|
     t.integer  "node_id"
@@ -82,7 +82,7 @@ ActiveRecord::Schema.define(:version => 20110107233911) do
 
   create_table "old_reports", :force => true do |t|
     t.integer  "node_id"
-    t.text     "report",     :limit => 16777215
+    t.text     "report",     :limit => 2147483647
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "host"
@@ -102,11 +102,11 @@ ActiveRecord::Schema.define(:version => 20110107233911) do
   create_table "report_logs", :force => true do |t|
     t.integer  "report_id", :null => false
     t.string   "level"
-    t.string   "message"
-    t.string   "source"
-    t.string   "tags"
+    t.text     "message"
+    t.text     "source"
+    t.text     "tags"
     t.datetime "time"
-    t.string   "file"
+    t.text     "file"
     t.integer  "line"
   end
 
@@ -127,14 +127,14 @@ ActiveRecord::Schema.define(:version => 20110107233911) do
 
   create_table "resource_events", :force => true do |t|
     t.integer  "resource_status_id", :null => false
-    t.string   "previous_value"
-    t.string   "desired_value"
-    t.string   "message"
+    t.text     "previous_value"
+    t.text     "desired_value"
+    t.text     "message"
     t.string   "name"
     t.string   "property"
     t.string   "status"
     t.datetime "time"
-    t.string   "historical_value"
+    t.text     "historical_value"
     t.boolean  "audited"
   end
 
@@ -143,11 +143,11 @@ ActiveRecord::Schema.define(:version => 20110107233911) do
   create_table "resource_statuses", :force => true do |t|
     t.integer  "report_id",                                        :null => false
     t.string   "resource_type"
-    t.string   "title"
+    t.text     "title"
     t.decimal  "evaluation_time",   :precision => 12, :scale => 6
-    t.string   "file"
+    t.text     "file"
     t.integer  "line"
-    t.string   "tags"
+    t.text     "tags"
     t.datetime "time"
     t.integer  "change_count"
     t.integer  "out_of_sync_count"
