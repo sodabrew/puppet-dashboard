@@ -195,6 +195,7 @@ describe NodesController do
     describe "when using node classification" do
       before :each do
         SETTINGS.stubs(:use_external_node_classification).returns(true)
+        SETTINGS.stubs(:enable_read_only_mode).returns(false)
         @node = Node.generate!
         @params = { :id => @node.id, :node => @node.attributes }
       end

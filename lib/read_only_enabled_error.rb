@@ -1,0 +1,2 @@
+class ReadOnlyEnabledError < StandardError
+end

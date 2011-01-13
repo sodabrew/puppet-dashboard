@@ -61,4 +61,6 @@ date_format: '%Y-%m-%d'
 # "http://dashboard_servername/reports/upload"
 disable_legacy_report_upload_url: false
 
+# Disables the UI and controller actions for editing nodes, classes, groups and reports.  Report submission is still allowed
+enable_read_only_mode: false
 #===[ fin ]=============================================================
