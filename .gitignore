@@ -25,3 +25,4 @@ spec/watchr.rb
 tags
 tmp/*
 results/*
+certs
