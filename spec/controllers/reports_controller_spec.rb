@@ -84,7 +84,7 @@ describe ReportsController do
       get('search')
       response.code.should == '200'
       response.should render_template("reports/search")
-      assigns[:files].should == []
+      assigns[:files].should == nil
     end
 
     describe "when searching for files" do
