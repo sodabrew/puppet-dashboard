@@ -67,14 +67,14 @@ describe Report do
       node = Node.generate!
       report = Report.create!(:host => node.name, :time => Time.now, :kind => "apply")
       node.reload
-      node.last_report.should == report
+      node.last_apply_report.should == report
     end
 
     it "should not update the node's last report for inspect reports" do
       node = Node.generate
       report = Report.create!(:host => node.name, :time => Time.now, :kind => "inspect")
       node.reload
-      node.last_report.should_not == report
+      node.last_apply_report.should_not == report
     end
   end
 
@@ -121,14 +121,14 @@ describe Report do
       # so time matches what the node has
       @newer_report.reload
       @node.reload
-      @node.last_report.should == @newer_report
+      @node.last_apply_report.should == @newer_report
       @node.reported_at.should == @newer_report.time
       @node.status.should == @newer_report.status
 
       @newer_report.destroy
       @node.reload
 
-      @node.last_report.should == @report
+      @node.last_apply_report.should == @report
       @node.reported_at.should == @report.time
       @node.status.should == @report.status
     end
@@ -142,14 +142,14 @@ describe Report do
       # so time matches what the node has
       @newer_report.reload
       @node.reload
-      @node.last_report.should == @newer_report
+      @node.last_apply_report.should == @newer_report
       @node.reported_at.should == @newer_report.time
       @node.status.should == @newer_report.status
 
       @newer_report.destroy
       @node.reload
 
-      @node.last_report.should == @report
+      @node.last_apply_report.should == @report
       @node.reported_at.should == @report.time
       @node.status.should == @report.status
     end
@@ -158,7 +158,7 @@ describe Report do
       @report.destroy
       @node.reload
 
-      @node.last_report.should == nil
+      @node.last_apply_report.should == nil
       @node.reported_at.should == nil
       @node.status.should == 'unchanged'
     end

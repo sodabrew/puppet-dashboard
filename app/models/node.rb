@@ -14,10 +14,10 @@ class Node < ActiveRecord::Base
   has_many :node_groups, :through => :node_group_memberships
 
   has_many :reports, :dependent => :destroy
-  belongs_to :last_report, :class_name => 'Report'
+  belongs_to :last_apply_report, :class_name => 'Report'
   belongs_to :baseline_report, :class_name => 'Report'
 
-  named_scope :with_last_report, :include => :last_report
+  named_scope :with_last_report, :include => :last_apply_report
   named_scope :by_report_date, :order => 'reported_at DESC'
 
   named_scope :search, lambda{|q| q.blank? ? {} : {:conditions => ['name LIKE ?', "%#{q}%"]} }
@@ -47,7 +47,7 @@ class Node < ActiveRecord::Base
   named_scope :by_currentness_and_successfulness, lambda {|currentness, successfulness|
     operator = successfulness ? '!=' : '='
     if currentness
-      { :conditions => ["nodes.status #{operator} 'failed' AND nodes.last_report_id is not NULL"]  }
+      { :conditions => ["nodes.status #{operator} 'failed' AND nodes.last_apply_report_id is not NULL"]  }
     else
       {
         :conditions => ["reports.kind = 'apply' AND reports.status #{operator} 'failed'"],
@@ -104,8 +104,8 @@ class Node < ActiveRecord::Base
   end
 
   def status_class
-    return 'no reports' unless last_report
-    last_report.status
+    return 'no reports' unless last_apply_report
+    last_apply_report.status
   end
 
   attr_accessor :node_class_names
@@ -138,12 +138,12 @@ class Node < ActiveRecord::Base
     return false
   end
 
-  # Assigns the node's :last_report attribute. # FIXME
+  # Assigns the node's :last_apply_report attribute. # FIXME
   def assign_last_report(report=nil)
     report ||= Report.applies.find_last_for(self)
 
-    if self.last_report != report
-      self.last_report = report
+    if self.last_apply_report != report
+      self.last_apply_report = report
       self.reported_at = report ? report.time : nil
       self.status = report ? report.status : 'unchanged'
 
