@@ -144,6 +144,20 @@ describe ReportsController do
             assigns[:files].to_a.should =~ @matching_report.resource_statuses + @matching_earlier_report.resource_statuses
           end
         end
+
+        describe "by title and negative content" do
+          it "should find the reports with files of this name that differ" do
+            get('search', :file_title => "/etc/hosts", :file_content => "ab07acbb1e496801937adfa772424bf7", :search_all_inspect_reports => true, :content_match => "negative")
+            assigns[:files].to_a.should =~ [ @doubly_matching_report.resource_statuses.first ]
+          end
+        end
+
+        describe "by title and negative content" do
+          it "should find the reports that don't contain any such files" do
+            get('search', :file_content => "ab07acbb1e496801937adfa772424bf7", :search_all_inspect_reports => true, :content_match => "negative")
+            assigns[:files].to_a.should =~ @unmatching_report.resource_statuses
+          end
+        end
       end
 
     end

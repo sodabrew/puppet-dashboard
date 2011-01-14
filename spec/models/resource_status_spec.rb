@@ -48,6 +48,18 @@ describe ResourceStatus do
         ResourceStatus.latest_inspections.should =~ @matching_report.resource_statuses
       end
     end
+
+    describe ".by_file_title.without_file_content" do
+      it "should only return statuses from reports that have a file of the name with unmatching contents" do
+        ResourceStatus.by_file_title('/etc/sudoers').without_file_content("ab07acbb1e496801937adfa772424bf7").should == @unmatching_report.resource_statuses
+      end
+    end
+
+    describe ".in_a_report_without_content" do
+      it "should only return statuses from reports that don't have any file with matching contents" do
+        ResourceStatus.by_file_title('/etc/sudoers').in_a_report_without_content("ab07acbb1e496801937adfa772424bf7").should == @unmatching_report.resource_statuses
+      end
+    end
   end
 end
 
