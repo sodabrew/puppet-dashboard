@@ -104,21 +104,21 @@ describe ReportsController do
         describe "by title" do
           it "should find the correct reports" do
             get('search', :file_title => "/etc/hosts", :file_content => '')
-            assigns[:files].should =~ @matching_report.resource_statuses
+            assigns[:files].to_a.should =~ @matching_report.resource_statuses
           end
         end
 
         describe "by content" do
           it "should find the correct reports" do
             get('search', :file_title => '', :file_content => "ab07acbb1e496801937adfa772424bf7")
-            assigns[:files].should =~ @matching_report.resource_statuses
+            assigns[:files].to_a.should =~ @matching_report.resource_statuses
           end
         end
 
         describe "by both title and content" do
           it "should find the correct reports" do
             get('search', :file_title => "/etc/hosts", :file_content => "ab07acbb1e496801937adfa772424bf7")
-            assigns[:files].should =~ @matching_report.resource_statuses
+            assigns[:files].to_a.should =~ @matching_report.resource_statuses
           end
         end
       end
@@ -127,21 +127,21 @@ describe ReportsController do
         describe "by title" do
           it "should find the correct reports" do
             get('search', :file_title => "/etc/hosts", :file_content => '', :search_all_inspect_reports => true)
-            assigns[:files].should =~ @matching_report.resource_statuses + @matching_earlier_report.resource_statuses + [@doubly_matching_report.resource_statuses.first]
+            assigns[:files].to_a.should =~ @matching_report.resource_statuses + @matching_earlier_report.resource_statuses + [@doubly_matching_report.resource_statuses.first]
           end
         end
 
         describe "by content" do
           it "should find the correct reports" do
             get('search', :file_title => '', :file_content => "ab07acbb1e496801937adfa772424bf7", :search_all_inspect_reports => true)
-            assigns[:files].should =~ @matching_report.resource_statuses + @matching_earlier_report.resource_statuses + [@doubly_matching_report.resource_statuses.last]
+            assigns[:files].to_a.should =~ @matching_report.resource_statuses + @matching_earlier_report.resource_statuses + [@doubly_matching_report.resource_statuses.last]
           end
         end
 
         describe "by both title and content" do
           it "should find the correct reports" do
             get('search', :file_title => "/etc/hosts", :file_content => "ab07acbb1e496801937adfa772424bf7", :search_all_inspect_reports => true)
-            assigns[:files].should =~ @matching_report.resource_statuses + @matching_earlier_report.resource_statuses
+            assigns[:files].to_a.should =~ @matching_report.resource_statuses + @matching_earlier_report.resource_statuses
           end
         end
       end
