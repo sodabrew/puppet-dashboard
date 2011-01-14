@@ -42,6 +42,12 @@ describe ResourceStatus do
         ResourceStatus.by_file_title("/etc/hosts").by_file_content("ab07acbb1e496801937adfa772424bf7").should == @matching_report.resource_statuses
       end
     end
+
+    describe ".latest_inspections" do
+      it "should only return statuses from reports that are the latest inspect report for their node" do
+        ResourceStatus.latest_inspections.should =~ @matching_report.resource_statuses
+      end
+    end
   end
 end
 

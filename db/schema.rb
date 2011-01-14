@@ -69,8 +69,9 @@ ActiveRecord::Schema.define(:version => 20110113195253) do
     t.datetime "reported_at"
     t.integer  "last_apply_report_id"
     t.string   "status"
-    t.boolean  "hidden",             :default => false
+    t.boolean  "hidden",                 :default => false
     t.integer  "baseline_report_id"
+    t.integer  "last_inspect_report_id"
   end
 
   create_table "old_reports", :force => true do |t|

@@ -15,6 +15,7 @@ class Node < ActiveRecord::Base
 
   has_many :reports, :dependent => :destroy
   belongs_to :last_apply_report, :class_name => 'Report'
+  belongs_to :last_inspect_report, :class_name => 'Report'
   belongs_to :baseline_report, :class_name => 'Report'
 
   named_scope :with_last_report, :include => :last_apply_report
@@ -138,17 +139,45 @@ class Node < ActiveRecord::Base
     return false
   end
 
-  # Assigns the node's :last_apply_report attribute. # FIXME
-  def assign_last_report(report=nil)
-    report ||= Report.applies.find_last_for(self)
+  def assign_last_apply_report_if_newer(report)
+    raise "wrong report type" unless report.kind == "apply"
 
-    if self.last_apply_report != report
+    if reported_at.nil? or reported_at.to_i < report.time.to_i
       self.last_apply_report = report
-      self.reported_at = report ? report.time : nil
-      self.status = report ? report.status : 'unchanged'
+      self.reported_at = report.time
+      self.status = report.status
+      self.save!
+    end
+  end
 
-      # FIXME #update_without_callbacks doesn't update the object, and #save! is creating unwanted timeline events.
-      ### node.send :update_without_callbacks # do not create a timeline event
+  def assign_last_inspect_report_if_newer(report)
+    raise "wrong report type" unless report.kind == "inspect"
+
+    if ! self.last_inspect_report or self.last_inspect_report.time.to_i < report.time.to_i
+      self.last_inspect_report = report
+      self.save!
+    end
+  end
+
+  def find_and_assign_last_apply_report
+    report = self.reports.applies.first
+    if report
+      self.reported_at = nil
+      assign_last_apply_report_if_newer(report)
+    else
+      self.last_apply_report = nil
+      self.reported_at = nil
+      self.status = nil
+      self.save!
+    end
+  end
+
+  def find_and_assign_last_inspect_report
+    report = self.reports.inspections.first
+    self.last_inspect_report = nil
+    if report
+      assign_last_inspect_report_if_newer(report)
+    else
       self.save!
     end
   end

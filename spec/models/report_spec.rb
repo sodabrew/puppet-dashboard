@@ -109,61 +109,6 @@ describe Report do
     end
   end
 
-  describe "when destroying the most recent report for a node" do
-    before :each do
-      @node = Node.generate!
-      @report = Report.generate!(:host => @node.name, :time => 1.week.ago.to_date, :status => 'unchanged', :kind => "apply")
-    end
-
-    it "should set the node's most recent report to what is now the most recent apply report" do
-      @newer_report = Report.generate!(:host => @node.name, :time => Time.now, :status => 'failed', :kind => "apply")
-      # Time objects store higher resolution than time from the database, so we need to reload
-      # so time matches what the node has
-      @newer_report.reload
-      @node.reload
-      @node.last_apply_report.should == @newer_report
-      @node.reported_at.should == @newer_report.time
-      @node.status.should == @newer_report.status
-
-      @newer_report.destroy
-      @node.reload
-
-      @node.last_apply_report.should == @report
-      @node.reported_at.should == @report.time
-      @node.status.should == @report.status
-    end
-
-    it "should not set the node's most recent report to an inspect report" do
-      @inspect_report = Report.generate!(:host => @node.name, :time => 3.days.ago.to_date, :kind => "inspect")
-      @inspect_report.reload
-
-      @newer_report = Report.generate!(:host => @node.name, :time => Time.now, :status => 'failed', :kind => "apply")
-      # Time objects store higher resolution than time from the database, so we need to reload
-      # so time matches what the node has
-      @newer_report.reload
-      @node.reload
-      @node.last_apply_report.should == @newer_report
-      @node.reported_at.should == @newer_report.time
-      @node.status.should == @newer_report.status
-
-      @newer_report.destroy
-      @node.reload
-
-      @node.last_apply_report.should == @report
-      @node.reported_at.should == @report.time
-      @node.status.should == @report.status
-    end
-
-    it "should clear the node's most recent report if there are no other reports" do
-      @report.destroy
-      @node.reload
-
-      @node.last_apply_report.should == nil
-      @node.reported_at.should == nil
-      @node.status.should == 'unchanged'
-    end
-  end
-
   describe "when diffing inspection reports" do
     def generate_report(time, file_ensure, file_content, resource_name = "/tmp/foo")
       report_yaml = <<-HEREDOC
@@ -328,6 +273,7 @@ HEREDOC
       Time.zone = 'UTC'
       @node = Node.generate(:name => 'sample_node')
       @report_yaml = File.read(File.join(RAILS_ROOT, "spec/fixtures/reports/puppet25/1_changed_0_failures.yml"))
+      Report.count.should == 0
       Report.create_from_yaml(@report_yaml)
       Report.count.should == 1
       report = Report.first
@@ -560,4 +506,193 @@ HEREDOC
       Metric.count.should == 0
     end
   end
+
+  describe "when submitting reports" do
+    it "should be able to save an inspect report and an apply report with the same timestamp" do
+      time = Time.now
+      Report.generate(:host => "my_node", :time => time, :kind => "apply")
+      Report.generate(:host => "my_node", :time => time, :kind => "inspect")
+
+      Report.count.should == 2
+    end
+  end
+
+  describe "setting denormalized fields on node" do
+    before :each do
+      @node = Node.generate(:name => "my_node")
+    end
+
+    ["apply", "inspect"].each do |kind|
+      other_kind = kind == "apply" ? "inspect" : "apply"
+
+      describe "from an #{kind} report" do
+
+        describe "when creating the first report" do
+          before :each do
+            @node.last_apply_report.should == nil
+            @node.last_inspect_report.should == nil
+            @node.reported_at.should == nil
+
+            @report = Report.generate(:host => "my_node", :time => Time.now, :kind => kind)
+            @node.reload
+          end
+
+          it "should set the last_#{kind}_report to the report" do
+            @node.send("last_#{kind}_report").should == @report
+            @node.send("last_#{other_kind}_report").should == nil
+          end
+
+          if kind == "apply"
+            it "should set the reported_at time to the report's time" do
+              @node.reported_at.to_s.should == @report.time.to_s
+              @node.reported_at.to_i.should == @report.time.to_i
+            end
+          end
+        end
+
+        describe "when creating a subsequent report" do
+          before :each do
+            @old_apply_report   = Report.generate(:host => "my_node", :time =>  1.hour.ago, :kind => "apply")
+            @old_inspect_report = Report.generate(:host => "my_node", :time => 2.hours.ago, :kind => "inspect")
+            @node.reload
+            @node.last_apply_report.should == @old_apply_report
+            @node.last_inspect_report.should == @old_inspect_report
+            @node.reported_at.to_s.should == @old_apply_report.time.to_s
+
+            @report = Report.generate(:host => "my_node", :time => Time.now, :kind => kind)
+
+            @node.reload
+          end
+
+          it "should set the last_#{kind}_report to the report" do
+            @node.send("last_#{kind}_report").should == @report
+            @node.send("last_#{other_kind}_report").should == ( other_kind == "apply" ? @old_apply_report : @old_inspect_report )
+          end
+
+          if kind == "apply"
+            it "should set the reported_at time to the report's time" do
+              @node.reported_at.to_s.should == @report.time.to_s
+              @node.reported_at.to_i.should == @report.time.to_i
+            end
+          end
+        end
+
+        describe "when creating a prior report" do
+          before :each do
+            @old_apply_report   = Report.generate(:host => "my_node", :time =>  1.hour.ago, :kind => "apply")
+            @old_inspect_report = Report.generate(:host => "my_node", :time => 2.hours.ago, :kind => "inspect")
+            @node.reload
+            @node.last_apply_report.should == @old_apply_report
+            @node.last_inspect_report.should == @old_inspect_report
+            @node.reported_at.to_s.should == @old_apply_report.time.to_s
+
+            @report = Report.generate(:host => "my_node", :time => 3.hours.ago, :kind => kind)
+            @node.reload
+          end
+
+          it "should not change any of last_apply_report, last_inspect_report, or reported_at" do
+            @node.last_apply_report.should == @old_apply_report
+            @node.last_inspect_report.should == @old_inspect_report
+            @node.reported_at.to_s.should == @old_apply_report.time.to_s
+          end
+        end
+
+        describe "when deleting the latest report" do
+          before :each do
+            @newer_apply_report   = Report.generate(:host => "my_node", :time =>  1.hour.ago, :kind => "apply",   :status => "failed")
+            @newer_inspect_report = Report.generate(:host => "my_node", :time => 2.hours.ago, :kind => "inspect", :status => "unchanged")
+            @older_apply_report   = Report.generate(:host => "my_node", :time => 3.hours.ago, :kind => "apply",   :status => "changed")
+            @older_inspect_report = Report.generate(:host => "my_node", :time => 4.hours.ago, :kind => "inspect", :status => "unchanged")
+
+            Report.count.should == 4
+
+            @node.reload
+            @node.last_apply_report.should == @newer_apply_report
+            @node.last_inspect_report.should == @newer_inspect_report
+            @node.reported_at.to_s.should == @newer_apply_report.time.to_s
+
+            @report = @node.send("last_#{kind}_report")
+            @report.destroy
+            @node.reload
+          end
+
+          it "should set the last_#{kind}_report to the next most recent report" do
+            @node.send("last_#{kind}_report").should == ( kind == "apply" ? @older_apply_report : @older_inspect_report )
+          end
+
+          if kind == "apply"
+            it "should set the reported_at time to the next most recent report's time" do
+              @node.reported_at.to_s.should == @older_apply_report.time.to_s
+            end
+
+            it "should set the node status to the next most recent report's status" do
+              @node.status.should == @older_apply_report.status
+            end
+          end
+        end
+
+        describe "when deleting the only report" do
+          before :each do
+            @apply_report   = Report.generate(:host => "my_node", :time =>  1.hour.ago, :kind => "apply",   :status => "failed")
+            @inspect_report = Report.generate(:host => "my_node", :time => 2.hours.ago, :kind => "inspect", :status => "unchanged")
+
+            Report.count.should == 2
+
+            @node.reload
+            @node.last_apply_report.should == @apply_report
+            @node.last_inspect_report.should == @inspect_report
+            @node.reported_at.to_s.should == @apply_report.time.to_s
+            @node.status.should == "failed"
+
+            @report = @node.send("last_#{kind}_report")
+            @report.destroy
+            @node.reload
+          end
+
+          it "should set the last_#{kind}_report to nil" do
+            @node.send("last_#{kind}_report").should == nil
+          end
+
+          if kind == "apply"
+            it "should set the reported_at time to nil" do
+              @node.reported_at.should == nil
+            end
+
+            it "should set the node status to nil" do
+              @node.status.should == nil
+            end
+          end
+        end
+      end
+
+      describe "when deleting some historical report" do
+        before :each do
+          @newer_apply_report   = Report.generate(:host => "my_node", :time =>  1.hour.ago, :kind => "apply",   :status => "failed")
+          @newer_inspect_report = Report.generate(:host => "my_node", :time => 2.hours.ago, :kind => "inspect", :status => "unchanged")
+          @older_apply_report   = Report.generate(:host => "my_node", :time => 3.hours.ago, :kind => "apply",   :status => "changed")
+          @older_inspect_report = Report.generate(:host => "my_node", :time => 4.hours.ago, :kind => "inspect", :status => "unchanged")
+
+          Report.count.should == 4
+
+          @node.reload
+          @node.last_apply_report.should == @newer_apply_report
+          @node.last_inspect_report.should == @newer_inspect_report
+          @node.reported_at.to_s.should == @newer_apply_report.time.to_s
+
+          @older_apply_report.destroy
+          @older_inspect_report.destroy
+          @node.reload
+        end
+
+        it "should not change any of last_apply_report, last_inspect_report, reported_at, or status" do
+          @node.last_apply_report.should == @newer_apply_report
+          @node.last_inspect_report.should == @newer_inspect_report
+          @node.reported_at.to_s.should == @newer_apply_report.time.to_s
+          @node.status.should == @newer_apply_report.status
+        end
+      end
+
+    end
+  end
+
 end
