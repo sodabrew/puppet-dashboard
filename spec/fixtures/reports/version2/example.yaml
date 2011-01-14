@@ -200,6 +200,7 @@
       changed: false
       evaluation_time: 0.000283
       events: []
+      failed: false
       file: 
       line: 
       out_of_sync: false
@@ -216,6 +217,7 @@
       changed: false
       evaluation_time: 0.000258
       events: []
+      failed: false
       file: 
       line: 
       out_of_sync: false
@@ -242,6 +244,7 @@
           property: owner
           status: audit
           time: 2010-12-30 16:56:37.436191 -08:00
+      failed: false
       file: *id001
       line: 7
       out_of_sync: false
@@ -268,6 +271,7 @@
           property: mode
           status: noop
           time: 2010-12-30 17:13:28.925582 -08:00
+      failed: false
       file: *id001
       line: 7
       out_of_sync: true
@@ -284,6 +288,7 @@
       changed: false
       evaluation_time: 0.000256
       events: []
+      failed: false
       file: 
       line: 
       out_of_sync: false
@@ -300,6 +305,7 @@
       changed: false
       evaluation_time: 0.00027
       events: []
+      failed: false
       file: 
       line: 
       out_of_sync: false
@@ -326,6 +332,7 @@
           property: ensure
           status: success
           time: 2010-12-30 16:56:37.440618 -08:00
+      failed: false
       file: *id001
       line: 7
       out_of_sync: true
@@ -352,6 +359,7 @@
           property: ensure
           status: success
           time: 2010-12-30 16:56:37.445044 -08:00
+      failed: false
       file: *id001
       line: 7
       out_of_sync: true
@@ -368,6 +376,7 @@
       changed: false
       evaluation_time: 0.000264
       events: []
+      failed: false
       file: 
       line: 
       out_of_sync: false
@@ -384,6 +393,7 @@
       changed: false
       evaluation_time: 0.00031
       events: []
+      failed: false
       file: 
       line: 
       out_of_sync: false
@@ -410,6 +420,7 @@
           property: mode
           status: success
           time: 2010-12-30 16:56:37.438029 -08:00
+      failed: true
       file: *id001
       line: 7
       out_of_sync: true
@@ -426,6 +437,7 @@
       changed: false
       evaluation_time: 0.000261
       events: []
+      failed: false
       file: 
       line: 
       out_of_sync: false

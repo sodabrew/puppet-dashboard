@@ -218,7 +218,8 @@ describe Puppet::Transaction::Report do
             ],
             "file"               => nil,
             "events"             => [],
-            "version"            => 1279826342
+            "version"            => 1279826342,
+            "failed"             => nil
           },
           "Filebucket[puppet]" => {
             "skipped"            => nil,
@@ -232,7 +233,8 @@ describe Puppet::Transaction::Report do
             ],
             "file"               => nil,
             "events"             => [],
-            "version"            => 1279826342
+            "version"            => 1279826342,
+            "failed"             => nil
           },
           "Service[mysqld]" => {
             "skipped"            => nil,
@@ -257,7 +259,8 @@ describe Puppet::Transaction::Report do
               "status"             => "success",
               "time"               => Time.parse("2010-07-22 12:19:48.921431 -07:00")
             }],
-            "version"            => 1279826342
+            "version"            => 1279826342,
+            "failed"             => nil
           },
           "Schedule[never]" => {
             "skipped"            => nil,
@@ -271,7 +274,8 @@ describe Puppet::Transaction::Report do
             ],
             "file"               => nil,
             "events"             => [],
-            "version"            => 1279826342
+            "version"            => 1279826342,
+            "failed"             => nil
           },
           "Schedule[weekly]" => {
             "skipped"            => nil,
@@ -285,7 +289,8 @@ describe Puppet::Transaction::Report do
             ],
             "file"               => nil,
             "events"             => [],
-            "version"            => 1279826342
+            "version"            => 1279826342,
+            "failed"             => nil
           },
           "Exec[/bin/true]" => {
             "skipped"            => nil,
@@ -309,7 +314,8 @@ describe Puppet::Transaction::Report do
               "status"             => "success",
               "time"               => Time.parse("2010-07-22 12:19:47.360626 -07:00")
             }],
-            "version"            => 1279826342
+            "version"            => 1279826342,
+            "failed"             => true
           },
           "Schedule[puppet]" => {
             "skipped"            => nil,
@@ -323,7 +329,8 @@ describe Puppet::Transaction::Report do
             ],
             "file"               => nil,
             "events"             => [],
-            "version"            => 1279826342
+            "version"            => 1279826342,
+            "failed"             => nil
           },
           "Schedule[daily]" => {
             "skipped"         => nil,
@@ -337,7 +344,8 @@ describe Puppet::Transaction::Report do
             ],
             "file"               => nil,
             "events"             => [],
-            "version"            => 1279826342
+            "version"            => 1279826342,
+            "failed"             => nil
           },
           "Schedule[hourly]" => {
             "skipped"         => nil,
@@ -351,7 +359,8 @@ describe Puppet::Transaction::Report do
             ],
             "file"               => nil,
             "events"             => [],
-            "version"            => 1279826342
+            "version"            => 1279826342,
+            "failed"             => nil
           }
         }
       end
