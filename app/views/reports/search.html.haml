@@ -39,3 +39,8 @@
                 %td= link_to h(file.report.host), file.report.node
                 %td= file.title
                 %td= file.events.find_by_property("content").previous_value rescue "not recorded"
+            - if @files.total_pages > 1
+              %tfoot
+                %tr
+                  %td{:colspan => 5}
+                    = pagination_for(@files)
