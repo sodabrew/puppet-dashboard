@@ -29,7 +29,7 @@
               - else
                 = sources.map{|s| link_to(s.name,s)}.join(", ")
           %td.latest_report
-            = node.last_report ? node.last_report.time : "Has not reported"
+            = node.last_apply_report ? node.last_apply_report.time : "Has not reported"
     - else
       %td.empty{:colspan => container.nil? ? 3 : 4}
         = describe_no_matches_for :nodes

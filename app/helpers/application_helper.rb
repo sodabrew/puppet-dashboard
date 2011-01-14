@@ -141,7 +141,7 @@ module ApplicationHelper
 
   # Return status icon for the +node+.
   def node_status_icon(node)
-    report_status_icon(node.last_report)
+    report_status_icon(node.last_apply_report)
   end
 
   # Return status icon for the +report+.

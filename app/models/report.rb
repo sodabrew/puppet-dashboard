@@ -11,7 +11,7 @@ class Report < ActiveRecord::Base
 
   before_validation :assign_to_node
   validates_presence_of :host, :time, :kind
-  validates_uniqueness_of :host, :scope => :time, :allow_nil => true
+  validates_uniqueness_of :host, :scope => [:time, :kind], :allow_nil => true
   after_save :update_node
   after_destroy :replace_last_report
 
@@ -20,10 +20,6 @@ class Report < ActiveRecord::Base
   named_scope :inspections, :conditions => {:kind => "inspect"}, :include => :metrics
   named_scope :applies,     :conditions => {:kind => "apply"  }, :include => :metrics
   named_scope :baselines,   :include => :node, :conditions => ['nodes.baseline_report_id = reports.id']
-
-  def self.find_last_for(node)
-    self.first(:conditions => {:node_id => node.id}, :order => 'time DESC', :limit => 1)
-  end
 
   def total_resources
     metric_value("resources", "total")
@@ -113,8 +109,13 @@ class Report < ActiveRecord::Base
   end
 
   def update_node
-    if kind == "apply" && (node.reported_at.nil? || (node.reported_at-1.second) <= self.time)
-      node.assign_last_report(self)
+    case kind
+    when "apply"
+      node.assign_last_apply_report_if_newer(self)
+    when "inspect"
+      node.assign_last_inspect_report_if_newer(self)
+    else
+      raise "There's no such thing as a #{kind.inspect} report"
     end
   end
 
@@ -150,6 +151,15 @@ class Report < ActiveRecord::Base
   end
 
   def replace_last_report
-    node.assign_last_report if node
+    return unless node
+
+    case kind
+    when "apply"
+      node.find_and_assign_last_apply_report
+    when "inspect"
+      node.find_and_assign_last_inspect_report
+    else
+      raise "There's no such thing as a #{kind.inspect} report"
+    end
   end
 end

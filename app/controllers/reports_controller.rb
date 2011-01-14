@@ -62,7 +62,13 @@ class ReportsController < InheritedResources::Base
   end
 
   def search
-    inspected_resources = ResourceStatus.inspections.order("reports.time DESC")
+    if params[:search_all_inspect_reports]
+      inspected_resources = ResourceStatus.inspections
+    else
+      inspected_resources = ResourceStatus.latest_inspections
+    end
+    inspected_resources = inspected_resources.order("reports.time DESC")
+
     if params[:file_title].present? and params[:file_content].present?
       @files = inspected_resources.by_file_title(params[:file_title]).by_file_content(params[:file_content])
     elsif params[:file_title].present?
