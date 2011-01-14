@@ -114,8 +114,21 @@ describe Puppet::Transaction::Report do
 
     describe "for a format 1 report" do
       before do
-        @report = YAML.load_file(Rails.root.join('spec', 'fixtures', 'reports', 'puppet26', 'report_ok_service_started_ok.yaml'))
+        @yaml_filename = Rails.root.join('spec', 'fixtures', 'reports', 'puppet26', 'report_ok_service_started_ok.yaml')
+        @report = YAML.load_file(@yaml_filename)
         @report.extend(ReportExtensions)
+      end
+
+      it "should fill in change_count=0 wherever a report is missing change_count attributes" do
+        report_yaml = File.read(@yaml_filename)
+        substitutions_performed = report_yaml.gsub!(/^ *change_count: [0-9]+\n/, '')
+        substitutions_performed.should be_true
+        @report = YAML.load(report_yaml)
+        @report.extend(ReportExtensions)
+        hash = @report.to_hash
+        hash["resource_statuses"].values.each do |resource_status|
+          resource_status["change_count"].should == 0
+        end
       end
 
       it "should produce a hash of the report" do
