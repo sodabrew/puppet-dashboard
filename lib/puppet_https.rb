@@ -29,6 +29,7 @@ class PuppetHttps
     url = URI.parse(url)
     req = Net::HTTP::Get.new("#{url.path}?#{url.query}", "Accept" => accept)
     res = make_ssl_request(url, req, authenticate)
+    res.error! unless res.code_type == Net::HTTPOK
     res.body
   end
 end
