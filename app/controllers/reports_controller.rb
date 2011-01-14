@@ -70,14 +70,28 @@ class ReportsController < InheritedResources::Base
     inspected_resources = inspected_resources.order("reports.time DESC")
 
     if params[:file_title].present? and params[:file_content].present?
-      @files = paginate_scope inspected_resources.by_file_title(params[:file_title]).by_file_content(params[:file_content])
+      @files = inspected_resources.by_file_title(params[:file_title])
+      if params[:content_match] == "negative"
+        @files = @files.without_file_content(params[:file_content])
+      else
+        @files = @files.by_file_content(params[:file_content])
+      end
+
     elsif params[:file_title].present?
-      @files = paginate_scope inspected_resources.by_file_title(params[:file_title])
+      @files = inspected_resources.by_file_title(params[:file_title])
+
     elsif params[:file_content].present?
-      @files = paginate_scope inspected_resources.by_file_content(params[:file_content])
+      if params[:content_match] == "negative"
+        @files = inspected_resources.in_a_report_without_content(params[:file_content])
+      else
+        @files = inspected_resources.by_file_content(params[:file_content])
+      end
+
     else
       @files = nil
+      return
     end
+    @files = paginate_scope @files
   end
 
   private

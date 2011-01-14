@@ -12,6 +12,10 @@
         = text_field_tag 'file_title', params[:file_title], :size => 100
         = label_tag 'file_content', 'File checksum'
         = text_field_tag 'file_content', params[:file_content], :size => 100
+        = label_tag 'content_match_positive', 'Files matching checksum'
+        = radio_button_tag 'content_match', "positive", params[:content_match] != "negative"
+        = label_tag 'content_match_negative', 'Files differing from checksum'
+        = radio_button_tag 'content_match', "negative", params[:content_match] == "negative"
         = label_tag 'search_all_inspect_reports', 'Search all reports?'
         = check_box_tag 'search_all_inspect_reports', 'true', params[:search_all_inspect_reports]
         %br
