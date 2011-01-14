@@ -1,38 +1,8 @@
 #sidebar= render 'shared/node_manager_sidebar'
 #main
-  .header
-    %h2
-      Comparing
-      = render 'report_title', :report => @my_report
-      %br
-      against baseline
-      = render 'report_title', :report => @baseline_report
-  .item
-    %h4
-      = pluralize(@resource_statuses[:failure].length, 'Mismatch')
-      - if @resource_statuses[:failure].present?
-        %a{ :href => '#', :class => 'expand-all' } (expand all)
-    - if @resource_statuses[:failure].present?
-      %dl#baseline-diff-report
-        - @resource_statuses[:failure].each do |resource|
-          %dt{:class => cycle( 'odd', 'even' )}
-            = link_to h(resource), {}, {:class => 'expandable-link collapsed-link'}
-          %dd.expandable.collapsed
-            %table
-              %tr
-                %th Property
-                %th Actual
-                %th Baseline
-              - @diff[ resource ].each do |property, expected_actual|
-                %tr
-                  - baseline, actual = expected_actual
-                  %td= h property
-                  %td= h actual
-                  %td= h baseline
-    %h4= pluralize(@resource_statuses[:pass].length, 'Match')
-    - if @resource_statuses[:pass].present?
-      %dl#baseline-diff-report
-        - @resource_statuses[:pass].each do |resource|
-          %dt{:class => cycle( 'odd', 'even' )}
-            %span{:class => 'non-expandable-bullet'}
-              = h(resource)
+  = render 'diff',                               |
+    :baseline_report      => @baseline_report,   |
+    :my_report            => @my_report,         |
+    :resource_statuses    => @resource_statuses, |
+    :diff                 => @diff,              |
+    :show_expand_all_link => true

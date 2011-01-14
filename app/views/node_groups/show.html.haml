@@ -38,8 +38,12 @@
     - if @node_group.all_nodes.present?
       .section
         = render 'statuses/run_failure', :nodes => @node_group.all_nodes
+  .item
     .section
-      %h3 Nodes for this group
+      .header
+        %h2 Nodes for this group
+        %ul.actions
+          %li= link_to "Diffs against own baselines", diff_node_group_path(@node_group), :class => 'button'
       - if @node_group.all_nodes.present?
         = render 'nodes/nodes', :nodes => @node_group.all_nodes, :container => @node_group
       - else

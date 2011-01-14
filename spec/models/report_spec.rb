@@ -118,7 +118,7 @@ describe Report do
   kind: inspect
   logs: []
   metrics: {}
-  resource_statuses: 
+  resource_statuses:
     "File[#{resource_name}]": !ruby/object:Puppet::Resource::Status
       evaluation_time: 0.000868
       file: &id001 /Users/matthewrobinson/work/puppet/test_data/genreportm/manifests/site.pp
@@ -133,7 +133,7 @@ describe Report do
         - &id003 class
       time: 2010-07-22 14:42:39.654436 -04:00
       failed: false
-      events: 
+      events:
         - !ruby/object:Puppet::Transaction::Event
           default_log_level: !ruby/sym notice
           file: *id001
@@ -143,7 +143,7 @@ describe Report do
           property: ensure
           resource: "File[#{resource_name}]"
           status: audit
-          tags: 
+          tags:
             - *id002
             - *id003
           time: 2010-12-03 12:18:40.039434 -08:00
@@ -159,7 +159,7 @@ HEREDOC
           property: content
           resource: "File[#{resource_name}]"
           status: audit
-          tags: 
+          tags:
             - *id002
             - *id003
           time: 2010-12-03 12:08:59.061376 -08:00
@@ -174,7 +174,7 @@ HEREDOC
       report2 = generate_report(1.week.ago, "file", "foo")
       report_diff = report1.diff(report2)
       report_diff.should == { "File[/tmp/foo]" => {} }
-      Report.divide_diff_into_pass_and_fail(report_diff).should == { 
+      Report.divide_diff_into_pass_and_fail(report_diff).should == {
         :pass    => ["File[/tmp/foo]"],
         :failure => []
       }
@@ -184,14 +184,14 @@ HEREDOC
       report1 = generate_report(Time.now, "file", "foo")
       report2 = generate_report(1.week.ago, "directory", "bar")
       report_diff = report1.diff(report2)
-      
+
       report_diff.should == {
         'File[/tmp/foo]' => {
           :ensure => [:file, :directory],
           :content => ["{md5}foo", "{md5}bar"],
         }
       }
-      Report.divide_diff_into_pass_and_fail(report_diff).should == { 
+      Report.divide_diff_into_pass_and_fail(report_diff).should == {
         :pass    => [],
         :failure => ["File[/tmp/foo]"]
       }
@@ -212,7 +212,7 @@ HEREDOC
           :content => [nil, "{md5}foo"],
         }
       }
-      Report.divide_diff_into_pass_and_fail(report_diff).should == { 
+      Report.divide_diff_into_pass_and_fail(report_diff).should == {
         :pass    => [],
         :failure => ["File[/tmp/foo]", "File[/tmp/bar]"]
       }
