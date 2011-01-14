@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110113195253) do
+ActiveRecord::Schema.define(:version => 20110114190814) do
 
   create_table "metrics", :force => true do |t|
     t.integer "report_id",                                :null => false
@@ -146,6 +146,7 @@ ActiveRecord::Schema.define(:version => 20110113195253) do
     t.integer  "change_count"
     t.integer  "out_of_sync_count"
     t.boolean  "skipped"
+    t.boolean  "failed"
   end
 
   add_index "resource_statuses", ["report_id"], :name => "index_resource_statuses_on_report_id"

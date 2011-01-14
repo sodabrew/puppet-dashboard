@@ -132,6 +132,7 @@ describe Report do
         - default
         - &id003 class
       time: 2010-07-22 14:42:39.654436 -04:00
+      failed: false
       events: 
         - !ruby/object:Puppet::Transaction::Event
           default_log_level: !ruby/sym notice
@@ -347,17 +348,18 @@ HEREDOC
           #t.source_description,
           t.tags.sort,
           #t.time,
-          t.change_count
+          t.change_count,
+          t.failed
         ] }.should =~ [
-          [ 'Filebucket' ,  'puppet'  ,  "0.00" ,  nil ,  nil ,  ['filebucket' ,  'puppet']   ,  0 ],
-          [ 'Schedule'   ,  'puppet'  ,  "0.00" ,  nil ,  nil ,  ['puppet'     ,  'schedule'] ,  0 ],
-          [ 'Schedule'   ,  'weekly'  ,  "0.00" ,  nil ,  nil ,  ['schedule'   ,  'weekly']   ,  0 ],
-          [ 'Schedule'   ,  'daily'   ,  "0.00" ,  nil ,  nil ,  ['daily'      ,  'schedule'] ,  0 ],
-          [ 'Schedule'   ,  'hourly'  ,  "0.00" ,  nil ,  nil ,  ['hourly'     ,  'schedule'] ,  0 ],
-          [ 'Schedule'   ,  'monthly' ,  "0.00" ,  nil ,  nil ,  ['monthly'    ,  'schedule'] ,  0 ],
-          [ 'Schedule'   ,  'never'   ,  "0.00" ,  nil ,  nil ,  ['never'      ,  'schedule'] ,  0 ],
-          [ 'Service'    ,  'mysqld'  ,  "1.56" ,  file,  8   ,  ['class'      ,  'default'   ,  'mysqld' ,  'node' ,  'service'] ,  1 ],
-          [ 'Exec'       ,'/bin/true' ,  "0.10" ,  file ,  9  ,  ['class'      ,  'default'   ,  'exec' ,  'node' ] ,  1 ],
+          [ 'Filebucket' ,  'puppet'  ,  "0.00" ,  nil ,  nil ,  ['filebucket' ,  'puppet']   ,  0, false ],
+          [ 'Schedule'   ,  'puppet'  ,  "0.00" ,  nil ,  nil ,  ['puppet'     ,  'schedule'] ,  0, false ],
+          [ 'Schedule'   ,  'weekly'  ,  "0.00" ,  nil ,  nil ,  ['schedule'   ,  'weekly']   ,  0, false ],
+          [ 'Schedule'   ,  'daily'   ,  "0.00" ,  nil ,  nil ,  ['daily'      ,  'schedule'] ,  0, false ],
+          [ 'Schedule'   ,  'hourly'  ,  "0.00" ,  nil ,  nil ,  ['hourly'     ,  'schedule'] ,  0, false ],
+          [ 'Schedule'   ,  'monthly' ,  "0.00" ,  nil ,  nil ,  ['monthly'    ,  'schedule'] ,  0, false ],
+          [ 'Schedule'   ,  'never'   ,  "0.00" ,  nil ,  nil ,  ['never'      ,  'schedule'] ,  0, false ],
+          [ 'Service'    ,  'mysqld'  ,  "1.56" ,  file,  8   ,  ['class'      ,  'default'   ,  'mysqld' ,  'node' ,  'service'] ,  1, false ],
+          [ 'Exec'       ,'/bin/true' ,  "0.10" ,  file ,  9  ,  ['class'      ,  'default'   ,  'exec' ,  'node' ] ,  1, true ],
         ]
         report.events.map { |t| [
           t.property,
@@ -428,19 +430,20 @@ HEREDOC
         #t.time,
         t.change_count,
         t.out_of_sync_count,
+        t.failed
       ] }.should =~ [
-        [ 'Filebucket' ,  'puppet'  ,  "0.000" ,  nil ,  nil ,  ['filebucket' ,  'puppet']   ,  0 , 0 ],
-        [ 'Schedule'   ,  'monthly' ,  "0.000" ,  nil ,  nil ,  ['monthly'    ,  'schedule'] ,  0 , 0 ],
-        [ 'File' , '/tmp/unchanged' ,  "0.001" ,  file,  7   ,  ['class'      ,  'file']     ,  0 , 0 ],
-        [ 'File' , '/tmp/noop'      ,  "0.001" ,  file,  7   ,  ['class'      ,  'file']     ,  0 , 1 ],
-        [ 'Schedule'   ,  'never'   ,  "0.000" ,  nil ,  nil ,  ['never'      ,  'schedule'] ,  0 , 0 ],
-        [ 'Schedule'   ,  'weekly'  ,  "0.000" ,  nil ,  nil ,  ['schedule'   ,  'weekly']   ,  0 , 0 ],
-        [ 'File' , '/tmp/removed'   ,  "0.004" ,  file,  7   ,  ['class'      ,  'file']     ,  1 , 1 ],
-        [ 'File' , '/tmp/created'   ,  "0.001" ,  file,  7   ,  ['class'      ,  'file']     ,  1 , 1 ],
-        [ 'Schedule'   ,  'puppet'  ,  "0.000" ,  nil ,  nil ,  ['puppet'     ,  'schedule'] ,  0 , 0 ],
-        [ 'Schedule'   ,  'daily'   ,  "0.000" ,  nil ,  nil ,  ['daily'      ,  'schedule'] ,  0 , 0 ],
-        [ 'File' , '/tmp/changed'   ,  "0.001" ,  file,  7   ,  ['class'      ,  'file']     ,  1 , 1 ],
-        [ 'Schedule'   ,  'hourly'  ,  "0.000" ,  nil ,  nil ,  ['hourly'     ,  'schedule'] ,  0 , 0 ],
+        [ 'Filebucket' ,  'puppet'  ,  "0.000" ,  nil ,  nil ,  ['filebucket' ,  'puppet']   ,  0 , 0 , false ],
+        [ 'Schedule'   ,  'monthly' ,  "0.000" ,  nil ,  nil ,  ['monthly'    ,  'schedule'] ,  0 , 0 , false ],
+        [ 'File' , '/tmp/unchanged' ,  "0.001" ,  file,  7   ,  ['class'      ,  'file']     ,  0 , 0 , false ],
+        [ 'File' , '/tmp/noop'      ,  "0.001" ,  file,  7   ,  ['class'      ,  'file']     ,  0 , 1 , false ],
+        [ 'Schedule'   ,  'never'   ,  "0.000" ,  nil ,  nil ,  ['never'      ,  'schedule'] ,  0 , 0 , false ],
+        [ 'Schedule'   ,  'weekly'  ,  "0.000" ,  nil ,  nil ,  ['schedule'   ,  'weekly']   ,  0 , 0 , false ],
+        [ 'File' , '/tmp/removed'   ,  "0.004" ,  file,  7   ,  ['class'      ,  'file']     ,  1 , 1 , false ],
+        [ 'File' , '/tmp/created'   ,  "0.001" ,  file,  7   ,  ['class'      ,  'file']     ,  1 , 1 , false ],
+        [ 'Schedule'   ,  'puppet'  ,  "0.000" ,  nil ,  nil ,  ['puppet'     ,  'schedule'] ,  0 , 0 , false ],
+        [ 'Schedule'   ,  'daily'   ,  "0.000" ,  nil ,  nil ,  ['daily'      ,  'schedule'] ,  0 , 0 , false ],
+        [ 'File' , '/tmp/changed'   ,  "0.001" ,  file,  7   ,  ['class'      ,  'file']     ,  1 , 1 , true  ],
+        [ 'Schedule'   ,  'hourly'  ,  "0.000" ,  nil ,  nil ,  ['hourly'     ,  'schedule'] ,  0 , 0 , false ],
       ]
       report.events.map { |t| [
         t.property,

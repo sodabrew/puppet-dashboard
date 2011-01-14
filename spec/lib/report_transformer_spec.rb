@@ -222,5 +222,16 @@ describe ReportTransformer do
         resource_status["skipped"].should == false
       end
     end
+
+    it "should set resource status 'failed' to false if not present" do
+      expected_failure_states = {}
+      @report["resource_statuses"].each do |key, resource_status|
+        expected_failure_states[key] = resource_status["failed"] || false
+      end
+      report = ReportTransformer::OneToTwo.apply(@report)
+      report["resource_statuses"].each do |key, resource_status|
+        resource_status["failed"].should == expected_failure_states[key]
+      end
+    end
   end
 end

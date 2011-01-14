@@ -148,6 +148,7 @@
             - class
           time: 2010-07-22 12:19:47.360626 -07:00
           version: 1279826342
+      failed: true
       file: *id002
       line: 9
       out_of_sync: true

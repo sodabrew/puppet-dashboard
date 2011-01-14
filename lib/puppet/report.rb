@@ -88,7 +88,7 @@ module Puppet #:nodoc:
     class Status
       attr_reader :evaluation_time, :resource, :tags,
       :file, :events, :time, :line, :changed, :change_count,
-      :skipped
+      :skipped, :failed
 
       def to_hash
         {
@@ -99,7 +99,8 @@ module Puppet #:nodoc:
           "time" => time,
           "change_count" => change_count || 0,
           "events" => events.map(&:to_hash),
-          "skipped" => skipped
+          "skipped" => skipped,
+          "failed" => failed,
         }
       end
     end
