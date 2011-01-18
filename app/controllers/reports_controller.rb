@@ -45,12 +45,12 @@ class ReportsController < InheritedResources::Base
 
   def diff_summary
     diff
-    @resources = {}
+    @resource_statuses = {:failure => [], :pass => []}
     @diff.each do |resource, differences|
       if ! differences.empty?
-        @resources[resource] = :failure
+        @resource_statuses[:failure] << resource
       else
-        @resources[resource] = :pass
+        @resource_statuses[:pass] << resource
       end
     end
   end
