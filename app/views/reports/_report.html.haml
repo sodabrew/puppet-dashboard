@@ -11,7 +11,7 @@
   - if report.kind == "inspect"
     .section
       %h3= "Compare with baseline:"
-      - form_tag({:id => report, :action => "diff_summary"}, :method => :get) do
+      - form_tag({:id => report, :action => "diff"}, :method => :get) do
         %p= select_tag( "baseline_id", options_from_collection_for_select( Report.baselines, :id, :long_name ) ) + submit_tag("compare")
   - if report.resource_statuses.present?
     .section

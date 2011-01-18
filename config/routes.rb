@@ -23,7 +23,6 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :reports,
     :member => {
       :diff => :get,
-      :diff_summary => :get,
       :make_baseline => :put,
     },
     :collection => {
