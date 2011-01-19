@@ -73,6 +73,18 @@ class Report < ActiveRecord::Base
     diff_stuff
   end
 
+  def self.divide_diff_into_pass_and_fail(diff)
+    divided_diff = {:failure => [], :pass => []}
+    diff.each do |resource, differences|
+      if ! differences.empty?
+        divided_diff[:failure] << resource
+      else
+        divided_diff[:pass] << resource
+      end
+    end
+    divided_diff
+  end
+
   def self.attribute_hash_from(report_hash)
     attribute_hash = report_hash.dup
     attribute_hash["logs_attributes"] = attribute_hash.delete("logs")
