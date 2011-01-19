@@ -1,0 +1,29 @@
+#sidebar= render 'shared/node_manager_sidebar'
+#main
+  .header
+    %h2
+      Diff Report for
+      = @node_group.name
+  - unless @nodes_without_latest_inspect_reports.empty?
+    .item
+      %h2 No latest inspect report
+      = @nodes_without_latest_inspect_reports.map {|node| link_to node.name, node_path(node)}.join(", ")
+  - unless @nodes_without_baselines.empty?
+    .item
+      %h2 No baseline
+      = @nodes_without_baselines.map {|node| link_to node.name, node_path(node)}.join(", ")
+  - unless @nodes_without_differences.empty?
+    .item
+      %h2 No differences from baseline
+      = @nodes_without_differences.map {|node| link_to node.name, node_path(node)}.join(", ")
+  - unless @nodes_with_differences.empty?
+    .item
+      %h2 Nodes with difference from baseline
+      %a{ :href => '#', :class => ['expand-all', 'button'] } expand all
+      %br
+      - @nodes_with_differences.each do |diff_information|
+        = render 'reports/diff',                                        |
+          :baseline_report   => diff_information[:baseline_report],     |
+          :my_report         => diff_information[:last_inspect_report], |
+          :resource_statuses => diff_information[:resource_statuses],   |
+          :diff              => diff_information[:report_diff]

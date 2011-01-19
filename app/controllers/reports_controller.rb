@@ -41,14 +41,7 @@ class ReportsController < InheritedResources::Base
     @my_report = Report.find(params[:id])
     @baseline_report = Report.find(params[:baseline_id])
     @diff = @baseline_report.diff(@my_report)
-    @resource_statuses = {:failure => [], :pass => []}
-    @diff.each do |resource, differences|
-      if ! differences.empty?
-        @resource_statuses[:failure] << resource
-      else
-        @resource_statuses[:pass] << resource
-      end
-    end
+    @resource_statuses = Report.divide_diff_into_pass_and_fail(@diff)
   end
 
   def make_baseline

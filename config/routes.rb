@@ -3,9 +3,11 @@ ActionController::Routing::Routes.draw do |map|
     classes.resources :nodes, :requirements => {:id => /.*/}
   end
 
-  map.resources :node_groups, :collection => {:search => :get} do |groups|
-    groups.resources :nodes, :requirements => {:id => /.*/}
-  end
+  map.resources :node_groups,
+    :member     => { :diff  => :get },
+    :collection => {:search => :get } do |groups|
+      groups.resources :nodes, :requirements => {:id => /.*/}
+    end
 
   map.resources :nodes,
     :member => {
