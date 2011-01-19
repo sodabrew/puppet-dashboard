@@ -10,21 +10,16 @@ class Report < ActiveRecord::Base
   accepts_nested_attributes_for :metrics, :resource_statuses, :logs
 
   before_validation :assign_to_node
-  validates_presence_of :host
-  validates_presence_of :time
-  validates_uniqueness_of :host, :scope => :time, :allow_nil => true
+  validates_presence_of :host, :time, :kind
+  validates_uniqueness_of :host, :scope => [:time, :kind], :allow_nil => true
   after_save :update_node
   after_destroy :replace_last_report
 
-  default_scope :order => 'time DESC'
+  default_scope :order => 'time DESC', :include => :node
 
-  named_scope :inspections, :conditions => {:kind => "inspect"}
-  named_scope :applies,     :conditions => {:kind => "apply"  }
+  named_scope :inspections, :conditions => {:kind => "inspect"}, :include => :metrics
+  named_scope :applies,     :conditions => {:kind => "apply"  }, :include => :metrics
   named_scope :baselines,   :include => :node, :conditions => ['nodes.baseline_report_id = reports.id']
-
-  def self.find_last_for(node)
-    self.first(:conditions => {:node_id => node.id}, :order => 'time DESC', :limit => 1)
-  end
 
   def total_resources
     metric_value("resources", "total")
@@ -57,7 +52,7 @@ class Report < ActiveRecord::Base
   end
 
   def metric_value(category, name)
-    metric = metrics.find_by_category_and_name(category, name)
+    metric = metrics.detect {|m| m.category == category and m.name == name }
     (metric and metric.value) or 0
   end
 
@@ -78,6 +73,18 @@ class Report < ActiveRecord::Base
     diff_stuff
   end
 
+  def self.divide_diff_into_pass_and_fail(diff)
+    divided_diff = {:failure => [], :pass => []}
+    diff.each do |resource, differences|
+      if ! differences.empty?
+        divided_diff[:failure] << resource
+      else
+        divided_diff[:pass] << resource
+      end
+    end
+    divided_diff
+  end
+
   def self.attribute_hash_from(report_hash)
     attribute_hash = report_hash.dup
     attribute_hash["logs_attributes"] = attribute_hash.delete("logs")
@@ -95,16 +102,18 @@ class Report < ActiveRecord::Base
   end
 
   def self.create_from_yaml(report_yaml)
-      raw_report = YAML.load(report_yaml)
+    raw_report = YAML.load(report_yaml)
 
-      unless raw_report.is_a? Puppet::Transaction::Report
-        raise ArgumentError, "The supplied report is in invalid format '#{raw_report.class}', expected 'Puppet::Transaction::Report'"
-      end
+    unless raw_report.is_a? Puppet::Transaction::Report
+      raise ArgumentError, "The supplied report is in invalid format '#{raw_report.class}', expected 'Puppet::Transaction::Report'"
+    end
 
-      raw_report.extend(ReportExtensions)
-      report_hash = ReportTransformer.apply(raw_report.to_hash)
+    raw_report.extend(ReportExtensions)
+    report_hash = ReportTransformer.apply(raw_report.to_hash)
 
-      Report.create!(Report.attribute_hash_from(report_hash))
+    report_hash["resource_statuses"] = report_hash["resource_statuses"].values
+
+    Report.create!(Report.attribute_hash_from(report_hash))
   end
 
   def assign_to_node
@@ -112,8 +121,13 @@ class Report < ActiveRecord::Base
   end
 
   def update_node
-    if node && (node.reported_at.nil? || (node.reported_at-1.second) <= self.time)
-      node.assign_last_report(self)
+    case kind
+    when "apply"
+      node.assign_last_apply_report_if_newer(self)
+    when "inspect"
+      node.assign_last_inspect_report_if_newer(self)
+    else
+      raise "There's no such thing as a #{kind.inspect} report"
     end
   end
 
@@ -126,6 +140,7 @@ class Report < ActiveRecord::Base
   end
 
   def baseline!
+    raise IncorrectReportKind.new("expected 'inspect', got '#{self.kind}'") unless self.kind == "inspect"
     self.node.baseline_report = self
     self.node.save!
   end
@@ -148,6 +163,15 @@ class Report < ActiveRecord::Base
   end
 
   def replace_last_report
-    node.assign_last_report if node
+    return unless node
+
+    case kind
+    when "apply"
+      node.find_and_assign_last_apply_report
+    when "inspect"
+      node.find_and_assign_last_inspect_report
+    else
+      raise "There's no such thing as a #{kind.inspect} report"
+    end
   end
 end

@@ -115,3 +115,44 @@ table td.empty {
   color: #999;
   background: #F8F8F8;
 }
+/* this isn't even really a table anymore */
+#baseline-diff-report {
+  padding : 1em;
+  background : #fff;
+  width : auto;
+}
+#baseline-diff-report .even {
+  background: #F5F5F5;
+}
+#baseline-diff-report .expandable {
+  margin-bottom : 1em;
+}
+#baseline-diff-report .collapsed {
+  display: none;
+}
+#baseline-diff-report .expandable-link.collapsed-link:before {
+  content: url('../../images/icons/bullet_toggle_plus.png');
+}
+#baseline-diff-report .expandable-link:before {
+  content: url('../../images/icons/bullet_toggle_minus.png');
+}
+#baseline-diff-report .non-expandable-bullet:before {
+  content: url('../../images/icons/bullet_green.png');
+}
+#baseline-diff-report .expandable-link, #baseline-diff-report .non-expandable-bullet {
+  vertical-align: bottom;
+}
+#baseline-diff-report table th {
+  font-weight : bold;
+}
+#baseline-diff-report table td,
+#baseline-diff-report table th {
+  padding : .25em .5em .15em;
+}
+.content {
+  padding : 1em;
+  background : #fff;
+}
+.content h4 {
+  margin-top : 1em;
+}

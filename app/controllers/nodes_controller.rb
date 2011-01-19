@@ -3,6 +3,7 @@ class NodesController < InheritedResources::Base
   belongs_to :node_group, :optional => true
   respond_to :html, :yaml, :json
   before_filter :raise_unless_using_external_node_classification, :only => [:new, :edit, :create, :update, :destroy]
+  before_filter :raise_if_enable_read_only_mode, :only => [:new, :edit, :create, :update, :destroy]
 
   layout lambda {|c| c.request.xhr? ? false : 'application' }
 
@@ -93,7 +94,7 @@ class NodesController < InheritedResources::Base
   # requirements
   def reports
     @node = resource
-    @reports = @node.reports
+    @reports = params[:kind] == "inspect" ? @node.reports.inspections : @node.reports.applies
     respond_to do |format|
       format.html { @reports = paginate_scope(@reports); render 'reports/index' }
     end

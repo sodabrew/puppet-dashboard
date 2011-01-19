@@ -3,9 +3,11 @@ ActionController::Routing::Routes.draw do |map|
     classes.resources :nodes, :requirements => {:id => /.*/}
   end
 
-  map.resources :node_groups, :collection => {:search => :get} do |groups|
-    groups.resources :nodes, :requirements => {:id => /.*/}
-  end
+  map.resources :node_groups,
+    :member     => { :diff  => :get },
+    :collection => {:search => :get } do |groups|
+      groups.resources :nodes, :requirements => {:id => /.*/}
+    end
 
   map.resources :nodes,
     :member => {
@@ -23,8 +25,10 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :reports,
     :member => {
       :diff => :get,
-      :diff_summary => :get,
       :make_baseline => :put,
+    },
+    :collection => {
+      :search => :get,
     }
 
   map.upload "reports/upload", :controller => :reports, :action => "upload", :conditions => { :method => :post }

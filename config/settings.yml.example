@@ -8,7 +8,7 @@
 #
 #---[ Values ]----------------------------------------------------------
 
-# Node name to use when contacting the inventory service.  This is the
+# Node name to use when contacting the puppet master.  This is the
 # CN that is used in Dashboard's certificate.
 cn_name: 'dashboard'
 
@@ -37,6 +37,16 @@ inventory_server: 'puppet'
 # Port for the inventory server.
 inventory_port: 8140
 
+# Set this to true to allow Dashboard to display diffs on files that
+# are archived in the file bucket.
+use_file_bucket_diffs: false
+
+# Hostname of the file bucket server.
+file_bucket_server: 'puppet'
+
+# Port for the file bucket server.
+file_bucket_port: 8140
+
 # Amount of time in seconds since last report before a node is considered no longer reporting
 no_longer_reporting_cutoff: 3600
 
@@ -61,4 +71,6 @@ date_format: '%Y-%m-%d'
 # "http://dashboard_servername/reports/upload"
 disable_legacy_report_upload_url: false
 
+# Disables the UI and controller actions for editing nodes, classes, groups and reports.  Report submission is still allowed
+enable_read_only_mode: false
 #===[ fin ]=============================================================

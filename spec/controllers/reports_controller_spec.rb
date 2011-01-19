@@ -79,7 +79,91 @@ describe ReportsController do
     end
   end
 
- def post_with_body(action, body, headers)
+  describe "#search" do
+    it "should render the search form if there are no parameters" do
+      get('search')
+      response.code.should == '200'
+      response.should render_template("reports/search")
+      assigns[:files].should == nil
+    end
+
+    describe "when searching for files" do
+      before do
+        @matching_report = Report.create!(:host => "foo", :time => 1.week.ago.to_date, :status => "unchanged", :kind => "inspect")
+        @matching_report.resource_statuses.create!(:resource_type => "File", :title => "/etc/hosts", :events_attributes => [{:property => "content", :previous_value => "{md5}ab07acbb1e496801937adfa772424bf7"}])
+        @matching_earlier_report = Report.create!(:host => "foo", :time => 10.weeks.ago.to_date, :status => "unchanged", :kind => "inspect")
+        @matching_earlier_report.resource_statuses.create!(:resource_type => "File", :title => "/etc/hosts", :events_attributes => [{:property => "content", :previous_value => "{md5}ab07acbb1e496801937adfa772424bf7"}])
+        @unmatching_report = Report.create!(:host => "foo", :time => 2.weeks.ago.to_date, :status => "unchanged", :kind => "inspect")
+        @unmatching_report.resource_statuses.create!(:resource_type => "File", :title => "/etc/sudoers", :events_attributes => [{:property => "content", :previous_value => "{md5}aa876288711c4198cfcda790b58d7e95"}])
+        @doubly_matching_report = Report.create!(:host => "foo", :time => 3.weeks.ago.to_date, :status => "unchanged", :kind => "inspect")
+        @doubly_matching_report.resource_statuses.create!(:resource_type => "File", :title => "/etc/hosts", :events_attributes => [{:property => "content", :previous_value => "{md5}aa876288711c4198cfcda790b58d7e95"}])
+        @doubly_matching_report.resource_statuses.create!(:resource_type => "File", :title => "/etc/sudoers", :events_attributes => [{:property => "content", :previous_value => "{md5}ab07acbb1e496801937adfa772424bf7"}])
+      end
+
+      describe "in latest reports " do
+        describe "by title" do
+          it "should find the correct reports" do
+            get('search', :file_title => "/etc/hosts", :file_content => '')
+            assigns[:files].to_a.should =~ @matching_report.resource_statuses
+          end
+        end
+
+        describe "by content" do
+          it "should find the correct reports" do
+            get('search', :file_title => '', :file_content => "ab07acbb1e496801937adfa772424bf7")
+            assigns[:files].to_a.should =~ @matching_report.resource_statuses
+          end
+        end
+
+        describe "by both title and content" do
+          it "should find the correct reports" do
+            get('search', :file_title => "/etc/hosts", :file_content => "ab07acbb1e496801937adfa772424bf7")
+            assigns[:files].to_a.should =~ @matching_report.resource_statuses
+          end
+        end
+      end
+
+      describe "in all reports " do
+        describe "by title" do
+          it "should find the correct reports" do
+            get('search', :file_title => "/etc/hosts", :file_content => '', :search_all_inspect_reports => true)
+            assigns[:files].to_a.should =~ @matching_report.resource_statuses + @matching_earlier_report.resource_statuses + [@doubly_matching_report.resource_statuses.first]
+          end
+        end
+
+        describe "by content" do
+          it "should find the correct reports" do
+            get('search', :file_title => '', :file_content => "ab07acbb1e496801937adfa772424bf7", :search_all_inspect_reports => true)
+            assigns[:files].to_a.should =~ @matching_report.resource_statuses + @matching_earlier_report.resource_statuses + [@doubly_matching_report.resource_statuses.last]
+          end
+        end
+
+        describe "by both title and content" do
+          it "should find the correct reports" do
+            get('search', :file_title => "/etc/hosts", :file_content => "ab07acbb1e496801937adfa772424bf7", :search_all_inspect_reports => true)
+            assigns[:files].to_a.should =~ @matching_report.resource_statuses + @matching_earlier_report.resource_statuses
+          end
+        end
+
+        describe "by title and negative content" do
+          it "should find the reports with files of this name that differ" do
+            get('search', :file_title => "/etc/hosts", :file_content => "ab07acbb1e496801937adfa772424bf7", :search_all_inspect_reports => true, :content_match => "negative")
+            assigns[:files].to_a.should =~ [ @doubly_matching_report.resource_statuses.first ]
+          end
+        end
+
+        describe "by title and negative content" do
+          it "should find the reports that don't contain any such files" do
+            get('search', :file_content => "ab07acbb1e496801937adfa772424bf7", :search_all_inspect_reports => true, :content_match => "negative")
+            assigns[:files].to_a.should =~ @unmatching_report.resource_statuses
+          end
+        end
+      end
+
+    end
+  end
+
+  def post_with_body(action, body, headers)
     @request.env['RAW_POST_DATA'] = body
     response = post(action, {}, headers)
     @request.env.delete('RAW_POST_DATA')

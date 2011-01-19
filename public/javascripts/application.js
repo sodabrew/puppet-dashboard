@@ -102,5 +102,45 @@ jQuery(document).ready(function(J) {
 
     J(this).hide();
   });
-
+  init_baseline_diff_report();
 });
+
+function init_baseline_diff_report() {
+  jQuery( '.expand-all' ).live( 'click', function() {
+    jQuery('.expandable-link.collapsed-link').each(toggle_expandable_link);
+    return false;
+  });
+  jQuery( '.collapse-all' ).live( 'click', function() {
+    jQuery('.expandable-link').not('.collapsed-link').each(toggle_expandable_link);
+    return false;
+  });
+  jQuery( '.expandable-link' ).live( 'click', function() {
+    toggle_expandable_link.call(this);
+    return false;
+  });
+}
+
+function toggle_expandable_link() {
+  jQuery(this).toggleClass('collapsed-link');
+  if (jQuery(this).hasClass('collapsed-link')) {
+    jQuery(this).parent().next( '.expandable' )
+      .addClass('collapsed');
+    if (jQuery('.expandable-link').not('.collapsed-link').size() == 0) {
+      var old_text = jQuery('.collapse-all').text();
+      jQuery('.collapse-all')
+        .removeClass( 'collapse-all' )
+        .addClass( 'expand-all' )
+        .text( old_text.replace( 'collapse', 'expand' ));
+    }
+  } else {
+    jQuery(this).parent().next( '.expandable' )
+      .removeClass('collapsed');
+    if (jQuery('.expandable-link.collapsed-link').size() == 0) {
+      var old_text = jQuery('.expand-all').text();
+      jQuery('.expand-all')
+        .removeClass( 'expand-all' )
+        .addClass( 'collapse-all' )
+        .text( old_text.replace( 'expand', 'collapse' ));
+    }
+  }
+}

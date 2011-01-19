@@ -20,7 +20,6 @@
     #wrap
       #header
         = render 'shared/global_nav'
-        = render 'shared/secondary_nav'
       #content
         - [:success, :warning, :failure].each do |type|
           - if message = flash[type]

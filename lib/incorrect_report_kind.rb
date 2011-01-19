@@ -1,0 +1,2 @@
+class IncorrectReportKind < StandardError
+end

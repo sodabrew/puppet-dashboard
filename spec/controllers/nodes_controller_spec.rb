@@ -195,6 +195,7 @@ describe NodesController do
     describe "when using node classification" do
       before :each do
         SETTINGS.stubs(:use_external_node_classification).returns(true)
+        SETTINGS.stubs(:enable_read_only_mode).returns(false)
         @node = Node.generate!
         @params = { :id => @node.id, :node => @node.attributes }
       end
@@ -457,8 +458,8 @@ describe NodesController do
         SETTINGS.stubs(:no_longer_reporting_cutoff).returns(60)
         @node = Node.generate!(:name => "foo")
         @hidden_node = Node.generate!(:name => "bar", :hidden => true)
-        Report.create!(:time => 1.hour.ago, :host => @node.name, :status => "failed")
-        Report.create!(:time => 1.hour.ago, :host => @hidden_node.name, :status => "failed")
+        Report.generate!(:time => 1.hour.ago, :host => @node.name, :status => "failed")
+        Report.generate!(:time => 1.hour.ago, :host => @hidden_node.name, :status => "failed")
       end
 
       let(:action) { "no_longer_reporting" }

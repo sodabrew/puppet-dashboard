@@ -102,7 +102,7 @@ module ApplicationHelper
   # Return HTML with pagination controls for displaying an ActiveRecord +scope+.
   def pagination_for(scope, more_link=nil)
     content_tag(:div, :class => 'actionbar') do
-      if scope.respond_to?(:total_pages) && scope.total_pages > 1
+      pagination = if scope.respond_to?(:total_pages) && scope.total_pages > 1
         [
         more_link ? content_tag(:span, :class => 'pagination') { link_to('More &raquo;', more_link) } : will_paginate(scope),
         content_tag(:div, :class => 'pagination') do
@@ -111,11 +111,12 @@ module ApplicationHelper
         ]
       else
         []
-      end +
-      [
+      end
+      pagination_sizer = more_link ? [] : [
         pagination_sizer_for(scope),
         tag(:br, :class=> 'clear')
       ]
+      pagination + pagination_sizer
     end
   end
 
@@ -128,7 +129,7 @@ module ApplicationHelper
         if (params[:per_page] || scope.per_page.to_s) == n.to_s
           content_tag(:span, :class => "current"){ n }
         else
-          link_to(n, {:per_page => n})
+          link_to(n, params.merge({:per_page => n}))
         end
       end
     end
@@ -140,7 +141,7 @@ module ApplicationHelper
 
   # Return status icon for the +node+.
   def node_status_icon(node)
-    report_status_icon(node.last_report)
+    report_status_icon(node.last_apply_report)
   end
 
   # Return status icon for the +report+.

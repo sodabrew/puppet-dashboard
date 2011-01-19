@@ -9,14 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101230054456) do
-
-  create_table "assignments", :force => true do |t|
-    t.integer  "node_id"
-    t.integer  "service_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
+ActiveRecord::Schema.define(:version => 20110114190814) do
 
   create_table "metrics", :force => true do |t|
     t.integer "report_id",                                :null => false
@@ -74,15 +67,16 @@ ActiveRecord::Schema.define(:version => 20101230054456) do
     t.datetime "updated_at"
     t.string   "url"
     t.datetime "reported_at"
-    t.integer  "last_report_id"
+    t.integer  "last_apply_report_id"
     t.string   "status"
-    t.boolean  "hidden",             :default => false
+    t.boolean  "hidden",                 :default => false
     t.integer  "baseline_report_id"
+    t.integer  "last_inspect_report_id"
   end
 
   create_table "old_reports", :force => true do |t|
     t.integer  "node_id"
-    t.text     "report",     :limit => 16777215
+    t.text     "report",     :limit => 2147483647
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "host"
@@ -102,11 +96,11 @@ ActiveRecord::Schema.define(:version => 20101230054456) do
   create_table "report_logs", :force => true do |t|
     t.integer  "report_id", :null => false
     t.string   "level"
-    t.string   "message"
-    t.string   "source"
-    t.string   "tags"
+    t.text     "message"
+    t.text     "source"
+    t.text     "tags"
     t.datetime "time"
-    t.string   "file"
+    t.text     "file"
     t.integer  "line"
   end
 
@@ -127,42 +121,35 @@ ActiveRecord::Schema.define(:version => 20101230054456) do
 
   create_table "resource_events", :force => true do |t|
     t.integer  "resource_status_id", :null => false
-    t.string   "previous_value"
-    t.string   "desired_value"
-    t.string   "message"
+    t.text     "previous_value"
+    t.text     "desired_value"
+    t.text     "message"
     t.string   "name"
     t.string   "property"
-    t.string   "source_description"
     t.string   "status"
-    t.string   "tags"
     t.datetime "time"
+    t.text     "historical_value"
+    t.boolean  "audited"
   end
 
   add_index "resource_events", ["resource_status_id"], :name => "index_resource_events_on_resource_status_id"
 
   create_table "resource_statuses", :force => true do |t|
-    t.integer  "report_id",                                         :null => false
+    t.integer  "report_id",                                        :null => false
     t.string   "resource_type"
-    t.string   "title"
-    t.decimal  "evaluation_time",    :precision => 12, :scale => 6
-    t.string   "file"
+    t.text     "title"
+    t.decimal  "evaluation_time",   :precision => 12, :scale => 6
+    t.text     "file"
     t.integer  "line"
-    t.string   "source_description"
-    t.string   "tags"
+    t.text     "tags"
     t.datetime "time"
     t.integer  "change_count"
-    t.boolean  "out_of_sync"
+    t.integer  "out_of_sync_count"
+    t.boolean  "skipped"
+    t.boolean  "failed"
   end
 
   add_index "resource_statuses", ["report_id"], :name => "index_resource_statuses_on_report_id"
-
-  create_table "services", :force => true do |t|
-    t.string   "name"
-    t.string   "type"
-    t.text     "description"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
 
   create_table "timeline_events", :force => true do |t|
     t.string   "event_type"
