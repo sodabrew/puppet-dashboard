@@ -5,7 +5,7 @@
       Group:
       = @node_group.name
     %ul.actions
-      - if SETTINGS.enable_read_only_mode
+      - unless SETTINGS.enable_read_only_mode
         %li= link_to 'Edit', edit_node_group_path(@node_group), :class => "edit button", :rel => 'inspect'
         %li= link_to 'Destroy', @node_group, :confirm => 'Are you sure?', :method => :delete, :class => "delete button"
 
