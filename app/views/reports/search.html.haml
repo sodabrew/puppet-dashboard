@@ -3,37 +3,43 @@
 
   .header
     %h2
-      Search Reports
+      Search Latest Inspect Reports
 
   .item
+    - [:errors, :notices].each do |message_type|
+      - if flash[message_type].present?
+        - flash[message_type].each do |messages|
+          %div{:class => "section #{message_type.to_s.singularize}"}
+            %h3= message_type.to_s.capitalize
+            %p
+              - messages.each do |message|
+                %li= message
+
     .section
       - form_tag url_for(:action => :search), :method => :get do
         = label_tag 'file_title', 'File title'
-        = text_field_tag 'file_title', params[:file_title], :size => 100
-        = label_tag 'file_content', 'File checksum'
-        = text_field_tag 'file_content', params[:file_content], :size => 100
-        = label_tag 'content_match_positive', 'Files matching checksum'
-        = radio_button_tag 'content_match', "positive", params[:content_match] != "negative"
-        = label_tag 'content_match_negative', 'Files differing from checksum'
-        = radio_button_tag 'content_match', "negative", params[:content_match] == "negative"
-        = label_tag 'search_all_inspect_reports', 'Search all reports?'
-        = check_box_tag 'search_all_inspect_reports', 'true', params[:search_all_inspect_reports]
+        = text_field_tag 'file_title', @title, :size => 100
+        = label_tag 'file_content', 'File checksum (md5)'
+        = text_field_tag 'file_content', @content, :size => 100
+        %br
+        = radio_button_tag 'search_results', 'unmatching', (params[:search_results] == 'unmatching' or params[:search_results].nil?)
+        = label_tag 'search_results_unmatching', 'unmatching', :class => :inline
+        = radio_button_tag 'search_results', 'matching', params[:search_results] == 'matching'
+        = label_tag 'search_results_matching', 'matching', :class => :inline
+        = radio_button_tag 'search_results', 'all', params[:search_results] == 'all'
+        = label_tag 'search_results_all', 'all', :class => :inline
         %br
         %button Search
 
-    .section
-      - if @files.nil?
-        - # blank
-      - elsif @files.empty?
-        No matching files found.
-      - else
+    - if @files.present?
+      .section
+        %h4 Found #{pluralize(@files.count, "node")}
         %table.inspector
           %thead
             %tr
               %th.status &nbsp;
-              %th Time &darr;
-              %th Host
-              %th Filename
+              %th Time
+              %th Host &uarr;
               %th Checksum
           %tbody
             - @files.each do |file|
@@ -41,10 +47,9 @@
                 = report_status_td(file.report)
                 %td= link_to file.report.time, file.report
                 %td= link_to h(file.report.host), file.report.node
-                %td= file.title
-                %td= file.events.find_by_property("content").previous_value rescue "not recorded"
+                %td= file.events.detect {|event| event.property == "content"}.previous_value.gsub("{md5}","") rescue "not recorded"
             - if @files.total_pages > 1
               %tfoot
                 %tr
-                  %td{:colspan => 5}
+                  %td{:colspan => 4}
                     = pagination_for(@files)
