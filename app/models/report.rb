@@ -136,7 +136,7 @@ class Report < ActiveRecord::Base
   end
 
   def baseline?
-    self.node.baseline_report == self
+    self.node.baseline_report_id == self.id
   end
 
   def baseline!

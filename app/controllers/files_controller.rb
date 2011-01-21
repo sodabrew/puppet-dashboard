@@ -6,7 +6,7 @@ class FilesController < ApplicationController
     end
 
     [params[:file1], params[:file2]].each do |md5|
-      unless md5 =~ /^[0-9a-f]{32}$/
+      unless is_md5?(md5)
         render :text => "Invalid md5: #{md5.inspect}", :content_type => 'text/plain', :status => 400
         return
       end

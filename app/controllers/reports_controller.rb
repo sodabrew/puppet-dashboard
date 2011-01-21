@@ -51,35 +51,31 @@ class ReportsController < InheritedResources::Base
   end
 
   def search
-    if params[:search_all_inspect_reports]
-      inspected_resources = ResourceStatus.inspections
-    else
-      inspected_resources = ResourceStatus.latest_inspections
-    end
-    inspected_resources = inspected_resources.order("reports.time DESC")
+    flash[:errors] = []
+    flash[:notices] = []
+    inspected_resources = ResourceStatus.latest_inspections.order("nodes.name")
 
-    if params[:file_title].present? and params[:file_content].present?
-      @files = inspected_resources.by_file_title(params[:file_title])
-      if params[:content_match] == "negative"
-        @files = @files.without_file_content(params[:file_content])
+    @files = []
+
+    @title = params[:file_title].to_s.strip
+    @content = params[:file_content].to_s.strip
+
+    if @title.present? then
+      @files = case params[:search_results]
+      when 'unmatching' then
+        inspected_resources.by_file_title(@title).without_file_content(@content)
+      when 'matching' then
+        inspected_resources.by_file_title(@title).by_file_content(@content)
+      when 'all' then
+        inspected_resources.by_file_title(@title)
       else
-        @files = @files.by_file_content(params[:file_content])
+        []
       end
-
-    elsif params[:file_title].present?
-      @files = inspected_resources.by_file_title(params[:file_title])
-
-    elsif params[:file_content].present?
-      if params[:content_match] == "negative"
-        @files = inspected_resources.in_a_report_without_content(params[:file_content])
-      else
-        @files = inspected_resources.by_file_content(params[:file_content])
-      end
-
-    else
-      @files = nil
-      return
     end
+
+    flash[:errors] << "Please specify the file title to search for" if params[:search_results].present?
+    flash[:notices] << "#{@content} is not a valid md5 checksum" if @content.present? and !is_md5?(@content)
+
     @files = paginate_scope @files
   end
 

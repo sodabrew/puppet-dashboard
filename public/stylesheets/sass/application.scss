@@ -471,37 +471,37 @@ body {
     margin-bottom: 1.5em;
 
     &.error {
-      @include icony_section('failure', 
-        #433, #FCC, 
-        #433, #FDD, 
+      @include icony_section('failed',
+        #433, #FCC,
+        #433, #FDD,
         #FCC);
     }
 
     &.failure {
-      @include icony_section('failure', 
-        #433, #FCC, 
-        #433, #FDD, 
+      @include icony_section('failed',
+        #433, #FCC,
+        #433, #FDD,
         #FCC);
     }
 
     &.warning {
-      @include icony_section('warning', 
-        #444, #DCC, 
-        #433, #EDD, 
+      @include icony_section('warning',
+        #444, #DCC,
+        #433, #EDD,
         #DCC);
     }
 
     &.success {
-      @include icony_section('warning', 
-        #444, #CDC, 
-        #343, #DED, 
+      @include icony_section('warning',
+        #444, #CDC,
+        #343, #DED,
         #CDC);
     }
 
     &.notice {
-      @include icony_section('notice', 
-        #444, #CCC, 
-        #333, #DDD, 
+      @include icony_section('notice',
+        #444, #CCC,
+        #333, #DDD,
         #CCC);
     }
 
@@ -569,7 +569,7 @@ body {
   ul.token-input-list-facebook {
     width: 100%;
   }
-  
+
   div.token-input-dropdown-facebook {
     &.token-input-dropdown-facebook {
       background-color: #FFFFED;
@@ -578,7 +578,7 @@ body {
 
     ul {
       li {
-        &.token-input-dropdown-item-facebook, 
+        &.token-input-dropdown-item-facebook,
         &.token-input-dropdown-item2-facebook {
           background-color: #FFFFED;
           list-style-type: none;
