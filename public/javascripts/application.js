@@ -144,3 +144,7 @@ function toggle_expandable_link() {
     }
   }
 }
+
+function display_file_diff(url) {
+    jQuery.colorbox({href: url, width: '80%', height: '80%', iframe: true});
+}
