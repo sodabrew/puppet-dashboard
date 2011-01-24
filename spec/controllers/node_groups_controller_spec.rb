@@ -15,12 +15,6 @@ describe NodeGroupsController do
       @node_group = NodeGroup.generate!
       @node = Node.generate! :name => "node_it_all"
       @node_group.nodes << @node
-
-      @child_node_group = NodeGroup.generate!
-      @child_node = Node.generate! :name => "nema_node"
-      @child_node_group.nodes << @node
-
-      @node_group.node_group_children << @child_node_group
     end
 
     describe "the node has no inspect reports" do
@@ -117,6 +111,75 @@ describe NodeGroupsController do
           :baseline_report     => @baseline,
           :report_diff         => {"File[/tmp/test]"=>{:content=>["{md5}abcd", "{md5}efgh"]}}
         }]
+      end
+    end
+
+    describe "when diffing against a single baseline" do
+      it "should diff each node against the given baseline" do
+        @child_node_group = NodeGroup.generate!
+        @child_node = Node.generate! :name => "nema_node"
+        @child_node_group.nodes << @child_node
+
+        @node_group.node_group_children << @child_node_group
+        @baseline = Report.generate!(:host => @node.name, :kind => 'inspect', :time => 2.hours.ago)
+        @baseline_status = ResourceStatus.generate!(
+          :report        => @baseline,
+          :resource_type => 'File',
+          :title         => '/tmp/test',
+          :events_attributes => [{:property => 'content', :previous_value => '{md5}abcd'}]
+        )
+
+        @latest = Report.generate!(:host => @node.name, :kind => 'inspect', :time => 1.hour.ago)
+        @latest_status = ResourceStatus.generate!(
+          :report        => @latest,
+          :resource_type => 'File',
+          :title         => '/tmp/test',
+          :events_attributes => [{:property => 'content', :previous_value => '{md5}efgh'}]
+        )
+
+        @child_baseline = Report.generate!(:host => @child_node.name, :kind => 'inspect', :time => 2.hours.ago)
+        @child_baseline_status = ResourceStatus.generate!(
+          :report        => @child_baseline,
+          :resource_type => 'File',
+          :title         => '/tmp/test',
+          :events_attributes => [{:property => 'content', :previous_value => '{md5}hijk'}]
+        )
+
+        @child_latest = Report.generate!(:host => @child_node.name, :kind => 'inspect', :time => 1.hour.ago)
+        @child_latest_status = ResourceStatus.generate!(
+          :report        => @child_latest,
+          :resource_type => 'File',
+          :title         => '/tmp/test',
+          :events_attributes => [{:property => 'content', :previous_value => '{md5}hijk'}]
+        )
+
+        @node.reports = [@baseline, @latest]
+        @child_node.reports = [@child_baseline, @child_latest]
+        @baseline.baseline!
+        @child_baseline.baseline!
+        @node.last_inspect_report = @latest
+        @child_node.last_inspect_report = @child_latest
+
+        get :diff, :id => @node_group.id, :against => @baseline.id
+
+        @node_group.all_nodes.should =~ [@node, @child_node]
+        assigns[:nodes_without_latest_inspect_reports].should be_empty
+        assigns[:nodes_without_baselines].should be_empty
+        assigns[:nodes_without_differences].should be_empty
+        assigns[:nodes_with_differences].should =~ [
+          {
+            :baseline_report => @baseline,
+            :last_inspect_report => @node.last_inspect_report,
+            :report_diff => {"File[/tmp/test]"=>{:content=>["{md5}abcd", "{md5}efgh"]}},
+            :resource_statuses => {:pass =>[], :failure=>["File[/tmp/test]"]}
+          },
+          {
+            :baseline_report => @baseline,
+            :last_inspect_report => @child_node.last_inspect_report,
+            :report_diff => {"File[/tmp/test]"=>{:content=>["{md5}abcd", "{md5}hijk"]}},
+            :resource_statuses => {:pass =>[], :failure=>["File[/tmp/test]"]}
+          }
+        ]
       end
     end
   end
