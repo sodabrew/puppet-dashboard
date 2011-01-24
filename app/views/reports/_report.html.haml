@@ -8,7 +8,7 @@
       %li= link_to 'Destroy', report, :confirm => 'Are you sure?', :method => :delete, :class => "delete button"
 
 .item
-  - if report.kind == "inspect"
+  - if report.kind == "inspect" and Report.baselines.any?
     .section
       %h3= "Compare with baseline:"
       - form_tag({:id => report, :action => "diff"}, :method => :get) do
