@@ -7,15 +7,15 @@
   - unless @nodes_without_latest_inspect_reports.empty?
     .item
       %h2 No latest inspect report
-      = @nodes_without_latest_inspect_reports.map {|node| link_to node.name, node_path(node)}.join(", ")
+      = @nodes_without_latest_inspect_reports.sort_by(&:name).map {|node| link_to node.name, node_path(node)}.join(", ")
   - unless @nodes_without_baselines.empty?
     .item
       %h2 No baseline
-      = @nodes_without_baselines.map {|node| link_to node.name, node_path(node)}.join(", ")
+      = @nodes_without_baselines.sort_by(&:name).map {|node| link_to node.name, node_path(node)}.join(", ")
   - unless @nodes_without_differences.empty?
     .item
       %h2 No differences from baseline
-      = @nodes_without_differences.map {|node| link_to node.name, node_path(node)}.join(", ")
+      = @nodes_without_differences.sort_by(&:name).map {|node| link_to node.name, node_path(node)}.join(", ")
   - unless @nodes_with_differences.empty?
     .item
       %h2 Nodes with difference from baseline
