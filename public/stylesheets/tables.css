@@ -142,6 +142,10 @@ table td.empty {
 #baseline-diff-report .expandable-link, #baseline-diff-report .non-expandable-bullet {
   vertical-align: bottom;
 }
+.baseline-diff-item {
+  display: inline-block;
+  vertical-align: bottom;
+}
 #baseline-diff-report table th {
   font-weight : bold;
 }

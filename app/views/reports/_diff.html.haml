@@ -12,10 +12,11 @@
       %a{ :href => '#', :class => 'expand-all' } (expand all)
   - if resource_statuses[:failure].present?
     %dl#baseline-diff-report
-      - resource_statuses[:failure].each do |resource|
+      - resource_statuses[:failure].each_with_index do |resource, index|
         %dt{:class => cycle( 'odd', 'even' )}
-          = link_to h(resource), {}, {:class => 'expandable-link collapsed-link'}
-        %dd.expandable.collapsed
+          %div.baseline-diff-item
+            = link_to h(resource), {}, {:class => 'expandable-link collapsed-link', :id => "expand-#{index}"}
+        %dd.expandable.collapsed{:id => "expandable-#{index}"}
           %table
             %tr
               %th Property
@@ -35,5 +36,4 @@
     %dl#baseline-diff-report
       - resource_statuses[:pass].each do |resource|
         %dt{:class => cycle( 'odd', 'even' )}
-          %span{:class => 'non-expandable-bullet'}
-            = h(resource)
+          %span{:class => 'non-expandable-bullet'}= h(resource)

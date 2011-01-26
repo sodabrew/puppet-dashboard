@@ -123,7 +123,7 @@ function init_baseline_diff_report() {
 function toggle_expandable_link() {
   jQuery(this).toggleClass('collapsed-link');
   if (jQuery(this).hasClass('collapsed-link')) {
-    jQuery(this).parent().next( '.expandable' )
+    jQuery(this.id.replace('expand', '#expandable'))
       .addClass('collapsed');
     if (jQuery('.expandable-link').not('.collapsed-link').size() == 0) {
       var old_text = jQuery('.collapse-all').text();
@@ -133,7 +133,7 @@ function toggle_expandable_link() {
         .text( old_text.replace( 'collapse', 'expand' ));
     }
   } else {
-    jQuery(this).parent().next( '.expandable' )
+    jQuery(this.id.replace('expand', '#expandable'))
       .removeClass('collapsed');
     if (jQuery('.expandable-link.collapsed-link').size() == 0) {
       var old_text = jQuery('.expand-all').text();
