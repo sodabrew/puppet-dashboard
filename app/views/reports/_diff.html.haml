@@ -26,8 +26,8 @@
               %tr
                 - baseline, actual = expected_actual
                 %td= h property
-                %td= h actual
-                %td= h baseline
+                %td= popup_md5s( h actual )
+                %td= popup_md5s( h baseline )
                 - if SETTINGS.use_file_bucket_diffs and resource =~ /^File\[/ and property == :content and actual =~ /^\{md5\}/ and baseline =~ /^\{md5\}/
                   %td
                     = link_to_function 'Show diff', "display_file_popup('#{url_for :controller => :files, :action => :diff, :file1 => baseline.sub('{md5}',''), :file2 => actual.sub('{md5}','')}')"
