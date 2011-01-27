@@ -75,6 +75,19 @@ class ReportsController < InheritedResources::Base
     end
   end
 
+  def baselines
+    if request.format == :json
+      limit = params[:limit].to_i
+      search_term = params[:term].gsub(/([\\%_])/, "\\\\\\1")
+      prefix_matches = Report.baselines.where(["host LIKE ?", "#{search_term}%"]).limit(limit).map(&:host).sort
+      substring_matches = Report.baselines.where(["host LIKE ?", "%#{search_term}%"]).limit(limit).map(&:host).sort
+      matches = (prefix_matches + substring_matches).uniq[0,limit]
+      render :text => matches.to_json, :content_type => 'application/json'
+    else
+      render :status => 406
+    end
+  end
+
   private
 
   def collection

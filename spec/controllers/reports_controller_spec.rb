@@ -140,6 +140,43 @@ describe ReportsController do
     end
   end
 
+  describe "#baselines" do
+    it "should sanitize the parameter given" do
+      hostname = %q{da\ng%erous'in_put}
+      report = Report.generate!(:host => hostname, :kind => "inspect")
+      report.baseline!
+
+      get :baselines, :term => hostname, :limit => 20, :format => :json
+      JSON.load(response.body).should == [hostname]
+    end
+
+    it "should return prefix matches before substring matches" do
+      Report.generate!(:host => "beetle"  , :kind => "inspect").baseline!
+      Report.generate!(:host => "egret"   , :kind => "inspect").baseline!
+      Report.generate!(:host => "chimera" , :kind => "inspect").baseline!
+      Report.generate!(:host => "elephant", :kind => "inspect").baseline!
+
+      get :baselines, :term => 'e', :limit => 20, :format => :json
+      JSON.load(response.body).should == ["egret", "elephant", "beetle", "chimera"]
+    end
+
+    it "should only return the requested number of matches" do
+      Report.generate!(:host => "beetle"  , :kind => "inspect").baseline!
+      Report.generate!(:host => "egret"   , :kind => "inspect").baseline!
+      Report.generate!(:host => "chimera" , :kind => "inspect").baseline!
+      Report.generate!(:host => "elephant", :kind => "inspect").baseline!
+
+      get :baselines, :term => 'e', :limit => 3, :format => :json
+      JSON.load(response.body).should == ["egret", "elephant", "beetle"]
+    end
+
+    it "should fail if the format is not json" do
+      get :baselines, :term => 'anything', :format => :html
+      response.should_not be_success
+      response.code.should == "406"
+    end
+  end
+
   def post_with_body(action, body, headers)
     @request.env['RAW_POST_DATA'] = body
     response = post(action, {}, headers)
