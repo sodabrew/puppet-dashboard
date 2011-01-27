@@ -6,14 +6,13 @@
       Search Latest Inspect Reports
 
   .item
-    - [:errors, :notices].each do |message_type|
-      - if flash[message_type].present?
-        - flash[message_type].each do |messages|
-          %div{:class => "section #{message_type.to_s.singularize}"}
-            %h3= message_type.to_s.capitalize
-            %p
-              - messages.each do |message|
-                %li= message
+    - if flash[:errors].present?
+      %div{:class => "section error"}
+        %h3 Errors
+        - flash[:errors].each do |messages|
+          %p
+            - messages.each do |message|
+              %li= message
 
     .section
       - form_tag url_for(:action => :search), :method => :get do
@@ -22,34 +21,23 @@
         = label_tag 'file_content', 'File checksum (md5)'
         = text_field_tag 'file_content', @content, :size => 100
         %br
-        = radio_button_tag 'search_results', 'unmatching', (params[:search_results] == 'unmatching' or params[:search_results].nil?)
-        = label_tag 'search_results_unmatching', 'unmatching', :class => :inline
-        = radio_button_tag 'search_results', 'matching', params[:search_results] == 'matching'
-        = label_tag 'search_results_matching', 'matching', :class => :inline
-        = radio_button_tag 'search_results', 'all', params[:search_results] == 'all'
-        = label_tag 'search_results_all', 'all', :class => :inline
-        %br
         %button Search
 
-    - if @files.present?
-      .section
-        %h4 Found #{pluralize(@files.count, "node")}
-        %table.inspector
-          %thead
-            %tr
-              %th.status &nbsp;
-              %th Time
-              %th Host &uarr;
-              %th Checksum
-          %tbody
-            - @files.each do |file|
+    - if @matching_files && @unmatching_files
+      - [[:unmatching, @unmatching_files], [:matching, @matching_files]].each do |result_type, results|
+        .section
+          %h4= pluralize(results.count, "#{result_type} node")
+          %table.inspector
+            %thead
               %tr
-                = report_status_td(file.report)
-                %td= link_to file.report.time, file.report
-                %td= link_to h(file.report.host), file.report.node
-                %td= file.events.detect {|event| event.property == "content"}.previous_value.gsub("{md5}","") rescue "not recorded"
-            - if @files.total_pages > 1
-              %tfoot
+                %th.status &nbsp;
+                %th Time
+                %th Host &uarr;
+                %th Checksum
+            %tbody
+              - results.each do |file|
                 %tr
-                  %td{:colspan => 4}
-                    = pagination_for(@files)
+                  = report_status_td(file.report)
+                  %td= link_to file.report.time, file.report
+                  %td= link_to h(file.report.host), file.report.node
+                  %td= file.events.detect {|event| event.property == "content"}.previous_value.gsub("{md5}","") rescue "not recorded"
