@@ -1,3 +1,4 @@
+- show_expand_all_link ||= false
 .header
   %h4
     Comparing
@@ -8,7 +9,7 @@
 .item
   %h4
     = pluralize(resource_statuses[:failure].length, 'Mismatch')
-    - if resource_statuses[:failure].present?
+    - if resource_statuses[:failure].present? && show_expand_all_link
       %a{ :href => '#', :class => 'expand-all' } (expand all)
   - if resource_statuses[:failure].present?
     %dl#baseline-diff-report
