@@ -124,7 +124,7 @@ function toggle_expandable_link() {
   jQuery(this).toggleClass('collapsed-link');
   if (jQuery(this).hasClass('collapsed-link')) {
     jQuery(this.id.replace('expand', '#expandable'))
-      .addClass('collapsed');
+      .hide('blind');
     if (jQuery('.expandable-link').not('.collapsed-link').size() == 0) {
       var old_text = jQuery('.collapse-all').text();
       jQuery('.collapse-all')
@@ -134,7 +134,7 @@ function toggle_expandable_link() {
     }
   } else {
     jQuery(this.id.replace('expand', '#expandable'))
-      .removeClass('collapsed');
+      .show('blind', {}, 1000);
     if (jQuery('.expandable-link.collapsed-link').size() == 0) {
       var old_text = jQuery('.expand-all').text();
       jQuery('.expand-all')
@@ -145,6 +145,6 @@ function toggle_expandable_link() {
   }
 }
 
-function display_file_diff(url) {
+function display_file_popup(url) {
     jQuery.colorbox({href: url, width: '80%', height: '80%', iframe: true});
 }

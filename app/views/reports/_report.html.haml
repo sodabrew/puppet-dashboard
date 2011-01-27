@@ -37,7 +37,7 @@
                 - status.events.each do |event|
                   %tr{:class => "status #{event.status}"}
                     %td= event.property
-                    %td= event.message
+                    %td= popup_md5s( h event.message )
   .section
     %h3 Log
     .section
