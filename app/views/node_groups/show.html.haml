@@ -43,11 +43,27 @@
       .header
         %h2 Nodes for this group
       - if Report.baselines.any?
-        %h3= "Compare with baselines"
-        - form_tag(diff_node_group_path(@node_group), :method => :get) do
+        %h3= "Compare with:"
+        - form_tag({:id => @node_group, :action => "diff"}, :id => "baseline_compare", :method => :get) do
           %p
-            = select_tag( "against", options_for_select({"individual baselines" => :self}) + options_from_collection_for_select( Report.baselines.order("name ASC"), :id, :long_name ) )
-            = submit_tag("compare")
+            = radio_button_tag "baseline_type", "self", true
+            = label_tag "baseline_type_self", "nodes' own baselines", :class => "inline"
+            %br
+            = radio_button_tag "baseline_type", "other"
+            = label_tag "baseline_type_other", "specific baseline:", :class => "inline"
+            = text_field_tag("baseline_host")
+            = link_to_function('Compare', "jQuery('#baseline_compare').submit()", :class => "button")
+        %script{:type => 'text/javascript'}
+          \jQuery('#baseline_host').autocomplete({
+          \  source: '#{baselines_reports_path :limit => 20, :format => :json}',
+          \  minLength: 0,
+          \  select: function(event, ui) {
+          \    jQuery('#baseline_type_other').attr('checked', true)
+          \  }
+          \});
+          \jQuery('#baseline_host').click(function() {
+          \  jQuery('#baseline_host').autocomplete('search');
+          \});
       - if @node_group.all_nodes.present?
         = render 'nodes/nodes', :nodes => @node_group.all_nodes, :container => @node_group
       - else
