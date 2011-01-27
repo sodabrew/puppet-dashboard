@@ -84,7 +84,8 @@ describe ReportsController do
       get('search')
       response.code.should == '200'
       response.should render_template("reports/search")
-      assigns[:files].should == []
+      assigns[:matching_files].should == nil
+      assigns[:unmatching_files].should == nil
     end
 
     describe "when searching for files" do
@@ -103,59 +104,37 @@ describe ReportsController do
       end
 
       describe "when both file title and content are specified" do
-        it "should return only matching nodes when requested" do
-          get('search', :file_title => "/etc/hosts", :file_content => "ab07acbb1e496801937adfa772424bf7", :search_results => "matching")
-          assigns[:files].to_a.should =~ @matching_report.resource_statuses + @other_matching_report.resource_statuses
-          flash[:notices].should be_empty
-        end
-
-        it "should return only unmatching nodes when requested" do
-          get('search', :file_title => "/etc/hosts", :file_content => "ab07acbb1e496801937adfa772424bf7", :search_results => "unmatching")
-          assigns[:files].to_a.should =~ @unmatching_content_report.resource_statuses
-          flash[:notices].should be_empty
-        end
-
-        it "should return all nodes containing the file when requested" do
-          get('search', :file_title => "/etc/hosts", :file_content => "ab07acbb1e496801937adfa772424bf7", :search_results => "all")
-          assigns[:files].to_a.should =~ @matching_report.resource_statuses +
-                                         @other_matching_report.resource_statuses +
-                                         @unmatching_content_report.resource_statuses
-          flash[:notices].should be_empty
-        end
-
-        it "should warn but still search if the specified md5 is not valid" do
-          get('search', :file_title => "/etc/hosts", :file_content => "not_an_md5_at_all", :search_results => "all")
-          assigns[:files].to_a.should =~ @matching_report.resource_statuses +
-                                         @other_matching_report.resource_statuses +
-                                         @unmatching_content_report.resource_statuses
-          flash[:notices].should include "not_an_md5_at_all is not a valid md5 checksum"
+        it "should return both matching and unmatching nodes" do
+          get('search', :file_title => "/etc/hosts", :file_content => "ab07acbb1e496801937adfa772424bf7")
+          assigns[:matching_files].to_a.should =~ @matching_report.resource_statuses + @other_matching_report.resource_statuses
+          assigns[:unmatching_files].to_a.should =~ @unmatching_content_report.resource_statuses
         end
       end
 
       describe "when only file content is specified" do
         it "should not perform a search, and should add an error message" do
-          get('search', :file_content => "ab07acbb1e496801937adfa772424bf7", :search_results => "all")
-          assigns[:files].should be_empty
+          get('search', :file_content => "ab07acbb1e496801937adfa772424bf7")
+          assigns[:matching_files].should == nil
+          assigns[:unmatching_files].should == nil
           flash[:errors].should include "Please specify the file title to search for"
-          flash[:notices].should be_empty
         end
       end
 
       describe "when the page first loads" do
         it "should not perform a search, and should not add error messages" do
           get('search')
-          assigns[:files].should be_empty
+          assigns[:matching_files].should == nil
+          assigns[:unmatching_files].should == nil
           flash[:errors].should be_empty
-          flash[:notices].should be_empty
         end
       end
 
       describe "when nothing is specified" do
-        it "should not perform a search, and should not add any error messages" do
-          get('search', :search_results => "all")
-          assigns[:files].should be_empty
+        it "should not perform a search, and should add error messages" do
+          get('search', :file_title => "", :file_content => "")
+          assigns[:matching_files].should == nil
+          assigns[:unmatching_files].should == nil
           flash[:errors].should include "Please specify the file title to search for"
-          flash[:notices].should be_empty
         end
       end
     end
