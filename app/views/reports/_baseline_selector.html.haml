@@ -1,0 +1,13 @@
+%h3= "Compare with:"
+- form_tag({:id => diffee, :action => "diff"}, :id => "baseline_compare", :method => :get) do
+  %p
+    = radio_button_tag "baseline_type", "self", true
+    = label_tag "baseline_type_self", "individual baseline", :class => "inline"
+    %br
+    = radio_button_tag "baseline_type", "other"
+    = label_tag "baseline_type_other", "specific baseline:", :class => "inline"
+    = text_field_tag("baseline_host")
+    = link_to_function('Compare', "jQuery('#baseline_compare').submit()", :class => "button")
+= javascript_include_tag 'baseline_selector'
+%script{:type => 'text/javascript'}
+  setup_baseline_selector('#baseline_host', '#{baselines_reports_path :limit => 20, :format => :json}');

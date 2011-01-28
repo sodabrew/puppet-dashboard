@@ -10,27 +10,7 @@
 .item
   - if report.kind == "inspect" and Report.baselines.any?
     .section
-      %h3= "Compare with:"
-      - form_tag({:id => report, :action => "diff"}, :id => "baseline_compare", :method => :get) do
-        %p
-          = radio_button_tag "baseline_type", "self", true
-          = label_tag "baseline_type_self", "node's own baseline", :class => "inline"
-          %br
-          = radio_button_tag "baseline_type", "other"
-          = label_tag "baseline_type_other", "specific baseline:", :class => "inline"
-          = text_field_tag("baseline_host")
-          = link_to_function('Compare', "jQuery('#baseline_compare').submit()", :class => "button")
-      %script{:type => 'text/javascript'}
-        \jQuery('#baseline_host').autocomplete({
-        \  source: '#{baselines_reports_path :limit => 20, :format => :json}',
-        \  minLength: 0,
-        \  select: function(event, ui) {
-        \    jQuery('#baseline_type_other').attr('checked', true)
-        \  }
-        \});
-        \jQuery('#baseline_host').click(function() {
-        \  jQuery('#baseline_host').autocomplete('search');
-        \});
+      = render 'baseline_selector', :diffee => report
   - if report.resource_statuses.present?
     .section
       %h3
