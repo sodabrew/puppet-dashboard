@@ -39,7 +39,13 @@ class ReportsController < InheritedResources::Base
 
   def diff
     @my_report = Report.find(params[:id])
-    @baseline_report = Report.find(params[:baseline_id])
+    if params[:baseline_type] == "self"
+      @baseline_report = @my_report.node.baseline_report
+      raise ActiveRecord::RecordNotFound.new "Node #{@my_report.node.name} does not have a baseline report set" unless @baseline_report
+    else
+      @baseline_report = Report.baselines.find_by_host!(params[:baseline_host])
+    end
+
     @diff = @baseline_report.diff(@my_report)
     @resource_statuses = Report.divide_diff_into_pass_and_fail(@diff)
   end
@@ -72,6 +78,19 @@ class ReportsController < InheritedResources::Base
         @matching_files = inspected_resources.by_file_title(@title).by_file_content(@content)
         @unmatching_files = inspected_resources.by_file_title(@title).without_file_content(@content)
       end
+    end
+  end
+
+  def baselines
+    if request.format == :json
+      limit = params[:limit].to_i
+      search_term = params[:term].gsub(/([\\%_])/, "\\\\\\1")
+      prefix_matches = Report.baselines.where(["host LIKE ?", "#{search_term}%"]).limit(limit).map(&:host).sort
+      substring_matches = Report.baselines.where(["host LIKE ?", "%#{search_term}%"]).limit(limit).map(&:host).sort
+      matches = (prefix_matches + substring_matches).uniq[0,limit]
+      render :text => matches.to_json, :content_type => 'application/json'
+    else
+      render :status => 406
     end
   end
 

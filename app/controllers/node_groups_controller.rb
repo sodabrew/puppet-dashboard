@@ -7,8 +7,10 @@ class NodeGroupsController < InheritedResources::Base
 
   def diff
     @node_group = NodeGroup.find(params[:id])
-
-    @baseline = Report.find(params[:against]) unless params[:against] == "self" || params[:against].nil?
+    unless params[:baseline_type] == "self"
+      @baseline = Node.find_by_name!(params[:baseline_host]).baseline_report
+      raise ActiveRecord::RecordNotFound.new("Node #{params[:baseline_host]} does not have a baseline report set") unless @baseline
+    end
 
     @nodes_without_latest_inspect_reports = []
     @nodes_without_baselines = []

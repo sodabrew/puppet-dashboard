@@ -17,9 +17,30 @@ describe NodeGroupsController do
       @node_group.nodes << @node
     end
 
+    describe "the requested baseline can't be found" do
+      it "should raise an error if the specified node doesn't have a baseline" do
+        Node.generate! :name => "foo"
+        lambda { get :diff, :id => @node_group.id, :baseline_type => "other", :baseline_host => "foo" }.should raise_error(ActiveRecord::RecordNotFound)
+      end
+
+      it "should raise an error if the node doesn't exist" do
+        lambda { get :diff, :id => @node_group.id, :baseline_type => "other", :baseline_host => "non_existent_node" }.should raise_error(ActiveRecord::RecordNotFound)
+      end
+
+      it "should not raise an error if comparing against nodes' own baselines" do
+        @non_baseline_node = Node.generate! :name => "no_baseline"
+        Report.generate! :host => @non_baseline_node.name, :kind => "inspect"
+        @node_group.nodes << @non_baseline_node
+
+        get :diff, :id => @node_group.id, :baseline_type => "self"
+        response.should be_success
+        assigns[:nodes_without_baselines].should include @non_baseline_node
+      end
+    end
+
     describe "the node has no inspect reports" do
       it "should not produce a node diff and should keep track that there is no inspect report" do
-        get :diff, :id => @node_group.id
+        get :diff, :id => @node_group.id, :baseline_type => "self"
         response.should be_success
         assigns[:nodes_without_latest_inspect_reports].should == [@node]
         assigns[:nodes_without_baselines].should be_empty
@@ -32,7 +53,7 @@ describe NodeGroupsController do
       it "should not produce a node diff and should keep track that there is no baseline" do
         Report.generate!(:host => @node.name, :kind => 'inspect', :time => 2.hours.ago)
 
-        get :diff, :id => @node_group.id
+        get :diff, :id => @node_group.id, :baseline_type => "self"
         response.should be_success
         assigns[:nodes_without_latest_inspect_reports].should be_empty
         assigns[:nodes_without_baselines].should == [@node]
@@ -75,7 +96,7 @@ describe NodeGroupsController do
           :previous_value  => '{md5}0b8b61ed7bce7ffb93cedc19845468cc'
         )
 
-        get :diff, :id => @node_group.id
+        get :diff, :id => @node_group.id, :baseline_type => "self"
 
         response.should be_success
 
@@ -98,7 +119,7 @@ describe NodeGroupsController do
           :previous_value  => '{md5}efgh'
         )
 
-        get :diff, :id => @node_group.id
+        get :diff, :id => @node_group.id, :baseline_type => "self"
 
         response.should be_success
 
@@ -160,7 +181,7 @@ describe NodeGroupsController do
         @node.last_inspect_report = @latest
         @child_node.last_inspect_report = @child_latest
 
-        get :diff, :id => @node_group.id, :against => @baseline.id
+        get :diff, :id => @node_group.id, :baseline_type => "other", :baseline_host => @node.name
 
         @node_group.all_nodes.should =~ [@node, @child_node]
         assigns[:nodes_without_latest_inspect_reports].should be_empty

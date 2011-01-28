@@ -79,6 +79,38 @@ describe ReportsController do
     end
   end
 
+  describe "#diff" do
+    it "should use the baseline of the node associated with the report if baseline_type=self" do
+      report = Report.generate!(:host => "foo", :kind => "inspect")
+      baseline = Report.generate!(:host => "foo", :time => 1.week.ago, :kind => "inspect")
+      baseline.baseline!
+
+      get :diff, :id => report.id, :baseline_type => "self"
+      assigns[:baseline_report].should == baseline
+    end
+
+    it "should use the baseline of the node specified if baseline_type=other" do
+      report = Report.generate!(:host => "foo", :kind => "inspect")
+      baseline = Report.generate!(:host => "bar", :kind => "inspect")
+      baseline.baseline!
+
+      get :diff, :id => report.id, :baseline_type => "other", :baseline_host => "bar"
+      assigns[:baseline_report].should == baseline
+    end
+
+    it "should raise an error if baseline_type=self and the current node does not have a baseline" do
+      report = Report.generate!(:host => "foo", :kind => "inspect")
+
+      lambda { get :diff, :id => report.id, :baseline_type => "self" }.should raise_error(ActiveRecord::RecordNotFound)
+    end
+
+    it "should raise an error if baseline_type=other and the specified node's baseline doesn't exist" do
+      report = Report.generate!(:host => "foo", :kind => "inspect")
+
+      lambda { get :diff, :id => report.id, :baseline_type => "other", :baseline_host => "foo" }.should raise_error(ActiveRecord::RecordNotFound)
+    end
+  end
+
   describe "#search" do
     it "should render the search form if there are no parameters" do
       get('search')
@@ -137,6 +169,43 @@ describe ReportsController do
           flash[:errors].should include "Please specify the file title to search for"
         end
       end
+    end
+  end
+
+  describe "#baselines" do
+    it "should sanitize the parameter given" do
+      hostname = %q{da\ng%erous'in_put}
+      report = Report.generate!(:host => hostname, :kind => "inspect")
+      report.baseline!
+
+      get :baselines, :term => hostname, :limit => 20, :format => :json
+      JSON.load(response.body).should == [hostname]
+    end
+
+    it "should return prefix matches before substring matches" do
+      Report.generate!(:host => "beetle"  , :kind => "inspect").baseline!
+      Report.generate!(:host => "egret"   , :kind => "inspect").baseline!
+      Report.generate!(:host => "chimera" , :kind => "inspect").baseline!
+      Report.generate!(:host => "elephant", :kind => "inspect").baseline!
+
+      get :baselines, :term => 'e', :limit => 20, :format => :json
+      JSON.load(response.body).should == ["egret", "elephant", "beetle", "chimera"]
+    end
+
+    it "should only return the requested number of matches" do
+      Report.generate!(:host => "beetle"  , :kind => "inspect").baseline!
+      Report.generate!(:host => "egret"   , :kind => "inspect").baseline!
+      Report.generate!(:host => "chimera" , :kind => "inspect").baseline!
+      Report.generate!(:host => "elephant", :kind => "inspect").baseline!
+
+      get :baselines, :term => 'e', :limit => 3, :format => :json
+      JSON.load(response.body).should == ["egret", "elephant", "beetle"]
+    end
+
+    it "should fail if the format is not json" do
+      get :baselines, :term => 'anything', :format => :html
+      response.should_not be_success
+      response.code.should == "406"
     end
   end
 
