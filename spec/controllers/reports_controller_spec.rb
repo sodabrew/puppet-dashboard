@@ -193,10 +193,10 @@ describe ReportsController do
     end
 
     it "should only return the requested number of matches" do
-      Report.generate!(:host => "beetle"  , :kind => "inspect").baseline!
       Report.generate!(:host => "egret"   , :kind => "inspect").baseline!
       Report.generate!(:host => "chimera" , :kind => "inspect").baseline!
       Report.generate!(:host => "elephant", :kind => "inspect").baseline!
+      Report.generate!(:host => "beetle"  , :kind => "inspect").baseline!
 
       get :baselines, :term => 'e', :limit => 3, :format => :json
       JSON.load(response.body).should == ["egret", "elephant", "beetle"]
