@@ -261,4 +261,9 @@ module ApplicationHelper
   def load_asynchronously(element, url)
     javascript = "jQuery.get('#{url}', function(data) { jQuery('#{element}').html(data) })"
   end
+
+  def generate_unique_id
+    @unique_id_counter ||= 0
+    @unique_id_counter += 1
+  end
 end

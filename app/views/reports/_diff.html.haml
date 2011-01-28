@@ -13,7 +13,8 @@
       %a{ :href => '#', :class => 'expand-all' } (expand all)
   - if resource_statuses[:failure].present?
     %dl#baseline-diff-report
-      - resource_statuses[:failure].each_with_index do |resource, index|
+      - resource_statuses[:failure].each do |resource|
+        - index = generate_unique_id()
         %dt{:class => cycle( 'odd', 'even' )}
           %div.baseline-diff-item
             = link_to h(resource), {}, {:class => 'expandable-link collapsed-link', :id => "expand-#{index}"}
