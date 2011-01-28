@@ -8,6 +8,9 @@ require 'mocha'
 require 'spec/autorun'
 require 'spec/rails'
 require 'shoulda'
+require 'factory_girl'
+require 'factory_girl/syntax/generate'
+require 'spec/factories'
 
 # Requires supporting files with custom matchers and macros, etc,
 # in ./support/ and its subdirectories.
