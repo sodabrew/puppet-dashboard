@@ -1,6 +1,7 @@
 --- !ruby/object:Gem::Specification 
 name: haml
 version: !ruby/object:Gem::Version 
+  hash: 29
   prerelease: false
   segments: 
   - 3
@@ -26,6 +27,7 @@ dependencies:
     requirements: 
     - - ">="
       - !ruby/object:Gem::Version 
+        hash: 13
         segments: 
         - 0
         - 5
@@ -40,6 +42,7 @@ dependencies:
     requirements: 
     - - ">="
       - !ruby/object:Gem::Version 
+        hash: 25
         segments: 
         - 0
         - 5
@@ -445,6 +448,7 @@ required_ruby_version: !ruby/object:Gem::Requirement
   requirements: 
   - - ">="
     - !ruby/object:Gem::Version 
+      hash: 3
       segments: 
       - 0
       version: "0"
@@ -452,13 +456,14 @@ required_rubygems_version: !ruby/object:Gem::Requirement
   requirements: 
   - - ">="
     - !ruby/object:Gem::Version 
+      hash: 3
       segments: 
       - 0
       version: "0"
 requirements: []
 
 rubyforge_project: haml
-rubygems_version: 1.3.6
+rubygems_version: 1.4.1
 signing_key: 
 specification_version: 3
 summary: An elegant, structured XHTML/XML templating engine. Comes with Sass, a similar CSS templating engine.
