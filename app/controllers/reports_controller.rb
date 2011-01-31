@@ -39,15 +39,25 @@ class ReportsController < InheritedResources::Base
 
   def diff
     @my_report = Report.find(params[:id])
+
     if params[:baseline_type] == "self"
       @baseline_report = @my_report.node.baseline_report
-      raise ActiveRecord::RecordNotFound.new "Node #{@my_report.node.name} does not have a baseline report set" unless @baseline_report
+      @diff_error_message = "Node '#{@my_report.node.name}' does not have a baseline report set." unless @baseline_report
     else
-      @baseline_report = Report.baselines.find_by_host!(params[:baseline_host])
+      node = Node.find_by_name(params[:baseline_host])
+
+      if node
+        @baseline_report = node.baseline_report
+        @diff_error_message = "Node '#{params[:baseline_host]}' does not have a baseline report set." unless @baseline_report
+      else
+        @diff_error_message = "Node '#{params[:baseline_host]}' does not exist."
+      end
     end
 
-    @diff = @baseline_report.diff(@my_report)
-    @resource_statuses = Report.divide_diff_into_pass_and_fail(@diff)
+    unless @diff_error_message
+      @diff = @baseline_report.diff(@my_report)
+      @resource_statuses = Report.divide_diff_into_pass_and_fail(@diff)
+    end
   end
 
   def make_baseline
