@@ -98,16 +98,25 @@ describe ReportsController do
       assigns[:baseline_report].should == baseline
     end
 
-    it "should raise an error if baseline_type=self and the current node does not have a baseline" do
+    it "should report an error if baseline_type=self and the current node does not have a baseline" do
       report = Report.generate!(:host => "foo", :kind => "inspect")
 
-      lambda { get :diff, :id => report.id, :baseline_type => "self" }.should raise_error(ActiveRecord::RecordNotFound)
+      get :diff, :id => report.id, :baseline_type => "self"
+      assigns[:diff_error_message].should_not be_nil
     end
 
-    it "should raise an error if baseline_type=other and the specified node's baseline doesn't exist" do
+    it "should report an error if baseline_type=other and the specified node's baseline doesn't exist" do
       report = Report.generate!(:host => "foo", :kind => "inspect")
 
-      lambda { get :diff, :id => report.id, :baseline_type => "other", :baseline_host => "foo" }.should raise_error(ActiveRecord::RecordNotFound)
+      get :diff, :id => report.id, :baseline_type => "other", :baseline_host => "foo"
+      assigns[:diff_error_message].should_not be_nil
+    end
+
+    it "should report an error if baseline_type=other and the specified node doesn't exist" do
+      report = Report.generate!(:host => "foo", :kind => "inspect")
+
+      get :diff, :id => report.id, :baseline_type => "other", :baseline_host => "bar"
+      assigns[:diff_error_message].should_not be_nil
     end
   end
 
