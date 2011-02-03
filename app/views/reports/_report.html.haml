@@ -17,10 +17,10 @@
         Events
         %a{ :href => '#', :class => 'expand-all' } (expand all)
       .section
-        %dl#baseline-diff-report
+        %dl.expandable-list
           - report.resource_statuses.sort_by(&:time).each_with_index do |status, index|
             %dt{:class => cycle( 'odd', 'even' )}
-              %div.baseline-diff-item
+              %div.expandable-list-item
                 - if status.events.empty?
                   %span{:class => 'non-expandable-bullet'}= status.name
                 - else

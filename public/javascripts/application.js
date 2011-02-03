@@ -102,10 +102,10 @@ jQuery(document).ready(function(J) {
 
     J(this).hide();
   });
-  init_baseline_diff_report();
+  init_expandable_list();
 });
 
-function init_baseline_diff_report() {
+function init_expandable_list() {
   jQuery( '.expand-all' ).live( 'click', function() {
     jQuery('.expandable-link.collapsed-link').each(toggle_expandable_link);
     return false;

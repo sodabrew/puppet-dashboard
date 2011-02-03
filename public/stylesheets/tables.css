@@ -116,41 +116,41 @@ table td.empty {
   background: #F8F8F8;
 }
 /* this isn't even really a table anymore */
-#baseline-diff-report {
+.expandable-list {
   padding : 1em;
   background : #fff;
   width : auto;
 }
-#baseline-diff-report .even {
+.expandable-list .even {
   background: #F5F5F5;
 }
-#baseline-diff-report .expandable {
+.expandable-list .expandable {
   margin-bottom : 1em;
 }
-#baseline-diff-report .collapsed {
+.expandable-list .collapsed {
   display: none;
 }
-#baseline-diff-report .expandable-link.collapsed-link:before {
+.expandable-list .expandable-link.collapsed-link:before {
   content: url('../../images/icons/bullet_toggle_plus.png');
 }
-#baseline-diff-report .expandable-link:before {
+.expandable-list .expandable-link:before {
   content: url('../../images/icons/bullet_toggle_minus.png');
 }
-#baseline-diff-report .non-expandable-bullet:before {
+.expandable-list .non-expandable-bullet:before {
   content: url('../../images/icons/bullet_green.png');
 }
-#baseline-diff-report .expandable-link, #baseline-diff-report .non-expandable-bullet {
+.expandable-list .expandable-link, .expandable-list .non-expandable-bullet {
   vertical-align: bottom;
 }
-.baseline-diff-item {
+.expandable-list-item {
   display: inline-block;
   vertical-align: bottom;
 }
-#baseline-diff-report table th {
+.expandable-list table th {
   font-weight : bold;
 }
-#baseline-diff-report table td,
-#baseline-diff-report table th {
+.expandable-list table td,
+.expandable-list table th {
   padding : .25em .5em .15em;
 }
 .content {
