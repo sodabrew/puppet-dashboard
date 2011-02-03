@@ -39,9 +39,25 @@ class ReportsController < InheritedResources::Base
 
   def diff
     @my_report = Report.find(params[:id])
-    @baseline_report = Report.find(params[:baseline_id])
-    @diff = @baseline_report.diff(@my_report)
-    @resource_statuses = Report.divide_diff_into_pass_and_fail(@diff)
+
+    if params[:baseline_type] == "self"
+      @baseline_report = @my_report.node.baseline_report
+      @diff_error_message = "Node '#{@my_report.node.name}' does not have a baseline report set." unless @baseline_report
+    else
+      node = Node.find_by_name(params[:baseline_host])
+
+      if node
+        @baseline_report = node.baseline_report
+        @diff_error_message = "Node '#{params[:baseline_host]}' does not have a baseline report set." unless @baseline_report
+      else
+        @diff_error_message = "Node '#{params[:baseline_host]}' does not exist."
+      end
+    end
+
+    unless @diff_error_message
+      @diff = @baseline_report.diff(@my_report)
+      @resource_statuses = Report.divide_diff_into_pass_and_fail(@diff)
+    end
   end
 
   def make_baseline
@@ -51,36 +67,41 @@ class ReportsController < InheritedResources::Base
   end
 
   def search
-    if params[:search_all_inspect_reports]
-      inspected_resources = ResourceStatus.inspections
+    flash[:errors] = []
+    inspected_resources = ResourceStatus.latest_inspections.order("nodes.name")
+
+    @title = params[:file_title].to_s.strip
+    @content = params[:file_content].to_s.strip
+
+    if params[:file_title] == nil and params[:file_content] == nil
+      # Don't do anything; user just navigated to the search page
     else
-      inspected_resources = ResourceStatus.latest_inspections
+      if !@title.present?
+        flash[:errors] << "Please specify the file title to search for"
+      end
+      if !@content.present?
+        flash[:errors] << "Please specify the file content to search for"
+      elsif !is_md5?(@content)
+        flash[:errors] << "#{@content} is not a valid md5 checksum"
+      end
+      if flash[:errors].empty?
+        @matching_files = inspected_resources.by_file_title(@title).by_file_content(@content)
+        @unmatching_files = inspected_resources.by_file_title(@title).without_file_content(@content)
+      end
     end
-    inspected_resources = inspected_resources.order("reports.time DESC")
+  end
 
-    if params[:file_title].present? and params[:file_content].present?
-      @files = inspected_resources.by_file_title(params[:file_title])
-      if params[:content_match] == "negative"
-        @files = @files.without_file_content(params[:file_content])
-      else
-        @files = @files.by_file_content(params[:file_content])
-      end
-
-    elsif params[:file_title].present?
-      @files = inspected_resources.by_file_title(params[:file_title])
-
-    elsif params[:file_content].present?
-      if params[:content_match] == "negative"
-        @files = inspected_resources.in_a_report_without_content(params[:file_content])
-      else
-        @files = inspected_resources.by_file_content(params[:file_content])
-      end
-
+  def baselines
+    if request.format == :json
+      limit = params[:limit].to_i
+      search_term = params[:term].gsub(/([\\%_])/, "\\\\\\1")
+      prefix_matches = Report.baselines.where(["host LIKE ?", "#{search_term}%"]).order("host ASC").limit(limit).map(&:host)
+      substring_matches = Report.baselines.where(["host LIKE ?", "%#{search_term}%"]).order("host ASC").limit(limit).map(&:host)
+      matches = (prefix_matches + substring_matches).uniq[0,limit]
+      render :text => matches.to_json, :content_type => 'application/json'
     else
-      @files = nil
-      return
+      render :status => 406
     end
-    @files = paginate_scope @files
   end
 
   private

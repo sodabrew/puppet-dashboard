@@ -14,9 +14,11 @@
   - if resource_statuses[:failure].present?
     %dl#baseline-diff-report
       - resource_statuses[:failure].each do |resource|
+        - index = generate_unique_id()
         %dt{:class => cycle( 'odd', 'even' )}
-          = link_to h(resource), {}, {:class => 'expandable-link collapsed-link'}
-        %dd.expandable.collapsed
+          %div.baseline-diff-item
+            = link_to h(resource), {}, {:class => 'expandable-link collapsed-link', :id => "expand-#{index}"}
+        %dd.expandable.collapsed{:id => "expandable-#{index}"}
           %table
             %tr
               %th Property
@@ -26,12 +28,14 @@
               %tr
                 - baseline, actual = expected_actual
                 %td= h property
-                %td= h actual
-                %td= h baseline
+                %td= popup_md5s( h actual )
+                %td= popup_md5s( h baseline )
+                - if SETTINGS.use_file_bucket_diffs and resource =~ /^File\[/ and property == :content and actual =~ /^\{md5\}/ and baseline =~ /^\{md5\}/
+                  %td
+                    = link_to_function 'Show diff', "display_file_popup('#{url_for :controller => :files, :action => :diff, :file1 => baseline.sub('{md5}',''), :file2 => actual.sub('{md5}','')}')"
   %h4= pluralize(resource_statuses[:pass].length, 'Match')
   - if resource_statuses[:pass].present?
     %dl#baseline-diff-report
       - resource_statuses[:pass].each do |resource|
         %dt{:class => cycle( 'odd', 'even' )}
-          %span{:class => 'non-expandable-bullet'}
-            = h(resource)
+          %span{:class => 'non-expandable-bullet'}= h(resource)

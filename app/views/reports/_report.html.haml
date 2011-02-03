@@ -8,40 +8,34 @@
       %li= link_to 'Destroy', report, :confirm => 'Are you sure?', :method => :delete, :class => "delete button"
 
 .item
-  - if report.kind == "inspect"
+  - if report.kind == "inspect" and Report.baselines.any?
     .section
-      %h3= "Compare with baseline:"
-      - form_tag({:id => report, :action => "diff"}, :method => :get) do
-        %p= select_tag( "baseline_id", options_from_collection_for_select( Report.baselines, :id, :long_name ) ) + submit_tag("compare")
+      = render 'baseline_selector', :diffee => report
   - if report.resource_statuses.present?
     .section
-      %h3 Events
+      %h3
+        Events
+        %a{ :href => '#', :class => 'expand-all' } (expand all)
       .section
-        %table.inspector#events
-          %thead
-            %tr
-              %th Name
-              %th Property
-              %th Message
-              %th File
-              %th Line
-          %tbody
-            - report.resource_statuses.sort_by(&:time).each do |status|
-              - if status.events.empty?
+        %dl#baseline-diff-report
+          - report.resource_statuses.sort_by(&:time).each_with_index do |status, index|
+            %dt{:class => cycle( 'odd', 'even' )}
+              %div.baseline-diff-item
+                - if status.events.empty?
+                  %span{:class => 'non-expandable-bullet'}= status.name
+                - else
+                  = link_to h(status.name), {}, {:class => 'expandable-link collapsed-link', :id => "expand-#{index}"}
+              - if status.file or status.line
+                = "(#{status.file}:#{status.line})"
+            %dd.expandable.collapsed{:id => "expandable-#{index}"}
+              %table
                 %tr
-                  %td= status.name
-                  %td
-                  %td
-                  %td= wrap_on_slashes(status.file)
-                  %td= status.line
-              - else
+                  %th Property
+                  %th Message
                 - status.events.each do |event|
                   %tr{:class => "status #{event.status}"}
-                    %td= status.name
                     %td= event.property
-                    %td= event.message
-                    %td= status.file
-                    %td= status.line
+                    %td= popup_md5s( h event.message )
   .section
     %h3 Log
     .section

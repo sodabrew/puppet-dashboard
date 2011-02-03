@@ -123,8 +123,8 @@ function init_baseline_diff_report() {
 function toggle_expandable_link() {
   jQuery(this).toggleClass('collapsed-link');
   if (jQuery(this).hasClass('collapsed-link')) {
-    jQuery(this).parent().next( '.expandable' )
-      .addClass('collapsed');
+    jQuery(this.id.replace('expand', '#expandable'))
+      .hide('blind');
     if (jQuery('.expandable-link').not('.collapsed-link').size() == 0) {
       var old_text = jQuery('.collapse-all').text();
       jQuery('.collapse-all')
@@ -133,8 +133,8 @@ function toggle_expandable_link() {
         .text( old_text.replace( 'collapse', 'expand' ));
     }
   } else {
-    jQuery(this).parent().next( '.expandable' )
-      .removeClass('collapsed');
+    jQuery(this.id.replace('expand', '#expandable'))
+      .show('blind', {}, 1000);
     if (jQuery('.expandable-link.collapsed-link').size() == 0) {
       var old_text = jQuery('.expand-all').text();
       jQuery('.expand-all')
@@ -143,4 +143,8 @@ function toggle_expandable_link() {
         .text( old_text.replace( 'expand', 'collapse' ));
     }
   }
+}
+
+function display_file_popup(url) {
+    jQuery.colorbox({href: url, width: '80%', height: '80%', iframe: true});
 }

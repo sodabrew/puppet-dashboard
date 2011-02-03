@@ -79,87 +79,142 @@ describe ReportsController do
     end
   end
 
+  describe "#diff" do
+    it "should use the baseline of the node associated with the report if baseline_type=self" do
+      report = Report.generate!(:host => "foo", :kind => "inspect")
+      baseline = Report.generate!(:host => "foo", :time => 1.week.ago, :kind => "inspect")
+      baseline.baseline!
+
+      get :diff, :id => report.id, :baseline_type => "self"
+      assigns[:baseline_report].should == baseline
+    end
+
+    it "should use the baseline of the node specified if baseline_type=other" do
+      report = Report.generate!(:host => "foo", :kind => "inspect")
+      baseline = Report.generate!(:host => "bar", :kind => "inspect")
+      baseline.baseline!
+
+      get :diff, :id => report.id, :baseline_type => "other", :baseline_host => "bar"
+      assigns[:baseline_report].should == baseline
+    end
+
+    it "should report an error if baseline_type=self and the current node does not have a baseline" do
+      report = Report.generate!(:host => "foo", :kind => "inspect")
+
+      get :diff, :id => report.id, :baseline_type => "self"
+      assigns[:diff_error_message].should_not be_nil
+    end
+
+    it "should report an error if baseline_type=other and the specified node's baseline doesn't exist" do
+      report = Report.generate!(:host => "foo", :kind => "inspect")
+
+      get :diff, :id => report.id, :baseline_type => "other", :baseline_host => "foo"
+      assigns[:diff_error_message].should_not be_nil
+    end
+
+    it "should report an error if baseline_type=other and the specified node doesn't exist" do
+      report = Report.generate!(:host => "foo", :kind => "inspect")
+
+      get :diff, :id => report.id, :baseline_type => "other", :baseline_host => "bar"
+      assigns[:diff_error_message].should_not be_nil
+    end
+  end
+
   describe "#search" do
     it "should render the search form if there are no parameters" do
       get('search')
       response.code.should == '200'
       response.should render_template("reports/search")
-      assigns[:files].should == nil
+      assigns[:matching_files].should == nil
+      assigns[:unmatching_files].should == nil
     end
 
     describe "when searching for files" do
       before do
         @matching_report = Report.create!(:host => "foo", :time => 1.week.ago.to_date, :status => "unchanged", :kind => "inspect")
         @matching_report.resource_statuses.create!(:resource_type => "File", :title => "/etc/hosts", :events_attributes => [{:property => "content", :previous_value => "{md5}ab07acbb1e496801937adfa772424bf7"}])
-        @matching_earlier_report = Report.create!(:host => "foo", :time => 10.weeks.ago.to_date, :status => "unchanged", :kind => "inspect")
-        @matching_earlier_report.resource_statuses.create!(:resource_type => "File", :title => "/etc/hosts", :events_attributes => [{:property => "content", :previous_value => "{md5}ab07acbb1e496801937adfa772424bf7"}])
-        @unmatching_report = Report.create!(:host => "foo", :time => 2.weeks.ago.to_date, :status => "unchanged", :kind => "inspect")
-        @unmatching_report.resource_statuses.create!(:resource_type => "File", :title => "/etc/sudoers", :events_attributes => [{:property => "content", :previous_value => "{md5}aa876288711c4198cfcda790b58d7e95"}])
-        @doubly_matching_report = Report.create!(:host => "foo", :time => 3.weeks.ago.to_date, :status => "unchanged", :kind => "inspect")
-        @doubly_matching_report.resource_statuses.create!(:resource_type => "File", :title => "/etc/hosts", :events_attributes => [{:property => "content", :previous_value => "{md5}aa876288711c4198cfcda790b58d7e95"}])
-        @doubly_matching_report.resource_statuses.create!(:resource_type => "File", :title => "/etc/sudoers", :events_attributes => [{:property => "content", :previous_value => "{md5}ab07acbb1e496801937adfa772424bf7"}])
+
+        @other_matching_report = Report.create!(:host => "bar", :time => 1.week.ago.to_date, :status => "unchanged", :kind => "inspect")
+        @other_matching_report.resource_statuses.create!(:resource_type => "File", :title => "/etc/hosts", :events_attributes => [{:property => "content", :previous_value => "{md5}ab07acbb1e496801937adfa772424bf7"}])
+
+        @unmatching_file_report = Report.create!(:host => "baz", :time => 1.week.ago.to_date, :status => "unchanged", :kind => "inspect")
+        @unmatching_file_report.resource_statuses.create!(:resource_type => "File", :title => "/etc/sudoers", :events_attributes => [{:property => "content", :previous_value => "{md5}ab07acbb1e496801937adfa772424bf7"}])
+
+        @unmatching_content_report = Report.create!(:host => "banana", :time => 1.week.ago.to_date, :status => "unchanged", :kind => "inspect")
+        @unmatching_content_report.resource_statuses.create!(:resource_type => "File", :title => "/etc/hosts", :events_attributes => [{:property => "content", :previous_value => "{md5}aa876288711c4198cfcda790b58d7e95"}])
       end
 
-      describe "in latest reports " do
-        describe "by title" do
-          it "should find the correct reports" do
-            get('search', :file_title => "/etc/hosts", :file_content => '')
-            assigns[:files].to_a.should =~ @matching_report.resource_statuses
-          end
-        end
-
-        describe "by content" do
-          it "should find the correct reports" do
-            get('search', :file_title => '', :file_content => "ab07acbb1e496801937adfa772424bf7")
-            assigns[:files].to_a.should =~ @matching_report.resource_statuses
-          end
-        end
-
-        describe "by both title and content" do
-          it "should find the correct reports" do
-            get('search', :file_title => "/etc/hosts", :file_content => "ab07acbb1e496801937adfa772424bf7")
-            assigns[:files].to_a.should =~ @matching_report.resource_statuses
-          end
+      describe "when both file title and content are specified" do
+        it "should return both matching and unmatching nodes" do
+          get('search', :file_title => "/etc/hosts", :file_content => "ab07acbb1e496801937adfa772424bf7")
+          assigns[:matching_files].to_a.should =~ @matching_report.resource_statuses + @other_matching_report.resource_statuses
+          assigns[:unmatching_files].to_a.should =~ @unmatching_content_report.resource_statuses
         end
       end
 
-      describe "in all reports " do
-        describe "by title" do
-          it "should find the correct reports" do
-            get('search', :file_title => "/etc/hosts", :file_content => '', :search_all_inspect_reports => true)
-            assigns[:files].to_a.should =~ @matching_report.resource_statuses + @matching_earlier_report.resource_statuses + [@doubly_matching_report.resource_statuses.first]
-          end
-        end
-
-        describe "by content" do
-          it "should find the correct reports" do
-            get('search', :file_title => '', :file_content => "ab07acbb1e496801937adfa772424bf7", :search_all_inspect_reports => true)
-            assigns[:files].to_a.should =~ @matching_report.resource_statuses + @matching_earlier_report.resource_statuses + [@doubly_matching_report.resource_statuses.last]
-          end
-        end
-
-        describe "by both title and content" do
-          it "should find the correct reports" do
-            get('search', :file_title => "/etc/hosts", :file_content => "ab07acbb1e496801937adfa772424bf7", :search_all_inspect_reports => true)
-            assigns[:files].to_a.should =~ @matching_report.resource_statuses + @matching_earlier_report.resource_statuses
-          end
-        end
-
-        describe "by title and negative content" do
-          it "should find the reports with files of this name that differ" do
-            get('search', :file_title => "/etc/hosts", :file_content => "ab07acbb1e496801937adfa772424bf7", :search_all_inspect_reports => true, :content_match => "negative")
-            assigns[:files].to_a.should =~ [ @doubly_matching_report.resource_statuses.first ]
-          end
-        end
-
-        describe "by title and negative content" do
-          it "should find the reports that don't contain any such files" do
-            get('search', :file_content => "ab07acbb1e496801937adfa772424bf7", :search_all_inspect_reports => true, :content_match => "negative")
-            assigns[:files].to_a.should =~ @unmatching_report.resource_statuses
-          end
+      describe "when only file content is specified" do
+        it "should not perform a search, and should add an error message" do
+          get('search', :file_content => "ab07acbb1e496801937adfa772424bf7")
+          assigns[:matching_files].should == nil
+          assigns[:unmatching_files].should == nil
+          flash[:errors].should include "Please specify the file title to search for"
         end
       end
 
+      describe "when the page first loads" do
+        it "should not perform a search, and should not add error messages" do
+          get('search')
+          assigns[:matching_files].should == nil
+          assigns[:unmatching_files].should == nil
+          flash[:errors].should be_empty
+        end
+      end
+
+      describe "when nothing is specified" do
+        it "should not perform a search, and should add error messages" do
+          get('search', :file_title => "", :file_content => "")
+          assigns[:matching_files].should == nil
+          assigns[:unmatching_files].should == nil
+          flash[:errors].should include "Please specify the file title to search for"
+        end
+      end
+    end
+  end
+
+  describe "#baselines" do
+    it "should sanitize the parameter given" do
+      hostname = %q{da\ng%erous'in_put}
+      report = Report.generate!(:host => hostname, :kind => "inspect")
+      report.baseline!
+
+      get :baselines, :term => hostname, :limit => 20, :format => :json
+      JSON.load(response.body).should == [hostname]
+    end
+
+    it "should return prefix matches before substring matches" do
+      Report.generate!(:host => "beetle"  , :kind => "inspect").baseline!
+      Report.generate!(:host => "egret"   , :kind => "inspect").baseline!
+      Report.generate!(:host => "chimera" , :kind => "inspect").baseline!
+      Report.generate!(:host => "elephant", :kind => "inspect").baseline!
+
+      get :baselines, :term => 'e', :limit => 20, :format => :json
+      JSON.load(response.body).should == ["egret", "elephant", "beetle", "chimera"]
+    end
+
+    it "should only return the requested number of matches" do
+      Report.generate!(:host => "egret"   , :kind => "inspect").baseline!
+      Report.generate!(:host => "chimera" , :kind => "inspect").baseline!
+      Report.generate!(:host => "elephant", :kind => "inspect").baseline!
+      Report.generate!(:host => "beetle"  , :kind => "inspect").baseline!
+
+      get :baselines, :term => 'e', :limit => 3, :format => :json
+      JSON.load(response.body).should == ["egret", "elephant", "beetle"]
+    end
+
+    it "should fail if the format is not json" do
+      get :baselines, :term => 'anything', :format => :html
+      response.should_not be_success
+      response.code.should == "406"
     end
   end
 

@@ -1,6 +1,7 @@
 --- !ruby/object:Gem::Specification 
 name: rspec-rails
 version: !ruby/object:Gem::Version 
+  hash: 31
   prerelease: false
   segments: 
   - 1
@@ -24,6 +25,7 @@ dependencies:
     requirements: 
     - - ">="
       - !ruby/object:Gem::Version 
+        hash: 27
         segments: 
         - 1
         - 3
@@ -38,6 +40,7 @@ dependencies:
     requirements: 
     - - ">="
       - !ruby/object:Gem::Version 
+        hash: 23
         segments: 
         - 1
         - 0
@@ -52,6 +55,7 @@ dependencies:
     requirements: 
     - - ">="
       - !ruby/object:Gem::Version 
+        hash: 213
         segments: 
         - 0
         - 3
@@ -66,6 +70,7 @@ dependencies:
     requirements: 
     - - ">="
       - !ruby/object:Gem::Version 
+        hash: 5
         segments: 
         - 2
         - 3
@@ -279,6 +284,7 @@ required_ruby_version: !ruby/object:Gem::Requirement
   requirements: 
   - - ">="
     - !ruby/object:Gem::Version 
+      hash: 3
       segments: 
       - 0
       version: "0"
@@ -286,13 +292,14 @@ required_rubygems_version: !ruby/object:Gem::Requirement
   requirements: 
   - - ">="
     - !ruby/object:Gem::Version 
+      hash: 3
       segments: 
       - 0
       version: "0"
 requirements: []
 
 rubyforge_project: rspec
-rubygems_version: 1.3.6
+rubygems_version: 1.4.1
 signing_key: 
 specification_version: 3
 summary: rspec-rails 1.3.2

@@ -293,7 +293,7 @@ body {
       body .section.error h3 {
         margin: -10px -10px .5em;
         padding: .5em 10px .5em 26px;
-        background: #ffcccc url("../images/icons/failure.png") 5px center no-repeat;
+        background: #ffcccc url("../images/icons/failed.png") 5px center no-repeat;
         color: #443333; }
       body .section.error p:last-child {
         padding-bottom: 0;
@@ -309,7 +309,7 @@ body {
       body .section.failure h3 {
         margin: -10px -10px .5em;
         padding: .5em 10px .5em 26px;
-        background: #ffcccc url("../images/icons/failure.png") 5px center no-repeat;
+        background: #ffcccc url("../images/icons/failed.png") 5px center no-repeat;
         color: #443333; }
       body .section.failure p:last-child {
         padding-bottom: 0;
