@@ -3,14 +3,9 @@
     = render 'report_title', :report => report
   - unless SETTINGS.enable_read_only_mode
     %ul.actions
-      - if report.kind == "inspect" and ! report.baseline?
-        %li= link_to "Make Baseline", {:id => report, :action => "make_baseline"}, :method => :put, :confirm => 'Are you sure?', :class => "button"
       %li= link_to 'Destroy', report, :confirm => 'Are you sure?', :method => :delete, :class => "delete button"
 
 .item
-  - if report.kind == "inspect" and Report.baselines.any?
-    .section
-      = render 'baseline_selector', :diffee => report
   - if report.resource_statuses.present?
     .section
       %h3

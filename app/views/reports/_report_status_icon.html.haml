@@ -1,8 +1,6 @@
 %span{:title => report ? report_title_text(report) : 'No reports'}
   - if report
-    - if report.baseline?
-      = icon(:baseline)
-    - elsif report.kind == "inspect"
+    - if report.kind == "inspect"
       = icon(:inspect)
     - else
       = icon(report.status)

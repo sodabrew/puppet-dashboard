@@ -75,8 +75,6 @@
       .section
         %h3
           Recent inspections
-          - if @node.baseline_report
-            = link_to "Baseline: #{@node.baseline_report.time}", @node.baseline_report
           %span.count== (#{@node.reports.inspections.count})
           - reports_limit = 10
         %table.inspector
