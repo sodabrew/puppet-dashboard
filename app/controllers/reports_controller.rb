@@ -37,35 +37,6 @@ class ReportsController < InheritedResources::Base
     end
   end
 
-  def diff
-    @my_report = Report.find(params[:id])
-
-    if params[:baseline_type] == "self"
-      @baseline_report = @my_report.node.baseline_report
-      @diff_error_message = "Node '#{@my_report.node.name}' does not have a baseline report set." unless @baseline_report
-    else
-      node = Node.find_by_name(params[:baseline_host])
-
-      if node
-        @baseline_report = node.baseline_report
-        @diff_error_message = "Node '#{params[:baseline_host]}' does not have a baseline report set." unless @baseline_report
-      else
-        @diff_error_message = "Node '#{params[:baseline_host]}' does not exist."
-      end
-    end
-
-    unless @diff_error_message
-      @diff = @baseline_report.diff(@my_report)
-      @resource_statuses = Report.divide_diff_into_pass_and_fail(@diff)
-    end
-  end
-
-  def make_baseline
-    report = Report.find( params[:id] )
-    report.baseline!
-    redirect_to report
-  end
-
   def search
     flash[:errors] = []
     inspected_resources = ResourceStatus.latest_inspections.order("nodes.name")
@@ -88,19 +59,6 @@ class ReportsController < InheritedResources::Base
         @matching_files = inspected_resources.by_file_title(@title).by_file_content(@content)
         @unmatching_files = inspected_resources.by_file_title(@title).without_file_content(@content)
       end
-    end
-  end
-
-  def baselines
-    if request.format == :json
-      limit = params[:limit].to_i
-      search_term = params[:term].gsub(/([\\%_])/, "\\\\\\1")
-      prefix_matches = Report.baselines.where(["host LIKE ?", "#{search_term}%"]).order("host ASC").limit(limit).map(&:host)
-      substring_matches = Report.baselines.where(["host LIKE ?", "%#{search_term}%"]).order("host ASC").limit(limit).map(&:host)
-      matches = (prefix_matches + substring_matches).uniq[0,limit]
-      render :text => matches.to_json, :content_type => 'application/json'
-    else
-      render :status => 406
     end
   end
 

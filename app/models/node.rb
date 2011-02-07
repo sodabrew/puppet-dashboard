@@ -16,7 +16,6 @@ class Node < ActiveRecord::Base
   has_many :reports, :dependent => :destroy
   belongs_to :last_apply_report, :class_name => 'Report'
   belongs_to :last_inspect_report, :class_name => 'Report'
-  belongs_to :baseline_report, :class_name => 'Report'
 
   named_scope :with_last_report, :include => :last_apply_report
   named_scope :by_report_date, :order => 'reported_at DESC'

@@ -42,8 +42,6 @@
     .section
       .header
         %h2 Nodes for this group
-      - if Report.baselines.any?
-        = render 'reports/baseline_selector', :diffee => @node_group
       - if @node_group.all_nodes.present?
         = render 'nodes/nodes', :nodes => @node_group.all_nodes, :container => @node_group
       - else
