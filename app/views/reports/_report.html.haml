@@ -3,9 +3,13 @@
     = render 'report_title', :report => report
   - unless SETTINGS.enable_read_only_mode
     %ul.actions
+      - Registry.each_hook :report, :actions do |thing|
+        = thing.call self, report
       %li= link_to 'Destroy', report, :confirm => 'Are you sure?', :method => :delete, :class => "delete button"
 
 .item
+  - Registry.each_hook :core, :report_view_widgets do |thing|
+    = thing.call self, report
   - if report.resource_statuses.present?
     .section
       %h3

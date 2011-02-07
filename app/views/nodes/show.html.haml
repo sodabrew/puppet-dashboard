@@ -71,6 +71,8 @@
                   .actionbar
                     = link_to "More &raquo;", reports_node_path(@node, :kind => "apply"), :class => 'button'
 
+    - Registry.each_hook :core, :node_view_widgets do |thing|
+      = thing.call self, @node
     - if @node.reports.inspections.count > 0
       .section
         %h3
