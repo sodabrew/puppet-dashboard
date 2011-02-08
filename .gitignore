@@ -26,3 +26,4 @@ tags
 tmp/*
 results/*
 certs
+vendor/plugins/puppet_*
