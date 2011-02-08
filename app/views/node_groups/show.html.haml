@@ -42,6 +42,8 @@
     .section
       .header
         %h2 Nodes for this group
+      - Registry.each_hook :core, :node_group_view_widgets do |thing|
+        = thing.call self, @node_group
       - if @node_group.all_nodes.present?
         = render 'nodes/nodes', :nodes => @node_group.all_nodes, :container => @node_group
       - else

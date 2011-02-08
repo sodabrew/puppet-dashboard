@@ -71,16 +71,14 @@
                   .actionbar
                     = link_to "More &raquo;", reports_node_path(@node, :kind => "apply"), :class => 'button'
 
+    - Registry.each_hook :core, :node_view_widgets do |thing|
+      = thing.call self, @node
     - if @node.reports.inspections.count > 0
       .section
         %h3
           Recent inspections
           %span.count== (#{@node.reports.inspections.count})
           - reports_limit = 10
-        - if @node.baseline_report
-          %h4
-            Baseline:
-            = link_to "#{@node.baseline_report.time}", @node.baseline_report
         %table.inspector
           %thead
             %tr

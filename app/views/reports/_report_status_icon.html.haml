@@ -1,8 +1,5 @@
 %span{:title => report ? report_title_text(report) : 'No reports'}
   - if report
-    - if report.kind == "inspect"
-      = icon(:inspect)
-    - else
-      = icon(report.status)
+    = icon(Registry.find_first_hook(:report, :status_icon) { |thing| thing.call(report) } || (report.kind == "inspect" ? :inspect : report.status))
   - else
     = icon(:error)
