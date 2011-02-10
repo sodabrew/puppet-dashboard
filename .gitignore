@@ -27,3 +27,4 @@ tmp/*
 results/*
 certs
 vendor/plugins/puppet_*
+db/schema.rb
