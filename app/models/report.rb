@@ -107,21 +107,6 @@ class Report < ActiveRecord::Base
 
   private
 
-  def resources_to_hash(resources)
-    hash = {}
-    resources.each do |resource_status|
-      hash[resource_status.name] = events_to_hash(resource_status.events)
-    end
-    hash
-  end
-
-  def events_to_hash(events)
-    events.inject({}) do |hash, event|
-      hash[event.property] = event.previous_value
-      hash
-    end
-  end
-
   def replace_last_report
     return unless node
 
