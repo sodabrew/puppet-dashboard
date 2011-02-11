@@ -28,3 +28,5 @@ results/*
 certs
 vendor/plugins/puppet_*
 db/schema.rb
+db/migrate/*_plugin__*.rb
+config/installed_plugins
