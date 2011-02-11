@@ -8,13 +8,15 @@ class Registry
   end
 
   def add_callback( feature_name, hook_name, callback_name, value = nil, &block )
-    if block and value
-      raise "Cannot pass both a value and a block to add_callback"
-    elsif @registry[feature_name][hook_name][callback_name]
-      raise "Cannot redefine callback [#{feature_name.inspect},#{hook_name.inspect},#{callback_name}]"
-    end
+    disallow_uninstalled_plugins do
+      if block and value
+        raise "Cannot pass both a value and a block to add_callback"
+      elsif @registry[feature_name][hook_name][callback_name]
+        raise "Cannot redefine callback [#{feature_name.inspect},#{hook_name.inspect},#{callback_name}]"
+      end
 
-    @registry[feature_name][hook_name][callback_name] = value || block
+      @registry[feature_name][hook_name][callback_name] = value || block
+    end
   end
 
   def each_callback( feature_name, hook_name )
@@ -40,5 +42,23 @@ class Registry
         hooks[hook_name] = Hash.new
       end
     end
+  end
+
+  private
+
+  def installed_plugins
+    @installed_plugins ||= Dir.open(File.join(File.dirname(__FILE__), '../config/installed_plugins')).to_a.reject { |f|
+      f =~ /^\./
+    }
+  end
+
+  def disallow_uninstalled_plugins
+    caller.each do |call_source|
+      if call_source =~ %r{/vendor/plugins/([^/]+)/}
+        plugin_name = $1
+        return unless installed_plugins.include? plugin_name
+      end
+    end
+    yield
   end
 end
