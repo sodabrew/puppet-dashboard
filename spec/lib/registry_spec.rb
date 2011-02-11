@@ -38,6 +38,37 @@ describe @registry do
       callbacks.first.call.should == "my block"
       callbacks.last.should == "foo bar baz"
     end
+
+    it "ignores calls from disabled plugins" do
+      @registry.stubs(:installed_plugins).returns(['foo'])
+      class << @registry
+        def caller
+          ['irrelevant/path.rb', '/x/y/z/vendor/plugins/bar/init.rb', 'other/irrelevant/path.rb']
+        end
+      end
+      @registry.add_callback(:test, :hook, "0_callback") { "my callback" }
+      callbacks = []
+      @registry.each_callback(:test, :hook) do |callback|
+        callbacks << callback
+      end
+      callbacks.should == []
+    end
+
+    it "allows calls from enabled plugins" do
+      @registry.stubs(:installed_plugins).returns(['foo'])
+      class << @registry
+        def caller
+          ['irrelevant/path.rb', '/x/y/z/vendor/plugins/foo/init.rb', 'other/irrelevant/path.rb']
+        end
+      end
+      @registry.add_callback(:test, :hook, "0_callback") { "my callback" }
+      callbacks = []
+      @registry.each_callback(:test, :hook) do |callback|
+        callbacks << callback
+      end
+      callbacks.length.should == 1
+      callbacks.first.call.should == "my callback"
+    end
   end
 
   describe "#each_callback" do
