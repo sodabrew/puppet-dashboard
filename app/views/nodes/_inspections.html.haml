@@ -1,0 +1,26 @@
+- if node.reports.inspections.count > 0
+  .section
+    %h3
+      Recent inspections
+      %span.count== (#{node.reports.inspections.count})
+      - reports_limit = 10
+    %table.inspector
+      %thead
+        %tr
+          %th.status
+          %th Reported at
+          %th Total
+          %th Runtime
+      %tbody
+        - node.reports.inspections.limit(reports_limit).each do |report|
+          %tr
+            = report_status_td(report)
+            %td= link_to report.time, report
+            %td= report.total_resources
+            %td= report.total_time
+      - if node.reports.inspections.count > reports_limit
+        %tfoot
+          %tr
+            %td{:colspan => 5}
+              .actionbar
+                = link_to "More &raquo;", reports_node_path(node, :kind => "inspect"), :class => 'button'

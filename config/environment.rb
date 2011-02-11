@@ -9,6 +9,8 @@ require 'active_support'
 
 require 'registry'
 
+require 'core_callbacks'
+
 Rails::Initializer.run do |config|
   config.gem 'rack'
   config.gem 'haml'
