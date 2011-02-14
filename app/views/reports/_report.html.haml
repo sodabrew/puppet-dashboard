@@ -8,58 +8,12 @@
       %li= link_to 'Destroy', report, :confirm => 'Are you sure?', :method => :delete, :class => "delete button"
 
 .item
-  - Registry.each_callback :core, :report_view_widgets do |thing|
-    = thing.call self, report
-  - if report.resource_statuses.present?
-    .section
-      %h3
-        Events
-        %a{ :href => '#', :class => 'expand-all' } (expand all)
-      .section
-        %dl.expandable-list
-          - report.resource_statuses.sort_by(&:time).each_with_index do |status, index|
-            %dt{:class => cycle( 'odd', 'even' )}
-              %div.expandable-list-item
-                - if status.events.empty?
-                  %span{:class => 'non-expandable-bullet'}= status.name
-                - else
-                  = link_to h(status.name), {}, {:class => 'expandable-link collapsed-link', :id => "expand-#{index}"}
-              - if status.file or status.line
-                = "(#{status.file}:#{status.line})"
-            %dd.expandable.collapsed{:id => "expandable-#{index}"}
-              %table
-                %tr
-                  %th Property
-                  %th Message
-                - status.events.each do |event|
-                  %tr{:class => "status #{event.status}"}
-                    %td= event.property
-                    %td= popup_md5s( h event.message )
-  .section
-    %h3 Log
-    .section
-      %table.inspector
-        %thead
-          %tr
-            %th Level
-            %th Message
-            %th Source
-            %th File
-            %th Line
-            %th Time
-        %tbody
-          - if report.logs.present?
-            = render :partial => 'puppet/util/logs/log', :collection => puppet_log_sorter(report.logs.compact)
-          - else
-            %td.empty{:colspan => 6}
-              = describe_no_matches_for 'log messages', :report
-  .section
-    %h3 Metrics
-    - if report.metrics.present?
-      - report.metrics.group_by(&:category).sort.each do |category, metrics_in_category|
-        .section
-          %h4= category.titleize
-          %table.inspector
-            = render :partial => 'metrics/metrics_table', :locals => {:metrics => metrics_in_category}
-    - else
-      &mdash; No metrics in this report &mdash;
+  - Registry.each_callback :core, :report_view_widgets do |widget|
+    = widget.call self, report
+  - # 500_baseline
+
+  - # 600_resource_statuses
+
+  - # 700_log
+
+  - # 800_metrics
