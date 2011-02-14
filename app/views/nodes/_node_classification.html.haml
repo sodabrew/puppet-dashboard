@@ -1,0 +1,6 @@
+- if SETTINGS.use_external_node_classification
+  = render 'shared/parameters', :resource => node
+  = render 'shared/groups', :resource => node
+  = render 'shared/classes', :resource => node
+
+%br.clear

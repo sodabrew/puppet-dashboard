@@ -1,0 +1,8 @@
+.section
+  %h3 Dashboard activity
+  - unless node.timeline_events.empty?
+    %ol.timeline= render node.timeline_events.recent(10)
+  - else
+    = describe_no_matches_for :activity
+
+%br.clear
