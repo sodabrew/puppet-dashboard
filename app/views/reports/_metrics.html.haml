@@ -1,0 +1,10 @@
+.section
+  %h3 Metrics
+  - if report.metrics.present?
+    - report.metrics.group_by(&:category).sort.each do |category, metrics_in_category|
+      .section
+        %h4= category.titleize
+        %table.inspector
+          = render :partial => 'metrics/metrics_table', :locals => {:metrics => metrics_in_category}
+  - else
+    &mdash; No metrics in this report &mdash;

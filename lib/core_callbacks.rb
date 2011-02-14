@@ -1,3 +1,4 @@
+# Node view widgets
 Registry.add_callback :core, :node_view_widgets, "100_description" do |view_renderer, node|
   view_renderer.render 'nodes/description', :node => node
 end
@@ -20,4 +21,17 @@ end
 
 Registry.add_callback :core, :node_view_widgets, "700_activity" do |view_renderer, node|
   view_renderer.render 'nodes/activity', :node => node
+end
+
+# Report view widgets
+Registry.add_callback :core, :report_view_widgets, "600_resource_statuses" do |view_renderer, report|
+  view_renderer.render 'reports/resource_statuses', :report => report
+end
+
+Registry.add_callback :core, :report_view_widgets, "700_log" do |view_renderer, report|
+  view_renderer.render 'reports/log', :report => report
+end
+
+Registry.add_callback :core, :report_view_widgets, "800_metrics" do |view_renderer, report|
+  view_renderer.render 'reports/metrics', :report => report
 end
