@@ -35,3 +35,10 @@ end
 Registry.add_callback :core, :report_view_widgets, "800_metrics" do |view_renderer, report|
   view_renderer.render 'reports/metrics', :report => report
 end
+
+# Report status icon
+Registry.add_callback :report, :status_icon, "750_inspect_report" do |report|
+  if report.kind == "inspect"
+    :inspect
+  end
+end
