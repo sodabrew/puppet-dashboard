@@ -81,3 +81,7 @@ License: MIT
 Files: vendor/rails
 Copyright: (c) 2004-2009 David Heinemeier Hansson <david@loudthinking.com>
 License: MIT
+
+Files: public/images/icons
+Copyright: (c) 2005 Mark James <mjames@gmail.com>
+License: Creative Commons Attribution 3.0 License
