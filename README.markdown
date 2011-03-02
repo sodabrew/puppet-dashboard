@@ -99,7 +99,7 @@ Installation
 
     3.  Download the most recent release of Puppet Dashboard, extract it and move it to your install location (this may be different on your system).  This options makes upgrading more difficult since you'll have to manually manage files when upgrading, but may be a good option if you want to avoid repository setup or using git and just want to try out dashboard.
 
-           wget --no-check-certificate https://github.com/puppetlabs/puppet-dashboard/tarball/v1.0.4 
+           wget --no-check-certificate https://github.com/puppetlabs/puppet-dashboard/tarball/v1.0.4
            tar -xzvf puppetlabs-puppet-dashboard-v1.0.4-0-g071acf4.tar.gz
            mv puppetlabs-puppet-dashboard-071acf4 /usr/share/puppet-dashboard
 
@@ -421,6 +421,15 @@ In order to connect to the inventory service you will need to configure auth.con
     path /inventory
     method search
     allow dashboard
+
+Icons
+-----
+
+Puppet Dashboard uses Mark James' fine [Silk icons](http://www.famfamfam.com/lab/icons/silk/).
+
+Thanks, Mark!
+
+
 
 Contributors
 ------------
