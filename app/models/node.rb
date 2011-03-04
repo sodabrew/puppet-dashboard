@@ -78,7 +78,7 @@ class Node < ActiveRecord::Base
       map {|param| "facts.#{CGI::escape param["fact"]}.#{param["comparator"]}=#{CGI::escape param["value"]}" }.
       join("&")
 
-    url = "https://#{SETTINGS.inventory_server}:#{SETTINGS.inventory_port}/production/inventory/search?#{query_string}"
+    url = "https://#{SETTINGS.inventory_server}:#{SETTINGS.inventory_port}/production/facts_search/search?#{query_string}"
     matches = JSON.parse(PuppetHttps.get(url, 'pson'))
     nodes = Node.find_all_by_name(matches)
     found = nodes.map(&:name).map(&:downcase)
