@@ -31,6 +31,9 @@ ca_port: 8140
 # Key length for SSL certificates
 key_length: 1024
 
+# The "inventory service" allows you to connect to a puppet master to retrieve and node facts
+enable_inventory_service: false
+
 # Hostname of the inventory server.
 inventory_server: 'puppet'
 
