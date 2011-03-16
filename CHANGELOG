@@ -1,3 +1,237 @@
+v1.1.0rc1
+=========
+1fcfc01 (#6736) Provide Mutex, avoid an error.
+95f97fb maint: Move inventory section lower on the node page
+8629962 (#4403) Do timezone arithmetic outside of the DB in the Status model
+614655c Remove dead code from Status model
+849f2de Validate the user supplied daily_run_history_length
+118962b (#6656) Inventory service is no longer experimental.
+90e0624 (#6601) Inventory search uses the new inventory URL
+fb55499 (#5711) Change license from GPLv3 to GPLv2
+68b335e (#5234) Source of silk icons attributed, per author's license
+d3d1528 Maint: Moved logic for identifying inspect reports into a callback.
+c2fe255 Maint: removed bogus comments from _report.html.haml
+81b8a04 Maint: Moved elements of the report "show" view into callbacks.
+2b91838 Maint: Moved elements of the node "show" view into callbacks.
+cc95431 Maint: Forbid uninstalled plugins from adding themselves to hooks.
+169d275 Maint: Add plug-in install and uninstall rake tasks
+d4d0b00 Maint: removed db/schema.rb
+5f6614d Maint: Removed some private methods in the report model that are part of baseline functionality.
+db663a5 Maint: remove code that belongs in the "baseline" module.
+5be1f0f maint: Added log dir to version control
+93857f0 Maint: Add puppet plugins to .gitignore
+1197e8a Bug fix: renamed each_hook and find_first_hook to *_callback
+cbfde3d Remove some forgotten baseline code
+2b4f9eb Add some basic hooks for use by future Dashboard plug-ins.
+c9ff13e Add a registry for creating hooks and callbacks.
+a40e6c9 Oops: Remove report baseline functionality
+fd7f799 Rename baseline-diff-report CSS classes and IDs to be expandable-list
+161e0da (#6090) Improved auto-selection of "specific baseline".
+035aa17 (#6072) Moved baseline inspection link underneath "Recent Inspections"
+613a465 (#6095) Render proper error messages when diffing against a baseline that can't be found
+ea2368f (#6069) Fixed unique ids in the report group diff view.
+3426763 maint: Use new factory_girl syntax to improve a test
+1862966 maint: Refresh the vendored gem specifications
+79a23c9 maint: replace object_daddy with factory_girl
+b6b17e5 maint: Fix a case where the alphabetically first baselines may not appear
+f5d0bbe Maint: Moved colorbox.css and image files to be compatible with production environment
+989fb4a (#5869) Extract baseline selector into a partial
+f666476 (#5869) Add new baseline selector to the node group page
+5e0d448 (#5869) Rework the baseline selector for report show page
+6fef8e7 (#5869) Add a /reports/baselines action to retrieve baselines
+5e7f8cb maint: add a view test to motivate reverting diff expand_all
+f5ac259 maint: Added combobox widget, to replace autocomplete plugin
+9da052f maint: upgraded jquery-ui to 1.8.9
+80c182c Maint: Add JQuery UI animation to expand/collapse widgets.
+efefe3d (#6024) Show filebucket popup on diff screen, too
+1c3c134 (#6024) Click md5s to popup file bucket contents on reports
+f1bed8f maint: Privatize string helper
+2112ba1 (#5865) Further improvements and bug fixes to the "search inspect reports" page
+d0cda86 Revert "Maint: Removed show_expand_all_link variable"
+57589a4 (#5785) Removed some redundancy from report view.
+353998f Maint: Removed show_expand_all_link variable
+de8ee46 (#5867) Add ability to diff a node_group against a single baseline
+7ca4d59 (#5867) Only show baseline comparison UI when there are baselines
+43e45d4 (#5867) Order nodes by name on node_group diff-against-baseline page
+475c5b5 (#5171) Added a user interface for viewing file content differences
+3bd69e9 (#5865) Rework search reports page
+4f752f4 (#5866) Get a consolidated report for baseline diffs in a group
+1dba2cf (#5866) Split dividing diff into pass and fail into a method
+e2c2d9a maint: Fixing bad view logic related to enable_read_only_mode
+90d9fe1 maint: Remove unused, user related views
+7cd677d (#5880) Renamed diff_summary to diff now that there is a single view for all diffing.
+583880f (#5880) Redesigned UI for diffing inspect reports
+68657bd (#5865) Search for files differing from the expected checksum
+cca236b (#5171) Allow Dashboard to contact a file bucket server for file diffs
+ff1d4de Maint: made PuppetHttps.get handle errors
+9bf6803 Maint: check that report deserialization fills in change_count
+459e588 (#5900) Added missing migration
+3caf9e3 (#5900) Added support for the resource status "failed" attribute in reports.
+e5d5f9b (#5889) Add pagination to the file search page
+7cd5d39 (#5863) Inspect report search defaults to only searching the most recent report
+2ca98d4 (#5863) inspect and apply reports are allowed to happen at the same timestamp
+025de25 (#5863) rename latest_report to latest_apply_report
+34ba970 maint: Add the certs directory to .gitignore
+9c71d31 (#5874) Git rid of unused assignments and services tables and models
+554cc21 (#5744) Change large columns from string to text
+54421c8 (#5864) Display "no results" if a file search returns an empty list.
+8d76938 (#5861) Make a enable_read_only_mode setting
+48c04cf maint: Remove redundant will_paginate plugin, and just use the gem
+4c1a5e8 maint: Fetch metrics all at once on reports index page
+862235c maint: Make pagination only appear when needed
+bcd85dd (#5540) Inspect reports no longer affect the status of a node
+2b4a664 (#5540) Make run time chart only consider 'apply' reports
+faa7251 (#5540) Make daily run status chart only consider 'apply' reports
+e0ffd79 (#5540) Do not allow 'apply' reports to be made baselines
+5b56960 (#5540) Split report tables into inspect and apply
+9cd5a5a (#5540) Require a kind for reports
+c5af8e5 (#5172) Add link to reports search page
+85aedfc (#5172) Add a page for searching reports
+3e1e241 (#5172) Add a route and controller action for searching reports by file title/content
+f05d3ea (#5172) Add scopes for finding resource_statuses by file title/content
+bf00c35 (#5743) Fix problems with supporting report_format 2
+890c0b6 (#5743) Added resource_statuses' skipped attribute to the database.
+3a151f7 (#5743) Added a test to verify that failed reports don't have a bogus time/total metric added to them when they are transformed from format 1 to 2.
+cc17ae0 (#5743) Cleaned up code for detecting status of reports when translating format 1 to format 2.
+c3ed82f (#5743) Made the report format 1->2 transformer convert metric names to strings.
+360b896 (#5743) Removed tags from resource_events, since they were redundant.
+7f25ea8 (#5743) Added audited and historical_value to the schema for reports and updated the report format 1->2 transformer to create these attributes.
+bf26cc6 (#5743) Removed source_description from resource_statuses and events in both the report hashes and in the database.
+e7f0102 (#5743) Removed resource_type and title from to_hash for format 0 and 1 reports, added to the format 1->2 report transformer.
+5677d56 (#5743) Added out_of_sync_count to the schema and to the 1->2 report transformer.
+5c3febf (#5743) Tested that the report format 1->2 transformation converts kind correctly.
+39331ff (#5743) Tested that the report format 1->2 conversion sets puppet_version properly.
+2a7b3c2 (#5743) Test that the format 1->2 report transformation handles configuration_version properly.
+a100e8f (#5743) Added to the report version 0->1 transformation to add puppet version information to logs.
+d9ec962 (#5743) Created the mixins for interpreting reports in format 2.
+fafa062 (#5743) Removed kind, configuration_version, and puppet_version from the hash reperesentation of version 1 reports, since these reports don't contain those attributes.
+f0f4bd1 (#5743) Changed resource_statuses to be represented as a hash internally while transforming reports.
+73f62c4 (#5743) Added log version to the hash for version 0 and 1 reports.
+36f3d3b (#5743) Added resource_status version to the hash for format 1 reports.
+4cbe8e5 (#5743) Removed kind, puppet_version, and configuration_version from the hash generated from format 1 reports, since those fields are not present in format 1 reports.
+665c67d (#5743) Removed dead code.
+089c37e (#5743) Add puppet_version, configuration_version, and kind to the 0->1 report transformer.
+4bae7ff (#5743) Remove kind, puppet_version, and configuration_version from the hash generated by 0.25.x reports, since those fields weren't present in 0.25.x reports.
+87be419 Prep work for #5743.  Test version and status inference.
+346d597 Prep for work on #5743.  Removed all pending spec tests.
+627612c (#5725) Update schema.rb to reflect the removal of the user table
+98813af maint: report title is a partial
+723b369 (#5174) Colorize diffs
+beeb45c (#5174) Unchanged resources appear on diff page
+a004a65 (#5174) UI to choose a baseline to diff against
+1e72aa4 (#5174) named scope to find baseline reports
+88cac05 (#5174) added named scopes to separate apply and inspect reports
+5338ace (#5174) add images for baseline and inspect
+91f74a1 (#5174) make_baseline action is exposed in UI
+9cf443a maint: 2.6 reports should respect @kind if they have it
+a9251c4 (#5174) Node has a Baseline Report
+52ab849 (#5739) Removing unused vendored plugin resources_controller
+50efbba (#5739) Removing unused vendored gem stringex
+686115b (#5739) Removing unused vendored gem has_scope
+5d6b148 (#5739) Removing unused vendored plugin jrails
+ed3285a (#5725) Remove user related code
+a5a4140 Fix #5573.  Diff now handles missing resources/properties.
+5e2e060 (#5493) Use the hash version of reports to create Reports
+02ae643 (#5493) Implemented ReportTransformer to bring reports to the latest format
+4a959fd (#5493) Added Puppet::Transaction::Report#to_hash method
+5d4ad28 maint: Don't recommend development head for installation
+4c279f2 (#5535) Rake task to migrate old database yaml to the new reports schema
+9343788 (#5543) Fix rake reports:import task
+c3232ac maint: group create_from_yaml tests
+191d8a9 maint: Remove dead metric view code.
+5012cbf maint: Get rid of generate_for usage and method
+26f8412 (#5459) Use resource_status.name method
+73179fb (#5459) Correctly retrive total_time
+dbe0958 (#5459) Fix rake db:seed to use new create_from_yaml
+bbd0a39 (#5459) Modify the slow success migration not to be slow
+200800b (#5459) Handle errors in report upload
+a68cd27 (#5459) Added a test of resource_status.name
+b4c6166 (#5459) Added a test of importing 0.25 reports
+027c914 (#5459): Make create_from_yaml transactional
+b0d651c (#5459) Convert from yaml in the report column to a schema
+32717c3 maint: removed unnecessary REPORTS_META constant
+fe3db03 maint: Rename failed? and changed? to not conflict with ActiveRecord methods
+bd5f4aa maint: remove unused formats for reports/nodes
+8b6557a (#5361) Add a new /reports/upload URL, and optionally disable old url
+810cd6a (#5170) Screens for diff and diff summary
+edca51f (#5174) Add a method to allow reports to be diffed
+6ea9305 (#4972) Add Rake task for creating the release tar-balls
+271fa63 (#5116) Add spec for PagesController#home
+55817ed (#5116) Fixed unreported nodes displaying as recently-reported
+2b2a34d (#5116) Add specs for hiddenness
+10e79c7 (#5116) Add ability to hide nodes
+d0c1fa3 (#5379) Reset SETTINGS to defaults before every test
+20beefa maint: Fix HTML table structure
+b182574 Feature #5142 Per-Page parameter
+796f83b Maint: Removed accidental duplication in Debian packaging
+609f7ff (#5116) Clean up specs for NodeController
+210d6a2 Added Ubuntu dist to changelog to update packaging
+9805a7a Feature #5117: custom_logo_url will replace the Puppet Dashboard logo
+9debd16 (#4623) Sort timeline_events in the order they were created
+3c48dad (#4623) Define comparator for NodeGroup and NodeClass
+d837e01 maint: Suppress ActiveSupport deprecation warnings
+2ebcfd2 maint: Remove useless test
+001c9c6 (#5120) Disable editing nodes when external node classification is disabled
+9f5a081 maint: Remove dead code and cleanup whitespace
+e3010ac (#4401) Modified status query to use the Rails time zone
+6b2143f (#4601) Fixes table rendering on group/class/node pages
+6605aea (#4661) Fix broken specs for shared behaviors
+ad7a1c1 (#4661) Classes/groups/nodes are now sorted appropriately
+c0080fe (#4605) Renamed date_format setting to datetime_format and added separate date_format.
+11e883a (#4475) Fixed documentation for passing environment variables to the external node script
+66207f4 maint: Fix setting dependent spec
+d2b37e4 (#4605) Fix timezone issues with chart grouping and start
+0db778d (#4605) Allow date_format to be set in settings.yml
+bc12011 (#4605) Tests for the time_zone setting
+047510b (#4605) Added Time zone setting to settings.yml.
+8748389 (#3435) Fix broken migration
+3f5b59f (#5278) Settings will now individually fallback to values in settings.yml.example
+faf7612 (#5278) Remove unused arguments to SettingsReader.read
+a00b741 (#5278) Rename settings-sample.yml to setting.yml.example
+3d9dda0 (#5278) Add specs for existing settings functionality
+47c88f5 Refine #4475 Add environment variables for all external_node settings
+1b9639a Feature #4475 Configurable URL in external_node script
+fa14898 (#4881) Added daily_run_history_length setting
+080912a (#4881) Add a spec for the daily run history partial
+3805872 (#3435) Add Node model stub to make migration safer
+7f0ab7b (#4474) Add setting to disable node classification
+7f4d692 Maint: Move "Local-branch:" info below "---"
+37218fb (#4874) Add setting for no_longer_reporting_cutoff
+1cff89c (#3435) Reports now have "changed/unchanged" as statuses
+07ccbc4 Maint: add "Local-branch:" info to mails sent by "rake mail_patches"
+506190f (#4345) Modified README to include workaround for Puppet bug #5244.
+6dc4b0c maint: require activesupport from config/environment.rb
+806aa69 (#4553) Add log rotation to config/environment.rb
+44f27c6 (#4620) Never reported nodes are not considered failing
+3b4a218 (#5104) Failed catalog compiles now report as failed
+2fd983a (#4636) Add file/line to log and event messages
+ba91e32 (#4514) Add table of resource events to report view
+3b6061c (#4514) Support total time for 2.6 reports
+b9cf649 (#4514) Support config retrieval time for 2.6 reports
+5e1ec78 (#4688) Update README to explain SSL configuration
+f145e31 (#4688) Add HTTPS support to bin/external_node
+5aeb60f maint: rename cert rake tasks to be in the "cert" namespace
+fe2cc2b (#4688) Include example SSL settings for apache
+4f45405 Maint: Remove delegation from PuppetHttps to Settings
+c0cf881 (#4688) Get CA cert and CRL list as part of cert rake tasks
+254397f (#3531) Moved node/group methods to NodeGroupGraph
+ba93b70 (#3531) Rename "list" methods and remove unused methods/files
+cadccc4 (#3531) Don't leave source for params/groups/classes blank
+d831eaf (#3531) Remove unused NodeGroupCycleError file
+854b7e2 (#3531) Show sources for nodes/group/classes/parameters
+7322d79 (#3531) Add helper methods for dealing with the node group graph
+35042e0 (#5199) Add setting to disable the inventory service features
+1c1c097 (#5133) Document auth.conf security for inventory service
+c1e6b88 (#2986) Add node search based on facts
+8391463 (#2933) Add missing partial for facts
+62409a3 (#2933) Add table of facts to node pages
+053319e Tightened up permissions on the public/private key pair that is used to contact the master.
+263f2b0 (#4604) Dashboard now has a place for site-specific settings
+e193f9f (#5133) Made Dashboard able to fetch node facts from inventory REST API.
+a196fd2 (#5149) Added rake tasks to manage certificate and public/private key pair
+dfb7b1b (#4880) Fixed validation of new reports
+1e43615 [#4541] Route to nodes using id instead of name.
+
 v1.0.4
 ======
 071acf4 Bump VERSION to v1.0.4.
