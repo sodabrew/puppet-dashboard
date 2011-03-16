@@ -8,14 +8,6 @@ class Status
     @start = Time.zone.parse(datum["start"])
   end
 
-  def self.latest(options={})
-    by_interval(options.merge(:limit => 1)).first
-  end
-
-  def self.recent(options={})
-    by_interval options.merge(:start => 1.hour.ago)
-  end
-
   # Returns an array of Statuses by date for either a :node, or :nodes or all nodes in the system.
   #
   # Options:
@@ -25,7 +17,6 @@ class Status
   # * :limit => Limit the number of records to return.
   def self.by_interval(options={})
     return [] if options[:nodes] && options[:nodes].empty?
-    interval = 1.day
 
     # WARNING: This uses the local server time, regardless of what is set in the Rails config.
     # This should be changed once we have a user-friendly settings file, or can get the browser
