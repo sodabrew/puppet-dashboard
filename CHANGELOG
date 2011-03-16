@@ -1,3 +1,205 @@
+v1.0.4
+======
+071acf4 Bump VERSION to v1.0.4.
+036aea9 (#4513) Fix and improve package task documentation.
+e281f7b (#4513) Add support for specifying the signing key id in the deb packaging rake task
+b000539 (#4513) Output the full file path to the built packages in the packaging rake tasks.
+143c454 (#4513) Update all references to ~/.rpmmacros controlled dirs to use rpm_macro_value
+b26d25e (#4513) Add helper to resolve rpm macros for packaging rake tasks
+4c6d1bf (#4513) Improve `rake package:deb package:rpm` to not use Rails environment.
+60b8eef Bump VERSION to 1.0.4rc2.
+4f48308 Updated RELEASE_NOTES for v1.0.4rc2.
+dacb309 (#4878) Improve efficiency of database query counting nodes.
+ea4355e Fix 'debian/rules' to install the 'bin' directory.
+2547e6a Fix 'redhat/puppet-dashboard.init' restart functionality.
+54a5d4f Fix 'debian/postinst' symlink handling of 'database.yml'.
+b9aee6f Fix debian/init script to not include stray "-dashboard" argument.
+9adfac7 Improve .rpm's init script to display 'status' in help
+677c9e5 (#4878) Improve efficiency of database query counting nodes.
+cfd1203 (#4877) Add rake task to optimize database tables.
+252403b (#4876) Document tips for improving performance.
+f66ff97 (#4879) Use common method to fetch node in NodesController.
+6c12e6c (#4513) Fix permissions on Red Had based systems
+d4b1f8d (#4513) Create a working init script for Red Hat based systems
+abeab6f (#4513) Update database.yml handling on Debian based systems
+bc5187b (#4513) Fix duplicated files in Debian packaging
+e87171a Bump RPM spec file's version so that `rake package:rpm` builds.
+309ff56 Added RELEASE_NOTES.md to `rake package:rpm` documents.
+d795074 Fixed RPM spec file to use more compatible way of detecting user.
+eafdabc Fixed `rake package:create_rpmmacros` path declarations.
+28cc0b1 Add documentation for `rake package:rpm` UNSIGNED option.
+c0d4e33 Correct typo in `rake package;deb` instructions.
+a72026f [#4513] Advertise UNSIGNED "option" to package rake tasks, on build failure.
+e166c69 (#4825) Fix raw "favicon.ico" URL, which breaks if app is mounted in subpath.
+c34304c (#4811) Fix raw URLs, which break when web app is mounted in a subpath.
+24c1abc [#4513] Add default file and init script for Debian
+2b54124 [#4513] Clean up README_PACKAGES.markdown
+aa5bc45 [#4513] Update RPM .spec file to add missing installation files
+7560242 [#4513] Minor clean-ups to RPM .spec file
+88fd0a7 [#4513] Update RPM .spec to mark config/database.yml as a config file.
+4ed8ba6 [#4513] Update Red Hat init script to start as puppet-dashboard user
+3dfa63e [#4513] Update RPM .spec to create a user & group, and set proper permissions.
+05e1167 [#4513] Update RPM .spec install section to use $RPM_BUILD_ROOT
+94ed2ee [#4513] Update Requires in RPM .spec
+3e03caf [#4513] Add tasks for RPM packaging.
+a452733 [#4513] Move clean working-tree check into "helper" task, and clean it up.
+9384bc3 [#4357] Add reports database index to improve performance.
+d451af4 [#4801] Fix exception in node's report listing.
+406152b Remove unused vendored gem.
+5a4e606 Fixed #4757 - Added rake mail_patches task to dashboard
+1dcd751 [#4794] Fix timezone shown in views.
+7046596 [#4791] Add a rake task to require the ci_reporter gem
+453ca3c Bump VERSION to 1.0.4rc1
+4b3fa06 Fix typos in RELEASE_NOTES.
+efc8921 [#4766] Replace 'reductivelabs' with 'puppetlabs' in documentation.
+aebebf1 [#4767] Fix migrations for Ruby 1.8.5 and earlier.
+abb87cf [#4562] Updated release notes to include recently-merged changes.
+131b0d8 [#4764] Add example "libdir" usage to the documentation.
+9b21691 Remove spurious trailing whitespace in spec tests.
+43722c7 [#4663] Change all `before` blocks in spec tests to be `before :each do`
+b04a886 [#4679] Remove duplicate group, and class memberships.
+32efb9d [#4639] Improve README's suggested shell and gem.
+a931797 Standardize whitespace used for indentation, and wrap longer code lines
+1e1dce8 [#4639] Update rubygems installation instructions to be sh compatible.
+027cce9 [#4734] Update instructions for enabling EPEL on CentOS 5
+cd1167c Fix failing specs for Node{Group,Class}#show views.
+ac47b51 [#4513] Fix ".deb" packaging and docs. Add `rake package:deb` task.
+fa12363 Remove unwanted ".bak" and "~" files.
+7044687 [#4677] Add "Report:" header prefix and realign "Node:".
+b82826a [#4677] Add resource type to header in #show for Node, NodeClass, and NodeGroup
+c38b94a [#4662] Add Jacob Helwig to contributor list.
+f1c1256 [#3470] Fix Node#available_node_classes specs by clearing database.
+c5fb09b [#3470] Improve specs by describing number of items expected.
+08f6ce5 [#3470] Update token autocompletion interface to match previous styling.
+5f8110f [#3470] Re-add support for node_class_names & node_group_names to NodeClass, and Node
+e66845f [#3470] Add find_from_form_* class methods to NodeClass & NodeGroup
+f6561f9 [#3470] Move class/group validation for Node, and NodeGroup to before_validation
+cefc5e6 [#3470] Remove unused fcbkcomplete JavaScript, and CSS
+73ddfa5 [#3470] Switch class, and group tokenizer/autocomplete to use new JavaScript library.
+ea44390 [#3470] Add a view helper to tokenize input fields
+9d2ced9 [#3470] Change default CSS classes for jquery.tokeninput.js
+1094127 [#3470] Tokenizer: Select current token on blur
+dd60488 [#3470] Tokenizer: Add "space" to the list of keys to select token
+d701b6f [#3470] Tokenizer: Use jQuery's "each", instead of "for(i in foo){...}"
+b6268cd [#3470] Whitesace fixups for jquery.tokeninput.js
+8524ef8 [#3470] Add new tokenizer JavaScript for use with classes and groups.
+15c6267 [#3470] Add jQuery UI library in preparation for switching autocomplete librarires.
+3000d66 [#4574] Fixed spec to reflect changes to external node errors
+bf8a376 [#4574] The external node tool will now receive and print error messages
+e40c094 [#4618] Refactor Node#assign_last_report and improve related spec.
+fcf9b83 [#4625] Fix NodeClassesController#index view to only show footer once.
+0561eed [#4625] Reformat code, add whitespace and include more inline documentation.
+cc39ba7 Add setup and usage documentation to watchr.rb.example.
+54471b4 Add a sample watchr file for continuous testing.
+8124c51 [#4625] Moved pagination from views into controllers
+e0adddf Add an example rcov.opts file
+63474b4 [#4618] Deleting the most recent report for a node now finds the previous report
+eeac9ee [#4622] Remove unused Node#environment method.
+a3a54f0 [#4621] Remove unnecessary TimelineEvent query on homepage.
+e50c7f3 [#4617] Fix label on node run time graph
+d042489 [#4578] Add specs describing how to show nodes that don't exist.
+48de593 [#4578] Node classifier properly returns an empty node when node not found
+fcf28ae Updated packaging information
+e4e02d1 [#4571] Rename incorrectly-named views and specs. Improve and add view specs.
+5c17c40 [#4571] Improve helpers for displaying "no matches" messages.
+b4a485f [#4503] Class names are allowed to start with a number
+f272f01 [#4571] Fix and improve views.
+60c14a0 Updated VERSION and RELEASE_NOTES for r1.0.4.
+fba9b23 [#4503] Fix NodeClass#name validation regexp to be more like Puppet's.
+5045a12 [#4520] Fix letter case of sidebar buttons to: "Add class" and "Add group".
+a7e8f21 [#4403] Fixed missing space in Status::by_interval SQL query.
+698b009 [#4543] Added error messages to class new/edit forms
+d7c7e6e [#4543] Node classes now use their edit form
+2b94287 [#4403] Refactor and improve documentation for Status::by_interval.
+fa635e8 [#4511] Improve nodes/edit view spec.
+1914ba5 [#4403] Run failure chart now shows the correct reports
+7f7f45d [#4531] Reports now use "time" where they used "created_at"
+9a431ed [#4511] Changing a node name to empty no longer crashes the page
+1f15007 [#4187] Remove unnecessary #return statements.
+d4e327f [#4503] Fix NodeClass validation message and specs.
+2ac5ff4 maint: Spell check, formatting and clarifications of README.
+dcbf778 [#4470] Improve `rake reports:prune` usage message.
+a0c254c [#4187] Improve validation messages and clarify validation return values.
+779ec92 [#3298] Add warnings explaining truncation bug and how to re-import reports.
+7cf6e9e [#4470] Fix which reports to prune, improve documentation and refactor.
+000c79a [#4470] Make 'rake reports:prune' friendlier
+a912cf6 [#4008] Fixed group parameter inheritance
+3baf3f6 maint: More README changes, mostly formatting, based on Igal's feedback
+9ada6bd maint: Making README style changes based on feedback form Igal
+1197fa7 [#4455] Document ownership requirements for the install directory
+3895f1e [#4469] Add documentation for upgrading
+69acf11 [#4492] Documentation to find the log files to help with debugging
+55d4ece [#4470] Documentation for pruning reports
+341dba5 Change index on reports(node_id) to reports(node_id,success)
+1cef2a5 Remove unnecessary report loading from pages controller
+caa9f0e [#4503] Make the class name regex more like puppet's
+4951ad5 [#3298] Add a line to the migration to remove truncated reports
+9b630ab [#3298] Test that you can have large report field without truncation
+c96357e [#3298] Increase the size of the reports.report column from 64k to 16mb
+8862372 [#4421] Delete reports.yml from version control
+6766d0e [#4417] .gitignore should have "public/stylesheets/all.css", not all.js
+6cd4e1a [#4187] Group graphs containing the same group twice aren't considered cyclic
+c501bea [#4503] New class allows a name with hyphens
+ee0a6c1 [#3820] Cleanup memberships when objects are deleted
+a45f54b [Bug #4451] Fix node search when :current and :successful aren't needed.
+94432c6 maint: Updated release notes for 1.0.3
+001df28 maint: Update CHANGELOG for 1.0.3
+3cbc8dc [Bug #4329] Updated documentation with operating system-specific installation instructions.
+f7f5b83 Fixed exception in nodes/_form partial, it now uses :object or :collection as appropriate.
+6d0d39a Fixed unwanted dependency on 'rake' gem, because 'rake' is often installed outside of RubyGems.
+c07300d maint: Redo report metrics to always put total at the bottom
+e507743 maint: Make report metric totals last and bold
+bffdd9e maint: CSS improved button spacing, hover style
+1e10b83 maint: Fixed display of empty entries
+daba9de Updated RELEASE NOTES regarding Puppet 2.6 reports.
+616c681 [#4332] Using lighter yellow
+f85d1b3 [#4332] Use 2x default Puppet Run frequency for no longer reporting cutoff
+0a6e484 [#4332] Removing facets and replacing #ergo and #to_b
+eaf6491 [#4375] Added instructions for setting up the database using both a `rake` task and `mysql` console.
+65eb170 [#4332] Don't query Node.all twice, use #each
+fddaeb8 Updated RELEASE_NOTES.
+d03b130 Fixed '.timeline .date' CSS style to be wide enough for larger dates.
+f096ab7 Updated specs.
+59cfd0b Added CSS styles for colorizing log entries by their severity level.
+d10378f Improved '.section.error' and '.section.warning' CSS styles to reduce gap below the text.
+c80cb17 Added '.nowrap' style to easily stop text wrapping.
+5854d28 Improved '.pagination' CSS style by moving it to right side where it's more visible.
+ae65cb4 Fixed '.actionbar' CSS style to have a flat top and rounded bottom.
+fe45ac2 Added 'body item:last-child' style to eliminate big gap below these sections.
+4b3308f Added '#sidebar .count.failure' CSS style to highlight errors in sidebar.
+c0d09a4 Improved '#sidebar .active' CSS style to be more visible.
+40cb05b Fixed '.header h2.half' CSS style to shrink to its content, rather than cause unwanted wrapping on narrow screens.
+8939a30 [Bug #4332] Fixed node categories, failing nodes from being displayed forever, many performance problems.
+2d9ffcf Extracted Node::NO_LONGER_REPORTING_CUTOFF as constant.
+4cbb3ac Improved nodes/show by adding node_status_icon.
+dc70d65 [Bug #4374] Added pagination to node_classes#index, node_groups#index, reports#index and nodes/_nodes.
+fde96e6 Fixed  header for nodes listings: removed it from nodes/nodes partial, added specific ones to home and nodes/index.
+73cc839 Fixed statuses/run_failure partial to get only data it needs, simplified invocations.
+a537ef4 Switched date-time formatting to international form.
+55bf1eb Improved puppet/util/logs/_log partial by adding classes to colorize logs by their level.
+dec66c0 Fixed puppet/util/logs/_log partial exceptions when rendering time, its improved formatting.
+a86e5fb Improved reports/_report partial to sort logs by level and specified location associated partial.
+dc7a2ec Removed unused checkboxes.
+1e3ccab Fixed .clear and 'clear: both' CSS styles by unifying them to the same valid markup.
+e27ebe7 Normalized titles, their case and contents.
+ba9aacf Removed pagination from nodes, groups, classes and reports controllers.
+e8af364 Added NodeClass::with_nodes_count and NodeGroup::with_nodes_count.
+ebb1225 Fixed exceptions and messages shown if missing entries on the groups, classes and reports listings.
+1661570 Added "Reports" to the main menu.
+16c4949 Fixed Status::by_interval exceptions when given :start or multiple options.
+b990cee Added Status::INTERVAL_CUTOFF constant to specify how much status information to graph.
+e1c3e3d Removed unused "collection" and "sidebar" partials.
+c6257d7 Added ApplicationHelper#paginate_scope to return a paginated scope based on current #items_per_page settings.
+e175547 Added ApplicationHelper#items_per_page to return number of items on a page for pagination.
+bb5e22d Added ApplicationHelper#counter_class to return CSS class used to colorize a sidebar item as an error.
+8c47fae Improved #report_status_icon to show errors, and added #node_status_icon to show icon for a node.
+1cb3e92 Improved ApplicationHelper#pagination_for to optionally display a "More" link.
+cf3ee73 Fixed chart width to fit on screen, for real this time.
+7811962 MIGRATION: Added :success and :last_report columns to Node and improved Report to set these.
+b46af2b Added vendored 'facets' gem
+b6f04c2 Updated Red Hat spec file
+2469892 Added updated packaging information for Red Hat and Debian
+
 v1.0.3
 ======
 3cbc8dc  [Bug #4329] Updated documentation with operating system-specific installation instructions.
