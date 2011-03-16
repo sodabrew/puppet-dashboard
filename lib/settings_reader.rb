@@ -42,6 +42,8 @@ class SettingsReader
 
     RAILS_DEFAULT_LOGGER.info(message) rescue nil
 
+    validate(settings)
+
     return OpenStruct.new(settings)
   end
 
@@ -53,5 +55,9 @@ class SettingsReader
   # Return an OpenStruct object by reading the +filename+ and parsing it with ERB and YAML.
   def self.filename_to_hash(filename)
     return YAML.load(ERB.new(File.read(filename)).result) rescue {}
+  end
+
+  def self.validate(settings)
+    raise ArgumentError.new("'daily_run_history_length' must be >= 1") unless settings['daily_run_history_length'].to_i >= 1
   end
 end

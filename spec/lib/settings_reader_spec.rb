@@ -9,11 +9,17 @@ FILE
     @sample_file = <<FILE
 foo: bob
 bat: baz
+daily_run_history_length: 1
 FILE
 
     @settings_file_all = <<FILE
 foo: bar
 bat: man
+daily_run_history_length: 1
+FILE
+
+    @settings_file_invalid_daily_run = <<FILE
+daily_run_history_length: 0
 FILE
   end
 
@@ -22,14 +28,22 @@ FILE
     File.stubs(:read).with {|filename| File.basename(filename) == "settings.yml.example"}.returns(@sample_file)
     RAILS_DEFAULT_LOGGER.expects(:info).with {|msg| msg =~ /Using default values for unspecified settings "bat"/}
 
-    SettingsReader.read.should == OpenStruct.new("foo" => "bar", "bat" => "baz")
+    SettingsReader.read.should == OpenStruct.new(
+      "foo"                      => "bar",
+      "bat"                      => "baz",
+      "daily_run_history_length" => 1
+    )
   end
 
   it "should use values from settings.yml.example if settings.yml does not exist" do
     File.stubs(:read).with {|filename| File.basename(filename) == "settings.yml.example"}.returns(@sample_file)
-    RAILS_DEFAULT_LOGGER.expects(:info).with {|msg| msg =~ /Using default values for unspecified settings "bat" and "foo"/}
+    RAILS_DEFAULT_LOGGER.expects(:info).with {|msg| msg =~ /Using default values for unspecified settings "bat", "daily_run_history_length", and "foo"/}
 
-    SettingsReader.read.should == OpenStruct.new("foo" => "bob", "bat" => "baz")
+    SettingsReader.read.should == OpenStruct.new(
+      "foo"                      => "bob",
+      "bat"                      => "baz",
+      "daily_run_history_length" => 1
+    )
   end
 
   it "should not output a warning if settings.yml defines all settings" do
@@ -37,6 +51,17 @@ FILE
     File.stubs(:read).with {|filename| File.basename(filename) == "settings.yml.example"}.returns(@sample_file)
     RAILS_DEFAULT_LOGGER.expects(:info).with {|msg| msg !~ /Using default values/}
 
-    SettingsReader.read.should == OpenStruct.new("foo" => "bar", "bat" => "man")
+    SettingsReader.read.should == OpenStruct.new(
+      "foo"                      => "bar",
+      "bat"                      => "man",
+      "daily_run_history_length" => 1
+    )
+  end
+
+  it "should validate that 'daily_run_history_length' is >= 1" do
+    File.stubs(:read).with {|filename| File.basename(filename) == "settings.yml"}.returns(@settings_file_invalid_daily_run)
+    File.stubs(:read).with {|filename| File.basename(filename) == "settings.yml.example"}.returns(@sample_file)
+
+    lambda { SettingsReader.read }.should raise_error(ArgumentError, "'daily_run_history_length' must be >= 1")
   end
 end
