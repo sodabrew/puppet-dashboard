@@ -8,55 +8,56 @@ class Status
     @start = Time.zone.parse(datum["start"])
   end
 
-  def self.latest(options={})
-    by_interval(options.merge(:limit => 1)).first
-  end
-
-  def self.recent(options={})
-    by_interval options.merge(:start => 1.hour.ago)
-  end
-
   # Returns an array of Statuses by date for either a :node, or :nodes or all nodes in the system.
   #
   # Options:
-  # * :node => Node to return Statuses for.
+  # * :node  => Node to return Statuses for.
   # * :nodes => Nodes to return Statuses for.
-  # * :start => Start Time of the range to query.
-  # * :limit => Limit the number of records to return.
-  def self.by_interval(options={})
+  def self.within_daily_run_history(options={})
     return [] if options[:nodes] && options[:nodes].empty?
-    interval = 1.day
 
-    # WARNING: This uses the local server time, regardless of what is set in the Rails config.
-    # This should be changed once we have a user-friendly settings file, or can get the browser
-    # time zone to this method.
-    offset = Time.zone.now.utc_offset
-    offset_timestamp = "UNIX_TIMESTAMP(time) + #{offset}"
-    date = "DATE(FROM_UNIXTIME(#{offset_timestamp}))"
+    last_day = Time.zone.now + 1.day             # Last full day to include (ignores time).
+    limit    = SETTINGS.daily_run_history_length # Limit the number of days to return (includes "last_day").
+
+    utc_date_boundaries     = get_utc_boundaries_ending(last_day, limit + 1)
+    newest_accepatable_data = utc_date_boundaries.first
+
+    boundary_groupings = "CASE\n"
+    utc_date_boundaries.each do |boundary|
+      # We use the '%Y-%m-%d %H:%M:%S %z' strftime to get something parse-able
+      # by Time.zone.parse and lexically sortable.
+      boundary_groupings << "WHEN time >= '#{boundary.utc.to_s(:db)}' THEN '#{boundary.strftime("%Y-%m-%d %H:%M:%S %z")}'\n"
+    end
+    boundary_groupings << "ELSE null\n"
+    boundary_groupings << "END"
 
     sql = <<-SQL
       SELECT
-        COUNT(*)                      as total,
+        COUNT(*)                                            as total,
         SUM(CASE status when "unchanged" then 1 else 0 end) as unchanged,
-        SUM(CASE status when "changed" then 1 else 0 end) as changed,
-        SUM(CASE status when "failed" then 1 else 0 end) as failed,
-        #{date}                       as start
+        SUM(CASE status when "changed" then 1 else 0 end)   as changed,
+        SUM(CASE status when "failed" then 1 else 0 end)    as failed,
+        #{boundary_groupings}                               as start
       FROM reports
     SQL
 
-    sql << "WHERE kind = 'apply' "
-    sql << "AND time >= \"#{options[:start].getutc.to_s(:db)}\"\n" if options[:start]
-    sql << "AND node_id = #{options[:node].id} " if options[:node]
+    sql << "WHERE kind = 'apply'\n"
+    sql << "AND time < \"#{newest_accepatable_data.utc.to_s(:db)}\"\n"
+    sql << "AND time >= \"#{utc_date_boundaries.last.utc.to_s(:db)}\"\n"
+    sql << "AND node_id = #{options[:node].id}\n"                      if options[:node]
     sql << "AND node_id IN (#{options[:nodes].map(&:id).join(',')})\n" if options[:nodes].present?
-    sql << "GROUP BY #{date}\n"
-    sql << "ORDER BY time ASC\n"
-    sql << "LIMIT #{options[:limit]}" if options[:limit]
+    sql << "GROUP BY start\n"
+    sql << "ORDER BY start ASC\n"
+    sql << "LIMIT #{limit}\n"
 
     return execute(sql)
   end
 
-  def self.within_daily_run_history(options={})
-    self.by_interval( options.merge( :start => SETTINGS.daily_run_history_length.days.ago, :limit => SETTINGS.daily_run_history_length ) )
+  def self.get_utc_boundaries_ending(date, num_days)
+    (0..(num_days-1)).collect do |offset|
+      x = date - offset.days
+      Time.zone.local(x.year, x.month, x.day, 0, 0, 0)
+    end
   end
 
   def self.runtime

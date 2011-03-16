@@ -1,0 +1,18 @@
+.section
+  %h3 Log
+  .section
+    %table.inspector
+      %thead
+        %tr
+          %th Level
+          %th Message
+          %th Source
+          %th File
+          %th Line
+          %th Time
+      %tbody
+        - if report.logs.present?
+          = render :partial => 'puppet/util/logs/log', :collection => puppet_log_sorter(report.logs.compact)
+        - else
+          %td.empty{:colspan => 6}
+            = describe_no_matches_for 'log messages', :report

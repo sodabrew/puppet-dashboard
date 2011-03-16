@@ -32,10 +32,6 @@ Factory.define :inspect_report, :parent => :report do |inspect|
   inspect.kind 'inspect'
 end
 
-Factory.define :baseline_inspect_report, :parent => :inspect_report do |baseline|
-  baseline.after_create {|report| report.baseline!}
-end
-
 Factory.define :resource_status do |status|
 end
 

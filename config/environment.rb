@@ -7,6 +7,10 @@ RAILS_GEM_VERSION = '2.3.4' unless defined? RAILS_GEM_VERSION
 require File.join(File.dirname(__FILE__), 'boot')
 require 'active_support'
 
+require 'registry'
+
+require 'core_callbacks'
+
 Rails::Initializer.run do |config|
   config.gem 'rack'
   config.gem 'haml'

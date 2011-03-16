@@ -16,7 +16,6 @@ class Node < ActiveRecord::Base
   has_many :reports, :dependent => :destroy
   belongs_to :last_apply_report, :class_name => 'Report'
   belongs_to :last_inspect_report, :class_name => 'Report'
-  belongs_to :baseline_report, :class_name => 'Report'
 
   named_scope :with_last_report, :include => :last_apply_report
   named_scope :by_report_date, :order => 'reported_at DESC'
@@ -79,7 +78,7 @@ class Node < ActiveRecord::Base
       map {|param| "facts.#{CGI::escape param["fact"]}.#{param["comparator"]}=#{CGI::escape param["value"]}" }.
       join("&")
 
-    url = "https://#{SETTINGS.inventory_server}:#{SETTINGS.inventory_port}/production/inventory/search?#{query_string}"
+    url = "https://#{SETTINGS.inventory_server}:#{SETTINGS.inventory_port}/production/facts_search/search?#{query_string}"
     matches = JSON.parse(PuppetHttps.get(url, 'pson'))
     nodes = Node.find_all_by_name(matches)
     found = nodes.map(&:name).map(&:downcase)

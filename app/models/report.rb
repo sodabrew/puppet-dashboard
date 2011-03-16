@@ -19,7 +19,6 @@ class Report < ActiveRecord::Base
 
   named_scope :inspections, :conditions => {:kind => "inspect"}, :include => :metrics
   named_scope :applies,     :conditions => {:kind => "apply"  }, :include => :metrics
-  named_scope :baselines,   :include => :node, :conditions => ['nodes.baseline_report_id = reports.id']
 
   def total_resources
     metric_value("resources", "total")
@@ -54,35 +53,6 @@ class Report < ActiveRecord::Base
   def metric_value(category, name)
     metric = metrics.detect {|m| m.category == category and m.name == name }
     (metric and metric.value) or 0
-  end
-
-  def diff(comparison_report)
-    diff_stuff = {}
-    comparison_resources = resources_to_hash(comparison_report.resource_statuses)
-    our_resources = resources_to_hash(resource_statuses)
-    (comparison_resources.keys | our_resources.keys).each do |resource_name|
-      comparison_resource = comparison_resources[resource_name] || {}
-      our_resource = our_resources[resource_name] || {}
-      (comparison_resource.keys | our_resource.keys).each do |property|
-        diff_stuff[resource_name] ||= {}
-        if our_resource[property] != comparison_resource[property]
-          diff_stuff[resource_name][property.to_sym] = [ our_resource[property], comparison_resource[property] ]
-        end
-      end
-    end
-    diff_stuff
-  end
-
-  def self.divide_diff_into_pass_and_fail(diff)
-    divided_diff = {:failure => [], :pass => []}
-    diff.each do |resource, differences|
-      if ! differences.empty?
-        divided_diff[:failure] << resource
-      else
-        divided_diff[:pass] << resource
-      end
-    end
-    divided_diff
   end
 
   def self.attribute_hash_from(report_hash)
@@ -135,32 +105,7 @@ class Report < ActiveRecord::Base
     "#{node.name} at #{time}"
   end
 
-  def baseline?
-    self.node.baseline_report_id == self.id
-  end
-
-  def baseline!
-    raise IncorrectReportKind.new("expected 'inspect', got '#{self.kind}'") unless self.kind == "inspect"
-    self.node.baseline_report = self
-    self.node.save!
-  end
-
   private
-
-  def resources_to_hash(resources)
-    hash = {}
-    resources.each do |resource_status|
-      hash[resource_status.name] = events_to_hash(resource_status.events)
-    end
-    hash
-  end
-
-  def events_to_hash(events)
-    events.inject({}) do |hash, event|
-      hash[event.property] = event.previous_value
-      hash
-    end
-  end
 
   def replace_last_report
     return unless node
