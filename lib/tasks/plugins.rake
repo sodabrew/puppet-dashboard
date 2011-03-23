@@ -22,7 +22,7 @@ namespace :puppet do
     end
 
     desc "Install a Dashboard plug-in"
-    task :install => [:copy_migration, "db:migrate", :create_installed_semaphore]
+    task :install => [:create_installed_semaphore, :copy_migration, "db:migrate"]
 
     desc "Create the semaphore file to indicate that a plugin is installed"
     task :create_installed_semaphore do
