@@ -12,14 +12,17 @@ namespace :puppet do
       Dir.glob(File.join(plugin_dir, 'db', 'migrate', '*.rb')) do |source_file|
         if File.basename(source_file) =~ /^([0-9]+)_(.*)$/
           timestamp, migration_name = $1, $2
-          destination_file = "db/migrate/#{timestamp}_plugin__#{plugin_name}__#{migration_name}"
+          # Downcase and replace anything not lower case letter, number or
+          # underscore (ie -, $, ^, space, etc) with underscores
+          new_migration_name = "#{timestamp}_plugin__#{plugin_name}__#{migration_name}".downcase.gsub(/[^a-z0-9_]/, '_')
+          destination_file = "db/migrate/#{new_migration_name}"
           FileUtils.cp source_file, destination_file
         end
       end
     end
 
     desc "Install a Dashboard plug-in"
-    task :install => [:copy_migration, "db:migrate", :create_installed_semaphore]
+    task :install => [:create_installed_semaphore, :copy_migration, "db:migrate"]
 
     desc "Create the semaphore file to indicate that a plugin is installed"
     task :create_installed_semaphore do
