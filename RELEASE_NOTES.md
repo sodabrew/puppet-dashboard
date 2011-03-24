@@ -1,6 +1,11 @@
 Puppet Dashboard Release Notes
 ==============================
 
+v1.1.0rc3
+---------
+
+* Updated VERSION for 1.1.0rc3
+
 v1.1.0rc2
 ---------
 

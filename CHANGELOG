@@ -1,3 +1,7 @@
+v1.1.0rc3
+=========
+2d4d3da Updated VERSION for 1.1.0rc3
+
 v1.1.0rc2
 =========
 af1a006 (#6835) Handle malformed facts from Puppet 2.6.7 & storedconfigs
