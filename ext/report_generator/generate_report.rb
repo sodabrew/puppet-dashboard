@@ -75,17 +75,41 @@ class Puppet::Resource::Status
       rs.changed           = rs.change_count > 0
       rs.skipped           = false
       rs.failed            = rs.change_count > 0 && rand(100) < 10
+
+      3.times do
+        event = DataGenerator.generate_resource_event(rs)
+        rs.events << event
+      end
+
     end
   end
 end
 class Puppet::Transaction::Event
   attr_accessor :audited, :property, :previous_value, :desired_value,
     :historical_value, :message, :name, :status, :time
+
+  def self.generate(resource_status)
+    Puppet::Transaction::Event.new.tap do |event|
+      event.audited          = false
+      event.property         = "mode"
+      event.previous_value   = 644
+      event.desired_value    = 777
+      event.historical_value = 666
+      event.message          = "Updated file mode"
+      event.name             = "mode"
+      event.status           = "success"
+      event.time             = resource_status.time
+    end
+  end
 end
 
 module DataGenerator
   def self.generate_report
     Puppet::Transaction::Report.generate
+  end
+
+  def self.generate_resource_event(resource_status)
+    Puppet::Transaction::Event.generate(resource_status)
   end
 
   def self.generate_resource_status(report)
