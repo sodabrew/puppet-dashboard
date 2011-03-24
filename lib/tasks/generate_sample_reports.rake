@@ -16,7 +16,7 @@ class Puppet::Transaction::Report
   attr_accessor :host, :time, :logs, :metrics, :resource_statuses,
     :configuration_version, :report_format, :puppet_version, :kind, :status
 
-  def self.generate
+  def self.generate(options)
     Puppet::Transaction::Report.new.tap do |report|
       report.host = DataGenerator.generate_hostname
       report.time = DataGenerator.generate_time
@@ -28,8 +28,8 @@ class Puppet::Transaction::Report
       report.puppet_version = "2.6.5"
       report.kind = "apply"
 
-      3.times do
-        resource_status = DataGenerator.generate_resource_status(report)
+      options[:num_statuses].times do
+        resource_status = DataGenerator.generate_resource_status(report, options)
         report.resource_statuses[resource_status.resource] = resource_status
       end
 
@@ -58,7 +58,7 @@ class Puppet::Resource::Status
     :evaluation_time, :change_count, :out_of_sync_count, :tags, :time, :events,
     :out_of_sync, :changed, :skipped, :failed
 
-  def self.generate(report)
+  def self.generate(report, options)
     Puppet::Resource::Status.new.tap do |rs|
       rs.resource_type     = "File"
       rs.title             = File.join("/", (1..(rand(5)+2)).map {DataGenerator.generate_word})
@@ -76,7 +76,7 @@ class Puppet::Resource::Status
       rs.skipped           = false
       rs.failed            = rs.change_count > 0 && rand(100) < 10
 
-      3.times do
+      options[:num_events].times do
         event = DataGenerator.generate_resource_event(rs)
         rs.events << event
       end
@@ -104,16 +104,16 @@ class Puppet::Transaction::Event
 end
 
 module DataGenerator
-  def self.generate_report
-    Puppet::Transaction::Report.generate
+  def self.generate_reports(options)
+    Puppet::Transaction::Report.generate(options)
   end
 
   def self.generate_resource_event(resource_status)
     Puppet::Transaction::Event.generate(resource_status)
   end
 
-  def self.generate_resource_status(report)
-    Puppet::Resource::Status.generate(report)
+  def self.generate_resource_status(report, options)
+    Puppet::Resource::Status.generate(report, options)
   end
 
   def self.generate_hostname
@@ -170,15 +170,20 @@ end
 namespace :reports do
   namespace :samples do
 
-    desc "Generate sample YAML reports"
+    desc "Generate sample YAML reports with in REPORT_DIR with NUM_NODES, NUM_STATUSES, NUM_EVENTS"
     task :generate do
       DEFAULT_DIR = 'tmp/sample_reports'
       report_dir = ENV['REPORT_DIR'] || DEFAULT_DIR
+      options = {
+        :num_statuses => ENV['NUM_STATUSES'].to_i || 3,
+        :num_events   => ENV['NUM_EVENTS'].to_i   || 3,
+      }
+      num_nodes = ENV['NUM_NODES'].to_i || 100
 
       FileUtils.mkdir_p(report_dir)
 
-      100.times do
-        report = DataGenerator.generate_report
+      num_nodes.times do
+        report = DataGenerator.generate_reports(options)
         File.open("#{report_dir}/#{report.host}.yaml","w") do |f|
           f.print YAML.dump(report)
         end
