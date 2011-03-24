@@ -478,6 +478,8 @@ describe Node do
     before :each do
       @node = Node.generate!(:name => 'gonaddynode')
       @sample_pson = '{"name":"foo","timestamp":"Fri Oct 29 10:33:53 -0700 2010","expiration":"Fri Oct 29 11:03:53 -0700 2010","values":{"a":"1","b":"2"}}'
+      @sample_pson_without_timestamp = '{"name":"foo","expiration":"Fri Oct 29 11:03:53 -0700 2010","values":{"a":"1","b":"2"}}'
+      @sample_pson_with_malformed_timestamp = '{"name":"foo","expiration":"Fri Oct 29 11:03:53 -0700 2010","values":{"a":"1","b":"2","--- !ruby/sym _timestamp":"Sat Oct 30 10:33:53 -0700 2010"}}'
       SETTINGS.stubs(:inventory_server).returns('fred')
       SETTINGS.stubs(:inventory_port).returns(12345)
     end
@@ -494,6 +496,21 @@ describe Node do
       PuppetHttps.expects(:get).with("https://fred:12345/production/facts/%26%2F%3D", 'pson').returns(
         @sample_pson)
       @node.facts
+    end
+
+    it "should return facts from an external REST call when timestamp is missing" do
+      PuppetHttps.stubs(:get).with("https://fred:12345/production/facts/gonaddynode", 'pson').returns(
+        @sample_pson_without_timestamp)
+      @node.facts.should == {:timestamp => nil, :values => {"a" => "1", "b" => "2"}}
+    end
+
+    # The malformed timestamp can come back with Puppet 2.6.7 when both
+    # storedconfigs and the inventory service are enabled.  See #6835
+    it "should return facts from an external REST call when timestamp is malformed" do
+      PuppetHttps.stubs(:get).with("https://fred:12345/production/facts/gonaddynode", 'pson').returns(
+        @sample_pson_with_malformed_timestamp)
+      timestamp = Time.parse("Sat Oct 30 10:33:53 -0700 2010")
+      @node.facts.should == {:timestamp => timestamp, :values => {"a" => "1", "b" => "2"}}
     end
   end
 end
