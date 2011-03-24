@@ -1,5 +1,4 @@
 #!/usr/bin/env ruby
-
 require 'erb'
 require 'ostruct'
 require 'rubygems'
@@ -173,21 +172,20 @@ class Array
   end
 end
 
-FileUtils.mkdir_p('yaml')
-rakefile_if_specified = "-f #{ARGV.first}" unless ARGV.empty?
+namespace :reports do
 
-100.times do
-  report = DataGenerator.generate_report
-  File.open("yaml/#{report.host}.yaml","w") do |f|
-    f.print YAML.dump(report)
+  desc "Generate sample YAML reports"
+  task :generate_samples do
+    DEFAULT_DIR = 'tmp/sample_reports'
+    report_dir = ENV['REPORT_DIR'] || DEFAULT_DIR
+
+    FileUtils.mkdir_p(report_dir)
+
+    100.times do
+      report = DataGenerator.generate_report
+      File.open("#{report_dir}/#{report.host}.yaml","w") do |f|
+        f.print YAML.dump(report)
+      end
+    end
   end
 end
-
-#puts "Importing reports"
-#`rake #{rakefile_if_specified} reports:import REPORT_DIR=yaml`
-
-#puts "Creating unresponsive nodes"
-#10.times do
-#  puts `rake #{rakefile_if_specified} node:add name=#{DataGenerator.generate_hostname}`
-#end
-
