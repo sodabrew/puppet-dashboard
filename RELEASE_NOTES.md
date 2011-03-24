@@ -1,6 +1,11 @@
 Puppet Dashboard Release Notes
 ==============================
 
+v1.1.0rc2
+---------
+
+* (#6835) Handle malformed facts from Puppet 2.6.7 & storedconfigs
+
 v1.1.0rc1
 ---------
 
