@@ -95,13 +95,13 @@ Installation
 
             git clone git://github.com/puppetlabs/puppet-dashboard.git
             cd puppet-dashboard
-            git checkout v1.1.0rc1
+            git checkout v1.1.0rc3
 
     3.  Download the most recent release of Puppet Dashboard, extract it and move it to your install location (this may be different on your system).  This options makes upgrading more difficult since you'll have to manually manage files when upgrading, but may be a good option if you want to avoid repository setup or using git and just want to try out dashboard.
 
-           wget http://puppetlabs.com/downloads/dashboard/puppet-dashboard-1.1.0rc1.tar.gz
-           tar -xzvf puppet-dashboard-1.1.0rc1.tar.gz
-           mv puppet-dashboard-1.1.0rc1 /usr/share/puppet-dashboard
+           wget http://puppetlabs.com/downloads/dashboard/puppet-dashboard-1.1.0rc3.tar.gz
+           tar -xzvf puppet-dashboard-1.1.0rc3.tar.gz
+           mv puppet-dashboard-1.1.0rc3 /usr/share/puppet-dashboard
 
 2.  Create a `config/database.yml` file to specify Puppet Dashboard's database configuration. Please see the `config/database.yml.example` file for further details about database configurations and environments. These files paths are relative to the path of the Puppet Dashboard software containing this `README.markdown` file.
 
