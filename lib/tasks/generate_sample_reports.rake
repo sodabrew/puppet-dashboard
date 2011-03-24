@@ -5,15 +5,10 @@ require 'rubygems'
 require 'active_support/all'
 require 'YAML'
 require 'fileutils'
-begin
-  require 'puppet/util/zaml'
-  YAML = ZAML
-rescue LoadError
-end
 
 module Puppet; end
 module Puppet::Resource; end
-module Puppet::Transaction; end
+class Puppet::Transaction; end
 module Puppet::Util; end
 
 # http://projects.puppetlabs.com/projects/puppet/wiki/Report_Format_2
@@ -173,18 +168,20 @@ class Array
 end
 
 namespace :reports do
+  namespace :samples do
 
-  desc "Generate sample YAML reports"
-  task :generate_samples do
-    DEFAULT_DIR = 'tmp/sample_reports'
-    report_dir = ENV['REPORT_DIR'] || DEFAULT_DIR
+    desc "Generate sample YAML reports"
+    task :generate do
+      DEFAULT_DIR = 'tmp/sample_reports'
+      report_dir = ENV['REPORT_DIR'] || DEFAULT_DIR
 
-    FileUtils.mkdir_p(report_dir)
+      FileUtils.mkdir_p(report_dir)
 
-    100.times do
-      report = DataGenerator.generate_report
-      File.open("#{report_dir}/#{report.host}.yaml","w") do |f|
-        f.print YAML.dump(report)
+      100.times do
+        report = DataGenerator.generate_report
+        File.open("#{report_dir}/#{report.host}.yaml","w") do |f|
+          f.print YAML.dump(report)
+        end
       end
     end
   end
