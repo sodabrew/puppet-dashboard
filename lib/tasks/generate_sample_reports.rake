@@ -4,7 +4,7 @@ require 'erb'
 require 'ostruct'
 require 'rubygems'
 require 'active_support/all'
-require 'YAML'
+require 'yaml'
 require 'fileutils'
 require 'data_generator'
 
