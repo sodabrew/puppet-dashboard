@@ -12,8 +12,8 @@ class Puppet::Transaction::Report
 
   def self.generate(options)
     Puppet::Transaction::Report.new.tap do |report|
-      report.host = DataGenerator.generate_hostname
-      report.time = DataGenerator.generate_time
+      report.host = options[:hostname]
+      report.time = DataGenerator.generate_time(options[:time_offset])
       report.logs = []
       report.metrics = {}
       report.resource_statuses = {}
@@ -119,9 +119,10 @@ module DataGenerator
     "#{host}.#{@domain}.#{@ext}"
   end
 
-  def self.generate_time
+  def self.generate_time(offset=nil)
     time = Time.now
-    time -= 1.day if rand(100) < 5
+    time -= 1.hour if rand(100) < 5
+    time -= offset.day if offset
     time
   end
 
