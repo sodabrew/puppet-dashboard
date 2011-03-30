@@ -11,18 +11,22 @@ require 'data_generator'
 namespace :reports do
   namespace :samples do
 
-    desc "Generate NUM_REPORTS sample YAML reports with in REPORT_DIR with NUM_NODES, NUM_STATUSES, NUM_EVENTS"
+    desc "Generate NUM_REPORTS sample YAML reports for NUM_NODES nodes, each with NUM_STATUSES with NUM_EVENTS."
     task :generate do
-      DEFAULT_DIR = 'tmp/sample_reports'
-      report_dir = ENV['REPORT_DIR'] || DEFAULT_DIR
+      report_dir = 'tmp/sample_reports'
+      ENV['REPORT_DIR'] = report_dir
       options = {
-        :num_statuses => ENV['NUM_STATUSES'].to_i || 3,
-        :num_events   => ENV['NUM_EVENTS'].to_i   || 3,
+        :num_statuses => (ENV['NUM_STATUSES'] || 3).to_i,
+        :num_events   => (ENV['NUM_EVENTS']   || 3).to_i,
       }
-      num_nodes = ENV['NUM_NODES'].to_i || 100
-      num_reports = ENV['NUM_REPORTS'].to_i || 1
+      num_nodes = (ENV['NUM_NODES'] || 20).to_i
+      num_reports = (ENV['NUM_REPORTS'] || 3).to_i
 
       FileUtils.mkdir_p(report_dir)
+
+      if Dir[File.join(report_dir, '**', '*.yaml')].present?
+        puts "Sample reports already present in #{report_dir}; these may cause conflicts when importing into the database"
+      end
 
       num_nodes.times do
         options[:hostname] = DataGenerator.generate_hostname
