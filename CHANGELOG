@@ -1,13 +1,11 @@
-v1.1.0rc3
-=========
+v1.1.0
+======
+e786ea3 Updated CHANGELOG for 1.1.0rc3
 2d4d3da Updated VERSION for 1.1.0rc3
-
-v1.1.0rc2
-=========
+29969d7 Updated CHANGELOG for 1.1.0rc2
 af1a006 (#6835) Handle malformed facts from Puppet 2.6.7 & storedconfigs
-
-v1.1.0rc1
-=========
+520a02d Update CHANGELOG and version for 1.1.0rc1
+3817aa5 maint: Add missing CHANGELOG entries for 1.0.3 to 1.0.4
 1fcfc01 (#6736) Provide Mutex, avoid an error.
 95f97fb maint: Move inventory section lower on the node page
 8629962 (#4403) Do timezone arithmetic outside of the DB in the Status model

@@ -1,19 +1,15 @@
 Puppet Dashboard Release Notes
 ==============================
 
-v1.1.0rc3
----------
+v1.1.0
+------
 
+* Updated CHANGELOG for 1.1.0rc3
 * Updated VERSION for 1.1.0rc3
-
-v1.1.0rc2
----------
-
+* Updated CHANGELOG for 1.1.0rc2
 * (#6835) Handle malformed facts from Puppet 2.6.7 & storedconfigs
-
-v1.1.0rc1
----------
-
+* Update CHANGELOG and version for 1.1.0rc1
+* maint: Add missing CHANGELOG entries for 1.0.3 to 1.0.4
 * (#6736) Provide Mutex, avoid an error.
 * maint: Move inventory section lower on the node page
 * (#4403) Do timezone arithmetic outside of the DB in the Status model
