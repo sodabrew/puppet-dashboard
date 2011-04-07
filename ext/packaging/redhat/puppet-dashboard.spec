@@ -2,7 +2,7 @@
 %global initrddir /etc/rc.d/init.d
 
 Name:           puppet-dashboard
-Version:        1.0.4
+Version:        1.1.0
 Release:        1%{?dist}
 Summary:        Systems Management web application
 Group:          Applications/System
@@ -57,11 +57,7 @@ cp -p -r vendor $RPM_BUILD_ROOT/%{_datadir}/%{name}/
 
 chmod a+x $RPM_BUILD_ROOT/%{_datadir}/%{name}/script/*
 
-for file in $(find $RPM_BUILD_ROOT/ -size 0) ; do
-    rm -f "$file"
-done
-
-rm -f -r $RPM_BUILD_ROOT/%{_datadir}/%{name}/.git
+rm -f -r $RPM_BUILD_ROOT/%{_datadir}/%{name}/.git*
 
 mv CHANGELOG timestamp
 iconv -f ISO-8859-1 -t UTF-8 -o CHANGELOG timestamp
@@ -96,6 +92,10 @@ fi
 %doc CHANGELOG COPYING README.markdown README_PACKAGES.markdown RELEASE_NOTES.md
 
 %changelog
+* Thu Apr 07 2011 James Turnbull <james@puppetlabs.com> - 1.1.0-1
+- Removed zero byte file deletion
+- Incremented version
+
 * Fri Jul 30 2010 James Turnbull <james@puppetlabs.com> - 1.0.3-3
 - Fixed database.yml error
 

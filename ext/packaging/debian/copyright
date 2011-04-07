@@ -38,10 +38,6 @@ License: MIT
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
 
-Files: vendor/plugins/object_daddy
-Copyright: (c) 2007, Flawed Logic, OG Consulting, Rick Bradley, Yossef Mendelssohn
-License: MIT
-
 Files: vendor/plugins/rspec-rails
 Copyright: (c) 2005-2009 The RSpec Development Team
 License: MIT
@@ -56,10 +52,6 @@ License: MIT
 
 Files: vendor/gems/haml
 Copyright: (c) 2006-2009 Hampton Catlin, Nathan Weizenbaum, and Chris Eppstein
-License: MIT
-
-Files: vendor/gems/mislav-will_paginate
-Copyright: (c) 2007 PJ Hyett and Mislav Marohnić
 License: MIT
 
 Files: vendor/gems/mocha
