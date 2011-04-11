@@ -141,6 +141,12 @@ Your Puppet Dashboard location will be wherever you cloned the source to, or if 
 Upgrading
 ---------
 
+### Reports
+
+Reports will need to be converted to a new schematized format when upgrading from a version < v1.1.0.  When running `rake db:migrate` to upgrade you may notice your reports are missing from the dashboard.  They have just been temporarily moved to another table until they have been converted to the new schema.  Rather than just storing reports as serialized YAML in the database as was done in versions before v1.1.0, they will now be in a set of tables that allows them to be queried more easily and faster.  This conversion can be a slow process if you have a long history of reports, so it's not done as part of `rake db:migrate`.  Instead, there is a rake task that will do the conversion for you, converting newer reports first and able to be resumed if it's interrupted just by rerunning it.
+
+    rake reports:schematize
+
 ### Code
 
 The Puppet Dashboard's code is constantly improving, and whether you're following along with the edge of the source code or using deployed packages, you can benefit from upgrading periodically for new features and bug fixes.
