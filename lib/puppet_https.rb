@@ -6,11 +6,13 @@ class PuppetHttps
     connection = Net::HTTP.new(url.host, url.port)
     connection.use_ssl = true
     if authenticate
-      if File.exists?(SETTINGS.certificate_path)
-        connection.cert = OpenSSL::X509::Certificate.new(File.read(SETTINGS.certificate_path))
+      certpath = File.join(Rails.root, SETTINGS.certificate_path)
+      pkey_path = File.join(Rails.root, SETTINGS.private_key_path)
+      if File.exists?(certpath)
+        connection.cert = OpenSSL::X509::Certificate.new(File.read(certpath))
       end
-      if File.exists?(SETTINGS.private_key_path)
-        connection.key = OpenSSL::PKey::RSA.new(File.read(SETTINGS.private_key_path))
+      if File.exists?(pkey_path)
+        connection.key = OpenSSL::PKey::RSA.new(File.read(pkey_path))
       end
     end
     connection.start { |http| http.request(req) }
