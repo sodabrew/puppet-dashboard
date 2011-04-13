@@ -1,3 +1,25 @@
+v1.1.1rc1
+======
+f1b2af4 (#7060) Use absolute paths for cert/private key
+1a3e607 maint: Document the `rake reports:schematize` upgrade process
+c02527a Fixed #6980 - Updated DEB packaging for 1.1.0
+535b69e Fixed #6980 - Updated RPM spec file for Puppet Dashboard
+d8374cc maint: Clean sample reports before generating new ones
+b2e62cc (#6862) Add a default subject for the mail_patches rake task
+e06e4e7 maint: require 'yaml' should be lowercase, works on macs for some reason
+148358c (#6532) Add NUM_REPORTS to reports:samples:generate rake task
+75768ae (#6533) Add rake task to generate unresponsive nodes
+1e924aa (#6532) Add options to sample generator rake task
+fd860bf (#6532) Add combination rake task for generating & importing samples
+ff1c087 (#6532) Change report generator to a rake task
+f0625a9 maint: Print error message when rake:import fails
+8d7f875 (#6531) Folded into one file & renamed
+c5056e4 (#6531) Add ability to generate events
+9d51f70 Branch with report generation utility
+e0652ef (#6736) Add require 'thread' to rakefile
+062f91c maint: Make sure config/installed_plugins is present before db:migrate
+bf2d91f (#6684) Sanitize plugin migration names
+
 v1.1.0
 ======
 e786ea3 Updated CHANGELOG for 1.1.0rc3
