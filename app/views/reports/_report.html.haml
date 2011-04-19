@@ -9,11 +9,13 @@
 
 .item
   - user_facing = { '600_resource_statuses' => 'Events', '700_log' => 'Log', '800_metrics' => 'Metrics' }
+  - panels = []
   %ul#report-tabs
     - Registry.each_callback :core, :report_view_widgets do |name, widget|
+      - panels << capture_haml do
+        %div(id="#{user_facing[name].downcase}")
+          = widget.call self, report
       %li
         %a{ :href => "##{user_facing[name].downcase}" }
           = user_facing[name]
-  - Registry.each_callback :core, :report_view_widgets do |name, widget|
-    %div(id="#{user_facing[name].downcase}")
-      = widget.call self, report
+  = panels
