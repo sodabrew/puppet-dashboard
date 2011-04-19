@@ -8,11 +8,12 @@
       %li= link_to 'Destroy', report, :confirm => 'Are you sure?', :method => :delete, :class => "delete button"
 
 .item
+  - user_facing = { '600_resource_statuses' => 'Events', '700_log' => 'Log', '800_metrics' => 'Metrics' }
   %ul#report-tabs
     - Registry.each_callback :core, :report_view_widgets do |widget|
       %li
-        %a{ :href => "##{widget.name}" }
-          = widget.name
+        %a{ :href => "##{user_facing[widget.name].downcase}" }
+          = user_facing[widget.name]
   - Registry.each_callback :core, :report_view_widgets do |widget|
-    %div(id="#{widget.name}")
+    %div(id="#{user_facing[widget.name].downcase}")
       = widget.call self, report
