@@ -16,8 +16,3 @@
   - Registry.each_callback :core, :report_view_widgets do |widget|
     %div(id="#{widget.name}")
       = widget.call self, report
-  :javascript
-    jQuery(function() {
-      jQuery('#report-tabs li:first').addClass("active");
-      jQuery('#report-tabs').tabify();
-    });

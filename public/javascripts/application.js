@@ -103,6 +103,9 @@ jQuery(document).ready(function(J) {
     J(this).hide();
   });
   init_expandable_list();
+
+  J('.reports_show_action #report-tabs li:first').addClass("active");
+  J('.reports_show_action #report-tabs').tabify();
 });
 
 function init_expandable_list() {
