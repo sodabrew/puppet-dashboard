@@ -15,16 +15,18 @@ class Registry
         raise "Cannot redefine callback [#{feature_name.inspect},#{hook_name.inspect},#{callback_name}]"
       end
 
-      (class << block; self; end).send(:define_method, :name) { callback_name }
-
       @registry[feature_name][hook_name][callback_name] = value || block
     end
   end
 
-  def each_callback( feature_name, hook_name )
+  def each_callback( feature_name, hook_name, &block )
     hook = @registry[feature_name][hook_name]
     hook.sort.each do |callback_name,callback|
-      yield( callback )
+      if block.arity == 2
+        yield( callback_name, callback )
+      else
+        yield( callback )
+      end
     end
     nil
   end
