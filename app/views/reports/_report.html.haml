@@ -8,5 +8,16 @@
       %li= link_to 'Destroy', report, :confirm => 'Are you sure?', :method => :delete, :class => "delete button"
 
 .item
+  %ul#report-tabs
+    - Registry.each_callback :core, :report_view_widgets do |widget|
+      %li
+        %a{ :href => "##{widget.name}" }
+          = widget.name
   - Registry.each_callback :core, :report_view_widgets do |widget|
-    = widget.call self, report
+    %div(id="#{widget.name}")
+      = widget.call self, report
+  :javascript
+    jQuery(function() {
+      jQuery('#report-tabs li:first').addClass("active");
+      jQuery('#report-tabs').tabify();
+    });

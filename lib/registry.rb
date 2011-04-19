@@ -15,6 +15,8 @@ class Registry
         raise "Cannot redefine callback [#{feature_name.inspect},#{hook_name.inspect},#{callback_name}]"
       end
 
+      (class << block; self; end).send(:define_method, :name) { callback_name }
+
       @registry[feature_name][hook_name][callback_name] = value || block
     end
   end
