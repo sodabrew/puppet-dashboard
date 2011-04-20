@@ -58,7 +58,7 @@ jQuery(document).ready(function(J) {
         show_ticks: false,
         start_at_zero: false,
         stroke_width: 3,
-        vertical_label_unit: "s",
+        vertical_label_unit: "s"
       }
     );
 
@@ -96,7 +96,7 @@ jQuery(document).ready(function(J) {
         labels: label_data,
         padding_top: 10,
         left_padding: 50,
-        show_ticks: false,
+        show_ticks: false
       }
     );
 
@@ -132,10 +132,11 @@ function init_expandable_list() {
 }
 
 function toggle_expandable_link() {
+  expansionTime = 100; // ms
   jQuery(this).toggleClass('collapsed-link');
+  jQuery(this.id.replace('expand', '#expandable'))
+    .toggle('blind', {}, expansionTime);
   if (jQuery(this).hasClass('collapsed-link')) {
-    jQuery(this.id.replace('expand', '#expandable'))
-      .hide('blind');
     if (jQuery('.expandable-link').not('.collapsed-link').size() == 0) {
       var old_text = jQuery('.collapse-all').text();
       jQuery('.collapse-all')
@@ -144,8 +145,6 @@ function toggle_expandable_link() {
         .text( old_text.replace( 'collapse', 'expand' ));
     }
   } else {
-    jQuery(this.id.replace('expand', '#expandable'))
-      .show('blind', {}, 1000);
     if (jQuery('.expandable-link.collapsed-link').size() == 0) {
       var old_text = jQuery('.expand-all').text();
       jQuery('.expand-all')
