@@ -13,9 +13,8 @@
   %ul#report-tabs
     - Registry.each_callback :core, :report_view_widgets do |name, widget|
       - panels << capture_haml do
-        %div(id="#{user_facing[name].downcase}")
+        %div.panel(id="#{user_facing[name].downcase}")
           = widget.call self, report
-      %li
-        %a{ :href => "##{user_facing[name].downcase}" }
-          = user_facing[name]
+      %li(id="#{user_facing[name].downcase}-tab")
+        = user_facing[name]
   = panels

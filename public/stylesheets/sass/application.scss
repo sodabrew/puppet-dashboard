@@ -524,8 +524,43 @@ body {
   }
 
   &.reports_show_action {
+    #report-tabs {
+      display: none;
+      font-size: 14px;
+      font-weight: bold;
+      float: left;
+      margin: 0;
+      padding: 0;
+
+      li {
+        @include rounded_top;
+        background: #CCC;
+        list-style: none;
+        float: left;
+        border: solid 1px #CCC;
+        padding: 4px 1em;
+        margin-right: 4px;
+        cursor: pointer;
+        color: white;
+
+        &.active {
+          border-bottom-color: white;
+          background-color: white;
+          color: #2C66A8;
+        }
+      }
+    }
+
+    .panel.tabbed {
+      border: solid 1px #CCC;
+      background-color: white;
+      padding: 1em;
+      margin-top: 27px;
+      margin-bottom: 1em;
+    }
+
     .section {
-      margin-left: 1em;
+      margin: 0;
     }
 
     h4 {

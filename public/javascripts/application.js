@@ -104,8 +104,16 @@ jQuery(document).ready(function(J) {
   });
   init_expandable_list();
 
-  J('.reports_show_action #report-tabs li:first').addClass("active");
-  J('.reports_show_action #report-tabs').tabify();
+  J('.reports_show_action #report-tabs').show();
+  J('.reports_show_action .panel').addClass('tabbed');
+  J('.reports_show_action #report-tabs li').click(function() {
+    panelID = this.id.replace(/-tab$/, '');
+    J('.reports_show_action #report-tabs li').removeClass('active');
+    J('.reports_show_action .panel').hide();
+    J(this).addClass('active');
+    J('#' + panelID).show();
+  });
+  J('.reports_show_action #report-tabs li:first').click();
 });
 
 function init_expandable_list() {
