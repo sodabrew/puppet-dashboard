@@ -375,8 +375,7 @@ body {
         vertical-align: top; }
   body.reports_show_action #report-tabs {
     display: none;
-    font-size: 14px;
-    font-weight: bold;
+    font: bold 14px Arial;
     float: left;
     margin: 0;
     padding: 0; }
@@ -391,8 +390,7 @@ body {
       padding: 4px 1em;
       margin-right: 4px;
       cursor: pointer;
-      color: white;
-      vertical-align: middle; }
+      color: white; }
       body.reports_show_action #report-tabs li.active {
         border-bottom-color: white;
         background-color: white;
@@ -401,7 +399,7 @@ body {
     border: solid 1px #CCC;
     background-color: white;
     padding: 1em;
-    margin-top: 27px;
+    margin-top: 25px;
     margin-bottom: 1em; }
   body.reports_show_action .section {
     margin: 0; }

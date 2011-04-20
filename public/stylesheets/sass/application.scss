@@ -526,8 +526,7 @@ body {
   &.reports_show_action {
     #report-tabs {
       display: none;
-      font-size: 14px;
-      font-weight: bold;
+      font: bold 14px Arial;
       float: left;
       margin: 0;
       padding: 0;
@@ -555,7 +554,7 @@ body {
       border: solid 1px #CCC;
       background-color: white;
       padding: 1em;
-      margin-top: 27px;
+      margin-top: 25px;
       margin-bottom: 1em;
     }
 
