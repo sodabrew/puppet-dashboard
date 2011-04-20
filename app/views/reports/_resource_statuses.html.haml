@@ -1,5 +1,5 @@
-- if report.resource_statuses.present?
-  .section
+.section
+  - if report.resource_statuses.present?
     %h3
       Events
       %a{ :href => '#', :class => 'expand-all' } (expand all)
@@ -22,3 +22,6 @@
                 %tr{:class => "status #{event.status}"}
                   %td= event.property
                   %td= popup_md5s( h event.message )
+  - else
+    %h3 Events
+    %p= describe_no_matches_for(:events, :report)
