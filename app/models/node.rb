@@ -73,6 +73,10 @@ class Node < ActiveRecord::Base
     return "#{currentness ? 'Currently' : 'Ever'} #{successfulness ? (currentness ? 'successful' : 'succeeded') : (currentness ? 'failing' : 'failed')}"
   end
 
+  def self.find_by_id_or_name!(identifier)
+    find_by_id(identifier) or find_by_name!(identifier)
+  end
+
   def self.find_from_inventory_search(search_params)
     query_string = search_params.
       map {|param| "facts.#{CGI::escape param["fact"]}.#{param["comparator"]}=#{CGI::escape param["value"]}" }.
