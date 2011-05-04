@@ -44,7 +44,7 @@ start() {
         # debugging output (or a real exit code) if it fails to start.
         # Also: We don't have reliable access to start-stop-daemon.
 
-        su -s /bin/sh -c "${DASHBOARD_RUBY} ${DASHBOARD_HOME}/script/server -e ${DASHBOARD_ENVIRONMENT} -p ${DASHBOARD_PORT} -b ${DASHBOARD_IFACE}" ${DASHBOARD_USER} &
+        su -s /bin/sh -c "${DASHBOARD_RUBY} ${DASHBOARD_HOME}/script/server -e ${DASHBOARD_ENVIRONMENT} -p ${DASHBOARD_PORT} -b ${DASHBOARD_IFACE} -d" ${DASHBOARD_USER} &
         local PID=$!
         echo $PID > ${PIDFILE}
 
