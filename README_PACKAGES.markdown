@@ -72,7 +72,7 @@ RPM packages via Yum
         sudo yum install puppet-dashboard
 
 You will be prompted to install the Puppet Labs release key as part of the
-installation process.
+installation process. If it does not then you can execute `gpg --recv-key 4BD6EC30` to install the [release signing key](http://projects.puppetlabs.com/projects/1/wiki/Downloading_Puppet#Import+the+release+signing+key).
 
 Puppet Dashboard will be installed in `/usr/share/puppet-dashboard` and you can
 start it via `service puppet-dashboard start`.
