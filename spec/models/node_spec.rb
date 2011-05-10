@@ -87,6 +87,30 @@ describe Node do
     end
   end
 
+  describe "::pending" do
+    before :each do
+      @node = Node.generate!
+      @report = Report.generate!(:status => "unchanged", :host => @node.name)
+      @resource_status = @report.resource_statuses.generate!(:resource_type => "file", :title => "/tmp/foo", :failed => false)
+      @resource_status.events.generate!(:status => "noop")
+    end
+
+    it "should find nodes with noop events" do
+      Node.pending.should == [@node]
+    end
+
+    it "should exclude nodes which are failed" do
+      @report.status = 'failed'
+      @report.save
+      Node.pending.should == []
+    end
+
+    it "should only consider the latest report for a node" do
+      @new_report = Report.generate!(:status => "unchanged", :host => @node.name)
+      Node.pending.should == []
+    end
+  end
+
   describe "::find_from_inventory_search" do
     before :each do
       @foo = Node.generate :name => "foo"

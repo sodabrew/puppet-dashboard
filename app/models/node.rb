@@ -57,6 +57,13 @@ class Node < ActiveRecord::Base
     end
   }
 
+  named_scope :pending,
+    :conditions => ["resource_events.status = 'noop' and reports.status != 'failed'"],
+    :joins => "join reports on nodes.last_apply_report_id = reports.id
+    join resource_statuses on resource_statuses.report_id = reports.id
+    join resource_events on resource_events.resource_status_id = resource_statuses.id",
+    :group => 'nodes.id'
+
   named_scope :reported, :conditions => ["reported_at IS NOT NULL"]
 
   # Return nodes that have never reported.
