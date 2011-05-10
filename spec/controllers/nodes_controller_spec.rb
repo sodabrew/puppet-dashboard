@@ -6,7 +6,7 @@ describe NodesController do
 
   describe "#index" do
     before :each do
-      @node = Factory(:compliant_node)
+      @node = Factory(:changed_node)
       @resource = @node.last_apply_report.resource_statuses.first
     end
 

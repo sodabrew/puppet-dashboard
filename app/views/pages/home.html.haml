@@ -3,19 +3,45 @@
   .header
     %h2 Dashboard
   .item
+    %ul#home-tabs
+      %li(id="all-tab")
+        All
+      %li(id="failed-tab")
+        Failed
+      %li(id="pending-tab")
+        Pending
+      %li(id="unresponsive-tab")
+        Unresponsive
+      %li(id="changed-tab")
+        Changed
+      %li(id="unchanged-tab")
+        Unchanged
+      %div.panel(id="all")
+        = render 'resource_summary', :nodes => @nodes
+      %div.panel(id="failed")
+        = render 'resource_summary', :nodes => @failed_nodes
+      %div.panel(id="pending")
+        = render 'resource_summary', :nodes => @pending_nodes
+      %div.panel(id="unresponsive")
+        = render 'resource_summary', :nodes => @unresponsive_nodes
+      %div.panel(id="changed")
+        = render 'resource_summary', :nodes => @changed_nodes
+      %div.panel(id="unchanged")
+        = render 'resource_summary', :nodes => @unchanged_nodes
+  .item
     - if @nodes.empty?
       .section
         %p There are no nodes known by Dashboard.
     - else
       .section
         %table.node_summary
-          - [ { :title => 'Unresponsive', :nodes => @unresponsive_nodes },
-              { :title => 'Failed',       :nodes => @failed_nodes },
-              { :title => 'Pending',      :nodes => @pending_nodes },
-              { :title => 'Compliant',    :nodes => @compliant_nodes },
-              { :title => 'Total Nodes',  :nodes => @nodes } ].each do |section|
+          - [ { :title => 'Unresponsive',          :nodes => @unresponsive_nodes },
+              { :title => 'Failed',                :nodes => @failed_nodes },
+              { :title => 'Pending',               :nodes => @pending_nodes },
+              { :title => 'Compliant (Changed)',   :nodes => @changed_nodes, :class_name => 'changed' },
+              { :title => 'Compliant (Unchanged)', :nodes => @unchanged_nodes, :class_name => 'unchanged' },
+              { :title => 'Total Nodes',           :nodes => @nodes } ].each do |section|
             = render 'node_summary_row', section
-
       .section
         = render 'statuses/run_failure', :nodes => @nodes
       .section

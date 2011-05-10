@@ -99,37 +99,40 @@ Factory.define :unresponsive_node, :parent => :reported_node do |node|
   end
 end
 
-Factory.define :current_node, :parent => :reported_node do |node|
+Factory.define :responsive_node, :parent => :reported_node do |node|
   node.after_create do |node|
     node.last_apply_report.update_attributes!(:time => 2.minutes.ago)
     node.update_attributes!(:reported_at => 2.minutes.ago)
   end
 end
 
-Factory.define :failing_node, :parent => :current_node do |node|
+Factory.define :failing_node, :parent => :responsive_node do |node|
   node.after_create do |node|
     node.last_apply_report.update_attributes!(:status => 'failed')
     node.update_attributes!(:status => 'failed')
   end
 end
 
-Factory.define :successful_node, :parent => :current_node do |node|
+Factory.define :pending_node, :parent => :responsive_node do |node|
   node.after_create do |node|
-    node.last_apply_report.update_attributes!(:status => 'changed')
-    node.update_attributes!(:status => 'changed')
-  end
-end
-
-Factory.define :pending_node, :parent => :successful_node do |node|
-  node.after_create do |node|
+    node.last_apply_report.update_attributes!(:status => 'pending')
+    node.update_attributes!(:status => 'pending')
     node.last_apply_report.resource_statuses.generate().events.generate(:status => 'noop')
   end
 end
 
-Factory.define :compliant_node, :parent => :successful_node do |node|
+Factory.define :changed_node, :parent => :responsive_node do |node|
   node.after_create do |node|
-    res = node.last_apply_report.resource_statuses.generate!(:failed => false)
-    res.events.generate!(:status => 'success')
+    node.last_apply_report.update_attributes!(:status => 'changed')
+    node.last_apply_report.resource_statuses.generate(:status => 'changed').events.generate(:status => 'changed')
+    node.update_attributes!(:status => 'changed')
+  end
+end
+
+Factory.define :unchanged_node, :parent => :responsive_node do |node|
+  node.after_create do |node|
+    node.last_apply_report.update_attributes!(:status => 'unchanged')
+    node.update_attributes!(:status => 'unchanged')
   end
 end
 

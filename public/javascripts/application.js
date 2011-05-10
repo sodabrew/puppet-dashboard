@@ -114,6 +114,17 @@ jQuery(document).ready(function(J) {
     J('#' + panelID).show();
   });
   J('.reports_show_action #report-tabs li:first').click();
+
+  J('.pages_home_action #home-tabs').show();
+  J('.pages_home_action .panel').addClass('tabbed');
+  J('.pages_home_action #home-tabs li').click(function() {
+    panelID = this.id.replace(/-tab$/, '');
+    J('.pages_home_action #home-tabs li').removeClass('active');
+    J('.pages_home_action .panel').hide();
+    J(this).addClass('active');
+    J('#' + panelID).show();
+  });
+  J('.pages_home_action #home-tabs li:first').click();
 });
 
 function init_expandable_list() {
