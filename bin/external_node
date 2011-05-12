@@ -29,6 +29,8 @@ url = ENV['PUPPET_DASHBOARD_URL'] || DASHBOARD_URL
 uri = URI.parse("#{url}/nodes/#{NODE}")
 require 'net/https' if uri.scheme == 'https'
 
+request = Net::HTTP::Get.new(uri.path, initheader = {'Accept' => 'text/yaml'})
+request.basic_auth uri.user, uri.password if uri.user
 http = Net::HTTP.new(uri.host, uri.port)
 if uri.scheme == 'https'
   cert = File.read(cert_path)
@@ -39,7 +41,7 @@ if uri.scheme == 'https'
   http.ca_file = ca_path
   http.verify_mode = OpenSSL::SSL::VERIFY_PEER
 end
-result = http.start { http.request_get(uri.path, 'Accept' => 'text/yaml') }
+result = http.start {|http| http.request(request)}
 
 case result
 when Net::HTTPSuccess; puts result.body; exit 0
