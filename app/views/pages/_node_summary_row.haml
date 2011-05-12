@@ -1,0 +1,13 @@
+- nodes      = local_assigns[:nodes]
+- title      = local_assigns[:title]
+- puts title.inspect
+- class_name = title[/\w*/].downcase
+
+%tr{:class => class_name}
+  %td.count
+    %span= nodes.length
+  %td
+    %span.label= title
+    %em= "#{percentage(nodes)}%"
+    %br/
+    %hr{:style => "width: #{percentage(nodes)}%"}

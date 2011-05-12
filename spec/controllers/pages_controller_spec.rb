@@ -5,26 +5,35 @@ describe PagesController do
     before :each do
       SETTINGS.stubs(:no_longer_reporting_cutoff).returns(3600)
 
-      @currently_failing_node          = Node.generate!(:name => "currently_failing")
-      @unreported_node                 = Node.generate!(:name => "unreported")
-      @no_longer_reporting_node        = Node.generate!(:name => "no_longer_reporting")
-      @hidden_node                     = Node.generate!(:name => "hidden", :hidden => true)
-      @unreported_hidden_node          = Node.generate!(:name => "unreported_hidden", :hidden => true)
-      @no_longer_reporting_hidden_node = Node.generate!(:name => "no_longer_reporting_hidden", :hidden => true)
-      Report.generate(:host => @currently_failing_node.name, :time => 5.minutes.ago, :status => "failed")
-      Report.generate(:host => @no_longer_reporting_node.name, :time => 2.hours.ago, :status => "unchanged")
-      Report.generate(:host => @hidden_node.name, :time => 5.minutes.ago, :status => "failed")
-      Report.generate(:host => @no_longer_reporting_hidden_node.name, :time => 2.hours.ago, :status => "failed")
+      [true, false].each do |hidden|
+        prefix = hidden ? 'hidden:' : ''
+        Factory(:node,              :hidden => hidden, :name => prefix + 'unreported')
+        Factory(:reported_node,     :hidden => hidden, :name => prefix + 'reported')
+        Factory(:unresponsive_node, :hidden => hidden, :name => prefix + 'unresponsive')
+        Factory(:current_node,      :hidden => hidden, :name => prefix + 'current')
+        Factory(:failing_node,      :hidden => hidden, :name => prefix + 'failing')
+        Factory(:successful_node,   :hidden => hidden, :name => prefix + 'successful')
+        Factory(:pending_node,      :hidden => hidden, :name => prefix + 'pending')
+        Factory(:compliant_node,    :hidden => hidden, :name => prefix + 'compliant')
+      end
     end
 
     it "should properly categorize nodes" do
       get :home
 
-      assigns[:currently_failing_nodes].map(&:name).should =~ ["currently_failing"]
-      assigns[:unreported_nodes].map(&:name).should =~ ["unreported"]
-      assigns[:no_longer_reporting_nodes].map(&:name).should =~ ["no_longer_reporting"]
-      assigns[:recently_reported_nodes].map(&:name).should =~ ["currently_failing", "no_longer_reporting"]
-      assigns[:unhidden_nodes].map(&:name).should =~ ["currently_failing", "unreported", "no_longer_reporting"]
+      assigns[:currently_failing_nodes].map(&:name).should   =~ %w[ reported unresponsive current failing ]
+      assigns[:unreported_nodes].map(&:name).should          =~ %w[ unreported ]
+      assigns[:no_longer_reporting_nodes].map(&:name).should =~ %w[ reported unresponsive ]
+      assigns[:recently_reported_nodes].map(&:name).should   =~ %w[ reported unresponsive current failing successful pending compliant ]
+
+      assigns[:nodes].map(&:name).should =~ %w[ unreported reported unresponsive current failing successful pending compliant ]
+
+      assigns[:unresponsive_nodes].map(&:name).should =~ %w[ unreported reported unresponsive ]
+      assigns[:current_nodes].map(&:name).should      =~ %w[ current failing successful pending compliant ]
+      assigns[:failed_nodes].map(&:name).should       =~ %w[ current failing ]
+      assigns[:successful_nodes].map(&:name).should   =~ %w[ successful pending compliant ]
+      assigns[:pending_nodes].map(&:name).should      =~ %w[ pending ]
+      assigns[:compliant_nodes].map(&:name).should    =~ %w[ successful compliant ]
     end
   end
 end
