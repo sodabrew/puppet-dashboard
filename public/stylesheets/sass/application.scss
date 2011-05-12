@@ -98,6 +98,11 @@ $rounding_radius: 0.35em;
     }
 }
 
+@mixin node_summary_row($color) {
+  color: $color;
+  hr { background-color: $color }
+}
+
 body {
   background: #e8eef0;
   color: #444;
@@ -581,6 +586,61 @@ body {
         &.puppet_log_level_warning {
             @include reporty_level_row(#FFEBD6);
         }
+    }
+  }
+
+  &.pages_home_action {
+    table.node_summary {
+      border: solid 1px #DDD;
+      padding: 1em;
+      width: 75%;
+      margin: 0 auto;
+
+      tr {
+        &.unresponsive { @include node_summary_row(gray) }
+        &.failed       { @include node_summary_row(red) }
+        &.pending      { @include node_summary_row(orange) }
+        &.compliant    { @include node_summary_row(green) }
+        &.total        { @include node_summary_row(black) }
+
+        td {
+          padding-bottom: 1em;
+
+          &.count {
+            padding-right: 1em;
+            width: 1em;
+            text-align: right;
+
+            span {
+              font-size: 3em;
+              font-weight: bold;
+            }
+          }
+
+          .label {
+            font-size: 1.5em;
+          }
+
+          em {
+            color: #888;
+            margin-left: 10px;
+            font-size: 1.25em;
+          }
+
+          hr {
+            height: 5px;
+            align: left;
+            border: 0;
+            margin: 0;
+          }
+        }
+
+        &.total td {
+          padding-top: 1em;
+          padding-bottom: 0;
+          border-top: solid 1px #DDD;
+        }
+      }
     }
   }
 
