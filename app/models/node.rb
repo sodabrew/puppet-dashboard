@@ -45,12 +45,14 @@ class Node < ActiveRecord::Base
   # * non-current and successful: Return any nodes that ever had a successful report.
   # * non-current and failing: Return any nodes that ever had a failing report.
   named_scope :by_currentness_and_successfulness, lambda {|currentness, successfulness|
-    operator = successfulness ? '!=' : '='
+    op = successfulness ? '!=' : '='
     if currentness
-      { :conditions => ["nodes.status #{operator} 'failed' AND nodes.last_apply_report_id is not NULL"]  }
+      {
+        :conditions => [ "nodes.status #{op} 'failed' AND nodes.last_apply_report_id is not NULL" ]
+      }
     else
       {
-        :conditions => ["reports.kind = 'apply' AND reports.status #{operator} 'failed'"],
+        :conditions => [ "reports.kind = 'apply' AND reports.status #{op} 'failed'" ],
         :joins => :reports,
         :group => 'nodes.id',
       }
@@ -70,14 +72,24 @@ class Node < ActiveRecord::Base
   named_scope :unreported, :conditions => {:reported_at => nil}
 
   # Return nodes that haven't reported recently.
-  named_scope :no_longer_reporting, lambda{{:conditions => ['reported_at < ?', SETTINGS.no_longer_reporting_cutoff.seconds.ago] }}
+  named_scope :no_longer_reporting, lambda {
+    {
+      :conditions => ['reported_at < ?', SETTINGS.no_longer_reporting_cutoff.seconds.ago]
+    }
+  }
 
   named_scope :hidden, :conditions => {:hidden => true}
 
   named_scope :unhidden, :conditions => {:hidden => false}
 
-  def self.label_for_currentness_and_successfulness(currentness, successfulness)
-    return "#{currentness ? 'Currently' : 'Ever'} #{successfulness ? (currentness ? 'successful' : 'succeeded') : (currentness ? 'failing' : 'failed')}"
+  def self.label_for_currentness_and_successfulness(current, successful)
+    scope = { true => 'Currently', false => 'Ever' }
+    tense = if current then
+      { true => 'successful', false => 'failing' }
+    else
+      { true => 'succeeded', false => 'failed' }
+    end
+    return "#{scope[current]} #{tense[successful]}"
   end
 
   def self.find_by_id_or_name!(identifier)
@@ -85,19 +97,31 @@ class Node < ActiveRecord::Base
   end
 
   def self.find_from_inventory_search(search_params)
-    query_string = search_params.
-      map {|param| "facts.#{CGI::escape param["fact"]}.#{param["comparator"]}=#{CGI::escape param["value"]}" }.
-      join("&")
+    queries = search_params.map do |param|
+      fact  = CGI::escape(param['fact'])
+      value = CGI::escape(param['value'])
+      "facts.#{ fact }.#{ param['comparator'] }=#{ value }"
+    end
 
-    url = "https://#{SETTINGS.inventory_server}:#{SETTINGS.inventory_port}/production/facts_search/search?#{query_string}"
+    url = "https://#{SETTINGS.inventory_server}:#{SETTINGS.inventory_port}/" +
+          "production/facts_search/search?#{ queries.join('&') }"
+
     matches = JSON.parse(PuppetHttps.get(url, 'pson'))
     nodes = Node.find_all_by_name(matches)
     found = nodes.map(&:name).map(&:downcase)
-    nodes.concat matches.reject {|match| found.include? match.downcase}.map {|match| Node.create!(:name => match)}
+    matched_nodes = matches.map do |m|
+      Node.create!(:name => m) unless found.include? m.downcase
+    end
+
+    return nodes + matched_nodes.compact
   end
 
   def configuration
-    { 'name' => name, 'classes' => all_node_classes.collect(&:name), 'parameters' => parameter_list }
+    {
+      'name'       => name,
+      'classes'    => all_node_classes.collect(&:name),
+      'parameters' => parameter_list
+    }
   end
 
   def to_yaml(opts={})
@@ -194,8 +218,9 @@ class Node < ActiveRecord::Base
 
   def facts
     return @facts if @facts
-    pson_data = PuppetHttps.get("https://#{SETTINGS.inventory_server}:#{SETTINGS.inventory_port}/production/facts/#{CGI.escape(self.name)}", 'pson')
-    data = JSON.parse(pson_data)
+    url = "https://#{SETTINGS.inventory_server}:#{SETTINGS.inventory_port}/" +
+          "production/facts/#{CGI.escape(self.name)}"
+    data = JSON.parse(PuppetHttps.get(url, 'pson'))
     if data['timestamp']
       timestamp = Time.parse data['timestamp']
     elsif data['values']['--- !ruby/sym _timestamp']
@@ -203,7 +228,8 @@ class Node < ActiveRecord::Base
     else
       timestamp = nil
     end
-    @facts = { :timestamp => timestamp,
+    @facts = {
+      :timestamp => timestamp,
       :values => data['values']
     }
   end
