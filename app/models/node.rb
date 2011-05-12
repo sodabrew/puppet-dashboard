@@ -33,6 +33,21 @@ class Node < ActiveRecord::Base
   fires :updated, :on => :update
   fires :removed, :on => :destroy
 
+  named_scope :current, lambda { |predicate|
+    predicate = predicate ? '' : 'NOT'
+    {
+      :conditions => [
+        "#{predicate} (last_apply_report_id IS NOT NULL AND reported_at >= ?)",
+        SETTINGS.no_longer_reporting_cutoff.seconds.ago
+      ]
+    }
+  }
+
+  named_scope :successful, lambda { |predicate|
+    predicate = predicate ? '' : 'NOT'
+    { :conditions => [ "#{predicate} (nodes.status != 'failed')" ] }
+  }
+
   # Return nodes based on their currentness and successfulness.
   #
   # The terms are:
@@ -59,12 +74,20 @@ class Node < ActiveRecord::Base
     end
   }
 
-  named_scope :pending,
-    :conditions => ["resource_events.status = 'noop' and reports.status != 'failed'"],
-    :joins => "join reports on nodes.last_apply_report_id = reports.id
-    join resource_statuses on resource_statuses.report_id = reports.id
-    join resource_events on resource_events.resource_status_id = resource_statuses.id",
-    :group => 'nodes.id'
+  named_scope :pending, lambda { |predicate|
+    predicate = predicate ? '' : 'NOT'
+    {
+      :conditions => <<-SQL
+        nodes.id #{predicate} IN (
+          SELECT nodes.id FROM nodes
+            INNER JOIN reports ON nodes.last_apply_report_id = reports.id
+            INNER JOIN resource_statuses ON reports.id = resource_statuses.report_id
+            INNER JOIN resource_events ON resource_statuses.id = resource_events.resource_status_id
+            WHERE resource_events.status = 'noop'
+          )
+      SQL
+    }
+  }
 
   named_scope :reported, :conditions => ["reported_at IS NOT NULL"]
 

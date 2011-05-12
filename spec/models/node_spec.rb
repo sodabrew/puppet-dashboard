@@ -89,25 +89,75 @@ describe Node do
 
   describe "::pending" do
     before :each do
-      @node = Node.generate!
-      @report = Report.generate!(:status => "unchanged", :host => @node.name)
+      @pending = Node.generate!
+      @report = Report.generate!(:status => "unchanged", :host => @pending.name)
       @resource_status = @report.resource_statuses.generate!(:resource_type => "file", :title => "/tmp/foo", :failed => false)
       @resource_status.events.generate!(:status => "noop")
+      @resource_status.events.generate!(:status => "success")
+
+      @current = Node.generate!
+      @report = Report.generate!(:status => "unchanged", :host => @current.name)
+      @resource_status = @report.resource_statuses.generate!(:resource_type => "file", :title => "/tmp/foo", :failed => false)
+      @resource_status.events.generate!(:status => "success")
     end
 
-    it "should find nodes with noop events" do
-      Node.pending.should == [@node]
+    describe "(true)" do
+      it "should find nodes with noop events" do
+        Node.pending(true).should == [@pending]
+      end
+
+      it "should only consider the latest report for a node" do
+        @new_report = Report.generate!(:status => "unchanged", :host => @pending.name)
+        Node.pending(true).should == []
+      end
     end
 
-    it "should exclude nodes which are failed" do
-      @report.status = 'failed'
-      @report.save
-      Node.pending.should == []
+    describe "(false)" do
+      it "should find nodes without noop events" do
+        Node.pending(false).should == [@current]
+      end
+
+      it "should only consider the latest report for a node" do
+        @new_report = Report.generate!(:status => "unchanged", :host => @pending.name)
+        Node.pending(false).should =~ [@pending, @current]
+      end
+    end
+  end
+  describe "::current" do
+    before :each do
+      Factory(:unresponsive_node, :name => 'unresponsive')
+      Factory(:current_node, :name => 'current')
     end
 
-    it "should only consider the latest report for a node" do
-      @new_report = Report.generate!(:status => "unchanged", :host => @node.name)
-      Node.pending.should == []
+    describe "(true)" do
+      it "should find nodes with recent reports" do
+        Node.current(true).map(&:name).should == %w[ current ]
+      end
+    end
+
+    describe "(false)" do
+      it "should find nodes without recent reports" do
+        Node.current(false).map(&:name).should == %w[ unresponsive ]
+      end
+    end
+  end
+
+  describe "::successful" do
+    before :each do
+      Factory(:successful_node, :name => 'successful')
+      Factory(:failing_node, :name => 'failed')
+    end
+
+    describe "(true)" do
+      it "should find nodes with non-failed status" do
+        Node.successful(true).map(&:name).should == %w[ successful ]
+      end
+    end
+
+    describe "(false)" do
+      it "should find nodes with failed status" do
+        Node.successful(false).map(&:name).should == %w[ failed ]
+      end
     end
   end
 
