@@ -41,7 +41,7 @@
 # * Starting a server with: scipt/server -e production
 # * Running a rake task with: rake RAILS_ENV=production ...
 production:
-  database: dashboard
+  database: dashboard_production
   username: root
   password:
   encoding: utf8
@@ -53,7 +53,7 @@ production:
 # * Starting a server with: script/server
 # * Running a rake task with: rake ...
 development:
-  database: dashboard
+  database: dashboard_development
   username: root
   password:
   encoding: utf8
