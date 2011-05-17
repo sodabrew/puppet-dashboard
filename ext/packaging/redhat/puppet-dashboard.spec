@@ -2,7 +2,7 @@
 %global initrddir /etc/rc.d/init.d
 
 Name:           puppet-dashboard
-Version:        1.1.0
+Version:        1.1.1
 Release:        1%{?dist}
 Summary:        Systems Management web application
 Group:          Applications/System
@@ -92,6 +92,9 @@ fi
 %doc CHANGELOG COPYING README.markdown README_PACKAGES.markdown RELEASE_NOTES.md
 
 %changelog
+* Tue May 17 2011 Michael Stahnke <stahnma@puppetlabs.com> - 1.1.1-1
+- New release
+
 * Thu Apr 07 2011 James Turnbull <james@puppetlabs.com> - 1.1.0-1
 - Removed zero byte file deletion
 - Incremented version
