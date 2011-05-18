@@ -1,3 +1,9 @@
+puppet-dashboard (1.1.1-1) intrepid jaunty karmic lucid meerkat narwhal; urgency=low
+
+  * 1.1.1-1 feature release
+
+ -- Michael Stahnke  <stahnma@puppetlabs.com>  Tue, 17 May 2011 15:08:00 -0700
+
 puppet-dashboard (1.1.0-1) intrepid jaunty karmic lucid meerkat narwhal; urgency=low
 
   * 1.1.0-1 feature release

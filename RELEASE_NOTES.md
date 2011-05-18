@@ -3,6 +3,28 @@ Puppet Dashboard Release Notes
 
 v1.1.0
 ------
+* Use absolute paths for cert/private key
+* Document the `rake reports:schematize` upgrade process
+* #6980 - Updated DEB packaging for 1.1.0
+* #6980 - Updated RPM spec file for Puppet Dashboard
+* maint: Clean sample reports before generating new ones
+* (#6862) Add a default subject for the mail_patches rake task
+* require 'yaml' should be lowercase, works on macs for some reason
+* (#6532) Add NUM_REPORTS to reports:samples:generate rake task
+* (#6533) Add rake task to generate unresponsive nodes
+* (#6532) Add options to sample generator rake task
+* (#6532) Add combination rake task for generating & importing samples
+* (#6532) Change report generator to a rake task
+* Print error message when rake:import fails
+* (#6531) Folded into one file & renamed
+* (#6531) Add ability to generate events
+* Branch with report generation utility
+* (#6736) Add require 'thread' to rakefile
+* Make sure config/installed_plugins is present before db:migrate
+* (#6684) Sanitize plugin migration names
+
+v1.1.0
+------
 
 * Updated CHANGELOG for 1.1.0rc3
 * Updated VERSION for 1.1.0rc3
