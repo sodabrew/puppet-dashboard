@@ -8,7 +8,9 @@
       %li= link_to 'Destroy', report, :confirm => 'Are you sure?', :method => :delete, :class => "delete button"
 
 .item
-  - user_facing = { '600_resource_statuses' => 'Events', '700_log' => 'Log', '800_metrics' => 'Metrics' }
+  - user_facing = Hash.new do |hash, key|
+    - hash[key] = key[/[a-z].*/i].gsub('_', ' ').gsub(/\b\w/) { |m| m.upcase }
+  - user_facing.update '600_resource_statuses' => 'Events'
   - panels = []
   %ul#report-tabs
     - Registry.each_callback :core, :report_view_widgets do |name, widget|
