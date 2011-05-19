@@ -55,5 +55,47 @@ describe ResourceStatus do
       end
     end
   end
+
+  describe ".pending" do
+    before :each do
+      report = Report.generate!
+      @pending_resource = Factory(:pending_resource, :title => 'pending', :report => report)
+      @successful_resource = Factory(:successful_resource, :title => 'successful', :report => report)
+      @failed_resource = Factory(:failed_resource, :title => 'failed', :report => report)
+    end
+
+    describe "true" do
+      it "should return resource statuses which have no pending events" do
+        ResourceStatus.pending(true).map(&:title).should == ['pending']
+      end
+    end
+
+    describe "false" do
+      it "should return resource statuses which have pending events" do
+        ResourceStatus.pending(false).map(&:title).should == ['successful', 'failed']
+      end
+    end
+  end
+
+  describe ".failed" do
+    before :each do
+      report = Report.generate!
+      @pending_resource = Factory(:pending_resource, :title => 'pending', :report => report)
+      @successful_resource = Factory(:successful_resource, :title => 'successful', :report => report)
+      @failed_resource = Factory(:failed_resource, :title => 'failed', :report => report)
+    end
+
+    describe "true" do
+      it "should return resource statuses which are failed" do
+        ResourceStatus.failed(true).map(&:title).should =~ ['failed']
+      end
+    end
+
+    describe "false" do
+      it "should return resource statuses which are not failed" do
+        ResourceStatus.failed(false).map(&:title).should =~ ['successful', 'pending']
+      end
+    end
+  end
 end
 

@@ -24,6 +24,10 @@ Factory.define :report do |report|
   report.time   { Factory.next(:time) }
 end
 
+Factory.define :successful_report, :parent => :report do |report|
+  report.status 'changed'
+end
+
 Factory.define :failing_report, :parent => :report do |report|
   report.status 'failed'
 end
@@ -33,6 +37,26 @@ Factory.define :inspect_report, :parent => :report do |inspect|
 end
 
 Factory.define :resource_status do |status|
+end
+
+Factory.define :failed_resource, :parent => :resource_status do |status|
+  status.failed true
+  status.after_create do |status|
+    status.events.generate!(:status => 'failed')
+  end
+end
+
+Factory.define :successful_resource, :parent => :resource_status do |status|
+  status.failed false
+  status.after_create do |status|
+    status.events.generate!(:status => 'success')
+  end
+end
+
+Factory.define :pending_resource, :parent => :successful_resource do |status|
+  status.after_create do |status|
+    status.events.generate!(:status => 'noop')
+  end
 end
 
 Factory.define :resource_event do |event|
