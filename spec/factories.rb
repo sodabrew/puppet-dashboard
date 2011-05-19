@@ -85,7 +85,8 @@ end
 
 Factory.define :compliant_node, :parent => :successful_node do |node|
   node.after_create do |node|
-    node.last_apply_report.resource_statuses.generate().events.generate(:status => 'success')
+    res = node.last_apply_report.resource_statuses.generate!(:failed => false)
+    res.events.generate!(:status => 'success')
   end
 end
 
