@@ -123,6 +123,7 @@ class NodesController < InheritedResources::Base
 
       format.html { render :index }
       format.yaml { render :text => collection.to_yaml, :content_type => 'application/x-yaml' }
+      format.csv  { render :text => collection.to_csv, :content_type => 'text/csv' }
     end
   end
 end
