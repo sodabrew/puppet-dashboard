@@ -66,11 +66,17 @@ describe NodesController do
                             'change_count',    'out_of_sync_count', 'skipped',        'failed' ]
       end
 
+      def body_from_proc
+        body = StringIO.new
+        response.body.call(response, body)
+        body.string
+      end
+
       it "should make correct CSV" do
         get :index, :format => "csv"
 
         response.should be_success
-        response.body.split("\n").should =~ [
+        body_from_proc.split("\n").should =~ [
           header,
           "#{@node.name},changed,1,0,0,1,#{@resource.resource_type},#{@resource.title},#{@resource.evaluation_time},#{@resource.file},#{@resource.line},#{@resource.time},#{@resource.change_count},#{@resource.out_of_sync_count},#{@resource.skipped},#{@resource.failed}"
         ]
@@ -83,7 +89,7 @@ describe NodesController do
         get :index, :format => "csv"
 
         response.should be_success
-        response.body.split("\n").should =~ [
+        body_from_proc.split("\n").should =~ [
           header,
           "#{@node.name},changed,1,0,0,1,#{@resource.resource_type},#{@resource.title},#{@resource.evaluation_time},#{@resource.file},#{@resource.line},#{@resource.time},#{@resource.change_count},#{@resource.out_of_sync_count},#{@resource.skipped},#{@resource.failed}",
           "#{unreported_node.name},,,,,,,,,,,,,,,"
@@ -97,7 +103,7 @@ describe NodesController do
           get :index, :format => "csv"
 
           response.should be_success
-          CSV.parse(response.body).last.first.should == name
+          CSV.parse(body_from_proc).last.first.should == name
         end
       end
 
@@ -123,7 +129,7 @@ describe NodesController do
         get :index, :format => "csv"
 
         response.should be_success
-        response.body.split("\n").should =~ [
+        body_from_proc.split("\n").should =~ [
           header,
           %Q[#{@node.name},failed,2,0,1,1,File,/etc/sudoers,1.0,/etc/puppet/manifests/site.pp,1,#{res1.time},1,1,false,false],
           %Q[#{@node.name},failed,2,0,1,1,File,/etc/hosts,2.0,/etc/puppet/manifests/site.pp,5,#{res2.time},2,2,false,true]
