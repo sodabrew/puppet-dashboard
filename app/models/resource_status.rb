@@ -53,6 +53,10 @@ class ResourceStatus < ActiveRecord::Base
     }
   }
 
+  def self.to_csv_properties
+    [:resource_type, :title, :evaluation_time, :file, :line, :time, :change_count, :out_of_sync_count, :skipped, :failed]
+  end
+
   def name
     "#{resource_type}[#{title}]"
   end
