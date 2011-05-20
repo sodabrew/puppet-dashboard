@@ -151,6 +151,46 @@ class Node < ActiveRecord::Base
     configuration.to_yaml(opts)
   end
 
+  def resource_count
+    last_apply_report.resource_statuses.count rescue nil
+  end
+
+  def pending_count
+    last_apply_report.resource_statuses.pending(true).failed(false).count rescue nil
+  end
+
+  def failed_count
+    last_apply_report.resource_statuses.failed(true).count rescue nil
+  end
+
+  def compliant_count
+    last_apply_report.resource_statuses.pending(false).failed(false).count rescue nil
+  end
+
+  def self.to_csv_header
+    CSV.generate_line(Node.to_csv_properties + ResourceStatus.to_csv_properties)
+  end
+
+  def self.to_csv_properties
+    [:name, :status, :resource_count, :pending_count, :failed_count, :compliant_count]
+  end
+
+  def to_csv
+    node_segment = self.to_csv_array
+    rows = []
+    if (last_apply_report.resource_statuses.present? rescue false)
+      last_apply_report.resource_statuses.each do |res|
+        rows << node_segment + res.to_csv_array
+      end
+    else
+      rows << node_segment + ([nil] * ResourceStatus.to_csv_properties.length)
+    end
+
+    rows.map do |row|
+      CSV.generate_line row
+    end.join("\n")
+  end
+
   def timeline_events
     TimelineEvent.for_node(self)
   end
