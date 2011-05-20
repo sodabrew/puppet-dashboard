@@ -8,8 +8,7 @@
       %li= link_to 'Destroy', report, :confirm => 'Are you sure?', :method => :delete, :class => "delete button"
 
 .item
-  - user_facing = Hash.new do |hash, key|
-    - hash[key] = key[/[a-z].*/i].gsub('_', ' ').gsub(/\b\w/) { |m| m.upcase }
+  - user_facing = Hash.new { |hash, key| hash[key] = key[/[a-z].*/i].titleize }
   - user_facing.update '600_resource_statuses' => 'Events'
   - panels = []
   %ul#report-tabs
