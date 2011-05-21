@@ -21,3 +21,5 @@
       .section
         %h3 Recently-reported nodes
         = render 'nodes/nodes', :nodes => @recently_reported_nodes, :more_link => nodes_path(:page => 2)
+      .section
+        = link_to 'Export all nodes as CSV', nodes_path(:format => 'csv')

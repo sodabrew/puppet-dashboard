@@ -24,6 +24,10 @@ Factory.define :report do |report|
   report.time   { Factory.next(:time) }
 end
 
+Factory.define :successful_report, :parent => :report do |report|
+  report.status 'changed'
+end
+
 Factory.define :failing_report, :parent => :report do |report|
   report.status 'failed'
 end
@@ -33,6 +37,45 @@ Factory.define :inspect_report, :parent => :report do |inspect|
 end
 
 Factory.define :resource_status do |status|
+  status.resource_type 'File'
+  status.title { Factory.next(:filename) }
+  status.evaluation_time { rand(60)+1 }
+  status.file { Factory.next(:filename) }
+  status.line { rand(60)+1 }
+  status.time { Factory.next(:time) }
+  status.change_count 0
+  status.out_of_sync_count 0
+  status.skipped false
+  status.failed false
+end
+
+Factory.define :failed_resource, :parent => :resource_status do |status|
+  status.failed true
+  status.after_create do |status|
+    status.events.generate!(:status => 'failed')
+    status.change_count += 1
+    status.out_of_sync_count += 1
+    status.save
+  end
+end
+
+Factory.define :successful_resource, :parent => :resource_status do |status|
+  status.failed false
+  status.after_create do |status|
+    status.events.generate!(:status => 'success')
+    status.change_count += 1
+    status.out_of_sync_count += 1
+    status.save
+  end
+end
+
+Factory.define :pending_resource, :parent => :successful_resource do |status|
+  status.failed false
+  status.after_create do |status|
+    status.events.generate!(:status => 'noop')
+    status.out_of_sync_count += 1
+    status.save
+  end
 end
 
 Factory.define :resource_event do |event|
@@ -85,12 +128,17 @@ end
 
 Factory.define :compliant_node, :parent => :successful_node do |node|
   node.after_create do |node|
-    node.last_apply_report.resource_statuses.generate().events.generate(:status => 'success')
+    res = node.last_apply_report.resource_statuses.generate!(:failed => false)
+    res.events.generate!(:status => 'success')
   end
 end
 
 Factory.sequence :name do |n|
   "name_#{n}"
+end
+
+Factory.sequence :filename do |n|
+  File.join('/', *(1..3).map {Factory.next(:name)})
 end
 
 Factory.sequence :time do |n|

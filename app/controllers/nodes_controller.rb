@@ -123,6 +123,16 @@ class NodesController < InheritedResources::Base
 
       format.html { render :index }
       format.yaml { render :text => collection.to_yaml, :content_type => 'application/x-yaml' }
+      format.csv do
+        response["Content-Type"] = 'text/comma-separated-values;'
+        response["Content-Disposition"] = 'filename="nodes.csv";'
+
+        render :text => proc { |response,output|
+          collection.to_csv do |line|
+            output.write(line)
+          end
+        }, :layout => false
+      end
     end
   end
 end

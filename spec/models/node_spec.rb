@@ -587,4 +587,37 @@ describe Node do
       @node.facts.should == {:timestamp => timestamp, :values => {"a" => "1", "b" => "2"}}
     end
   end
+
+  describe '.to_csv' do
+    before :each do
+      @node = Node.generate!
+      @report = Report.generate!(:host => @node.name)
+      @node.reload
+
+      @custom_node_properties = [:name, :status, :resource_count, :pending_count, :failed_count, :compliant_count]
+      @custom_resource_properties = [:resource_type, :title, :evaluation_time, :file, :line, :time, :change_count, :out_of_sync_count, :skipped, :failed]
+    end
+
+    let(:node_values) { @custom_node_properties.map {|prop| @node.send(prop)} }
+
+    it 'should export one row per resource status with both node, and resource data' do
+      pending_resource = Factory(:pending_resource, :title => 'pending', :report => @report)
+      successful_resource = Factory(:successful_resource, :title => 'successful', :report => @report)
+      failed_resource = Factory(:failed_resource, :title => 'failed', :report => @report)
+
+      csv_lines = Node.find(:all).to_csv.split("\n")
+      csv_lines.first.should == (@custom_node_properties + @custom_resource_properties).join(',')
+      csv_lines[1..-1].should =~ [pending_resource, failed_resource, successful_resource].map do |res|
+        line = node_values + @custom_resource_properties.map { |field| res.send(field) }
+        line.join(',')
+      end
+    end
+
+    it 'should export nulls for the resource status values when there are no resource statuses' do
+      Node.find(:all).to_csv.split("\n").should == [
+        (@custom_node_properties + @custom_resource_properties).join(','),
+        (node_values + ([nil] * @custom_resource_properties.count)).join(',')
+      ]
+    end
+  end
 end

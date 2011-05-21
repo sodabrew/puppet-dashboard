@@ -34,6 +34,29 @@ class ResourceStatus < ActiveRecord::Base
     }
   }
 
+  named_scope :pending, lambda { |predicate|
+    predicate = predicate ? '' : 'NOT'
+    {
+      :conditions => <<-SQL
+        resource_statuses.id #{predicate} IN (
+          SELECT resource_statuses.id FROM resource_statuses
+            INNER JOIN resource_events ON resource_statuses.id = resource_events.resource_status_id
+            WHERE resource_events.status = 'noop'
+        )
+      SQL
+    }
+  }
+
+  named_scope :failed, lambda { |predicate|
+    {
+      :conditions => {:failed => predicate}
+    }
+  }
+
+  def self.to_csv_properties
+    [:resource_type, :title, :evaluation_time, :file, :line, :time, :change_count, :out_of_sync_count, :skipped, :failed]
+  end
+
   def name
     "#{resource_type}[#{title}]"
   end

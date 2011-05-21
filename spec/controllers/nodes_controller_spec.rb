@@ -6,7 +6,8 @@ describe NodesController do
 
   describe "#index" do
     before :each do
-      @node = Node.generate!
+      @node = Factory(:compliant_node)
+      @resource = @node.last_apply_report.resource_statuses.first
     end
 
     context "as HTML" do
@@ -54,6 +55,85 @@ describe NodesController do
           response.should_not be_success
           response.response_code.should == 403
         end
+      end
+    end
+
+    context "as CSV" do
+      let :header do
+        CSV.generate_line [ 'name',            'status',            'resource_count', 'pending_count',
+                            'failed_count',    'compliant_count',   'resource_type',  'title',
+                            'evaluation_time', 'file',              'line',           'time',
+                            'change_count',    'out_of_sync_count', 'skipped',        'failed' ]
+      end
+
+      def body_from_proc
+        body = StringIO.new
+        response.body.call(response, body)
+        body.string
+      end
+
+      it "should make correct CSV" do
+        get :index, :format => "csv"
+
+        response.should be_success
+        body_from_proc.split("\n").should =~ [
+          header,
+          "#{@node.name},changed,1,0,0,1,#{@resource.resource_type},#{@resource.title},#{@resource.evaluation_time},#{@resource.file},#{@resource.line},#{@resource.time},#{@resource.change_count},#{@resource.out_of_sync_count},#{@resource.skipped},#{@resource.failed}"
+        ]
+
+      end
+
+      it "should handle unreported nodes" do
+        unreported_node = Node.generate!
+
+        get :index, :format => "csv"
+
+        response.should be_success
+        body_from_proc.split("\n").should =~ [
+          header,
+          "#{@node.name},changed,1,0,0,1,#{@resource.resource_type},#{@resource.title},#{@resource.evaluation_time},#{@resource.file},#{@resource.line},#{@resource.time},#{@resource.change_count},#{@resource.out_of_sync_count},#{@resource.skipped},#{@resource.failed}",
+          "#{unreported_node.name},,,,,,,,,,,,,,,"
+        ]
+      end
+
+      %w[foo,_-' bar/\\$^ <ba"z>>].each do |name|
+        it "should handle a node named #{name}" do
+          @node.name = name
+          @node.save
+          get :index, :format => "csv"
+
+          response.should be_success
+          CSV.parse(body_from_proc).last.first.should == name
+        end
+      end
+
+      it "should include the node's resources" do
+        report = Report.generate!(:host => @node.name, :status => "failed", :time => Time.now)
+        res1 = report.resource_statuses.generate!( :resource_type     => "File",    :title        => "/etc/sudoers",
+                                                   :evaluation_time   => 1.second,  :file         => "/etc/puppet/manifests/site.pp",
+                                                   :line              => 1,         :tags         => ["file", "default"],
+                                                   :time              => Time.now,  :change_count => 1,
+                                                   :out_of_sync_count => 1,         :skipped      => false,
+                                                   :failed            => false )
+
+        res2 = report.resource_statuses.generate!( :resource_type     => "File",    :title        => "/etc/hosts",
+                                                   :evaluation_time   => 2.seconds, :file         => "/etc/puppet/manifests/site.pp",
+                                                   :line              => 5,         :tags         => ["file", "default"],
+                                                   :time              => Time.now,  :change_count => 2,
+                                                   :out_of_sync_count => 2,         :skipped      => false,
+                                                   :failed            => true )
+
+        res1.reload
+        res2.reload
+
+        get :index, :format => "csv"
+
+        response.should be_success
+        body_from_proc.split("\n").should =~ [
+          header,
+          %Q[#{@node.name},failed,2,0,1,1,File,/etc/sudoers,1.0,/etc/puppet/manifests/site.pp,1,#{res1.time},1,1,false,false],
+          %Q[#{@node.name},failed,2,0,1,1,File,/etc/hosts,2.0,/etc/puppet/manifests/site.pp,5,#{res2.time},2,2,false,true]
+        ]
       end
     end
   end
