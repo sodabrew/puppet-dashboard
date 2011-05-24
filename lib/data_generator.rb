@@ -130,14 +130,10 @@ module DataGenerator
     words[rand(words.length)]
   end
 
+  private
   def self.words
-    if @words.nil?
-      @words = []
-      File.open("/usr/share/dict/words").each_line do |line|
-        @words << line.chomp
-      end
-      @words.delete_if {|word| word.length < 6 or word.squeeze != word or word.downcase != word}
+    @words ||= File.new('/usr/share/dict/words').lines.map(&:chomp).reject do |w|
+      w.length < 6 or w =~ /[A-Z]|(.)\1/
     end
-    @words
   end
 end
