@@ -55,5 +55,68 @@ describe ResourceStatus do
       end
     end
   end
+
+  describe ".pending" do
+    before :each do
+      report = Report.generate!
+      @pending_resource = Factory(:pending_resource, :title => 'pending', :report => report)
+      @successful_resource = Factory(:successful_resource, :title => 'successful', :report => report)
+      @failed_resource = Factory(:failed_resource, :title => 'failed', :report => report)
+    end
+
+    describe "true" do
+      it "should return resource statuses which have no pending events" do
+        ResourceStatus.pending(true).map(&:title).should == ['pending']
+      end
+    end
+
+    describe "false" do
+      it "should return resource statuses which have pending events" do
+        ResourceStatus.pending(false).map(&:title).should == ['successful', 'failed']
+      end
+    end
+  end
+
+  describe ".failed" do
+    before :each do
+      report = Report.generate!
+      @pending_resource = Factory(:pending_resource, :title => 'pending', :report => report)
+      @successful_resource = Factory(:successful_resource, :title => 'successful', :report => report)
+      @failed_resource = Factory(:failed_resource, :title => 'failed', :report => report)
+    end
+
+    describe "true" do
+      it "should return resource statuses which are failed" do
+        ResourceStatus.failed(true).map(&:title).should =~ ['failed']
+      end
+    end
+
+    describe "false" do
+      it "should return resource statuses which are not failed" do
+        ResourceStatus.failed(false).map(&:title).should =~ ['successful', 'pending']
+      end
+    end
+  end
+
+  describe '.to_csv' do
+    before :each do
+      report = Report.generate!
+      @pending_resource = Factory(:pending_resource, :title => 'pending', :report => report)
+      @successful_resource = Factory(:successful_resource, :title => 'successful', :report => report)
+      @failed_resource = Factory(:failed_resource, :title => 'failed', :report => report)
+    end
+
+    it 'should use a custom list of properties to export as CSV' do
+      custom_properties = [:resource_type, :title, :evaluation_time, :file, :line, :time, :change_count, :out_of_sync_count, :skipped, :failed]
+
+      csv_lines = ResourceStatus.find(:all).to_csv.split("\n")
+      csv_lines.first.should == custom_properties.join(',')
+      csv_lines[1..-1].should =~ [@pending_resource, @failed_resource, @successful_resource].map do |res|
+        custom_properties.map do |field|
+          res.send(field)
+        end.join(',')
+      end
+    end
+  end
 end
 

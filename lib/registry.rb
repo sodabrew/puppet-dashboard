@@ -19,10 +19,14 @@ class Registry
     end
   end
 
-  def each_callback( feature_name, hook_name )
+  def each_callback( feature_name, hook_name, &block )
     hook = @registry[feature_name][hook_name]
     hook.sort.each do |callback_name,callback|
-      yield( callback )
+      if block.arity == 2
+        yield( callback_name, callback )
+      else
+        yield( callback )
+      end
     end
     nil
   end

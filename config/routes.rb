@@ -27,6 +27,8 @@ ActionController::Routing::Routes.draw do |map|
       :search => :get,
     }
 
+  map.resources :node_group_memberships, :as => :memberships
+
   map.upload "reports/upload", :controller => :reports, :action => "upload", :conditions => { :method => :post }
 
   map.release_notes '/release_notes', :controller => :pages, :action => :release_notes

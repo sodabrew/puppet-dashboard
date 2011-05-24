@@ -87,6 +87,80 @@ describe Node do
     end
   end
 
+  describe "::pending" do
+    before :each do
+      @pending = Node.generate!
+      @report = Report.generate!(:status => "unchanged", :host => @pending.name)
+      @resource_status = @report.resource_statuses.generate!(:resource_type => "file", :title => "/tmp/foo", :failed => false)
+      @resource_status.events.generate!(:status => "noop")
+      @resource_status.events.generate!(:status => "success")
+
+      @current = Node.generate!
+      @report = Report.generate!(:status => "unchanged", :host => @current.name)
+      @resource_status = @report.resource_statuses.generate!(:resource_type => "file", :title => "/tmp/foo", :failed => false)
+      @resource_status.events.generate!(:status => "success")
+    end
+
+    describe "(true)" do
+      it "should find nodes with noop events" do
+        Node.pending(true).should == [@pending]
+      end
+
+      it "should only consider the latest report for a node" do
+        @new_report = Report.generate!(:status => "unchanged", :host => @pending.name)
+        Node.pending(true).should == []
+      end
+    end
+
+    describe "(false)" do
+      it "should find nodes without noop events" do
+        Node.pending(false).should == [@current]
+      end
+
+      it "should only consider the latest report for a node" do
+        @new_report = Report.generate!(:status => "unchanged", :host => @pending.name)
+        Node.pending(false).should =~ [@pending, @current]
+      end
+    end
+  end
+  describe "::current" do
+    before :each do
+      Factory(:unresponsive_node, :name => 'unresponsive')
+      Factory(:current_node, :name => 'current')
+    end
+
+    describe "(true)" do
+      it "should find nodes with recent reports" do
+        Node.current(true).map(&:name).should == %w[ current ]
+      end
+    end
+
+    describe "(false)" do
+      it "should find nodes without recent reports" do
+        Node.current(false).map(&:name).should == %w[ unresponsive ]
+      end
+    end
+  end
+
+  describe "::successful" do
+    before :each do
+      Factory(:successful_node, :name => 'successful')
+      Factory(:failing_node, :name => 'failed')
+    end
+
+    describe "(true)" do
+      it "should find nodes with non-failed status" do
+        Node.successful(true).map(&:name).should == %w[ successful ]
+      end
+    end
+
+    describe "(false)" do
+      it "should find nodes with failed status" do
+        Node.successful(false).map(&:name).should == %w[ failed ]
+      end
+    end
+  end
+
   describe "::find_from_inventory_search" do
     before :each do
       @foo = Node.generate :name => "foo"
@@ -511,6 +585,39 @@ describe Node do
         @sample_pson_with_malformed_timestamp)
       timestamp = Time.parse("Sat Oct 30 10:33:53 -0700 2010")
       @node.facts.should == {:timestamp => timestamp, :values => {"a" => "1", "b" => "2"}}
+    end
+  end
+
+  describe '.to_csv' do
+    before :each do
+      @node = Node.generate!
+      @report = Report.generate!(:host => @node.name)
+      @node.reload
+
+      @custom_node_properties = [:name, :status, :resource_count, :pending_count, :failed_count, :compliant_count]
+      @custom_resource_properties = [:resource_type, :title, :evaluation_time, :file, :line, :time, :change_count, :out_of_sync_count, :skipped, :failed]
+    end
+
+    let(:node_values) { @custom_node_properties.map {|prop| @node.send(prop)} }
+
+    it 'should export one row per resource status with both node, and resource data' do
+      pending_resource = Factory(:pending_resource, :title => 'pending', :report => @report)
+      successful_resource = Factory(:successful_resource, :title => 'successful', :report => @report)
+      failed_resource = Factory(:failed_resource, :title => 'failed', :report => @report)
+
+      csv_lines = Node.find(:all).to_csv.split("\n")
+      csv_lines.first.should == (@custom_node_properties + @custom_resource_properties).join(',')
+      csv_lines[1..-1].should =~ [pending_resource, failed_resource, successful_resource].map do |res|
+        line = node_values + @custom_resource_properties.map { |field| res.send(field) }
+        line.join(',')
+      end
+    end
+
+    it 'should export nulls for the resource status values when there are no resource statuses' do
+      Node.find(:all).to_csv.split("\n").should == [
+        (@custom_node_properties + @custom_resource_properties).join(','),
+        (node_values + ([nil] * @custom_resource_properties.count)).join(',')
+      ]
     end
   end
 end

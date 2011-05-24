@@ -103,13 +103,7 @@ class NodesController < InheritedResources::Base
   protected
 
   def resource
-    node = get_resource_ivar
-    return node if node
-
-    node ||= end_of_association_chain.find(params[:id]) rescue nil
-    node ||= end_of_association_chain.find_by_name!(params[:id])
-
-    set_resource_ivar(node)
+    get_resource_ivar || set_resource_ivar(end_of_association_chain.find_by_id_or_name!(params[:id]))
   end
 
   # Render the index using the +scope_name+ (e.g. :successful for Node.successful).
@@ -129,6 +123,16 @@ class NodesController < InheritedResources::Base
 
       format.html { render :index }
       format.yaml { render :text => collection.to_yaml, :content_type => 'application/x-yaml' }
+      format.csv do
+        response["Content-Type"] = 'text/comma-separated-values;'
+        response["Content-Disposition"] = 'filename="nodes.csv";'
+
+        render :text => proc { |response,output|
+          collection.to_csv do |line|
+            output.write(line)
+          end
+        }, :layout => false
+      end
     end
   end
 end

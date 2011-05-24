@@ -9,15 +9,16 @@ namespace :puppet do
       unless File.exists?(plugin_dir)
         raise "Plugin #{plugin_name} not found in vendor/plugins."
       end
+
       Dir.glob(File.join(plugin_dir, 'db', 'migrate', '*.rb')) do |source_file|
-        if File.basename(source_file) =~ /^([0-9]+)_(.*)$/
-          timestamp, migration_name = $1, $2
-          # Downcase and replace anything not lower case letter, number or
-          # underscore (ie -, $, ^, space, etc) with underscores
-          new_migration_name = "#{timestamp}_plugin__#{plugin_name}__#{migration_name}".downcase.gsub(/[^a-z0-9_]/, '_')
-          destination_file = "db/migrate/#{new_migration_name}"
-          FileUtils.cp source_file, destination_file
+        base_file_name = File.basename(source_file)
+
+        unless base_file_name.match(/^\d{14}_plugin_#{plugin_name}_.+\.rb$/)
+          raise "Found a misnamed migration: #{source_file}\n" +
+            "Migrations for this plugin must be named in the form: YYYYMMDDHHMMSS_plugin_#{plugin_name}_*.rb"
         end
+
+        FileUtils.cp source_file, "db/migrate/#{base_file_name}"
       end
     end
 
