@@ -112,7 +112,7 @@ module DataGenerator
 
   def self.generate_hostname
     @domain ||= generate_word
-    @ext ||= ["net", "org", "com", "co.uk"].random_element
+    @ext ||= ["net", "org", "com", "co.uk"].shuffle.first
 
     host = @domain
     host = generate_word until host != @domain
@@ -127,7 +127,7 @@ module DataGenerator
   end
 
   def self.generate_word
-    words.random_element
+    words[rand(words.length)]
   end
 
   def self.words
@@ -141,24 +141,3 @@ module DataGenerator
     @words
   end
 end
-
-class Array
-  def random_element(n=nil)
-    return self[Kernel.rand(size)] if n.nil?
-    n = n.to_int
-  rescue Exception => e
-    raise TypeError, "Coercion error: #{n.inspect}.to_int => Integer failed:\n(#{e.message})"
-  else
-    raise TypeError, "Coercion error: #{n}.to_int did NOT return an Integer (was #{n.class})" unless n.kind_of? ::Integer
-    raise ArgumentError, "negative array size" if n < 0
-    n = size if n > size
-    result = ::Array.new(self)
-    n.times do |i|
-      r = i + Kernel.rand(size - i)
-      result[i], result[r] = result[r], result[i]
-    end
-    result[n..size] = []
-    result
-  end
-end
-
