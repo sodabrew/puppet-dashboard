@@ -1,7 +1,7 @@
 Puppet Dashboard Release Notes
 ==============================
 
-v1.1.0
+v1.1.1
 ------
 * Use absolute paths for cert/private key
 * Document the `rake reports:schematize` upgrade process
