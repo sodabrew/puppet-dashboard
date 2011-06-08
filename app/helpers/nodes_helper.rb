@@ -5,7 +5,8 @@ module NodesHelper
   end
 
   def node_title_text(node)
-    returning node.status_class.titleize do |str|
+    return "No reports" unless node.status
+    returning node.status.titleize do |str|
       str << " " << time_ago_in_words(node.reported_at) << " ago" if node.reported_at
     end
   end

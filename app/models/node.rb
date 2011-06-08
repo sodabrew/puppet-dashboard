@@ -36,75 +36,28 @@ class Node < ActiveRecord::Base
 
   named_scope :unresponsive, lambda {{
     :conditions => [
-      "last_apply_report_id IS NULL OR reported_at < ?",
+      "last_apply_report_id IS NOT NULL AND reported_at < ?",
       SETTINGS.no_longer_reporting_cutoff.seconds.ago
     ]
   }}
-  named_scope :responsive, lambda {{
-    :conditions => [
-      "last_apply_report_id IS NOT NULL AND reported_at >= ?",
-      SETTINGS.no_longer_reporting_cutoff.seconds.ago
-    ]
-  }}
-
-  # Return nodes based on their currentness and successfulness.
-  #
-  # The terms are:
-  # * currentness: +true+ uses the latest report (current) and +false+ uses any report.
-  # * successfulness: +true+ means a successful report, +false+ a failing report.
-  #
-  # Thus:
-  # * current and successful: Return only nodes that are currently successful.
-  # * current and failing: Return only nodes that are currently failing.
-  # * non-current and successful: Return any nodes that ever had a successful report.
-  # * non-current and failing: Return any nodes that ever had a failing report.
-  named_scope :by_currentness_and_successfulness, lambda {|currentness, successfulness|
-    op = successfulness ? '!=' : '='
-    if currentness
-      {
-        :conditions => [ "nodes.status #{op} 'failed' AND nodes.last_apply_report_id is not NULL" ]
-      }
-    else
-      {
-        :conditions => [ "reports.kind = 'apply' AND reports.status #{op} 'failed'" ],
-        :joins => :reports,
-        :group => 'nodes.id',
-      }
-    end
-  }
 
   [:failed, :pending, :changed, :unchanged].each do |node_status|
-    # what I really want is composite scopes so that I can say it has to be responsive without
-    # duplicating the logic for responsive
     named_scope node_status, lambda {{
       :conditions => [
-        "last_apply_report_id IS NOT NULL AND reported_at >= ? AND status = '#{node_status}'",
+        "last_apply_report_id IS NOT NULL AND reported_at >= ? AND nodes.status = '#{node_status}'",
         SETTINGS.no_longer_reporting_cutoff.seconds.ago
       ]
     }}
   end
 
-  named_scope :reported,   :conditions => ["reported_at IS NOT NULL"]
   named_scope :unreported, :conditions => {:reported_at => nil}
-
-  named_scope :no_longer_reporting, lambda {
-    {
-      :conditions => ['reported_at < ?', SETTINGS.no_longer_reporting_cutoff.seconds.ago]
-    }
-  }
 
   named_scope :hidden, :conditions => {:hidden => true}
 
   named_scope :unhidden, :conditions => {:hidden => false}
 
-  def self.label_for_currentness_and_successfulness(current, successful)
-    scope = { true => 'Currently', false => 'Ever' }
-    tense = if current then
-      { true => 'successful', false => 'failing' }
-    else
-      { true => 'succeeded', false => 'failed' }
-    end
-    return "#{scope[current]} #{tense[successful]}"
+  def self.possible_statuses
+    ["unresponsive", "failed", "pending", "changed", "unchanged"]
   end
 
   def self.find_by_id_or_name!(identifier)
@@ -191,11 +144,6 @@ class Node < ActiveRecord::Base
 
   def environment
     'production'
-  end
-
-  def status_class
-    return 'no reports' unless last_apply_report
-    last_apply_report.status
   end
 
   attr_accessor :node_class_names

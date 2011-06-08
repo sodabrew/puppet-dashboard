@@ -505,22 +505,6 @@ describe NodesController do
       end
     end
 
-    describe "#successful" do
-      it "should redirect to current and successful" do
-        get :successful
-
-        response.should redirect_to(nodes_path(:current => true.to_s, :successful => true.to_s))
-      end
-    end
-
-    describe "#failed" do
-      it "should redirect to current and failed" do
-        get :failed
-
-        response.should redirect_to(nodes_path(:current => true.to_s, :successful => false.to_s))
-      end
-    end
-
     describe "#unreported" do
       before :each do
         @node = Node.generate!(:name => "foo")
@@ -528,21 +512,6 @@ describe NodesController do
       end
 
       let(:action) { "unreported" }
-      let(:action_params) { {} }
-
-      it_should_behave_like "a scoped_index action"
-    end
-
-    describe "#no_longer_reporting" do
-      before :each do
-        SETTINGS.stubs(:no_longer_reporting_cutoff).returns(60)
-        @node = Node.generate!(:name => "foo")
-        @hidden_node = Node.generate!(:name => "bar", :hidden => true)
-        Report.generate!(:time => 1.hour.ago, :host => @node.name, :status => "failed")
-        Report.generate!(:time => 1.hour.ago, :host => @hidden_node.name, :status => "failed")
-      end
-
-      let(:action) { "no_longer_reporting" }
       let(:action_params) { {} }
 
       it_should_behave_like "a scoped_index action"
@@ -556,21 +525,6 @@ describe NodesController do
 
       let(:action) { "hidden" }
       let(:action_params) { {} }
-
-      it_should_behave_like "a scoped_index action"
-    end
-
-    describe "current and successful" do
-      before :each do
-        SETTINGS.stubs(:no_longer_reporting_cutoff).returns(3600)
-        @node = Node.generate!(:name => "foo")
-        @hidden_node = Node.generate!(:name => "bar", :hidden => true)
-        Report.generate!(:host => @node.name, :time => 5.minutes.ago, :status => "unchanged")
-        Report.generate!(:host => @hidden_node.name, :time => 5.minutes.ago, :status => "unchanged")
-      end
-
-      let(:action) { "index" }
-      let(:action_params) { {:current => "true", :successful => "true"} }
 
       it_should_behave_like "a scoped_index action"
     end

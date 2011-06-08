@@ -10,15 +10,15 @@ describe PagesHelper do
 
   describe '#percentage' do
     before :each do
-      helper.instance_variable_set(:@nodes, @nodes = [])
+      helper.instance_variable_set(:@all_nodes, @all_nodes = [])
     end
 
-    describe 'with values in @nodes' do
+    describe 'with values in @all_nodes' do
       before :each do
-        @nodes.push(*%w[ a b c d e f g h i j ])
+        @all_nodes.push(*%w[ a b c d e f g h i j ])
       end
 
-      it 'should report the ratio of given list length to @nodes' do
+      it 'should report the ratio of given list length to @all_nodes' do
         helper.percentage(%w[ a b c d e ]).should == 50
         helper.percentage(%w[ a b c z ]).should == 40
       end

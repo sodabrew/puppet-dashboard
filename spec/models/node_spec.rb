@@ -66,29 +66,10 @@ describe Node do
 
       @never_reported = Node.generate!(:name => 'never_reported')
     end
-
-    [
-      [true,  true,  %w[ever_changed ever_unchanged just_changed just_unchanged]],
-      [true,  false, %w[ever_failed just_failed]],
-      [false, true,  %w[ever_changed ever_unchanged just_changed just_unchanged just_failed]],
-      [false, false, %w[just_changed just_unchanged ever_failed just_failed]],
-    ].each do |currentness, successfulness, inclusions|
-      context "when #{currentness ? 'current' : 'ever'} and #{successfulness ? 'successful' : 'failed'}" do
-        let(:currentness) { currentness }
-        let(:successfulness) { successfulness }
-        let(:inclusions) { inclusions }
-
-        describe "::by_currentness_and_successfulness" do
-          it "should exactly match: #{inclusions.join(', ')}" do
-            Node.by_currentness_and_successfulness(currentness, successfulness).map(&:name).sort.should == inclusions.sort
-          end
-        end
-      end
-    end
   end
 
   describe "status named_scopes" do
-    it "should find responsive nodes with the appropriate statuses on the latest report" do
+    it "should find nodes with the appropriate statuses on the latest report" do
       [:failed, :pending, :changed, :unchanged].each do |node_status|
         node = Node.create!(:name => node_status.to_s)
         node.reports.generate!(:status => 'bogus', :time => Time.now - 1)
@@ -105,13 +86,6 @@ describe Node do
       Node.changed.map(&:name).should   == ['changed']
       Node.unchanged.map(&:name).should == ['unchanged']
       Node.failed.map(&:name).should    == ['failed']
-
-      Node.responsive.map(&:name).should =~ [
-        'failed',
-        'pending',
-        'changed',
-        'unchanged'
-      ]
 
       Node.unresponsive.map(&:name).should =~ [
         'failed-unresponsive',
@@ -145,16 +119,6 @@ describe Node do
     end
   end
 
-  describe ".reported" do
-    it "should return all nodes with a latest report" do
-      unreported_node = Node.generate
-      reported_node = Node.generate
-      Report.generate!(:host => reported_node.name)
-
-      Node.reported.should == [reported_node]
-    end
-  end
-
   describe ".unreported" do
     it "should return all nodes whose latest report was unreported" do
       unreported_node = Node.generate
@@ -162,17 +126,6 @@ describe Node do
       Report.generate!(:host => reported_node.name)
 
       Node.unreported.should == [unreported_node]
-    end
-  end
-
-  describe "no_longer_reporting" do
-    it "should return all nodes whose latest report is more than 1 hour ago" do
-      SETTINGS.expects(:no_longer_reporting_cutoff).at_least_once.returns(1.hour.to_i)
-      old = node = Node.generate(:reported_at => 2.hours.ago, :name => "old")
-      new = node = Node.generate(:reported_at => 10.minutes.ago, :name => "new")
-
-      Node.no_longer_reporting.should include(old)
-      Node.no_longer_reporting.should_not include(new)
     end
   end
 
