@@ -21,6 +21,9 @@
       %tr.changed
         - statuses.each do |status|
           %td= status.changed
+      %tr.pending
+        - statuses.each do |status|
+          %td= status.pending
       %tr.failed
         - statuses.each do |status|
           %td= status.failed

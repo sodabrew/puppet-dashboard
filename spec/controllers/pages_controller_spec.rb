@@ -7,33 +7,28 @@ describe PagesController do
 
       [true, false].each do |hidden|
         prefix = hidden ? 'hidden:' : ''
-        Factory(:node,              :hidden => hidden, :name => prefix + 'unreported')
-        Factory(:reported_node,     :hidden => hidden, :name => prefix + 'reported')
-        Factory(:unresponsive_node, :hidden => hidden, :name => prefix + 'unresponsive')
-        Factory(:current_node,      :hidden => hidden, :name => prefix + 'current')
-        Factory(:failing_node,      :hidden => hidden, :name => prefix + 'failing')
-        Factory(:successful_node,   :hidden => hidden, :name => prefix + 'successful')
-        Factory(:pending_node,      :hidden => hidden, :name => prefix + 'pending')
-        Factory(:compliant_node,    :hidden => hidden, :name => prefix + 'compliant')
+        Factory(:node, :hidden => hidden, :name => prefix + 'unreported')
+        [:reported, :unresponsive, :responsive, :failing, :pending, :changed, :unchanged].each do |node_status|
+          Factory("#{node_status}_node".to_sym, :hidden => hidden, :name => prefix + node_status.to_s)
+        end
       end
     end
 
     it "should properly categorize nodes" do
       get :home
 
-      assigns[:currently_failing_nodes].map(&:name).should   =~ %w[ reported unresponsive current failing ]
+      assigns[:currently_failing_nodes].map(&:name).should   =~ %w[ reported unresponsive responsive failing ]
       assigns[:unreported_nodes].map(&:name).should          =~ %w[ unreported ]
       assigns[:no_longer_reporting_nodes].map(&:name).should =~ %w[ reported unresponsive ]
-      assigns[:recently_reported_nodes].map(&:name).should   =~ %w[ reported unresponsive current failing successful pending compliant ]
+      assigns[:recently_reported_nodes].map(&:name).should   =~ %w[ reported unresponsive responsive failing changed pending unchanged ]
 
-      assigns[:nodes].map(&:name).should =~ %w[ unreported reported unresponsive current failing successful pending compliant ]
+      assigns[:nodes].map(&:name).should =~ %w[ unreported reported unresponsive responsive failing changed pending unchanged ]
 
       assigns[:unresponsive_nodes].map(&:name).should =~ %w[ unreported reported unresponsive ]
-      assigns[:current_nodes].map(&:name).should      =~ %w[ current failing successful pending compliant ]
-      assigns[:failed_nodes].map(&:name).should       =~ %w[ current failing ]
-      assigns[:successful_nodes].map(&:name).should   =~ %w[ successful pending compliant ]
+      assigns[:failed_nodes].map(&:name).should       =~ %w[ responsive failing ]
       assigns[:pending_nodes].map(&:name).should      =~ %w[ pending ]
-      assigns[:compliant_nodes].map(&:name).should    =~ %w[ successful compliant ]
+      assigns[:changed_nodes].map(&:name).should      =~ %w[ changed ]
+      assigns[:unchanged_nodes].map(&:name).should    =~ %w[ unchanged ]
     end
   end
 end

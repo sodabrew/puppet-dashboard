@@ -18,8 +18,11 @@
             %th Host
           %th Total
           %th Failed
-          %th Failed restarts
+          %th Changed
+          %th Unchanged
+          %th Pending
           %th Skipped
+          %th Failed restarts
           %th Config retrieval
           %th Runtime
       %tbody
@@ -32,8 +35,10 @@
                 %td= link_to_if report.node, h(report.host), node_path(report.node)
               %td= report.total_resources
               %td= report.failed_resources
-              %td= report.failed_restarts
+              %td= report.unchanged_resources
+              %td= report.changed_resources
               %td= report.skipped_resources
+              %td= report.failed_restarts
               %td #{report.config_retrieval_time} s
               %td #{report.total_time} s
           - if @reports.total_pages > 1

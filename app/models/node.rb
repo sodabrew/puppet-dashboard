@@ -12,8 +12,9 @@ class Node < ActiveRecord::Base
   has_many :node_classes, :through => :node_class_memberships
   has_many :node_group_memberships, :dependent => :destroy
   has_many :node_groups, :through => :node_group_memberships
-
   has_many :reports, :dependent => :destroy
+  has_many :resource_statuses, :through => :reports
+
   belongs_to :last_apply_report, :class_name => 'Report'
   belongs_to :last_inspect_report, :class_name => 'Report'
 
@@ -33,20 +34,18 @@ class Node < ActiveRecord::Base
   fires :updated, :on => :update
   fires :removed, :on => :destroy
 
-  named_scope :current, lambda { |predicate|
-    predicate = predicate ? '' : 'NOT'
-    {
-      :conditions => [
-        "#{predicate} (last_apply_report_id IS NOT NULL AND reported_at >= ?)",
-        SETTINGS.no_longer_reporting_cutoff.seconds.ago
-      ]
-    }
-  }
-
-  named_scope :successful, lambda { |predicate|
-    predicate = predicate ? '' : 'NOT'
-    { :conditions => [ "#{predicate} (nodes.status != 'failed')" ] }
-  }
+  named_scope :unresponsive, lambda {{
+    :conditions => [
+      "last_apply_report_id IS NULL OR reported_at < ?",
+      SETTINGS.no_longer_reporting_cutoff.seconds.ago
+    ]
+  }}
+  named_scope :responsive, lambda {{
+    :conditions => [
+      "last_apply_report_id IS NOT NULL AND reported_at >= ?",
+      SETTINGS.no_longer_reporting_cutoff.seconds.ago
+    ]
+  }}
 
   # Return nodes based on their currentness and successfulness.
   #
@@ -74,27 +73,20 @@ class Node < ActiveRecord::Base
     end
   }
 
-  named_scope :pending, lambda { |predicate|
-    predicate = predicate ? '' : 'NOT'
-    {
-      :conditions => <<-SQL
-        nodes.id #{predicate} IN (
-          SELECT nodes.id FROM nodes
-            INNER JOIN reports ON nodes.last_apply_report_id = reports.id
-            INNER JOIN resource_statuses ON reports.id = resource_statuses.report_id
-            INNER JOIN resource_events ON resource_statuses.id = resource_events.resource_status_id
-            WHERE resource_events.status = 'noop'
-          )
-      SQL
-    }
-  }
+  [:failed, :pending, :changed, :unchanged].each do |node_status|
+    # what I really want is composite scopes so that I can say it has to be responsive without
+    # duplicating the logic for responsive
+    named_scope node_status, lambda {{
+      :conditions => [
+        "last_apply_report_id IS NOT NULL AND reported_at >= ? AND status = '#{node_status}'",
+        SETTINGS.no_longer_reporting_cutoff.seconds.ago
+      ]
+    }}
+  end
 
-  named_scope :reported, :conditions => ["reported_at IS NOT NULL"]
-
-  # Return nodes that have never reported.
+  named_scope :reported,   :conditions => ["reported_at IS NOT NULL"]
   named_scope :unreported, :conditions => {:reported_at => nil}
 
-  # Return nodes that haven't reported recently.
   named_scope :no_longer_reporting, lambda {
     {
       :conditions => ['reported_at < ?', SETTINGS.no_longer_reporting_cutoff.seconds.ago]

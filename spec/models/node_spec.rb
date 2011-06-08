@@ -87,77 +87,38 @@ describe Node do
     end
   end
 
-  describe "::pending" do
-    before :each do
-      @pending = Node.generate!
-      @report = Report.generate!(:status => "unchanged", :host => @pending.name)
-      @resource_status = @report.resource_statuses.generate!(:resource_type => "file", :title => "/tmp/foo", :failed => false)
-      @resource_status.events.generate!(:status => "noop")
-      @resource_status.events.generate!(:status => "success")
+  describe "status named_scopes" do
+    it "should find responsive nodes with the appropriate statuses on the latest report" do
+      [:failed, :pending, :changed, :unchanged].each do |node_status|
+        node = Node.create!(:name => node_status.to_s)
+        node.reports.generate!(:status => 'bogus', :time => Time.now - 1)
+        node.reports.generate!(:status => node_status.to_s, :time => Time.now)
 
-      @current = Node.generate!
-      @report = Report.generate!(:status => "unchanged", :host => @current.name)
-      @resource_status = @report.resource_statuses.generate!(:resource_type => "file", :title => "/tmp/foo", :failed => false)
-      @resource_status.events.generate!(:status => "success")
-    end
-
-    describe "(true)" do
-      it "should find nodes with noop events" do
-        Node.pending(true).should == [@pending]
+        node = Node.create!(:name => "#{node_status}-unresponsive")
+        node.reports.generate!(
+          :status => node_status.to_s, 
+          :time => SETTINGS.no_longer_reporting_cutoff.seconds.ago - 1
+        )
       end
 
-      it "should only consider the latest report for a node" do
-        @new_report = Report.generate!(:status => "unchanged", :host => @pending.name)
-        Node.pending(true).should == []
-      end
-    end
+      Node.pending.map(&:name).should   == ['pending']
+      Node.changed.map(&:name).should   == ['changed']
+      Node.unchanged.map(&:name).should == ['unchanged']
+      Node.failed.map(&:name).should    == ['failed']
 
-    describe "(false)" do
-      it "should find nodes without noop events" do
-        Node.pending(false).should == [@current]
-      end
+      Node.responsive.map(&:name).should =~ [
+        'failed',
+        'pending',
+        'changed',
+        'unchanged'
+      ]
 
-      it "should only consider the latest report for a node" do
-        @new_report = Report.generate!(:status => "unchanged", :host => @pending.name)
-        Node.pending(false).should =~ [@pending, @current]
-      end
-    end
-  end
-  describe "::current" do
-    before :each do
-      Factory(:unresponsive_node, :name => 'unresponsive')
-      Factory(:current_node, :name => 'current')
-    end
-
-    describe "(true)" do
-      it "should find nodes with recent reports" do
-        Node.current(true).map(&:name).should == %w[ current ]
-      end
-    end
-
-    describe "(false)" do
-      it "should find nodes without recent reports" do
-        Node.current(false).map(&:name).should == %w[ unresponsive ]
-      end
-    end
-  end
-
-  describe "::successful" do
-    before :each do
-      Factory(:successful_node, :name => 'successful')
-      Factory(:failing_node, :name => 'failed')
-    end
-
-    describe "(true)" do
-      it "should find nodes with non-failed status" do
-        Node.successful(true).map(&:name).should == %w[ successful ]
-      end
-    end
-
-    describe "(false)" do
-      it "should find nodes with failed status" do
-        Node.successful(false).map(&:name).should == %w[ failed ]
-      end
+      Node.unresponsive.map(&:name).should =~ [
+        'failed-unresponsive',
+        'pending-unresponsive',
+        'changed-unresponsive',
+        'unchanged-unresponsive'
+      ]
     end
   end
 
