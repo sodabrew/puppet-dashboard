@@ -74,21 +74,24 @@ jQuery(document).ready(function(J) {
     var label_data = J(this).find("tr.labels th").mapHtml();
     var changed_data = J(this).find("tr.changed td").mapHtmlInt();
     var unchanged_data = J(this).find("tr.unchanged td").mapHtmlInt();
+    var pending_data = J(this).find("tr.pending td").mapHtmlInt();
     var failed_data = J(this).find("tr.failed td").mapHtmlInt();
 
     var changed_data_label = J.map(changed_data, function(item, index){return item+" changed"});
     var unchanged_data_label = J.map(unchanged_data, function(item, index){return item+" unchanged"});
+    var pending_data_label = J.map(pending_data, function(item, index){return item+" pending"});
     var failed_data_label = J.map(failed_data, function(item, index){return item+" failed"});
 
     new Grafico.StackedBarGraph($(id),
       {
         unchanged: unchanged_data,
         changed: changed_data,
+        pending: pending_data,
         failed: failed_data
       },
       {
-        colors: { changed: "orange", unchanged: "#0C3", failed: "#901" },
-        datalabels: { changed: changed_data_label, unchanged: unchanged_data_label, failed: failed_data_label },
+        colors: { pending: "orange", changed: "green", unchanged: "darkblue", failed: "red" },
+        datalabels: { changed: changed_data_label, unchanged: unchanged_data_label, pending: pending_data_label, failed: failed_data_label },
         font_size: 9,
         grid: false,
         label_color: '#666',
