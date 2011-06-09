@@ -25,6 +25,6 @@
             = link_to h(node.name), node
           - ["total", "failed", "pending", "changed", "unchanged"].each do |status|
             %th
-              = node.last_apply_report.metric_value("resources", status).to_i
+              = node.last_apply_report.metric_value("resources", status).to_i if node.last_apply_report
 - else
   &mdash; No nodes matching &mdash;
