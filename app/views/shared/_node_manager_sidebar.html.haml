@@ -2,20 +2,14 @@
   %h3{:class => active_if(controller_name == "nodes" && action_name == "index")}= link_to "Nodes", nodes_path
   %span.count= Node.unhidden.count
   %ul
-    - for currentness in [true, false]
-      - for successfulness in [true, false]
-        %li{:class => active_if(controller_name == 'nodes' && params[:current] && (params[:current] == "true") == currentness && params[:successful] && (params[:successful] == "true") == successfulness && parent.nil?)}
-          - label = Node.label_for_currentness_and_successfulness(currentness, successfulness)
-          = link_to label, nodes_path(:current => currentness.to_s, :successful => successfulness.to_s)
-          - count = Node.unhidden.by_currentness_and_successfulness(currentness, successfulness).length
-          %span.count{:class => counter_class(count, currentness && !successfulness)}= count
+    - Node.possible_statuses.each do |status|
+      %li{:class => active_if(controller_name == 'nodes' && action_name == status && parent.nil?)}
+        = link_to status.capitalize, eval("#{status}_nodes_path")
+        - count = Node.send(status).unhidden.count
+        %span.count{:class => counter_class(count, true)}= count
     %li{:class => active_if(controller_name == 'nodes' && action_name == 'unreported' && parent.nil?)}
       = link_to "Never reported", unreported_nodes_path
       - count = Node.unreported.unhidden.count
-      %span.count{:class => counter_class(count, true)}= count
-    %li{:class => active_if(controller_name == 'nodes' && action_name == 'no_longer_reporting' && parent.nil?)}
-      = link_to "Not currently reporting", no_longer_reporting_nodes_path
-      - count = Node.no_longer_reporting.unhidden.count
       %span.count{:class => counter_class(count, true)}= count
     %li{:class => active_if(controller_name == 'nodes' && action_name == 'hidden' && parent.nil?)}
       = link_to "Hidden", hidden_nodes_path

@@ -8,7 +8,7 @@ describe PagesController do
       [true, false].each do |hidden|
         prefix = hidden ? 'hidden:' : ''
         Factory(:node, :hidden => hidden, :name => prefix + 'unreported')
-        [:reported, :unresponsive, :responsive, :failing, :pending, :changed, :unchanged].each do |node_status|
+        [:unresponsive, :responsive, :failing, :pending, :changed, :unchanged].each do |node_status|
           Factory("#{node_status}_node".to_sym, :hidden => hidden, :name => prefix + node_status.to_s)
         end
       end
@@ -16,15 +16,10 @@ describe PagesController do
 
     it "should properly categorize nodes" do
       get :home
+      assigns[:all_nodes].map(&:name).should =~ %w[ unreported unresponsive responsive failing changed pending unchanged ]
 
-      assigns[:currently_failing_nodes].map(&:name).should   =~ %w[ reported unresponsive responsive failing ]
-      assigns[:unreported_nodes].map(&:name).should          =~ %w[ unreported ]
-      assigns[:no_longer_reporting_nodes].map(&:name).should =~ %w[ reported unresponsive ]
-      assigns[:recently_reported_nodes].map(&:name).should   =~ %w[ reported unresponsive responsive failing changed pending unchanged ]
-
-      assigns[:nodes].map(&:name).should =~ %w[ unreported reported unresponsive responsive failing changed pending unchanged ]
-
-      assigns[:unresponsive_nodes].map(&:name).should =~ %w[ unreported reported unresponsive ]
+      assigns[:unreported_nodes].map(&:name).should   =~ %w[ unreported ]
+      assigns[:unresponsive_nodes].map(&:name).should =~ %w[ unresponsive ]
       assigns[:failed_nodes].map(&:name).should       =~ %w[ responsive failing ]
       assigns[:pending_nodes].map(&:name).should      =~ %w[ pending ]
       assigns[:changed_nodes].map(&:name).should      =~ %w[ changed ]

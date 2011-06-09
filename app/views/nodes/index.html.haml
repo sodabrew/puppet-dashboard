@@ -6,9 +6,6 @@
       - if action_name != 'index'
         = action_name.titleize.capitalize
         nodes
-      - elsif params[:current] or params[:successful]
-        = Node.label_for_currentness_and_successfulness(params[:current] == "true", params[:successful] == "true").capitalize
-        nodes
       - else
         Nodes
       = describe_search_if_present
@@ -20,4 +17,4 @@
       = render 'statuses/run_failure', :nodes => @nodes
     .section
       %h3 Nodes
-      = render 'nodes', :nodes => @nodes
+      = render 'nodes', :nodes => @nodes, :selected_status => action_name
