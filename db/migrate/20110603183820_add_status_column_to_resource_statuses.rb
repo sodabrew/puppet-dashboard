@@ -6,6 +6,7 @@ class AddStatusColumnToResourceStatuses < ActiveRecord::Migration
     # if users want all reports updated they can run the rake task
     Node.all.each do |n|
       last_report = n.last_apply_report
+      next unless last_report
       last_report.munge
       last_report.save!
     end
