@@ -2,7 +2,7 @@
   %h3{:class => active_if(controller_name == "nodes" && action_name == "index")}= link_to "Nodes", nodes_path
   %span.count= Node.unhidden.count
   %ul
-    - Node.possible_statuses.each do |status|
+    - Node.possible_derived_statuses.each do |status|
       %li{:class => active_if(controller_name == 'nodes' && action_name == status && parent.nil?)}
         = link_to status.capitalize, eval("#{status}_nodes_path")
         - count = Node.send(status).unhidden.count
