@@ -534,4 +534,34 @@ describe Node do
       ]
     end
   end
+
+  describe 'self.resource_status_totals' do
+    before :each do
+      @pending_node = Factory(:pending_node)
+      @unchanged_node = Factory(:unchanged_node)
+
+      Metric.create!(:report => @pending_node.last_apply_report, :category => "resources", :name => "pending", :value => 27)
+      Metric.create!(:report => @pending_node.last_apply_report, :category => "resources", :name => "unchanged", :value => 48)
+      Metric.create!(:report => @pending_node.last_apply_report, :category => "resources", :name => "changed", :value => 4)
+      Metric.create!(:report => @unchanged_node.last_apply_report, :category => "resources", :name => "unchanged", :value => 25)
+    end
+    it 'should calculate the correct totals for default scope' do
+      Node.resource_status_totals("pending").should == 27
+      Node.resource_status_totals("unchanged").should == 73
+      Node.resource_status_totals("changed").should == 4
+    end
+
+    it 'should calculate the correct totals for specific scopes' do
+      Node.resource_status_totals("unchanged","pending").should == 48
+      Node.resource_status_totals("unchanged","unchanged").should == 25
+    end
+ 
+    it 'should raise an error if passed a scope that does not exist' do
+      expect { Node.resource_status_totals("unchanged","not_a_scope") }.to raise_error(NoMethodError, /undefined method/)
+    end
+
+    it 'should raise an error if passed an invalid status' do
+      expect { Node.resource_status_totals("not_a_status") }.to raise_error(ArgumentError, /No such status/)
+    end
+  end
 end

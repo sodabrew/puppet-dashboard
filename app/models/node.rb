@@ -18,6 +18,14 @@ class Node < ActiveRecord::Base
   belongs_to :last_apply_report, :class_name => 'Report'
   belongs_to :last_inspect_report, :class_name => 'Report'
 
+  def self.possible_derived_statuses
+    self.possible_statuses.unshift("unresponsive")
+  end
+
+  def self.possible_statuses
+    ["failed", "pending", "changed", "unchanged"]
+  end
+
   named_scope :with_last_report, :include => :last_apply_report
   named_scope :by_report_date, :order => 'reported_at DESC'
 
@@ -41,7 +49,7 @@ class Node < ActiveRecord::Base
     ]
   }}
 
-  [:failed, :pending, :changed, :unchanged].each do |node_status|
+  possible_statuses.each do |node_status|
     named_scope node_status, lambda {{
       :conditions => [
         "last_apply_report_id IS NOT NULL AND reported_at >= ? AND nodes.status = '#{node_status}'",
@@ -55,10 +63,6 @@ class Node < ActiveRecord::Base
   named_scope :hidden, :conditions => {:hidden => true}
 
   named_scope :unhidden, :conditions => {:hidden => false}
-
-  def self.possible_statuses
-    ["unresponsive", "failed", "pending", "changed", "unchanged"]
-  end
 
   def self.find_by_id_or_name!(identifier)
     find_by_id(identifier) or find_by_name!(identifier)
@@ -235,5 +239,11 @@ class Node < ActiveRecord::Base
       :timestamp => timestamp,
       :values => data['values']
     }
+  end
+
+  def self.resource_status_totals(resource_status, scope='all')
+    raise ArgumentError, "No such status #{resource_status}" unless possible_statuses.unshift("total").include?(resource_status)
+    options = {:conditions => "metrics.category = 'resources' AND metrics.name = '#{resource_status}'", :joins => 'left join metrics on metrics.report_id = nodes.last_apply_report_id'}
+    ['all', 'index'].include?(scope) ? Node.sum(:value, options).to_i : Node.send(scope).sum(:value, options).to_i
   end
 end

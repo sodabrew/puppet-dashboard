@@ -29,6 +29,10 @@
         Unchanged
   %tbody
     - if nodes.present?
+      %tr
+        %td{:colspan => 3}  Total
+        - Node.possible_statuses.unshift("total").each do |status|
+          %td= Node.resource_status_totals(status, selected_status)
       - nodes.each do |node|
         - sources = container.nodes_with_sources[node] unless container.nil?
         %tr[node]{:class => "#{'active' if node == @node}"}
