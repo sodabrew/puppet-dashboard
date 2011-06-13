@@ -24,9 +24,9 @@
       - tab_statuses.each do |tab_status|
         %li(id="#{tab_status}-tab")
           = tab_status.humanize
-      - tab_statuses.each do |tab_status|
-        %div.panel(id=tab_status)
-          = render 'nodes/nodes',
-            :nodes           => instance_variable_get("@#{tab_status}_nodes"),
-            :selected_status => tab_status,
-            :more_link       => url_for(:controller => "nodes", :action => tab_status == "all" ? :index : tab_status, :page => 2)
+    - tab_statuses.each do |tab_status|
+      %div.panel(id=tab_status)
+        = render 'nodes/nodes',
+          :nodes           => instance_variable_get("@#{tab_status}_nodes"),
+          :selected_status => tab_status,
+          :more_link       => url_for(:controller => "nodes", :action => tab_status == "all" ? :index : tab_status, :page => 2)
