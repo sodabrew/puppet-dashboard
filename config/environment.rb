@@ -14,6 +14,7 @@ require 'core_callbacks'
 Rails::Initializer.run do |config|
   config.gem 'rack'
   config.gem 'haml'
+  config.gem 'sass'
   config.gem 'will_paginate'
   config.gem 'maruku'
 
