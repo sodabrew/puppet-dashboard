@@ -8,8 +8,11 @@
       .section
         %p There are no nodes known by Dashboard.
     - else
-      .section
-        %table.node_summary
+      .section.node_summary.with-help
+        %p.help
+          %a{ :href => 'http://docs.puppetlabs.com/dashboard/1.2/node-summary/', :target => '_blank' }
+            Help
+        %table
           - [ { :title => 'Unresponsive',          :nodes => @unresponsive_nodes },
               { :title => 'Failed',                :nodes => @failed_nodes },
               { :title => 'Pending',               :nodes => @pending_nodes },

@@ -417,59 +417,61 @@ body {
     background: #ffe4c7; }
   body.reports_show_action tr.puppet_log.puppet_log_level_warning td, body.pages_home_action tr.puppet_log.puppet_log_level_warning td {
     background: #ffebd6; }
-  body.pages_home_action table.node_summary {
-    border: solid 1px #DDD;
+  body.pages_home_action .node_summary {
     padding: 1em;
-    width: 75%;
-    margin: 0 auto; }
-    body.pages_home_action table.node_summary tr.unresponsive {
-      color: gray; }
-      body.pages_home_action table.node_summary tr.unresponsive hr {
-        background-color: gray; }
-    body.pages_home_action table.node_summary tr.failed {
-      color: red; }
-      body.pages_home_action table.node_summary tr.failed hr {
-        background-color: red; }
-    body.pages_home_action table.node_summary tr.pending {
-      color: orange; }
-      body.pages_home_action table.node_summary tr.pending hr {
-        background-color: orange; }
-    body.pages_home_action table.node_summary tr.changed {
-      color: green; }
-      body.pages_home_action table.node_summary tr.changed hr {
-        background-color: green; }
-    body.pages_home_action table.node_summary tr.unchanged {
-      color: darkblue; }
-      body.pages_home_action table.node_summary tr.unchanged hr {
-        background-color: darkblue; }
-    body.pages_home_action table.node_summary tr.total {
-      color: black; }
-      body.pages_home_action table.node_summary tr.total hr {
-        background-color: black; }
-    body.pages_home_action table.node_summary tr td {
-      padding-bottom: 1em; }
-      body.pages_home_action table.node_summary tr td.count {
-        padding-right: 1em;
-        width: 1em;
-        text-align: right; }
-        body.pages_home_action table.node_summary tr td.count span {
-          font-size: 3em;
-          font-weight: bold; }
-      body.pages_home_action table.node_summary tr td .label {
-        font-size: 1.5em; }
-      body.pages_home_action table.node_summary tr td em {
-        color: #888;
-        margin-left: 10px;
-        font-size: 1.25em; }
-      body.pages_home_action table.node_summary tr td hr {
-        height: 5px;
-        align: left;
-        border: 0;
-        margin: 0; }
-    body.pages_home_action table.node_summary tr.total td {
-      padding-top: 1em;
-      padding-bottom: 0;
-      border-top: solid 1px #DDD; }
+    border: solid 1px #ddd;
+    margin: 0 auto 1em;
+    width: 75%; }
+    body.pages_home_action .node_summary table {
+      width: 100%; }
+      body.pages_home_action .node_summary table tr.unresponsive {
+        color: gray; }
+        body.pages_home_action .node_summary table tr.unresponsive hr {
+          background-color: gray; }
+      body.pages_home_action .node_summary table tr.failed {
+        color: red; }
+        body.pages_home_action .node_summary table tr.failed hr {
+          background-color: red; }
+      body.pages_home_action .node_summary table tr.pending {
+        color: orange; }
+        body.pages_home_action .node_summary table tr.pending hr {
+          background-color: orange; }
+      body.pages_home_action .node_summary table tr.changed {
+        color: green; }
+        body.pages_home_action .node_summary table tr.changed hr {
+          background-color: green; }
+      body.pages_home_action .node_summary table tr.unchanged {
+        color: darkblue; }
+        body.pages_home_action .node_summary table tr.unchanged hr {
+          background-color: darkblue; }
+      body.pages_home_action .node_summary table tr.total {
+        color: black; }
+        body.pages_home_action .node_summary table tr.total hr {
+          background-color: black; }
+      body.pages_home_action .node_summary table tr td {
+        padding-bottom: 1em; }
+        body.pages_home_action .node_summary table tr td.count {
+          padding-right: 1em;
+          width: 1em;
+          text-align: right; }
+          body.pages_home_action .node_summary table tr td.count span {
+            font-size: 3em;
+            font-weight: bold; }
+        body.pages_home_action .node_summary table tr td .label {
+          font-size: 1.5em; }
+        body.pages_home_action .node_summary table tr td em {
+          color: #888;
+          margin-left: 10px;
+          font-size: 1.25em; }
+        body.pages_home_action .node_summary table tr td hr {
+          height: 5px;
+          align: left;
+          border: 0;
+          margin: 0; }
+      body.pages_home_action .node_summary table tr.total td {
+        padding-top: 1em;
+        padding-bottom: 0;
+        border-top: solid 1px #DDD; }
   body.pages_release_notes_action .markeddown h2 {
     margin-top: 1em;
     margin-bottom: 0.15em; }

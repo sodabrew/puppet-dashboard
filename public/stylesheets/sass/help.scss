@@ -1,0 +1,13 @@
+.with-help {
+  position : relative; /* won't someone think of the children? */
+}
+.help {
+  position : absolute;
+  top : 10px;
+  right : 10px;
+  a {
+    padding-left : 20px;
+    background : transparent url( '../images/icons/help.png' ) no-repeat 0% 50%;
+    cursor : pointer;
+  }
+}

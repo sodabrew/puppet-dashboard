@@ -591,56 +591,58 @@ body {
   }
 
   &.pages_home_action {
-    table.node_summary {
-      border: solid 1px #DDD;
+    .node_summary {
       padding: 1em;
+      border: solid 1px #ddd;
+      margin: 0 auto 1em;
       width: 75%;
-      margin: 0 auto;
+      table {
+        width : 100%;
+        tr {
+          &.unresponsive { @include node_summary_row(gray)   }
+          &.failed       { @include node_summary_row(red)    }
+          &.pending      { @include node_summary_row(orange) }
+          &.changed      { @include node_summary_row(green)  }
+          &.unchanged    { @include node_summary_row(darkblue)  }
+          &.total        { @include node_summary_row(black)  }
 
-      tr {
-        &.unresponsive { @include node_summary_row(gray)   }
-        &.failed       { @include node_summary_row(red)    }
-        &.pending      { @include node_summary_row(orange) }
-        &.changed      { @include node_summary_row(green)  }
-        &.unchanged    { @include node_summary_row(darkblue)  }
-        &.total        { @include node_summary_row(black)  }
+          td {
+            padding-bottom: 1em;
 
-        td {
-          padding-bottom: 1em;
+            &.count {
+              padding-right: 1em;
+              width: 1em;
+              text-align: right;
 
-          &.count {
-            padding-right: 1em;
-            width: 1em;
-            text-align: right;
+              span {
+                font-size: 3em;
+                font-weight: bold;
+              }
+            }
 
-            span {
-              font-size: 3em;
-              font-weight: bold;
+            .label {
+              font-size: 1.5em;
+            }
+
+            em {
+              color: #888;
+              margin-left: 10px;
+              font-size: 1.25em;
+            }
+
+            hr {
+              height: 5px;
+              align: left;
+              border: 0;
+              margin: 0;
             }
           }
 
-          .label {
-            font-size: 1.5em;
+          &.total td {
+            padding-top: 1em;
+            padding-bottom: 0;
+            border-top: solid 1px #DDD;
           }
-
-          em {
-            color: #888;
-            margin-left: 10px;
-            font-size: 1.25em;
-          }
-
-          hr {
-            height: 5px;
-            align: left;
-            border: 0;
-            margin: 0;
-          }
-        }
-
-        &.total td {
-          padding-top: 1em;
-          padding-bottom: 0;
-          border-top: solid 1px #DDD;
         }
       }
     }
