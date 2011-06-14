@@ -6,6 +6,6 @@ require 'thread'
 
 require 'rake'
 require 'rake/testtask'
-require 'rake/rdoctask'
+require 'rdoc/task'
 
 require 'tasks/rails'
