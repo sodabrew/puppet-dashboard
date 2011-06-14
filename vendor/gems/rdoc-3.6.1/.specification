@@ -1,0 +1,267 @@
+--- !ruby/object:Gem::Specification 
+name: rdoc
+version: !ruby/object:Gem::Version 
+  hash: 29
+  prerelease: 
+  segments: 
+  - 3
+  - 6
+  - 1
+  version: 3.6.1
+platform: ruby
+authors: 
+- Eric Hodel
+- Dave Thomas
+- Phil Hagelberg
+- Tony Strauss
+autorequire: 
+bindir: bin
+cert_chain: 
+- |
+  -----BEGIN CERTIFICATE-----
+  MIIDNjCCAh6gAwIBAgIBADANBgkqhkiG9w0BAQUFADBBMRAwDgYDVQQDDAdkcmJy
+  YWluMRgwFgYKCZImiZPyLGQBGRYIc2VnbWVudDcxEzARBgoJkiaJk/IsZAEZFgNu
+  ZXQwHhcNMDcxMjIxMDIwNDE0WhcNMDgxMjIwMDIwNDE0WjBBMRAwDgYDVQQDDAdk
+  cmJyYWluMRgwFgYKCZImiZPyLGQBGRYIc2VnbWVudDcxEzARBgoJkiaJk/IsZAEZ
+  FgNuZXQwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCbbgLrGLGIDE76
+  LV/cvxdEzCuYuS3oG9PrSZnuDweySUfdp/so0cDq+j8bqy6OzZSw07gdjwFMSd6J
+  U5ddZCVywn5nnAQ+Ui7jMW54CYt5/H6f2US6U0hQOjJR6cpfiymgxGdfyTiVcvTm
+  Gj/okWrQl0NjYOYBpDi+9PPmaH2RmLJu0dB/NylsDnW5j6yN1BEI8MfJRR+HRKZY
+  mUtgzBwF1V4KIZQ8EuL6I/nHVu07i6IkrpAgxpXUfdJQJi0oZAqXurAV3yTxkFwd
+  g62YrrW26mDe+pZBzR6bpLE+PmXCzz7UxUq3AE0gPHbiMXie3EFE0oxnsU3lIduh
+  sCANiQ8BAgMBAAGjOTA3MAkGA1UdEwQCMAAwCwYDVR0PBAQDAgSwMB0GA1UdDgQW
+  BBS5k4Z75VSpdM0AclG2UvzFA/VW5DANBgkqhkiG9w0BAQUFAAOCAQEAHagT4lfX
+  kP/hDaiwGct7XPuVGbrOsKRVD59FF5kETBxEc9UQ1clKWngf8JoVuEoKD774dW19
+  bU0GOVWO+J6FMmT/Cp7nuFJ79egMf/gy4gfUfQMuvfcr6DvZUPIs9P/TlK59iMYF
+  DIOQ3DxdF3rMzztNUCizN4taVscEsjCcgW6WkUJnGdqlu3OHWpQxZBJkBTjPCoc6
+  UW6on70SFPmAy/5Cq0OJNGEWBfgD9q7rrs/X8GGwUWqXb85RXnUVi/P8Up75E0ag
+  14jEc90kN+C7oI/AGCBN0j6JnEtYIEJZibjjDJTSMWlUKKkj30kq7hlUC2CepJ4v
+  x52qPcexcYZR7w==
+  -----END CERTIFICATE-----
+
+date: 2011-05-15 00:00:00 -07:00
+default_executable: 
+dependencies: 
+- !ruby/object:Gem::Dependency 
+  name: minitest
+  prerelease: false
+  requirement: &id001 !ruby/object:Gem::Requirement 
+    none: false
+    requirements: 
+    - - ">="
+      - !ruby/object:Gem::Version 
+        hash: 11
+        segments: 
+        - 2
+        - 0
+        - 2
+        version: 2.0.2
+  type: :development
+  version_requirements: *id001
+- !ruby/object:Gem::Dependency 
+  name: minitest
+  prerelease: false
+  requirement: &id002 !ruby/object:Gem::Requirement 
+    none: false
+    requirements: 
+    - - ~>
+      - !ruby/object:Gem::Version 
+        hash: 7
+        segments: 
+        - 2
+        version: "2"
+  type: :development
+  version_requirements: *id002
+- !ruby/object:Gem::Dependency 
+  name: isolate
+  prerelease: false
+  requirement: &id003 !ruby/object:Gem::Requirement 
+    none: false
+    requirements: 
+    - - ~>
+      - !ruby/object:Gem::Version 
+        hash: 5
+        segments: 
+        - 3
+        version: "3"
+  type: :development
+  version_requirements: *id003
+- !ruby/object:Gem::Dependency 
+  name: ZenTest
+  prerelease: false
+  requirement: &id004 !ruby/object:Gem::Requirement 
+    none: false
+    requirements: 
+    - - ~>
+      - !ruby/object:Gem::Version 
+        hash: 11
+        segments: 
+        - 4
+        version: "4"
+  type: :development
+  version_requirements: *id004
+- !ruby/object:Gem::Dependency 
+  name: hoe
+  prerelease: false
+  requirement: &id005 !ruby/object:Gem::Requirement 
+    none: false
+    requirements: 
+    - - ">="
+      - !ruby/object:Gem::Version 
+        hash: 35
+        segments: 
+        - 2
+        - 9
+        - 4
+        version: 2.9.4
+  type: :development
+  version_requirements: *id005
+description: |-
+  RDoc produces HTML and command-line documentation for Ruby projects.  RDoc
+  includes the +rdoc+ and +ri+ tools for generating and displaying online
+  documentation.
+  
+  See RDoc for a description of RDoc's markup and basic use.
+email: 
+- drbrain@segment7.net
+- ""
+- technomancy@gmail.com
+- tony.strauss@designingpatterns.com
+executables: 
+- rdoc
+- ri
+extensions: []
+
+extra_rdoc_files: []
+
+files: 
+- test/test_attribute_manager.rb
+- test/test_rdoc_alias.rb
+- test/test_rdoc_any_method.rb
+- test/test_rdoc_attr.rb
+- test/test_rdoc_class_module.rb
+- test/test_rdoc_code_object.rb
+- test/test_rdoc_constant.rb
+- test/test_rdoc_context.rb
+- test/test_rdoc_context_section.rb
+- test/test_rdoc_encoding.rb
+- test/test_rdoc_generator_darkfish.rb
+- test/test_rdoc_generator_ri.rb
+- test/test_rdoc_include.rb
+- test/test_rdoc_markup.rb
+- test/test_rdoc_markup_attribute_manager.rb
+- test/test_rdoc_markup_document.rb
+- test/test_rdoc_markup_paragraph.rb
+- test/test_rdoc_markup_parser.rb
+- test/test_rdoc_markup_pre_process.rb
+- test/test_rdoc_markup_raw.rb
+- test/test_rdoc_markup_to_ansi.rb
+- test/test_rdoc_markup_to_bs.rb
+- test/test_rdoc_markup_to_html.rb
+- test/test_rdoc_markup_to_html_crossref.rb
+- test/test_rdoc_markup_to_rdoc.rb
+- test/test_rdoc_markup_to_tt_only.rb
+- test/test_rdoc_method_attr.rb
+- test/test_rdoc_normal_class.rb
+- test/test_rdoc_normal_module.rb
+- test/test_rdoc_options.rb
+- test/test_rdoc_parser.rb
+- test/test_rdoc_parser_c.rb
+- test/test_rdoc_parser_ruby.rb
+- test/test_rdoc_parser_simple.rb
+- test/test_rdoc_rdoc.rb
+- test/test_rdoc_require.rb
+- test/test_rdoc_ri_driver.rb
+- test/test_rdoc_ri_paths.rb
+- test/test_rdoc_ri_store.rb
+- test/test_rdoc_ruby_lex.rb
+- test/test_rdoc_single_class.rb
+- test/test_rdoc_stats.rb
+- test/test_rdoc_task.rb
+- test/test_rdoc_text.rb
+- test/test_rdoc_top_level.rb
+- bin/rdoc
+- bin/ri
+has_rdoc: true
+homepage: http://docs.seattlerb.org/rdoc
+licenses: []
+
+post_install_message: 
+rdoc_options: []
+
+require_paths: 
+- lib
+required_ruby_version: !ruby/object:Gem::Requirement 
+  none: false
+  requirements: 
+  - - ">="
+    - !ruby/object:Gem::Version 
+      hash: 57
+      segments: 
+      - 1
+      - 8
+      - 7
+      version: 1.8.7
+required_rubygems_version: !ruby/object:Gem::Requirement 
+  none: false
+  requirements: 
+  - - ">="
+    - !ruby/object:Gem::Version 
+      hash: 9
+      segments: 
+      - 1
+      - 3
+      version: "1.3"
+requirements: []
+
+rubyforge_project: rdoc
+rubygems_version: 1.6.2
+signing_key: 
+specification_version: 3
+summary: RDoc produces HTML and command-line documentation for Ruby projects
+test_files: 
+- test/test_attribute_manager.rb
+- test/test_rdoc_alias.rb
+- test/test_rdoc_any_method.rb
+- test/test_rdoc_attr.rb
+- test/test_rdoc_class_module.rb
+- test/test_rdoc_code_object.rb
+- test/test_rdoc_constant.rb
+- test/test_rdoc_context.rb
+- test/test_rdoc_context_section.rb
+- test/test_rdoc_encoding.rb
+- test/test_rdoc_generator_darkfish.rb
+- test/test_rdoc_generator_ri.rb
+- test/test_rdoc_include.rb
+- test/test_rdoc_markup.rb
+- test/test_rdoc_markup_attribute_manager.rb
+- test/test_rdoc_markup_document.rb
+- test/test_rdoc_markup_paragraph.rb
+- test/test_rdoc_markup_parser.rb
+- test/test_rdoc_markup_pre_process.rb
+- test/test_rdoc_markup_raw.rb
+- test/test_rdoc_markup_to_ansi.rb
+- test/test_rdoc_markup_to_bs.rb
+- test/test_rdoc_markup_to_html.rb
+- test/test_rdoc_markup_to_html_crossref.rb
+- test/test_rdoc_markup_to_rdoc.rb
+- test/test_rdoc_markup_to_tt_only.rb
+- test/test_rdoc_method_attr.rb
+- test/test_rdoc_normal_class.rb
+- test/test_rdoc_normal_module.rb
+- test/test_rdoc_options.rb
+- test/test_rdoc_parser.rb
+- test/test_rdoc_parser_c.rb
+- test/test_rdoc_parser_ruby.rb
+- test/test_rdoc_parser_simple.rb
+- test/test_rdoc_rdoc.rb
+- test/test_rdoc_require.rb
+- test/test_rdoc_ri_driver.rb
+- test/test_rdoc_ri_paths.rb
+- test/test_rdoc_ri_store.rb
+- test/test_rdoc_ruby_lex.rb
+- test/test_rdoc_single_class.rb
+- test/test_rdoc_stats.rb
+- test/test_rdoc_task.rb
+- test/test_rdoc_text.rb
+- test/test_rdoc_top_level.rb

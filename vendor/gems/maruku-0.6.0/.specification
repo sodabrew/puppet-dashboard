@@ -264,7 +264,7 @@ required_rubygems_version: !ruby/object:Gem::Requirement
 requirements: []
 
 rubyforge_project: 
-rubygems_version: 1.4.1
+rubygems_version: 1.6.2
 signing_key: 
 specification_version: 2
 summary: Maruku is a Markdown-superset interpreter written in Ruby.
