@@ -110,6 +110,12 @@ body table.inspector tbody tr td.total {
   font-weight: bold;
 }
 
+table th.empty {
+  text-align: left;
+  background: transparent !important;
+  padding-left: 1em !important;
+}
+
 table td.empty {
   text-align: center;
   color: #999;
