@@ -1,8 +1,9 @@
 class Status
-  attr_reader :changed, :unchanged, :failed, :total, :start
+  attr_reader :changed, :unchanged, :pending, :failed, :total, :start
   def initialize(datum)
     @changed = datum["changed"].to_i
     @unchanged = datum["unchanged"].to_i
+    @pending = datum["pending"].to_i
     @failed = datum["failed"].to_i
     @total = datum["total"].to_i
     @start = Time.zone.parse(datum["start"])
@@ -36,6 +37,7 @@ class Status
         COUNT(*)                                            as total,
         SUM(CASE status when "unchanged" then 1 else 0 end) as unchanged,
         SUM(CASE status when "changed" then 1 else 0 end)   as changed,
+        SUM(CASE status when "pending" then 1 else 0 end)   as pending,
         SUM(CASE status when "failed" then 1 else 0 end)    as failed,
         #{boundary_groupings}                               as start
       FROM reports

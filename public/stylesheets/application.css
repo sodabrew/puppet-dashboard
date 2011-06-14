@@ -373,13 +373,14 @@ body {
         right: 0; }
       body .section#flash img {
         vertical-align: top; }
-  body.reports_show_action #report-tabs {
+  body.reports_show_action #report-tabs, body.reports_show_action #home-tabs, body.pages_home_action #report-tabs, body.pages_home_action #home-tabs {
     display: none;
     font: bold 14px Arial;
+    width: 100%;
     float: left;
     margin: 0;
     padding: 0; }
-    body.reports_show_action #report-tabs li {
+    body.reports_show_action #report-tabs li, body.reports_show_action #home-tabs li, body.pages_home_action #report-tabs li, body.pages_home_action #home-tabs li {
       -webkit-border-radius: 0.35em 0.35em 0 0;
       -moz-border-radius: 0.35em 0.35em 0 0;
       border-radius: 0.35em 0.35em 0 0;
@@ -391,30 +392,30 @@ body {
       margin-right: 4px;
       cursor: pointer;
       color: white; }
-      body.reports_show_action #report-tabs li.active {
+      body.reports_show_action #report-tabs li.active, body.reports_show_action #home-tabs li.active, body.pages_home_action #report-tabs li.active, body.pages_home_action #home-tabs li.active {
         border-bottom-color: white;
         background-color: white;
         color: #2C66A8; }
-  body.reports_show_action .panel.tabbed {
+  body.reports_show_action .panel.tabbed, body.pages_home_action .panel.tabbed {
     border: solid 1px #CCC;
     background-color: white;
     padding: 1em;
     margin-top: 25px;
     margin-bottom: 1em; }
-  body.reports_show_action .section {
+  body.reports_show_action .section, body.pages_home_action .section {
     margin: 0; }
-  body.reports_show_action h4 {
+  body.reports_show_action h4, body.pages_home_action h4 {
     color: #444; }
-  body.reports_show_action table.inspector td.key {
+  body.reports_show_action table.inspector td.key, body.pages_home_action table.inspector td.key {
     text-align: right;
     white-space: nowrap; }
-  body.reports_show_action tr.puppet_log.puppet_log_level_err:nth-child(even) td {
+  body.reports_show_action tr.puppet_log.puppet_log_level_err:nth-child(even) td, body.pages_home_action tr.puppet_log.puppet_log_level_err:nth-child(even) td {
     background: #ffc7c7; }
-  body.reports_show_action tr.puppet_log.puppet_log_level_err td {
+  body.reports_show_action tr.puppet_log.puppet_log_level_err td, body.pages_home_action tr.puppet_log.puppet_log_level_err td {
     background: #ffd6d6; }
-  body.reports_show_action tr.puppet_log.puppet_log_level_warning:nth-child(even) td {
+  body.reports_show_action tr.puppet_log.puppet_log_level_warning:nth-child(even) td, body.pages_home_action tr.puppet_log.puppet_log_level_warning:nth-child(even) td {
     background: #ffe4c7; }
-  body.reports_show_action tr.puppet_log.puppet_log_level_warning td {
+  body.reports_show_action tr.puppet_log.puppet_log_level_warning td, body.pages_home_action tr.puppet_log.puppet_log_level_warning td {
     background: #ffebd6; }
   body.pages_home_action table.node_summary {
     border: solid 1px #DDD;
@@ -433,10 +434,14 @@ body {
       color: orange; }
       body.pages_home_action table.node_summary tr.pending hr {
         background-color: orange; }
-    body.pages_home_action table.node_summary tr.compliant {
+    body.pages_home_action table.node_summary tr.changed {
       color: green; }
-      body.pages_home_action table.node_summary tr.compliant hr {
+      body.pages_home_action table.node_summary tr.changed hr {
         background-color: green; }
+    body.pages_home_action table.node_summary tr.unchanged {
+      color: darkblue; }
+      body.pages_home_action table.node_summary tr.unchanged hr {
+        background-color: darkblue; }
     body.pages_home_action table.node_summary tr.total {
       color: black; }
       body.pages_home_action table.node_summary tr.total hr {

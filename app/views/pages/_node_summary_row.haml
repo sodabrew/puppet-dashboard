@@ -1,6 +1,6 @@
-- nodes      = local_assigns[:nodes]
-- title      = local_assigns[:title]
-- class_name = title[/\w*/].downcase
+- nodes       = local_assigns[:nodes]
+- title       = local_assigns[:title]
+- class_name  = local_assigns[:class_name] || title[/\w*/].downcase
 
 %tr{:class => class_name}
   %td.count

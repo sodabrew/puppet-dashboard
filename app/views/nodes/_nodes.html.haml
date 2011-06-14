@@ -1,9 +1,14 @@
-- nodes = paginate_scope(local_assigns[:nodes])
-- more_link = local_assigns[:more_link]
-- container = local_assigns[:container]
+- nodes           = paginate_scope(local_assigns[:nodes])
+- container       = local_assigns[:container]
+- selected_status = local_assigns[:selected_status]
+- more_link       = local_assigns[:more_link]
 
 %table.main
   %thead
+    %tr
+      %th(colspan="3")
+      %th(colspan="5")
+        Resources
     %tr
       %th.status
       %th.hostname
@@ -12,12 +17,31 @@
         %th Source
       %th.latest_report.desc
         &darr; Latest report
+      %th
+        All
+      %th
+        Failed
+      %th
+        Pending
+      %th
+        Changed
+      %th
+        Unchanged
+  - if nodes.present?
+    %tfoot
+      %tr
+        %td{:colspan => container.nil? ? 8 : 9 }
+          = pagination_for nodes, more_link
   %tbody
     - if nodes.present?
-      - nodes.sort {|a,b| (b.reported_at || Time.at(0)) <=> (a.reported_at || Time.at(0))}.each do |node|
+      %tr
+        %td{:colspan => 3} Total
+        - Node.possible_statuses.unshift("total").each do |status|
+          %td= Node.resource_status_totals(status, selected_status)
+      - nodes.each do |node|
         - sources = container.nodes_with_sources[node] unless container.nil?
-        %tr[node]{:class => "#{'active' if node == @node}"}
-          %td.status{:class => node.status_class}
+        %tr{:class => "#{'active' if node == @node}"}
+          %td.status{:class => node.status}
             %span{:title => node_title_text(node)}
               = node_status_icon(node)
           %td.hostname
@@ -30,11 +54,11 @@
                 = sources.map{|s| link_to(s.name,s)}.join(", ")
           %td.latest_report
             = node.last_apply_report ? node.last_apply_report.time : "Has not reported"
+          - ["total", "failed", "pending", "changed", "unchanged"].each do |status|
+            %td
+              = node.last_apply_report.metric_value("resources", status).to_i if node.last_apply_report
     - else
-      %td.empty{:colspan => container.nil? ? 3 : 4}
-        = describe_no_matches_for :nodes
-  - if nodes.present?
-    %tfoot
       %tr
-        %td{:colspan => container.nil? ? 3 : 4 }
-          = pagination_for nodes, more_link
+        %td.empty{:colspan => container.nil? ? 8 : 9}
+          = describe_no_matches_for :nodes
+= link_to "Export nodes as CSV", url_for(:controller => "nodes", :action => selected_status == "all" ? :index : selected_status, :format => 'csv')

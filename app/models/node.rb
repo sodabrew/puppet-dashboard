@@ -12,10 +12,19 @@ class Node < ActiveRecord::Base
   has_many :node_classes, :through => :node_class_memberships
   has_many :node_group_memberships, :dependent => :destroy
   has_many :node_groups, :through => :node_group_memberships
-
   has_many :reports, :dependent => :destroy
+  has_many :resource_statuses, :through => :reports
+
   belongs_to :last_apply_report, :class_name => 'Report'
   belongs_to :last_inspect_report, :class_name => 'Report'
+
+  def self.possible_derived_statuses
+    self.possible_statuses.unshift("unresponsive")
+  end
+
+  def self.possible_statuses
+    ["failed", "pending", "changed", "unchanged"]
+  end
 
   named_scope :with_last_report, :include => :last_apply_report
   named_scope :by_report_date, :order => 'reported_at DESC'
@@ -33,87 +42,27 @@ class Node < ActiveRecord::Base
   fires :updated, :on => :update
   fires :removed, :on => :destroy
 
-  named_scope :current, lambda { |predicate|
-    predicate = predicate ? '' : 'NOT'
-    {
+  named_scope :unresponsive, lambda {{
+    :conditions => [
+      "last_apply_report_id IS NOT NULL AND reported_at < ?",
+      SETTINGS.no_longer_reporting_cutoff.seconds.ago
+    ]
+  }}
+
+  possible_statuses.each do |node_status|
+    named_scope node_status, lambda {{
       :conditions => [
-        "#{predicate} (last_apply_report_id IS NOT NULL AND reported_at >= ?)",
+        "last_apply_report_id IS NOT NULL AND reported_at >= ? AND nodes.status = '#{node_status}'",
         SETTINGS.no_longer_reporting_cutoff.seconds.ago
       ]
-    }
-  }
+    }}
+  end
 
-  named_scope :successful, lambda { |predicate|
-    predicate = predicate ? '' : 'NOT'
-    { :conditions => [ "#{predicate} (nodes.status != 'failed')" ] }
-  }
-
-  # Return nodes based on their currentness and successfulness.
-  #
-  # The terms are:
-  # * currentness: +true+ uses the latest report (current) and +false+ uses any report.
-  # * successfulness: +true+ means a successful report, +false+ a failing report.
-  #
-  # Thus:
-  # * current and successful: Return only nodes that are currently successful.
-  # * current and failing: Return only nodes that are currently failing.
-  # * non-current and successful: Return any nodes that ever had a successful report.
-  # * non-current and failing: Return any nodes that ever had a failing report.
-  named_scope :by_currentness_and_successfulness, lambda {|currentness, successfulness|
-    op = successfulness ? '!=' : '='
-    if currentness
-      {
-        :conditions => [ "nodes.status #{op} 'failed' AND nodes.last_apply_report_id is not NULL" ]
-      }
-    else
-      {
-        :conditions => [ "reports.kind = 'apply' AND reports.status #{op} 'failed'" ],
-        :joins => :reports,
-        :group => 'nodes.id',
-      }
-    end
-  }
-
-  named_scope :pending, lambda { |predicate|
-    predicate = predicate ? '' : 'NOT'
-    {
-      :conditions => <<-SQL
-        nodes.id #{predicate} IN (
-          SELECT nodes.id FROM nodes
-            INNER JOIN reports ON nodes.last_apply_report_id = reports.id
-            INNER JOIN resource_statuses ON reports.id = resource_statuses.report_id
-            INNER JOIN resource_events ON resource_statuses.id = resource_events.resource_status_id
-            WHERE resource_events.status = 'noop'
-          )
-      SQL
-    }
-  }
-
-  named_scope :reported, :conditions => ["reported_at IS NOT NULL"]
-
-  # Return nodes that have never reported.
   named_scope :unreported, :conditions => {:reported_at => nil}
-
-  # Return nodes that haven't reported recently.
-  named_scope :no_longer_reporting, lambda {
-    {
-      :conditions => ['reported_at < ?', SETTINGS.no_longer_reporting_cutoff.seconds.ago]
-    }
-  }
 
   named_scope :hidden, :conditions => {:hidden => true}
 
   named_scope :unhidden, :conditions => {:hidden => false}
-
-  def self.label_for_currentness_and_successfulness(current, successful)
-    scope = { true => 'Currently', false => 'Ever' }
-    tense = if current then
-      { true => 'successful', false => 'failing' }
-    else
-      { true => 'succeeded', false => 'failed' }
-    end
-    return "#{scope[current]} #{tense[successful]}"
-  end
 
   def self.find_by_id_or_name!(identifier)
     find_by_id(identifier) or find_by_name!(identifier)
@@ -199,11 +148,6 @@ class Node < ActiveRecord::Base
 
   def environment
     'production'
-  end
-
-  def status_class
-    return 'no reports' unless last_apply_report
-    last_apply_report.status
   end
 
   attr_accessor :node_class_names
@@ -295,5 +239,11 @@ class Node < ActiveRecord::Base
       :timestamp => timestamp,
       :values => data['values']
     }
+  end
+
+  def self.resource_status_totals(resource_status, scope='all')
+    raise ArgumentError, "No such status #{resource_status}" unless possible_statuses.unshift("total").include?(resource_status)
+    options = {:conditions => "metrics.category = 'resources' AND metrics.name = '#{resource_status}'", :joins => 'left join metrics on metrics.report_id = nodes.last_apply_report_id'}
+    ['all', 'index'].include?(scope) ? Node.sum(:value, options).to_i : Node.send(scope).sum(:value, options).to_i
   end
 end

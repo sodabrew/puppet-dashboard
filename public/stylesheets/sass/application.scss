@@ -528,10 +528,11 @@ body {
     }
   }
 
-  &.reports_show_action {
-    #report-tabs {
+  &.reports_show_action, &.pages_home_action {
+    #report-tabs, #home-tabs {
       display: none;
       font: bold 14px Arial;
+      width: 100%;
       float: left;
       margin: 0;
       padding: 0;
@@ -597,11 +598,12 @@ body {
       margin: 0 auto;
 
       tr {
-        &.unresponsive { @include node_summary_row(gray) }
-        &.failed       { @include node_summary_row(red) }
+        &.unresponsive { @include node_summary_row(gray)   }
+        &.failed       { @include node_summary_row(red)    }
         &.pending      { @include node_summary_row(orange) }
-        &.compliant    { @include node_summary_row(green) }
-        &.total        { @include node_summary_row(black) }
+        &.changed      { @include node_summary_row(green)  }
+        &.unchanged    { @include node_summary_row(darkblue)  }
+        &.total        { @include node_summary_row(black)  }
 
         td {
           padding-bottom: 1em;

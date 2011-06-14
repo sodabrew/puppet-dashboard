@@ -66,98 +66,33 @@ describe Node do
 
       @never_reported = Node.generate!(:name => 'never_reported')
     end
-
-    [
-      [true,  true,  %w[ever_changed ever_unchanged just_changed just_unchanged]],
-      [true,  false, %w[ever_failed just_failed]],
-      [false, true,  %w[ever_changed ever_unchanged just_changed just_unchanged just_failed]],
-      [false, false, %w[just_changed just_unchanged ever_failed just_failed]],
-    ].each do |currentness, successfulness, inclusions|
-      context "when #{currentness ? 'current' : 'ever'} and #{successfulness ? 'successful' : 'failed'}" do
-        let(:currentness) { currentness }
-        let(:successfulness) { successfulness }
-        let(:inclusions) { inclusions }
-
-        describe "::by_currentness_and_successfulness" do
-          it "should exactly match: #{inclusions.join(', ')}" do
-            Node.by_currentness_and_successfulness(currentness, successfulness).map(&:name).sort.should == inclusions.sort
-          end
-        end
-      end
-    end
   end
 
-  describe "::pending" do
-    before :each do
-      @pending = Node.generate!
-      @report = Report.generate!(:status => "unchanged", :host => @pending.name)
-      @resource_status = @report.resource_statuses.generate!(:resource_type => "file", :title => "/tmp/foo", :failed => false)
-      @resource_status.events.generate!(:status => "noop")
-      @resource_status.events.generate!(:status => "success")
+  describe "status named_scopes" do
+    it "should find nodes with the appropriate statuses on the latest report" do
+      [:failed, :pending, :changed, :unchanged].each do |node_status|
+        node = Node.create!(:name => node_status.to_s)
+        node.reports.generate!(:status => 'bogus', :time => Time.now - 1)
+        node.reports.generate!(:status => node_status.to_s, :time => Time.now)
 
-      @current = Node.generate!
-      @report = Report.generate!(:status => "unchanged", :host => @current.name)
-      @resource_status = @report.resource_statuses.generate!(:resource_type => "file", :title => "/tmp/foo", :failed => false)
-      @resource_status.events.generate!(:status => "success")
-    end
-
-    describe "(true)" do
-      it "should find nodes with noop events" do
-        Node.pending(true).should == [@pending]
+        node = Node.create!(:name => "#{node_status}-unresponsive")
+        node.reports.generate!(
+          :status => node_status.to_s, 
+          :time => SETTINGS.no_longer_reporting_cutoff.seconds.ago - 1
+        )
       end
 
-      it "should only consider the latest report for a node" do
-        @new_report = Report.generate!(:status => "unchanged", :host => @pending.name)
-        Node.pending(true).should == []
-      end
-    end
+      Node.pending.map(&:name).should   == ['pending']
+      Node.changed.map(&:name).should   == ['changed']
+      Node.unchanged.map(&:name).should == ['unchanged']
+      Node.failed.map(&:name).should    == ['failed']
 
-    describe "(false)" do
-      it "should find nodes without noop events" do
-        Node.pending(false).should == [@current]
-      end
-
-      it "should only consider the latest report for a node" do
-        @new_report = Report.generate!(:status => "unchanged", :host => @pending.name)
-        Node.pending(false).should =~ [@pending, @current]
-      end
-    end
-  end
-  describe "::current" do
-    before :each do
-      Factory(:unresponsive_node, :name => 'unresponsive')
-      Factory(:current_node, :name => 'current')
-    end
-
-    describe "(true)" do
-      it "should find nodes with recent reports" do
-        Node.current(true).map(&:name).should == %w[ current ]
-      end
-    end
-
-    describe "(false)" do
-      it "should find nodes without recent reports" do
-        Node.current(false).map(&:name).should == %w[ unresponsive ]
-      end
-    end
-  end
-
-  describe "::successful" do
-    before :each do
-      Factory(:successful_node, :name => 'successful')
-      Factory(:failing_node, :name => 'failed')
-    end
-
-    describe "(true)" do
-      it "should find nodes with non-failed status" do
-        Node.successful(true).map(&:name).should == %w[ successful ]
-      end
-    end
-
-    describe "(false)" do
-      it "should find nodes with failed status" do
-        Node.successful(false).map(&:name).should == %w[ failed ]
-      end
+      Node.unresponsive.map(&:name).should =~ [
+        'failed-unresponsive',
+        'pending-unresponsive',
+        'changed-unresponsive',
+        'unchanged-unresponsive'
+      ]
     end
   end
 
@@ -184,16 +119,6 @@ describe Node do
     end
   end
 
-  describe ".reported" do
-    it "should return all nodes with a latest report" do
-      unreported_node = Node.generate
-      reported_node = Node.generate
-      Report.generate!(:host => reported_node.name)
-
-      Node.reported.should == [reported_node]
-    end
-  end
-
   describe ".unreported" do
     it "should return all nodes whose latest report was unreported" do
       unreported_node = Node.generate
@@ -201,17 +126,6 @@ describe Node do
       Report.generate!(:host => reported_node.name)
 
       Node.unreported.should == [unreported_node]
-    end
-  end
-
-  describe "no_longer_reporting" do
-    it "should return all nodes whose latest report is more than 1 hour ago" do
-      SETTINGS.expects(:no_longer_reporting_cutoff).at_least_once.returns(1.hour.to_i)
-      old = node = Node.generate(:reported_at => 2.hours.ago, :name => "old")
-      new = node = Node.generate(:reported_at => 10.minutes.ago, :name => "new")
-
-      Node.no_longer_reporting.should include(old)
-      Node.no_longer_reporting.should_not include(new)
     end
   end
 
@@ -618,6 +532,36 @@ describe Node do
         (@custom_node_properties + @custom_resource_properties).join(','),
         (node_values + ([nil] * @custom_resource_properties.count)).join(',')
       ]
+    end
+  end
+
+  describe 'self.resource_status_totals' do
+    before :each do
+      @pending_node = Factory(:pending_node)
+      @unchanged_node = Factory(:unchanged_node)
+
+      Metric.create!(:report => @pending_node.last_apply_report, :category => "resources", :name => "pending", :value => 27)
+      Metric.create!(:report => @pending_node.last_apply_report, :category => "resources", :name => "unchanged", :value => 48)
+      Metric.create!(:report => @pending_node.last_apply_report, :category => "resources", :name => "changed", :value => 4)
+      Metric.create!(:report => @unchanged_node.last_apply_report, :category => "resources", :name => "unchanged", :value => 25)
+    end
+    it 'should calculate the correct totals for default scope' do
+      Node.resource_status_totals("pending").should == 27
+      Node.resource_status_totals("unchanged").should == 73
+      Node.resource_status_totals("changed").should == 4
+    end
+
+    it 'should calculate the correct totals for specific scopes' do
+      Node.resource_status_totals("unchanged","pending").should == 48
+      Node.resource_status_totals("unchanged","unchanged").should == 25
+    end
+ 
+    it 'should raise an error if passed a scope that does not exist' do
+      expect { Node.resource_status_totals("unchanged","not_a_scope") }.to raise_error(NoMethodError, /undefined method/)
+    end
+
+    it 'should raise an error if passed an invalid status' do
+      expect { Node.resource_status_totals("not_a_status") }.to raise_error(ArgumentError, /No such status/)
     end
   end
 end
