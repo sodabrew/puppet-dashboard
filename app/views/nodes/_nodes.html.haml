@@ -1,3 +1,4 @@
+- node_count      = local_assigns[:nodes].count
 - nodes           = paginate_scope(local_assigns[:nodes])
 - container       = local_assigns[:container]
 - selected_status = local_assigns[:selected_status]
@@ -39,7 +40,7 @@
     %tfoot
       %tr
         %td{:colspan => container.nil? ? 8 : 9 }
-          = pagination_for nodes, more_link
+          = pagination_for nodes, more_link, (node_count - nodes.count)
   %tbody
     - if nodes.present?
       %tr
@@ -50,8 +51,7 @@
         - sources = container.nodes_with_sources[node] unless container.nil?
         %tr{:class => "#{'active' if node == @node}"}
           %td.status{:class => node.status}
-            %span{:title => node_title_text(node)}
-              = node_status_icon(node)
+            = node_status_icon(node)
           %td.hostname
             = link_to h(node.name), node
           - unless container.nil?
