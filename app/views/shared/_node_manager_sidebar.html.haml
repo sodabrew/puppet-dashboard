@@ -1,12 +1,32 @@
 .group
-  %h3{:class => active_if(controller_name == "nodes" && action_name == "index")}= link_to "Nodes", nodes_path
-  %span.count= Node.unhidden.count
+  -# %h3{:class => active_if(controller_name == "nodes" && action_name == "index")}= link_to "Nodes", nodes_path
+  -# %span.count= Node.unhidden.count
+  %p.help
+    %a{ :href => 'http://docs.puppetlabs.com/dashboard/1.2/node-summary/', :target => '_blank' }
+      Help
+  .node_summary
+    %table
+      - Node.possible_derived_statuses.push( 'all' ).each do |status|
+        - if( status == 'all' )
+          - node_count = Node.unhidden.count
+          - nodes_path = '/nodes'
+          - action_status = 'index'
+        - else
+          - node_count = Node.send(status).unhidden.count
+          - nodes_path = eval("#{status}_nodes_path")
+          - action_status = status
+
+        %tr{:class => "#{status} #{active_if(controller_name == 'nodes' && action_name == action_status && parent.nil?)}"}
+          %td.count
+            = node_count
+          %td
+            = link_to status.capitalize, nodes_path
+            %em= "#{percentage(node_count, Node.unhidden.count)}%"
+        %tr{:class => "#{status} graph"}
+          %td{:colspan => 2}
+            %hr{:style => "width: #{percentage(node_count, Node.unhidden.count)}%"}
+
   %ul
-    - Node.possible_derived_statuses.each do |status|
-      %li{:class => active_if(controller_name == 'nodes' && action_name == status && parent.nil?)}
-        = link_to status.capitalize, eval("#{status}_nodes_path")
-        - count = Node.send(status).unhidden.count
-        %span.count{:class => counter_class(count, true)}= count
     %li{:class => active_if(controller_name == 'nodes' && action_name == 'unreported' && parent.nil?)}
       = link_to "Never reported", unreported_nodes_path
       - count = Node.unreported.unhidden.count
@@ -15,8 +35,6 @@
       = link_to "Hidden", hidden_nodes_path
       - count = Node.hidden.count
       %span.count{:class => counter_class(count, false)}= count
-    %li
-      = link_to "File Search", search_reports_path
     - if SETTINGS.enable_inventory_service
       %li
         = link_to "Custom query", search_nodes_path

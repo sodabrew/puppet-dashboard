@@ -23,3 +23,6 @@
   %li &bull;
   %li{:class => active_if(controller_name == "reports")}
     = link_to "Reports", reports_path
+  %li &bull;
+  %li{:class => active_if(controller_name == "reports" && action_name == "search")}
+    = link_to "File Search", search_reports_path

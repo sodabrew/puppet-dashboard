@@ -1,5 +1,6 @@
 module PagesHelper
-  def percentage(nodes)
-    (100 * nodes.length / @all_nodes.length.to_f).round(2)
+  def percentage(node_count, all_node_count)
+    return 0 unless all_node_count > 0
+    (100 * node_count / all_node_count.to_f).round(1)
   end
 end

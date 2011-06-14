@@ -1,27 +1,12 @@
 - tab_statuses = Node.possible_derived_statuses.unshift("all")
 #sidebar= render 'shared/node_manager_sidebar'
 #main
-  .header
-    %h2 Dashboard
   .item
     - if @all_nodes.empty?
       .section
         %p There are no nodes known by Dashboard.
-    - else
-      .section.node_summary.with-help
-        %p.help
-          %a{ :href => 'http://docs.puppetlabs.com/dashboard/1.2/node-summary/', :target => '_blank' }
-            Help
-        %table
-          - [ { :title => 'Unresponsive',          :nodes => @unresponsive_nodes },
-              { :title => 'Failed',                :nodes => @failed_nodes },
-              { :title => 'Pending',               :nodes => @pending_nodes },
-              { :title => 'Compliant (Changed)',   :nodes => @changed_nodes, :class_name => 'changed' },
-              { :title => 'Compliant (Unchanged)', :nodes => @unchanged_nodes, :class_name => 'unchanged' },
-              { :title => 'Total Nodes',           :nodes => @all_nodes } ].each do |section|
-            = render 'node_summary_row', section
-      .section
-        = render 'statuses/run_failure', :nodes => @all_nodes
+    .section
+      = render 'statuses/run_failure', :nodes => @all_nodes
   .item
     %ul#home-tabs
       - tab_statuses.each do |tab_status|
