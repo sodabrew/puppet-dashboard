@@ -19,7 +19,7 @@ Dependencies
 
 The Puppet Dashboard will run on most Unix, Linux and Mac OS X systems once its dependencies are installed from either the operating system's repositories or their respective websites. For installation instructions on specific operating systems, see below. A list of dependencies follows:
 
-* [Ruby](http://www.ruby-lang.org/en/downloads/) or [Ruby Enterprise Edition](http://www.rubyenterpriseedition.com/download.html) programming language interpreter, version 1.8.4 to 1.8.7, but not 1.9.x
+* [Ruby](http://www.ruby-lang.org/en/downloads/) or [Ruby Enterprise Edition](http://www.rubyenterpriseedition.com/download.html) programming language interpreter version 1.8.7
 * [Rake](http://github.com/jimweirich/rake) build tool for Ruby, version 0.8.3 or newer
 * [MySQL](http://www.mysql.com/downloads/mysql/) database server 5.x
 * [Ruby-MySQL](http://rubygems.org/gems/mysql) bindings 2.7.x or 2.8.x
