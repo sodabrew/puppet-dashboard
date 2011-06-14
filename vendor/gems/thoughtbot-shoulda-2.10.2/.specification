@@ -269,7 +269,7 @@ required_rubygems_version: !ruby/object:Gem::Requirement
 requirements: []
 
 rubyforge_project: shoulda
-rubygems_version: 1.4.1
+rubygems_version: 1.6.2
 signing_key: 
 specification_version: 3
 summary: Making tests easy on the fingers and eyes

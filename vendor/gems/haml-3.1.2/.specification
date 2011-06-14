@@ -1,0 +1,114 @@
+--- !ruby/object:Gem::Specification 
+name: haml
+version: !ruby/object:Gem::Version 
+  hash: 7
+  prerelease: 
+  segments: 
+  - 3
+  - 1
+  - 2
+  version: 3.1.2
+platform: ruby
+authors: 
+- Nathan Weizenbaum
+- Hampton Catlin
+autorequire: 
+bindir: bin
+cert_chain: []
+
+date: 2011-06-07 00:00:00 -07:00
+default_executable: 
+dependencies: 
+- !ruby/object:Gem::Dependency 
+  name: yard
+  prerelease: false
+  requirement: &id001 !ruby/object:Gem::Requirement 
+    none: false
+    requirements: 
+    - - ">="
+      - !ruby/object:Gem::Version 
+        hash: 13
+        segments: 
+        - 0
+        - 5
+        - 3
+        version: 0.5.3
+  type: :development
+  version_requirements: *id001
+- !ruby/object:Gem::Dependency 
+  name: maruku
+  prerelease: false
+  requirement: &id002 !ruby/object:Gem::Requirement 
+    none: false
+    requirements: 
+    - - ">="
+      - !ruby/object:Gem::Version 
+        hash: 25
+        segments: 
+        - 0
+        - 5
+        - 9
+        version: 0.5.9
+  type: :development
+  version_requirements: *id002
+description: "      Haml (HTML Abstraction Markup Language) is a layer on top of XHTML or XML\n      that's designed to express the structure of XHTML or XML documents\n      in a non-repetitive, elegant, easy way,\n      using indentation rather than closing tags\n      and allowing Ruby to be embedded with ease.\n      It was originally envisioned as a plugin for Ruby on Rails,\n      but it can function as a stand-alone templating engine.\n"
+email: haml@googlegroups.com
+executables: 
+- haml
+- html2haml
+extensions: []
+
+extra_rdoc_files: []
+
+files: 
+- test/haml/engine_test.rb
+- test/haml/html2haml_test.rb
+- test/haml/template_test.rb
+- test/haml/util_test.rb
+- test/haml/helper_test.rb
+- test/haml/spec_test.rb
+- test/haml/spec/ruby_haml_test.rb
+- bin/haml
+- bin/html2haml
+has_rdoc: true
+homepage: http://haml-lang.com/
+licenses: []
+
+post_install_message: 
+rdoc_options: []
+
+require_paths: 
+- lib
+required_ruby_version: !ruby/object:Gem::Requirement 
+  none: false
+  requirements: 
+  - - ">="
+    - !ruby/object:Gem::Version 
+      hash: 3
+      segments: 
+      - 0
+      version: "0"
+required_rubygems_version: !ruby/object:Gem::Requirement 
+  none: false
+  requirements: 
+  - - ">="
+    - !ruby/object:Gem::Version 
+      hash: 3
+      segments: 
+      - 0
+      version: "0"
+requirements: []
+
+rubyforge_project: haml
+rubygems_version: 1.6.2
+signing_key: 
+specification_version: 3
+summary: An elegant, structured XHTML/XML templating engine.
+test_files: 
+- test/haml/engine_test.rb
+- test/haml/html2haml_test.rb
+- test/haml/template_test.rb
+- test/haml/util_test.rb
+- test/haml/helper_test.rb
+- test/haml/spec_test.rb
+- test/haml/spec/ruby_haml_test.rb

@@ -19,7 +19,7 @@ Dependencies
 
 The Puppet Dashboard will run on most Unix, Linux and Mac OS X systems once its dependencies are installed from either the operating system's repositories or their respective websites. For installation instructions on specific operating systems, see below. A list of dependencies follows:
 
-* [Ruby](http://www.ruby-lang.org/en/downloads/) or [Ruby Enterprise Edition](http://www.rubyenterpriseedition.com/download.html) programming language interpreter, version 1.8.4 to 1.8.7, but not 1.9.x
+* [Ruby](http://www.ruby-lang.org/en/downloads/) or [Ruby Enterprise Edition](http://www.rubyenterpriseedition.com/download.html) programming language interpreter version 1.8.7
 * [Rake](http://github.com/jimweirich/rake) build tool for Ruby, version 0.8.3 or newer
 * [MySQL](http://www.mysql.com/downloads/mysql/) database server 5.x
 * [Ruby-MySQL](http://rubygems.org/gems/mysql) bindings 2.7.x or 2.8.x
@@ -283,7 +283,7 @@ The Puppet Dashboard can collect reports from your Puppet Master as they're crea
 
 ##### On your Puppet Master
 
-1.  Modify your Puppet Master to send reports to the Puppet Dashboard. Do this by adding an `http` value to the `reports` setting in the `master` section of your `puppet.conf` file. For example, a `puppet.conf` for sending reports to a Puppet Dashboard server running at `localhost` on port `3000` may look like:
+1.  Modify puppet master's settings to send reports to the Puppet Dashboard. Do this by adding an `http` value to the `reports` setting in the `master` section of your `puppet.conf` file. For example, a `puppet.conf` for sending reports to a Puppet Dashboard server running at `localhost` on port `3000` may look like:
 
         [master]
           reports = http, store
@@ -296,7 +296,7 @@ The Puppet Dashboard can collect reports from your Puppet Master as they're crea
 
     *NOTE:* The `/reports/upload` portion of the `reporturl` is required.
 
-2.  Restart the `puppetmasterd` process.
+2.  Restart puppet master.
 
 
 External node classification
@@ -306,7 +306,7 @@ The Puppet Dashboard can act as an external node classification tool, which will
 
 1.  Modify your Puppet Master's `puppet.conf` file by adding lines like these:
 
-        [puppetmasterd]
+        [master]
           node_terminus  = exec
           external_nodes = /opt/dashboard/bin/external_node
 
@@ -314,10 +314,10 @@ The Puppet Dashboard can act as an external node classification tool, which will
 
     The `bin/external_node` program connects to the Puppet Dashboard at `localhost` on port `3000`. If your Puppet Dashboard is running on a different host or node, please modify this file.
 
-    If you have Dashboard set up to use HTTPS, change the DASHBOARD_URL in `external_node` to the `https` prefix and the correct port number (443, by default). You may also need to change the CERT_PATH, PKEY_PATH, and CA_PATH variables if your puppet master's hostname is not `puppet` or if your ssldir is not `/etc/puppet/ssl`.
+    If you have Dashboard set up to use HTTPS, change the `DASHBOARD_URL` in `external_node` to the `https` prefix and the correct port number (443, by default). You may also need to change the `CERT_PATH`, `PKEY_PATH`, and `CA_PATH` variables if your puppet master's hostname is not `puppet` or if your ssldir is not `/etc/puppet/ssl`.
 
-    If you would prefer not to edit the external_node script, you may override these settings using environment variables: PUPPET_DASHBOARD_URL, PUPPET_CERT_PATH, PUPPET_PKEY_PATH, PUPPET_CA_PATH. For example:
-        [puppetmasterd]
+    If you would prefer not to edit the `external_node` script, you may override these settings using environment variables: `PUPPET_DASHBOARD_URL`, `PUPPET_CERT_PATH`, `PUPPET_PKEY_PATH`, `PUPPET_CA_PATH`. For example:
+        [master]
           node_terminus  = exec
           external_nodes = /usr/bin/env PUPPET_DASHBOARD_URL=http://dashboard.localdomain:8000 /opt/dashboard/bin/external_node
 
@@ -412,20 +412,21 @@ Then instruct the master to sign the certificate request (using "puppet cert"), 
 
     rake cert:retrieve
 
-You will also need to configure auth.conf on the master to allow Dashboard to connect to the facts terminus:
+You may need to set the `ca_server` and `ca_port` in settings.yml before running these tasks, depending on how your site is configured.
 
-    path /facts
-    method find
-    allow dashboard
+Using the Inventory Service and Custom Queries
+----------------------------------------------
 
-Using the Inventory Service Custom Queries
-----------------------------------------------------
+In order to connect to the inventory service you will need to request and retrieve signed certificates as above. You will also need to:
 
-In order to connect to the inventory service you will need to configure auth.conf on the puppet master running the inventory service to allow Dashboard to connect to the inventory terminus:
+* Make sure you are running Puppet 2.6.7 or newer.
+* Configure auth.conf on the puppet master to allow Dashboard to connect to the `facts` and `facts_search` termini:
 
-    path /inventory
-    method search
-    allow dashboard
+        path /facts
+        method find, search
+        allow dashboard
+* Ensure that either the `json` or `json_pure` gem is installed on the machine running Dashboard.
+* Set `enable_inventory_service: true` in Dashboard's settings.yml file, and configure the proper `inventory_server` and `inventory_port`.
 
 Icons
 -----

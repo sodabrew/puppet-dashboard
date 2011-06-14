@@ -1,0 +1,542 @@
+--- !ruby/object:Gem::Specification 
+name: rspec
+version: !ruby/object:Gem::Version 
+  hash: 31
+  prerelease: 
+  segments: 
+  - 1
+  - 3
+  - 2
+  version: 1.3.2
+platform: ruby
+authors: 
+- The RSpec Development Team
+autorequire: 
+bindir: bin
+cert_chain: []
+
+date: 2011-04-10 00:00:00 -07:00
+default_executable: 
+dependencies: 
+- !ruby/object:Gem::Dependency 
+  name: cucumber
+  prerelease: false
+  requirement: &id001 !ruby/object:Gem::Requirement 
+    none: false
+    requirements: 
+    - - ">="
+      - !ruby/object:Gem::Version 
+        hash: 13
+        segments: 
+        - 0
+        - 3
+        version: "0.3"
+  type: :development
+  version_requirements: *id001
+- !ruby/object:Gem::Dependency 
+  name: fakefs
+  prerelease: false
+  requirement: &id002 !ruby/object:Gem::Requirement 
+    none: false
+    requirements: 
+    - - ">="
+      - !ruby/object:Gem::Version 
+        hash: 21
+        segments: 
+        - 0
+        - 2
+        - 1
+        version: 0.2.1
+  type: :development
+  version_requirements: *id002
+- !ruby/object:Gem::Dependency 
+  name: syntax
+  prerelease: false
+  requirement: &id003 !ruby/object:Gem::Requirement 
+    none: false
+    requirements: 
+    - - ">="
+      - !ruby/object:Gem::Version 
+        hash: 15
+        segments: 
+        - 1
+        - 0
+        version: "1.0"
+  type: :development
+  version_requirements: *id003
+- !ruby/object:Gem::Dependency 
+  name: diff-lcs
+  prerelease: false
+  requirement: &id004 !ruby/object:Gem::Requirement 
+    none: false
+    requirements: 
+    - - ">="
+      - !ruby/object:Gem::Version 
+        hash: 23
+        segments: 
+        - 1
+        - 1
+        - 2
+        version: 1.1.2
+  type: :development
+  version_requirements: *id004
+description: Behaviour Driven Development for Ruby.
+email: 
+- rspec-devel@rubyforge.org
+executables: 
+- autospec
+- spec
+extensions: []
+
+extra_rdoc_files: []
+
+files: 
+- features/before_and_after_blocks/before_and_after_blocks.feature
+- features/command_line/line_number_option.feature
+- features/command_line/line_number_option_with_example_with_no_name.feature
+- features/example_groups/define_example_attribute.feature
+- features/example_groups/example_group_with_should_methods.feature
+- features/example_groups/implicit_docstrings.feature
+- features/example_groups/nested_groups.feature
+- features/expectations/customized_message.feature
+- features/expectations/expect_change.feature
+- features/expectations/expect_error.feature
+- features/extensions/custom_example_group.feature
+- features/formatters/custom_formatter.feature
+- features/formatters/nested_formatter.feature
+- features/interop/cucumber_stubs_dont_leak.feature
+- features/interop/examples_and_tests_together.feature
+- features/interop/rspec_output.feature
+- features/interop/test_but_not_test_unit.feature
+- features/interop/test_case_with_should_methods.feature
+- features/load_paths/add_lib_to_load_path.feature
+- features/load_paths/add_spec_to_load_path.feature
+- features/matchers/define_diffable_matcher.feature
+- features/matchers/define_matcher.feature
+- features/matchers/define_matcher_outside_rspec.feature
+- features/matchers/define_matcher_with_fluent_interface.feature
+- features/matchers/define_wrapped_matcher.feature
+- features/matchers/match_unless_raises.feature
+- features/matchers/match_unless_raises_unexpected_error.feature
+- features/mock_framework_integration/use_flexmock.feature
+- features/mock_framework_integration/use_mocha.feature
+- features/mock_framework_integration/use_rr.feature
+- features/mocks/block_local_expectations.feature
+- features/mocks/mix_stubs_and_mocks.feature
+- features/mocks/stub_implementation.feature
+- features/pending/pending_examples.feature
+- features/runner/specify_line_number.feature
+- features/spec_helper/spec_helper.feature
+- features/step_definitions/running_rspec_steps.rb
+- features/step_definitions/stubbing_steps.rb
+- features/subject/explicit_subject.feature
+- features/subject/implicit_subject.feature
+- features/support/env.rb
+- features/support/matchers/smart_match.rb
+- spec/README.jruby
+- spec/autotest/autotest_helper.rb
+- spec/autotest/autotest_matchers.rb
+- spec/autotest/discover_spec.rb
+- spec/autotest/failed_results_re_spec.rb
+- spec/autotest/rspec_spec.rb
+- spec/ruby_forker.rb
+- spec/spec.opts
+- spec/spec/dsl/main_spec.rb
+- spec/spec/example/example_group_class_definition_spec.rb
+- spec/spec/example/example_group_factory_spec.rb
+- spec/spec/example/example_group_methods_spec.rb
+- spec/spec/example/example_group_proxy_spec.rb
+- spec/spec/example/example_group_spec.rb
+- spec/spec/example/example_matcher_spec.rb
+- spec/spec/example/example_methods_spec.rb
+- spec/spec/example/example_proxy_spec.rb
+- spec/spec/example/helper_method_spec.rb
+- spec/spec/example/nested_example_group_spec.rb
+- spec/spec/example/pending_module_spec.rb
+- spec/spec/example/predicate_matcher_spec.rb
+- spec/spec/example/shared_example_group_spec.rb
+- spec/spec/example/subclassing_example_group_spec.rb
+- spec/spec/example/subject_spec.rb
+- spec/spec/expectations/differs/default_spec.rb
+- spec/spec/expectations/extensions/kernel_spec.rb
+- spec/spec/expectations/fail_with_spec.rb
+- spec/spec/expectations/handler_spec.rb
+- spec/spec/expectations/wrap_expectation_spec.rb
+- spec/spec/interop/test/unit/resources/spec_that_fails.rb
+- spec/spec/interop/test/unit/resources/spec_that_passes.rb
+- spec/spec/interop/test/unit/resources/spec_with_errors.rb
+- spec/spec/interop/test/unit/resources/spec_with_options_hash.rb
+- spec/spec/interop/test/unit/resources/test_case_that_fails.rb
+- spec/spec/interop/test/unit/resources/test_case_that_passes.rb
+- spec/spec/interop/test/unit/resources/test_case_with_errors.rb
+- spec/spec/interop/test/unit/resources/test_case_with_various_names.rb
+- spec/spec/interop/test/unit/resources/testsuite_adapter_spec_with_test_unit.rb
+- spec/spec/interop/test/unit/spec_spec.rb
+- spec/spec/interop/test/unit/test_unit_spec_helper.rb
+- spec/spec/interop/test/unit/testcase_spec.rb
+- spec/spec/interop/test/unit/testsuite_adapter_spec.rb
+- spec/spec/matchers/be_close_spec.rb
+- spec/spec/matchers/be_instance_of_spec.rb
+- spec/spec/matchers/be_kind_of_spec.rb
+- spec/spec/matchers/be_spec.rb
+- spec/spec/matchers/change_spec.rb
+- spec/spec/matchers/compatibility_spec.rb
+- spec/spec/matchers/description_generation_spec.rb
+- spec/spec/matchers/dsl_spec.rb
+- spec/spec/matchers/eql_spec.rb
+- spec/spec/matchers/equal_spec.rb
+- spec/spec/matchers/exist_spec.rb
+- spec/spec/matchers/has_spec.rb
+- spec/spec/matchers/have_spec.rb
+- spec/spec/matchers/include_spec.rb
+- spec/spec/matchers/match_array_spec.rb
+- spec/spec/matchers/match_spec.rb
+- spec/spec/matchers/matcher_spec.rb
+- spec/spec/matchers/matchers_spec.rb
+- spec/spec/matchers/operator_matcher_spec.rb
+- spec/spec/matchers/pretty_spec.rb
+- spec/spec/matchers/raise_exception_spec.rb
+- spec/spec/matchers/respond_to_spec.rb
+- spec/spec/matchers/satisfy_spec.rb
+- spec/spec/matchers/simple_matcher_spec.rb
+- spec/spec/matchers/throw_symbol_spec.rb
+- spec/spec/mocks/and_yield_spec.rb
+- spec/spec/mocks/any_number_of_times_spec.rb
+- spec/spec/mocks/argument_expectation_spec.rb
+- spec/spec/mocks/argument_matchers_spec.rb
+- spec/spec/mocks/at_least_spec.rb
+- spec/spec/mocks/at_most_spec.rb
+- spec/spec/mocks/bug_report_10260_spec.rb
+- spec/spec/mocks/bug_report_10263_spec.rb
+- spec/spec/mocks/bug_report_1049_spec.rb
+- spec/spec/mocks/bug_report_11545_spec.rb
+- spec/spec/mocks/bug_report_15719_spec.rb
+- spec/spec/mocks/bug_report_496_spec.rb
+- spec/spec/mocks/bug_report_600_spec.rb
+- spec/spec/mocks/bug_report_7611_spec.rb
+- spec/spec/mocks/bug_report_7805_spec.rb
+- spec/spec/mocks/bug_report_8165_spec.rb
+- spec/spec/mocks/bug_report_8302_spec.rb
+- spec/spec/mocks/bug_report_830_spec.rb
+- spec/spec/mocks/bug_report_957_spec.rb
+- spec/spec/mocks/double_spec.rb
+- spec/spec/mocks/failing_argument_matchers_spec.rb
+- spec/spec/mocks/hash_including_matcher_spec.rb
+- spec/spec/mocks/hash_not_including_matcher_spec.rb
+- spec/spec/mocks/mock_ordering_spec.rb
+- spec/spec/mocks/mock_space_spec.rb
+- spec/spec/mocks/mock_spec.rb
+- spec/spec/mocks/multiple_return_value_spec.rb
+- spec/spec/mocks/nil_expectation_warning_spec.rb
+- spec/spec/mocks/null_object_mock_spec.rb
+- spec/spec/mocks/once_counts_spec.rb
+- spec/spec/mocks/options_hash_spec.rb
+- spec/spec/mocks/partial_mock_spec.rb
+- spec/spec/mocks/partial_mock_using_mocks_directly_spec.rb
+- spec/spec/mocks/passing_argument_matchers_spec.rb
+- spec/spec/mocks/precise_counts_spec.rb
+- spec/spec/mocks/record_messages_spec.rb
+- spec/spec/mocks/stub_chain_spec.rb
+- spec/spec/mocks/stub_implementation_spec.rb
+- spec/spec/mocks/stub_spec.rb
+- spec/spec/mocks/stubbed_message_expectations_spec.rb
+- spec/spec/mocks/twice_counts_spec.rb
+- spec/spec/mocks/unstub_spec.rb
+- spec/spec/package/bin_spec_spec.rb
+- spec/spec/rake/spectask_spec.rb
+- spec/spec/runner/class_and_argument_parser_spec.rb
+- spec/spec/runner/command_line_spec.rb
+- spec/spec/runner/configuration_spec.rb
+- spec/spec/runner/drb_command_line_spec.rb
+- spec/spec/runner/empty_file.txt
+- spec/spec/runner/example_group_runner_spec.rb
+- spec/spec/runner/examples.txt
+- spec/spec/runner/failed.txt
+- spec/spec/runner/formatter/base_formatter_spec.rb
+- spec/spec/runner/formatter/base_text_formatter_spec.rb
+- spec/spec/runner/formatter/failing_example_groups_formatter_spec.rb
+- spec/spec/runner/formatter/failing_examples_formatter_spec.rb
+- spec/spec/runner/formatter/html_formatted-1.8.6-jruby.html
+- spec/spec/runner/formatter/html_formatted-1.8.6.html
+- spec/spec/runner/formatter/html_formatted-1.8.7.html
+- spec/spec/runner/formatter/html_formatted-1.9.1.html
+- spec/spec/runner/formatter/html_formatted-1.9.2.html
+- spec/spec/runner/formatter/html_formatter_spec.rb
+- spec/spec/runner/formatter/nested_text_formatter_spec.rb
+- spec/spec/runner/formatter/profile_formatter_spec.rb
+- spec/spec/runner/formatter/progress_bar_formatter_spec.rb
+- spec/spec/runner/formatter/snippet_extractor_spec.rb
+- spec/spec/runner/formatter/specdoc_formatter_spec.rb
+- spec/spec/runner/formatter/text_mate_formatted-1.8.6-jruby.html
+- spec/spec/runner/formatter/text_mate_formatted-1.8.6.html
+- spec/spec/runner/formatter/text_mate_formatted-1.8.7.html
+- spec/spec/runner/formatter/text_mate_formatted-1.9.1.html
+- spec/spec/runner/formatter/text_mate_formatted-1.9.2.html
+- spec/spec/runner/formatter/text_mate_formatter_spec.rb
+- spec/spec/runner/heckle_runner_spec.rb
+- spec/spec/runner/heckler_spec.rb
+- spec/spec/runner/line_number_query/line_number_query_fixture.rb
+- spec/spec/runner/line_number_query_spec.rb
+- spec/spec/runner/noisy_backtrace_tweaker_spec.rb
+- spec/spec/runner/option_parser_spec.rb
+- spec/spec/runner/options_spec.rb
+- spec/spec/runner/output_one_time_fixture.rb
+- spec/spec/runner/output_one_time_fixture_runner.rb
+- spec/spec/runner/output_one_time_spec.rb
+- spec/spec/runner/quiet_backtrace_tweaker_spec.rb
+- spec/spec/runner/reporter_spec.rb
+- spec/spec/runner/resources/a_bar.rb
+- spec/spec/runner/resources/a_foo.rb
+- spec/spec/runner/resources/a_spec.rb
+- spec/spec/runner/resources/custom_example_group_runner.rb
+- spec/spec/runner/resources/utf8_encoded.rb
+- spec/spec/runner/spec.opts
+- spec/spec/runner/spec_drb.opts
+- spec/spec/runner/spec_spaced.opts
+- spec/spec/runner_spec.rb
+- spec/spec_helper.rb
+- spec/support/macros.rb
+- spec/support/spec_classes.rb
+- bin/autospec
+- bin/spec
+has_rdoc: true
+homepage: ""
+licenses: []
+
+post_install_message: 
+rdoc_options: []
+
+require_paths: 
+- lib
+required_ruby_version: !ruby/object:Gem::Requirement 
+  none: false
+  requirements: 
+  - - ">="
+    - !ruby/object:Gem::Version 
+      hash: 3
+      segments: 
+      - 0
+      version: "0"
+required_rubygems_version: !ruby/object:Gem::Requirement 
+  none: false
+  requirements: 
+  - - ">="
+    - !ruby/object:Gem::Version 
+      hash: 3
+      segments: 
+      - 0
+      version: "0"
+requirements: []
+
+rubyforge_project: rspec
+rubygems_version: 1.6.2
+signing_key: 
+specification_version: 3
+summary: rspec 1.3.2
+test_files: 
+- features/before_and_after_blocks/before_and_after_blocks.feature
+- features/command_line/line_number_option.feature
+- features/command_line/line_number_option_with_example_with_no_name.feature
+- features/example_groups/define_example_attribute.feature
+- features/example_groups/example_group_with_should_methods.feature
+- features/example_groups/implicit_docstrings.feature
+- features/example_groups/nested_groups.feature
+- features/expectations/customized_message.feature
+- features/expectations/expect_change.feature
+- features/expectations/expect_error.feature
+- features/extensions/custom_example_group.feature
+- features/formatters/custom_formatter.feature
+- features/formatters/nested_formatter.feature
+- features/interop/cucumber_stubs_dont_leak.feature
+- features/interop/examples_and_tests_together.feature
+- features/interop/rspec_output.feature
+- features/interop/test_but_not_test_unit.feature
+- features/interop/test_case_with_should_methods.feature
+- features/load_paths/add_lib_to_load_path.feature
+- features/load_paths/add_spec_to_load_path.feature
+- features/matchers/define_diffable_matcher.feature
+- features/matchers/define_matcher.feature
+- features/matchers/define_matcher_outside_rspec.feature
+- features/matchers/define_matcher_with_fluent_interface.feature
+- features/matchers/define_wrapped_matcher.feature
+- features/matchers/match_unless_raises.feature
+- features/matchers/match_unless_raises_unexpected_error.feature
+- features/mock_framework_integration/use_flexmock.feature
+- features/mock_framework_integration/use_mocha.feature
+- features/mock_framework_integration/use_rr.feature
+- features/mocks/block_local_expectations.feature
+- features/mocks/mix_stubs_and_mocks.feature
+- features/mocks/stub_implementation.feature
+- features/pending/pending_examples.feature
+- features/runner/specify_line_number.feature
+- features/spec_helper/spec_helper.feature
+- features/step_definitions/running_rspec_steps.rb
+- features/step_definitions/stubbing_steps.rb
+- features/subject/explicit_subject.feature
+- features/subject/implicit_subject.feature
+- features/support/env.rb
+- features/support/matchers/smart_match.rb
+- spec/README.jruby
+- spec/autotest/autotest_helper.rb
+- spec/autotest/autotest_matchers.rb
+- spec/autotest/discover_spec.rb
+- spec/autotest/failed_results_re_spec.rb
+- spec/autotest/rspec_spec.rb
+- spec/ruby_forker.rb
+- spec/spec.opts
+- spec/spec/dsl/main_spec.rb
+- spec/spec/example/example_group_class_definition_spec.rb
+- spec/spec/example/example_group_factory_spec.rb
+- spec/spec/example/example_group_methods_spec.rb
+- spec/spec/example/example_group_proxy_spec.rb
+- spec/spec/example/example_group_spec.rb
+- spec/spec/example/example_matcher_spec.rb
+- spec/spec/example/example_methods_spec.rb
+- spec/spec/example/example_proxy_spec.rb
+- spec/spec/example/helper_method_spec.rb
+- spec/spec/example/nested_example_group_spec.rb
+- spec/spec/example/pending_module_spec.rb
+- spec/spec/example/predicate_matcher_spec.rb
+- spec/spec/example/shared_example_group_spec.rb
+- spec/spec/example/subclassing_example_group_spec.rb
+- spec/spec/example/subject_spec.rb
+- spec/spec/expectations/differs/default_spec.rb
+- spec/spec/expectations/extensions/kernel_spec.rb
+- spec/spec/expectations/fail_with_spec.rb
+- spec/spec/expectations/handler_spec.rb
+- spec/spec/expectations/wrap_expectation_spec.rb
+- spec/spec/interop/test/unit/resources/spec_that_fails.rb
+- spec/spec/interop/test/unit/resources/spec_that_passes.rb
+- spec/spec/interop/test/unit/resources/spec_with_errors.rb
+- spec/spec/interop/test/unit/resources/spec_with_options_hash.rb
+- spec/spec/interop/test/unit/resources/test_case_that_fails.rb
+- spec/spec/interop/test/unit/resources/test_case_that_passes.rb
+- spec/spec/interop/test/unit/resources/test_case_with_errors.rb
+- spec/spec/interop/test/unit/resources/test_case_with_various_names.rb
+- spec/spec/interop/test/unit/resources/testsuite_adapter_spec_with_test_unit.rb
+- spec/spec/interop/test/unit/spec_spec.rb
+- spec/spec/interop/test/unit/test_unit_spec_helper.rb
+- spec/spec/interop/test/unit/testcase_spec.rb
+- spec/spec/interop/test/unit/testsuite_adapter_spec.rb
+- spec/spec/matchers/be_close_spec.rb
+- spec/spec/matchers/be_instance_of_spec.rb
+- spec/spec/matchers/be_kind_of_spec.rb
+- spec/spec/matchers/be_spec.rb
+- spec/spec/matchers/change_spec.rb
+- spec/spec/matchers/compatibility_spec.rb
+- spec/spec/matchers/description_generation_spec.rb
+- spec/spec/matchers/dsl_spec.rb
+- spec/spec/matchers/eql_spec.rb
+- spec/spec/matchers/equal_spec.rb
+- spec/spec/matchers/exist_spec.rb
+- spec/spec/matchers/has_spec.rb
+- spec/spec/matchers/have_spec.rb
+- spec/spec/matchers/include_spec.rb
+- spec/spec/matchers/match_array_spec.rb
+- spec/spec/matchers/match_spec.rb
+- spec/spec/matchers/matcher_spec.rb
+- spec/spec/matchers/matchers_spec.rb
+- spec/spec/matchers/operator_matcher_spec.rb
+- spec/spec/matchers/pretty_spec.rb
+- spec/spec/matchers/raise_exception_spec.rb
+- spec/spec/matchers/respond_to_spec.rb
+- spec/spec/matchers/satisfy_spec.rb
+- spec/spec/matchers/simple_matcher_spec.rb
+- spec/spec/matchers/throw_symbol_spec.rb
+- spec/spec/mocks/and_yield_spec.rb
+- spec/spec/mocks/any_number_of_times_spec.rb
+- spec/spec/mocks/argument_expectation_spec.rb
+- spec/spec/mocks/argument_matchers_spec.rb
+- spec/spec/mocks/at_least_spec.rb
+- spec/spec/mocks/at_most_spec.rb
+- spec/spec/mocks/bug_report_10260_spec.rb
+- spec/spec/mocks/bug_report_10263_spec.rb
+- spec/spec/mocks/bug_report_1049_spec.rb
+- spec/spec/mocks/bug_report_11545_spec.rb
+- spec/spec/mocks/bug_report_15719_spec.rb
+- spec/spec/mocks/bug_report_496_spec.rb
+- spec/spec/mocks/bug_report_600_spec.rb
+- spec/spec/mocks/bug_report_7611_spec.rb
+- spec/spec/mocks/bug_report_7805_spec.rb
+- spec/spec/mocks/bug_report_8165_spec.rb
+- spec/spec/mocks/bug_report_8302_spec.rb
+- spec/spec/mocks/bug_report_830_spec.rb
+- spec/spec/mocks/bug_report_957_spec.rb
+- spec/spec/mocks/double_spec.rb
+- spec/spec/mocks/failing_argument_matchers_spec.rb
+- spec/spec/mocks/hash_including_matcher_spec.rb
+- spec/spec/mocks/hash_not_including_matcher_spec.rb
+- spec/spec/mocks/mock_ordering_spec.rb
+- spec/spec/mocks/mock_space_spec.rb
+- spec/spec/mocks/mock_spec.rb
+- spec/spec/mocks/multiple_return_value_spec.rb
+- spec/spec/mocks/nil_expectation_warning_spec.rb
+- spec/spec/mocks/null_object_mock_spec.rb
+- spec/spec/mocks/once_counts_spec.rb
+- spec/spec/mocks/options_hash_spec.rb
+- spec/spec/mocks/partial_mock_spec.rb
+- spec/spec/mocks/partial_mock_using_mocks_directly_spec.rb
+- spec/spec/mocks/passing_argument_matchers_spec.rb
+- spec/spec/mocks/precise_counts_spec.rb
+- spec/spec/mocks/record_messages_spec.rb
+- spec/spec/mocks/stub_chain_spec.rb
+- spec/spec/mocks/stub_implementation_spec.rb
+- spec/spec/mocks/stub_spec.rb
+- spec/spec/mocks/stubbed_message_expectations_spec.rb
+- spec/spec/mocks/twice_counts_spec.rb
+- spec/spec/mocks/unstub_spec.rb
+- spec/spec/package/bin_spec_spec.rb
+- spec/spec/rake/spectask_spec.rb
+- spec/spec/runner/class_and_argument_parser_spec.rb
+- spec/spec/runner/command_line_spec.rb
+- spec/spec/runner/configuration_spec.rb
+- spec/spec/runner/drb_command_line_spec.rb
+- spec/spec/runner/empty_file.txt
+- spec/spec/runner/example_group_runner_spec.rb
+- spec/spec/runner/examples.txt
+- spec/spec/runner/failed.txt
+- spec/spec/runner/formatter/base_formatter_spec.rb
+- spec/spec/runner/formatter/base_text_formatter_spec.rb
+- spec/spec/runner/formatter/failing_example_groups_formatter_spec.rb
+- spec/spec/runner/formatter/failing_examples_formatter_spec.rb
+- spec/spec/runner/formatter/html_formatted-1.8.6-jruby.html
+- spec/spec/runner/formatter/html_formatted-1.8.6.html
+- spec/spec/runner/formatter/html_formatted-1.8.7.html
+- spec/spec/runner/formatter/html_formatted-1.9.1.html
+- spec/spec/runner/formatter/html_formatted-1.9.2.html
+- spec/spec/runner/formatter/html_formatter_spec.rb
+- spec/spec/runner/formatter/nested_text_formatter_spec.rb
+- spec/spec/runner/formatter/profile_formatter_spec.rb
+- spec/spec/runner/formatter/progress_bar_formatter_spec.rb
+- spec/spec/runner/formatter/snippet_extractor_spec.rb
+- spec/spec/runner/formatter/specdoc_formatter_spec.rb
+- spec/spec/runner/formatter/text_mate_formatted-1.8.6-jruby.html
+- spec/spec/runner/formatter/text_mate_formatted-1.8.6.html
+- spec/spec/runner/formatter/text_mate_formatted-1.8.7.html
+- spec/spec/runner/formatter/text_mate_formatted-1.9.1.html
+- spec/spec/runner/formatter/text_mate_formatted-1.9.2.html
+- spec/spec/runner/formatter/text_mate_formatter_spec.rb
+- spec/spec/runner/heckle_runner_spec.rb
+- spec/spec/runner/heckler_spec.rb
+- spec/spec/runner/line_number_query/line_number_query_fixture.rb
+- spec/spec/runner/line_number_query_spec.rb
+- spec/spec/runner/noisy_backtrace_tweaker_spec.rb
+- spec/spec/runner/option_parser_spec.rb
+- spec/spec/runner/options_spec.rb
+- spec/spec/runner/output_one_time_fixture.rb
+- spec/spec/runner/output_one_time_fixture_runner.rb
+- spec/spec/runner/output_one_time_spec.rb
+- spec/spec/runner/quiet_backtrace_tweaker_spec.rb
+- spec/spec/runner/reporter_spec.rb
+- spec/spec/runner/resources/a_bar.rb
+- spec/spec/runner/resources/a_foo.rb
+- spec/spec/runner/resources/a_spec.rb
+- spec/spec/runner/resources/custom_example_group_runner.rb
+- spec/spec/runner/resources/utf8_encoded.rb
+- spec/spec/runner/spec.opts
+- spec/spec/runner/spec_drb.opts
+- spec/spec/runner/spec_spaced.opts
+- spec/spec/runner_spec.rb
+- spec/spec_helper.rb
+- spec/support/macros.rb
+- spec/support/spec_classes.rb
