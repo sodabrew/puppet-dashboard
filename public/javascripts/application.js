@@ -146,7 +146,7 @@ function init_expandable_list() {
 }
 
 function toggle_expandable_link() {
-  expansionTime = 100; // ms
+  expansionTime = 30; // ms
   jQuery(this).toggleClass('collapsed-link');
   jQuery(this.id.replace('expand', '#expandable'))
     .toggle('blind', {}, expansionTime);

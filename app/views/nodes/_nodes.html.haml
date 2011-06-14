@@ -18,55 +18,55 @@
 -# XXX this is a dirty hack to pass tests [randall@puppetlabs.com 2011-06-13]
 - selected_status = 'all' if selected_status == nil
 
-%table.main
-  %thead
-    %tr
-      %th(colspan="3")
-      - unless column_filter[ selected_status ] && column_filter[ selected_status ].empty?
-        %th(colspan="5")
-          Resources
-    %tr
-      %th.status
-      %th.hostname
-        Hostname
-      - unless container.nil?
-        %th Source
-      %th.latest_report.desc
-        &darr; Latest report
-      - column_filter[ selected_status ].each do |status|
-        %th
-          = status.capitalize
-  - if nodes.present?
-    %tfoot
+- unless nodes.empty?
+  %table.main
+    %thead
       %tr
-        %td{:colspan => container.nil? ? 8 : 9 }
-          = pagination_for nodes, more_link, (node_count - nodes.count)
-  %tbody
-    - if nodes.present?
+        %th(colspan="3")
+        - unless column_filter[ selected_status ] && column_filter[ selected_status ].empty?
+          %th(colspan="5")
+            Resources
       %tr
-        %td{:colspan => 3} Total
+        %th.status
+        %th.hostname
+          Hostname
+        - unless container.nil?
+          %th Source
+        %th.latest_report.desc
+          &darr; Latest report
         - column_filter[ selected_status ].each do |status|
-          %td= Node.resource_status_totals(status, selected_status)
-      - nodes.each do |node|
-        - sources = container.nodes_with_sources[node] unless container.nil?
-        %tr{:class => "#{'active' if node == @node}"}
-          %td.status{:class => node.status}
-            = node_status_icon(node)
-          %td.hostname
-            = link_to h(node.name), node
-          - unless container.nil?
-            %td
-              - if sources.include?(container)
-                = node.name
-              - else
-                = sources.map{|s| link_to(s.name,s)}.join(", ")
-          %td.latest_report
-            = node.last_apply_report ? node.last_apply_report.time : "Has not reported"
+          %th
+            = status.capitalize
+    - if nodes.present?
+      %tfoot
+        %tr
+          %td{:colspan => container.nil? ? 8 : 9 }
+            = pagination_for nodes, more_link, (node_count - nodes.count)
+    %tbody
+      - if nodes.present?
+        %tr
+          %td{:colspan => 3} Total
           - column_filter[ selected_status ].each do |status|
-            %td
-              = node.last_apply_report.metric_value("resources", status).to_i if node.last_apply_report
-    - else
-      %tr
-        %td.empty{:colspan => container.nil? ? 8 : 9}
-          = describe_no_matches_for :nodes
-= link_to "Export nodes as CSV", url_for(:controller => "nodes", :action => selected_status == "all" ? :index : selected_status, :format => 'csv')
+            %td= Node.resource_status_totals(status, selected_status)
+        - nodes.each do |node|
+          - sources = container.nodes_with_sources[node] unless container.nil?
+          %tr{:class => "#{'active' if node == @node}"}
+            %td.status{:class => node.status}
+              = node_status_icon(node)
+            %td.hostname
+              = link_to h(node.name), node
+            - unless container.nil?
+              %td
+                - if sources.include?(container)
+                  = node.name
+                - else
+                  = sources.map{|s| link_to(s.name,s)}.join(", ")
+            %td.latest_report
+              = node.last_apply_report ? node.last_apply_report.time : "Has not reported"
+            - column_filter[ selected_status ].each do |status|
+              %td
+                = node.last_apply_report.metric_value("resources", status).to_i if node.last_apply_report
+  = link_to "Export nodes as CSV", url_for(:controller => "nodes", :action => selected_status == "all" ? :index : selected_status, :format => 'csv')
+- else
+  %p
+    = describe_no_matches_for :nodes
