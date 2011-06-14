@@ -9,7 +9,7 @@ class FinderTest < ActiveRecordTestCase
   fixtures :topics, :replies, :users, :projects, :developers_projects
 
   def test_new_methods_presence
-    assert_respond_to_all Topic, %w(per_page paginate paginate_by_sql)
+    assert_respond_to_all Topic, %w(per_page paginate paginate_by_sql paginate_by_definition_in_class)
   end
   
   def test_simple_paginate
@@ -37,6 +37,22 @@ class FinderTest < ActiveRecordTestCase
 
     # :count could be nil and we should still not cry
     assert_nothing_raised { Topic.paginate :page => 1, :count => nil }
+  end
+  
+  def test_counting_when_integer_has_length_method
+    Integer.module_eval { def length; to_s.length; end }
+    begin
+      assert_equal 2, 11.length
+      entries = Developer.paginate :page => 1, :per_page => 5
+      assert_equal 11, entries.total_entries
+      assert_equal 5, entries.size
+      assert_equal 3, entries.total_pages
+    ensure
+      begin
+        Integer.module_eval { remove_method :length }
+      rescue
+      end
+    end
   end
   
   def test_paginate_with_per_page
@@ -197,7 +213,7 @@ class FinderTest < ActiveRecordTestCase
 
   def test_paginate_with_dynamic_finder
     expected = [replies(:witty_retort), replies(:spam)]
-    assert_equal expected, Reply.paginate_by_topic_id(1, :page => 1)
+    assert_equal expected, Reply.paginate_by_topic_id(1, :page => 1, :order => :created_at)
 
     entries = Developer.paginate :conditions => { :salary => 100000 }, :page => 1, :per_page => 5
     assert_equal 8, entries.total_entries
@@ -468,6 +484,13 @@ class FinderTest < ActiveRecordTestCase
       Project.find(1, :include => :replies)
       
       # I cannot reproduce any of the failures from those reports :(
+    end
+
+    def test_hmt_with_uniq
+      project = Project.find(1)
+      result = project.unique_replies.paginate :page => 1, :per_page => 1,
+        :order => 'replies.id'
+      assert_equal replies(:decisive), result.first
     end
   end
 end

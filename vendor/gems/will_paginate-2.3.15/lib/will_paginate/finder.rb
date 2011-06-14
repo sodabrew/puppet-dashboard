@@ -155,7 +155,7 @@ module WillPaginate
         when :paginate, :paginate_by_sql
           true
         else
-          super(method.to_s.sub(/^paginate/, 'find'), include_priv)
+          super || super(method.to_s.sub(/^paginate/, 'find'), include_priv)
         end
       end
 
@@ -198,7 +198,7 @@ module WillPaginate
 
         if options[:select] and options[:select] =~ /^\s*DISTINCT\b/i
           # Remove quoting and check for table_name.*-like statement.
-          if options[:select].gsub('`', '') =~ /\w+\.\*/
+          if options[:select].gsub(/[`"]/, '') =~ /\w+\.\*/
             options[:select] = "DISTINCT #{klass.table_name}.#{klass.primary_key}"
           end
         else
@@ -235,7 +235,7 @@ module WillPaginate
                   counter.call
                 end
 
-        count.respond_to?(:length) ? count.length : count
+        (!count.is_a?(Integer) && count.respond_to?(:length)) ? count.length : count
       end
 
       def wp_parse_options(options) #:nodoc:
