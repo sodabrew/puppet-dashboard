@@ -133,8 +133,8 @@ module ApplicationHelper
     end
   end
 
-  def icon(name)
-    image_tag "icons/#{name}.png"
+  def icon(name, options={})
+    image_tag "icons/#{name}.png", options
   end
 
   # Return status icon for the +node+.

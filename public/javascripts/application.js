@@ -1,5 +1,12 @@
+var UNRESPONSIVE = '#888';
+var FAILED       = '#c21';
+var PENDING      = '#e72';
+var CHANGED      = '#093';
+var UNCHANGED    = '#069';
+var ALL          = '#000';
+
 jQuery(document).ready(function(J) {
-  J('.status span[title]').tipsy({gravity: 's'});
+  J('table.main .status img[title]').tipsy({gravity: 's'});
 
   J('button.drop, a.drop').click( function(e) {
     var self = J(this);
@@ -90,7 +97,7 @@ jQuery(document).ready(function(J) {
         failed: failed_data
       },
       {
-        colors: { pending: "orange", changed: "green", unchanged: "darkblue", failed: "red" },
+        colors: { pending: PENDING, changed: CHANGED, unchanged: UNCHANGED, failed: FAILED },
         datalabels: { changed: changed_data_label, unchanged: unchanged_data_label, pending: pending_data_label, failed: failed_data_label },
         font_size: 9,
         grid: false,
@@ -128,6 +135,8 @@ jQuery(document).ready(function(J) {
     J('#' + panelID).show();
   });
   J('.pages_home_action #home-tabs li:first').click();
+
+  init_sidebar_links();
 });
 
 function init_expandable_list() {
@@ -171,4 +180,24 @@ function toggle_expandable_link() {
 
 function display_file_popup(url) {
     jQuery.colorbox({href: url, width: '80%', height: '80%', iframe: true});
+}
+
+function init_sidebar_links() {
+  jQuery( '.node_summary .primary tr' ).each( function() {
+    var status = jQuery( this ).attr( 'class' );
+    jQuery( this )
+      .hover(
+        function() {
+          jQuery( '.node_summary tr.'+ status ).addClass( 'hover' );
+        },
+        function() {
+          jQuery( '.node_summary tr.'+ status ).removeClass( 'hover' );
+        }
+      )
+      .click( function() {
+        var url = jQuery( '.node_summary tr.'+ status +' .count a' ).attr( 'href' );
+        document.location.href = url;
+        return false;
+      });
+  });
 }

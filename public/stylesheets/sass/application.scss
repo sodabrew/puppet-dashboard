@@ -99,8 +99,24 @@ $rounding_radius: 0.35em;
 }
 
 @mixin node_summary_row($color) {
-  color: $color;
-  hr { background-color: $color }
+  a {
+    color : $color;
+  }
+  hr {
+    background-color : $color;
+  }
+  &.hover,
+  &.active,
+  &:hover {
+    background-color : $color;
+    a {
+      color : #fff;
+      text-decoration : none;
+    }
+    hr {
+      background-color : #fff;
+    }
+  }
 }
 
 body {
@@ -592,53 +608,80 @@ body {
 
   .node_summary {
     padding : 0 .5em;
-    margin: 3em auto 1em;
-    table {
+    margin: .5em auto;
+    table { // primary and secondary
       width : 100%;
+      .count {
+        font-weight : bold;
+      }
+      .count,
+      .graph {
+        padding-left : .3em;
+      }
+      .count,
+      .label {
+        padding-top : .2em;
+      }
+      .percent,
+      .count {
+        text-align: right;
+        padding-right: .3em;
+      }
+    }
+
+    table.primary {
       tr {
-        &.active {
-          td {
-            background-color: red;
-          }
-        }
-        &.unresponsive { @include node_summary_row(gray)   }
-        &.failed       { @include node_summary_row(red)    }
-        &.pending      { @include node_summary_row(orange) }
-        &.changed      { @include node_summary_row(green)  }
-        &.unchanged    { @include node_summary_row(darkblue)  }
-        &.total        { @include node_summary_row(black)  }
+        cursor : pointer;
+        &.unresponsive { @include node_summary_row( #888 )}
+        &.failed       { @include node_summary_row( #c21 )}
+        &.pending      { @include node_summary_row( #e72 )}
+        &.changed      { @include node_summary_row( #093 )}
+        &.unchanged    { @include node_summary_row( #069 )}
+        &.unreported   { @include node_summary_row( #aaa )}
+        &.all          { @include node_summary_row( #000 )}
 
-        &.graph {
-          td {
-            padding : 0 0 .5em 0;
-          }
-        }
         td {
-          &.count {
-            padding-right: .5em;
-            text-align: right;
-          }
-          .label {
-            font-size: 1.5em;
-          }
-          em {
-            color: #888;
-            margin-left: 10px;
-          }
+          font-size : 1.4em;
 
-          hr {
-            height: 5px;
-            align: left;
-            border: 0;
-            margin: 0;
+          &.percent {
+            display : none; // just fooling around with this
+            em {
+              color: #666;
+              font-size : .8em;
+            }
+          }
+          &.label {
+            width : 100%;
+          }
+          &.graph {
+            padding-bottom : .4em;
+            width : 100%;
+            hr {
+              height: 3px;
+              border: 0;
+              margin: 0;
+            }
+          }
+          &.label,
+          &.graph {
+            padding-right : .3em;
           }
         }
-
-        &.all td {
-          padding-top: 1em;
-          padding-bottom: 0;
-          border-top: solid 1px #DDD;
+      }
+    }
+    table.secondary {
+      padding-top : .5em;
+      border-top : 1px solid #ccc;
+      margin-top : .5em;
+      tr.active {
+        a {
+          color : #fff;
         }
+        background-color : #2c66a8;
+      }
+      td {
+        font-size : 1.2em;
+        padding : .2em .3em;
       }
     }
   }
