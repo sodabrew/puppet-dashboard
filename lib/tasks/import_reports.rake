@@ -9,14 +9,13 @@ namespace :reports do
     plural = lambda{|str, count| str + (count != 1 ? 's' : '')}
     reports = FileList[File.join(report_dir, '**', '*.yaml')]
 
-    STDOUT.puts "Importing #{reports.size} #{plural['report', reports.size]} from #{report_dir}"
+    STDOUT.puts "Importing #{reports.size} #{plural['report', reports.size]} from #{report_dir} in the background"
 
     skipped = 0
     pbar = ProgressBar.new("Importing:", reports.size, STDOUT)
     reports.each do |report|
-      data = File.read(report)
       success = begin
-        Report.create_from_yaml(data)
+        Report.delay.create_from_yaml_file(report)
       rescue => e
         puts e
         false
@@ -28,7 +27,7 @@ namespace :reports do
 
     successes = reports.size - skipped
 
-    STDOUT.puts "#{successes} of #{reports.size} #{plural['report', successes]} imported"
+    STDOUT.puts "#{successes} of #{reports.size} #{plural['report', successes]} queued"
     STDOUT.puts "#{skipped} #{plural['report', skipped]} skipped" if skipped > 0
   end
 end

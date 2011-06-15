@@ -27,8 +27,22 @@ class ReportsController < InheritedResources::Base
 
   def upload
     begin
-      Report.create_from_yaml(params[:report][:report])
-      render :text => "Report successfully uploaded"
+      yaml = params[:report][:report]
+      md5  = Digest::MD5.hexdigest(yaml)
+      file = Rails.root + 'spool' + "#{md5}.yaml"
+      n    = 0
+
+      begin
+        fd = File.new(file, File::CREAT|File::EXCL|File::RDWR, 0600)
+        fd.print yaml
+        fd.close
+
+        Report.delay.create_from_yaml_file(file.to_s, :delete => true)
+        render :text => "Report queued for import as #{md5}"
+      rescue Errno::EEXIST
+        file = Rails.root + 'spool' + "#{md5}-#{n += 1}.yaml"
+        retry
+      end
     rescue => e
       error_text = "ERROR! ReportsController#upload failed:"
       Rails.logger.debug error_text
