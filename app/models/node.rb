@@ -242,6 +242,7 @@ class Node < ActiveRecord::Base
   end
 
   def self.resource_status_totals(resource_status, scope='all')
+    scope ||="all"
     raise ArgumentError, "No such status #{resource_status}" unless possible_statuses.unshift("total").include?(resource_status)
     options = {:conditions => "metrics.category = 'resources' AND metrics.name = '#{resource_status}'", :joins => 'left join metrics on metrics.report_id = nodes.last_apply_report_id'}
     ['all', 'index'].include?(scope) ? Node.sum(:value, options).to_i : Node.send(scope).sum(:value, options).to_i

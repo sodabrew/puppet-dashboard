@@ -560,6 +560,12 @@ describe Node do
       expect { Node.resource_status_totals("unchanged","not_a_scope") }.to raise_error(NoMethodError, /undefined method/)
     end
 
+    it 'should default to all scope if nil is passed as scope' do
+      Node.resource_status_totals("pending", nil).should == 27
+      Node.resource_status_totals("unchanged", nil).should == 73
+      Node.resource_status_totals("changed", nil).should == 4
+    end
+
     it 'should raise an error if passed an invalid status' do
       expect { Node.resource_status_totals("not_a_status") }.to raise_error(ArgumentError, /No such status/)
     end
