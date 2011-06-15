@@ -417,59 +417,131 @@ body {
     background: #ffe4c7; }
   body.reports_show_action tr.puppet_log.puppet_log_level_warning td, body.pages_home_action tr.puppet_log.puppet_log_level_warning td {
     background: #ffebd6; }
-  body.pages_home_action table.node_summary {
-    border: solid 1px #DDD;
-    padding: 1em;
-    width: 75%;
-    margin: 0 auto; }
-    body.pages_home_action table.node_summary tr.unresponsive {
-      color: gray; }
-      body.pages_home_action table.node_summary tr.unresponsive hr {
-        background-color: gray; }
-    body.pages_home_action table.node_summary tr.failed {
-      color: red; }
-      body.pages_home_action table.node_summary tr.failed hr {
-        background-color: red; }
-    body.pages_home_action table.node_summary tr.pending {
-      color: orange; }
-      body.pages_home_action table.node_summary tr.pending hr {
-        background-color: orange; }
-    body.pages_home_action table.node_summary tr.changed {
-      color: green; }
-      body.pages_home_action table.node_summary tr.changed hr {
-        background-color: green; }
-    body.pages_home_action table.node_summary tr.unchanged {
-      color: darkblue; }
-      body.pages_home_action table.node_summary tr.unchanged hr {
-        background-color: darkblue; }
-    body.pages_home_action table.node_summary tr.total {
-      color: black; }
-      body.pages_home_action table.node_summary tr.total hr {
+  body .node_summary {
+    padding: 0 .5em;
+    margin: .5em auto; }
+    body .node_summary table {
+      width: 100%; }
+      body .node_summary table .count {
+        font-weight: bold; }
+      body .node_summary table .count,
+      body .node_summary table .graph {
+        padding-left: .3em; }
+      body .node_summary table .count,
+      body .node_summary table .label {
+        padding-top: .2em; }
+      body .node_summary table .percent,
+      body .node_summary table .count {
+        text-align: right;
+        padding-right: .3em; }
+    body .node_summary table.primary tr {
+      cursor: pointer; }
+      body .node_summary table.primary tr.unresponsive a {
+        color: #888888; }
+      body .node_summary table.primary tr.unresponsive hr {
+        background-color: #888888; }
+      body .node_summary table.primary tr.unresponsive.hover, body .node_summary table.primary tr.unresponsive.active, body .node_summary table.primary tr.unresponsive:hover {
+        background-color: #888888; }
+        body .node_summary table.primary tr.unresponsive.hover a, body .node_summary table.primary tr.unresponsive.active a, body .node_summary table.primary tr.unresponsive:hover a {
+          color: #fff;
+          text-decoration: none; }
+        body .node_summary table.primary tr.unresponsive.hover hr, body .node_summary table.primary tr.unresponsive.active hr, body .node_summary table.primary tr.unresponsive:hover hr {
+          background-color: #fff; }
+      body .node_summary table.primary tr.failed a {
+        color: #cc2211; }
+      body .node_summary table.primary tr.failed hr {
+        background-color: #cc2211; }
+      body .node_summary table.primary tr.failed.hover, body .node_summary table.primary tr.failed.active, body .node_summary table.primary tr.failed:hover {
+        background-color: #cc2211; }
+        body .node_summary table.primary tr.failed.hover a, body .node_summary table.primary tr.failed.active a, body .node_summary table.primary tr.failed:hover a {
+          color: #fff;
+          text-decoration: none; }
+        body .node_summary table.primary tr.failed.hover hr, body .node_summary table.primary tr.failed.active hr, body .node_summary table.primary tr.failed:hover hr {
+          background-color: #fff; }
+      body .node_summary table.primary tr.pending a {
+        color: #ee7722; }
+      body .node_summary table.primary tr.pending hr {
+        background-color: #ee7722; }
+      body .node_summary table.primary tr.pending.hover, body .node_summary table.primary tr.pending.active, body .node_summary table.primary tr.pending:hover {
+        background-color: #ee7722; }
+        body .node_summary table.primary tr.pending.hover a, body .node_summary table.primary tr.pending.active a, body .node_summary table.primary tr.pending:hover a {
+          color: #fff;
+          text-decoration: none; }
+        body .node_summary table.primary tr.pending.hover hr, body .node_summary table.primary tr.pending.active hr, body .node_summary table.primary tr.pending:hover hr {
+          background-color: #fff; }
+      body .node_summary table.primary tr.changed a {
+        color: #009933; }
+      body .node_summary table.primary tr.changed hr {
+        background-color: #009933; }
+      body .node_summary table.primary tr.changed.hover, body .node_summary table.primary tr.changed.active, body .node_summary table.primary tr.changed:hover {
+        background-color: #009933; }
+        body .node_summary table.primary tr.changed.hover a, body .node_summary table.primary tr.changed.active a, body .node_summary table.primary tr.changed:hover a {
+          color: #fff;
+          text-decoration: none; }
+        body .node_summary table.primary tr.changed.hover hr, body .node_summary table.primary tr.changed.active hr, body .node_summary table.primary tr.changed:hover hr {
+          background-color: #fff; }
+      body .node_summary table.primary tr.unchanged a {
+        color: #006699; }
+      body .node_summary table.primary tr.unchanged hr {
+        background-color: #006699; }
+      body .node_summary table.primary tr.unchanged.hover, body .node_summary table.primary tr.unchanged.active, body .node_summary table.primary tr.unchanged:hover {
+        background-color: #006699; }
+        body .node_summary table.primary tr.unchanged.hover a, body .node_summary table.primary tr.unchanged.active a, body .node_summary table.primary tr.unchanged:hover a {
+          color: #fff;
+          text-decoration: none; }
+        body .node_summary table.primary tr.unchanged.hover hr, body .node_summary table.primary tr.unchanged.active hr, body .node_summary table.primary tr.unchanged:hover hr {
+          background-color: #fff; }
+      body .node_summary table.primary tr.unreported a {
+        color: #aaaaaa; }
+      body .node_summary table.primary tr.unreported hr {
+        background-color: #aaaaaa; }
+      body .node_summary table.primary tr.unreported.hover, body .node_summary table.primary tr.unreported.active, body .node_summary table.primary tr.unreported:hover {
+        background-color: #aaaaaa; }
+        body .node_summary table.primary tr.unreported.hover a, body .node_summary table.primary tr.unreported.active a, body .node_summary table.primary tr.unreported:hover a {
+          color: #fff;
+          text-decoration: none; }
+        body .node_summary table.primary tr.unreported.hover hr, body .node_summary table.primary tr.unreported.active hr, body .node_summary table.primary tr.unreported:hover hr {
+          background-color: #fff; }
+      body .node_summary table.primary tr.all a {
+        color: black; }
+      body .node_summary table.primary tr.all hr {
         background-color: black; }
-    body.pages_home_action table.node_summary tr td {
-      padding-bottom: 1em; }
-      body.pages_home_action table.node_summary tr td.count {
-        padding-right: 1em;
-        width: 1em;
-        text-align: right; }
-        body.pages_home_action table.node_summary tr td.count span {
-          font-size: 3em;
-          font-weight: bold; }
-      body.pages_home_action table.node_summary tr td .label {
-        font-size: 1.5em; }
-      body.pages_home_action table.node_summary tr td em {
-        color: #888;
-        margin-left: 10px;
-        font-size: 1.25em; }
-      body.pages_home_action table.node_summary tr td hr {
-        height: 5px;
-        align: left;
-        border: 0;
-        margin: 0; }
-    body.pages_home_action table.node_summary tr.total td {
-      padding-top: 1em;
-      padding-bottom: 0;
-      border-top: solid 1px #DDD; }
+      body .node_summary table.primary tr.all.hover, body .node_summary table.primary tr.all.active, body .node_summary table.primary tr.all:hover {
+        background-color: black; }
+        body .node_summary table.primary tr.all.hover a, body .node_summary table.primary tr.all.active a, body .node_summary table.primary tr.all:hover a {
+          color: #fff;
+          text-decoration: none; }
+        body .node_summary table.primary tr.all.hover hr, body .node_summary table.primary tr.all.active hr, body .node_summary table.primary tr.all:hover hr {
+          background-color: #fff; }
+      body .node_summary table.primary tr td {
+        font-size: 1.4em; }
+        body .node_summary table.primary tr td.percent {
+          display: none; }
+          body .node_summary table.primary tr td.percent em {
+            color: #666;
+            font-size: .8em; }
+        body .node_summary table.primary tr td.label {
+          width: 100%; }
+        body .node_summary table.primary tr td.graph {
+          padding-bottom: .4em;
+          width: 100%; }
+          body .node_summary table.primary tr td.graph hr {
+            height: 3px;
+            border: 0;
+            margin: 0; }
+        body .node_summary table.primary tr td.label, body .node_summary table.primary tr td.graph {
+          padding-right: .3em; }
+    body .node_summary table.secondary {
+      padding-top: .5em;
+      border-top: 1px solid #ccc;
+      margin-top: .5em; }
+      body .node_summary table.secondary tr.active {
+        background-color: #2c66a8; }
+        body .node_summary table.secondary tr.active a {
+          color: #fff; }
+      body .node_summary table.secondary td {
+        font-size: 1.2em;
+        padding: .2em .3em; }
   body.pages_release_notes_action .markeddown h2 {
     margin-top: 1em;
     margin-bottom: 0.15em; }

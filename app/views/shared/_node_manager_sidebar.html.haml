@@ -1,25 +1,42 @@
 .group
   %h3{:class => active_if(controller_name == "nodes" && action_name == "index")}= link_to "Nodes", nodes_path
-  %span.count= Node.unhidden.count
-  %ul
-    - Node.possible_derived_statuses.each do |status|
-      %li{:class => active_if(controller_name == 'nodes' && action_name == status && parent.nil?)}
-        = link_to status.capitalize, eval("#{status}_nodes_path")
-        - count = Node.send(status).unhidden.count
-        %span.count{:class => counter_class(count, true)}= count
-    %li{:class => active_if(controller_name == 'nodes' && action_name == 'unreported' && parent.nil?)}
-      = link_to "Never reported", unreported_nodes_path
-      - count = Node.unreported.unhidden.count
-      %span.count{:class => counter_class(count, true)}= count
-    %li{:class => active_if(controller_name == 'nodes' && action_name == 'hidden' && parent.nil?)}
-      = link_to "Hidden", hidden_nodes_path
-      - count = Node.hidden.count
-      %span.count{:class => counter_class(count, false)}= count
-    %li
-      = link_to "File Search", search_reports_path
-    - if SETTINGS.enable_inventory_service
-      %li
-        = link_to "Custom query", search_nodes_path
+  -# %span.count= Node.unhidden.count
+  %p.help
+    %a{ :href => 'http://links.puppetlabs.com/dashboard1.2_node_summary_help', :target => '_blank' }
+      Help
+  .node_summary
+    %table.primary
+      -# This conditional is ugly, but it saves us from duplicating the markup
+      - Node.possible_derived_statuses.push( 'unreported', 'all' ).each do |status|
+        - if( status == 'all' )
+          - node_count = Node.unhidden.count
+          - nodes_path = '/nodes'
+          - action_status = 'index'
+        - else
+          - node_count = Node.send(status).unhidden.count
+          - nodes_path = eval("#{status}_nodes_path")
+          - action_status = status
+        - percent = percentage(node_count, Node.unhidden.count).to_i
+
+        %tr{:class => "#{status} #{active_if(controller_name == 'nodes' && action_name == action_status && parent.nil?)}"}
+          %td.count
+            = link_to node_count, nodes_path
+          %td.percent
+            = link_to "#{percent}<em>%</em>", nodes_path
+          %td.label
+            = link_to status.capitalize, nodes_path
+        %tr{:class => "#{status} #{active_if(controller_name == 'nodes' && action_name == action_status && parent.nil?)}"}
+          %td.graph{ :colspan => 3 }
+            %hr{:style => "width: #{percent}%"}
+
+    - if Node.hidden.count > 0
+      %table.secondary
+        %tr{:class => active_if(controller_name == 'nodes' && action_name == 'hidden' && parent.nil?)}
+          %td.count
+            = link_to Node.hidden.count, hidden_nodes_path
+          %td.label
+            = link_to "Hidden", hidden_nodes_path
+
   .footer.actionbar
     - if SETTINGS.use_external_node_classification && !SETTINGS.enable_read_only_mode
       = link_to "Add node", new_node_path, :class => 'button'
