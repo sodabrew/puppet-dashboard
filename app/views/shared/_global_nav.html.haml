@@ -30,3 +30,5 @@
     %li &bull;
     %li{:class => active_if(controller_name == "nodes" && action_name == "search")}
       = link_to "Inventory Search", search_nodes_path
+  - Registry.each_callback :core, :global_nav_widgets do |callback|
+    = callback.call self
