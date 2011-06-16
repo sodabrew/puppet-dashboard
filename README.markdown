@@ -132,6 +132,9 @@ Installation
 
             rake db:migrate db:test:prepare
 
+6.  Adjust the `delayed_job_workers` setting in `settings.yml`.  You should set this to the number of worker processes you want for background jobs.  We recommend one per CPU core in your system, but will work correctly with one or more.
+
+
 Ownership and permission requirements
 -------------------------------------
 
@@ -360,6 +363,7 @@ Performance
 
 The Puppet Dashboard slows down as it manages more data. Here are ways to make it run faster, from easiest to hardest:
 
+*  Tune `delayed_job_workers` to have one worker per CPU core on your system.
 *  Optimize your database by running `rake RAILS_ENV=production db:raw:optimize` from your Puppet Dashboard directory, this will reorganize and reanalyze your database for faster queries.
 *  Run the application in `production` mode, e.g. by running `./script/server -e production`. The default `development` mode is significantly slower because it doesn't cache and logs more details.
 *  Run the application using multiple processes to handle more concurrent requests. You can use Phusion Passenger, or clusters of Thin or Unicorn servers to serve multiple concurrent requests.

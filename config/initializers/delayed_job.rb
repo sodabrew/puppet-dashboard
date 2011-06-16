@@ -6,7 +6,7 @@ Delayed::Worker.max_attempts = 3
 
 def start_delayed_job
   Thread.new do
-    `#{Rails.root}/script/delayed_job --pid-dir=#{DELAYED_JOB_PID_PATH} -p dashboard -m start`
+    `#{Rails.root}/script/delayed_job --pid-dir=#{DELAYED_JOB_PID_PATH} -p dashboard -n #{SETTINGS.delayed_job_workers || 2} -m start`
   end
 end
 
