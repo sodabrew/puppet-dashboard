@@ -96,6 +96,10 @@ class Report < ActiveRecord::Base
     report
   end
 
+  class << self
+    handle_asynchronously :create_from_yaml
+  end
+
   def assign_to_node
     self.node = Node.find_or_create_by_name(self.host)
   end

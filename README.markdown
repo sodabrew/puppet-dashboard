@@ -105,7 +105,12 @@ Installation
 
 2.  Create a `config/database.yml` file to specify Puppet Dashboard's database configuration. Please see the `config/database.yml.example` file for further details about database configurations and environments. These files paths are relative to the path of the Puppet Dashboard software containing this `README.markdown` file.
 
-3.  Setup a MySQL database server, create a user and database for use with the Puppet Dashboard by either:
+3.  Configure MySQL maximum packet size, to permit larger rows in the database.  Puppet Dashboard can send up to 17MB of data in a single row, although it is extraordinarily rare that it will.  You should configure your server `my.cnf` to increase the limit to at least 24MB (32MB or more recommended), and restart MySQL for this to take effect.  (See [the MySQL documentation][http://dev.mysql.com/doc/refman/5.1/en/server-system-variables.html#sysvar_max_allowed_packet] for more details, and how to up the limit without restarting.)
+
+           # Allowing 32MB ensures our 17MB row with plenty of spare room
+           max_allowed_packet = 32M
+
+4.  Setup a MySQL database server, create a user and database for use with the Puppet Dashboard by either:
 
     1.  Using a `rake` task to create just the database from settings in the `config/database.yml` file. You must `cd` into the directory with the Puppet Dashboard software containing this `README.markdown` file before running these commands:
 
@@ -117,7 +122,7 @@ Installation
             CREATE USER 'dashboard'@'localhost' IDENTIFIED BY 'my_password';
             GRANT ALL PRIVILEGES ON dashboard.* TO 'dashboard'@'localhost';
 
-4.  Populate the database with the tables for the Puppet Dashboard.
+5.  Populate the database with the tables for the Puppet Dashboard.
 
     1.  For typical use with the `production` environment:
 
@@ -342,6 +347,13 @@ Third-party tools that can help secure a Puppet Dashboard include:
         http://username:password@hostname
 
 4.  HTTPS (SSL) Encryption is supported when running Dashboard under Apache and Passenger. The example configuration in `ext/passenger/dashboard-vhost.conf` includes a commented-out vhost configured to use SSL. You may need to change the Apache directives SSLCertificateFile, SSLCertificateKeyFile, SSLCACertificateFile, and SSLCARevocationFile to the paths of the files created by the `cert` rake tasks. (See `Generating certs and connecting to the puppet master` for how to create these files)
+
+Background Processing
+---------------------
+
+The Puppet Dashboard performs a number of tasks, such as report import, that can consume significant system resources.  To ensure that performance remains snappy under load, we use the `delayed_job` background processing system to manage these tasks without tying up a web front end thread.
+
+The Puppet Dashboard code will automatically spawn a manager and worker in the background, which will run these tasks without tying up the resources of the web server.  This will share the same credentials and access as the web front-end, so should introduce no additional security risk.
 
 Performance
 -----------
