@@ -25,12 +25,13 @@ class ReportsController < InheritedResources::Base
     end
   end
 
+  filter_parameter_logging :report
+
   def upload
     begin
+      @@n ||= 0
       yaml = params[:report][:report]
-      md5  = Digest::MD5.hexdigest(yaml)
-      file = Rails.root + 'spool' + "#{md5}.yaml"
-      n    = 0
+      file = Rails.root + 'spool' + "report-#{$$}-#{@@n += 1}.yaml"
 
       begin
         fd = File.new(file, File::CREAT|File::EXCL|File::RDWR, 0600)
@@ -38,9 +39,9 @@ class ReportsController < InheritedResources::Base
         fd.close
 
         Report.delay.create_from_yaml_file(file.to_s, :delete => true)
-        render :text => "Report queued for import as #{md5}"
+        render :text => "Report queued for import as #{file.basename}"
       rescue Errno::EEXIST
-        file = Rails.root + 'spool' + "#{md5}-#{n += 1}.yaml"
+        file = Rails.root + 'spool' + "report-#{$$}-#{@@n += 1}.yaml"
         retry
       end
     rescue => e
