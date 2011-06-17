@@ -184,18 +184,17 @@ function display_file_popup(url) {
 
 function init_sidebar_links() {
   jQuery( '.node_summary .primary tr' ).each( function() {
-    var status = jQuery( this ).attr( 'class' );
     jQuery( this )
       .hover(
         function() {
-          jQuery( '.node_summary tr.'+ status ).addClass( 'hover' );
+          jQuery( this ).addClass( 'hover' );
         },
         function() {
-          jQuery( '.node_summary tr.'+ status ).removeClass( 'hover' );
+          jQuery( this ).removeClass( 'hover' );
         }
       )
       .click( function() {
-        var url = jQuery( '.node_summary tr.'+ status +' .count a' ).attr( 'href' );
+        var url = jQuery( this ).find( '.count a' ).attr( 'href' );
         document.location.href = url;
         return false;
       });
