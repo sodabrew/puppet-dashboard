@@ -102,8 +102,10 @@ $rounding_radius: 0.35em;
   a {
     color : $color;
   }
-  hr {
-    background-color : $color;
+  .percent {
+    a {
+      background-color : $color;
+    }
   }
   &.hover,
   &.active,
@@ -113,9 +115,23 @@ $rounding_radius: 0.35em;
       color : #fff;
       text-decoration : none;
     }
-    hr {
-      background-color : #fff;
+    .percent {
+      a {
+        background-color : #fff;
+      }
     }
+  }
+}
+
+@mixin clearfix {
+  display : block;
+  &:after {
+    content : "\0020";
+    display : block;
+    height : 0;
+    clear : both;
+    visibility : hidden;
+    overflow : hidden;
   }
 }
 
@@ -613,6 +629,8 @@ body {
       width : 100%;
       .count {
         font-weight : bold;
+        padding-left: .3em;
+        padding-right: .6em;
       }
       .count,
       .graph {
@@ -622,16 +640,14 @@ body {
       .label {
         padding-top : .2em;
       }
-      .percent,
-      .count {
-        text-align: right;
-        padding-right: .3em;
-      }
     }
 
-    table.primary {
+    table.primary { // this is marked up as a table, but not rendered that way
       tr {
         cursor : pointer;
+        display : block;
+        @include clearfix;
+
         &.unresponsive { @include node_summary_row( #888 )}
         &.failed       { @include node_summary_row( #c21 )}
         &.pending      { @include node_summary_row( #e72 )}
@@ -642,29 +658,26 @@ body {
 
         td {
           font-size : 1.4em;
+          display : block;
 
-          &.percent {
-            display : none; // just fooling around with this
-            em {
-              color: #666;
-              font-size : .8em;
-            }
+          &.count,
+          &.label {
+            float : left;
+          }
+          &.count {
           }
           &.label {
-            width : 100%;
-          }
-          &.graph {
-            padding-bottom : .4em;
-            width : 100%;
-            hr {
-              height: 3px;
-              border: 0;
-              margin: 0;
-            }
-          }
-          &.label,
-          &.graph {
             padding-right : .3em;
+          }
+          &.percent {
+            padding-left : .3em;
+            padding-bottom : .3em;
+            a {
+              text-indent : -9999px;
+              display : block;
+              height : 3px;
+              clear : left;
+            }
           }
         }
       }

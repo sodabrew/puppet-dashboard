@@ -291,7 +291,7 @@ body {
       border: 1px solid #ffcccc;
       color: #443333; }
       body .section.error h3 {
-        margin: -10px -10px .5em;
+        margin: -10px -10px 0.5em;
         padding: .5em 10px .5em 26px;
         background: #ffcccc url("../images/icons/failed.png") 5px center no-repeat;
         color: #443333; }
@@ -307,7 +307,7 @@ body {
       border: 1px solid #ffcccc;
       color: #443333; }
       body .section.failure h3 {
-        margin: -10px -10px .5em;
+        margin: -10px -10px 0.5em;
         padding: .5em 10px .5em 26px;
         background: #ffcccc url("../images/icons/failed.png") 5px center no-repeat;
         color: #443333; }
@@ -323,7 +323,7 @@ body {
       border: 1px solid #ddcccc;
       color: #443333; }
       body .section.warning h3 {
-        margin: -10px -10px .5em;
+        margin: -10px -10px 0.5em;
         padding: .5em 10px .5em 26px;
         background: #ddcccc url("../images/icons/warning.png") 5px center no-repeat;
         color: #444444; }
@@ -339,7 +339,7 @@ body {
       border: 1px solid #ccddcc;
       color: #334433; }
       body .section.success h3 {
-        margin: -10px -10px .5em;
+        margin: -10px -10px 0.5em;
         padding: .5em 10px .5em 26px;
         background: #ccddcc url("../images/icons/warning.png") 5px center no-repeat;
         color: #444444; }
@@ -355,7 +355,7 @@ body {
       border: 1px solid #cccccc;
       color: #333333; }
       body .section.notice h3 {
-        margin: -10px -10px .5em;
+        margin: -10px -10px 0.5em;
         padding: .5em 10px .5em 26px;
         background: #cccccc url("../images/icons/notice.png") 5px center no-repeat;
         color: #444444; }
@@ -423,114 +423,118 @@ body {
     body .node_summary table {
       width: 100%; }
       body .node_summary table .count {
-        font-weight: bold; }
+        font-weight: bold;
+        padding-left: .3em;
+        padding-right: .6em; }
       body .node_summary table .count,
       body .node_summary table .graph {
         padding-left: .3em; }
       body .node_summary table .count,
       body .node_summary table .label {
         padding-top: .2em; }
-      body .node_summary table .percent,
-      body .node_summary table .count {
-        text-align: right;
-        padding-right: .3em; }
     body .node_summary table.primary tr {
-      cursor: pointer; }
+      cursor: pointer;
+      display: block;
+      display: block; }
+      body .node_summary table.primary tr:after {
+        content: "\0020";
+        display: block;
+        height: 0;
+        clear: both;
+        visibility: hidden;
+        overflow: hidden; }
       body .node_summary table.primary tr.unresponsive a {
         color: #888888; }
-      body .node_summary table.primary tr.unresponsive hr {
+      body .node_summary table.primary tr.unresponsive .percent a {
         background-color: #888888; }
       body .node_summary table.primary tr.unresponsive.hover, body .node_summary table.primary tr.unresponsive.active, body .node_summary table.primary tr.unresponsive:hover {
         background-color: #888888; }
         body .node_summary table.primary tr.unresponsive.hover a, body .node_summary table.primary tr.unresponsive.active a, body .node_summary table.primary tr.unresponsive:hover a {
           color: #fff;
           text-decoration: none; }
-        body .node_summary table.primary tr.unresponsive.hover hr, body .node_summary table.primary tr.unresponsive.active hr, body .node_summary table.primary tr.unresponsive:hover hr {
+        body .node_summary table.primary tr.unresponsive.hover .percent a, body .node_summary table.primary tr.unresponsive.active .percent a, body .node_summary table.primary tr.unresponsive:hover .percent a {
           background-color: #fff; }
       body .node_summary table.primary tr.failed a {
         color: #cc2211; }
-      body .node_summary table.primary tr.failed hr {
+      body .node_summary table.primary tr.failed .percent a {
         background-color: #cc2211; }
       body .node_summary table.primary tr.failed.hover, body .node_summary table.primary tr.failed.active, body .node_summary table.primary tr.failed:hover {
         background-color: #cc2211; }
         body .node_summary table.primary tr.failed.hover a, body .node_summary table.primary tr.failed.active a, body .node_summary table.primary tr.failed:hover a {
           color: #fff;
           text-decoration: none; }
-        body .node_summary table.primary tr.failed.hover hr, body .node_summary table.primary tr.failed.active hr, body .node_summary table.primary tr.failed:hover hr {
+        body .node_summary table.primary tr.failed.hover .percent a, body .node_summary table.primary tr.failed.active .percent a, body .node_summary table.primary tr.failed:hover .percent a {
           background-color: #fff; }
       body .node_summary table.primary tr.pending a {
         color: #ee7722; }
-      body .node_summary table.primary tr.pending hr {
+      body .node_summary table.primary tr.pending .percent a {
         background-color: #ee7722; }
       body .node_summary table.primary tr.pending.hover, body .node_summary table.primary tr.pending.active, body .node_summary table.primary tr.pending:hover {
         background-color: #ee7722; }
         body .node_summary table.primary tr.pending.hover a, body .node_summary table.primary tr.pending.active a, body .node_summary table.primary tr.pending:hover a {
           color: #fff;
           text-decoration: none; }
-        body .node_summary table.primary tr.pending.hover hr, body .node_summary table.primary tr.pending.active hr, body .node_summary table.primary tr.pending:hover hr {
+        body .node_summary table.primary tr.pending.hover .percent a, body .node_summary table.primary tr.pending.active .percent a, body .node_summary table.primary tr.pending:hover .percent a {
           background-color: #fff; }
       body .node_summary table.primary tr.changed a {
         color: #009933; }
-      body .node_summary table.primary tr.changed hr {
+      body .node_summary table.primary tr.changed .percent a {
         background-color: #009933; }
       body .node_summary table.primary tr.changed.hover, body .node_summary table.primary tr.changed.active, body .node_summary table.primary tr.changed:hover {
         background-color: #009933; }
         body .node_summary table.primary tr.changed.hover a, body .node_summary table.primary tr.changed.active a, body .node_summary table.primary tr.changed:hover a {
           color: #fff;
           text-decoration: none; }
-        body .node_summary table.primary tr.changed.hover hr, body .node_summary table.primary tr.changed.active hr, body .node_summary table.primary tr.changed:hover hr {
+        body .node_summary table.primary tr.changed.hover .percent a, body .node_summary table.primary tr.changed.active .percent a, body .node_summary table.primary tr.changed:hover .percent a {
           background-color: #fff; }
       body .node_summary table.primary tr.unchanged a {
         color: #006699; }
-      body .node_summary table.primary tr.unchanged hr {
+      body .node_summary table.primary tr.unchanged .percent a {
         background-color: #006699; }
       body .node_summary table.primary tr.unchanged.hover, body .node_summary table.primary tr.unchanged.active, body .node_summary table.primary tr.unchanged:hover {
         background-color: #006699; }
         body .node_summary table.primary tr.unchanged.hover a, body .node_summary table.primary tr.unchanged.active a, body .node_summary table.primary tr.unchanged:hover a {
           color: #fff;
           text-decoration: none; }
-        body .node_summary table.primary tr.unchanged.hover hr, body .node_summary table.primary tr.unchanged.active hr, body .node_summary table.primary tr.unchanged:hover hr {
+        body .node_summary table.primary tr.unchanged.hover .percent a, body .node_summary table.primary tr.unchanged.active .percent a, body .node_summary table.primary tr.unchanged:hover .percent a {
           background-color: #fff; }
       body .node_summary table.primary tr.unreported a {
         color: #aaaaaa; }
-      body .node_summary table.primary tr.unreported hr {
+      body .node_summary table.primary tr.unreported .percent a {
         background-color: #aaaaaa; }
       body .node_summary table.primary tr.unreported.hover, body .node_summary table.primary tr.unreported.active, body .node_summary table.primary tr.unreported:hover {
         background-color: #aaaaaa; }
         body .node_summary table.primary tr.unreported.hover a, body .node_summary table.primary tr.unreported.active a, body .node_summary table.primary tr.unreported:hover a {
           color: #fff;
           text-decoration: none; }
-        body .node_summary table.primary tr.unreported.hover hr, body .node_summary table.primary tr.unreported.active hr, body .node_summary table.primary tr.unreported:hover hr {
+        body .node_summary table.primary tr.unreported.hover .percent a, body .node_summary table.primary tr.unreported.active .percent a, body .node_summary table.primary tr.unreported:hover .percent a {
           background-color: #fff; }
       body .node_summary table.primary tr.all a {
         color: black; }
-      body .node_summary table.primary tr.all hr {
+      body .node_summary table.primary tr.all .percent a {
         background-color: black; }
       body .node_summary table.primary tr.all.hover, body .node_summary table.primary tr.all.active, body .node_summary table.primary tr.all:hover {
         background-color: black; }
         body .node_summary table.primary tr.all.hover a, body .node_summary table.primary tr.all.active a, body .node_summary table.primary tr.all:hover a {
           color: #fff;
           text-decoration: none; }
-        body .node_summary table.primary tr.all.hover hr, body .node_summary table.primary tr.all.active hr, body .node_summary table.primary tr.all:hover hr {
+        body .node_summary table.primary tr.all.hover .percent a, body .node_summary table.primary tr.all.active .percent a, body .node_summary table.primary tr.all:hover .percent a {
           background-color: #fff; }
       body .node_summary table.primary tr td {
-        font-size: 1.4em; }
-        body .node_summary table.primary tr td.percent {
-          display: none; }
-          body .node_summary table.primary tr td.percent em {
-            color: #666;
-            font-size: .8em; }
+        font-size: 1.4em;
+        display: block; }
+        body .node_summary table.primary tr td.count, body .node_summary table.primary tr td.label {
+          float: left; }
         body .node_summary table.primary tr td.label {
-          width: 100%; }
-        body .node_summary table.primary tr td.graph {
-          padding-bottom: .4em;
-          width: 100%; }
-          body .node_summary table.primary tr td.graph hr {
-            height: 3px;
-            border: 0;
-            margin: 0; }
-        body .node_summary table.primary tr td.label, body .node_summary table.primary tr td.graph {
           padding-right: .3em; }
+        body .node_summary table.primary tr td.percent {
+          padding-left: .3em;
+          padding-bottom: .3em; }
+          body .node_summary table.primary tr td.percent a {
+            text-indent: -9999px;
+            display: block;
+            height: 3px;
+            clear: left; }
     body .node_summary table.secondary {
       padding-top: .5em;
       border-top: 1px solid #ccc;

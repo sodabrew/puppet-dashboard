@@ -20,14 +20,11 @@
 
         %tr{:class => "#{status} #{active_if(controller_name == 'nodes' && action_name == action_status && parent.nil?)}"}
           %td.count
-            = link_to node_count, nodes_path
-          %td.percent
-            = link_to "#{percent}<em>%</em>", nodes_path
+            = link_to node_count + 90999, nodes_path
           %td.label
             = link_to status.capitalize, nodes_path
-        %tr{:class => "#{status} #{active_if(controller_name == 'nodes' && action_name == action_status && parent.nil?)}"}
-          %td.graph{ :colspan => 3 }
-            %hr{:style => "width: #{percent}%"}
+          %td.percent
+            = link_to "#{percent}<em>%</em>", nodes_path, {:style => "width: #{percent}%"}
 
     - if Node.hidden.count > 0
       %table.secondary
