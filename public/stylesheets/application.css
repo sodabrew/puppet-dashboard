@@ -470,22 +470,22 @@ body {
         body .node_summary table.primary tr.pending.hover hr, body .node_summary table.primary tr.pending.active hr, body .node_summary table.primary tr.pending:hover hr {
           background-color: #fff; }
       body .node_summary table.primary tr.changed a {
-        color: #009933; }
+        color: #006699; }
       body .node_summary table.primary tr.changed hr {
-        background-color: #009933; }
+        background-color: #006699; }
       body .node_summary table.primary tr.changed.hover, body .node_summary table.primary tr.changed.active, body .node_summary table.primary tr.changed:hover {
-        background-color: #009933; }
+        background-color: #006699; }
         body .node_summary table.primary tr.changed.hover a, body .node_summary table.primary tr.changed.active a, body .node_summary table.primary tr.changed:hover a {
           color: #fff;
           text-decoration: none; }
         body .node_summary table.primary tr.changed.hover hr, body .node_summary table.primary tr.changed.active hr, body .node_summary table.primary tr.changed:hover hr {
           background-color: #fff; }
       body .node_summary table.primary tr.unchanged a {
-        color: #006699; }
+        color: #009933; }
       body .node_summary table.primary tr.unchanged hr {
-        background-color: #006699; }
+        background-color: #009933; }
       body .node_summary table.primary tr.unchanged.hover, body .node_summary table.primary tr.unchanged.active, body .node_summary table.primary tr.unchanged:hover {
-        background-color: #006699; }
+        background-color: #009933; }
         body .node_summary table.primary tr.unchanged.hover a, body .node_summary table.primary tr.unchanged.active a, body .node_summary table.primary tr.unchanged:hover a {
           color: #fff;
           text-decoration: none; }

@@ -1,8 +1,8 @@
 var UNRESPONSIVE = '#888';
 var FAILED       = '#c21';
 var PENDING      = '#e72';
-var CHANGED      = '#093';
-var UNCHANGED    = '#069';
+var CHANGED      = '#069';
+var UNCHANGED    = '#093';
 var ALL          = '#000';
 
 jQuery(document).ready(function(J) {
