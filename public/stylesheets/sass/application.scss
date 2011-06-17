@@ -635,8 +635,8 @@ body {
         &.unresponsive { @include node_summary_row( #888 )}
         &.failed       { @include node_summary_row( #c21 )}
         &.pending      { @include node_summary_row( #e72 )}
-        &.changed      { @include node_summary_row( #093 )}
-        &.unchanged    { @include node_summary_row( #069 )}
+        &.changed      { @include node_summary_row( #069 )}
+        &.unchanged    { @include node_summary_row( #093 )}
         &.unreported   { @include node_summary_row( #aaa )}
         &.all          { @include node_summary_row( #000 )}
 
