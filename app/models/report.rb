@@ -79,6 +79,12 @@ class Report < ActiveRecord::Base
     attribute_hash
   end
 
+  def self.create_from_yaml_file(report_file, options = {})
+    report = create_from_yaml(File.read(report_file))
+    File.unlink(report_file) if options[:delete]
+    return report
+  end
+
   def self.create_from_yaml(report_yaml)
     raw_report = YAML.load(report_yaml)
 

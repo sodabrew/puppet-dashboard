@@ -25,10 +25,25 @@ class ReportsController < InheritedResources::Base
     end
   end
 
+  filter_parameter_logging :report
+
   def upload
     begin
-      Report.create_from_yaml(params[:report][:report])
-      render :text => "Report successfully uploaded"
+      @@n ||= 0
+      yaml = params[:report][:report]
+      file = Rails.root + 'spool' + "report-#{$$}-#{@@n += 1}.yaml"
+
+      begin
+        fd = File.new(file, File::CREAT|File::EXCL|File::RDWR, 0600)
+        fd.print yaml
+        fd.close
+
+        Report.delay.create_from_yaml_file(file.to_s, :delete => true)
+        render :text => "Report queued for import as #{file.basename}"
+      rescue Errno::EEXIST
+        file = Rails.root + 'spool' + "report-#{$$}-#{@@n += 1}.yaml"
+        retry
+      end
     rescue => e
       error_text = "ERROR! ReportsController#upload failed:"
       Rails.logger.debug error_text

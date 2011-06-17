@@ -105,7 +105,12 @@ Installation
 
 2.  Create a `config/database.yml` file to specify Puppet Dashboard's database configuration. Please see the `config/database.yml.example` file for further details about database configurations and environments. These files paths are relative to the path of the Puppet Dashboard software containing this `README.markdown` file.
 
-3.  Setup a MySQL database server, create a user and database for use with the Puppet Dashboard by either:
+3.  Configure MySQL maximum packet size, to permit larger rows in the database.  Puppet Dashboard can send up to 17MB of data in a single row, although it is extraordinarily rare that it will.  You should configure your server `my.cnf` to increase the limit to at least 24MB (32MB or more recommended), and restart MySQL for this to take effect.  (See [the MySQL documentation][http://dev.mysql.com/doc/refman/5.1/en/server-system-variables.html#sysvar_max_allowed_packet] for more details, and how to up the limit without restarting.)
+
+           # Allowing 32MB ensures our 17MB row with plenty of spare room
+           max_allowed_packet = 32M
+
+4.  Setup a MySQL database server, create a user and database for use with the Puppet Dashboard by either:
 
     1.  Using a `rake` task to create just the database from settings in the `config/database.yml` file. You must `cd` into the directory with the Puppet Dashboard software containing this `README.markdown` file before running these commands:
 
@@ -117,7 +122,7 @@ Installation
             CREATE USER 'dashboard'@'localhost' IDENTIFIED BY 'my_password';
             GRANT ALL PRIVILEGES ON dashboard.* TO 'dashboard'@'localhost';
 
-4.  Populate the database with the tables for the Puppet Dashboard.
+5.  Populate the database with the tables for the Puppet Dashboard.
 
     1.  For typical use with the `production` environment:
 
@@ -126,6 +131,22 @@ Installation
     2.  For developing the software using the `development` and `test` environments:
 
             rake db:migrate db:test:prepare
+
+6.  Start the `delayed_job` workers for your deployment.  You need at least one worker for each environment you run, and we recommend one worker per CPU core in production.
+
+    1.  For typical use with the `production` environment, one worker per CPU:
+
+            env CPUS=4 RAILS_ENV=production /.../script/delayed_job \
+                  -p dashboard -n $CPUS -m start
+
+    2.  Using the rake task to start a single worker (not recommended for production):
+
+            rake RAILS_ENV=production jobs:work
+
+    3.  Running a development worker for testing:
+
+            rake RAILS_ENV=development jobs:work
+
 
 Ownership and permission requirements
 -------------------------------------
@@ -180,6 +201,12 @@ Regardless of how you installed the code, you need to run the database migration
     RAILS_ENV=production rake db:migrate
 
 After upgrading the code and running the migrations, you'll need to restart your Puppet Dashboard server for these changes to take effect, which may require restarting your webserver.
+
+### Delayed Job Background Tasks
+
+When you upgrade from Puppet Dashboard 1.1.1 or earlier, you will need to configure worker processes for the `delayed_job` system.  This is used to significantly improve responsiveness of the dashboard, especially to improve throughput from a Puppet Master when reports are sent to the Puppet Dashboard.
+
+Please see the notes at the end of `Running` below, or `Background Processing`, for the ways to get this running.  Without at least one running worker, reports will no longer finish importing into the Puppet Dashboard database.
 
 Running
 -------
@@ -343,11 +370,25 @@ Third-party tools that can help secure a Puppet Dashboard include:
 
 4.  HTTPS (SSL) Encryption is supported when running Dashboard under Apache and Passenger. The example configuration in `ext/passenger/dashboard-vhost.conf` includes a commented-out vhost configured to use SSL. You may need to change the Apache directives SSLCertificateFile, SSLCertificateKeyFile, SSLCACertificateFile, and SSLCARevocationFile to the paths of the files created by the `cert` rake tasks. (See `Generating certs and connecting to the puppet master` for how to create these files)
 
+Background Processing
+---------------------
+
+The Puppet Dashboard performs a number of tasks, such as report import, that can consume significant system resources.  To ensure that performance remains snappy under load, we use the `delayed_job` background processing system to manage these tasks without tying up a web front end thread.
+
+You will need to configure at least one background worker process to run these tasks.  We recommend one worker per core in a production environment, for better performance.  More workers than CPU cores will not improve throughput.
+
+You can use `script/delayed_job` to act as a process supervisor, forking the desired number of workers and restarting them if they abort.  We recommend this approach, compared to using the individual rake task to start a worker.
+
+For additional reliability, you might want to use a service monitoring tool like [god][http://god.rubyforge.org/], [monit][http://mmonit.com/monit/], or [runit][http://smarden.org/runit/].  We generally recommend you supervise the `script/delayed_job` monitor, but provided the workers keep running things should be good.
+
+There is also plenty of great documentation available about different ways to get `delayed_job` workers running, such as http://stackoverflow.com/questions/1226302/how-to-monitor-delayed-job-with-monit
+
 Performance
 -----------
 
 The Puppet Dashboard slows down as it manages more data. Here are ways to make it run faster, from easiest to hardest:
 
+*  Run one, and only one, `delayed_job` worker per CPU core.
 *  Optimize your database by running `rake RAILS_ENV=production db:raw:optimize` from your Puppet Dashboard directory, this will reorganize and reanalyze your database for faster queries.
 *  Run the application in `production` mode, e.g. by running `./script/server -e production`. The default `development` mode is significantly slower because it doesn't cache and logs more details.
 *  Run the application using multiple processes to handle more concurrent requests. You can use Phusion Passenger, or clusters of Thin or Unicorn servers to serve multiple concurrent requests.

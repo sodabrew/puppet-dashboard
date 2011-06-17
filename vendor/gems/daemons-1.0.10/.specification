@@ -1,0 +1,67 @@
+--- !ruby/object:Gem::Specification 
+name: daemons
+version: !ruby/object:Gem::Version 
+  hash: 3
+  prerelease: 
+  segments: 
+  - 1
+  - 0
+  - 10
+  version: 1.0.10
+platform: ruby
+authors: 
+- Thomas Uehlinger
+autorequire: daemons
+bindir: bin
+cert_chain: []
+
+date: 2008-03-20 00:00:00 -07:00
+default_executable: 
+dependencies: []
+
+description: Daemons provides an easy way to wrap existing ruby scripts (for example a self-written server)  to be run as a daemon and to be controlled by simple start/stop/restart commands.  You can also call blocks as daemons and control them from the parent or just daemonize the current process.  Besides this basic functionality, daemons offers many advanced features like exception  backtracing and logging (in case your ruby script crashes) and monitoring and automatic restarting of your processes if they crash.
+email: th.uehlinger@gmx.ch
+executables: []
+
+extensions: []
+
+extra_rdoc_files: []
+
+files: []
+
+has_rdoc: true
+homepage: http://daemons.rubyforge.org
+licenses: []
+
+post_install_message: 
+rdoc_options: []
+
+require_paths: 
+- lib
+required_ruby_version: !ruby/object:Gem::Requirement 
+  none: false
+  requirements: 
+  - - ">="
+    - !ruby/object:Gem::Version 
+      hash: 3
+      segments: 
+      - 0
+      version: "0"
+required_rubygems_version: !ruby/object:Gem::Requirement 
+  none: false
+  requirements: 
+  - - ">="
+    - !ruby/object:Gem::Version 
+      hash: 3
+      segments: 
+      - 0
+      version: "0"
+requirements: []
+
+rubyforge_project: daemons
+rubygems_version: 1.6.2
+signing_key: 
+specification_version: 2
+summary: A toolkit to create and control daemons in different ways
+test_files: []
+
