@@ -358,6 +358,10 @@ The Puppet Dashboard performs a number of tasks, such as report import, that can
 
 The Puppet Dashboard code will automatically spawn a manager and worker in the background, which will run these tasks without tying up the resources of the web server.  This will share the same credentials and access as the web front-end, so should introduce no additional security risk.
 
+You should set the `delayed_job_workers` configuration value to the number of workers you want running; we recommend one per core.  If this is greater than zero we will automatically start a worker monitor in the background to perform background tasks.
+
+This is not entirely efficient or easy to monitor, however, so you might instead want to set that to zero and fire up the worker monitor yourself.  See `scripts/delayed_job --help` for details on firing up the worker daemon manually.
+
 Performance
 -----------
 
