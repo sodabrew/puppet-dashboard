@@ -132,7 +132,20 @@ Installation
 
             rake db:migrate db:test:prepare
 
-6.  Adjust the `delayed_job_workers` setting in `settings.yml`.  You should set this to the number of worker processes you want for background jobs.  We recommend one per CPU core in your system, but will work correctly with one or more.
+6.  Start the `delayed_job` workers for your deployment.  You need at least one worker for each environment you run, and we recommend one worker per CPU core in production.
+
+    1.  For typical use with the `production` environment, one worker per CPU:
+
+            env CPUS=4 RAILS_ENV=production /.../script/delayed_job \
+                  -p dashboard -n $CPUS -m start
+
+    2.  Using the rake task to start a single worker (not recommended for production):
+
+            rake RAILS_ENV=production jobs:work
+
+    3.  Running a development worker for testing:
+
+            rake RAILS_ENV=development jobs:work
 
 
 Ownership and permission requirements
@@ -188,6 +201,12 @@ Regardless of how you installed the code, you need to run the database migration
     RAILS_ENV=production rake db:migrate
 
 After upgrading the code and running the migrations, you'll need to restart your Puppet Dashboard server for these changes to take effect, which may require restarting your webserver.
+
+### Delayed Job Background Tasks
+
+When you upgrade from Puppet Dashboard 1.1.1 or earlier, you will need to configure worker processes for the `delayed_job` system.  This is used to significantly improve responsiveness of the dashboard, especially to improve throughput from a Puppet Master when reports are sent to the Puppet Dashboard.
+
+Please see the notes at the end of `Running` below, or `Background Processing`, for the ways to get this running.  Without at least one running worker, reports will no longer finish importing into the Puppet Dashboard database.
 
 Running
 -------
@@ -356,18 +375,20 @@ Background Processing
 
 The Puppet Dashboard performs a number of tasks, such as report import, that can consume significant system resources.  To ensure that performance remains snappy under load, we use the `delayed_job` background processing system to manage these tasks without tying up a web front end thread.
 
-The Puppet Dashboard code will automatically spawn a manager and worker in the background, which will run these tasks without tying up the resources of the web server.  This will share the same credentials and access as the web front-end, so should introduce no additional security risk.
+You will need to configure at least one background worker process to run these tasks.  We recommend one worker per core in a production environment, for better performance.  More workers than CPU cores will not improve throughput.
 
-You should set the `delayed_job_workers` configuration value to the number of workers you want running; we recommend one per core.  If this is greater than zero we will automatically start a worker monitor in the background to perform background tasks.
+You can use `script/delayed_job` to act as a process supervisor, forking the desired number of workers and restarting them if they abort.  We recommend this approach, compared to using the individual rake task to start a worker.
 
-This is not entirely efficient or easy to monitor, however, so you might instead want to set that to zero and fire up the worker monitor yourself.  See `scripts/delayed_job --help` for details on firing up the worker daemon manually.
+For additional reliability, you might want to use a service monitoring tool like [god][http://god.rubyforge.org/], [monit][http://mmonit.com/monit/], or [runit][http://smarden.org/runit/].  We generally recommend you supervise the `script/delayed_job` monitor, but provided the workers keep running things should be good.
+
+There is also plenty of great documentation available about different ways to get `delayed_job` workers running, such as http://stackoverflow.com/questions/1226302/how-to-monitor-delayed-job-with-monit
 
 Performance
 -----------
 
 The Puppet Dashboard slows down as it manages more data. Here are ways to make it run faster, from easiest to hardest:
 
-*  Tune `delayed_job_workers` to have one worker per CPU core on your system.
+*  Run one, and only one, `delayed_job` worker per CPU core.
 *  Optimize your database by running `rake RAILS_ENV=production db:raw:optimize` from your Puppet Dashboard directory, this will reorganize and reanalyze your database for faster queries.
 *  Run the application in `production` mode, e.g. by running `./script/server -e production`. The default `development` mode is significantly slower because it doesn't cache and logs more details.
 *  Run the application using multiple processes to handle more concurrent requests. You can use Phusion Passenger, or clusters of Thin or Unicorn servers to serve multiple concurrent requests.

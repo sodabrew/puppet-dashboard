@@ -23,6 +23,20 @@ class CreateDelayedJobs < ActiveRecord::Migration
     end
 
     add_index :delayed_jobs, [:priority, :run_at], :name => 'delayed_jobs_priority'
+
+    STDERR.puts <<EOT
+========================================================================
+You MUST run at least one `delayed_job` worker on your system, so that
+background jobs are processed.  Without this various parts of dashboard,
+especially things like report import, will not work.
+
+Please see `README.markdown` for details of how to run the workers, or
+use one of:
+
+] rake RAILS_ENV=production jobs:work
+] ./script/delayed_job -p dashboard -n $CPUS -m start
+========================================================================
+EOT
   end
 
   def self.down

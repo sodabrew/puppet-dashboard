@@ -77,7 +77,4 @@ disable_legacy_report_upload_url: false
 # Disables the UI and controller actions for editing nodes, classes, groups and reports.  Report submission is still allowed
 enable_read_only_mode: false
 
-# Delayed job worker process count - we recommend one per core on your system
-delayed_job_workers: 2
-
 #===[ fin ]=============================================================
