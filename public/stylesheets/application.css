@@ -424,8 +424,7 @@ body {
       width: 100%; }
       body .node_summary table .count {
         font-weight: bold;
-        padding-left: .3em;
-        padding-right: .6em; }
+        padding-left: .3em; }
       body .node_summary table .count,
       body .node_summary table .graph {
         padding-left: .3em; }
@@ -434,15 +433,7 @@ body {
         padding-top: .2em; }
     body .node_summary table.primary tr {
       cursor: pointer;
-      display: block;
-      display: block; }
-      body .node_summary table.primary tr:after {
-        content: "\0020";
-        display: block;
-        height: 0;
-        clear: both;
-        visibility: hidden;
-        overflow: hidden; }
+      position: relative; }
       body .node_summary table.primary tr.unresponsive a {
         color: #888888; }
       body .node_summary table.primary tr.unresponsive .percent a {
@@ -522,14 +513,16 @@ body {
           background-color: #fff; }
       body .node_summary table.primary tr td {
         font-size: 1.4em;
-        display: block; }
-        body .node_summary table.primary tr td.count, body .node_summary table.primary tr td.label {
-          float: left; }
-        body .node_summary table.primary tr td.label {
-          padding-right: .3em; }
+        padding-bottom: .5em; }
+        body .node_summary table.primary tr td.count {
+          text-align: right;
+          padding-right: 0.3em; }
         body .node_summary table.primary tr td.percent {
-          padding-left: .3em;
-          padding-bottom: .3em; }
+          display: block;
+          position: absolute;
+          left: 0.6em;
+          right: 0.6em;
+          margin-top: 1.3em; }
           body .node_summary table.primary tr td.percent a {
             text-indent: -9999px;
             display: block;
