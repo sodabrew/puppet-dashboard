@@ -3,7 +3,7 @@ class CreateDelayedJobFailures < ActiveRecord::Migration
     create_table :delayed_job_failures do |t|
       t.string      :summary, :limit => 255
       t.text        :details
-      t.boolean     :read
+      t.boolean     :read, :default => false, :null => false
       t.timestamps
     end
   end
