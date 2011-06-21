@@ -1,0 +1,17 @@
+#sidebar= render 'shared/node_manager_sidebar'
+#main
+  .header
+    %h2
+      Delayed Job Failures
+      %span.count= page_entries_info(@delayed_job_failures, { :entry_name => "failure" } )
+    - form_tag request.url, :class => 'REVISIT', :method => :post do
+      %button{:name => :mark_all_read} Mark all Read
+
+  .item
+    %ul
+      - @delayed_job_failures.each do |e|
+        %li{:class => e.read ? :read : :unread}
+          &= "#{e.summary} (#{e.created_at})"
+          %pre
+            &= e.details
+    = pagination_for @delayed_job_failures
