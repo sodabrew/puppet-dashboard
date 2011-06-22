@@ -560,42 +560,55 @@ body {
     }
   }
 
-  &.reports_show_action, &.pages_home_action {
-    #report-tabs, #home-tabs {
-      display: none;
-      font: bold 14px Arial;
-      width: 100%;
+  ul.tabbed,
+  #report-tabs, #home-tabs {
+    display: none;
+    font: bold 14px Arial;
+    width: 100%;
+    float: left;
+    margin: 0;
+    padding: 0;
+
+    li {
+      @include rounded_top;
+      background: #CCC;
+      list-style: none;
       float: left;
-      margin: 0;
-      padding: 0;
+      border: solid 1px #CCC;
+      padding: 4px 1em;
+      margin-right: 4px;
+      cursor: pointer;
+      color: white;
 
-      li {
-        @include rounded_top;
-        background: #CCC;
-        list-style: none;
-        float: left;
-        border: solid 1px #CCC;
-        padding: 4px 1em;
-        margin-right: 4px;
-        cursor: pointer;
-        color: white;
-
-        &.active {
-          border-bottom-color: white;
-          background-color: white;
+      a {
+        color : #fff;
+      }
+      a:hover {
+        text-decoration : underline;
+      }
+      &.active {
+        border-bottom-color: white;
+        background-color: white;
+        color: #2C66A8;
+        a {
           color: #2C66A8;
         }
       }
     }
+  }
+  ul.tabbed {
+    @include clearfix;
+    display : block;
+  }
+  .panel.tabbed {
+    border: solid 1px #CCC;
+    background-color: white;
+    padding: 1em;
+    margin-top: 25px;
+    margin-bottom: 1em;
+  }
 
-    .panel.tabbed {
-      border: solid 1px #CCC;
-      background-color: white;
-      padding: 1em;
-      margin-top: 25px;
-      margin-bottom: 1em;
-    }
-
+  &.reports_show_action, &.pages_home_action {
     .section {
       margin: 0;
     }
