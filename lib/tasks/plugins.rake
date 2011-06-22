@@ -37,7 +37,9 @@ namespace :puppet do
         FileUtils.cp source_file, "db/migrate/#{base_file_name}"
       end
 
-      link_contents(Pathname.new(File.join(plugin_dir, 'public')), Pathname.new(File.join(Rails.root, 'public')))
+      source_dir = Pathname.new(File.join(plugin_dir, 'public'))
+      dest_dir   = Pathname.new(File.join(Rails.root, 'public'))
+      link_contents(source_dir, dest_dir) if source_dir.directory?
     end
 
     desc "Install a Dashboard plug-in"
