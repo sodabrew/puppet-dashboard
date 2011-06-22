@@ -13,6 +13,8 @@
 
     = stylesheet_link_tag 'reset', 'layout', 'forms', 'tables', 'jquery.ui.custom', 'jquery.ui.combobox', 'typography', 'links', 'token-input-facebook', 'tipsy', 'application', 'colorbox', 'help', :cache => 'all'
     = javascript_include_tag 'prototype', 'jquery-ui.min', 'jquery.tokeninput', 'excanvas.min', 'raphael-min', 'grafico.min', 'jquery.form', 'jquery.placeholders', 'jquery.ui.combobox', 'jquery.colorbox.js', 'jquery.tipsy', 'search', 'application', :cache => 'all'
+    - Registry.each_callback :core, :head_extensions do |widget|
+      = widget.call self
 
   - body_classes = [ "#{controller.controller_name}_controller", "#{controller.controller_name}_#{controller.action_name}_action" ]
   - body_classes << "#{controller.controller_name}_form_action" if %w[new create edit update].include?(controller.action_name)
