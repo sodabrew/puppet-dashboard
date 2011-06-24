@@ -21,6 +21,9 @@ log/*.log*
 log/*.pid
 public/javascripts/all.js
 public/stylesheets/all.css
+public/javascripts/plugin-*
+public/stylesheets/plugin-*
+public/stylesheets/sass/plugin-*
 spec/rcov.opts
 spec/spec.opts
 spec/watchr.rb
@@ -30,5 +33,5 @@ results/*
 certs
 vendor/plugins/puppet_*
 db/schema.rb
-db/migrate/*_plugin__*.rb
+db/migrate/*_plugin_*.rb
 config/installed_plugins
