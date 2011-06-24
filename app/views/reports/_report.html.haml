@@ -19,3 +19,6 @@
       %li(id="#{user_facing[name].downcase}-tab")
         = user_facing[name]
   = panels
+
+- Registry.each_callback :report, :tail do |thing|
+  = thing.call self, report
