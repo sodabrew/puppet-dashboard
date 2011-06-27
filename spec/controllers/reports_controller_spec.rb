@@ -15,12 +15,15 @@ describe ReportsController do
     describe "correctly formatted POST", :shared => true do
       it { should_not raise_error }
       it { should change(Report, :count).by(1) }
-      it { should change{ Node.find_by_name("sample_node")}.from(nil) }
+      it { should change { Node.find_by_name("sample_node") }.from(nil) }
     end
 
     describe "with a POST from Puppet 2.6.x" do
       subject do
-        lambda { post_with_body('upload', @yaml, :content_type => 'application/x-yaml') }
+        lambda {
+          post_with_body('upload', @yaml, :content_type => 'application/x-yaml')
+          Delayed::Worker.new.work_off
+        }
       end
 
       it_should_behave_like "correctly formatted POST"
@@ -28,7 +31,10 @@ describe ReportsController do
 
     describe "with a POST from Puppet 0.25.x" do
       subject do
-        lambda { post('upload', :report => @yaml) }
+        lambda {
+          post('upload', :report => @yaml)
+          Delayed::Worker.new.work_off
+        }
       end
 
       it_should_behave_like "correctly formatted POST"
@@ -36,7 +42,10 @@ describe ReportsController do
 
     describe "with a POST with a report inside the report parameter" do
       subject do
-        lambda { post('upload', :report => { :report => @yaml }) }
+        lambda {
+          post('upload', :report => { :report => @yaml })
+          Delayed::Worker.new.work_off
+        }
       end
 
       it_should_behave_like "correctly formatted POST"
@@ -47,9 +56,8 @@ describe ReportsController do
         post('upload', :report => "" )
       end
 
-      it "should return a 406 response and the error text" do
-        response.code.should == '406'
-        response.body.should == "ERROR! ReportsController#upload failed: The supplied report is in invalid format 'FalseClass', expected 'Puppet::Transaction::Report'"
+      it "should be 200, because we queued the job" do
+        response.code.should == '200'
       end
     end
 
@@ -58,9 +66,8 @@ describe ReportsController do
         post('upload', :report => "foo bar baz bad data invalid")
       end
 
-      it "should return a 406 response and the error text" do
-        response.code.should == '406'
-        response.body.should == "ERROR! ReportsController#upload failed: The supplied report is in invalid format 'String', expected 'Puppet::Transaction::Report'"
+      it "should be 200, because we queued the job" do
+        response.code.should == '200'
       end
     end
   end

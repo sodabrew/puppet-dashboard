@@ -99,8 +99,40 @@ $rounding_radius: 0.35em;
 }
 
 @mixin node_summary_row($color) {
-  color: $color;
-  hr { background-color: $color }
+  a {
+    color : $color;
+  }
+  .percent {
+    a {
+      background-color : $color;
+    }
+  }
+  &.hover,
+  &.active,
+  &:hover {
+    background-color : $color;
+    a {
+      color : #fff;
+      text-decoration : none;
+    }
+    .percent {
+      a {
+        background-color : #fff;
+      }
+    }
+  }
+}
+
+@mixin clearfix {
+  display : block;
+  &:after {
+    content : "\0020";
+    display : block;
+    height : 0;
+    clear : both;
+    visibility : hidden;
+    overflow : hidden;
+  }
 }
 
 body {
@@ -528,42 +560,55 @@ body {
     }
   }
 
-  &.reports_show_action, &.pages_home_action {
-    #report-tabs, #home-tabs {
-      display: none;
-      font: bold 14px Arial;
-      width: 100%;
+  ul.tabbed,
+  #report-tabs, #home-tabs {
+    display: none;
+    font: bold 14px Arial;
+    width: 100%;
+    float: left;
+    margin: 0;
+    padding: 0;
+
+    li {
+      @include rounded_top;
+      background: #CCC;
+      list-style: none;
       float: left;
-      margin: 0;
-      padding: 0;
+      border: solid 1px #CCC;
+      padding: 4px 1em;
+      margin-right: 4px;
+      cursor: pointer;
+      color: white;
 
-      li {
-        @include rounded_top;
-        background: #CCC;
-        list-style: none;
-        float: left;
-        border: solid 1px #CCC;
-        padding: 4px 1em;
-        margin-right: 4px;
-        cursor: pointer;
-        color: white;
-
-        &.active {
-          border-bottom-color: white;
-          background-color: white;
+      a {
+        color : #fff;
+      }
+      a:hover {
+        text-decoration : underline;
+      }
+      &.active {
+        border-bottom-color: white;
+        background-color: white;
+        color: #2C66A8;
+        a {
           color: #2C66A8;
         }
       }
     }
+  }
+  ul.tabbed {
+    @include clearfix;
+    display : block;
+  }
+  .panel.tabbed {
+    border: solid 1px #CCC;
+    background-color: white;
+    padding: 1em;
+    margin-top: 25px;
+    margin-bottom: 1em;
+  }
 
-    .panel.tabbed {
-      border: solid 1px #CCC;
-      background-color: white;
-      padding: 1em;
-      margin-top: 25px;
-      margin-bottom: 1em;
-    }
-
+  &.reports_show_action, &.pages_home_action {
     .section {
       margin: 0;
     }
@@ -590,58 +635,76 @@ body {
     }
   }
 
-  &.pages_home_action {
-    table.node_summary {
-      border: solid 1px #DDD;
-      padding: 1em;
-      width: 75%;
-      margin: 0 auto;
+  .node_summary {
+    padding : 0 .5em;
+    margin: .5em auto;
+    table { // primary and secondary
+      width : 100%;
+      .count {
+        font-weight : bold;
+        padding-left: .3em;
+      }
+      .count,
+      .graph {
+        padding-left : .3em;
+      }
+      .count,
+      .label {
+        padding-top : .2em;
+      }
+    }
 
+    table.primary { // this is marked up as a table, but not rendered that way
       tr {
-        &.unresponsive { @include node_summary_row(gray)   }
-        &.failed       { @include node_summary_row(red)    }
-        &.pending      { @include node_summary_row(orange) }
-        &.changed      { @include node_summary_row(green)  }
-        &.unchanged    { @include node_summary_row(darkblue)  }
-        &.total        { @include node_summary_row(black)  }
+        cursor : pointer;
+        position: relative;
+
+        &.unresponsive { @include node_summary_row( #888 )}
+        &.failed       { @include node_summary_row( #c21 )}
+        &.pending      { @include node_summary_row( #e72 )}
+        &.changed      { @include node_summary_row( #069 )}
+        &.unchanged    { @include node_summary_row( #093 )}
+        &.unreported   { @include node_summary_row( #aaa )}
+        &.all          { @include node_summary_row( #000 )}
 
         td {
-          padding-bottom: 1em;
+          font-size : 1.4em;
+          padding-bottom: .5em;
 
           &.count {
-            padding-right: 1em;
-            width: 1em;
             text-align: right;
+            padding-right: 0.3em;
+          }
+          &.percent {
+            display: block;
+            position: absolute;
+            left: 0.6em;
+            right: 0.6em;
+            margin-top: 1.3em;
 
-            span {
-              font-size: 3em;
-              font-weight: bold;
+            a {
+              text-indent : -9999px;
+              display : block;
+              height : 3px;
+              clear : left;
             }
           }
-
-          .label {
-            font-size: 1.5em;
-          }
-
-          em {
-            color: #888;
-            margin-left: 10px;
-            font-size: 1.25em;
-          }
-
-          hr {
-            height: 5px;
-            align: left;
-            border: 0;
-            margin: 0;
-          }
         }
-
-        &.total td {
-          padding-top: 1em;
-          padding-bottom: 0;
-          border-top: solid 1px #DDD;
+      }
+    }
+    table.secondary {
+      padding-top : .5em;
+      border-top : 1px solid #ccc;
+      margin-top : .5em;
+      tr.active {
+        a {
+          color : #fff;
         }
+        background-color : #2c66a8;
+      }
+      td {
+        font-size : 1.2em;
+        padding : .2em .3em;
       }
     }
   }

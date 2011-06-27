@@ -5,11 +5,11 @@
     %ul.actions
       - Registry.each_callback :report, :actions do |thing|
         = thing.call self, report
-      %li= link_to 'Destroy', report, :confirm => 'Are you sure?', :method => :delete, :class => "delete button"
+      %li= link_to 'Delete', report, :confirm => 'Are you sure?', :method => :delete, :class => "delete button"
 
 .item
   - user_facing = Hash.new { |hash, key| hash[key] = key[/[a-z].*/i].titleize }
-  - user_facing.update '600_resource_statuses' => 'Events'
+  - user_facing.update '800_resource_statuses' => 'Events'
   - panels = []
   %ul#report-tabs
     - Registry.each_callback :core, :report_view_widgets do |name, widget|
@@ -19,3 +19,6 @@
       %li(id="#{user_facing[name].downcase}-tab")
         = user_facing[name]
   = panels
+
+- Registry.each_callback :report, :tail do |thing|
+  = thing.call self, report

@@ -7,7 +7,7 @@ class MigrateReportData < ActiveRecord::Migration
       reports.each{|r| r.send(:set_attributes); r.save_without_validation; pbar.inc}
     end
   ensure
-    pbar.finish
+    pbar and pbar.finish
   end
 
   def self.down

@@ -1,5 +1,4 @@
-%span{:title => report ? report_title_text(report) : 'No reports'}
-  - if report
-    = icon(Registry.find_first_callback(:report, :status_icon) { |thing| thing.call(report) } || report.status)
-  - else
-    = icon(:error)
+- if report
+  = icon(Registry.find_first_callback(:report, :status_icon) { |thing| thing.call(report) } || report.status, {:title => report ? report_title_text(report) : 'No reports'})
+- else
+  = icon(:error)

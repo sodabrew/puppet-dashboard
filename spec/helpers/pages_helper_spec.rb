@@ -1,7 +1,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe PagesHelper do
-  
+
   #Delete this example and add some real ones or delete this file
   it "should be included in the object returned by #helper" do
     included_modules = (class << helper; self; end).send :included_modules
@@ -9,18 +9,12 @@ describe PagesHelper do
   end
 
   describe '#percentage' do
-    before :each do
-      helper.instance_variable_set(:@all_nodes, @all_nodes = [])
-    end
-
-    describe 'with values in @all_nodes' do
-      before :each do
-        @all_nodes.push(*%w[ a b c d e f g h i j ])
-      end
-
-      it 'should report the ratio of given list length to @all_nodes' do
-        helper.percentage(%w[ a b c d e ]).should == 50
-        helper.percentage(%w[ a b c z ]).should == 40
+    describe 'with appropriate values passed in' do
+      it 'should report the ratio of those values' do
+        helper.percentage(50,100).should == 50
+        helper.percentage(40,100).should == 40
+        helper.percentage(1,3).should == 33.3
+        helper.percentage(1,0).should == 0
       end
     end
   end
