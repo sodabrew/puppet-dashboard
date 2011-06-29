@@ -12,7 +12,7 @@ namespace :puppet do
           link_contents(source_file, target_file)
         else
           target_file.unlink if target_file.exist?
-          File.copy(source_file.realpath.to_s, target_file.realpath.to_s) if target_file.parent.exist?
+          File.copy(source_file, target_file)
         end
       end
     end
