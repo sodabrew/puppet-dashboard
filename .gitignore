@@ -22,8 +22,13 @@ log/*.pid
 public/javascripts/all.js
 public/stylesheets/all.css
 public/javascripts/plugin-*
-public/stylesheets/plugin-*
+public/javascripts/plugin_*
 public/stylesheets/sass/plugin-*
+public/stylesheets/sass/plugin_*
+public/stylesheets/plugin-*
+public/stylesheets/plugin_*
+public/images/plugin-*
+public/images/plugin_*
 spec/rcov.opts
 spec/spec.opts
 spec/watchr.rb

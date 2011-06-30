@@ -1,4 +1,5 @@
 require 'pathname'
+require 'ftools'
 
 namespace :puppet do
   namespace :plugin do
@@ -10,8 +11,8 @@ namespace :puppet do
           target_file.mkdir unless target_file.exist?
           link_contents(source_file, target_file)
         else
-          target_file.delete if target_file.symlink? && target_file.realpath != source_file
-          target_file.make_symlink(source_file.relative_path_from(target_dir)) unless target_file.exist?
+          target_file.unlink if target_file.exist?
+          File.copy(source_file, target_file)
         end
       end
     end
