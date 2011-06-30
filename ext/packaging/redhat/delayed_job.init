@@ -1,0 +1,108 @@
+#!/bin/bash
+#
+# delayed_job		Start up the delayed_job worker
+#
+# chkconfig: 2345 95 5
+# description: Delayed_job (or DJ) encapsulates the common pattern of \
+#              asynchronously executing longer tasks in the background.
+#
+# processname: delayed_job
+
+### BEGIN INIT INFO
+# Provides: delayed_job
+# Required-Start: $local_fs $network $syslog
+# Required-Stop: $local_fs $syslog
+# Should-Start: $syslog
+# Should-Stop: $network $syslog
+# Default-Start: 2 3 4 5
+# Default-Stop: 0 1 6
+# Short-Description: delayed_job
+# Description: delayed_job
+### END INIT INFO
+
+# source function library
+. /etc/rc.d/init.d/functions
+
+name=delayed_job
+# name=pe-delayed_job
+
+# pull in sysconfig settings
+[ -f /etc/sysconfig/$name ] && . /etc/sysconfig/$name
+
+# The default dashboard root if not set in sysconfig
+: ${DASHBOARD_ROOT:=/usr/share/puppet-dashboard}
+
+RETVAL=0
+prog="${name}"
+lockfile=/var/lock/subsys/$prog
+
+start()
+{
+	echo -n $"Starting $prog: "
+	daemon --user puppet-dashboard "bash -e -c '
+		export PATH='${PATH}';
+		export RUBYLIB='${RUBYLIB:-}';
+		export RAILS_ENV=production;
+		${DASHBOARD_ROOT}/script/delayed_job -p dashboard -n ${CPUS:-2} -m start;'"
+	RETVAL=$?
+	[ $RETVAL -eq 0 ] && touch $lockfile
+	echo
+	return $RETVAL
+}
+
+stop()
+{
+	echo -n $"Stopping $prog: "
+	sudo -H -u puppet-dashboard bash -e -c "
+		export PATH='${PATH}';
+		export RUBYLIB='${RUBYLIB}';
+		export RAILS_ENV=production;
+		'${DASHBOARD_ROOT}/script/delayed_job' -p dashboard -n ${CPUS:-2} -m stop;"
+	RETVAL=$?
+	[ $RETVAL -eq 0 ] && (rm -f $lockfile; echo_success) || echo_failure
+	echo
+}
+
+restart() {
+	stop
+	start
+}
+
+rh_status() {
+	RETVAL=1
+	for pidfile in $(ls -1 "${DASHBOARD_ROOT}"/tmp/pids/*.pid 2>/dev/null)
+	do
+		status -p $pidfile delayed_job || return $?
+		RETVAL=$?
+	done
+	return $RETVAL
+}
+
+rh_status_q() {
+	rh_status >/dev/null 2>&1
+}
+
+case "$1" in
+	start)
+		rh_status_q && exit 0
+		start
+		;;
+	stop)
+		if ! rh_status_q; then
+			rm -f $lockfile
+			exit 0
+		fi
+		stop
+		;;
+	restart)
+		restart
+		;;
+	status)
+		rh_status
+		RETVAL=$?
+		;;
+	*)
+		echo $"Usage: $0 {start|stop|restart|status}"
+		RETVAL=2
+esac
+exit $RETVAL
