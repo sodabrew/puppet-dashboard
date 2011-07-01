@@ -2,15 +2,16 @@
 %global initrddir /etc/rc.d/init.d
 
 Name:           puppet-dashboard
-Version:        1.1.1
+Version:        1.1.9
 Release:        1%{?dist}
 Summary:        Systems Management web application
 Group:          Applications/System
-License:        GPLv2+
+License:        GPLv2
 URL:            http://www.puppetlabs.com
 Source0:        http://yum.puppetlabs.com/sources/%{name}-%{version}.tar.gz
 BuildArch:      noarch
-Requires:       ruby(abi) = 1.8, rubygems, rubygem-rake, ruby-mysql
+Requires:       ruby(abi) = 1.8, rubygems, ruby-mysql
+Requires:       ruby > 1.8.7, rubygem(rake)
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-%(id -un)
 
 Requires(pre):    shadow-utils
@@ -51,13 +52,12 @@ install -Dp -m0644 VERSION $RPM_BUILD_ROOT/%{_datadir}/%{name}/VERSION
 
 # Add sysconfig and init script
 install -Dp -m0755 %{confdir}/%{name}.init $RPM_BUILD_ROOT/%{initrddir}/puppet-dashboard
+install -Dp -m0755 %{confdir}/puppet-dashboard-workers.init $RPM_BUILD_ROOT/%{initrddir}/puppet-dashboard-workers
 install -Dp -m0644 %{confdir}/%{name}.sysconfig $RPM_BUILD_ROOT/%{_sysconfdir}/sysconfig/puppet-dashboard
 install -Dp -m0644 %{confdir}/%{name}.logrotate $RPM_BUILD_ROOT/%{_sysconfdir}/logrotate.d/puppet-dashboard
 
 cp -p -r vendor $RPM_BUILD_ROOT/%{_datadir}/%{name}/
-
 chmod a+x $RPM_BUILD_ROOT/%{_datadir}/%{name}/script/*
-
 rm -f -r $RPM_BUILD_ROOT/%{_datadir}/%{name}/.git*
 
 mv CHANGELOG timestamp
@@ -67,32 +67,51 @@ rm timestamp
 
 %post
 /sbin/chkconfig --add puppet-dashboard || :
+/sbin/chkconfig --add puppet-dashboard-workers || :
 
 %preun
 if [ "$1" = 0 ] ; then
   /sbin/service puppet-dashboard stop > /dev/null 2>&1
+  /sbin/service puppet-dashboard-workers stop > /dev/null 2>&1
   /sbin/chkconfig --del puppet-dashboard || :
+  /sbin/chkconfig --del puppet-dashboard-workers || :
 fi
 
 %postun
 if [ "$1" -ge 1 ]; then
   /sbin/service puppet-dashboard condrestart >/dev/null 2>&1 || :
+  /sbin/service puppet-dashboard-workers condrestart >/dev/null 2>&1 || :
 fi
 
 %files
-%defattr(-,root,root,0755)
-%{_datadir}/%{name}
-%attr(0640,puppet-dashboard,puppet-dashboard) %config(noreplace) %{_datadir}/%{name}/config/database.yml
+%defattr(-,root,root,)
+%doc CHANGELOG COPYING README.markdown README_PACKAGES.markdown RELEASE_NOTES.md
+%attr(-,puppet-dashboard,puppet-dashboard) %config(noreplace) %{_datadir}/%{name}/config/*
 %{initrddir}/puppet-dashboard
+%{initrddir}/puppet-dashboard-workers
 %{_sysconfdir}/sysconfig/puppet-dashboard
-%attr(-,puppet-dashboard,puppet-dashboard) %{_datadir}/%{name}/config/environment.rb
+%{_sysconfdir}/logrotate.d/puppet-dashboard
+%attr(-,puppet-dashboard,puppet-dashboard) %doc %{_datadir}/puppet-dashboard/RELEASE_NOTES.md
+%attr(-,puppet-dashboard,puppet-dashboard) %doc %{_datadir}/puppet-dashboard/VERSION
+%attr(-,puppet-dashboard,puppet-dashboard) %{_datadir}/puppet-dashboard/Rakefile
 %attr(-,puppet-dashboard,puppet-dashboard) %{_datadir}/%{name}/public
 %attr(-,puppet-dashboard,puppet-dashboard) %dir %{_datadir}/%{name}/log
 %attr(-,puppet-dashboard,puppet-dashboard) %dir %{_datadir}/%{name}/tmp
-
-%doc CHANGELOG COPYING README.markdown README_PACKAGES.markdown RELEASE_NOTES.md
+%attr(-,puppet-dashboard,puppet-dashboard) %{_datadir}/%{name}/vendor
+%attr(-,puppet-dashboard,puppet-dashboard) %{_datadir}/%{name}/app
+%attr(-,puppet-dashboard,puppet-dashboard) %{_datadir}/%{name}/script
+%attr(-,puppet-dashboard,puppet-dashboard) %{_datadir}/%{name}/spec
+%attr(-,puppet-dashboard,puppet-dashboard) %{_datadir}/%{name}/lib
+%attr(-,puppet-dashboard,puppet-dashboard) %{_datadir}/%{name}/ext
+%attr(-,puppet-dashboard,puppet-dashboard) %{_datadir}/%{name}/db
+%attr(-,puppet-dashboard,puppet-dashboard) %dir %{_datadir}/%{name}/config
+%attr(-,puppet-dashboard,puppet-dashboard) %{_datadir}/%{name}/bin
 
 %changelog
+* Thu Jun 30 2011 Michael Stahnke <stahnma@puppetlabs.com> - 1.1.9-1
+- Using 1.1.9 as 1.2 alpha for upgradability reasons
+- Fixing "file listed twice" warnings
+
 * Tue May 17 2011 Michael Stahnke <stahnma@puppetlabs.com> - 1.1.1-1
 - New release
 
