@@ -1,30 +1,30 @@
 #!/bin/bash
 #
-# delayed_job		Start up the delayed_job worker
+# puppet-dashboard-workers		Start up the puppet-dashboard-workers r
 #
 # chkconfig: 2345 95 5
 # description: Delayed_job (or DJ) encapsulates the common pattern of \
 #              asynchronously executing longer tasks in the background.
 #
-# processname: delayed_job
+# processname: puppet-dashboard-workers
 
 ### BEGIN INIT INFO
-# Provides: delayed_job
+# Provides: puppet-dashboard-workers
 # Required-Start: $local_fs $network $syslog
 # Required-Stop: $local_fs $syslog
 # Should-Start: $syslog
 # Should-Stop: $network $syslog
 # Default-Start: 2 3 4 5
 # Default-Stop: 0 1 6
-# Short-Description: delayed_job
-# Description: delayed_job
+# Short-Description: puppet-dashboard-workers
+# Description: puppet-dashboard-workers
 ### END INIT INFO
 
 # source function library
 . /etc/rc.d/init.d/functions
 
-name=delayed_job
-# name=pe-delayed_job
+name=puppet-dashboard-workers
+# name=pe-dashboard-workers
 
 # pull in sysconfig settings
 [ -f /etc/sysconfig/$name ] && . /etc/sysconfig/$name
@@ -72,7 +72,7 @@ rh_status() {
 	RETVAL=1
 	for pidfile in $(ls -1 "${DASHBOARD_ROOT}"/tmp/pids/*.pid 2>/dev/null)
 	do
-		status -p $pidfile delayed_job || return $?
+		status -p $pidfile puppet-dashboard-workers || return $?
 		RETVAL=$?
 	done
 	return $RETVAL
