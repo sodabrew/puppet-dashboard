@@ -264,4 +264,8 @@ module ApplicationHelper
     @unique_id_counter ||= 0
     @unique_id_counter += 1
   end
+
+  def add_body_class(klass)
+    (@body_classes ||= []).push(klass).uniq!
+  end
 end
