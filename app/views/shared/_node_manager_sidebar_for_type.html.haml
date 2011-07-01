@@ -1,5 +1,6 @@
 -# Render a sidebar section for a +type+ (e.g. NodeGroup or NodeClass).
 
+- add_body_class 'with-sidebar'
 - table = type.name.tableize
 - label = type.name.sub(/Node/, '')
 - ivar = instance_variable_get "@#{table.singularize}"
