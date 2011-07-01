@@ -8,7 +8,9 @@
 
 #content #sidebar { width: 20%; float: left; }
 
-#content #main { width: 80%; float: left; }
+body.with-sidebar #content #main { width: 80%; float: left; }
+body.no-sidebar #content #main { width: 100%; }
+
 #content #main.full { width: 100%; }
 
 #content #main #list {
