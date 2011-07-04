@@ -53,37 +53,6 @@ The Puppet Dashboard will run on most Unix, Linux and Mac OS X systems once its 
 
         update-alternatives --install /usr/bin/gem gem /usr/bin/gem1.8 1
 
-#### CentOS 5.5
-
-1. Install the [Extra Packages for Enterprise Linux (EPEL)](http://fedoraproject.org/wiki/EPEL) repository for `yum`.  Please see [the EPEL Wiki](https://fedoraproject.org/wiki/EPEL/FAQ#howtouse) for specific instructions.
-
-2.  Install the operating system packages:
-
-        yum install -y mysql mysql-devel mysql-server ruby ruby-devel ruby-irb \
-          ruby-mysql ruby-rdoc ruby-ri
-
-3.  Start MySQL and make it start automatically at boot:
-
-        service mysqld start
-        chkconfig mysqld on
-
-4.  Install the `gem` package manager, using the following shell script -- do not install RubyGems version 1.3.6 or newer because they are incompatible with the version of Ruby shipped with CentOS 5.5:
-
-        (
-          URL="http://production.cf.rubygems.org/rubygems/rubygems-1.3.5.tgz"
-          PACKAGE=$(echo $URL | sed "s/\.[^\.]*$//; s/^.*\///")
-
-          cd $(mktemp -d /tmp/install_rubygems.XXXXXXXXXX) && \
-          wget -c -t10 -T20 -q $URL && \
-          tar xfz $PACKAGE.tgz && \
-          cd $PACKAGE && \
-          sudo ruby setup.rb
-        )
-
-5.  Install the `rake` gem:
-
-        gem install rake
-
 Installation
 ------------
 
