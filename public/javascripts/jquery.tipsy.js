@@ -1,3 +1,8 @@
+// tipsy, facebook style tooltips for jquery
+// version 1.0.0a
+// (c) 2008-2010 jason frame [jason@onehackoranother.com]
+// releated under the MIT license
+
 (function($) {
     
     function fixTitle($ele) {
@@ -10,6 +15,7 @@
         this.$element = $(element);
         this.options = options;
         this.enabled = true;
+        fixTitle(this.$element);
     }
     
     Tipsy.prototype = {
@@ -31,22 +37,33 @@
                 var gravity = (typeof this.options.gravity == 'function')
                                 ? this.options.gravity.call(this.$element[0])
                                 : this.options.gravity;
-
+                
+                var tp;
                 switch (gravity.charAt(0)) {
                     case 'n':
-                        $tip.css({top: pos.top + pos.height, left: pos.left + pos.width / 2 - actualWidth / 2}).addClass('tipsy-north');
+                        tp = {top: pos.top + pos.height + this.options.offset, left: pos.left + pos.width / 2 - actualWidth / 2};
                         break;
                     case 's':
-                        $tip.css({top: pos.top - actualHeight, left: pos.left + pos.width / 2 - actualWidth / 2}).addClass('tipsy-south');
+                        tp = {top: pos.top - actualHeight - this.options.offset, left: pos.left + pos.width / 2 - actualWidth / 2};
                         break;
                     case 'e':
-                        $tip.css({top: pos.top + pos.height / 2 - actualHeight / 2, left: pos.left - actualWidth}).addClass('tipsy-east');
+                        tp = {top: pos.top + pos.height / 2 - actualHeight / 2, left: pos.left - actualWidth - this.options.offset};
                         break;
                     case 'w':
-                        $tip.css({top: pos.top + pos.height / 2 - actualHeight / 2, left: pos.left + pos.width}).addClass('tipsy-west');
+                        tp = {top: pos.top + pos.height / 2 - actualHeight / 2, left: pos.left + pos.width + this.options.offset};
                         break;
                 }
-
+                
+                if (gravity.length == 2) {
+                    if (gravity.charAt(1) == 'w') {
+                        tp.left = pos.left + pos.width / 2 - 15;
+                    } else {
+                        tp.left = pos.left + pos.width / 2 - actualWidth + 15;
+                    }
+                }
+                
+                $tip.css(tp).addClass('tipsy-' + gravity);
+                
                 if (this.options.fade) {
                     $tip.stop().css({opacity: 0, display: 'block', visibility: 'visible'}).animate({opacity: this.options.opacity});
                 } else {
@@ -78,10 +95,7 @@
         
         tip: function() {
             if (!this.$tip) {
-                this.$tip = $('<div class="tipsy"><div class="tipsy-inner"/></div>').css({
-                    position: 'absolute',
-                    zIndex: 100000
-                });
+                this.$tip = $('<div class="tipsy"></div>').html('<div class="tipsy-arrow"></div><div class="tipsy-inner"/></div>');
             }
             return this.$tip;
         },
@@ -108,7 +122,7 @@
         function get(ele) {
             var tipsy = $.data(ele, 'tipsy');
             if (!tipsy) {
-                tipsy = new Tipsy(ele, options);
+                tipsy = new Tipsy(ele, $.fn.tipsy.elementOptions(ele, options));
                 $.data(ele, 'tipsy', tipsy);
             }
             return tipsy;
@@ -134,16 +148,13 @@
             }
         };
         
-        if (!options.live) {
-            this.each(function() { $.data(this, 'tipsy', new Tipsy(this, options)) });
-        }
+        if (!options.live) this.each(function() { get(this); });
         
-        if (options.trigger == 'hover') {
-            if (options.live) {
-                this.live('mouseenter', enter).live('mouseleave', leave);
-            } else {
-                this.hover(enter, leave);
-            }
+        if (options.trigger != 'manual') {
+            var binder   = options.live ? 'live' : 'bind',
+                eventIn  = options.trigger == 'hover' ? 'mouseenter' : 'focus',
+                eventOut = options.trigger == 'hover' ? 'mouseleave' : 'blur';
+            this[binder](eventIn, enter)[binder](eventOut, leave);
         }
         
         return this;
@@ -158,6 +169,7 @@
         gravity: 'n',
         html: false,
         live: false,
+        offset: 0,
         opacity: 0.8,
         title: 'title',
         trigger: 'hover'
