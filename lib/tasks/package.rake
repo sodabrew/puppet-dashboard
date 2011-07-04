@@ -29,6 +29,26 @@ namespace :package do
     end
   end
 
+  desc "Create srpm from this git repository (unsigned)"
+  task :srpm => :tar do 
+    name='puppet-dashboard'
+    temp=`mktemp -d`.strip!
+    pwd=`pwd`.strip!
+    spec_file="ext/packaging/redhat/#{name}.spec"
+    rpm_defines = " --define \"_specdir #{temp}/SPECS\" --define \"_rpmdir #{temp}/RPMS\" --define \"_sourcedir #{temp}/SOURCES\" --define \" _srcrpmdir #{temp}/SRPMS\" --define \"_builddir #{temp}/BUILD\""
+    sh " [ -f /usr/bin/rpmbuild ] "
+    dirs = [ 'BUILD', 'SPECS', 'SOURCES', 'RPMS', 'SRPMS' ]
+    dirs.each do |d|
+      FileUtils.mkdir_p "#{temp}//#{d}"
+    end
+    sh "mv tmp/packages/tar/*.tar.gz #{temp}/SOURCES"
+    sh "cp #{spec_file} #{temp}/SPECS"
+    sh "rpmbuild #{rpm_defines} -bs --nodeps #{temp}/SPECS/*.spec"
+    sh "mv -f #{temp}/SRPMS/* ."
+    sh "rm -rf #{temp}/BUILD #{temp}/SRPMS #{temp}/RPMS #{temp}/SPECS #{temp}/SOURCES"
+    sh "rm -rf #{temp}"
+  end
+
   desc "Create .rpm from this git repository, set UNSIGNED=1 to leave unsigned."
   task :rpm => :build_environment do
     unless File.exists?(File.expand_path('~/.rpmmacros'))
