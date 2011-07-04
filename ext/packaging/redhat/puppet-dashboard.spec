@@ -3,9 +3,10 @@
 
 Name:           puppet-dashboard
 Version:        1.1.9
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Systems Management web application
 Group:          Applications/System
+# Remember to verify this
 License:        GPLv2
 URL:            http://www.puppetlabs.com
 Source0:        http://yum.puppetlabs.com/sources/%{name}-%{version}.tar.gz
@@ -49,6 +50,7 @@ cp -p -r app bin config db ext lib public Rakefile script spec $RPM_BUILD_ROOT/%
 install -Dp -m0644 config/database.yml.example $RPM_BUILD_ROOT/%{_datadir}/%{name}/config/database.yml
 install -Dp -m0644 RELEASE_NOTES.md $RPM_BUILD_ROOT/%{_datadir}/%{name}/RELEASE_NOTES.md
 install -Dp -m0644 VERSION $RPM_BUILD_ROOT/%{_datadir}/%{name}/VERSION
+mkdir -p $RPM_BUILD_ROOT/%{_datadir}/%{name}/spool
 
 # Add sysconfig and init script
 install -Dp -m0755 %{confdir}/%{name}.init $RPM_BUILD_ROOT/%{initrddir}/puppet-dashboard
@@ -124,6 +126,7 @@ fi
 %attr(-,puppet-dashboard,puppet-dashboard) %{_datadir}/%{name}/public
 %attr(-,puppet-dashboard,puppet-dashboard) %{_datadir}/%{name}/script
 %attr(-,puppet-dashboard,puppet-dashboard) %{_datadir}/%{name}/spec
+%attr(-,puppet-dashboard,puppet-dashboard) %dir %{_datadir}/%{name}/spool
 %attr(-,puppet-dashboard,puppet-dashboard) %dir %{_datadir}/%{name}/tmp
 %attr(-,puppet-dashboard,puppet-dashboard) %{_datadir}/%{name}/vendor
 #%attr(-,puppet-dashboard,puppet-dashboard) %dir /var/log/%{name}
@@ -132,6 +135,7 @@ fi
 * Mon Jul 04 2011 Michael Stahnke <stahnma@puppetlabs.com> - 1.1.9-2
 - Updating spec to fix some rpmlint issues
 - Began work on FHS issues, but haven't completed (commented out)
+- Adding a spool directory
 
 * Thu Jun 30 2011 Michael Stahnke <stahnma@puppetlabs.com> - 1.1.9-1
 - Using 1.1.9 as 1.2 alpha for upgradability reasons
