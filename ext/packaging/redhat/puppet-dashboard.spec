@@ -65,7 +65,27 @@ iconv -f ISO-8859-1 -t UTF-8 -o CHANGELOG timestamp
 touch -r timestamp CHANGELOG
 rm timestamp
 
+# Put logs in /var/log and symlink in /usr/share (FHS work)
+#mkdir -p $RPM_BUILD_ROOT/var/log/%{name}
+#if $(stat $RPM_BUILD_ROOT/%{_datadir}/%{name}/log/*) ; then 
+#  rsync -avx $RPM_BUILD_ROOT/%{_datadir}/%{name}/log/* $RPM_BUILD_ROOT/var/log/%{name}
+#fi 
+#rm -rf $RPM_BUILD_ROOT/%{_datadir}/%{name}/log
+#ls -l $RPM_BUILD_ROOT/%{_datadir}/%{name}
+#cd $RPM_BUILD_ROOT/var/log    
+#ln -sf %{name} ../..%{_datadir}/%{name}/log
+
+
+# Clean up some rpmlint issues
+rm -f $RPM_BUILD_ROOT/%{_datadir}/%{name}/spec/models/.gitignore
+rm -f $RPM_BUILD_ROOT/%{_datadir}/%{name}/app/views/layouts/.gitignore
+rm -f $RPM_BUILD_ROOT/%{_datadir}/%{name}/public/stylesheets/.gitignore
+rm -f $RPM_BUILD_ROOT/%{_datadir}/%{name}/spec/views/.gitignore
+rm -rf $RPM_BUILD_ROOT/%{_datadir}/%{name}/ext/packaging
+
+
 %post
+
 /sbin/chkconfig --add puppet-dashboard || :
 /sbin/chkconfig --add puppet-dashboard-workers || :
 
@@ -94,20 +114,25 @@ fi
 %attr(-,puppet-dashboard,puppet-dashboard) %doc %{_datadir}/puppet-dashboard/RELEASE_NOTES.md
 %attr(-,puppet-dashboard,puppet-dashboard) %doc %{_datadir}/puppet-dashboard/VERSION
 %attr(-,puppet-dashboard,puppet-dashboard) %{_datadir}/puppet-dashboard/Rakefile
-%attr(-,puppet-dashboard,puppet-dashboard) %{_datadir}/%{name}/public
-%attr(-,puppet-dashboard,puppet-dashboard) %dir %{_datadir}/%{name}/log
-%attr(-,puppet-dashboard,puppet-dashboard) %dir %{_datadir}/%{name}/tmp
-%attr(-,puppet-dashboard,puppet-dashboard) %{_datadir}/%{name}/vendor
+%attr(-,puppet-dashboard,puppet-dashboard) %dir %{_datadir}/%{name}/config
 %attr(-,puppet-dashboard,puppet-dashboard) %{_datadir}/%{name}/app
+%attr(-,puppet-dashboard,puppet-dashboard) %{_datadir}/%{name}/bin
+%attr(-,puppet-dashboard,puppet-dashboard) %{_datadir}/%{name}/db
+%attr(-,puppet-dashboard,puppet-dashboard) %{_datadir}/%{name}/ext
+%attr(-,puppet-dashboard,puppet-dashboard) %{_datadir}/%{name}/lib
+%attr(-,puppet-dashboard,puppet-dashboard) %{_datadir}/%{name}/log
+%attr(-,puppet-dashboard,puppet-dashboard) %{_datadir}/%{name}/public
 %attr(-,puppet-dashboard,puppet-dashboard) %{_datadir}/%{name}/script
 %attr(-,puppet-dashboard,puppet-dashboard) %{_datadir}/%{name}/spec
-%attr(-,puppet-dashboard,puppet-dashboard) %{_datadir}/%{name}/lib
-%attr(-,puppet-dashboard,puppet-dashboard) %{_datadir}/%{name}/ext
-%attr(-,puppet-dashboard,puppet-dashboard) %{_datadir}/%{name}/db
-%attr(-,puppet-dashboard,puppet-dashboard) %dir %{_datadir}/%{name}/config
-%attr(-,puppet-dashboard,puppet-dashboard) %{_datadir}/%{name}/bin
+%attr(-,puppet-dashboard,puppet-dashboard) %dir %{_datadir}/%{name}/tmp
+%attr(-,puppet-dashboard,puppet-dashboard) %{_datadir}/%{name}/vendor
+#%attr(-,puppet-dashboard,puppet-dashboard) %dir /var/log/%{name}
 
 %changelog
+* Mon Jul 04 2011 Michael Stahnke <stahnma@puppetlabs.com> - 1.1.9-2
+- Updating spec to fix some rpmlint issues
+- Began work on FHS issues, but haven't completed (commented out)
+
 * Thu Jun 30 2011 Michael Stahnke <stahnma@puppetlabs.com> - 1.1.9-1
 - Using 1.1.9 as 1.2 alpha for upgradability reasons
 - Fixing "file listed twice" warnings
