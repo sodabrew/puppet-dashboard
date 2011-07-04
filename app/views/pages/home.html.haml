@@ -8,10 +8,10 @@
     .section
       = render 'statuses/run_failure', :nodes => @all_nodes
   .item
-    %ul#home-tabs
+    %ul#home-tabs.tabbed
       - tab_statuses.each do |tab_status|
         %li(id="#{tab_status}-tab")
-          = tab_status.humanize
+          %a= tab_status.humanize
     - tab_statuses.each do |tab_status|
       %div.panel(id=tab_status)
         = render 'nodes/nodes',

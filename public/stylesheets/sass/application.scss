@@ -560,8 +560,7 @@ body {
     }
   }
 
-  ul.tabbed,
-  #report-tabs, #home-tabs {
+  ul.tabbed {
     display: none;
     font: bold 14px Arial;
     width: 100%;
@@ -575,13 +574,14 @@ body {
       list-style: none;
       float: left;
       border: solid 1px #CCC;
-      padding: 4px 1em;
       margin-right: 4px;
-      cursor: pointer;
       color: white;
 
       a {
         color : #fff;
+        padding : 4px 1em;
+        display : block;
+        cursor: pointer;
       }
       a:hover {
         text-decoration : underline;

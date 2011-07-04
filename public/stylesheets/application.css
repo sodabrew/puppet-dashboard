@@ -373,14 +373,14 @@ body {
         right: 0; }
       body .section#flash img {
         vertical-align: top; }
-  body.reports_show_action #report-tabs, body.reports_show_action #home-tabs, body.pages_home_action #report-tabs, body.pages_home_action #home-tabs {
+  body ul.tabbed {
     display: none;
     font: bold 14px Arial;
     width: 100%;
     float: left;
     margin: 0;
     padding: 0; }
-    body.reports_show_action #report-tabs li, body.reports_show_action #home-tabs li, body.pages_home_action #report-tabs li, body.pages_home_action #home-tabs li {
+    body ul.tabbed li {
       -webkit-border-radius: 0.35em 0.35em 0 0;
       -moz-border-radius: 0.35em 0.35em 0 0;
       border-radius: 0.35em 0.35em 0 0;
@@ -388,15 +388,32 @@ body {
       list-style: none;
       float: left;
       border: solid 1px #CCC;
-      padding: 4px 1em;
       margin-right: 4px;
-      cursor: pointer;
       color: white; }
-      body.reports_show_action #report-tabs li.active, body.reports_show_action #home-tabs li.active, body.pages_home_action #report-tabs li.active, body.pages_home_action #home-tabs li.active {
+      body ul.tabbed li a {
+        color: #fff;
+        padding: 4px 1em;
+        display: block;
+        cursor: pointer; }
+      body ul.tabbed li a:hover {
+        text-decoration: underline; }
+      body ul.tabbed li.active {
         border-bottom-color: white;
         background-color: white;
         color: #2C66A8; }
-  body.reports_show_action .panel.tabbed, body.pages_home_action .panel.tabbed {
+        body ul.tabbed li.active a {
+          color: #2C66A8; }
+  body ul.tabbed {
+    display: block;
+    display: block; }
+    body ul.tabbed:after {
+      content: "\0020";
+      display: block;
+      height: 0;
+      clear: both;
+      visibility: hidden;
+      overflow: hidden; }
+  body .panel.tabbed {
     border: solid 1px #CCC;
     background-color: white;
     padding: 1em;
