@@ -750,4 +750,57 @@ body {
       }
     }
   }
+
+  &.delayed_job_failures_controller {
+    dl {
+      dt {
+        color : #999;
+        strong {
+          color : #000;
+        }
+        em {
+          color : #000;
+          font-weight : normal;
+        }
+      }
+      dd {
+        padding-bottom : .3em;
+        border-bottom : 1px solid #eee;
+        margin-bottom : .3em;
+      }
+    }
+  }
+  #mark-as-read {
+    margin-bottom : 1em;
+  }
+  .delayed-job {
+    padding-bottom : .5em;
+    p {
+      padding : .5em 1em 0 1em;
+      margin : 0;
+      em,
+      a {
+        padding-left : 20px;
+        background-color : transparent;
+        background-repeat : no-repeat;
+        background-position : 0% 50%;
+        margin-bottom : .5em;
+      }
+      &.ok {
+        em {
+          background : transparent url( /images/icons/delayed-job-ok.png ) no-repeat 0% 50%;
+        }
+      }
+      &.failure {
+        a {
+          background-image : url( /images/icons/delayed-job-failure.png );
+        }
+      }
+      &.warning {
+        em {
+          background-image : url( /images/icons/delayed-job-warning.png );
+        }
+      }
+    }
+  }
 }
