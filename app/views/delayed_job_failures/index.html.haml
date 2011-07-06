@@ -2,17 +2,29 @@
 #main
   .header
     %h2
-      &= "#{@read ? 'Read' : 'Unread'} Delayed Job Failures"
-      %span.count= page_entries_info(@delayed_job_failures, { :entry_name => "#{@read ? 'read' : 'unread'} failure" } )
-    - if @read == false
-      - form_tag request.url, :class => 'REVISIT', :method => :post do
-        %button{:name => :mark_all_read} Mark all Read
+      Background Task Failures
 
   .item
-    %ul
-      - @delayed_job_failures.each do |e|
-        %li{:class => e.read ? :read : :unread}
-          &= "#{e.summary} (#{e.created_at})"
-          %pre
-            &= e.details
-    = pagination_for @delayed_job_failures
+    %ul.tabbed
+      %li{ :class => active_if( controller.action_name == 'index' )}
+        = link_to "#{DelayedJobFailure.unread.count > 0 ? DelayedJobFailure.unread.count : ''} New failed tasks", '/delayed_job_failures'
+      %li{ :class => active_if( controller.action_name == 'read' )}
+        = link_to 'Previously-read failures', '/delayed_job_failures/read'
+
+    %div.panel.tabbed
+      - if @delayed_job_failures.count > 0
+        - if @read == false
+          #mark-as-read
+            - form_tag request.url, :method => :post do
+              %button{:name => :mark_all_read} Mark all as read
+              (and we'll stop notifying you about them)
+        %dl
+          - @delayed_job_failures.each do |e|
+            %dt
+              %strong= e.summary
+              at
+              %em= e.created_at
+            %dd= e.details
+        = pagination_for @delayed_job_failures
+      - else
+        %p No unread task failures.

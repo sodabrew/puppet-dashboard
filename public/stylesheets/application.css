@@ -573,3 +573,34 @@ body {
   body div.token-input-dropdown-facebook ul li.token-input-selected-dropdown-item-facebook {
     background-color: #FFFDA4;
     color: #000; }
+  body.delayed_job_failures_controller dl dt {
+    color: #999; }
+    body.delayed_job_failures_controller dl dt strong {
+      color: #000; }
+    body.delayed_job_failures_controller dl dt em {
+      color: #000;
+      font-weight: normal; }
+  body.delayed_job_failures_controller dl dd {
+    padding-bottom: .3em;
+    border-bottom: 1px solid #eee;
+    margin-bottom: .3em; }
+  body #mark-as-read {
+    margin-bottom: 1em; }
+  body .delayed-job {
+    padding-bottom: .5em; }
+    body .delayed-job p {
+      padding: .5em 1em 0 1em;
+      margin: 0; }
+      body .delayed-job p em,
+      body .delayed-job p a {
+        padding-left: 20px;
+        background-color: transparent;
+        background-repeat: no-repeat;
+        background-position: 0% 50%;
+        margin-bottom: .5em; }
+      body .delayed-job p.ok em {
+        background: transparent url(/images/icons/delayed-job-ok.png) no-repeat 0% 50%; }
+      body .delayed-job p.failure a {
+        background-image: url(/images/icons/delayed-job-failure.png); }
+      body .delayed-job p.warning em {
+        background-image: url(/images/icons/delayed-job-warning.png); }

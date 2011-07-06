@@ -1,9 +1,17 @@
 - add_body_class 'with-sidebar'
 
-.group
-  %h3= link_to "Delayed Job Status", "/delayed_job_failures"
-  %h4= link_to "#{DelayedJobFailure.unread.count} unread failures", "/delayed_job_failures"
-  %h4= "#{Delayed::Job.count} pending reports"
+.group.delayed-job
+  %h3= link_to "Background Tasks", "/delayed_job_failures"
+
+  - if DelayedJobFailure.unread.count > 0
+    %p.failure
+      =link_to "#{ pluralize DelayedJobFailure.unread.count, 'new failed task' }", "/delayed_job_failures"
+  - if Delayed::Job.count > 0
+    %p.warning
+      %em= "#{ pluralize Delayed::Job.count, 'pending task' }"
+  - if Delayed::Job.count == 0 and DelayedJobFailure.unread.count == 0
+    %p.ok
+      %em All systems go
 
 .group
   %h3{:class => active_if(controller_name == "nodes" && action_name == "index")}= link_to "Nodes", nodes_path

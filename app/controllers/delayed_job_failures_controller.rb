@@ -7,11 +7,12 @@ class DelayedJobFailuresController < ApplicationController
       DelayedJobFailure.transaction do
         # Can't just update_all, because this is a WillPaginate collection,
         # and it has a limited API.  Alas. --daniel 2011-06-20
-        @delayed_job_failures.each do |event|
+        DelayedJobFailure.all.each do |event|
           event.read = true
           event.save!
         end
       end
+      @delayed_job_failures = []
     end
   end
 
