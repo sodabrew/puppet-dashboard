@@ -5,7 +5,7 @@
       %a{ :href => '#', :class => 'expand-all' } Expand all
     .section
       %dl.expandable-list
-        - report.resource_statuses.group_by(&:status).each do |status, resources|
+        - statuses.each do |status, resources|
           %h3 #{status.titleize} (#{resources.count})
           - resources.sort_by(&:time).each do |status|
             - index += 1
