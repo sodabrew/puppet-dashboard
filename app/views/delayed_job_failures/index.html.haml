@@ -2,10 +2,11 @@
 #main
   .header
     %h2
-      Delayed Job Failures
-      %span.count= page_entries_info(@delayed_job_failures, { :entry_name => "failure" } )
-    - form_tag request.url, :class => 'REVISIT', :method => :post do
-      %button{:name => :mark_all_read} Mark all Read
+      &= "#{@read ? 'Read' : 'Unread'} Delayed Job Failures"
+      %span.count= page_entries_info(@delayed_job_failures, { :entry_name => "#{@read ? 'read' : 'unread'} failure" } )
+    - if @read == false
+      - form_tag request.url, :class => 'REVISIT', :method => :post do
+        %button{:name => :mark_all_read} Mark all Read
 
   .item
     %ul
