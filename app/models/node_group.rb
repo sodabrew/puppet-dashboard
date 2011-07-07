@@ -44,6 +44,7 @@ class NodeGroup < ActiveRecord::Base
   before_validation :assign_node_classes
   def assign_node_classes
     return true unless @node_class_ids || @node_class_names
+    raise NodeClassificationDisabledError.new unless SETTINGS.use_external_node_classification
     node_classes = []
     node_classes << NodeClass.find_from_form_names(*@node_class_names) if @node_class_names
     node_classes << NodeClass.find_from_form_ids(*@node_class_ids)     if @node_class_ids

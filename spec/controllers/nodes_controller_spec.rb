@@ -228,41 +228,23 @@ describe NodesController do
       get :edit, :id => @node.id
     end
 
-    describe "when using node classification" do
-      before :each do
-        SETTINGS.stubs(:use_external_node_classification).returns(true)
-        @node = Node.generate!
+    before :each do
+      @node = Node.generate!
 
-        it 'should make the requested node available to the view' do
-          do_get
-          assigns[:node].should == @node
-        end
-
-        it 'should render the edit template' do
-          do_get
-          response.should render_template('edit')
-        end
-
-        it 'should work when given a node name' do
-          get :edit, :id => @node.name
-
-          assigns[:node].should == @node
-        end
-      end
-    end
-
-    describe "when not using node classification" do
-      before :each do
-        SETTINGS.stubs(:use_external_node_classification).returns(false)
-        @node = Node.generate!
-      end
-
-      it 'should render 403 text' do
+      it 'should make the requested node available to the view' do
         do_get
+        assigns[:node].should == @node
+      end
 
-        response.body.should =~ /Node classification has been disabled/
-        response.should_not be_success
-        response.response_code.should == 403
+      it 'should render the edit template' do
+        do_get
+        response.should render_template('edit')
+      end
+
+      it 'should work when given a node name' do
+        get :edit, :id => @node.name
+
+        assigns[:node].should == @node
       end
     end
   end
@@ -272,81 +254,121 @@ describe NodesController do
       put :update, @params
     end
 
-    describe "when using node classification" do
-      before :each do
-        SETTINGS.stubs(:use_external_node_classification).returns(true)
-        SETTINGS.stubs(:enable_read_only_mode).returns(false)
-        @node = Node.generate!
-        @params = { :id => @node.id, :node => @node.attributes }
-      end
+    before :each do
+      SETTINGS.stubs(:enable_read_only_mode).returns(false)
+      @node = Node.generate!
+      @params = { :id => @node.id, :node => @node.attributes }
+    end
 
-      it 'should fail when an invalid node id is given' do
-        @params[:id] = 'unknown'
-        lambda { do_put }.should raise_error(ActiveRecord::RecordNotFound)
-      end
+    it 'should fail when an invalid node id is given' do
+      @params[:id] = 'unknown'
+      lambda { do_put }.should raise_error(ActiveRecord::RecordNotFound)
+    end
 
-      it 'should work when given a node name' do
-        @params.merge!({:id => @node.name})
+    it 'should work when given a node name' do
+      @params.merge!({:id => @node.name})
 
-        do_put
-        assigns[:node].should == @node
-      end
+      do_put
+      assigns[:node].should == @node
+    end
 
-      describe 'when a valid node id is given' do
+    describe 'when a valid node id is given' do
 
-        describe 'and the data provided would make the node invalid' do
-          before :each do
-            @params[:node]['name'] = nil
-          end
-
-          it 'should make the node available to the view' do
-            do_put
-            assigns[:node].should == @node
-          end
-
-          it 'should not save the node' do
-            do_put
-            Node.find(@node.id).name.should_not be_nil
-          end
-
-          it 'should have errors on the node' do
-            do_put
-            assigns[:node].errors[:name].should_not be_blank
-          end
-
-          it 'should render the update action' do
-            do_put
-            response.should render_template('edit')
-          end
+      describe 'and the data provided would make the node invalid' do
+        before :each do
+          @params[:node]['name'] = nil
         end
 
-        describe 'and the data provided make the node valid' do
-          it 'should update the node with the data provided' do
-            @params[:node]['name'] = 'new name'
-            do_put
-            Node.find(@node.id).name.should == 'new name'
-          end
+        it 'should make the node available to the view' do
+          do_put
+          assigns[:node].should == @node
+        end
 
-          it 'should have a valid node' do
-            do_put
-            assigns[:node].should be_valid
-          end
+        it 'should not save the node' do
+          do_put
+          Node.find(@node.id).name.should_not be_nil
+        end
+
+        it 'should have errors on the node' do
+          do_put
+          assigns[:node].errors[:name].should_not be_blank
+        end
+
+        it 'should render the update action' do
+          do_put
+          response.should render_template('edit')
+        end
+      end
+
+      describe 'and the data provided make the node valid' do
+        it 'should update the node with the data provided' do
+          @params[:node]['name'] = 'new name'
+          do_put
+          Node.find(@node.id).name.should == 'new name'
+        end
+
+        it 'should have a valid node' do
+          do_put
+          assigns[:node].should be_valid
         end
       end
     end
 
-    describe "when not using node classification" do
+    describe "when node classification is enabled" do
       before :each do
-        SETTINGS.stubs(:use_external_node_classification).returns(false)
-        @node = Node.generate!
+        SETTINGS.stubs(:use_external_node_classification).returns(true)
       end
 
-      it 'should render 403 text' do
+      it "should allow specification of 'parameter_attributes'" do
+        @params[:node].merge! :parameter_attributes => [{:key => 'foo', :value => 'bar'}]
+
         do_put
 
+        @node.reload.parameters.to_hash.should == {'foo' => 'bar'}
+      end
+
+      it "should allow specification of node classes" do
+        node_class = NodeClass.generate!
+        @params[:node].merge! :node_class_ids => [node_class.id]
+
+        do_put
+
+        @node.reload.node_classes.should == [node_class]
+      end
+    end
+
+    describe "when node classification is disabled" do
+      before :each do
+        SETTINGS.stubs(:use_external_node_classification).returns(false)
+      end
+
+      it "should fail if parameter_attributes are specified" do
+        @params[:node].merge! :parameter_attributes => [{:key => 'foo', :value => 'bar'}]
+
+        do_put
+
+        response.code.should == '403'
         response.body.should =~ /Node classification has been disabled/
-        response.should_not be_success
-        response.response_code.should == 403
+
+        @node.reload.parameters.to_hash.should_not be_present
+      end
+
+      it "should fail if node classes are specified" do
+        node_class = NodeClass.generate!
+        @params[:node].merge! :node_class_ids => [node_class.id]
+
+        do_put
+
+        response.code.should == '403'
+        response.body.should =~ /Node classification has been disabled/
+
+        @node.reload.node_classes.should_not be_present
+      end
+
+      it "should succeed if parameter_attributes and node classes are omitted" do
+        do_put
+
+        response.should be_redirect
       end
     end
   end

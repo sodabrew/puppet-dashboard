@@ -6,7 +6,7 @@
       Node:
       = h @node.name
       %span.alt= "(hidden)" if @node.hidden
-    - if SETTINGS.use_external_node_classification && !SETTINGS.enable_read_only_mode
+    - unless SETTINGS.enable_read_only_mode
       %ul.actions
         %li= link_to 'Edit', edit_node_path(@node), :class => "edit button", :rel => 'inspect'
         - if @node.hidden

@@ -9,30 +9,29 @@
     = form.label :name
     = form.text_field :name, :placeholder => "Group name"
 
-  .element
-    %h3 Parameters
-    %table#parameters.inspector
-      %thead
-        %tr
-          %th.key Key
-          %th.value Value
-      %tbody
-        - if form.object.parameters.blank?
-          = render :partial => 'parameters/parameter_input', :object => form.object.parameters.build
-        - else
-          = render :partial => 'parameters/parameter_input', :collection => form.object.parameters
-      %tfoot
-        %tr
-          %td{:colspan => 2}
-            = link_to_function("Add parameter", :class => "add button") { |page|  page.insert_html :bottom, 'parameters', :partial => 'parameters/parameter_input', :object => form.object.parameters.build }
-  .element.node_classes
-    = label_tag 'Classes'
-    = text_field_tag 'node_group[node_class_ids][]', '', :id => 'node_class_ids'
+  - if SETTINGS.use_external_node_classification
+    .element
+      %h3 Parameters
+      %table#parameters.inspector
+        %thead
+          %tr
+            %th.key Key
+            %th.value Value
+        %tbody
+          - if form.object.parameters.blank?
+            = render :partial => 'parameters/parameter_input', :object => form.object.parameters.build
+          - else
+            = render :partial => 'parameters/parameter_input', :collection => form.object.parameters
+        %tfoot
+          %tr
+            %td{:colspan => 2}
+              = link_to_function("Add parameter", :class => "add button") { |page|  page.insert_html :bottom, 'parameters', :partial => 'parameters/parameter_input', :object => form.object.parameters.build }
+    .element.node_classes
+      = label_tag 'Classes'
+      = text_field_tag 'node_group[node_class_ids][]', '', :id => 'node_class_ids'
 
   .element.node_groups
     = label_tag 'Groups'
     = text_field_tag 'node_group[node_group_ids][]', '', :id => 'node_group_ids'
 
-  - class_data = {:class => '#node_class_ids', :data_source => node_classes_path(:format => :json), :objects => form.object.node_classes}
-  - group_data = {:class => '#node_group_ids', :data_source => node_groups_path(:format => :json),  :objects => form.object.node_groups}
-  %script#tokenizer{:type => "text/javascript"}= tokenize_input_class(class_data, group_data)
+  %script#tokenizer{:type => "text/javascript"}= tokenize_input_class(@class_data, @group_data)

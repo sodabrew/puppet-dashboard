@@ -13,10 +13,10 @@
   %li &bull;
   %li{:class => active_if(controller_name == "nodes" && action_name == "index")}
     = link_to "Nodes", nodes_path
-  - if SETTINGS.use_external_node_classification
     %li &bull;
-    %li{:class => active_if(controller_name == "node_groups")}
-      = link_to "Groups", node_groups_path
+  %li{:class => active_if(controller_name == "node_groups")}
+    = link_to "Groups", node_groups_path
+  - if SETTINGS.use_external_node_classification
     %li &bull;
     %li{:class => active_if(controller_name == "node_classes")}
       = link_to "Classes", node_classes_path

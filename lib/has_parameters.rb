@@ -19,6 +19,7 @@ module HasParameters
 
   module InstanceMethods
     def parameter_attributes=(values)
+      raise NodeClassificationDisabledError.new unless SETTINGS.use_external_node_classification
       new_parameters = values.reject{|v| v[:key].blank? && v[:value].blank?}.map do |hash|
         parameter = parameters.find_or_initialize_by_key(hash[:key])
         parameter.value = hash[:value]

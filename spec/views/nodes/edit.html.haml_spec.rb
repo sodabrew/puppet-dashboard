@@ -76,10 +76,33 @@ describe '/nodes/edit' do
   end
 
   describe 'editing interface' do
+    describe "for parameters" do
+      before :each do
+        @node.parameter_attributes = [{:key => 'foo', :value => 'bar'}]
+      end
+
+      it "should allow editing parameters with node classification enabled" do
+        SETTINGS.stubs(:use_external_node_classification).returns(true)
+
+        render
+
+        response.should have_tag('table#parameters')
+      end
+
+      it "should not allow editing parameters with node classification disabled" do
+        SETTINGS.stubs(:use_external_node_classification).returns(false)
+
+        render
+
+        response.should_not have_tag('table#parameters')
+      end
+    end
+
     describe 'for classes' do
       before :each do
         @classes = Array.new(6) { NodeClass.generate! }
         @node.node_classes << @classes[0..2]
+        assigns[:class_data] = {:class => '#node_class_ids', :data_source => node_classes_path(:format => :json), :objects => @node.node_classes}
       end
 
       it 'should provide a means to edit the associated classes when using node classification' do
@@ -122,6 +145,7 @@ describe '/nodes/edit' do
       before :each do
         @groups = Array.new(6) {NodeGroup.generate! }
         @node.node_groups << @groups[0..3]
+        assigns[:group_data] = {:class => '#node_group_ids', :data_source => node_groups_path(:format => :json),  :objects => @node.node_groups}
       end
 
       it 'should show the associated groups when using node classification' do
@@ -138,11 +162,18 @@ describe '/nodes/edit' do
         end
       end
 
-      it 'should not show associated groups when not using node classification' do
+      it 'should show associated groups when not using node classification' do
         SETTINGS.stubs(:use_external_node_classification).returns(false)
         do_render
 
-        response.should_not have_tag('#node_group_ids')
+        response.should have_tag('#tokenizer') do
+          struct = get_json_struct_for_token_list('#node_group_ids')
+          struct.should have(4).items
+
+          (0..3).each do |idx|
+            struct.should include({"id" => @groups[idx].id, "name" => @groups[idx].name})
+          end
+        end
       end
     end
 

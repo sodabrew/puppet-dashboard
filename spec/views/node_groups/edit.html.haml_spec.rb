@@ -12,10 +12,33 @@ describe "/node_groups/edit.html.haml" do
     it { render; should have_tag('form[method=post][action=?]', node_group_path(@node_group)) }
 
     describe "in editing interface" do
+      describe "for parameters" do
+        before :each do
+          @node_group.parameter_attributes = [{:key => 'foo', :value => 'bar'}]
+        end
+
+        it "should allow editing parameters with node classification enabled" do
+          SETTINGS.stubs(:use_external_node_classification).returns(true)
+
+          render
+
+          response.should have_tag('table#parameters')
+        end
+
+        it "should not allow editing parameters with node classification disabled" do
+          SETTINGS.stubs(:use_external_node_classification).returns(false)
+
+          render
+
+          response.should_not have_tag('table#parameters')
+        end
+      end
+
       describe "for classes" do
         before :each do
           @classes = Array.new(6) { NodeClass.generate! }
           @node_group.node_classes << @classes[0..2]
+          assigns[:class_data] = {:class => '#node_class_ids', :data_source => node_classes_path(:format => :json), :objects => @node_group.node_classes}
 
           render
         end
@@ -40,6 +63,7 @@ describe "/node_groups/edit.html.haml" do
         before :each do
           @groups = Array.new(6) { NodeGroup.generate! }
           @node_group.node_groups << @groups[0..3]
+          assigns[:group_data] = {:class => '#node_group_ids', :data_source => node_groups_path(:format => :json),  :objects => @node_group.node_groups}
 
           render
         end
