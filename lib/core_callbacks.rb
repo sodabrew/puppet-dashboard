@@ -3,8 +3,20 @@ Registry.add_callback :core, :node_view_widgets, "100_description" do |view_rend
   view_renderer.render 'nodes/description', :node => node
 end
 
-Registry.add_callback :core, :node_view_widgets, "200_node_classification" do |view_renderer, node|
-  view_renderer.render 'nodes/node_classification', :node => node
+Registry.add_callback :core, :node_view_widgets, "200_parameters" do |view_renderer, node|
+  if SETTINGS.use_external_node_classification
+    view_renderer.render 'shared/parameters', :resource => node
+  end
+end
+
+Registry.add_callback :core, :node_view_widgets, "210_groups" do |view_renderer, node|
+  view_renderer.render 'shared/groups', :resource => node
+end
+
+Registry.add_callback :core, :node_view_widgets, "220_classes" do |view_renderer, node|
+  if SETTINGS.use_external_node_classification
+    view_renderer.render 'shared/classes', :resource => node
+  end
 end
 
 Registry.add_callback :core, :node_view_widgets, "400_reports" do |view_renderer, node|

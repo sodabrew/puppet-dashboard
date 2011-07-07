@@ -10,9 +10,11 @@
         %li= link_to 'Delete', @node_group, :confirm => 'Are you sure?', :method => :delete, :class => "delete button"
 
   .item
-    = render 'shared/parameters', :resource => @node_group
+    - if SETTINGS.use_external_node_classification
+      = render 'shared/parameters', :resource => @node_group
     = render 'shared/groups', :resource => @node_group
-    = render 'shared/classes', :resource => @node_group
+    - if SETTINGS.use_external_node_classification
+      = render 'shared/classes', :resource => @node_group
 
     .section.half
       %h3 Derived groups

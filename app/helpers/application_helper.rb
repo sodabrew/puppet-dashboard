@@ -243,6 +243,7 @@ module ApplicationHelper
   #     });
   #   });
   def tokenize_input_class(*inputs)
+    inputs.compact!
     javascript = "jQuery(document).ready(function(J) {\n"
     inputs.each do |input|
       javascript << "  J('#{input[:class]}').tokenInput('#{input[:data_source]}', {\n"

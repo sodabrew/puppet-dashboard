@@ -50,9 +50,9 @@
             = link_to "Hidden", hidden_nodes_path
 
   .footer.actionbar
-    - if SETTINGS.use_external_node_classification && !SETTINGS.enable_read_only_mode
+    - unless SETTINGS.enable_read_only_mode
       = link_to "Add node", new_node_path, :class => 'button'
 
+= render "shared/node_manager_sidebar_for_type", :type => NodeGroup
 - if SETTINGS.use_external_node_classification
-  - for type in [NodeClass, NodeGroup]
-    = render "shared/node_manager_sidebar_for_type", :type => type
+  = render "shared/node_manager_sidebar_for_type", :type => NodeClass
