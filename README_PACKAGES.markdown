@@ -16,8 +16,8 @@ DEB Packages via APT
 
 2.  Add the Puppet Labs repository key to APT by running:
 
-        gpg --recv-key 8347A27F
-        gpg -a --export 8347A27F | sudo apt-key add -
+        gpg --recv-key 4BD6EC30
+        gpg -a --export 4BD6EC30 | sudo apt-key add -
 
 3.  Update APT's package cache:
 
@@ -65,7 +65,7 @@ RPM packages via Yum
         baseurl=http://yum.puppetlabs.com/base/
         enabled=1
         gpgcheck=1
-        gpgkey=http://yum.puppetlabs.com/RPM-GPG-KEY-reductive
+        gpgkey=http://yum.puppetlabs.com/RPM-GPG-KEY-puppetlabs
 
 2.  Install Puppet Dashboard via Yum:
 
