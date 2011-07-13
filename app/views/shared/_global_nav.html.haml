@@ -6,7 +6,7 @@
     - else
       %a{:href => root_path, :id => "logo", :style => "text-indent: -9000px;"} Puppet Dashboard
   %li{:class => active_if(request.url == release_notes_url)}
-    = link_to "v#{APP_VERSION}", release_notes_path
+    = link_to "v#{APP_VERSION}", 'https://github.com/puppetlabs/puppet-dashboard'
   %li &raquo;
   %li{:class => active_if(request.url == root_url)}
     = link_to "Home", root_path
