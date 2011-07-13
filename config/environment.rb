@@ -16,7 +16,6 @@ Rails::Initializer.run do |config|
   config.gem 'haml'
   config.gem 'sass'
   config.gem 'will_paginate'
-  config.gem 'maruku'
   config.gem 'daemons', :version => '1.0.10'
 
   # Change this to adjust log rotation. Logger.new(log_file, number_of_logs, max_log_size).

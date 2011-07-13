@@ -10,6 +10,4 @@ class PagesController < ApplicationController
     @unchanged_nodes          = @all_nodes.unchanged
   end
 
-  def release_notes
-  end
 end
