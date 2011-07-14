@@ -1,32 +1,48 @@
 #!/usr/bin/make -f
-# -*- makefile -*-
 
-# Uncomment these fllowing lines to display lots of debugging information during the build process:
-export DH_VERBOSE=1
-export DH_OPTIONS=-v
+include /usr/share/cdbs/1/rules/debhelper.mk
+include /usr/share/cdbs/1/rules/buildcore.mk
 
-%:
-	dh $@
+ruby_ver = 1.8
 
-override_dh_install:
-	install -d debian/puppet-dashboard/etc/puppet-dashboard
-	install -d debian/puppet-dashboard/usr/share/puppet-dashboard
-	install -d debian/puppet-dashboard/usr/share/doc/puppet-dashboard/examples
-	cp -r app bin config db ext lib public script spec vendor VERSION CHANGELOG COPYING LICENSE README.markdown README_PACKAGES.markdown RELEASE_NOTES.md Rakefile debian/puppet-dashboard/usr/share/puppet-dashboard/
-	install config/database.yml.example debian/puppet-dashboard/etc/puppet-dashboard/database.yml
-	install config/database.yml.example debian/puppet-dashboard/usr/share/doc/puppet-dashboard/examples/database.yml.example
-	# Clean up the "extra" license files
-	rm -f debian/puppet-dashboard/usr/share/puppet-dashboard/config/database.yml.example
-	rm -f debian/puppet-dashboard/usr/share/puppet-dashboard/doc/README_FOR_APP
-	rm -f debian/puppet-dashboard/usr/share/puppet-dashboard/vendor/plugins/*/*LICENSE
-	rm -f debian/puppet-dashboard/usr/share/puppet-dashboard/vendor/plugins/*/License.txt
-	rm -f debian/puppet-dashboard/usr/share/puppet-dashboard/vendor/plugins/*/COPYING
-	rm -f debian/puppet-dashboard/usr/share/puppet-dashboard/vendor/gems/*/COPYING
-	rm -f debian/puppet-dashboard/usr/share/puppet-dashboard/vendor/gems/*/*LICENSE
-	rm -f debian/puppet-dashboard/usr/share/puppet-dashboard/vendor/gems/*/License.txt
-	rm -f debian/puppet-dashboard/usr/share/puppet-dashboard/vendor/rails/*/*LICENSE
-	# ...and other various files
-	rm -f debian/puppet-dashboard/.gems
-	rm -f debian/puppet-dashboard/.autotest
-	find debian/puppet-dashboard -name '.gitignore' -type f | xargs rm -f
-	find debian/puppet-dashboard -name '.git' -type d | xargs rm -rf
+binary-install/puppet-dashboard::
+	mkdir -p $(CURDIR)/debian/$(cdbs_curpkg)/etc/puppet-dashboard
+	mkdir -p $(CURDIR)/debian/$(cdbs_curpkg)/usr/share/puppet-dashboard
+	mkdir -p $(CURDIR)/debian/$(cdbs_curpkg)/var/$(cdbs_curpkg)/tmp
+	mkdir -p $(CURDIR)/debian/$(cdbs_curpkg)/var/log/puppet-dashboard
+	cp -r app \
+	    bin \
+	    config \
+	    db \
+	    ext \
+	    lib \
+	    Rakefile \
+	    script \
+	    spec \
+	    vendor \
+	    RELEASE_NOTES.md \
+	    $(CURDIR)/debian/$(cdbs_curpkg)/usr/share/puppet-dashboard
+	cp $(CURDIR)/config/database.yml.example $(CURDIR)/debian/$(cdbs_curpkg)/etc/puppet-dashboard/database.yml
+	cp -r $(CURDIR)/public $(CURDIR)/debian/$(cdbs_curpkg)/var/$(cdbs_curpkg)
+	chmod -R a+rx $(CURDIR)/debian/$(cdbs_curpkg)/usr/share/puppet-dashboard/script
+	rm -rf $(CURDIR)/debian/$(cdbs_curpkg)/usr/share/puppet-dashboard/ext/packaging
+	# Clean up the "extra" files
+	rm -f $(CURDIR)/debian/$(cdbs_curpkg)/usr/share/puppet-dashboard/config/database.yml.example
+	rm -f $(CURDIR)/debian/$(cdbs_curpkg)/usr/share/puppet-dashboard/vendor/plugins/*/*LICENSE
+	rm -f $(CURDIR)/debian/$(cdbs_curpkg)/usr/share/puppet-dashboard/vendor/plugins/*/License.txt
+	rm -f $(CURDIR)/debian/$(cdbs_curpkg)/usr/share/puppet-dashboard/vendor/gems/*/COPYING
+	rm -f $(CURDIR)/debian/$(cdbs_curpkg)/usr/share/puppet-dashboard/vendor/gems/*/*LICENSE
+	rm -f $(CURDIR)/debian/$(cdbs_curpkg)/usr/share/puppet-dashboard/vendor/gems/*/License.txt
+	rm -f $(CURDIR)/debian/$(cdbs_curpkg)/usr/share/puppet-dashboard/vendor/rails/*/*LICENSE
+	find $(CURDIR)/debian/$(cdbs_curpkg) -name .gitignore -exec rm {} \;
+	find $(CURDIR)/debian/$(cdbs_curpkg)/usr/share/puppet-dashboard/vendor -name LICENSE -exec rm {} \;
+	find $(CURDIR)/debian/$(cdbs_curpkg)/usr/share/puppet-dashboard/vendor -name MIT-LICENSE -exec rm {} \;
+	find $(CURDIR)/debian/$(cdbs_curpkg)/usr/share/puppet-dashboard/vendor -type f -exec chmod a-x {} \;
+	find $(CURDIR)/debian/$(cdbs_curpkg)/usr/share/puppet-dashboard/app -type f -exec chmod a-x {} \;
+	find $(CURDIR)/debian/$(cdbs_curpkg)/usr/share/puppet-dashboard/spec -type f -exec chmod a-x {} \;
+	# Fixup shebang lines
+	bash $(CURDIR)/debian/rmshebang.sh \
+	    $(CURDIR)/debian/$(cdbs_curpkg)/usr/share/puppet-dashboard/lib \
+	    $(CURDIR)/debian/$(cdbs_curpkg)/usr/share/puppet-dashboard/app \
+	    $(CURDIR)/debian/$(cdbs_curpkg)/usr/share/puppet-dashboard/spec \
+	    $(CURDIR)/debian/$(cdbs_curpkg)/usr/share/puppet-dashboard/vendor
