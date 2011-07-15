@@ -1,3 +1,129 @@
+1.2rc1
+===
+d389d8b (#7568) Relicense to Apache-2.0 License
+82eeea7 (#7567) Refactor dashboard packaging to allow for nightly builds
+a58f3e0 (#6840) Remove need for VERSION file in puppet-dashboard
+d9a384f (#8316) Ruby sorting for ResourceEvents.
+57d0122 (#8276) Remove MaRuKu dependency
+9cf4f86 maint: README_PACKAGES had older GPG Key in it: updated.
+a44d9ff (#8262) Show node groups even when node classification is disabled
+3996b29 (#8262) Create callbacks for each section of node_classification partial
+8f7da94 Remove unused node_groups/_node_groups partial
+5dac13a (#8199) Move 'failed' resources to the top when viewing report events
+2a3a73c (#7967) Improved user-facing design for delayed job warnings
+c78b85a (#8266) Back-end logic for splitting read and unread DJ failures.
+15bba31 (#8121) Properly generate CSS from SASS in production.
+68c0236 Maint: Added $RAILSROOT/spool directory
+365a432 Maint: Removing reference to CentOS 5.5.
+518bbca Maint: Added rake task to generate srpm
+223822e Maint: Updated rpm spec file.
+a9abf41 (#8101) Updated to new version of Tipsy plugin
+9cb5e55 (Maint) More generalized tabbed interface
+07ae6f7 Updating to rename pupet-dashboard-workers
+491cf33 Updating spec.
+a428d15 Updating to version 1.1.9 for a 1.2. beta
+fbe11aa (#8196) Adjust content width based on body classes.
+e756c25 (#8196) Add a body class describing sidebar state.
+23cbef1 (#8196) Clean up body class manipulation.
+c55c326 (Maint) popup_md5 is a little more functional
+3670e2b (#8146) Change default DASHBOARD_URL in external_node to localhost
+102ab03 maint: Remove use of realpath
+741e3da maint: Check whether a directory exists before copying to it
+7728525 maint: Change puppet:plugin:stage to copy files
+ed8e765 Maint: Tell git to ignore plugin resources with underscores
+81ec3c0 (#8090) Update .gitignore to ignore plugin files
+d5f539d maint: add a hook at the tail of report display.
+576438b maint: report pages should display the sidebar.
+6f117fc (#8022) Don't fail when installing plugin without `public` directory
+07a9407 (#8022) Create a hook for plugins to add items to <head> in layout
+66e8d81 (#8022) Provide a rake task to symlink public assets from plugins into `public`.
+05524f0 Maint: small refactor of tab styles for portability
+64be352 (#7967) Add default value for read column of delayed_job_failures
+240c548 (#7967) Infrastructure for displaying background failures.
+36f233d maint: more robust migration code.
+612623a Aligning node category names in sidebar.
+8038cce (#7389) Don't auto-start DelayedJob workers.
+933ae04 (#7389) Cheaper unique filenames for spooled reports.
+b4384eb (#7398) Support externally managed DelayedJob workers.
+184e65b (#7689) Rake task to support parallel report POSTing.
+2333c08 (#5947) Rename Destroy button to Delete
+2fb0ac1 (#7976) Fixed static debug data in view
+393970d (#7976) Node filter links in sidebar work in all cases
+4ba3d23 (#7398) Configurable DelayedJob worker count.
+e839884 (#7938) Delayed import from file, not YAML string.
+d24c323 (#7973) Refactor colors for changed/unchanged
+58c2b52 (#7398) Use DelayedJob for background processing.
+6aefc60 (#7938) Add daemons gem to support DelayedJob
+7395369 (#7398) Vendor DelayedJob for background tasks.
+05040d9 (#7958) Allow plugins to add top level navigation
+eda53a9 Align node list headers when associated with a class or group
+8fb1c50 (#7597) Many small design changes for final integration
+491b52b maint: Default scope to "all" for resource status totals
+f5955cc maint: Remove db/seeds.rb so that db:reset task works
+c4d2f26 (#7597) Better integration of node summaries
+4ad9cbc (#7913) Upgrade rspec and rspec-rails vendored gems
+c09b650 (#7913) Fix tap deprecation warning
+d88da0e (#7913) Update README to say we only support Ruby 1.8.7
+acdc31f (#7913) upgrade will_paginate gem to avoid deprecation warnings
+e935b8d (#7913) vendor newer version of RDoc
+ce9be98 (#7913) Fix deprecation warning for config.load_paths
+dd8f277 (#7913) Upgrade vendored haml gem and vendor sass
+dd88d74 (#7913) vendor json_pure since it was an undocumented dependency
+789c1b7 (#7913) Upgrading from Rails 2.3.4 to 2.3.12
+060799f (#7597) Reformat node view CSV link
+3726771 (#7280) Edit outdated information about the inventory service
+a02113a (#7597) Change empty tab display, report tab ordering, link expansion
+b62bf4c (#7597) Add count to pagination link, fix duplicate tags
+9f06f58 (#7597) Display only relevant columns in node tables
+96bb99c (#7597) Add "help" link to node summary.
+233d1bb maint: fixing HTML validation errors
+95f870e (#6992) Add totals row for resource status counts to node view
+598f42a Ignoring RVM's local config.
+44a145c (#7544) Group report resources by status
+c2e2c63 (#7840) Increase consistency of status definitions and remove old code
+5640ea7 maint: Fix another place where we didn't check for nodes without reports
+492c574 maint: Fix migration to check for nil value
+dd5e610 (#7674) Add pending to the run status stacked bar graph
+a58d06d (#6992) Show a summary of nodes x resources on home page.
+9d71cd2 (#7630) Denormalize ResourceStatus status and count calculations
+a7e382f maint: Fix version number on the release notes
+6e03872 (#6528) Cleanup implementation of `::words`.
+2b53c29 (#6528) Remove hideous Array monkeypatch.
+c2de052 maint: Remove debugging puts from node summary row partial
+0312ea2 (#7007) Stream node CSV download
+87b3e91 (#7007) Add a link to the home page to download nodes in CSV
+1af5e86 (#7007) Add support for CSV to nodes index
+2829a8b (#7007) Add custom CSV output for nodes with resources
+11aa643 (#7007) Use a custom property list for ResourceStatus.to_csv
+fc0fe85 (#7007) Add support for CSV output
+d2184e4 (#7537) Use #titleize for report tab names.
+12b035d (#7537) Add reasonable defaults for report tab names.
+23726d0 maint: Add resource status scopes for pending/failed
+b230077 (#7560) Clean up the Dashboard index for 0 nodes.
+1220e22 maint: Make 'compliant node' factory's resource not failed
+b51c698 maint: Have different production and development databases in the example
+e0eb377 Updating package files for the v1.1.1 release.
+6fe8513 (#6991) Add the Node Status summary graph.
+8e70035 (#6991) Massage Node named scopes.
+57d6b6b (#6991) Cleanup of excessively long lines.
+db61b1b (#6537) Add a pending scope to nodes
+552c760 (#5126) Support HTTP basic auth in bin/external_node
+a85c681 (#6537) Add a pending scope to nodes
+cf1410a (#6988) rpm should include logrotate file
+0ff2373 (#7209) Require naming convention for plugin migration files
+8ff11be (#7161) Add a route to create node group memberships
+ec9e879 (#7161) Remove forgery protection
+6c700c1 (#4816) Add a Node#find_by_id_or_name helper
+d540cc6 (#6989) Improve messages for empty tabs.
+b36bfb6 (#6989) Squash bugs in IE{7,8}.
+16d6fad (#6989) Fix font rendering in Firefox.
+0f2723b (#6989) Add basic styling for tabs.
+31984aa (#6989) Remove a call to Registry.each_callback.
+4d2f9c7 (#6989) Remove ugly <Proc instance>#name hack.
+b8f5a04 (#6989) Refactor user-facing names.
+04153bc (#6989) Refactor Javascript into application.js
+cc43e61 (#6989) Add "tabs" for report sections.
+
 v1.1.1
 ======
 f1b2af4 (#7060) Use absolute paths for cert/private key
