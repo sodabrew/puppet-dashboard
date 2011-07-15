@@ -30,7 +30,6 @@ binary-install/puppet-dashboard::
 	rm -f $(CURDIR)/debian/$(cdbs_curpkg)/usr/share/puppet-dashboard/config/database.yml.example
 	rm -f $(CURDIR)/debian/$(cdbs_curpkg)/usr/share/puppet-dashboard/vendor/plugins/*/*LICENSE
 	rm -f $(CURDIR)/debian/$(cdbs_curpkg)/usr/share/puppet-dashboard/vendor/plugins/*/License.txt
-	rm -f $(CURDIR)/debian/$(cdbs_curpkg)/usr/share/puppet-dashboard/vendor/gems/*/COPYING
 	rm -f $(CURDIR)/debian/$(cdbs_curpkg)/usr/share/puppet-dashboard/vendor/gems/*/*LICENSE
 	rm -f $(CURDIR)/debian/$(cdbs_curpkg)/usr/share/puppet-dashboard/vendor/gems/*/License.txt
 	rm -f $(CURDIR)/debian/$(cdbs_curpkg)/usr/share/puppet-dashboard/vendor/rails/*/*LICENSE

@@ -10,12 +10,12 @@ Copyright:
 
     Copyright (C) 2009-2010  Puppet Labs
 
-License: GPL-2
+License: Apache-2.0
     On Debian systems, the complete text of the GNU General
-    Public License can be found in '/usr/share/common-licenses/GPL-2'.
+    Public License can be found in '/usr/share/common-licenses/Apache-2.0'.
 
-The Debian packaging is copyright 2010 James Turnbull <james@lovedthanlost.net>,
-and is licensed under the GPL-2, see `/usr/share/common-licenses/GPL-2'.
+The Debian packaging is copyright 2011 Michael Stahnke <stahnma@puppetlabs.com>,
+and is licensed under the Apache-2.0, see `/usr/share/common-licenses/Apache-2.0'.
 
 Files: vendor/plugins/inherited_resources
 Copyright: (c) 2009 Jose Valim

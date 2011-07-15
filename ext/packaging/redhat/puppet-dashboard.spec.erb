@@ -10,7 +10,7 @@ Release:        <%= release -%>%{?dist}
 Summary:        Systems Management web application
 Group:          Applications/System
 # Remember to verify this
-License:        GPLv2
+License:        ASL 2.0
 URL:            http://www.puppetlabs.com
 Source0:        http://yum.puppetlabs.com/sources/%{name}-%{realversion}.tar.gz
 BuildArch:      noarch
@@ -110,7 +110,7 @@ fi
 
 %files
 %defattr(-,root,root,)
-%doc CHANGELOG COPYING README.markdown README_PACKAGES.markdown RELEASE_NOTES.md
+%doc CHANGELOG LICENSE README.markdown README_PACKAGES.markdown RELEASE_NOTES.md
 %attr(-,puppet-dashboard,puppet-dashboard) %config(noreplace) %{_datadir}/%{name}/config/*
 %{initrddir}/puppet-dashboard
 %{initrddir}/puppet-dashboard-workers
