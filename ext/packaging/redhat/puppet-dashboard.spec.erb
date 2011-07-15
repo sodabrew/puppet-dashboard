@@ -1,15 +1,18 @@
 %global confdir ext/packaging/redhat
 %global initrddir /etc/rc.d/init.d
+# VERSION is subbed out during rake srpm process
+%global realversion <%= version %>
+%define rpmversion %(echo    %{realversion} | sed -e 's/-/_/g')
 
 Name:           puppet-dashboard
-Version:        1.1.9
-Release:        2%{?dist}
+Version:        %{rpmversion}
+Release:        <%= release -%>%{?dist}
 Summary:        Systems Management web application
 Group:          Applications/System
 # Remember to verify this
 License:        GPLv2
 URL:            http://www.puppetlabs.com
-Source0:        http://yum.puppetlabs.com/sources/%{name}-%{version}.tar.gz
+Source0:        http://yum.puppetlabs.com/sources/%{name}-%{realversion}.tar.gz
 BuildArch:      noarch
 Requires:       ruby(abi) = 1.8, rubygems, ruby-mysql
 Requires:       ruby > 1.8.7, rubygem(rake)
@@ -33,7 +36,7 @@ getent passwd puppet-dashboard > /dev/null || \
 exit 0
 
 %prep
-%setup -q
+%setup -q -n %{name}-%{realversion}
 
 %build
 
@@ -69,12 +72,12 @@ rm timestamp
 
 # Put logs in /var/log and symlink in /usr/share (FHS work)
 #mkdir -p $RPM_BUILD_ROOT/var/log/%{name}
-#if $(stat $RPM_BUILD_ROOT/%{_datadir}/%{name}/log/*) ; then 
+#if $(stat $RPM_BUILD_ROOT/%{_datadir}/%{name}/log/*) ; then
 #  rsync -avx $RPM_BUILD_ROOT/%{_datadir}/%{name}/log/* $RPM_BUILD_ROOT/var/log/%{name}
-#fi 
+#fi
 #rm -rf $RPM_BUILD_ROOT/%{_datadir}/%{name}/log
 #ls -l $RPM_BUILD_ROOT/%{_datadir}/%{name}
-#cd $RPM_BUILD_ROOT/var/log    
+#cd $RPM_BUILD_ROOT/var/log
 #ln -sf %{name} ../..%{_datadir}/%{name}/log
 
 
@@ -132,9 +135,12 @@ fi
 #%attr(-,puppet-dashboard,puppet-dashboard) %dir /var/log/%{name}
 
 %changelog
+* <%= spec_date %>  Michael Stahnke <stahnma@puppetlabs.com> -  <%= rpmversion %>-<%= release %>
+- Build for <%= version %>
+
 * Mon Jul 04 2011 Michael Stahnke <stahnma@puppetlabs.com> - 1.1.9-2
 - Updating spec to fix some rpmlint issues
-- Began work on FHS issues, but haven't completed (commented out)
+- Began work on FHS issues, but have not completed (commented out)
 - Adding a spool directory
 
 * Thu Jun 30 2011 Michael Stahnke <stahnma@puppetlabs.com> - 1.1.9-1
@@ -184,4 +190,3 @@ fi
 
 * Thu Mar 26 2010 James Turnbull <james@lovedthanlost.net> - 1.0.0-1
 - Initial release.
-
