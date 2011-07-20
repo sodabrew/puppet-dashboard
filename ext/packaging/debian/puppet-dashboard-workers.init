@@ -1,0 +1,134 @@
+#!/bin/sh
+### BEGIN INIT INFO
+# Provides:          puppet-dashboard-workers
+# Required-Start:    $local_fs $remote_fs $network $syslog
+# Required-Stop:     $local_fs $remote_fs $network $syslog
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# X-Interactive:     true
+# Short-Description: Start/stop puppet-dashboard-workers delayed_job helpers
+### END INIT INFO
+#
+# puppet-dashboard-workers   This init.d script is used to start puppet-dashboard-workers.
+
+name=puppet-dashboard-workers
+ENV="env -i LANG=C PATH=/usr/local/bin:/usr/bin:/bin"
+
+set -e
+
+. /lib/lsb/init-functions
+
+test -f /etc/default/rcS && . /etc/default/rcS
+test -f /etc/default/${name} && . /etc/default/${name}
+
+# Set defaults in case they're not in the above defaults file:
+DASHBOARD_HOME=${DASHBOARD_HOME:-/usr/share/puppet-dashboard}
+DASHBOARD_USER=${DASHBOARD_USER:-www-data}
+DASHBOARD_RUBY=${DASHBOARD_RUBY:-/usr/bin/ruby}
+DASHBOARD_ENVIRONMENT=${DASHBOARD_ENVIRONMENT:-production}
+DASHBOARD_IFACE=${DASHBOARD_IFACE:-0.0.0.0}
+DASHBOARD_PORT=${DASHBOARD_PORT:-3000}
+
+check_dashboard_enabled_option() {
+    if [ ! "$START" = "yes" ]; then
+        log_warning_msg "Not starting Puppet Dashboard Workers, disabled via /etc/default/${name}"
+        return 1
+    else
+        return 0
+    fi
+}
+
+check_puppet_dashboard_worker_status() {
+    RETVAL=1
+    for pidfile in $(ls -1 "${DASHBOARD_HOME}"/tmp/pids/*.pid 2>/dev/null)
+    do
+      status_of_proc -p $pidfile ${DASHBOARD_RUBY} "Puppet Dashboard Worker (pid $(cat $pidfile))"  ||  return $?
+      RETVAL=$?
+    done
+    if [ "$RETVAL" -eq "1" ] ; then
+      log_daemon_msg "${name} is not running."
+    fi
+    return $RETVAL
+}
+
+stop_puppet_dashboard_workers() {
+    RETVAL=0
+    for pidfile in $(ls -1 "${DASHBOARD_HOME}"/tmp/pids/*.pid 2>/dev/null)
+    do
+      start-stop-daemon --stop --quiet --oknodo --pidfile $pidfile --retry 10
+      ((RETVAL=RETVAL+$?))
+    done
+    return $RETVAL
+}
+
+start_puppet_dashboard_workers() {
+    start-stop-daemon  --start --quiet --oknodo --user ${DASHBOARD_USER} --chuid ${DASHBOARD_USER}  --exec /bin/bash -- -e -c "
+                export PATH='${PATH}';
+                export RUBYLIB='${RUBYLIB:-}';
+                export RAILS_ENV=production;
+                ${DASHBOARD_HOME}/script/delayed_job -p dashboard -n ${NUM_DELAYED_JOB_WORKERS:-2} -m start;"
+    check_puppet_dashboard_worker_status
+}
+
+case $1 in
+    start)
+        log_daemon_msg "Starting Puppet Dashboard Workers"
+        if ! check_dashboard_enabled_option; then
+            log_end_msg 0
+            exit
+        fi
+        if start_puppet_dashboard_workers; then
+            log_end_msg 0
+        else
+            log_end_msg 1
+        fi
+    ;;
+    stop)
+        log_daemon_msg "Stopping Puppet Dashboard Workers"
+        if stop_puppet_dashboard_workers ; then
+            log_end_msg 0
+        else
+            log_end_msg 1
+        fi
+    ;;
+    restart)
+        log_daemon_msg "Restarting Puppet Dashboard Workers"
+        set +e
+        stop_puppet_dashboard_workers
+        RET="$?"
+        set -e
+        case ${RET} in
+            0)
+                # Old server stopped
+                if ! check_dashboard_enabled_option; then
+                    log_end_msg 0
+                    exit
+                fi
+                if start_puppet_dashboard_workers; then
+                    log_end_msg 0
+                else
+                    log_end_msg 1
+                fi
+                ;;
+            1)
+                # Server not running
+                log_progress_msg "(not running)"
+                log_end_msg 0
+                ;;
+            *)
+                # Failed to stop
+                log_progress_msg "(failed to stop)"
+                log_end_msg 1
+                ;;
+        esac
+    ;;
+    status)
+        check_puppet_dashboard_worker_status && exit 0 || exit $?
+    ;;
+    *)
+        log_action_msg "Usage: /etc/init.d/${name} {start|stop|restart|status}"
+        exit 1
+    ;;
+esac
+
+exit 0

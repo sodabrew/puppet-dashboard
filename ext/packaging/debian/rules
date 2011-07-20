@@ -10,6 +10,7 @@ binary-install/puppet-dashboard::
 	mkdir -p $(CURDIR)/debian/$(cdbs_curpkg)/usr/share/puppet-dashboard
 	mkdir -p $(CURDIR)/debian/$(cdbs_curpkg)/var/$(cdbs_curpkg)/tmp
 	mkdir -p $(CURDIR)/debian/$(cdbs_curpkg)/var/log/puppet-dashboard
+	dh_installinit --name=puppet-dashboard-workers
 	cp -r app \
 	    bin \
 	    config \
