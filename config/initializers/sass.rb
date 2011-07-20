@@ -1,5 +1,3 @@
-p "** Ensuring that Sass will regenerate"
-
 # Sass fails to regenerate in production mode at an appropriate time, which
 # yields a server error (500), followed by some unstyled content.  Unsetting
 # this constant in an initializer prompts Sass to ensure that the stylesheets
