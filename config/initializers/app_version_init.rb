@@ -10,7 +10,7 @@ def get_app_version
   if File.exists?(Rails.root.join('VERSION'))
     return File.read(Rails.root.join('VERSION')).strip
   elsif File.directory?(Rails.root.join('.git'))
-    return `cd #{Rails.root}; git describe`.strip! rescue 'unknown'
+    return `cd '#{Rails.root}'; git describe`.strip! rescue 'unknown'
   end
 
   'unknown'
