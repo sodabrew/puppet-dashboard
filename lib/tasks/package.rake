@@ -5,7 +5,7 @@ def get_version
 end
 
 def get_temp
-  `mktemp -d`.strip
+  `mktemp -d -t tmpXXXXXX`.strip
 end
 
 def get_name
@@ -27,7 +27,7 @@ def update_redhat_spec_file(base)
   template = IO.read(erbfile)
   message = ERB.new(template, 0, "-")
   output = message.result(binding)
-  holder = `mktemp`.strip!
+  holder = `mktemp -t tmpXXXXXX`.strip!
   File.open(holder, 'w') {|f| f.write(output) }
   mv holder , specfile
   rm_f erbfile
@@ -43,7 +43,7 @@ def update_debian_changelog(base)
   template = IO.read(erbfile)
   message = ERB.new(template, 0, "-")
   output = message.result(binding)
-  holder = `mktemp`.strip!
+  holder = `mktemp -t tmpXXXXXX`.strip!
   sh "echo -n \"#{output}\" | cat - #{deb_changelog}  > #{holder}"
   mv holder, deb_changelog
   rm_f erbfile
@@ -52,7 +52,7 @@ end
 def prep_rpm_builds
   name=get_name
   version=get_version
-  temp=`mktemp -d`.strip!
+  temp=`mktemp -d -t tmpXXXXXX`.strip!
   raise "No /usr/bin/rpmbuild found!" unless File.exists? '/usr/bin/rpmbuild'
   dirs = [ 'BUILD', 'SPECS', 'SOURCES', 'RPMS', 'SRPMS' ]
   dirs.each do |d|
@@ -72,7 +72,7 @@ namespace :package do
     name = get_name
     version = get_version
     dt = Time.now.strftime("%a, %d %b %Y %H:%M:%S %z")
-    temp=`mktemp -d`.strip!
+    temp=`mktemp -d -t tmpXXXXXX`.strip!
     base="#{temp}/#{name}-#{version}"
     sh "cp pkg/tar/#{name}-#{version}.tar.gz #{temp}"
     cd temp do
@@ -143,7 +143,7 @@ namespace :package do
   task :tar => :build_environment do
     name = get_name
     rm_rf 'pkg/tar'
-    temp=`mktemp -d`.strip!
+    temp=`mktemp -d -t tmpXXXXXX`.strip!
     version = `git describe`.strip!
     base = "#{temp}/#{name}-#{version}/"
     mkdir_p base

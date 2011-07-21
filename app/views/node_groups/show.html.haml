@@ -40,10 +40,10 @@
     - if @node_group.all_nodes.present?
       .section
         = render 'statuses/run_failure', :nodes => @node_group.all_nodes
+  .header
+    %h2 Nodes for this group
   .item
     .section
-      .header
-        %h2 Nodes for this group
       - Registry.each_callback :core, :node_group_view_widgets do |thing|
         = thing.call self, @node_group
       - if @node_group.all_nodes.present?
