@@ -5,4 +5,7 @@ Time::DATE_FORMATS.update(
   :date => lambda{|time| time.in_time_zone.strftime(SETTINGS.date_format) },
   :time => lambda{|time| time.in_time_zone.strftime('%I:%M%p') }
 )
+Date::DATE_FORMATS.update(
+  :default => SETTINGS.date_format
+)
 

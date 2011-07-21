@@ -64,7 +64,7 @@ use_external_node_classification: true
 
 # Look at http://ruby-doc.org/core/classes/Time.html#M000298 for the strftime formatting
 datetime_format: '%Y-%m-%d %H:%M %Z'
-date_format: '%Y-%m-%d'
+date_format: '%A, %B %e, %Y'
 
 # Set this to the URL of an image. The image will be scaled to 155x23 pixels.
 #custom_logo_url: 'http://www.puppetlabs.com/images/puppet-short.png'
