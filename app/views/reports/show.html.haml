@@ -1,4 +1,4 @@
 #sidebar= render 'shared/node_manager_sidebar'
 #main
-  .item
+  .item{ :class => @report ? @report.kind + '-report' : '' }
     = render 'report', :report => @report
