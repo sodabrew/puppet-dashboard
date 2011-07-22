@@ -142,9 +142,14 @@ table td.empty {
 .expandable-list .expandable-link:before {
   content: url('../../images/icons/bullet_toggle_minus.png');
 }
+
 .expandable-list .non-expandable-bullet:before {
   content: url('../../images/icons/bullet_green.png');
 }
+.inspect-report .expandable-list .non-expandable-bullet:before {
+  content: url('../../images/icons/bullet_red.png');
+}
+
 .expandable-list .expandable-link, .expandable-list .non-expandable-bullet {
   vertical-align: bottom;
 }
