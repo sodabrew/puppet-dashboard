@@ -7,7 +7,7 @@
       %dl.expandable-list
         - statuses.each do |status, resources|
           %h3 #{status.titleize} (#{resources.count})
-          - resources.sort_by(&:time).each do |status|
+          - resources.each do |status|
             - index += 1
             %dt{:class => cycle( 'odd', 'even' )}
               - if status.events.empty?

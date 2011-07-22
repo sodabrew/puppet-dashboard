@@ -37,9 +37,9 @@ end
 
 # Report view widgets
 Registry.add_callback :core, :report_view_widgets, "800_resource_statuses" do |view_renderer, report|
-  statuses = report.resource_statuses.group_by(&:status).sort
-  if failed = statuses.index {|s,rs| s == 'failed'} then statuses.unshift(statuses.delete_at(failed)) end
-  view_renderer.render 'reports/resource_statuses', :report => report, :statuses => statuses
+  statuses = report.resource_statuses.all(:order => 'resource_type, title').group_by(&:status)
+  statuses = %w[failed pending changed unchanged].map { |k| (v = statuses[k]) && [k, v] }
+  view_renderer.render 'reports/resource_statuses', :report => report, :statuses => statuses.compact
 end
 
 Registry.add_callback :core, :report_view_widgets, "700_log" do |view_renderer, report|
