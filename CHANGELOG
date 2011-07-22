@@ -1,3 +1,13 @@
+1.2rc2
+===
+d036276 (#8505) Update the default date stringification.
+bb99ed9 Properly Quote RAILS_ROOT in get_app_version method
+08717e1 (#8508) Add delayed job worker script for debian/ubuntu package
+2eef4f4 (#8529) Remove unneeded a print statement from sass.rb
+af8b6e9 (#8500) Replace README with a smaller one
+dff2256 (#8499) Update the usage of mktemp in Rakefile to work on mac
+3f0afca (#8484) "Nodes for this group" heading now appears correctly
+
 1.2rc1
 ===
 d389d8b (#7568) Relicense to Apache-2.0 License
