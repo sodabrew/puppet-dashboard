@@ -1,5 +1,7 @@
-1.2rc2
+1.2rc3
 ===
+88771ec (#8589) Report events are now ordered by name.
+8bd0ffb (#8544) Make empty inspected resources "red".
 d036276 (#8505) Update the default date stringification.
 bb99ed9 Properly Quote RAILS_ROOT in get_app_version method
 08717e1 (#8508) Add delayed job worker script for debian/ubuntu package
