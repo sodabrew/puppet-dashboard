@@ -39,7 +39,7 @@ describe Report do
       Report.create_from_yaml(@report_yaml)
       lambda {
         Report.create_from_yaml(@report_yaml)
-      }.should raise_error(ActiveRecord::RecordInvalid)
+      }.should raise_error(ActiveRecord::RecordInvalid, 'Validation failed: Host already has a report for time and kind')
       Report.count.should == 1
     end
 
