@@ -84,8 +84,12 @@ class Report < ActiveRecord::Base
     File.unlink(report_file) if options[:delete]
     return report
   rescue Exception => e
-    DelayedJobFailure.create!(:summary => "Importing report #{File.basename(report_file)}",
-                              :details => e.to_s)
+    retries ||= 3
+    retry if (retries -= 1) > 0
+    DelayedJobFailure.create!(
+      :summary => "Importing report #{File.basename(report_file)}",
+      :details => e.to_s
+    )
     return nil
   end
 

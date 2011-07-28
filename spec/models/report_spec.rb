@@ -397,6 +397,60 @@ describe Report do
     end
   end
 
+  describe "#create_from_yaml_file" do
+    describe "when create_from_yaml is successful" do
+      before do
+        File.expects(:read).with('/tmp/foo').returns(@report_yaml)
+        Report.expects(:create_from_yaml).returns('i can haz report')
+      end
+
+      it "should call create_from_yaml on the file passed in and return the results" do
+        Report.create_from_yaml_file('/tmp/foo').should == "i can haz report"
+      end
+
+      it "should delete the file if delete option is specified" do
+        File.expects(:unlink).with('/tmp/foo')
+        Report.create_from_yaml_file('/tmp/foo', :delete => true)
+      end
+    end
+
+
+    describe "when create_from_yaml fails" do
+      before do
+        File.expects(:read).at_least_once.with('/tmp/foo').returns(@report_yaml)
+      end
+
+      it "not unlink the file if create_from_yaml fails" do
+        File.expects(:unlink).with('/tmp/foo').never
+        Report.expects(:create_from_yaml).raises(ActiveRecord::StatementInvalid)
+        Report.create_from_yaml_file('/tmp/foo', :delete => true)
+      end
+
+      it "should retry 3 times in the case of a failure" do
+        Report.expects(:create_from_yaml).times(3).
+          raises(ActiveRecord::StatementInvalid).then.
+          raises(ActiveRecord::StatementInvalid).then.
+          returns("FINALLY!")
+
+        Report.create_from_yaml_file('/tmp/foo').should == "FINALLY!"
+      end
+
+      it "should create a DelayedJobFailure after 3 failures and return nil" do
+        Report.expects(:create_from_yaml).times(3).
+          raises(ActiveRecord::StatementInvalid).then.
+          raises(ActiveRecord::StatementInvalid).then.
+          raises(ActiveRecord::StatementInvalid).then.
+          returns("Sir not appearing in this expectation")
+
+        Report.create_from_yaml_file('/tmp/foo').should == nil
+
+        DelayedJobFailure.count.should == 1
+        DelayedJobFailure.first.summary.should == 'Importing report foo'
+        DelayedJobFailure.first.details.should == 'ActiveRecord::StatementInvalid'
+      end
+    end
+  end
+
 
   describe "When destroying" do
     it "should destroy all dependent model objects" do
