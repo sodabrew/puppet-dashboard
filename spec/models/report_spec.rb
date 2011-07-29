@@ -447,6 +447,7 @@ describe Report do
         DelayedJobFailure.count.should == 1
         DelayedJobFailure.first.summary.should == 'Importing report foo'
         DelayedJobFailure.first.details.should == 'ActiveRecord::StatementInvalid'
+        DelayedJobFailure.first.backtrace.any? {|trace| trace =~ /report\.rb:\d+:in.*create_from_yaml_file/}.should be_true
       end
     end
   end

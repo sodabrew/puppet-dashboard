@@ -90,8 +90,9 @@ class Report < ActiveRecord::Base
     retries ||= 3
     retry if (retries -= 1) > 0
     DelayedJobFailure.create!(
-      :summary => "Importing report #{File.basename(report_file)}",
-      :details => e.to_s
+      :summary   => "Importing report #{File.basename(report_file)}",
+      :details   => e.to_s,
+      :backtrace => e.application_backtrace
     )
     return nil
   end
