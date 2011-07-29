@@ -36,8 +36,8 @@
                 %td= link_to_if report.node, h(report.host), node_path(report.node)
               %td= report.total_resources
               %td= report.failed_resources
-              %td= report.unchanged_resources
               %td= report.changed_resources
+              %td= report.unchanged_resources
               %td= report.skipped_resources
               %td= report.failed_restarts
               %td #{report.config_retrieval_time} s
