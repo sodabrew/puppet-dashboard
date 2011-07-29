@@ -1,3 +1,9 @@
+1.2rc4
+===
+e45338a (#8691) Fix the order of changed and unchanged resources on the report summary
+7653800 Provide clearer error message when report host, kind and time are not unique
+e86526f (#8686) Handle concurrent DelayedJob workers importing for same node
+
 1.2rc3
 ===
 88771ec (#8589) Report events are now ordered by name.
