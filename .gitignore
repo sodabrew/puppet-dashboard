@@ -33,7 +33,6 @@ spec/rcov.opts
 spec/spec.opts
 spec/watchr.rb
 tags
-tmp/*
 results/*
 certs
 vendor/plugins/puppet_*
