@@ -92,18 +92,23 @@ module Daemons
     
     def pid=(p)
       File.open(filename, 'w') {|f|
+        f.chmod(0644)
         f.puts p   #Process.pid
       }
     end
 
     def cleanup
-      File.delete(filename)
+      File.delete(filename) if pid == Process.pid
     end
 
     def pid
-      File.open(filename) {|f|
-        return f.gets.to_i
-      }
+      begin
+        File.open(filename) {|f|
+          return f.gets.to_i
+        }
+      rescue ::Exception
+        return nil
+      end
     end
 
   end

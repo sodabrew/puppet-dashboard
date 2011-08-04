@@ -1,3 +1,12 @@
+1.2rc5
+===
+3f88c7f (#8748) Fix my forgetting to add a vendored gem
+2f636a9 Allow setting of RUBY for the workers on redhat systems
+651511c (#8748) Upgrade vendored daemons gem to fix umask on pids
+3a65fd0 (#8694) Add backtrace info to DelayedJobFailure
+bf22939 Add document outlining preferred contribution methods
+803be4f (#8745) Update gitignore to not exlucde tmp during tarball creation
+
 1.2rc4
 ===
 e45338a (#8691) Fix the order of changed and unchanged resources on the report summary

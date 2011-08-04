@@ -116,7 +116,6 @@ module Daemonize
     # NOTE: STDOUT and STDERR will not be redirected to the logfile, because in :ontop mode, we normally want to see the output
     
     Dir.chdir "/"   # Release old working directory
-    File.umask 0000 # Insure sensible umask
 
     # Make sure all file descriptors are closed
     ObjectSpace.each_object(IO) do |io|
@@ -173,7 +172,6 @@ module Daemonize
       $0 = app_name if app_name
       
       Dir.chdir "/"   # Release old working directory
-      File.umask 0000 # Insure sensible umask
   
       # Make sure all file descriptors are closed
       ObjectSpace.each_object(IO) do |io|
@@ -186,6 +184,13 @@ module Daemonize
           end
         end
       end
+      
+      ios = Array.new(8192){|i| IO.for_fd(i) rescue nil}.compact
+      ios.each do |io|
+        next if io.fileno < 3
+        io.close
+      end
+
   
       redirect_io(logfile_name)  
     
@@ -216,7 +221,6 @@ module Daemonize
     $0 = app_name if app_name
     
     Dir.chdir "/"   # Release old working directory
-    File.umask 0000 # Insure sensible umask
 
     # Make sure all file descriptors are closed
     ObjectSpace.each_object(IO) do |io|
@@ -247,6 +251,7 @@ module Daemonize
     if logfile_name
       begin
         STDOUT.reopen logfile_name, "a" 
+        File.chmod(0644, logfile_name)
         STDOUT.sync = true
       rescue ::Exception
         begin; STDOUT.reopen "/dev/null"; rescue ::Exception; end

@@ -1,26 +1,70 @@
 = Daemons Release History
 
-== Release 1.0.10: November 16, 2007
+== Release 1.1.4: June 17, 2011
+
+* Do not change the umask to 0000 when daemonizing anymore, just leave it as it 
+  was (thanks to Jon Botelho).
+
+== Release 1.1.3: April 14, 2011
+
+* Fixed a bug in Application.stop: the cached pid number needs to
+  be used to check for the status of a killed process (thanks to Jimmy Sieben).
+  
+== Release 1.1.2: March 29, 2011
+
+* Fixed gemspec to include all needed files.
+  
+== Release 1.1.1: March 29, 2011
+
+* Make the logging facilities work in :mode => :none (i.e. when calling 
+  Daemons.daemonize) (thanks to the input from Peter Hegedus).
+  
+== Release 1.1.0: June 20, 2010
+
+* Honour the options[:app_name] in Daemons.daemonize (thanks to Ryan Tecco).
+* Included a new option :stop_proc to specify a proc that will be called when a 
+  daemonized process receives a request to stop (thanks to Dave Dupre).
+* Only delete the pidfile if the current pid is the original pid (ghazel).
+* Start when restart but no application running (pcreux).
+* Silently continue if there is no pidfile (ghazel).
+* We now per default wait for processes to stop and
+  kill them automatically it if they do not stop within a given time 
+  (force_kill_waittime). Use the option --no_wait to not wait for processes to 
+  stop.
+* Set log files mode to 0644 (mikehale).
+* Set pid file permissions to 0644 (mikehale).
+* Added ability to change process uid/gid (mikehale).
+* Fix for: If you happen to start a daemon from a process that has open file 
+  descriptors these will stay open. As it is daemonize.rb only closes ruby IO 
+  objects (thanks to Han Holl).
+* New reload command (SIGHUP) (thanks to Michael Schuerig).
+
+== Release 1.0.10: March 21, 2008
 
 * By default, we now delete stray pid-files (i.e. pid-files which result for 
-  example from a killed daemon) automatically. This function can be deactivated by
-  passing :keep_pid_files => true as an option.
-* All pid files of :multiple daemons new get deleted correctly upon exit of the daemons (reported by Han Holl).
+  example from a killed daemon) automatically. This function can be deactivated 
+  by passing :keep_pid_files => true as an option.
+* All pid files of :multiple daemons new get deleted correctly upon exit of the 
+  daemons (reported by Han Holl).
 * Use the signal 'KILL' instead of 'TERM' on Windows platforms.
-* Use exit! in trap('TERM') instead of exit when option :hard_exit is given (thanks to Han Holl).
+* Use exit! in trap('TERM') instead of exit when option :hard_exit is given 
+  (thanks to Han Holl).
 * Did some clarification on the exception log.
 
 == Release 1.0.9: October 29, 2007
 
-* fixed a severe bug in the new Pid.running? function: function returned true if the process did not exist (thanks to Jeremy Lawler).
+* fixed a severe bug in the new Pid.running? function: function returned true if
+  the process did not exist (thanks to Jeremy Lawler).
 
 == Release 1.0.8: September 24, 2007
 
-* new Pid.running? function. Checking whether a process exists by sending signal '0' (thanks to Dru Nelson).
+* new Pid.running? function. Checking whether a process exists by sending 
+  signal '0' (thanks to Dru Nelson).
 
 == Release 1.0.7: July 7, 2007
 
-* Patch to fix wrong ARGV when using :exec (in def start_exec: Kernel.exec(script(), *(@app_argv || []))) (thanks to Alex McGuire).
+* Patch to fix wrong ARGV when using :exec (in def start_exec: 
+  Kernel.exec(script(), *(@app_argv || []))) (thanks to Alex McGuire).
 
 == Release 1.0.6: Mai 8, 2007
 
@@ -37,7 +81,8 @@
 
 * Document the :log_output option (thanks to Andrew Kuklewicz).
 * Set STDOUT.sync = true when redirecting to a logfile (thanks to Andrew Kuklewicz).
-* Should now run also correctly when there is no working 'ps ax' on the system (thanks to Daniel Kehoe).
+* Should now run also correctly when there is no working 'ps ax' on the system 
+  (thanks to Daniel Kehoe).
 
 == Release 1.0.3: November 1, 2006
 

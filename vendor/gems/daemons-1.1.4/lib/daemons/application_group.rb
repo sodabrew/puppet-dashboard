@@ -42,6 +42,7 @@ module Daemons
       @dir = options[:dir] || ''
       
       @keep_pid_files = options[:keep_pid_files] || false
+      @no_pidfiles = options[:no_pidfiles] || false
       
       #@applications = find_applications(pidfile_dir())
       @applications = []
@@ -60,6 +61,41 @@ module Daemons
     end  
     
     def find_applications(dir)
+      if @no_pidfiles
+        return find_applications_by_app_name(app_name)
+      else
+        return find_applications_by_pidfiles(dir)
+      end
+    end
+    
+    # TODO: identifiy the monitor process
+    def find_applications_by_app_name(app_name)
+      pids = []
+      
+      begin
+      x = `ps auxw | grep -v grep | awk '{print $2, $11, $12}' | grep #{app_name}`
+      if x && x.chomp!
+        processes = x.split(/\n/).compact
+        processes = processes.delete_if do |p|
+          pid, name, add = p.split(/\s/)
+          # We want to make sure that the first part of the process name matches
+          # so that app_name matches app_name_22
+          
+          app_name != name[0..(app_name.length - 1)] and not add.include?(app_name)
+        end
+        pids = processes.map {|p| p.split(/\s/)[0].to_i}
+      end
+      rescue ::Exception
+      end
+      
+      return pids.map {|f|
+        app = Application.new(self, {}, PidMem.existing(f))
+        setup_app(app)
+        app
+      }
+    end
+    
+    def find_applications_by_pidfiles(dir)
       pid_files = PidFile.find_files(dir, app_name, ! @keep_pid_files)
       
       #pp pid_files
@@ -125,18 +161,24 @@ module Daemons
       }
     end
     
-    def stop_all(force = false)
+    def stop_all(no_wait = false)
       @monitor.stop if @monitor
       
+      threads = []
+      
       @applications.each {|a| 
-        if force
-          begin; a.stop; rescue ::Exception; end
-        else
-          a.stop
+        threads << Thread.new do
+          a.stop(no_wait)
         end
       }
+      
+      threads.each {|t| t.join}
     end
     
+    def reload_all
+      @applications.each {|a| a.reload}
+    end
+
     def zap_all
       @monitor.stop if @monitor
       
