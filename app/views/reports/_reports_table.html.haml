@@ -15,6 +15,15 @@
       %th Failed restarts
       %th Config retrieval
       %th Runtime
+  %tfoot
+    - if reports.present?
+      - if defined? tfoot and tfoot
+        = render tfoot, :reports => reports, :node => node
+      - else
+        - if reports.total_pages > 1
+          %tr
+            %td{:colspan => node ? 13 : 12}
+              = pagination_for(reports)
   %tbody
     - if reports.present?
       - for report in reports
@@ -32,14 +41,6 @@
           %td= report.failed_restarts.to_i
           %td #{report.config_retrieval_time} s
           %td #{report.total_time} s
-      - if defined? tfoot and tfoot
-        = render tfoot, :reports => reports, :node => node
-      - else
-        - if reports.total_pages > 1
-          %tfoot
-            %tr
-              %td{:colspan => node ? 13 : 12}
-                = pagination_for(reports)
     - else
       %td.empty{:colspan => node ? 13 : 12}
         = describe_no_matches_for :reports
