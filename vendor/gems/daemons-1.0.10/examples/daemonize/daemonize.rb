@@ -11,16 +11,9 @@ end
 require 'daemons'
 
 
-options = {
-  :log_output => true
-}
+testfile = File.expand_path(__FILE__) + '.log'
 
-
-testfile = File.expand_path(__FILE__) + '.txt'
-
-Daemons.daemonize(options)
-
-puts "some output..."
+Daemons.daemonize
 
 File.open(testfile, 'w') {|f|
   f.write("test")
