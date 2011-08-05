@@ -1,0 +1,45 @@
+%table.inspector
+  %thead
+    %tr
+      %th.status
+        &nbsp;
+      %th Reported at &darr;
+      - unless node
+        %th Host
+      %th Total
+      %th Failed
+      %th Changed
+      %th Unchanged
+      %th Pending
+      %th Skipped
+      %th Failed restarts
+      %th Config retrieval
+      %th Runtime
+  %tbody
+    - if reports.present?
+      - for report in reports
+        %tr.nowrap[report]
+          = report_status_td(report)
+          %td= link_to report.time, report
+          - unless node
+            %td= link_to_if report.node, h(report.host), node_path(report.node)
+          %td= report.total_resources.to_i
+          %td= report.failed_resources.to_i
+          %td= report.changed_resources.to_i
+          %td= report.unchanged_resources.to_i
+          %td= report.pending_resources.to_i
+          %td= report.skipped_resources.to_i
+          %td= report.failed_restarts.to_i
+          %td #{report.config_retrieval_time} s
+          %td #{report.total_time} s
+      - if defined? tfoot and tfoot
+        = render tfoot, :reports => reports, :node => node
+      - else
+        - if reports.total_pages > 1
+          %tfoot
+            %tr
+              %td{:colspan => node ? 13 : 12}
+                = pagination_for(reports)
+    - else
+      %td.empty{:colspan => node ? 13 : 12}
+        = describe_no_matches_for :reports
