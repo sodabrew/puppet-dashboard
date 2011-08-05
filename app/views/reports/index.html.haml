@@ -34,19 +34,20 @@
               %td= link_to report.time, report
               - unless @node
                 %td= link_to_if report.node, h(report.host), node_path(report.node)
-              %td= report.total_resources
-              %td= report.failed_resources
-              %td= report.changed_resources
-              %td= report.unchanged_resources
-              %td= report.skipped_resources
-              %td= report.failed_restarts
+              %td= report.total_resources.to_i
+              %td= report.failed_resources.to_i
+              %td= report.changed_resources.to_i
+              %td= report.unchanged_resources.to_i
+              %td= report.pending_resources.to_i
+              %td= report.skipped_resources.to_i
+              %td= report.failed_restarts.to_i
               %td #{report.config_retrieval_time} s
               %td #{report.total_time} s
           - if @reports.total_pages > 1
             %tfoot
               %tr
-                %td{:colspan => @node ? 10 : 9}
+                %td{:colspan => @node ? 13 : 12}
                   = pagination_for(@reports)
         - else
-          %td.empty{:colspan => @node ? 10 : 9}
+          %td.empty{:colspan => @node ? 13 : 12}
             = describe_no_matches_for :@reports
