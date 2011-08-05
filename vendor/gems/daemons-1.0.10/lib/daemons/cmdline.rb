@@ -10,8 +10,10 @@ module Daemons
       @options = {}
       
       @opts = OptionParser.new do |opts|
+        #opts.banner = "Usage: example.rb [options]"
         opts.banner = ""
         
+        # Boolean switch.
 #         opts.on("-v", "--[no-]verbose", "Run verbosely") do |v|
 #           @options[:verbose] = v
 #         end
@@ -24,10 +26,6 @@ module Daemons
           @options[:force] = t
         end
         
-        opts.on("-n", "--no_wait", "Do not wait for processes to stop") do |t|
-          @options[:no_wait] = t
-        end
-        
         #opts.separator ""
         #opts.separator "Specific options:"
 
@@ -35,7 +33,8 @@ module Daemons
         opts.separator ""
         opts.separator "Common options:"
 
-        # No argument, shows at tail.  This will print an options summary
+        # No argument, shows at tail.  This will print an options summary.
+        # Try it and see!
         opts.on_tail("-h", "--help", "Show this message") do
           #puts opts
           #@usage = 
@@ -44,7 +43,7 @@ module Daemons
           exit
         end
 
-        # Switch to print the version.
+        # Another typical switch to print the version.
         opts.on_tail("--version", "Show version") do
           puts "daemons version #{Daemons::VERSION}"
           exit
@@ -57,7 +56,6 @@ module Daemons
         @usage = <<END
             -t, --ontop                      Stay on top (does not daemonize)
             -f, --force                      Force operation
-            -n, --no_wait                    Do not wait for processes to stop
 
         Common options:
             -h, --help                       Show this message
@@ -94,10 +92,8 @@ END
       puts "  start         start an instance of the application"
       puts "  stop          stop all instances of the application"
       puts "  restart       stop all instances and restart them afterwards"
-      puts "  reload        send a SIGHUP to all instances of the application"
       puts "  run           start the application and stay on top"
       puts "  zap           set the application to a stopped state"
-      puts "  status        show status (PID) of application instances"
       puts
       puts "* and where <options> may contain several of the following:"
       

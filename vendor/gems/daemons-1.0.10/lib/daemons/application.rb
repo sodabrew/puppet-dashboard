@@ -1,8 +1,5 @@
 require 'daemons/pidfile'
 require 'daemons/pidmem'
-require 'daemons/change_privilege'
-
-require 'timeout'
 
 
 module Daemons
@@ -32,23 +29,13 @@ module Daemons
       
       @dir_mode = @dir = @script = nil
       
-      @force_kill_waittime = @options[:force_kill_waittime] || 20
-      
       unless @pid = pid
-        if @options[:no_pidfiles]
-          @pid = PidMem.new
-        elsif dir = pidfile_dir
+        if dir = pidfile_dir
           @pid = PidFile.new(dir, @group.app_name, @group.multiple)
         else
           @pid = PidMem.new
         end
       end
-    end
-    
-    def change_privilege
-      user = options[:user]
-      group = options[:group]
-      CurrentProcess.change_privilege(user, group) if user
     end
     
     def script
@@ -59,28 +46,22 @@ module Daemons
       Pid.dir(@dir_mode || @group.dir_mode, @dir || @group.dir, @script || @group.script)
     end
     
-    def logdir
-      logdir = options[:log_dir]
-      unless logdir
-        logdir = options[:dir_mode] == :system ? '/var/log' : pidfile_dir
-      end
-      logdir
-    end
-    
     def output_logfile
+      logdir = options[:dir_mode] == :system ? '/var/log' : pidfile_dir
       (options[:log_output] && logdir) ? File.join(logdir, @group.app_name + '.output') : nil
     end
     
     def logfile
+      logdir = options[:dir_mode] == :system ? '/var/log' : pidfile_dir
       logdir ? File.join(logdir, @group.app_name + '.log') : nil
     end
     
     # this function is only used to daemonize the currently running process (Daemons.daemonize)
     def start_none
       unless options[:ontop]
-        Daemonize.daemonize(output_logfile, @group.app_name)
+        Daemonize.daemonize(nil, @group.app_name) #(logfile)
       else
-        Daemonize.simulate(output_logfile)
+        Daemonize.simulate
       end
       
       @pid.pid = Process.pid
@@ -132,12 +113,14 @@ module Daemons
       
       # note that we cannot remove the pid file if we run in :ontop mode (i.e. 'ruby ctrl_exec.rb run')
       @pid.pid = Process.pid
-      
+        
       ENV['DAEMONS_ARGV'] = @controller_argv.join(' ')      
       # haven't tested yet if this is really passed to the exec'd process...
       
-      started()
+      
+      
       Kernel.exec(script(), *(@app_argv || []))
+      #Kernel.exec(script(), *ARGV)
     end
     
     def start_load
@@ -151,7 +134,7 @@ module Daemons
       
       
       # We need this to remove the pid-file if the applications exits by itself.
-      # Note that <tt>at_exit</tt> will only be run if the applications exits by calling 
+      # Note that <tt>at_text</tt> will only be run if the applications exits by calling 
       # <tt>exit</tt>, and not if it calls <tt>exit!</tt> (so please don't call <tt>exit!</tt>
       # in your application!
       #
@@ -171,15 +154,7 @@ module Daemons
       # Note that the applications is not supposed to overwrite the signal handler for
       # 'TERM'.
       #
-      $daemons_stop_proc = options[:stop_proc]
       trap(SIGNAL) {
-        begin
-        if $daemons_stop_proc
-          $daemons_stop_proc.call
-        end
-        rescue ::Exception
-        end
-        
         begin; @pid.cleanup; rescue ::Exception; end
         $daemons_sigterm = true
         
@@ -197,7 +172,6 @@ module Daemons
       ARGV.clear
       ARGV.concat @app_argv if @app_argv
       
-      started()
       # TODO: begin - rescue - end around this and exception logging
       load script()
     end
@@ -227,15 +201,7 @@ module Daemons
         # Note that the applications is not supposed to overwrite the signal handler for
         # 'TERM'.
         #
-        $daemons_stop_proc = options[:stop_proc]
         trap(SIGNAL) {
-          begin
-          if $daemons_stop_proc
-            $daemons_stop_proc.call
-          end
-          rescue ::Exception
-          end
-          
           begin; @pid.cleanup; rescue ::Exception; end
           $daemons_sigterm = true
 
@@ -251,7 +217,6 @@ module Daemons
       
       unless options[:ontop]
         @pid.pid = Daemonize.call_as_daemon(myproc, output_logfile, @group.app_name)
-        
       else
         Daemonize.simulate(output_logfile)
         
@@ -272,13 +237,10 @@ module Daemons
         #   Process.detach(@pid.pid)
         # end
       end
-      
-      started()
     end
     
     
     def start
-      change_privilege
       @group.create_monitor(@group.applications[0] || self) unless options[:ontop]  # we don't monitor applications in the foreground
       
       case options[:mode]
@@ -296,14 +258,6 @@ module Daemons
       end
     end
     
-    def started
-      if pid = @pid.pid
-        puts "#{self.group.app_name}: process with pid #{pid} started."
-        STDOUT.flush
-      end
-    end
-    
-    
 #     def run
 #       if @group.controller.options[:exec]
 #         run_via_exec()
@@ -320,11 +274,6 @@ module Daemons
 #       
 #     end
 
-	def reload
-      Process.kill('HUP', @pid.pid)
-    rescue
-      # ignore
-    end
 
     # This is a nice little function for debugging purposes:
     # In case a multi-threaded ruby script exits due to an uncaught exception
@@ -367,70 +316,26 @@ module Daemons
     end
     
     
-    def stop(no_wait = false)
-      if not running?
+    def stop
+      if options[:force] and not running?
         self.zap
         return
       end
-      
-      pid = @pid.pid
       
       # Catch errors when trying to kill a process that doesn't
       # exist. This happens when the process quits and hasn't been
       # restarted by the monitor yet. By catching the error, we allow the
       # pid file clean-up to occur.
       begin
-        Process.kill(SIGNAL, pid)
+        Process.kill(SIGNAL, @pid.pid)
       rescue Errno::ESRCH => e
-        puts "#{e} #{pid}"
+        puts "#{e} #{@pid.pid}"
         puts "deleting pid-file."
       end
       
-      if not no_wait
-        if @force_kill_waittime > 0
-          puts "#{self.group.app_name}: trying to stop process with pid #{pid}..."
-          STDOUT.flush
-          
-          begin
-            Timeout::timeout(@force_kill_waittime) {
-              while Pid.running?(pid)
-                sleep(0.2)
-              end
-            }
-          rescue Timeout::Error
-            puts "#{self.group.app_name}: process with pid #{pid} won't stop, we forcefully kill it..."
-            STDOUT.flush
-            
-            begin
-              Process.kill('KILL', pid)
-            rescue Errno::ESRCH
-            end
-            
-            begin
-              Timeout::timeout(20) {
-                while Pid.running?(pid)
-                  sleep(1)
-                end
-              }
-            rescue Timeout::Error
-              puts "#{self.group.app_name}: unable to forcefully kill process with pid #{pid}."
-              STDOUT.flush
-            end
-          end
-        end
-        
-        
-      end
-      
-      sleep(0.1)
-      unless Pid.running?(pid)
-        # We try to remove the pid-files by ourselves, in case the application
-        # didn't clean it up.
-        begin; @pid.cleanup; rescue ::Exception; end
-        
-        puts "#{self.group.app_name}: process with pid #{pid} successfully stopped."
-        STDOUT.flush
-      end
+      # We try to remove the pid-files by ourselves, in case the application
+      # didn't clean it up.
+      begin; @pid.cleanup; rescue ::Exception; end
       
     end
     

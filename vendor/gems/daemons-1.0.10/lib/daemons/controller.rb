@@ -15,7 +15,6 @@ module Daemons
       'restart',
       'run',
       'zap',
-      'reload',
       'status'
     ]
     
@@ -72,18 +71,13 @@ module Daemons
           @options[:ontop] ||= true
           @group.new_application.start
         when 'stop'
-          @group.stop_all(@options[:no_wait])
+          @group.stop_all
         when 'restart'
           unless @group.applications.empty?
             @group.stop_all
-            sleep(1)
+            sleep 1
             @group.start_all
-          else
-            puts "Warning: no instances running. Starting..."
-            @group.new_application.start
           end
-        when 'reload'
-          @group.reload_all
         when 'zap'
           @group.zap_all
         when 'status'
