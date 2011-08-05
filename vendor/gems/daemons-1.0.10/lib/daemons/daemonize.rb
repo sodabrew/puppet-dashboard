@@ -116,7 +116,7 @@ module Daemonize
     # NOTE: STDOUT and STDERR will not be redirected to the logfile, because in :ontop mode, we normally want to see the output
     
     Dir.chdir "/"   # Release old working directory
-    File.umask 0000 # Insure sensible umask
+    File.umask 0022 # Insure sensible umask
 
     # Make sure all file descriptors are closed
     ObjectSpace.each_object(IO) do |io|
@@ -173,7 +173,7 @@ module Daemonize
       $0 = app_name if app_name
       
       Dir.chdir "/"   # Release old working directory
-      File.umask 0000 # Insure sensible umask
+      File.umask 0022 # Insure sensible umask
   
       # Make sure all file descriptors are closed
       ObjectSpace.each_object(IO) do |io|
@@ -216,7 +216,7 @@ module Daemonize
     $0 = app_name if app_name
     
     Dir.chdir "/"   # Release old working directory
-    File.umask 0000 # Insure sensible umask
+    File.umask 0022 # Insure sensible umask
 
     # Make sure all file descriptors are closed
     ObjectSpace.each_object(IO) do |io|
