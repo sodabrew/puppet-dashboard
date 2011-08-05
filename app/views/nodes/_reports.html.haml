@@ -11,25 +11,7 @@
       Recent reports
       %span.count== (#{node.reports.applies.count})
       - reports_limit = 10
-    %table.inspector
-      %thead
-        %tr
-          %th.status
-          %th Reported at
-          %th Total
-          %th Failed
-          %th Runtime
-      %tbody
-        - node.reports.applies.limit(reports_limit).each do |report|
-          %tr
-            = report_status_td(report)
-            %td= link_to report.time, report
-            %td= report.total_resources
-            %td= report.failed_resources
-            %td= report.total_time
-      - if node.reports.applies.count > reports_limit
-        %tfoot
-          %tr
-            %td{:colspan => 5}
-              .actionbar
-                = link_to "More &raquo;", reports_node_path(node, :kind => "apply"), :class => 'button'
+    = render 'reports/reports_table', 
+      :reports  => paginate_scope(node.reports.applies, :per_page => reports_limit),
+      :node     => node,
+      :tfoot    => reports.count > reports_limit ? 'nodes/reports_table_tfoot' : nil
