@@ -6,8 +6,6 @@ module Daemons
   class Pid
   
     def Pid.running?(pid)
-      return false unless pid
-      
       # Check if process is in existence
       # The simplest way to do this is to send signal '0'
       # (which is a single system call) that doesn't actually
@@ -51,7 +49,6 @@ module Daemons
   #  end
     
     
-    
     # Returns the directory that should be used to write the pid file to
     # depending on the given mode.
     # 
@@ -89,16 +86,11 @@ module Daemons
     def pid=(p)
     end
     
-    # Check whether the process is running
-    def running?
-      return Pid.running?(pid())
-    end
-    
     # Cleanup method
     def cleanup
     end
     
-    # Exist? method
+    # Exists? method
     def exist?
       true
     end

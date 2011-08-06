@@ -1,3 +1,12 @@
+1.2rc6
+===
+90f5ce0 (#8488) Move tfoot before tbody in reports table
+ee1f182 (#8488) Make columns consistent between report views
+e54ecb8 (#8790) Fix reports page column display and alignment
+947dcee (#8748) Put sensible umask on pids and logs that delayed_job creates
+4ef96b6 (#8785) Close a directory that we open
+0bfbbf6 (#8785) - Revert "(#8748) Upgrade vendored daemons gem to fix umask on pids"
+
 1.2rc5
 ===
 3f88c7f (#8748) Fix my forgetting to add a vendored gem

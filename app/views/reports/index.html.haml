@@ -9,44 +9,4 @@
       %span.count== (#{@reports.total_entries})
 
   .item
-    %table.inspector
-      %thead
-        %tr
-          %th.status
-            &nbsp;
-          %th Reported at &darr;
-          - unless @node
-            %th Host
-          %th Total
-          %th Failed
-          %th Changed
-          %th Unchanged
-          %th Pending
-          %th Skipped
-          %th Failed restarts
-          %th Config retrieval
-          %th Runtime
-      %tbody
-        - if @reports.present?
-          - for report in @reports
-            %tr.nowrap[report]
-              = report_status_td(report)
-              %td= link_to report.time, report
-              - unless @node
-                %td= link_to_if report.node, h(report.host), node_path(report.node)
-              %td= report.total_resources
-              %td= report.failed_resources
-              %td= report.changed_resources
-              %td= report.unchanged_resources
-              %td= report.skipped_resources
-              %td= report.failed_restarts
-              %td #{report.config_retrieval_time} s
-              %td #{report.total_time} s
-          - if @reports.total_pages > 1
-            %tfoot
-              %tr
-                %td{:colspan => @node ? 10 : 9}
-                  = pagination_for(@reports)
-        - else
-          %td.empty{:colspan => @node ? 10 : 9}
-            = describe_no_matches_for :@reports
+    = render 'reports/reports_table', :reports => @reports, :node => @node
