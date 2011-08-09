@@ -29,8 +29,8 @@
             Resources
       %tr
         %th.status
-        %th.hostname
-          Hostname
+        %th.node
+          Node
         - unless container.nil?
           %th Source
         %th.latest_report.desc
@@ -52,7 +52,7 @@
         %tr{:class => "#{'active' if node == @node}"}
           %td.status{:class => node.status}
             = node_status_icon(node)
-          %td.hostname
+          %td.node
             = link_to h(node.name), node
           - unless container.nil?
             %td
