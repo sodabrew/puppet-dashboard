@@ -18,9 +18,6 @@ Rails::Initializer.run do |config|
   config.gem 'will_paginate'
   config.gem 'daemons', :version => '1.0.10'
 
-  # Change this to adjust log rotation. Logger.new(log_file, number_of_logs, max_log_size).
-  config.logger = Logger.new("#{RAILS_ROOT}/log/#{RAILS_ENV}.log", 50, 10.megabytes)
-
   # Settings in config/environments/* take precedence over those specified here.
   # Application configuration should go into files in config/initializers
   # -- all .rb files in that directory are automatically loaded.
