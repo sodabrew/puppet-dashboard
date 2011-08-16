@@ -22,6 +22,7 @@ binary-install/puppet-dashboard::
 	    spec \
 	    vendor \
 	    RELEASE_NOTES.md \
+		VERSION \
 	    $(CURDIR)/debian/$(cdbs_curpkg)/usr/share/puppet-dashboard
 	cp $(CURDIR)/config/database.yml.example $(CURDIR)/debian/$(cdbs_curpkg)/etc/puppet-dashboard/database.yml
 	cp -r $(CURDIR)/public $(CURDIR)/debian/$(cdbs_curpkg)/var/$(cdbs_curpkg)
