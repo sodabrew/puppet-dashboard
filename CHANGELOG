@@ -1,3 +1,9 @@
+1.2rc8
+===
+0a73593 (#7934) Improve wording to filebucket error
+fa8d27c (#7934) Give a better error message when filebucket contents don't exist
+7b742e9 (#7934) Don't link md5s for new content
+
 1.2rc7
 ===
 735925f (#9032) Update Debian package to ensure VERSION is packaged
