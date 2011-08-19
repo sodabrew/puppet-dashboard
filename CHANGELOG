@@ -1,3 +1,9 @@
+1.2rc9
+===
+2e85b8d Apply security patch for XSS Vulnerability in the escaping function in Ruby on Rails
+d3bfcf5 Apply security patch for XSS Vulnerability in strip_tags helper
+107f101 Apply security patch for SQL Injection Vulnerability in quote_table_name
+
 1.2rc8
 ===
 0a73593 (#7934) Improve wording to filebucket error
