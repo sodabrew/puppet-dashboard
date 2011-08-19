@@ -40,7 +40,7 @@ class FilesController < ApplicationController
         <a target=\"_blank\" href=\"http://links.puppetlabs.com/dashboard_generating_certs\">View documentation</a></p>"
     else
       text = "<p>File contents not available: #{e}</p>
-        <p>You may not have filebucketing enabled.
+        <p>Your agents may not be submitting files to a central filebucket.
         <a target=\"_blank\" href=\"http://links.puppetlabs.com/enabling_the_filebucket_viewer\">View documentation</a></p>"
     end
     render :text => text,
