@@ -52,4 +52,18 @@ class ApplicationController < ActionController::Base
       params[param][:parameters] = {}
     end
   end
+
+  def set_group_and_class_autocomplete_data_sources(source_object)
+    @class_data = {
+      :class       => '#node_class_ids',
+      :data_source => node_classes_path(:format => :json),
+      :objects     => source_object.node_classes
+    } if SETTINGS.use_external_node_classification
+
+    @group_data = {
+      :class       => '#node_group_ids',
+      :data_source => node_groups_path(:format => :json),
+      :objects     => source_object.node_groups
+    }
+  end
 end
