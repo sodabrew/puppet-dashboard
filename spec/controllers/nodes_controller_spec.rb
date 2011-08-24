@@ -138,8 +138,34 @@ describe NodesController do
     end
   end
 
+  describe "#new" do
+    it "should successfully render the new page" do
+      get :new
+
+      response.should be_success
+      assigns[:class_data].should == {:class=>"#node_class_ids", :data_source=>"/node_classes.json", :objects=>[]}
+      assigns[:group_data].should == {:class=>"#node_group_ids", :data_source=>"/node_groups.json", :objects=>[]}
+    end
+  end
+
+  describe "#create" do
+    it "should create a node on successful creation" do
+      post :create, 'node' => { 'name' => 'foo' }
+      assigns[:node].name.should == 'foo'
+    end
+
+    it "should render new when creation fails" do
+      post :create, 'node' => { }
+      response.should render_template('nodes/new')
+      response.should be_success
+
+      assigns[:node].errors.full_messages.should == ["Name can't be blank"]
+      assigns[:class_data].should == {:class=>"#node_class_ids", :data_source=>"/node_classes.json", :objects=>[]}
+      assigns[:group_data].should == {:class=>"#node_group_ids", :data_source=>"/node_groups.json", :objects=>[]}
+    end
+  end
+
   describe "#show" do
-    integrate_views
 
     before :each do
       @node = Node.generate!
@@ -230,22 +256,26 @@ describe NodesController do
 
     before :each do
       @node = Node.generate!
+    end
 
-      it 'should make the requested node available to the view' do
-        do_get
-        assigns[:node].should == @node
-      end
+    it 'should render the edit template' do
+      do_get
+      assigns[:node].should == @node
 
-      it 'should render the edit template' do
-        do_get
-        response.should render_template('edit')
-      end
+      response.should render_template('edit')
+      response.should be_success
 
-      it 'should work when given a node name' do
-        get :edit, :id => @node.name
+      assigns[:class_data].should == {:class=>"#node_class_ids", :data_source=>"/node_classes.json", :objects=>[]}
+      assigns[:group_data].should == {:class=>"#node_group_ids", :data_source=>"/node_groups.json", :objects=>[]}
+    end
 
-        assigns[:node].should == @node
-      end
+    it 'should work when given a node name' do
+      get :edit, :id => @node.name
+
+      response.should render_template('edit')
+      response.should be_success
+
+      assigns[:node].should == @node
     end
   end
 

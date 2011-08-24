@@ -15,6 +15,23 @@ class NodesController < InheritedResources::Base
     define_method(action) {scoped_index :unhidden, action}
   end
 
+  def new
+    new! do |format|
+      format.html {
+        set_group_and_class_autocomplete_data_sources(@node)
+      }
+    end
+  end
+
+  def create
+    create! do |success, failure|
+      failure.html {
+        set_group_and_class_autocomplete_data_sources(@node)
+        render :new
+      }
+    end
+  end
+
   def hidden
     scoped_index :hidden
   end
@@ -50,10 +67,16 @@ class NodesController < InheritedResources::Base
   def edit
     edit! do |format|
       format.html {
-        if SETTINGS.use_external_node_classification
-          @class_data = {:class => '#node_class_ids', :data_source => node_classes_path(:format => :json), :objects => @node.node_classes}
-        end
-        @group_data = {:class => '#node_group_ids', :data_source => node_groups_path(:format => :json),  :objects => @node.node_groups}
+        set_group_and_class_autocomplete_data_sources(@node)
+      }
+    end
+  end
+
+  def update
+    update! do |success, failure|
+      failure.html {
+        set_group_and_class_autocomplete_data_sources(@node)
+        render :edit
       }
     end
   end
