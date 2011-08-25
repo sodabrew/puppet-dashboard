@@ -2,6 +2,7 @@ class NodeClass < ActiveRecord::Base
   def self.per_page; 50 end # Pagination
 
   include NodeGroupGraph
+  extend FindFromForm
 
   has_many :node_group_class_memberships, :dependent => :destroy
   has_many :node_class_memberships, :dependent => :destroy
@@ -25,14 +26,6 @@ class NodeClass < ActiveRecord::Base
 
   def to_json(options)
     super({:methods => :description, :only => [:name, :id]}.merge(options))
-  end
-
-  def self.find_from_form_names(*names)
-    names.reject(&:blank?).map{|name| self.find_by_name(name)}.uniq
-  end
-
-  def self.find_from_form_ids(*ids)
-    ids.map{|entry| entry.to_s.split(/[ ,]/)}.flatten.reject(&:blank?).uniq.map{|id| self.find(id)}
   end
 
   def <=>(rhs)
