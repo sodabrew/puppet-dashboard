@@ -4,13 +4,36 @@ class NodeGroupsController < InheritedResources::Base
 
   include SearchableIndex
 
+  def new
+    new! do |format|
+      format.html {
+        set_group_and_class_autocomplete_data_sources(@node_group)
+      }
+    end
+  end
+
+  def create
+    create! do |success, failure|
+      failure.html {
+        set_group_and_class_autocomplete_data_sources(@node_group)
+        render :new
+      }
+    end
+  end
+
   def edit
     edit! do |format|
       format.html {
-        if SETTINGS.use_external_node_classification
-          @class_data = {:class => '#node_class_ids', :data_source => node_classes_path(:format => :json), :objects => @node_group.node_classes}
-        end
-        @group_data = {:class => '#node_group_ids', :data_source => node_groups_path(:format => :json),  :objects => @node_group.node_groups}
+        set_group_and_class_autocomplete_data_sources(@node_group)
+      }
+    end
+  end
+
+  def update
+    update! do |success, failure|
+      failure.html {
+        set_group_and_class_autocomplete_data_sources(@node_group)
+        render :edit
       }
     end
   end
