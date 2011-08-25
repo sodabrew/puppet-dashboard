@@ -1,8 +1,8 @@
 #!/bin/bash
 #
-# puppet-dashboard-workers		Start up the puppet-dashboard-workers r
+# puppet-dashboard-workers		Start up the puppet-dashboard-workers
 #
-# chkconfig: 2345 95 5
+# chkconfig: 95 5
 # description: Delayed_job (or DJ) encapsulates the common pattern of \
 #              asynchronously executing longer tasks in the background.
 #
