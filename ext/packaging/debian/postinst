@@ -14,7 +14,7 @@ mv_conffile() {
 
 case "$1" in
 configure)
-    for item in config/environment.rb public log tmp; do
+    for item in config/environment.rb public log tmp spool; do
         chown -R www-data:www-data /usr/share/puppet-dashboard/${item}
     done
 
