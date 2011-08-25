@@ -385,7 +385,7 @@ describe NodesController do
 
       it "should fail if node classes are specified" do
         node_class = NodeClass.generate!
-        @params[:node].merge! :node_class_ids => [node_class.id]
+        @params[:node].merge! :assigned_node_class_ids => [node_class.id]
 
         do_put
 

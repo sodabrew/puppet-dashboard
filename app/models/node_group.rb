@@ -41,13 +41,13 @@ class NodeGroup < ActiveRecord::Base
   end
 
   ['node', 'node_class', 'node_group'].each do |model|
-    attr_accessor "#{model}_names"
-    attr_accessor "#{model}_ids"
+    attr_accessor "assigned_#{model}_names"
+    attr_accessor "assigned_#{model}_ids"
     before_validation "assign_#{model.pluralize}"
 
     define_method("assign_#{model.pluralize}") do
-      names = instance_variable_get("@#{model}_names")
-      ids = instance_variable_get("@#{model}_ids")
+      names = instance_variable_get("@assigned_#{model}_names")
+      ids = instance_variable_get("@assigned_#{model}_ids")
       begin
         return true unless ids || names
         raise NodeClassificationDisabledError.new unless SETTINGS.use_external_node_classification
