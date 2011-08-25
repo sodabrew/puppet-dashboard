@@ -39,6 +39,8 @@ class Node < ActiveRecord::Base
 
   has_parameters
 
+  assigns_related :node_class, :node_group
+
   fires :created, :on => :create
   fires :updated, :on => :update
   fires :removed, :on => :destroy
@@ -149,29 +151,6 @@ class Node < ActiveRecord::Base
 
   def environment
     'production'
-  end
-
-  ['node_class', 'node_group'].each do |model|
-    attr_accessor "assigned_#{model}_names"
-    attr_accessor "assigned_#{model}_ids"
-    before_validation "assign_#{model.pluralize}"
-
-    define_method("assign_#{model.pluralize}") do
-      names = instance_variable_get("@assigned_#{model}_names")
-      ids = instance_variable_get("@assigned_#{model}_ids")
-      begin
-        return true unless ids || names
-        raise NodeClassificationDisabledError.new unless SETTINGS.use_external_node_classification
-        nodes = []
-        nodes << model.camelize.constantize.find_from_form_names(*names) if names
-        nodes << model.camelize.constantize.find_from_form_ids(*ids)     if ids
-
-        send("#{model.pluralize}=", nodes.flatten.uniq)
-      rescue ActiveRecord::RecordInvalid, ActiveRecord::RecordNotFound => e
-        self.errors.add_to_base(e.message)
-        return false
-      end
-    end
   end
 
   def assign_last_apply_report_if_newer(report)

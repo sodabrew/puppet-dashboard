@@ -27,9 +27,14 @@
             %td{:colspan => 2}
               = link_to_function("Add parameter", :class => "add button") { |page|  page.insert_html :bottom, 'parameters', :partial => 'parameters/parameter_input', :object => form.object.parameters.build }
 
-    - {'node_class' => 'Classes', 'node_group' => 'Groups'}.each do |model, title|
-      .element{:class => "#{model.pluralize}"}
-        = label_tag title
-        = text_field_tag "node[assigned_#{model}_ids][]", '', :id => "#{model}_ids"
+    = render :partial => 'shared/tokenized_text_box',
+      :locals => { :model => 'node_class',
+        :title => 'Classes',
+        :source => 'node' }
+
+  = render :partial => 'shared/tokenized_text_box',
+    :locals => {:model => 'node_group',
+      :title => 'Groups',
+      :source => 'node'}
 
   %script#tokenizer{:type => "text/javascript"}= tokenize_input_class(@class_data, @group_data)
