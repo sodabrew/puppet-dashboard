@@ -231,4 +231,61 @@ describe NodeGroup do
       end
     end
   end
+
+  describe "assigning before validation" do
+    let(:node_groups)  { Array.new(2) { |i| NodeGroup.generate! :name => "group#{i}" } }
+    let(:node_classes) { Array.new(2) { |i| NodeClass.generate! :name => "class#{i}" } }
+    let(:nodes)        { Array.new(2) { |i| Node.generate!      :name => "node#{i}"  } }
+
+    it "should assign groups, classes and nodes by id" do
+      new_group = NodeGroup.new(
+        :node_group_ids => node_groups.map(&:id),
+        :node_class_ids => node_classes.map(&:id),
+        :node_ids       => nodes.map(&:id)
+      )
+      new_group.assign_node_groups
+      new_group.assign_node_classes
+      new_group.assign_nodes
+
+      new_group.node_groups.should  == node_groups
+      new_group.node_classes.should == node_classes
+      new_group.nodes.should        == nodes
+    end
+
+    it "should assign groups, classes and nodes by name" do
+      new_group = NodeGroup.new(
+        :node_group_names => node_groups.map(&:name),
+        :node_class_names => node_classes.map(&:name),
+        :node_names       => nodes.map(&:name)
+      )
+      new_group.assign_node_groups
+      new_group.assign_node_classes
+      new_group.assign_nodes
+
+      new_group.node_groups.should  == node_groups
+      new_group.node_classes.should == node_classes
+      new_group.nodes.should        == nodes
+    end
+
+    it "should add assignment errors to the object" do
+      new_group = NodeGroup.new(
+        :node_group_ids => ['cow'],
+        :node_class_ids => ['dog'],
+        :node_ids       => ['pig']
+      )
+      new_group.assign_node_groups
+      new_group.assign_node_classes
+      new_group.assign_nodes
+
+      new_group.node_groups.should  be_empty
+      new_group.node_classes.should be_empty
+      new_group.nodes.should        be_empty
+
+      new_group.errors.full_messages.should =~ [
+        "Couldn't find NodeGroup with ID=cow",
+        "Couldn't find NodeClass with ID=dog",
+        "Couldn't find Node with ID=pig"
+      ]
+    end
+  end
 end

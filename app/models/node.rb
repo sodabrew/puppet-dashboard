@@ -248,4 +248,12 @@ class Node < ActiveRecord::Base
     options = {:conditions => "metrics.category = 'resources' AND metrics.name = '#{resource_status}'", :joins => 'left join metrics on metrics.report_id = nodes.last_apply_report_id'}
     ['all', 'index'].include?(scope) ? Node.sum(:value, options).to_i : Node.send(scope).sum(:value, options).to_i
   end
+
+  def self.find_from_form_names(*names)
+    names.reject(&:blank?).map{|name| self.find_by_name(name)}.uniq
+  end
+
+  def self.find_from_form_ids(*ids)
+    ids.map{|entry| entry.to_s.split(/[ ,]/)}.flatten.reject(&:blank?).uniq.map{|id| self.find(id)}
+  end
 end

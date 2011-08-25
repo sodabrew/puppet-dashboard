@@ -53,6 +53,14 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def set_node_autocomplete_data_sources(source_object)
+    @node_data = {
+      :class       => '#node_ids',
+      :data_source => nodes_path(:format => :json),
+      :objects     => source_object.nodes
+    }
+  end
+
   def set_group_and_class_autocomplete_data_sources(source_object)
     @class_data = {
       :class       => '#node_class_ids',

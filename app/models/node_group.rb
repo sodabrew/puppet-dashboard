@@ -39,6 +39,22 @@ class NodeGroup < ActiveRecord::Base
     super({:methods => :description, :only => [:name, :id]}.merge(options))
   end
 
+  attr_accessor :node_names
+  attr_accessor :node_ids
+  before_validation :assign_nodes
+  def assign_nodes
+    return true unless @node_ids || @node_names
+    raise NodeClassificationDisabledError.new unless SETTINGS.use_external_node_classification
+    nodes = []
+    nodes << Node.find_from_form_names(*@node_names) if @node_names
+    nodes << Node.find_from_form_ids(*@node_ids)     if @node_ids
+
+    self.nodes = nodes.flatten.uniq
+  rescue ActiveRecord::RecordInvalid => e
+    self.errors.add_to_base(e.message)
+    return false
+  end
+
   attr_accessor :node_class_names
   attr_accessor :node_class_ids
   before_validation :assign_node_classes

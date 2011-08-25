@@ -34,4 +34,8 @@
     = label_tag 'Groups'
     = text_field_tag 'node_group[node_group_ids][]', '', :id => 'node_group_ids'
 
-  %script#tokenizer{:type => "text/javascript"}= tokenize_input_class(@class_data, @group_data)
+  .element.nodes
+    = label_tag 'Nodes'
+    = text_field_tag 'node_group[node_ids][]', '', :id => 'node_ids'
+
+  %script#tokenizer{:type => "text/javascript"}= tokenize_input_class(@class_data, @group_data, @node_data)

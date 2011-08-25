@@ -7,6 +7,7 @@ class NodeGroupsController < InheritedResources::Base
   def new
     new! do |format|
       format.html {
+        set_node_autocomplete_data_sources(@node_group)
         set_group_and_class_autocomplete_data_sources(@node_group)
       }
     end
@@ -15,6 +16,7 @@ class NodeGroupsController < InheritedResources::Base
   def create
     create! do |success, failure|
       failure.html {
+        set_node_autocomplete_data_sources(@node_group)
         set_group_and_class_autocomplete_data_sources(@node_group)
         render :new
       }
@@ -24,6 +26,7 @@ class NodeGroupsController < InheritedResources::Base
   def edit
     edit! do |format|
       format.html {
+        set_node_autocomplete_data_sources(@node_group)
         set_group_and_class_autocomplete_data_sources(@node_group)
       }
     end
@@ -32,6 +35,7 @@ class NodeGroupsController < InheritedResources::Base
   def update
     update! do |success, failure|
       failure.html {
+        set_node_autocomplete_data_sources(@node_group)
         set_group_and_class_autocomplete_data_sources(@node_group)
         render :edit
       }
