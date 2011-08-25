@@ -385,7 +385,7 @@ describe NodesController do
 
       it "should fail if node classes are specified" do
         node_class = NodeClass.generate!
-        @params[:node].merge! :node_class_ids => [node_class.id]
+        @params[:node].merge! :assigned_node_class_ids => [node_class.id]
 
         do_put
 
@@ -393,6 +393,16 @@ describe NodesController do
         response.body.should =~ /Node classification has been disabled/
 
         @node.reload.node_classes.should_not be_present
+      end
+
+      it "should not fail if node groups are specified" do
+        node_group = NodeGroup.generate!
+        @params[:node].merge! :assigned_node_group_ids => [node_group.id]
+
+        do_put
+
+        response.should redirect_to(node_path(@node))
+        @node.node_groups.should == [node_group]
       end
 
       it "should succeed if parameter_attributes and node classes are omitted" do

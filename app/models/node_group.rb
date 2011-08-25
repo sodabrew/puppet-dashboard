@@ -34,33 +34,12 @@ class NodeGroup < ActiveRecord::Base
     :joins => 'LEFT OUTER JOIN node_group_memberships ON (node_groups.id = node_group_memberships.node_group_id) LEFT OUTER JOIN nodes ON (nodes.id = node_group_memberships.node_id)',
     :group => 'node_groups.id'
 
+  assigns_related :node_class, :node_group, :node
+
   def inspect; "#<NodeGroup id:#{id}, name:#{name.inspect}>" end
 
   def to_json(options)
     super({:methods => :description, :only => [:name, :id]}.merge(options))
-  end
-
-  ['node', 'node_class', 'node_group'].each do |model|
-    attr_accessor "#{model}_names"
-    attr_accessor "#{model}_ids"
-    before_validation "assign_#{model.pluralize}"
-
-    define_method("assign_#{model.pluralize}") do
-      names = instance_variable_get("@#{model}_names")
-      ids = instance_variable_get("@#{model}_ids")
-      begin
-        return true unless ids || names
-        raise NodeClassificationDisabledError.new unless SETTINGS.use_external_node_classification
-        nodes = []
-        nodes << model.camelize.constantize.find_from_form_names(*names) if names
-        nodes << model.camelize.constantize.find_from_form_ids(*ids)     if ids
-
-        send("#{model.pluralize}=", nodes.flatten.uniq)
-      rescue ActiveRecord::RecordInvalid, ActiveRecord::RecordNotFound => e
-        self.errors.add_to_base(e.message)
-        return false
-      end
-    end
   end
 
   def <=>(rhs)
