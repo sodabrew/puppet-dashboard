@@ -1,49 +1,36 @@
-1.2rc9
+v1.2.0
 ===
+9c32431 (#8228) Reports fail to upload with spool directory
+0bfa755 (#9101) Dashboard workers should not be enabled by default
+3abc596 (#9103) Remove invalid files from git repo
+f52b0ee (#9182) Fix ability to add classes and groups on creation
+e924586 (#9195) Use a shorter date format for the report status graph
 2e85b8d Apply security patch for XSS Vulnerability in the escaping function in Ruby on Rails
 d3bfcf5 Apply security patch for XSS Vulnerability in strip_tags helper
 107f101 Apply security patch for SQL Injection Vulnerability in quote_table_name
-
-1.2rc8
-===
 0a73593 (#7934) Improve wording to filebucket error
 fa8d27c (#7934) Give a better error message when filebucket contents don't exist
 7b742e9 (#7934) Don't link md5s for new content
-
-1.2rc7
-===
 735925f (#9032) Update Debian package to ensure VERSION is packaged
 620de4e (#8251 and #8042) Don't use our own logger
 a2a97ab (#8796) Re-write misleading 500 error message
 6b525b1 (#5845) Changed host to node in UI.
-49cca0b Add document outlining preferred contribution methods
-
-1.2rc6
-===
 90f5ce0 (#8488) Move tfoot before tbody in reports table
 ee1f182 (#8488) Make columns consistent between report views
 e54ecb8 (#8790) Fix reports page column display and alignment
 947dcee (#8748) Put sensible umask on pids and logs that delayed_job creates
 4ef96b6 (#8785) Close a directory that we open
 0bfbbf6 (#8785) - Revert "(#8748) Upgrade vendored daemons gem to fix umask on pids"
-
-1.2rc5
-===
 3f88c7f (#8748) Fix my forgetting to add a vendored gem
 2f636a9 Allow setting of RUBY for the workers on redhat systems
 651511c (#8748) Upgrade vendored daemons gem to fix umask on pids
 3a65fd0 (#8694) Add backtrace info to DelayedJobFailure
 bf22939 Add document outlining preferred contribution methods
+49cca0b Add document outlining preferred contribution methods
 803be4f (#8745) Update gitignore to not exlucde tmp during tarball creation
-
-1.2rc4
-===
 e45338a (#8691) Fix the order of changed and unchanged resources on the report summary
 7653800 Provide clearer error message when report host, kind and time are not unique
 e86526f (#8686) Handle concurrent DelayedJob workers importing for same node
-
-1.2rc3
-===
 88771ec (#8589) Report events are now ordered by name.
 8bd0ffb (#8544) Make empty inspected resources "red".
 d036276 (#8505) Update the default date stringification.
@@ -53,9 +40,6 @@ bb99ed9 Properly Quote RAILS_ROOT in get_app_version method
 af8b6e9 (#8500) Replace README with a smaller one
 dff2256 (#8499) Update the usage of mktemp in Rakefile to work on mac
 3f0afca (#8484) "Nodes for this group" heading now appears correctly
-
-1.2rc1
-===
 d389d8b (#7568) Relicense to Apache-2.0 License
 82eeea7 (#7567) Refactor dashboard packaging to allow for nightly builds
 a58f3e0 (#6840) Remove need for VERSION file in puppet-dashboard
