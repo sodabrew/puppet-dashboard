@@ -107,7 +107,7 @@ describe NodeGroupsController do
 
       it "should fail if node classes are specified" do
         node_class = NodeClass.generate!
-        @params[:node_group].merge! :node_class_ids => [node_class.id]
+        @params[:node_group].merge! :assigned_node_class_ids => [node_class.id]
 
         do_put
 
