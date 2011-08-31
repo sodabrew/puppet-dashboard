@@ -42,7 +42,7 @@
 # * Running a rake task with: rake RAILS_ENV=production ...
 production:
   database: dashboard_production
-  username: root
+  username: dashboard
   password:
   encoding: utf8
   adapter: mysql
@@ -54,7 +54,7 @@ production:
 # * Running a rake task with: rake ...
 development:
   database: dashboard_development
-  username: root
+  username: dashboard
   password:
   encoding: utf8
   adapter: mysql
@@ -65,7 +65,7 @@ development:
 # "development" or "production".
 test:
   database: dashboard_test
-  username: root
+  username: dashboard
   password:
   encoding: utf8
   adapter: mysql
