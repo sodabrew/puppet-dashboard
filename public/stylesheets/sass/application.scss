@@ -506,6 +506,7 @@ body {
 
   .section {
     margin-bottom: 1.5em;
+    overflow: auto;
 
     &.error {
       @include icony_section('failed',
