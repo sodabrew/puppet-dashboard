@@ -1,3 +1,11 @@
+v1.2.1rc1
+===
+6b10a5e maint: Move duplicated code to a helper method
+02ca4ff maint: Fix node_ids method by not overwriting it with and attr_accessor
+a2b864d (#8878) Make code more DRY
+0075dd9 (#8878) Add ability to add nodes from the group edit/create pages
+ee59af8 (#8803) A single report page has a header with too much padding
+
 v1.2.0
 ===
 9c32431 (#8228) Reports fail to upload with spool directory
