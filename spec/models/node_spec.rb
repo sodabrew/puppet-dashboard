@@ -15,6 +15,7 @@ describe Node do
     it { should have_db_column(:name).of_type(:string) }
     it { should validate_presence_of(:name) }
     it { should validate_uniqueness_of(:name) }
+    it { should have_readonly_attribute(:name) }
 
   end
 

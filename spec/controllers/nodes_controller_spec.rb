@@ -98,8 +98,7 @@ describe NodesController do
 
       %w[foo,_-' bar/\\$^ <ba"z>>].each do |name|
         it "should handle a node named #{name}" do
-          @node.name = name
-          @node.save
+          node = Node.generate!(:name => name)
           get :index, :format => "csv"
 
           response.should be_success
@@ -332,9 +331,9 @@ describe NodesController do
 
       describe 'and the data provided make the node valid' do
         it 'should update the node with the data provided' do
-          @params[:node]['name'] = 'new name'
+          @params[:node]['description'] = 'new description'
           do_put
-          Node.find(@node.id).name.should == 'new name'
+          Node.find(@node.id).description.should == 'new description'
         end
 
         it 'should have a valid node' do
