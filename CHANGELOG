@@ -1,3 +1,7 @@
+v1.2.1rc2
+===
+3ab0029 (#9101) Fix Dashboard workers init script on RH
+
 v1.2.1rc1
 ===
 6b10a5e maint: Move duplicated code to a helper method
