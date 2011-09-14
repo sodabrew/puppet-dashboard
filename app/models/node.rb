@@ -8,6 +8,7 @@ class Node < ActiveRecord::Base
 
   validates_presence_of :name
   validates_uniqueness_of :name
+  attr_readonly :name
 
   has_many :node_class_memberships, :dependent => :destroy
   has_many :node_classes, :through => :node_class_memberships
