@@ -1,8 +1,8 @@
 %ul#global-navigation.navigation
   %li
     - if SETTINGS.custom_logo_url
-      %a{:href => root_path, :id => "logo", :style => "background-image:none"}
-        %img{:src => SETTINGS.custom_logo_url, :height => '23', :width => '155', :alt => "Puppet Dashboard" }
+      %a{:href => root_path, :id => "logo", :style => "background-image:none; height:auto; width:auto;"}
+        %img{:src => SETTINGS.custom_logo_url, :height => SETTINGS.custom_logo_height, :width => SETTINGS.custom_logo_width, :alt => SETTINGS.custom_logo_alt_text }
     - else
       %a{:href => root_path, :id => "logo", :style => "text-indent: -9000px;"} Puppet Dashboard
   %li{:class => active_if(request.url == release_notes_url)}
