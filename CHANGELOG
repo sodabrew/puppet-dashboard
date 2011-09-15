@@ -1,3 +1,7 @@
+v1.2.1rc3
+===
+0e81c25 (#7405) Daemonized redhat init script for dashboard
+
 v1.2.1rc2
 ===
 3ab0029 (#9101) Fix Dashboard workers init script on RH
