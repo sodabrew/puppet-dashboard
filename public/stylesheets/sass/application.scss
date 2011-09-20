@@ -161,9 +161,11 @@ body {
 
       &.navigation {
         li {
-          display: block;
-          float: left;
+          list-style-position: outside;
+          padding-left: 0.3em;
+          margin-left: 1.0em;
           margin-right: 1em;
+          float: left;
 
           &.active > a,
           &.active > a:hover {
@@ -171,6 +173,10 @@ body {
           }
         }
       }
+    }
+
+    li:first-child {
+      list-style-type: none;
     }
 
     a#logo {

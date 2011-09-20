@@ -28,11 +28,15 @@ body {
         float: left;
         margin-right: 0.8em; }
     body #header ul.navigation li {
-      display: block;
-      float: left;
-      margin-right: 1em; }
+      list-style-position: outside;
+      padding-left: 0.3em;
+      margin-left: 1.0em;
+      margin-right: 1em;
+      float: left; }
       body #header ul.navigation li.active > a, body #header ul.navigation li.active > a:hover {
         font-weight: bold; }
+    body #header li:first-child {
+      list-style-type: none; }
     body #header a#logo {
       background: transparent url("../images/dashboard_logo.png") no-repeat top center;
       display: inline-block;
