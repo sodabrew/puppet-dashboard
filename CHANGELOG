@@ -1,13 +1,7 @@
-v1.2.1rc3
+v1.2.1
 ===
 0e81c25 (#7405) Daemonized redhat init script for dashboard
-
-v1.2.1rc2
-===
 3ab0029 (#9101) Fix Dashboard workers init script on RH
-
-v1.2.1rc1
-===
 6b10a5e maint: Move duplicated code to a helper method
 02ca4ff maint: Fix node_ids method by not overwriting it with and attr_accessor
 a2b864d (#8878) Make code more DRY
