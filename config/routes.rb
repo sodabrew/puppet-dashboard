@@ -37,6 +37,8 @@ ActionController::Routing::Routes.draw do |map|
 
   map.release_notes '/release_notes', :controller => :pages, :action => :release_notes
 
+  map.header '/header.:format', :controller => :pages, :action => :header
+
   map.root :controller => :pages, :action => :home
 
   map.connect ':controller/:action/:id'
