@@ -171,6 +171,10 @@ body {
           &.active > a:hover {
             font-weight: bold;
           }
+
+          a {
+            vertical-align: middle;
+          }
         }
       }
     }
@@ -179,7 +183,7 @@ body {
       list-style-type: none;
     }
 
-    a#logo {
+    #logo a {
       background: transparent url('../images/dashboard_logo.png') no-repeat top center;
       display: inline-block;
       height: 23px;
