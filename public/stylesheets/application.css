@@ -28,19 +28,25 @@ body {
         float: left;
         margin-right: 0.8em; }
     body #header ul.navigation li {
-      display: block;
-      float: left;
-      margin-right: 1em; }
+      list-style-position: outside;
+      padding-left: 0.3em;
+      margin-left: 1.0em;
+      margin-right: 1em;
+      float: left; }
       body #header ul.navigation li.active > a, body #header ul.navigation li.active > a:hover {
         font-weight: bold; }
-    body #header a#logo {
+      body #header ul.navigation li a {
+        vertical-align: middle; }
+    body #header li:first-child {
+      list-style-type: none; }
+    body #header #logo a {
       background: transparent url("../images/dashboard_logo.png") no-repeat top center;
       display: inline-block;
       height: 23px;
       width: 155px;
       position: relative;
       top: 1px; }
-      body #header a#logo:hover {
+      body #header #logo a:hover {
         background-position: bottom center; }
   body #footer p {
     clear: both;
@@ -281,7 +287,8 @@ body {
     margin-right: 5%;
     float: left; }
   body .section {
-    margin-bottom: 1.5em; }
+    margin-bottom: 1.5em;
+    overflow: auto; }
     body .section.error {
       -webkit-border-radius: 0.35em 0.35em 0.35em 0.35em;
       -moz-border-radius: 0.35em 0.35em 0.35em 0.35em;

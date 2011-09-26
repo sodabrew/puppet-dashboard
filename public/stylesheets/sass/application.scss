@@ -161,19 +161,29 @@ body {
 
       &.navigation {
         li {
-          display: block;
-          float: left;
+          list-style-position: outside;
+          padding-left: 0.3em;
+          margin-left: 1.0em;
           margin-right: 1em;
+          float: left;
 
           &.active > a,
           &.active > a:hover {
             font-weight: bold;
           }
+
+          a {
+            vertical-align: middle;
+          }
         }
       }
     }
 
-    a#logo {
+    li:first-child {
+      list-style-type: none;
+    }
+
+    #logo a {
       background: transparent url('../images/dashboard_logo.png') no-repeat top center;
       display: inline-block;
       height: 23px;
@@ -506,6 +516,7 @@ body {
 
   .section {
     margin-bottom: 1.5em;
+    overflow: auto;
 
     &.error {
       @include icony_section('failed',
