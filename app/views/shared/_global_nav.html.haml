@@ -1,34 +1,30 @@
-%ul#global-navigation.navigation
-  %li
-    - if SETTINGS.custom_logo_url
-      %a{:href => root_path, :id => "logo", :style => "background-image:none"}
-        %img{:src => SETTINGS.custom_logo_url, :height => '23', :width => '155', :alt => "Puppet Dashboard" }
-    - else
-      %a{:href => root_path, :id => "logo", :style => "text-indent: -9000px;"} Puppet Dashboard
-  %li{:class => active_if(request.url == release_notes_url)}
-    = link_to APP_VERSION, "https://github.com/puppetlabs/puppet-dashboard/blob/#{APP_VERSION.sub(/.*?g([0-9a-f]*)/, "\\1")}/CHANGELOG"
-  %li &raquo;
-  %li{:class => active_if(request.url == root_url)}
-    = link_to "Home", root_path
-  %li &bull;
-  %li{:class => active_if(controller_name == "nodes" && action_name == "index")}
-    = link_to "Nodes", nodes_path
-    %li &bull;
-  %li{:class => active_if(controller_name == "node_groups")}
-    = link_to "Groups", node_groups_path
-  - if SETTINGS.use_external_node_classification
-    %li &bull;
-    %li{:class => active_if(controller_name == "node_classes")}
-      = link_to "Classes", node_classes_path
-  %li &bull;
-  %li{:class => active_if(controller_name == "reports" && action_name == "index")}
-    = link_to "Reports", reports_path
-  %li &bull;
-  %li{:class => active_if(controller_name == "reports" && action_name == "search")}
-    = link_to "File Search", search_reports_path
-  - if SETTINGS.enable_inventory_service
-    %li &bull;
-    %li{:class => active_if(controller_name == "nodes" && action_name == "search")}
-      = link_to "Inventory Search", search_nodes_path
-  - Registry.each_callback :core, :global_nav_widgets do |callback|
-    = callback.call self
+.topbar
+  .topbar-inner
+    .container
+      %ul#global-navigation.navigation
+        %li#logo
+          - if SETTINGS.custom_logo_url
+            %a{:href => root_path, :style => "background-image:none; height:auto; width:auto;"}
+              %img{:src => SETTINGS.custom_logo_url, :height => SETTINGS.custom_logo_height, :width => SETTINGS.custom_logo_width, :alt => SETTINGS.custom_logo_alt_text }
+          - else
+            %a{:href => root_path, :style => "text-indent: -9000px;"} Puppet Dashboard
+        %li#dashboard-version{:class => active_if(request.url == release_notes_url)}
+          = link_to APP_VERSION, "https://github.com/puppetlabs/puppet-dashboard/blob/#{APP_VERSION.sub(/.*?g([0-9a-f]*)/, "\\1")}/CHANGELOG"
+        %li{:class => active_if(request.url == root_url)}
+          = link_to "Home", root_path
+        %li{:class => active_if(controller_name == "nodes" && action_name == "index")}
+          = link_to "Nodes", nodes_path
+        %li{:class => active_if(controller_name == "node_groups")}
+          = link_to "Groups", node_groups_path
+        - if SETTINGS.use_external_node_classification
+          %li{:class => active_if(controller_name == "node_classes")}
+            = link_to "Classes", node_classes_path
+        %li{:class => active_if(controller_name == "reports" && action_name == "index")}
+          = link_to "Reports", reports_path
+        %li{:class => active_if(controller_name == "reports" && action_name == "search")}
+          = link_to "File Search", search_reports_path
+        - if SETTINGS.enable_inventory_service
+          %li{:class => active_if(controller_name == "nodes" && action_name == "search")}
+            = link_to "Inventory Search", search_nodes_path
+        - Registry.each_callback :core, :global_nav_widgets do |callback|
+          = callback.call self

@@ -6,7 +6,7 @@
   margin-bottom: 1em;
 }
 
-#content #sidebar { width: 20%; float: left; }
+#content #sidebar { width: 20%; float: left; clear: left; }
 
 body.with-sidebar #content #main { width: 80%; float: left; }
 body.no-sidebar #content #main { width: 100%; }

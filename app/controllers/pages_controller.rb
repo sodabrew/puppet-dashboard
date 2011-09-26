@@ -10,4 +10,10 @@ class PagesController < ApplicationController
     @unchanged_nodes          = @all_nodes.unchanged
   end
 
+  def header
+    respond_to do |format|
+      format.html { render :partial => 'shared/global_nav' }
+    end
+  end
+
 end
