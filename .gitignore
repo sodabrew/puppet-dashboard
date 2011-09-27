@@ -19,6 +19,7 @@ doc/api
 doc/app
 log/*.log*
 log/*.pid
+log/mcollective*
 public/javascripts/all.js
 public/stylesheets/all.css
 public/javascripts/plugin-*
