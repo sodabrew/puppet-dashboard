@@ -40,10 +40,8 @@ body {
     body #header li:first-child {
       list-style-type: none; }
     body #header #logo a {
-      background: transparent url("../images/dashboard_logo.png") no-repeat top center;
+      background-position: top center;
       display: inline-block;
-      height: 23px;
-      width: 155px;
       position: relative;
       top: 1px; }
       body #header #logo a:hover {
