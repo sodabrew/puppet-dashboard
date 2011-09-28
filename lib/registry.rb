@@ -51,10 +51,7 @@ class Registry
   private
 
   def installed_plugins
-    Dir.open(File.join(File.dirname(__FILE__), '../config/installed_plugins')) { |aDir|
-      @installed_plugins ||= aDir.to_a.reject { |f| f =~ /^\./ }
-    }
-    @installed_plugins
+    Dir[Rails.root.join('config', 'installed_plugins', '*')]
   end
 
   def disallow_uninstalled_plugins
