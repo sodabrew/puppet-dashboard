@@ -51,7 +51,7 @@ class Registry
   private
 
   def installed_plugins
-    Dir[Rails.root.join('config', 'installed_plugins', '*')]
+    Dir[Rails.root.join('config', 'installed_plugins', '*')].map { |path| File.basename(path) }
   end
 
   def disallow_uninstalled_plugins
