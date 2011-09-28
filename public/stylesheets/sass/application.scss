@@ -498,7 +498,6 @@ body {
     background: #FFF;
     padding: 1em;
     margin-bottom: 1em;
-    overflow: hidden;
 
     &:last-child {
         padding-bottom: 0;
@@ -514,7 +513,6 @@ body {
 
   .section {
     margin-bottom: 1.5em;
-    overflow: auto;
 
     &.error {
       @include icony_section('failed',
