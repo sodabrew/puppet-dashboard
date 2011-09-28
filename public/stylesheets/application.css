@@ -277,8 +277,7 @@ body {
     border-radius: 0 0 0.35em 0.35em;
     background: #FFF;
     padding: 1em;
-    margin-bottom: 1em;
-    overflow: hidden; }
+    margin-bottom: 1em; }
     body .item:last-child {
       padding-bottom: 0;
       margin-bottom: 0; }
@@ -287,8 +286,7 @@ body {
     margin-right: 5%;
     float: left; }
   body .section {
-    margin-bottom: 1.5em;
-    overflow: auto; }
+    margin-bottom: 1.5em; }
     body .section.error {
       -webkit-border-radius: 0.35em 0.35em 0.35em 0.35em;
       -moz-border-radius: 0.35em 0.35em 0.35em 0.35em;
