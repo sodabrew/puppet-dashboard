@@ -1,11 +1,7 @@
-Dir.foreach(Rails.root.join('config', 'installed_plugins')) do |plugin|
-  next if plugin =~ /^\.+$/
-  plugin_dir = Rails.root.join('vendor', 'plugins', plugin)
-  initializers = plugin_dir.join('config', 'initializers')
+Dir[Rails.root.join('config', 'installed_plugins', '*')].sort.each do |plugin|
+  dir = Rails.root.join('vendor', 'plugins', plugin)
 
-  if File.directory?(initializers)
-    Dir[initializers.join('**', '*.rb')].sort.each do |initializer|
-      load(initializer)
-    end
+  Dir[dir.join('config', 'initializers', '**', '*.rb')].sort.each do |file|
+    load(file)
   end
 end
