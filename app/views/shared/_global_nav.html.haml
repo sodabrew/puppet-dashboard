@@ -3,11 +3,11 @@
     .container
       %ul#global-navigation.navigation
         %li#logo
-          - if SETTINGS.custom_logo_url
-            %a{:href => root_path, :style => "background-image:none; height:auto; width:auto;"}
-              %img{:src => SETTINGS.custom_logo_url, :height => SETTINGS.custom_logo_height, :width => SETTINGS.custom_logo_width, :alt => SETTINGS.custom_logo_alt_text }
-          - else
-            %a{:href => root_path, :style => "text-indent: -9000px;"} Puppet Dashboard
+          - css = ["background-repeat: no-repeat", "text-indent: -9000px"]
+          - css << "background-image: url('#{SETTINGS.custom_logo_url}')"
+          - css << "height: #{SETTINGS.custom_logo_height}"
+          - css << "width: #{SETTINGS.custom_logo_width}"
+          %a{:href => root_path, :title => SETTINGS.custom_logo_alt_text, :style => css.join('; ')} Puppet Dashboard
         %li#dashboard-version{:class => active_if(request.url == release_notes_url)}
           = link_to APP_VERSION, "https://github.com/puppetlabs/puppet-dashboard/blob/#{APP_VERSION.sub(/.*?g([0-9a-f]*)/, "\\1")}/CHANGELOG"
         %li{:class => active_if(request.url == root_url)}
