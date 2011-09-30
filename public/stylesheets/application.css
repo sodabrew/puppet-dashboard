@@ -40,10 +40,8 @@ body {
     body #header li:first-child {
       list-style-type: none; }
     body #header #logo a {
-      background: transparent url("../images/dashboard_logo.png") no-repeat top center;
+      background-position: top center;
       display: inline-block;
-      height: 23px;
-      width: 155px;
       position: relative;
       top: 1px; }
       body #header #logo a:hover {
@@ -277,8 +275,7 @@ body {
     border-radius: 0 0 0.35em 0.35em;
     background: #FFF;
     padding: 1em;
-    margin-bottom: 1em;
-    overflow: hidden; }
+    margin-bottom: 1em; }
     body .item:last-child {
       padding-bottom: 0;
       margin-bottom: 0; }
@@ -287,8 +284,7 @@ body {
     margin-right: 5%;
     float: left; }
   body .section {
-    margin-bottom: 1.5em;
-    overflow: auto; }
+    margin-bottom: 1.5em; }
     body .section.error {
       -webkit-border-radius: 0.35em 0.35em 0.35em 0.35em;
       -moz-border-radius: 0.35em 0.35em 0.35em 0.35em;
