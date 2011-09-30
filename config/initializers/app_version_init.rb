@@ -16,4 +16,13 @@ def get_app_version
   'unknown'
 end
 
+def get_app_version_link
+  if File.exists?(Rails.root.join('VERSION_LINK'))
+    return File.read(Rails.root.join('VERSION_LINK')).strip
+  elsif File.directory?(Rails.root.join('.git'))
+    return "https://github.com/puppetlabs/puppet-dashboard/blob/#{APP_VERSION.sub(/.*?g([0-9a-f]*)/, "\\1")}/CHANGELOG"
+  end
+end
+
 APP_VERSION = get_app_version
+APP_VERSION_LINK = get_app_version_link
