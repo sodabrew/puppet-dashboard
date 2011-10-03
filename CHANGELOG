@@ -1,3 +1,21 @@
+1.2.2
+===
+a344e82 (#9366) removes conditional on .git for APP_VERSION_LINK
+9ed1c19 (#9366) allows a custom version link to be specified
+39a07de (#9773) Report content hidden
+233fbf0 (#9756/Maint) Fix plugin loading.
+54146c6 (#9756/Maint) Better guards around installed_plugins.
+7b36bb3 (#9756) Autoload plugin initializers.
+5311e6b (#9731) Refactor the Dashboard logo rendering.
+1e4996c Maint: telling git to ignore MCollective logs
+6c2e454 (#9306) tweaks base header styling to match markup changes
+c897d00 (#9571) tweaks header markup, method of importing CSS styles
+5f381a0 (#9306) adds divs to header markup
+a63c1df (#9306) sanitizes header markup for assimilation by Riddler
+22001cc (9571) exports global nav bar via /header.html
+1f42a27 (#8825) allows configuration of logo dimensions and alt text
+992af88 (#9262) causes the contents of .section divs to scroll when overflowing
+
 v1.2.1
 ===
 0e81c25 (#7405) Daemonized redhat init script for dashboard
