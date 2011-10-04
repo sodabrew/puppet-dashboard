@@ -7,7 +7,11 @@
 
   .element
     = form.label :node, "Node"
-    = form.text_field :name, :placeholder => "Enter the node name here", :readonly => @readonly_name
+    - if @readonly_name
+      %p
+        = @node.name
+    - else
+      = form.text_field :name, :placeholder => "Enter the node name here"
 
   .element.textarea
     = form.label :description
