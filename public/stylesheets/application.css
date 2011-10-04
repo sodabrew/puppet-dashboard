@@ -284,7 +284,8 @@ body {
     margin-right: 5%;
     float: left; }
   body .section {
-    margin-bottom: 1.5em; }
+    margin-bottom: 1.5em;
+    overflow: auto; }
     body .section.error {
       -webkit-border-radius: 0.35em 0.35em 0.35em 0.35em;
       -moz-border-radius: 0.35em 0.35em 0.35em 0.35em;

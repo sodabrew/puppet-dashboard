@@ -67,6 +67,10 @@ form .header input {
   width: 80%;
 }
 
+form input[readonly] {
+  background-color: #EEE;
+}
+
 form .header label {
   display: none;
 }
