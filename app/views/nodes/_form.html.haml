@@ -1,4 +1,4 @@
-= focus :node_name
+= focus (@readonly_name) ? :node_description : :node_name
 
 = header_for(form)
 
@@ -7,7 +7,11 @@
 
   .element
     = form.label :node, "Node"
-    = form.text_field :name, :placeholder => "Enter the node name here"
+    - if @readonly_name
+      %p
+        = @node.name
+    - else
+      = form.text_field :name, :placeholder => "Enter the node name here"
 
   .element.textarea
     = form.label :description
