@@ -44,7 +44,7 @@ start()
 stop()
 {
 	echo -n $"Stopping $prog: "
-	sudo -H -u puppet-dashboard bash -e -c "
+	bash -e -c "
 		export PATH='${PATH}';
 		export RUBYLIB='${RUBYLIB}';
 		export RAILS_ENV=production;
