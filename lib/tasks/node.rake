@@ -51,7 +51,7 @@ namespace :node do
   end
 
   desc 'Remove a node'
-  task :del => :environment do
+  task :delete => :environment do
     if ENV['name']
       name = ENV['name']
     else
