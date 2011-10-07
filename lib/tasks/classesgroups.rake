@@ -43,6 +43,25 @@ namespace :nodeclass do
 end
 
 namespace :nodegroup do
+  desc 'List node groups'
+  task :list => :environment do
+    regex = false
+
+    if ENV['match']
+      regex = ENV['match']
+    end
+
+    NodeGroup.find(:all).each do |nodegroup|
+      if regex
+        if nodegroup.name =~ /#{regex}/
+          puts nodegroup.name
+        end
+      else
+        puts nodegroup.name
+      end
+    end
+  end
+
   desc 'Add a new node group'
   task :add => :environment do
     if ENV['name']
