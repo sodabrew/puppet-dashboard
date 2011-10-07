@@ -1,4 +1,23 @@
 namespace :nodeclass do
+  desc 'List node classes'
+  task :list => :environment do
+    regex = false
+
+    if ENV['match']
+      regex = ENV['match']
+    end
+
+    NodeClass.find(:all).each do |nodeclass|
+      if regex
+        if nodeclass.name =~ /#{regex}/
+          puts nodeclass.name
+        end
+      else
+        puts nodeclass.name
+      end
+    end
+  end
+
   desc 'Add a new node class'
   task :add => :environment do
     if ENV['name']
