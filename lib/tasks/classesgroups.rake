@@ -76,6 +76,53 @@ namespace :nodegroup do
     end
   end
 
+  desc 'Add a class to a nodegroup'
+  task :addclass => :environment do
+    if ENV['name']
+      name = ENV['name']
+    else
+      puts 'Must specify group name (name=<group>).'
+      exit 1
+    end
+
+    if ENV['class']
+      classname = ENV['class']
+    else
+      puts 'Must specify class name (class=<classname>).'
+      exit 1
+    end
+
+    begin
+      nodegroup = NodeGroup.find_by_name(name)
+      if nodegroup.nil?
+        puts 'Group doesn\'t exist!'
+        exit 1
+      end
+
+      nc = NodeClass.find_by_name(classname)
+      if nc.nil?
+        puts 'Class doesn\'t exist!'
+        exit 1
+      else
+       classes = nodegroup.node_classes
+       if classes.include?(nc)
+         puts "Group '#{name}' already includes class '#{classname}'"
+         exit 0
+       else
+         classes << nc
+         nodegroup.node_classes = classes
+         if nodegroup.save
+           puts "Class '#{classname}' added to node group '#{name}'"
+        end
+      end
+    end
+
+    rescue => e
+      puts e.message
+      exit 1
+    end
+  end
+
   desc 'Edit a node group'
   task :edit => :environment do
     if ENV['name']
