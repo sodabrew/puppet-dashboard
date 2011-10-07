@@ -50,6 +50,27 @@ namespace :node do
     end
   end
 
+  desc 'Remove a node'
+  task :delete => :environment do
+    if ENV['name']
+      name = ENV['name']
+    else
+      puts 'Must specify node name (name=<hostname>).'
+      exit 1
+    end
+
+    begin
+      n = Node.find_by_name(name)
+      n.destroy
+    rescue NoMethodError
+      puts 'Node does not exist!'
+      exit 1
+    rescue => e
+      puts e.message
+      exit 1
+    end
+  end
+
   desc 'Add/Edit class(es) for a node'
   task :classes => :environment do
     begin
