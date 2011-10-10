@@ -1,11 +1,15 @@
-1.2.2rc2
+v1.2.2
 ===
+484b323 Change node:delete to node:del for consistency
+56b141c (#9215) Rename node:del to node:delete
+20cf5fe (#9954) Add a rake task to add classes to a nodegroup
+d9eca18 (#9954) Add a rake task to list nodeclasses
+e75b51d (#9953) Add a rake task for listing nodegroups
+14b93a2 Maint: adding VERSION_LINK to .gitignore
+8725921 (#9940) dashboard-workers can be managed as service
 ce3868f (#9429) Prevent editing node name
 edbb48e (#9429) makes node name field readonly during edit action
 14bc1e5 (#9429) adds attr_readonly to name in the node model
-
-v1.2.2rc1
-===
 a344e82 (#9366) removes conditional on .git for APP_VERSION_LINK
 9ed1c19 (#9366) allows a custom version link to be specified
 39a07de (#9773) Report content hidden
@@ -19,8 +23,11 @@ c897d00 (#9571) tweaks header markup, method of importing CSS styles
 5f381a0 (#9306) adds divs to header markup
 a63c1df (#9306) sanitizes header markup for assimilation by Riddler
 22001cc (9571) exports global nav bar via /header.html
+ca7d7a5 (#9282) Rewrite explanatory text in database.yml.example
 1f42a27 (#8825) allows configuration of logo dimensions and alt text
 992af88 (#9262) causes the contents of .section divs to scroll when overflowing
+ad4641f (#9282) Change user in database.yml.example to "dashboard"
+090538f (#9215) Add a Rake task that removes nodes
 
 v1.2.1
 ===
