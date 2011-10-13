@@ -4,6 +4,19 @@ def get_version
   `git describe`.strip
 end
 
+def get_rpmversion
+  get_version.match(/^([0-9.]+)/)[1]
+end
+
+def get_release
+  version = get_version
+  if version.include?("rc")
+    "0.1" + version.gsub('-', '_').match(/rc[0-9]+.*/)[0]
+  else
+    "1"
+  end
+end
+
 def get_temp
   `mktemp -d -t tmpXXXXXX`.strip
 end
@@ -19,9 +32,9 @@ end
 def update_redhat_spec_file(base)
   name = get_name
   spec_date = Time.now.strftime("%a %b %d %Y")
-  release = ENV['RELEASE'] ||= "1"
+  release = ENV['RELEASE'] ||= get_release
   version = get_version
-  rpmversion = version.gsub('-', '_')
+  rpmversion = get_rpmversion
   specfile = File.join(base, 'ext', 'packaging', 'redhat', "#{name}.spec")
   erbfile = File.join(base, 'ext', 'packaging', 'redhat', "#{name}.spec.erb")
   template = IO.read(erbfile)
@@ -144,7 +157,7 @@ namespace :package do
     name = get_name
     rm_rf 'pkg/tar'
     temp=`mktemp -d -t tmpXXXXXX`.strip!
-    version = `git describe`.strip!
+    version = get_version
     base = "#{temp}/#{name}-#{version}/"
     mkdir_p base
     sh "git checkout-index -af --prefix=#{base}"
