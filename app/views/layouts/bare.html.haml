@@ -1,0 +1,25 @@
+!!!
+%html{ :xmlns => "http://www.w3.org/1999/xhtml", :style => 'height: 100%' }
+  %head
+    - page_title = yield(:page_title)
+    %title= [ page_title, 'Puppet Node Manager'].compact.join(' - ')
+    %link{ :href => image_path("favicon.ico"), :rel => "shortcut icon" }
+    %meta{ :content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type" }
+
+    = javascript_include_tag 'jquery.min'
+    :javascript
+      var relative_url_root = '#{ActionController::Base.relative_url_root}';
+      $.noConflict();
+
+    = stylesheet_link_tag 'reset', 'layout', 'forms', 'tables', 'typography', 'links', 'token-input-facebook', 'tipsy', 'application', 'help', :cache => 'all'
+    = javascript_include_tag 'excanvas.min', 'raphael-min', 'grafico.min', 'application', :cache => 'all'
+    - Registry.each_callback :core, :head_extensions do |widget|
+      = widget.call self
+
+  - add_body_class "#{controller.controller_name}_controller"
+  - add_body_class "#{controller.controller_name}_#{controller.action_name}_action"
+  - add_body_class "#{controller.controller_name}_form_action" if %w[new create edit update].include?(controller.action_name)
+  - add_body_class "no-sidebar" unless @body_classes.include?('with-sidebar')
+  %body{:class => @body_classes, :style => 'height: 100%' }
+    = yield
+
