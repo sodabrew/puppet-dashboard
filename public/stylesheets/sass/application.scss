@@ -830,8 +830,6 @@ body {
     }
   }
   .radiator {
-    &_rounded_left  { @include rounded_left() }
-    &_rounded_right { @include rounded_right() }
     &_unresponsive  { @include radiator_div( $status_color_unresponsive) }
     &_failed        { @include radiator_div( $status_color_failed) }
     &_pending       { @include radiator_div( $status_color_pending) }

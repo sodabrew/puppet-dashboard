@@ -607,3 +607,57 @@ body {
         background-image: url(/images/icons/delayed-job-failure.png); }
       body .delayed-job p.warning em {
         background-image: url(/images/icons/delayed-job-warning.png); }
+  body .radiator_unresponsive {
+    background-color: #888888;
+    height: 100%;
+    min-height: 100%;
+    float: left;
+    text-align: center;
+    color: white;
+    font-weight: bold;
+    padding-top: 120px; }
+  body .radiator_failed {
+    background-color: #cc2211;
+    height: 100%;
+    min-height: 100%;
+    float: left;
+    text-align: center;
+    color: white;
+    font-weight: bold;
+    padding-top: 120px; }
+  body .radiator_pending {
+    background-color: #ee7722;
+    height: 100%;
+    min-height: 100%;
+    float: left;
+    text-align: center;
+    color: white;
+    font-weight: bold;
+    padding-top: 120px; }
+  body .radiator_changed {
+    background-color: #006699;
+    height: 100%;
+    min-height: 100%;
+    float: left;
+    text-align: center;
+    color: white;
+    font-weight: bold;
+    padding-top: 120px; }
+  body .radiator_unchanged {
+    background-color: #009933;
+    height: 100%;
+    min-height: 100%;
+    float: left;
+    text-align: center;
+    color: white;
+    font-weight: bold;
+    padding-top: 120px; }
+  body .radiator_unreported {
+    background-color: #aaaaaa;
+    height: 100%;
+    min-height: 100%;
+    float: left;
+    text-align: center;
+    color: white;
+    font-weight: bold;
+    padding-top: 120px; }
