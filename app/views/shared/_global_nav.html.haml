@@ -23,6 +23,8 @@
           = link_to "Reports", reports_path
         %li{:class => active_if(controller_name == "reports" && action_name == "search")}
           = link_to "File Search", search_reports_path
+        %li{:class => active_if(controller_name == "radiator")}
+          = link_to "Radiator", url_for(:controller => 'radiator')
         - if SETTINGS.enable_inventory_service
           %li{:class => active_if(controller_name == "nodes" && action_name == "search")}
             = link_to "Inventory Search", search_nodes_path
