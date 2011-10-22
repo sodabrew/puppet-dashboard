@@ -1,0 +1,14 @@
+-# This conditional is ugly, but it saves us from duplicating the markup
+- Node.possible_derived_statuses.push( 'unreported').each do |status|
+  - node_count = Node.send(status).unhidden.count
+  - nodes_path = eval("#{status}_nodes_url")
+  - action_status = status
+  - percent = percentage(node_count, Node.unhidden.count)
+  - font_size = (percent * 144 / 100).to_i
+  - font_size = 12 if font_size < 12
+  
+  - if percent > 0
+    %div{:id => "radiator_#{status}", :class => "radiator_#{status}", :style => "width: #{percent}%; font-size: #{font_size}pt;", :onclick => "location.href='#{nodes_path}'" }
+      = node_count
+
+

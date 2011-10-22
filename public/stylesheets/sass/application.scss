@@ -10,6 +10,14 @@
     Be sure to edit the right file, all changes to the .css file will be lost!
 */
 
+$status_color_unresponsive: #888;
+$status_color_failed:       #c21;
+$status_color_pending:      #e72;
+$status_color_changed:      #069;
+$status_color_unchanged:    #093;
+$status_color_unreported:   #aaa;
+$status_color_all:          #000;
+
 $button_background: #5c80a8;
 $button_gradient_percentage: 10%;
 
@@ -133,6 +141,17 @@ $rounding_radius: 0.35em;
     visibility : hidden;
     overflow : hidden;
   }
+}
+
+@mixin radiator_div($color) {
+  background-color: $color;
+  height: 100%;
+  min-height: 100%;
+  float: left;
+  text-align: center;
+  color: white;
+  font-weight: bold;
+  padding-top: 120px;
 }
 
 body {
@@ -666,13 +685,13 @@ body {
         cursor : pointer;
         position: relative;
 
-        &.unresponsive { @include node_summary_row( #888 )}
-        &.failed       { @include node_summary_row( #c21 )}
-        &.pending      { @include node_summary_row( #e72 )}
-        &.changed      { @include node_summary_row( #069 )}
-        &.unchanged    { @include node_summary_row( #093 )}
-        &.unreported   { @include node_summary_row( #aaa )}
-        &.all          { @include node_summary_row( #000 )}
+        &.unresponsive { @include node_summary_row( $status_color_unresponsive )}
+        &.failed       { @include node_summary_row( $status_color_failed )}
+        &.pending      { @include node_summary_row( $status_color_pending )}
+        &.changed      { @include node_summary_row( $status_color_changed )}
+        &.unchanged    { @include node_summary_row( $status_color_unchanged )}
+        &.unreported   { @include node_summary_row( $status_color_unreported )}
+        &.all          { @include node_summary_row( $status_color_all )}
 
         td {
           font-size : 1.4em;
@@ -809,5 +828,13 @@ body {
         }
       }
     }
+  }
+  .radiator {
+    &_unresponsive  { @include radiator_div( $status_color_unresponsive) }
+    &_failed        { @include radiator_div( $status_color_failed) }
+    &_pending       { @include radiator_div( $status_color_pending) }
+    &_changed       { @include radiator_div( $status_color_changed) }
+    &_unchanged     { @include radiator_div( $status_color_unchanged) }
+    &_unreported    { @include radiator_div( $status_color_unreported) }
   }
 }
