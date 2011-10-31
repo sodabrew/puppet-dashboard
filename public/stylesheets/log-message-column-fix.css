@@ -1,0 +1,4 @@
+table.inspector tr.puppet_log td.message {
+    max-width : 400px !important;
+    word-wrap : break-word !important;
+}
