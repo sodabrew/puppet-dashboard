@@ -2,7 +2,7 @@
 %global initrddir /etc/rc.d/init.d
 # VERSION is subbed out during rake srpm process
 %global realversion <%= version %>
-%define rpmversion %(echo    %{realversion} | sed -e 's/-/_/g')
+%global rpmversion <%= rpmversion %>
 
 Name:           puppet-dashboard
 Version:        %{rpmversion}
