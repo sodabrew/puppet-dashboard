@@ -217,4 +217,33 @@ namespace :nodegroup do
       puts e.message
     end
   end
+
+  desc 'Automatically adds all nodes to a group'
+  task :add_all_nodes => :environment do
+    if ENV['group']
+      groupname = ENV['group']
+    else
+      puts 'Must specify group name (group=<groupname>).'
+      exit 1
+    end
+
+    group = NodeGroup.find_by_name(groupname)
+    if group.nil?
+      puts "Cannot find group: #{groupname}"
+      exit 1
+    end
+
+    begin
+      Node.find(:all).each do |node|
+        node_groups = node.node_groups
+        unless node_groups.include?(group)
+          node_groups.push(group)
+          node.node_groups = node_groups
+        end
+      end
+    rescue => e
+      puts "There was a problem adding all nodes to the group '#{group}': #{e.message}"
+      exit 1
+    end
+  end
 end
