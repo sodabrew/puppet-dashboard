@@ -5,15 +5,12 @@ def get_version
 end
 
 def get_rpmversion
-  version = get_version
-  version.sub!(/rc[0-9]+/, '') if version.include?("rc")
-  version.slice(/[^-]+/)
+  get_version.match(/^([0-9.]+)/)[1]
 end
 
 def get_release
-  version = get_version.gsub('-', '_')
   if version.include?("rc")
-    "0.1" + /rc[0-9]+.*/.match(version)[0]
+    "0.1" + version.match(/rc[0-9]+.*/)[0]
   else
     "1"
   end
