@@ -10,21 +10,21 @@
           %a{:href => root_path, :title => SETTINGS.custom_logo_alt_text, :style => css.join('; ')} Puppet Dashboard
         %li#dashboard-version{:class => active_if(request.url == release_notes_url)}
           = link_to APP_VERSION, APP_VERSION_LINK
-        %li{:class => active_if(request.url == root_url)}
+        %li#navigation-home{:class => active_if(request.url == root_url)}
           = link_to "Home", root_path
-        %li{:class => active_if(controller_name == "nodes" && action_name == "index")}
+        %li#navigation-nodes{:class => active_if(controller_name == "nodes" && action_name == "index")}
           = link_to "Nodes", nodes_path
-        %li{:class => active_if(controller_name == "node_groups")}
+        %li#navigation-groups{:class => active_if(controller_name == "node_groups")}
           = link_to "Groups", node_groups_path
         - if SETTINGS.use_external_node_classification
-          %li{:class => active_if(controller_name == "node_classes")}
+          %li#navigation-classes{:class => active_if(controller_name == "node_classes")}
             = link_to "Classes", node_classes_path
-        %li{:class => active_if(controller_name == "reports" && action_name == "index")}
+        %li#navigation-reports{:class => active_if(controller_name == "reports" && action_name == "index")}
           = link_to "Reports", reports_path
-        %li{:class => active_if(controller_name == "reports" && action_name == "search")}
+        %li#navigation-file-search{:class => active_if(controller_name == "reports" && action_name == "search")}
           = link_to "File Search", search_reports_path
         - if SETTINGS.enable_inventory_service
-          %li{:class => active_if(controller_name == "nodes" && action_name == "search")}
+          %li#navigation-inventory-search{:class => active_if(controller_name == "nodes" && action_name == "search")}
             = link_to "Inventory Search", search_nodes_path
         - Registry.each_callback :core, :global_nav_widgets do |callback|
           = callback.call self
