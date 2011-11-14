@@ -1,3 +1,8 @@
+1.2.3rc2
+===
+a5aaba2 (#10024)  Fix typo in fix for 10024
+2cb82dc (#10024) Update Puppet Dashboard Workers init script
+
 v1.2.3rc1
 ===
 f71e679 (#10543) Rake task to add all nodes to a group
