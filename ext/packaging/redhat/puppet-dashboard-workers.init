@@ -29,7 +29,7 @@ lockfile=/var/lock/subsys/$prog
 start()
 {
 	echo -n $"Starting $prog: "
-	daemon --user $DAHSBOARD_USER "bash -e -c '
+	daemon --user ${DASHBOARD_USER} "bash -e -c '
 		export PATH='${PATH}';
 		export RUBYLIB='${RUBYLIB:-}';
 		export RAILS_ENV=production;
