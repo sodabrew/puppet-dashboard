@@ -61,7 +61,7 @@
               - else
                 = sources.map{|s| link_to(s.name,s)}.join(", ")
           %td.latest_report
-            = node.last_apply_report ? node.last_apply_report.time : "Has not reported"
+            = node.last_apply_report ? link_to(node.last_apply_report.time, node.last_apply_report) : "Has not reported"
           - column_filter[ selected_status ].each do |status|
             %td
               = node.last_apply_report.metric_value("resources", status).to_i if node.last_apply_report
