@@ -12,7 +12,6 @@
 . /etc/rc.d/init.d/functions
 
 name=puppet-dashboard-workers
-# name=pe-dashboard-workers
 
 # pull in sysconfig settings
 # first the general dashboard settings, then the dedicated settings for
@@ -21,7 +20,7 @@ name=puppet-dashboard-workers
 [ -f /etc/sysconfig/$name ] && . /etc/sysconfig/$name
 
 # The default dashboard root if not set in sysconfig
-: ${DASHBOARD_ROOT:=/usr/share/puppet-dashboard}
+: ${DASHBOARD_HOME:=/usr/share/puppet-dashboard}
 
 RETVAL=0
 prog="${name}"
@@ -30,11 +29,11 @@ lockfile=/var/lock/subsys/$prog
 start()
 {
 	echo -n $"Starting $prog: "
-	daemon --user puppet-dashboard "bash -e -c '
+	daemon --user $DAHSBOARD_USER "bash -e -c '
 		export PATH='${PATH}';
 		export RUBYLIB='${RUBYLIB:-}';
 		export RAILS_ENV=production;
-		${DASHBOARD_RUBY} ${DASHBOARD_ROOT}/script/delayed_job -p dashboard -n ${CPUS:-2} -m start;'"
+		${DASHBOARD_RUBY} ${DASHBOARD_HOME}/script/delayed_job -p dashboard -n ${CPUS:-2} -m start;'"
 	RETVAL=$?
 	[ $RETVAL -eq 0 ] && touch $lockfile
 	echo
@@ -48,7 +47,7 @@ stop()
 		export PATH='${PATH}';
 		export RUBYLIB='${RUBYLIB}';
 		export RAILS_ENV=production;
-		${DASHBOARD_RUBY} ${DASHBOARD_ROOT}/script/delayed_job -p dashboard -n ${CPUS:-2} -m stop;"
+		${DASHBOARD_RUBY} ${DASHBOARD_HOME}/script/delayed_job -p dashboard -n ${CPUS:-2} -m stop;"
 	RETVAL=$?
 	[ $RETVAL -eq 0 ] && (rm -f $lockfile; echo_success) || echo_failure
 	echo
@@ -61,7 +60,7 @@ restart() {
 
 rh_status() {
 	RETVAL=1
-	for pidfile in $(ls -1 "${DASHBOARD_ROOT}"/tmp/pids/delayed_job.*.pid 2>/dev/null)
+	for pidfile in $(ls -1 "${DASHBOARD_HOME}"/tmp/pids/delayed_job.*.pid 2>/dev/null)
 	do
 		status -p $pidfile puppet-dashboard-workers || return $?
 		RETVAL=$?
