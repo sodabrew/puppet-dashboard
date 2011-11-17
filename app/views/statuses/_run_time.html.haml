@@ -5,7 +5,7 @@
     %thead
       %tr.labels
         - reports.map{|r| r.time}.each do |time|
-          %th= time.to_s(:time)
+          %th{:scope => :col}= time.to_s(:time)
     %tbody
       %tr.runtimes
         - reports.map{|r| r.total_time}.compact.each do |time|

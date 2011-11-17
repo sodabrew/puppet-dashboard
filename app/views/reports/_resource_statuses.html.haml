@@ -19,8 +19,8 @@
             %dd.expandable.collapsed{:id => "expandable-#{index}"}
               %table
                 %tr
-                  %th Property
-                  %th Message
+                  %th{:scope => :col} Property
+                  %th{:scope => :col} Message
                 - status.events.each do |event|
                   %tr{:class => "status #{event.status}"}
                     %td= event.property

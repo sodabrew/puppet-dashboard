@@ -13,7 +13,7 @@
     %thead
       %tr.labels
         - statuses.each do |status|
-          %th= status.start.strftime('%Y-%m-%d')
+          %th{:scope => :col}= status.start.strftime('%Y-%m-%d')
     %tbody
       %tr.unchanged
         - statuses.each do |status|

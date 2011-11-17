@@ -12,7 +12,7 @@
       %tr
         -# %th.check
           -# = check_box_tag "check_all"
-        %th.name
+        %th.name{:scope => :col}
           Name
     - if @node_classes.present?
       %tbody

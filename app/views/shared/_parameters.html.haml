@@ -10,9 +10,9 @@
     %table.inspector
       %thead
         %tr
-          %th Key
-          %th Value
-          %th Source
+          %th{:scope => :col} Key
+          %th{:scope => :col} Value
+          %th{:scope => :col} Source
       %tbody
         - resource.compiled_parameters(true).each do |param|
           %tr
