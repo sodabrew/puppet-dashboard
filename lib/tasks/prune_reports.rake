@@ -50,7 +50,18 @@ UNITS:
 
     cutoff = Time.now.gmtime - (upto * units[unit].to_i)
     puts "Deleting reports before #{cutoff}..."
+
+    affected_nodes = Node.find(:all, :include => 'reports', :conditions => ['reports.time < ?', cutoff])
+
+    # the database does cascading deletes for us on dependent records
     deleted_count = Report.delete_all(['time < ?', cutoff])
+
+    # In case the last report was deleted we need to update the node
+    # This normally runs after report destroy as a callback
+    # but we're doing delete since it's a LOT faster
+    affected_nodes.each(&:find_and_assign_last_apply_report)
+    affected_nodes.each(&:find_and_assign_last_inspect_report)
+
     puts "Deleted #{deleted_count} reports."
   end
 
