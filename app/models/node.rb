@@ -14,7 +14,7 @@ class Node < ActiveRecord::Base
   has_many :node_classes, :through => :node_class_memberships
   has_many :node_group_memberships, :dependent => :destroy
   has_many :node_groups, :through => :node_group_memberships
-  has_many :reports, :dependent => :destroy
+  has_many :reports
   has_many :resource_statuses, :through => :reports
 
   belongs_to :last_apply_report, :class_name => 'Report'
