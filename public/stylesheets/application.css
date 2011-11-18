@@ -18,6 +18,28 @@ body {
   /* Facebook-style token autocompletion */ }
   body #content {
     padding: 1.5em 0 2em; }
+  body #skiplinkholder a,
+  body #skiplinkholder a:link,
+  body #skiplinkholder a:visited {
+    display: block;
+    width: 99%;
+    position: absolute;
+    top: 0;
+    left: -200%;
+    z-index: 2; }
+  body #skiplinkholder a:focus,
+  body #skiplinkholder a:active {
+    left: 0;
+    top: 0;
+    z-index: 100; }
+  body #skiplinkholder a,
+  body #skiplinkholder a:link,
+  body #skiplinkholder a:visited {
+    color: #fff;
+    background: #336;
+    text-decoration: none;
+    border-bottom: solid #ccc 2px;
+    padding: 5px; }
   body #header {
     padding: 1em 0 0; }
     body #header ul#secondary-navigation {

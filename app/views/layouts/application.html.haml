@@ -22,8 +22,12 @@
   - add_body_class "no-sidebar" unless @body_classes.include?('with-sidebar')
   %body{:class => @body_classes}
     #wrap
+      #skiplinkholder
+        = render 'shared/skiplink'
       #header
         = render 'shared/global_nav'
+      #skiptargetholder
+        = render 'shared/skiptarget'
       #content
         - [:success, :warning, :failure].each do |type|
           - if message = flash[type]
