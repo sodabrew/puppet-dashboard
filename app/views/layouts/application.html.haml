@@ -26,8 +26,6 @@
         = render 'shared/skiplink'
       #header
         = render 'shared/global_nav'
-      #skiptargetholder
-        = render 'shared/skiptarget'
       #content
         - [:success, :warning, :failure].each do |type|
           - if message = flash[type]
