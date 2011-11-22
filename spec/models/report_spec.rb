@@ -452,25 +452,6 @@ describe Report do
     end
   end
 
-
-  describe "When destroying" do
-    it "should destroy all dependent model objects" do
-      @node = Node.generate(:name => 'puppet.puppetlabs.vm')
-      @report_yaml = File.read(File.join(RAILS_ROOT, "spec/fixtures/reports/puppet26/report_ok_service_started_ok.yaml"))
-      file = '/etc/puppet/manifests/site.pp'
-      report = Report.create_from_yaml(@report_yaml)
-      ResourceStatus.count.should_not == 0
-      ResourceEvent.count.should_not == 0
-      ReportLog.count.should_not == 0
-      Metric.count.should_not == 0
-      report.destroy
-      ResourceStatus.count.should == 0
-      ResourceEvent.count.should == 0
-      ReportLog.count.should == 0
-      Metric.count.should == 0
-    end
-  end
-
   describe "when submitting reports" do
     it "should be able to save an inspect report and an apply report with the same timestamp" do
       time = Time.now

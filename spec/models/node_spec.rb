@@ -436,12 +436,6 @@ describe Node do
       @node = Node.generate!(:name => 'gonnadienode')
     end
 
-    it("should destroy dependent reports") do
-      @report = Report.generate!(:host => @node.name)
-      @node.destroy
-      Report.all.should_not include(@report)
-    end
-
     it "should remove class memberships" do
       node_class = NodeClass.generate!()
       @node.node_classes << node_class
