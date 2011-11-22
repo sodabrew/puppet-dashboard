@@ -47,7 +47,9 @@ end
 
 Rake.application.instance_variable_get('@tasks').delete('default')
 
-spec_prereq = File.exist?(File.join(RAILS_ROOT, 'config', 'database.yml')) ? "db:test:prepare" : :noop
+# db:test:prepare loads the schema from schema.rb, which doesn't have foreign key constraints
+# db:test:clone_structure copies the schema to test from development, which will have the constraints
+spec_prereq = File.exist?(File.join(RAILS_ROOT, 'config', 'database.yml')) ? "db:test:clone_structure" : :noop
 task :noop do
 end
 

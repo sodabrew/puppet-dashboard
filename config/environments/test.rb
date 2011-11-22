@@ -25,6 +25,11 @@ config.action_mailer.delivery_method = :test
 # Use SQL instead of Active Record's schema dumper when creating the test database.
 # This is necessary if your schema can't be completely dumped by the schema dumper,
 # like if you have constraints or database-specific column types
+# Unfortunately, this doesn't work
+# A fix was merged recently
+# https://github.com/rails/rails/issues/715
+# But not sure when they'll backport it to Rails 2.3
+# https://github.com/rails/rails/issues/743
 # config.active_record.schema_format = :sql
 
 config.gem 'mocha'
