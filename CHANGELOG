@@ -1,10 +1,7 @@
-1.2.3rc2
+v1.2.3
 ===
 a5aaba2 (#10024)  Fix typo in fix for 10024
 2cb82dc (#10024) Update Puppet Dashboard Workers init script
-
-v1.2.3rc1
-===
 f71e679 (#10543) Rake task to add all nodes to a group
 2e93d73 (#10270) dashboard-workers init script should check the right pid files
 c6d57e6 Revert "Merge pull request #45 from robsweet/master"
