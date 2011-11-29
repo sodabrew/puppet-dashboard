@@ -109,6 +109,7 @@ namespace :package do
           cp latest_file(File.join(temp, '*.deb')), dest_dir
           cp latest_file(File.join(temp, '*.dsc')), dest_dir
           cp latest_file(File.join(temp, '*.changes')), dest_dir
+          cp latest_file(File.join(temp, '*.tar.gz')), dest_dir
           puts
           puts "** Created package: "+ latest_file(File.expand_path(File.join(RAILS_ROOT, 'pkg', 'deb', '*.deb')))
         rescue
