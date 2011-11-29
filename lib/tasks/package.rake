@@ -6,7 +6,7 @@ end
 
 def get_debversion
   version = get_version
-  version.include?("rc") ? version.sub(/rc[0-9]+/, '-0.1\0') : version + '-1'
+  version.include?("rc") ? version.sub(/rc[0-9]+/, '-0.1\0') : version + '-1puppetlabs1'
 end
 
 def get_rpmversion
