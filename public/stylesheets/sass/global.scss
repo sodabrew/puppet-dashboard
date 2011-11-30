@@ -2,13 +2,660 @@
     IMPORTANT: This stylesheet is processed using SASS!
 
     Edit this file:
-        public/stylesheets/sass/application.scss
+        public/stylesheets/sass/global.scss
 
     And after a Rails action, it'll generate a fresh copy of:
-        public/stylesheets/application.css
+        public/stylesheets/global.css
 
     Be sure to edit the right file, all changes to the .css file will be lost!
 */
+
+@import 'reset';
+
+/*********************
+ * layout.css
+ */
+#wrap {
+  margin: 0 1em 1em;
+}
+
+#header {
+  margin-bottom: 1em;
+  padding: 1em 0 0;
+}
+
+#sidebar { 
+  width: 20%; 
+  float: left; 
+  clear: left;
+}
+
+body.with-sidebar #main { 
+  width: 80%; 
+  float: left;
+}
+
+body.no-sidebar #main { 
+  width: 100%;
+}
+
+#main.full {
+  width: 100%;
+}
+
+#list {
+  max-height: 300px;
+  overflow: auto;
+}
+
+#item {
+  background: #FFF;
+}
+
+/*******************
+ * forms.css
+ */
+.element {
+  width: 512px;
+  margin: 0 0 .5em;
+}
+
+.element.header {
+  width: 100%;
+}
+
+.element.actions {
+  background: #DDD;
+  width: 100%;
+  padding: .2em 0;
+}
+
+.errors.element {
+  border: 1px solid #FCC;
+  background: #FEE;
+  color: #F66;
+}
+
+.errors.element h3 {
+  color: #D55;
+  background: #FCC;
+}
+
+.errors ul {
+  list-style: none; margin-bottom: .5em;
+  padding: 0 0.5em;
+}
+
+.errors ul li {
+  padding-left: 20px;
+  background: url(images/icons/failure.png) left center no-repeat;
+}
+
+
+.element.errors h3 {
+  padding: .2em .5em;
+}
+
+label {
+  display: block;
+  font-weight: bold;
+}
+
+form h3 {
+  font-size: 1em;
+}
+
+form input.inline, form label.inline {
+  display: inline;
+}
+
+form .errorExplanation {
+  margin-bottom: 1.5em;
+}
+
+form .header input {
+  border: 1px solid transparent;
+  font-size: 1.45em;
+  font-weight: bold;
+  margin: 2px;
+  width: 80%;
+}
+
+form input[readonly] {
+  background-color: #EEE;
+}
+
+form .header label {
+  display: none;
+}
+
+form textarea {
+  width: 99%;
+}
+
+form.search {
+  float: right;
+  background: transparent;
+  padding: 0;
+}
+
+body form.search input {
+  color: #444;
+  width: 20em;
+  margin: 0;
+  line-height: 1.4em;
+  padding: .35em;
+  border: 1px solid #CCC;
+}
+
+body form.search button {
+  margin: 0.25em 0.25em 0.25em 0em;
+}
+
+.fieldWithErrors input {
+  background: #FDD;
+}
+
+form#new_user_session,
+form#new_user{
+  width: 360px;
+  margin: 0 auto;
+  border: 4px solid #ccc;
+  background: #eee;
+  padding: 20px;
+}
+
+form#new_user_session .buttons,
+form#new_user .buttons{
+  margin-top: 2em;
+}
+
+.in-place {
+  display: none;
+}
+
+/**********************
+ * tables.css
+ */
+table.main, table.inspector {
+  border-collapse: collapse;
+  width: 100%;
+  background: #FFF;
+  border: 1px solid #DDD;
+}
+
+table.inspector { margin-bottom: 1em; }
+
+table.main thead th,
+table.inspector thead th {
+  background: #EEE -moz-linear-gradient(top, #F8F8F8, #E8E8E8);
+  background: #EEE -webkit-gradient(linear, 0% 0%, 0% 100%, from(#F8F8F8), to(#E8E8E8));
+  border: 1px solid #DDD;
+  padding: 0 .5em;
+  color: #888;
+}
+
+table.inspector tbody td,
+table.main tbody td {
+  border: 1px solid #DDD;
+  padding: .25em .5em .15em;
+  vertical-align: top;
+}
+
+table.inspector tbody tr:nth-child(even) td,
+table.main tbody tr:nth-child(even) td {
+  background: #F5F5F5;
+}
+
+table.main tbody tr.active td {
+  background: #BFE2EC;
+}
+
+table.main tfoot td {
+  background: #DDD;
+}
+
+table thead th.check, table tbody td.check {
+  width: 1px;
+  margin: 0;
+}
+
+table thead th.check input, table tbody td.check input {
+  margin: 0 -.2em;
+  padding: 0;
+}
+
+table thead th.status, table tbody td.status {
+  width: 2em;
+  color: #AAA;
+  padding: 0;
+  text-align: center;
+  vertical-align: middle;
+}
+
+table thead th.status span, table tbody td.status span {
+  font-weight: bold;
+}
+
+table thead th.status span {
+  top: .1em;
+}
+
+table tbody td.status.success {
+  color: green;
+}
+
+table tbody td.status.failure {
+  color: red;
+}
+
+table tbody tr.status.failure td {
+  background-color: #ffb7b7;
+}
+table tbody tr:nth-child(even).status.failure td {
+  background-color: #ffc7c7;
+}
+
+table tbody tr.status.changed {
+  background-color: #FF9;
+}
+
+table.inspector td.key,
+table.inspector td.value {
+  vertical-align: top;
+  text-align: left;
+}
+
+table.inspector td.key {
+  width: 20%;
+}
+
+table.inspector td.value {
+  width: 100%;
+}
+
+table.inspector tfoot td {
+  border: 1px solid #DDD;
+  background: #DDD;
+}
+
+form table.inspector input {
+  padding: 5px 1%;
+  width: 97%;
+  margin: 0;
+}
+
+body table.inspector tbody tr td.total {
+  font-weight: bold;
+}
+
+table th.empty {
+  text-align: left;
+  background: transparent !important;
+  padding-left: 1em !important;
+}
+
+table td.empty {
+  text-align: center;
+  color: #999;
+  background: #F8F8F8;
+}
+/* this isn't even really a table anymore */
+.expandable-list {
+  padding : 1em;
+  background : #fff;
+  width : auto;
+}
+.expandable-list .even {
+  background: #F5F5F5;
+}
+.expandable-list .expandable {
+  margin-bottom : 1em;
+}
+.expandable-list .collapsed {
+  display: none;
+}
+.expandable-list .expandable-link.collapsed-link:before {
+  content: url('../../images/icons/bullet_toggle_plus.png');
+}
+.expandable-list .expandable-link:before {
+  content: url('../../images/icons/bullet_toggle_minus.png');
+}
+
+.expandable-list .non-expandable-bullet:before {
+  content: url('../../images/icons/bullet_green.png');
+}
+.inspect-report .expandable-list .non-expandable-bullet:before {
+  content: url('../../images/icons/bullet_red.png');
+}
+
+.expandable-list .expandable-link, .expandable-list .non-expandable-bullet {
+  vertical-align: bottom;
+}
+.expandable-list-item {
+  display: inline-block;
+  vertical-align: bottom;
+}
+.expandable-list table th {
+  font-weight : bold;
+}
+.expandable-list table td,
+.expandable-list table th {
+  padding : .25em .5em .15em;
+}
+.content {
+  padding : 1em;
+  background : #fff;
+}
+.content h4 {
+  margin-top : 1em;
+}
+
+/********************
+ * jquery.ui.custom.css
+ */
+
+@import 'jquery.ui.custom';
+
+/********************
+ * jquery.ui.combobox.css
+ */
+
+@import 'jquery.ui.combobox';
+
+/********************
+ * typography.css
+ */
+
+body {
+  font-family: Helvetica, Arial, Verdana, sans-serif;
+  line-height: 18px;
+  font-size: 12px;
+}
+
+h1, h2, h3, h4, h5, h6,
+.actions, .button, .navigation,
+.header input, button {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: #333;
+  font-weight: bold;
+  margin-bottom: .5em;
+}
+
+h1 {
+  font-size: 2.5em;
+  line-height: 1em;
+  margin-bottom: 0.33em;
+}
+
+h2 {
+  font-size: 1.45em;
+  line-height: 1.5em;
+  margin-bottom: 0.5em;
+}
+
+h3 {
+  font-size: 1.25em;
+  line-height: 1em;
+}
+
+#sidebar h3 {
+  margin: 0;
+}
+
+h4 {
+  font-size: 1em;
+  line-height: 1.28em;
+}
+
+p {
+  font-size: 1em;
+  margin-bottom: 1.5em;
+}
+
+a {
+  text-decoration: none;
+  color: #2C66A8;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+span.count {
+  color: #999;
+}
+
+span.alt {
+  color: #999;
+  font-family: "Georgia", sefif;
+  font-weight: normal;
+  font-style: italic;
+}
+
+strong {
+  font-weight: bold;
+}
+
+code, pre {
+  font-family: "Monaco", "Courier New", Courier, fixed-width;
+}
+
+p.error {
+  color: #C33;
+  background: #FEE;
+  padding: .5em 1em;
+}
+
+input {
+  font-size: 1em;
+}
+
+/********************
+ * links.css
+ */
+
+ul.actions {
+  position: absolute;
+  right: 1px;
+  top: 1px;
+}
+
+ul.actions li {
+  display: inline-block;
+}
+
+a.cancel {
+  color: #888;
+}
+.icon {
+  display: inline-block;
+  height: 100%;
+  width: 16px;
+  text-indent: -9999px;
+  vertical-align: baseline;
+}
+
+a.icon span { display: none; }
+
+.icon.success {
+  background: url(images/icons/success.png) transparent center center no-repeat;
+}
+
+.icon.failed {
+  background: url(images/icons/failure.png) transparent center center no-repeat;
+}
+
+.icon.add {
+  background: url(images/icons/add.png) transparent center center no-repeat;
+}
+
+.icon.delete {
+  background: url(images/icons/delete.png) transparent center center no-repeat;
+}
+
+span.type {
+  top: 0.25em;
+  left: 0;
+  position: absolute;
+  display: block;
+  width: 16px;
+  height: 16px;
+}
+
+span.type span {
+  display: none;
+}
+
+span.node.type {
+  background: url(images/icons/computer.png);
+}
+
+/********************
+ * token-input-facebook.css
+ */
+
+/* Example tokeninput style #2: Facebook style */
+ul.token-input-list-facebook {
+    overflow: hidden; 
+    height: auto !important; 
+    height: 1%;
+    width: 400px;
+    border: 1px solid #8496ba;
+    cursor: text;
+    font-size: 12px;
+    font-family: Verdana;
+    min-height: 1px;
+    z-index: 999;
+    margin: 0;
+    padding: 0;
+    background-color: #fff;
+}
+
+ul.token-input-list-facebook {
+    list-style-type: none;
+}
+
+ul.token-input-list-facebook li input {
+    border: 0;
+    width: 100px;
+    padding: 3px 8px;
+    background-color: white;
+    margin: 2px 0;
+}
+
+li.token-input-token-facebook {
+    overflow: hidden; 
+    height: auto !important; 
+    height: 1%;
+    margin: 3px;
+    padding: 1px 3px;
+    background-color: #eff2f7;
+    color: #000;
+    cursor: default;
+    border: 1px solid #ccd5e4;
+    font-size: 11px;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    float: left;
+}
+
+li.token-input-token-facebook p {
+    display: inline;
+    padding: 0;
+    margin: 0;
+}
+
+li.token-input-token-facebook span {
+    color: #a6b3cf;
+    margin-left: 5px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+li.token-input-selected-token-facebook {
+    background-color: #5670a6;
+    border: 1px solid #3b5998;
+    color: #fff;
+}
+
+li.token-input-input-token-facebook {
+    float: left;
+}
+
+div.token-input-dropdown-facebook {
+    position: absolute;
+    width: 400px;
+    background-color: #fff;
+    overflow: hidden;
+    border-left: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    cursor: default;
+    font-size: 11px;
+    font-family: Verdana;
+    z-index: 1;
+}
+
+div.token-input-dropdown-facebook p {
+    margin: 0;
+    padding: 5px;
+    font-weight: bold;
+    color: #777;
+}
+
+div.token-input-dropdown-facebook ul {
+    margin: 0;
+    padding: 0;
+}
+
+div.token-input-dropdown-facebook ul li {
+    background-color: #fff;
+    padding: 3px;
+}
+
+div.token-input-dropdown-facebook ul li.token-input-dropdown-item-facebook {
+    background-color: #fff;
+}
+
+div.token-input-dropdown-facebook ul li.token-input-dropdown-item2-facebook {
+    background-color: #fff;
+}
+
+div.token-input-dropdown-facebook ul li em {
+    font-weight: bold;
+    font-style: none;
+}
+
+div.token-input-dropdown-facebook ul li.token-input-selected-dropdown-item-facebook {
+    background-color: #3b5998;
+    color: #fff;
+}
+
+/********************
+ * tipsy.css
+ */
+
+.tipsy { padding: 5px; font-size: 12px; position: absolute; z-index: 100000; }
+  .tipsy-inner { padding: 5px 8px 4px 8px; background-color: black; color: white; max-width: 200px; text-align: center; }
+  .tipsy-inner { border-radius: 3px; -moz-border-radius:3px; -webkit-border-radius:3px; }
+  .tipsy-arrow { position: absolute; background: url('../images/tipsy.gif') no-repeat top left; width: 9px; height: 5px; }
+  .tipsy-n .tipsy-arrow { top: 0; left: 50%; margin-left: -4px; }
+    .tipsy-nw .tipsy-arrow { top: 0; left: 10px; }
+    .tipsy-ne .tipsy-arrow { top: 0; right: 10px; }
+  .tipsy-s .tipsy-arrow { bottom: 0; left: 50%; margin-left: -4px; background-position: bottom left; }
+    .tipsy-sw .tipsy-arrow { bottom: 0; left: 10px; background-position: bottom left; }
+    .tipsy-se .tipsy-arrow { bottom: 0; right: 10px; background-position: bottom left; }
+  .tipsy-e .tipsy-arrow { top: 50%; margin-top: -4px; right: 0; width: 5px; height: 9px; background-position: top right; }
+  .tipsy-w .tipsy-arrow { top: 50%; margin-top: -4px; left: 0; width: 5px; height: 9px; }
+
+/********************
+ * global.css
+ */
 
 $button_background: #5c80a8;
 $button_gradient_percentage: 10%;
@@ -145,7 +792,6 @@ body {
   }
 
   #header {
-    padding: 1em 0 0;
 
     ul {
       &#secondary-navigation {
@@ -811,3 +1457,29 @@ body {
     }
   }
 }
+
+/********************
+ * colorbox.css
+ */
+@import 'colorbox';
+
+/********************
+ * help.css
+ */
+.with-help {
+  position: relative;
+  /* won't someone think of the children? */ }
+
+.help {
+  position: absolute;
+  top: 2px;
+  right: 4px; }
+  .help a {
+    text-indent: -9999px;
+    background: transparent url("../images/icons/help.png") no-repeat 0% 50%;
+    cursor: pointer;
+    width: 16px;
+    height: 16px;
+    display: block; }
+
+@import 'inner';

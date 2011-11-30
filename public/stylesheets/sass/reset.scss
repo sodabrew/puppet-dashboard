@@ -9,6 +9,7 @@
 
     Be sure to edit the right file, all changes to the .css file will be lost!
 */
+
 html, body, div, span, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, code, del, dfn, em, img, q, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td {
   margin: 0;
   padding: 0;
@@ -17,33 +18,43 @@ html, body, div, span, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pr
   font-style: inherit;
   font-size: 100%;
   font-family: inherit;
-  vertical-align: baseline; }
+  vertical-align: baseline;
+}
 
 body {
-  line-height: 20px; }
+  line-height: 20px;
+}
 
 table {
   border-collapse: separate;
-  border-spacing: 0; }
+  border-spacing: 0;
+}
 
 caption, th, td {
   text-align: left;
-  font-weight: normal; }
+  font-weight: normal;
+}
 
 table, td, th {
-  vertical-align: middle; }
+  vertical-align: middle;
+}
 
 blockquote:before, blockquote:after, q:before, q:after {
-  content: ""; }
+  content: "";
+}
 
 blockquote, q {
-  quotes: "" ""; }
+  quotes: "" "";
+}
 
 a img {
-  border: none; }
+  border: none;
+}
 
 a {
-  outline: 0; }
+  outline: 0;
+}
 
 ul {
-  list-style-position: inside; }
+  list-style-position: inside;
+}
