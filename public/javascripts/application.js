@@ -114,27 +114,27 @@ jQuery(document).ready(function(J) {
   });
   init_expandable_list();
 
-  J('.reports_show_action #report-tabs').show();
-  J('.reports_show_action .panel').addClass('tabbed');
-  J('.reports_show_action #report-tabs li').click(function() {
+  J('.reports-show-action #report-tabs').show();
+  J('.reports-show-action .panel').addClass('tabbed');
+  J('.reports-show-action #report-tabs li').click(function() {
     panelID = this.id.replace(/-tab$/, '');
-    J('.reports_show_action #report-tabs li').removeClass('active');
-    J('.reports_show_action .panel').hide();
+    J('.reports-show-action #report-tabs li').removeClass('active');
+    J('.reports-show-action .panel').hide();
     J(this).addClass('active');
     J('#' + panelID).show();
   });
-  J('.reports_show_action #report-tabs li:first').click();
+  J('.reports-show-action #report-tabs li:first').click();
 
-  J('.pages_home_action #home-tabs').show();
-  J('.pages_home_action .panel').addClass('tabbed');
-  J('.pages_home_action #home-tabs li').click(function() {
+  J('.pages-home-action #home-tabs').show();
+  J('.pages-home-action .panel').addClass('tabbed');
+  J('.pages-home-action #home-tabs li').click(function() {
     panelID = this.id.replace(/-tab$/, '');
-    J('.pages_home_action #home-tabs li').removeClass('active');
-    J('.pages_home_action .panel').hide();
+    J('.pages-home-action #home-tabs li').removeClass('active');
+    J('.pages-home-action .panel').hide();
     J(this).addClass('active');
     J('#' + panelID).show();
   });
-  J('.pages_home_action #home-tabs li:first').click();
+  J('.pages-home-action #home-tabs li:first').click();
 
   init_sidebar_links();
 });

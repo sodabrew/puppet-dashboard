@@ -1422,305 +1422,9 @@ button.ui-button::-moz-focus-inner {
 
     Be sure to edit the right file, all changes to the .css file will be lost!
 */
-/*******************************************************************************
-*                              STRUCTURAL RULES                                *
-*******************************************************************************/
-/* TODO: START WORK HERE */
 /******************************************************************************
 *                      GLOBAL STYLES, VARIABLES, MIXINS                       *
 ******************************************************************************/
-/******************************************************************************
-*                              REUSABLE CLASSES                               *
-******************************************************************************/
-.element {
-  width: 512px;
-  margin: 0 0 .5em; }
-
-.element.header {
-  width: 100%; }
-
-.element.actions {
-  background: #DDD;
-  width: 100%;
-  padding: .2em 0; }
-
-.element.errors {
-  border: 1px solid #FCC;
-  background: #FEE;
-  color: #F66; }
-
-.in-place {
-  display: none; }
-
-.expandable-list {
-  padding: 1em;
-  background: #fff;
-  width: auto; }
-
-.expandable {
-  margin-bottom: 1em; }
-
-.collapsed {
-  display: none; }
-
-.expandable-list .even {
-  background: #F5F5F5; }
-
-.expandable-link.collapsed-link:before {
-  content: url("../../images/icons/bullet_toggle_plus.png"); }
-
-.expandable-link:before {
-  content: url("../../images/icons/bullet_toggle_minus.png"); }
-
-.non-expandable-bullet:before {
-  content: url("../../images/icons/bullet_green.png"); }
-
-.expandable-link,
-.non-expandable-bullet {
-  vertical-align: bottom; }
-
-.expandable-list-item {
-  display: inline-block;
-  vertical-align: bottom; }
-
-.content {
-  padding: 1em;
-  background: #fff; }
-
-.actions {
-  font-size: 12px; }
-
-.actions,
-.button,
-.navigation {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; }
-
-.errorExplanation {
-  margin-bottom: 1.5em; }
-
-.icon {
-  display: inline-block;
-  height: 100%;
-  width: 16px;
-  text-indent: -9999px;
-  vertical-align: baseline; }
-
-.icon.success {
-  background: url(images/icons/success.png) transparent center center no-repeat; }
-
-.icon.failed {
-  background: url(images/icons/failure.png) transparent center center no-repeat; }
-
-.icon.add {
-  background: url(images/icons/add.png) transparent center center no-repeat; }
-
-.icon.delete {
-  background: url(images/icons/delete.png) transparent center center no-repeat; }
-
-.navigation {
-  position: relative; }
-
-.clear {
-  clear: both; }
-
-.wrap {
-  word-wrap: break-word;
-  word-break: break-all; }
-
-.nowrap {
-  white-space: nowrap; }
-
-.item {
-  -webkit-border-radius: 0 0 0.35em 0.35em;
-  -moz-border-radius: 0 0 0.35em 0.35em;
-  border-radius: 0 0 0.35em 0.35em;
-  background: #FFF;
-  padding: 1em;
-  margin-bottom: 1em; }
-
-.item:last-child {
-  padding-bottom: 0;
-  margin-bottom: 0; }
-
-.half {
-  width: 45%;
-  margin-right: 5%;
-  float: left; }
-
-.section {
-  margin-bottom: 1.5em; }
-  .section.error {
-    -webkit-border-radius: 0.35em 0.35em 0.35em 0.35em;
-    -moz-border-radius: 0.35em 0.35em 0.35em 0.35em;
-    border-radius: 0.35em 0.35em 0.35em 0.35em;
-    padding: 10px 10px 0;
-    background: #ffdddd;
-    border: 1px solid #ffcccc;
-    color: #443333; }
-    .section.error h3 {
-      margin: -10px -10px 0.5em;
-      padding: .5em 10px .5em 26px;
-      background: #ffcccc url("../images/icons/failed.png") 5px center no-repeat;
-      color: #443333; }
-    .section.error p:last-child {
-      padding-bottom: 0;
-      margin-bottom: 0.75em; }
-  .section.failure {
-    -webkit-border-radius: 0.35em 0.35em 0.35em 0.35em;
-    -moz-border-radius: 0.35em 0.35em 0.35em 0.35em;
-    border-radius: 0.35em 0.35em 0.35em 0.35em;
-    padding: 10px 10px 0;
-    background: #ffdddd;
-    border: 1px solid #ffcccc;
-    color: #443333; }
-    .section.failure h3 {
-      margin: -10px -10px 0.5em;
-      padding: .5em 10px .5em 26px;
-      background: #ffcccc url("../images/icons/failed.png") 5px center no-repeat;
-      color: #443333; }
-    .section.failure p:last-child {
-      padding-bottom: 0;
-      margin-bottom: 0.75em; }
-  .section.warning {
-    -webkit-border-radius: 0.35em 0.35em 0.35em 0.35em;
-    -moz-border-radius: 0.35em 0.35em 0.35em 0.35em;
-    border-radius: 0.35em 0.35em 0.35em 0.35em;
-    padding: 10px 10px 0;
-    background: #eedddd;
-    border: 1px solid #ddcccc;
-    color: #443333; }
-    .section.warning h3 {
-      margin: -10px -10px 0.5em;
-      padding: .5em 10px .5em 26px;
-      background: #ddcccc url("../images/icons/warning.png") 5px center no-repeat;
-      color: #444444; }
-    .section.warning p:last-child {
-      padding-bottom: 0;
-      margin-bottom: 0.75em; }
-  .section.success {
-    -webkit-border-radius: 0.35em 0.35em 0.35em 0.35em;
-    -moz-border-radius: 0.35em 0.35em 0.35em 0.35em;
-    border-radius: 0.35em 0.35em 0.35em 0.35em;
-    padding: 10px 10px 0;
-    background: #ddeedd;
-    border: 1px solid #ccddcc;
-    color: #334433; }
-    .section.success h3 {
-      margin: -10px -10px 0.5em;
-      padding: .5em 10px .5em 26px;
-      background: #ccddcc url("../images/icons/warning.png") 5px center no-repeat;
-      color: #444444; }
-    .section.success p:last-child {
-      padding-bottom: 0;
-      margin-bottom: 0.75em; }
-  .section.notice {
-    -webkit-border-radius: 0.35em 0.35em 0.35em 0.35em;
-    -moz-border-radius: 0.35em 0.35em 0.35em 0.35em;
-    border-radius: 0.35em 0.35em 0.35em 0.35em;
-    padding: 10px 10px 0;
-    background: #dddddd;
-    border: 1px solid #cccccc;
-    color: #333333; }
-    .section.notice h3 {
-      margin: -10px -10px 0.5em;
-      padding: .5em 10px .5em 26px;
-      background: #cccccc url("../images/icons/notice.png") 5px center no-repeat;
-      color: #444444; }
-    .section.notice p:last-child {
-      padding-bottom: 0;
-      margin-bottom: 0.75em; }
-
-.panel.tabbed {
-  border: solid 1px #CCC;
-  background-color: white;
-  padding: 1em;
-  margin-top: 25px;
-  margin-bottom: 1em; }
-
-.node_summary {
-  padding: 0 .5em;
-  margin: .5em auto; }
-
-.delayed-job {
-  padding-bottom: .5em; }
-
-.with-help {
-  position: relative;
-  /* won't someone think of the children? */ }
-
-.help {
-  position: absolute;
-  top: 2px;
-  right: 4px; }
-
-/******************************************************************************
-*                             DEFAULT TAG STYLES                              *
-******************************************************************************/
-body {
-  background: #e8eef0;
-  color: #444;
-  min-width: 400px;
-  font-family: Helvetica, Arial, Verdana, sans-serif;
-  line-height: 18px;
-  font-size: 12px; }
-
-label {
-  display: block;
-  font-weight: bold; }
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  color: #333;
-  font-weight: bold;
-  margin-bottom: .5em;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; }
-
-h1 {
-  font-size: 2.5em;
-  line-height: 1em;
-  margin-bottom: 0.33em; }
-
-h2 {
-  font-size: 1.45em;
-  line-height: 1.5em;
-  margin-bottom: 0.5em; }
-
-h3 {
-  font-size: 1.25em;
-  line-height: 1em; }
-
-h4 {
-  font-size: 1em;
-  line-height: 1.28em; }
-
-p {
-  font-size: 1em;
-  margin-bottom: 1.5em; }
-
-a {
-  text-decoration: none;
-  color: #2C66A8; }
-
-a:hover {
-  text-decoration: underline; }
-
-button {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; }
-
-strong {
-  font-weight: bold; }
-
-code,
-pre {
-  font-family: "Monaco", "Courier New", Courier, fixed-width; }
-
-input {
-  font-size: 1em; }
-
 /*******************************************************************************
 *                              STRUCTURAL RULES                                *
 *******************************************************************************/
@@ -1845,18 +1549,6 @@ form.search button {
 
 .fieldWithErrors input {
   background: #FDD; }
-
-form#new_user_session,
-form#new_user {
-  width: 360px;
-  margin: 0 auto;
-  border: 4px solid #ccc;
-  background: #eee;
-  padding: 20px; }
-
-form#new_user_session .buttons,
-form#new_user .buttons {
-  margin-top: 2em; }
 
 table.main,
 table.inspector {
@@ -2320,12 +2012,6 @@ button.warning {
   padding: 1px; }
   .actionbar form {
     padding: .25em; }
-  .actionbar #add_node {
-    margin: 2px 2px 1px; }
-    .actionbar #add_node form {
-      -webkit-border-radius: 0.35em 0.35em 0.35em 0.35em;
-      -moz-border-radius: 0.35em 0.35em 0.35em 0.35em;
-      border-radius: 0.35em 0.35em 0.35em 0.35em; }
   .actionbar .pagination {
     font-size: 12px;
     padding: .1em .5em;
@@ -2398,155 +2084,148 @@ ul.tabbed {
     visibility: hidden;
     overflow: hidden; }
 
-body.reports_show_action .section,
-body.pages_home_action .section {
+body.reports-show-action .section,
+body.pages-home-action .section {
   margin: 0; }
-body.reports_show_action h4,
-body.pages_home_action h4 {
+body.reports-show-action h4,
+body.pages-home-action h4 {
   color: #444; }
-body.reports_show_action table.inspector td.key,
-body.pages_home_action table.inspector td.key {
+body.reports-show-action table.inspector td.key,
+body.pages-home-action table.inspector td.key {
   text-align: right;
   white-space: nowrap; }
-body.reports_show_action tr.puppet_log.puppet_log_level_err:nth-child(even) td,
-body.pages_home_action tr.puppet_log.puppet_log_level_err:nth-child(even) td {
+body.reports-show-action tr.puppet-log.puppet-log-level-err:nth-child(even) td,
+body.pages-home-action tr.puppet-log.puppet-log-level-err:nth-child(even) td {
   background: #ffc7c7; }
-body.reports_show_action tr.puppet_log.puppet_log_level_err td,
-body.pages_home_action tr.puppet_log.puppet_log_level_err td {
+body.reports-show-action tr.puppet-log.puppet-log-level-err td,
+body.pages-home-action tr.puppet-log.puppet-log-level-err td {
   background: #ffd6d6; }
-body.reports_show_action tr.puppet_log.puppet_log_level_warning:nth-child(even) td,
-body.pages_home_action tr.puppet_log.puppet_log_level_warning:nth-child(even) td {
+body.reports-show-action tr.puppet-log.puppet-log-level-warning:nth-child(even) td,
+body.pages-home-action tr.puppet-log.puppet-log-level-warning:nth-child(even) td {
   background: #ffe4c7; }
-body.reports_show_action tr.puppet_log.puppet_log_level_warning td,
-body.pages_home_action tr.puppet_log.puppet_log_level_warning td {
+body.reports-show-action tr.puppet-log.puppet-log-level-warning td,
+body.pages-home-action tr.puppet-log.puppet-log-level-warning td {
   background: #ffebd6; }
 
-.node_summary table {
+.node-summary table {
   width: 100%; }
-  .node_summary table .count {
+  .node-summary table .count {
     font-weight: bold;
     padding-left: .3em; }
-  .node_summary table .count,
-  .node_summary table .graph {
+  .node-summary table .count,
+  .node-summary table .graph {
     padding-left: .3em; }
-  .node_summary table .count,
-  .node_summary table .label {
+  .node-summary table .count,
+  .node-summary table .label {
     padding-top: .2em; }
-.node_summary table.primary tr {
+.node-summary table.primary tr {
   cursor: pointer;
   position: relative; }
-  .node_summary table.primary tr.unresponsive a {
+  .node-summary table.primary tr.unresponsive a {
     color: #888888; }
-  .node_summary table.primary tr.unresponsive .percent a {
+  .node-summary table.primary tr.unresponsive .percent a {
     background-color: #888888; }
-  .node_summary table.primary tr.unresponsive.hover, .node_summary table.primary tr.unresponsive.active, .node_summary table.primary tr.unresponsive:hover {
+  .node-summary table.primary tr.unresponsive.hover, .node-summary table.primary tr.unresponsive.active, .node-summary table.primary tr.unresponsive:hover {
     background-color: #888888; }
-    .node_summary table.primary tr.unresponsive.hover a, .node_summary table.primary tr.unresponsive.active a, .node_summary table.primary tr.unresponsive:hover a {
+    .node-summary table.primary tr.unresponsive.hover a, .node-summary table.primary tr.unresponsive.active a, .node-summary table.primary tr.unresponsive:hover a {
       color: #fff;
       text-decoration: none; }
-    .node_summary table.primary tr.unresponsive.hover .percent a, .node_summary table.primary tr.unresponsive.active .percent a, .node_summary table.primary tr.unresponsive:hover .percent a {
+    .node-summary table.primary tr.unresponsive.hover .percent a, .node-summary table.primary tr.unresponsive.active .percent a, .node-summary table.primary tr.unresponsive:hover .percent a {
       background-color: #fff; }
-  .node_summary table.primary tr.failed a {
+  .node-summary table.primary tr.failed a {
     color: #cc2211; }
-  .node_summary table.primary tr.failed .percent a {
+  .node-summary table.primary tr.failed .percent a {
     background-color: #cc2211; }
-  .node_summary table.primary tr.failed.hover, .node_summary table.primary tr.failed.active, .node_summary table.primary tr.failed:hover {
+  .node-summary table.primary tr.failed.hover, .node-summary table.primary tr.failed.active, .node-summary table.primary tr.failed:hover {
     background-color: #cc2211; }
-    .node_summary table.primary tr.failed.hover a, .node_summary table.primary tr.failed.active a, .node_summary table.primary tr.failed:hover a {
+    .node-summary table.primary tr.failed.hover a, .node-summary table.primary tr.failed.active a, .node-summary table.primary tr.failed:hover a {
       color: #fff;
       text-decoration: none; }
-    .node_summary table.primary tr.failed.hover .percent a, .node_summary table.primary tr.failed.active .percent a, .node_summary table.primary tr.failed:hover .percent a {
+    .node-summary table.primary tr.failed.hover .percent a, .node-summary table.primary tr.failed.active .percent a, .node-summary table.primary tr.failed:hover .percent a {
       background-color: #fff; }
-  .node_summary table.primary tr.pending a {
+  .node-summary table.primary tr.pending a {
     color: #ee7722; }
-  .node_summary table.primary tr.pending .percent a {
+  .node-summary table.primary tr.pending .percent a {
     background-color: #ee7722; }
-  .node_summary table.primary tr.pending.hover, .node_summary table.primary tr.pending.active, .node_summary table.primary tr.pending:hover {
+  .node-summary table.primary tr.pending.hover, .node-summary table.primary tr.pending.active, .node-summary table.primary tr.pending:hover {
     background-color: #ee7722; }
-    .node_summary table.primary tr.pending.hover a, .node_summary table.primary tr.pending.active a, .node_summary table.primary tr.pending:hover a {
+    .node-summary table.primary tr.pending.hover a, .node-summary table.primary tr.pending.active a, .node-summary table.primary tr.pending:hover a {
       color: #fff;
       text-decoration: none; }
-    .node_summary table.primary tr.pending.hover .percent a, .node_summary table.primary tr.pending.active .percent a, .node_summary table.primary tr.pending:hover .percent a {
+    .node-summary table.primary tr.pending.hover .percent a, .node-summary table.primary tr.pending.active .percent a, .node-summary table.primary tr.pending:hover .percent a {
       background-color: #fff; }
-  .node_summary table.primary tr.changed a {
+  .node-summary table.primary tr.changed a {
     color: #006699; }
-  .node_summary table.primary tr.changed .percent a {
+  .node-summary table.primary tr.changed .percent a {
     background-color: #006699; }
-  .node_summary table.primary tr.changed.hover, .node_summary table.primary tr.changed.active, .node_summary table.primary tr.changed:hover {
+  .node-summary table.primary tr.changed.hover, .node-summary table.primary tr.changed.active, .node-summary table.primary tr.changed:hover {
     background-color: #006699; }
-    .node_summary table.primary tr.changed.hover a, .node_summary table.primary tr.changed.active a, .node_summary table.primary tr.changed:hover a {
+    .node-summary table.primary tr.changed.hover a, .node-summary table.primary tr.changed.active a, .node-summary table.primary tr.changed:hover a {
       color: #fff;
       text-decoration: none; }
-    .node_summary table.primary tr.changed.hover .percent a, .node_summary table.primary tr.changed.active .percent a, .node_summary table.primary tr.changed:hover .percent a {
+    .node-summary table.primary tr.changed.hover .percent a, .node-summary table.primary tr.changed.active .percent a, .node-summary table.primary tr.changed:hover .percent a {
       background-color: #fff; }
-  .node_summary table.primary tr.unchanged a {
+  .node-summary table.primary tr.unchanged a {
     color: #009933; }
-  .node_summary table.primary tr.unchanged .percent a {
+  .node-summary table.primary tr.unchanged .percent a {
     background-color: #009933; }
-  .node_summary table.primary tr.unchanged.hover, .node_summary table.primary tr.unchanged.active, .node_summary table.primary tr.unchanged:hover {
+  .node-summary table.primary tr.unchanged.hover, .node-summary table.primary tr.unchanged.active, .node-summary table.primary tr.unchanged:hover {
     background-color: #009933; }
-    .node_summary table.primary tr.unchanged.hover a, .node_summary table.primary tr.unchanged.active a, .node_summary table.primary tr.unchanged:hover a {
+    .node-summary table.primary tr.unchanged.hover a, .node-summary table.primary tr.unchanged.active a, .node-summary table.primary tr.unchanged:hover a {
       color: #fff;
       text-decoration: none; }
-    .node_summary table.primary tr.unchanged.hover .percent a, .node_summary table.primary tr.unchanged.active .percent a, .node_summary table.primary tr.unchanged:hover .percent a {
+    .node-summary table.primary tr.unchanged.hover .percent a, .node-summary table.primary tr.unchanged.active .percent a, .node-summary table.primary tr.unchanged:hover .percent a {
       background-color: #fff; }
-  .node_summary table.primary tr.unreported a {
+  .node-summary table.primary tr.unreported a {
     color: #aaaaaa; }
-  .node_summary table.primary tr.unreported .percent a {
+  .node-summary table.primary tr.unreported .percent a {
     background-color: #aaaaaa; }
-  .node_summary table.primary tr.unreported.hover, .node_summary table.primary tr.unreported.active, .node_summary table.primary tr.unreported:hover {
+  .node-summary table.primary tr.unreported.hover, .node-summary table.primary tr.unreported.active, .node-summary table.primary tr.unreported:hover {
     background-color: #aaaaaa; }
-    .node_summary table.primary tr.unreported.hover a, .node_summary table.primary tr.unreported.active a, .node_summary table.primary tr.unreported:hover a {
+    .node-summary table.primary tr.unreported.hover a, .node-summary table.primary tr.unreported.active a, .node-summary table.primary tr.unreported:hover a {
       color: #fff;
       text-decoration: none; }
-    .node_summary table.primary tr.unreported.hover .percent a, .node_summary table.primary tr.unreported.active .percent a, .node_summary table.primary tr.unreported:hover .percent a {
+    .node-summary table.primary tr.unreported.hover .percent a, .node-summary table.primary tr.unreported.active .percent a, .node-summary table.primary tr.unreported:hover .percent a {
       background-color: #fff; }
-  .node_summary table.primary tr.all a {
+  .node-summary table.primary tr.all a {
     color: black; }
-  .node_summary table.primary tr.all .percent a {
+  .node-summary table.primary tr.all .percent a {
     background-color: black; }
-  .node_summary table.primary tr.all.hover, .node_summary table.primary tr.all.active, .node_summary table.primary tr.all:hover {
+  .node-summary table.primary tr.all.hover, .node-summary table.primary tr.all.active, .node-summary table.primary tr.all:hover {
     background-color: black; }
-    .node_summary table.primary tr.all.hover a, .node_summary table.primary tr.all.active a, .node_summary table.primary tr.all:hover a {
+    .node-summary table.primary tr.all.hover a, .node-summary table.primary tr.all.active a, .node-summary table.primary tr.all:hover a {
       color: #fff;
       text-decoration: none; }
-    .node_summary table.primary tr.all.hover .percent a, .node_summary table.primary tr.all.active .percent a, .node_summary table.primary tr.all:hover .percent a {
+    .node-summary table.primary tr.all.hover .percent a, .node-summary table.primary tr.all.active .percent a, .node-summary table.primary tr.all:hover .percent a {
       background-color: #fff; }
-  .node_summary table.primary tr td {
+  .node-summary table.primary tr td {
     font-size: 1.4em;
     padding-bottom: .5em; }
-    .node_summary table.primary tr td.count {
+    .node-summary table.primary tr td.count {
       text-align: right;
       padding-right: 0.3em; }
-    .node_summary table.primary tr td.percent {
+    .node-summary table.primary tr td.percent {
       display: block;
       position: absolute;
       left: 0.6em;
       right: 0.6em;
       margin-top: 1.3em; }
-      .node_summary table.primary tr td.percent a {
+      .node-summary table.primary tr td.percent a {
         text-indent: -9999px;
         display: block;
         height: 3px;
         clear: left; }
-.node_summary table.secondary {
+.node-summary table.secondary {
   padding-top: .5em;
   border-top: 1px solid #ccc;
   margin-top: .5em; }
-  .node_summary table.secondary tr.active {
+  .node-summary table.secondary tr.active {
     background-color: #2c66a8; }
-    .node_summary table.secondary tr.active a {
+    .node-summary table.secondary tr.active a {
       color: #fff; }
-  .node_summary table.secondary td {
+  .node-summary table.secondary td {
     font-size: 1.2em;
     padding: .2em .3em; }
-
-body.pages_release_notes_action .markeddown h2 {
-  margin-top: 1em;
-  margin-bottom: 0.15em; }
-body.pages_release_notes_action .markeddown li {
-  list-style-position: outside;
-  margin-left: 1em; }
 
 /* Facebook-style token autocompletion */
 ul.token-input-list-facebook {
@@ -2601,3 +2280,291 @@ body.delayed_job_failures_controller dl dd {
   width: 16px;
   height: 16px;
   display: block; }
+
+/******************************************************************************
+*                      GLOBAL STYLES, VARIABLES, MIXINS                       *
+******************************************************************************/
+/******************************************************************************
+*                              REUSABLE CLASSES                               *
+******************************************************************************/
+.element {
+  width: 512px;
+  margin: 0 0 .5em; }
+
+.element.header {
+  width: 100%; }
+
+.element.actions {
+  background: #DDD;
+  width: 100%;
+  padding: .2em 0; }
+
+.element.errors {
+  border: 1px solid #FCC;
+  background: #FEE;
+  color: #F66; }
+
+.in-place {
+  display: none; }
+
+.collapsed {
+  display: none; }
+
+.expandable {
+  margin-bottom: 1em; }
+
+.expandable-list {
+  padding: 1em;
+  background: #fff;
+  width: auto; }
+
+.expandable-list .even {
+  background: #F5F5F5; }
+
+.expandable-link,
+.non-expandable-bullet {
+  vertical-align: bottom; }
+
+.expandable-link.collapsed-link:before {
+  content: url("../../images/icons/bullet_toggle_plus.png"); }
+
+.expandable-link:before {
+  content: url("../../images/icons/bullet_toggle_minus.png"); }
+
+.non-expandable-bullet:before {
+  content: url("../../images/icons/bullet_green.png"); }
+
+.expandable-list-item {
+  display: inline-block;
+  vertical-align: bottom; }
+
+.content {
+  padding: 1em;
+  background: #fff; }
+
+.actions {
+  font-size: 12px; }
+
+.actions,
+.button,
+.navigation {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; }
+
+.errorExplanation {
+  margin-bottom: 1.5em; }
+
+.icon {
+  display: inline-block;
+  height: 100%;
+  width: 16px;
+  text-indent: -9999px;
+  vertical-align: baseline; }
+
+.icon.success {
+  background: url(images/icons/success.png) transparent center center no-repeat; }
+
+.icon.failed {
+  background: url(images/icons/failure.png) transparent center center no-repeat; }
+
+.icon.add {
+  background: url(images/icons/add.png) transparent center center no-repeat; }
+
+.icon.delete {
+  background: url(images/icons/delete.png) transparent center center no-repeat; }
+
+.clear {
+  clear: both; }
+
+.wrap {
+  word-wrap: break-word;
+  word-break: break-all; }
+
+.nowrap {
+  white-space: nowrap; }
+
+.item {
+  -webkit-border-radius: 0 0 0.35em 0.35em;
+  -moz-border-radius: 0 0 0.35em 0.35em;
+  border-radius: 0 0 0.35em 0.35em;
+  background: #FFF;
+  padding: 1em;
+  margin-bottom: 1em; }
+
+.item:last-child {
+  padding-bottom: 0;
+  margin-bottom: 0; }
+
+.half {
+  width: 45%;
+  margin-right: 5%;
+  float: left; }
+
+.section {
+  margin-bottom: 1.5em; }
+  .section.error {
+    -webkit-border-radius: 0.35em 0.35em 0.35em 0.35em;
+    -moz-border-radius: 0.35em 0.35em 0.35em 0.35em;
+    border-radius: 0.35em 0.35em 0.35em 0.35em;
+    padding: 10px 10px 0;
+    background: #ffdddd;
+    border: 1px solid #ffcccc;
+    color: #443333; }
+    .section.error h3 {
+      margin: -10px -10px 0.5em;
+      padding: .5em 10px .5em 26px;
+      background: #ffcccc url("../images/icons/failed.png") 5px center no-repeat;
+      color: #443333; }
+    .section.error p:last-child {
+      padding-bottom: 0;
+      margin-bottom: 0.75em; }
+  .section.failure {
+    -webkit-border-radius: 0.35em 0.35em 0.35em 0.35em;
+    -moz-border-radius: 0.35em 0.35em 0.35em 0.35em;
+    border-radius: 0.35em 0.35em 0.35em 0.35em;
+    padding: 10px 10px 0;
+    background: #ffdddd;
+    border: 1px solid #ffcccc;
+    color: #443333; }
+    .section.failure h3 {
+      margin: -10px -10px 0.5em;
+      padding: .5em 10px .5em 26px;
+      background: #ffcccc url("../images/icons/failed.png") 5px center no-repeat;
+      color: #443333; }
+    .section.failure p:last-child {
+      padding-bottom: 0;
+      margin-bottom: 0.75em; }
+  .section.warning {
+    -webkit-border-radius: 0.35em 0.35em 0.35em 0.35em;
+    -moz-border-radius: 0.35em 0.35em 0.35em 0.35em;
+    border-radius: 0.35em 0.35em 0.35em 0.35em;
+    padding: 10px 10px 0;
+    background: #eedddd;
+    border: 1px solid #ddcccc;
+    color: #443333; }
+    .section.warning h3 {
+      margin: -10px -10px 0.5em;
+      padding: .5em 10px .5em 26px;
+      background: #ddcccc url("../images/icons/warning.png") 5px center no-repeat;
+      color: #444444; }
+    .section.warning p:last-child {
+      padding-bottom: 0;
+      margin-bottom: 0.75em; }
+  .section.success {
+    -webkit-border-radius: 0.35em 0.35em 0.35em 0.35em;
+    -moz-border-radius: 0.35em 0.35em 0.35em 0.35em;
+    border-radius: 0.35em 0.35em 0.35em 0.35em;
+    padding: 10px 10px 0;
+    background: #ddeedd;
+    border: 1px solid #ccddcc;
+    color: #334433; }
+    .section.success h3 {
+      margin: -10px -10px 0.5em;
+      padding: .5em 10px .5em 26px;
+      background: #ccddcc url("../images/icons/warning.png") 5px center no-repeat;
+      color: #444444; }
+    .section.success p:last-child {
+      padding-bottom: 0;
+      margin-bottom: 0.75em; }
+  .section.notice {
+    -webkit-border-radius: 0.35em 0.35em 0.35em 0.35em;
+    -moz-border-radius: 0.35em 0.35em 0.35em 0.35em;
+    border-radius: 0.35em 0.35em 0.35em 0.35em;
+    padding: 10px 10px 0;
+    background: #dddddd;
+    border: 1px solid #cccccc;
+    color: #333333; }
+    .section.notice h3 {
+      margin: -10px -10px 0.5em;
+      padding: .5em 10px .5em 26px;
+      background: #cccccc url("../images/icons/notice.png") 5px center no-repeat;
+      color: #444444; }
+    .section.notice p:last-child {
+      padding-bottom: 0;
+      margin-bottom: 0.75em; }
+
+.panel.tabbed {
+  border: solid 1px #CCC;
+  background-color: white;
+  padding: 1em;
+  margin-top: 25px;
+  margin-bottom: 1em; }
+
+.node-summary {
+  padding: 0 .5em;
+  margin: .5em auto; }
+
+.delayed-job {
+  padding-bottom: .5em; }
+
+.help {
+  position: absolute;
+  top: 2px;
+  right: 4px; }
+
+/******************************************************************************
+*                             DEFAULT TAG STYLES                              *
+******************************************************************************/
+body {
+  background: #e8eef0;
+  color: #444;
+  min-width: 400px;
+  font-family: Helvetica, Arial, Verdana, sans-serif;
+  line-height: 18px;
+  font-size: 12px; }
+
+label {
+  display: block;
+  font-weight: bold; }
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: #333;
+  font-weight: bold;
+  margin-bottom: .5em;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; }
+
+h1 {
+  font-size: 2.5em;
+  line-height: 1em;
+  margin-bottom: 0.33em; }
+
+h2 {
+  font-size: 1.45em;
+  line-height: 1.5em;
+  margin-bottom: 0.5em; }
+
+h3 {
+  font-size: 1.25em;
+  line-height: 1em; }
+
+h4 {
+  font-size: 1em;
+  line-height: 1.28em; }
+
+p {
+  font-size: 1em;
+  margin-bottom: 1.5em; }
+
+a {
+  text-decoration: none;
+  color: #2C66A8; }
+
+a:hover {
+  text-decoration: underline; }
+
+button {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; }
+
+strong {
+  font-weight: bold; }
+
+code,
+pre {
+  font-family: "Monaco", "Courier New", Courier, fixed-width; }
+
+input {
+  font-size: 1em; }
