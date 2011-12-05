@@ -1,3 +1,17 @@
+v1.2.4rc1
+===
+09d555a (#11063) Building deb package should keep the source tarball
+f03b2e8 (#11058) deb package should have `puppetlabs` in vendor string
+2f4cbbd (#6717) Fix failing dependency destroy tests
+630f540 (#6717) Update last report on the node after deleting reports
+c497195 (#6717) Add foreign keys and cascading deletes to report related tables
+3652aca (#6717) Add a rake task to cleanup orphaned report data
+39bb62e (#9529) makes filter tabs accessible via keyboard
+a45a326 (#7554) Link latest report to actual report on front page
+10f1a6c (#10638) Navigation items should be individually selectable by CSS
+6c6d674 (#10076) Adjust RPM package versions so RCs are 'less than' finals
+23789df (#10017) Adjust Debian package versions so RCs are 'less than' finals
+
 v1.2.3
 ===
 a5aaba2 (#10024)  Fix typo in fix for 10024
