@@ -21,13 +21,6 @@
 #header {
   margin-bottom: 1em;
   padding: 1em 0 0; }
-  #header ul#secondary-navigation {
-    float: right;
-    top: -1.5em; }
-    #header ul#secondary-navigation li {
-      list-style-type: none;
-      float: left;
-      margin-right: 0.8em; }
   #header ul.navigation li {
     list-style-position: outside;
     padding-left: 0.3em;
@@ -57,29 +50,26 @@
   clear: left; }
   #sidebar h3 {
     margin: 0; }
-  #sidebar a.fold {
-    width: 1em;
-    display: inline-block;
-    text-align: center;
-    font-size: 14px;
-    font-weight: bold; }
   #sidebar ul {
     list-style: none; }
+
+#footer p {
+  clear: both;
+  padding-top: 1em;
+  color: #777; }
+  #footer p a {
+    color: inherit; }
 
 body.with-sidebar #main {
   width: 80%;
   float: left; }
 
-body.no-sidebar #main,
-body #main.full {
+body.no-sidebar #main {
   width: 100%; }
 
 #list {
   max-height: 300px;
   overflow: auto; }
-
-#item {
-  background: #FFF; }
 
 .errors ul {
   list-style: none;
@@ -171,46 +161,6 @@ table.main tbody tr.active td {
 table.main tfoot td {
   background: #DDD; }
 
-th.check,
-td.check {
-  width: 1px;
-  margin: 0; }
-
-th.check input,
-td.check input {
-  margin: 0 -0.2em;
-  padding: 0; }
-
-th.status,
-td.status {
-  width: 2em;
-  color: #AAA;
-  padding: 0;
-  text-align: center;
-  vertical-align: middle; }
-
-th.status span,
-td.status span {
-  font-weight: bold; }
-
-th.status span {
-  top: .1em; }
-
-td.status.success {
-  color: green; }
-
-td.status.failure {
-  color: red; }
-
-tr.status.failure td {
-  background-color: #ffb7b7; }
-
-tr:nth-child(even).status.failure td {
-  background-color: #ffc7c7; }
-
-tbody tr.status.changed {
-  background-color: #FF9; }
-
 table.inspector td.key,
 table.inspector td.value {
   vertical-align: top;
@@ -231,18 +181,10 @@ table.inspector input {
   width: 97%;
   margin: 0; }
 
-table.inspector td.total {
-  font-weight: bold; }
-
 th.empty {
   text-align: left;
   background: transparent !important;
   padding-left: 1em !important; }
-
-td.empty {
-  text-align: center;
-  color: #999;
-  background: #F8F8F8; }
 
 .inspect-report .non-expandable-bullet:before {
   content: url("../../images/icons/bullet_red.png"); }
@@ -253,9 +195,6 @@ td.empty {
 .expandable-list td,
 .expandable-list th {
   padding: .25em .5em .15em; }
-
-.content h4 {
-  margin-top: 1em; }
 
 .header input {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; }
@@ -269,11 +208,6 @@ span.alt {
   font-weight: normal;
   font-style: italic; }
 
-p.error {
-  color: #C33;
-  background: #FEE;
-  padding: .5em 1em; }
-
 ul.actions {
   position: absolute;
   right: 1px;
@@ -282,25 +216,8 @@ ul.actions {
 ul.actions li {
   display: inline-block; }
 
-a.cancel {
-  color: #888; }
-
 a.icon span {
   display: none; }
-
-span.type {
-  top: 0.25em;
-  left: 0;
-  position: absolute;
-  display: block;
-  width: 16px;
-  height: 16px; }
-
-span.type span {
-  display: none; }
-
-span.node.type {
-  background: url(images/icons/computer.png); }
 
 /* Example tokeninput style #2: Facebook style */
 ul.token-input-list-facebook {
@@ -404,13 +321,6 @@ div.token-input-dropdown-facebook ul li.token-input-selected-dropdown-item-faceb
   background-color: #3b5998;
   color: #fff; }
 
-#footer p {
-  clear: both;
-  padding-top: 1em;
-  color: #777; }
-  #footer p a {
-    color: inherit; }
-
 .header {
   -webkit-border-radius: 0.35em 0.35em 0 0;
   -moz-border-radius: 0.35em 0.35em 0 0;
@@ -445,47 +355,6 @@ ol.timeline li {
     display: inline-block;
     width: 12em; }
 
-ul .status {
-  list-style: none; }
-ul li {
-  /* drop down menu */ }
-  ul li .dropdown {
-    display: none;
-    left: 0;
-    position: absolute;
-    top: 1.5em;
-    background: #FFF;
-    border: 1px solid #CCC;
-    color: #666;
-    font-size: 14px;
-    width: 15em;
-    z-index: 7; }
-    ul li .dropdown ul {
-      width: 100%;
-      margin-bottom: .25em;
-      max-height: 30em;
-      overflow: auto; }
-    ul li .dropdown li {
-      list-style: none; }
-      ul li .dropdown li a {
-        display: block;
-        padding: .2em .5em; }
-    ul li .dropdown .actions {
-      border-top: 1px solid #DDD;
-      background-color: #EEE;
-      clear: both;
-      padding: .25em .5em; }
-    ul li .dropdown input {
-      display: inline;
-      vertical-align: middle; }
-
-span.sparkline {
-  vertical-align: bottom; }
-
-div.flot-graph {
-  margin-bottom: 10px;
-  width: 100%; }
-
 a.button {
   display: inline-block; }
 
@@ -519,10 +388,6 @@ button {
   a.button.drop:after,
   button.drop:after {
     content: "   \002193"; }
-
-a.button.warning,
-button.warning {
-  background: #C66; }
 
 .header a.button,
 .header button {
@@ -588,8 +453,6 @@ button.warning {
         display: block; }
       .group ul li span.count {
         background: #DDD; }
-        .group ul li span.count.failure {
-          background: #DD9B9B; }
 
 .actionbar {
   -webkit-border-radius: 0 0 0.35em 0.35em;
@@ -597,8 +460,6 @@ button.warning {
   border-radius: 0 0 0.35em 0.35em;
   background: #DDD;
   padding: 1px; }
-  .actionbar form {
-    padding: .25em; }
   .actionbar .pagination {
     font-size: 12px;
     padding: .1em .5em;
@@ -607,27 +468,6 @@ button.warning {
     .actionbar .pagination a,
     .actionbar .pagination span {
       padding: 0 0.2em; }
-  .actionbar .dropdown {
-    top: 1.75em; }
-  .actionbar ul {
-    float: left;
-    list-style: none;
-    margin-right: .25em; }
-    .actionbar ul li {
-      float: left;
-      position: relative; }
-
-.section#flash {
-  margin-left: auto;
-  margin-right: auto;
-  width: 50%;
-  position: relative; }
-  .section#flash .close {
-    position: absolute;
-    top: 0;
-    right: 0; }
-  .section#flash img {
-    vertical-align: top; }
 
 ul.tabbed {
   display: none;
@@ -700,9 +540,6 @@ body.pages-home-action tr.puppet-log.puppet-log-level-warning td {
     font-weight: bold;
     padding-left: .3em; }
   .node-summary table .count,
-  .node-summary table .graph {
-    padding-left: .3em; }
-  .node-summary table .count,
   .node-summary table .label {
     padding-top: .2em; }
 .node-summary table.primary tr {
@@ -712,78 +549,78 @@ body.pages-home-action tr.puppet-log.puppet-log-level-warning td {
     color: #888888; }
   .node-summary table.primary tr.unresponsive .percent a {
     background-color: #888888; }
-  .node-summary table.primary tr.unresponsive.hover, .node-summary table.primary tr.unresponsive.active, .node-summary table.primary tr.unresponsive:hover {
+  .node-summary table.primary tr.unresponsive.active, .node-summary table.primary tr.unresponsive:hover {
     background-color: #888888; }
-    .node-summary table.primary tr.unresponsive.hover a, .node-summary table.primary tr.unresponsive.active a, .node-summary table.primary tr.unresponsive:hover a {
+    .node-summary table.primary tr.unresponsive.active a, .node-summary table.primary tr.unresponsive:hover a {
       color: #fff;
       text-decoration: none; }
-    .node-summary table.primary tr.unresponsive.hover .percent a, .node-summary table.primary tr.unresponsive.active .percent a, .node-summary table.primary tr.unresponsive:hover .percent a {
+    .node-summary table.primary tr.unresponsive.active .percent a, .node-summary table.primary tr.unresponsive:hover .percent a {
       background-color: #fff; }
   .node-summary table.primary tr.failed a {
     color: #cc2211; }
   .node-summary table.primary tr.failed .percent a {
     background-color: #cc2211; }
-  .node-summary table.primary tr.failed.hover, .node-summary table.primary tr.failed.active, .node-summary table.primary tr.failed:hover {
+  .node-summary table.primary tr.failed.active, .node-summary table.primary tr.failed:hover {
     background-color: #cc2211; }
-    .node-summary table.primary tr.failed.hover a, .node-summary table.primary tr.failed.active a, .node-summary table.primary tr.failed:hover a {
+    .node-summary table.primary tr.failed.active a, .node-summary table.primary tr.failed:hover a {
       color: #fff;
       text-decoration: none; }
-    .node-summary table.primary tr.failed.hover .percent a, .node-summary table.primary tr.failed.active .percent a, .node-summary table.primary tr.failed:hover .percent a {
+    .node-summary table.primary tr.failed.active .percent a, .node-summary table.primary tr.failed:hover .percent a {
       background-color: #fff; }
   .node-summary table.primary tr.pending a {
     color: #ee7722; }
   .node-summary table.primary tr.pending .percent a {
     background-color: #ee7722; }
-  .node-summary table.primary tr.pending.hover, .node-summary table.primary tr.pending.active, .node-summary table.primary tr.pending:hover {
+  .node-summary table.primary tr.pending.active, .node-summary table.primary tr.pending:hover {
     background-color: #ee7722; }
-    .node-summary table.primary tr.pending.hover a, .node-summary table.primary tr.pending.active a, .node-summary table.primary tr.pending:hover a {
+    .node-summary table.primary tr.pending.active a, .node-summary table.primary tr.pending:hover a {
       color: #fff;
       text-decoration: none; }
-    .node-summary table.primary tr.pending.hover .percent a, .node-summary table.primary tr.pending.active .percent a, .node-summary table.primary tr.pending:hover .percent a {
+    .node-summary table.primary tr.pending.active .percent a, .node-summary table.primary tr.pending:hover .percent a {
       background-color: #fff; }
   .node-summary table.primary tr.changed a {
     color: #006699; }
   .node-summary table.primary tr.changed .percent a {
     background-color: #006699; }
-  .node-summary table.primary tr.changed.hover, .node-summary table.primary tr.changed.active, .node-summary table.primary tr.changed:hover {
+  .node-summary table.primary tr.changed.active, .node-summary table.primary tr.changed:hover {
     background-color: #006699; }
-    .node-summary table.primary tr.changed.hover a, .node-summary table.primary tr.changed.active a, .node-summary table.primary tr.changed:hover a {
+    .node-summary table.primary tr.changed.active a, .node-summary table.primary tr.changed:hover a {
       color: #fff;
       text-decoration: none; }
-    .node-summary table.primary tr.changed.hover .percent a, .node-summary table.primary tr.changed.active .percent a, .node-summary table.primary tr.changed:hover .percent a {
+    .node-summary table.primary tr.changed.active .percent a, .node-summary table.primary tr.changed:hover .percent a {
       background-color: #fff; }
   .node-summary table.primary tr.unchanged a {
     color: #009933; }
   .node-summary table.primary tr.unchanged .percent a {
     background-color: #009933; }
-  .node-summary table.primary tr.unchanged.hover, .node-summary table.primary tr.unchanged.active, .node-summary table.primary tr.unchanged:hover {
+  .node-summary table.primary tr.unchanged.active, .node-summary table.primary tr.unchanged:hover {
     background-color: #009933; }
-    .node-summary table.primary tr.unchanged.hover a, .node-summary table.primary tr.unchanged.active a, .node-summary table.primary tr.unchanged:hover a {
+    .node-summary table.primary tr.unchanged.active a, .node-summary table.primary tr.unchanged:hover a {
       color: #fff;
       text-decoration: none; }
-    .node-summary table.primary tr.unchanged.hover .percent a, .node-summary table.primary tr.unchanged.active .percent a, .node-summary table.primary tr.unchanged:hover .percent a {
+    .node-summary table.primary tr.unchanged.active .percent a, .node-summary table.primary tr.unchanged:hover .percent a {
       background-color: #fff; }
   .node-summary table.primary tr.unreported a {
     color: #aaaaaa; }
   .node-summary table.primary tr.unreported .percent a {
     background-color: #aaaaaa; }
-  .node-summary table.primary tr.unreported.hover, .node-summary table.primary tr.unreported.active, .node-summary table.primary tr.unreported:hover {
+  .node-summary table.primary tr.unreported.active, .node-summary table.primary tr.unreported:hover {
     background-color: #aaaaaa; }
-    .node-summary table.primary tr.unreported.hover a, .node-summary table.primary tr.unreported.active a, .node-summary table.primary tr.unreported:hover a {
+    .node-summary table.primary tr.unreported.active a, .node-summary table.primary tr.unreported:hover a {
       color: #fff;
       text-decoration: none; }
-    .node-summary table.primary tr.unreported.hover .percent a, .node-summary table.primary tr.unreported.active .percent a, .node-summary table.primary tr.unreported:hover .percent a {
+    .node-summary table.primary tr.unreported.active .percent a, .node-summary table.primary tr.unreported:hover .percent a {
       background-color: #fff; }
   .node-summary table.primary tr.all a {
     color: black; }
   .node-summary table.primary tr.all .percent a {
     background-color: black; }
-  .node-summary table.primary tr.all.hover, .node-summary table.primary tr.all.active, .node-summary table.primary tr.all:hover {
+  .node-summary table.primary tr.all.active, .node-summary table.primary tr.all:hover {
     background-color: black; }
-    .node-summary table.primary tr.all.hover a, .node-summary table.primary tr.all.active a, .node-summary table.primary tr.all:hover a {
+    .node-summary table.primary tr.all.active a, .node-summary table.primary tr.all:hover a {
       color: #fff;
       text-decoration: none; }
-    .node-summary table.primary tr.all.hover .percent a, .node-summary table.primary tr.all.active .percent a, .node-summary table.primary tr.all:hover .percent a {
+    .node-summary table.primary tr.all.active .percent a, .node-summary table.primary tr.all:hover .percent a {
       background-color: #fff; }
   .node-summary table.primary tr td {
     font-size: 1.4em;

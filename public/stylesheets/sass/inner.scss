@@ -88,7 +88,6 @@ $rounding-radius: 0.35em;
       background-color: $color;
     }
   }
-  &.hover,
   &.active,
   &:hover {
     background-color: $color;
@@ -129,17 +128,6 @@ $rounding-radius: 0.35em;
   padding: 1em 0 0;
 
   ul {
-    &#secondary-navigation {
-      float: right;
-      top: -1.5em;
-
-      li {
-        list-style-type: none;
-        float: left;
-        margin-right: 0.8em;
-      }
-    }
-
     &.navigation {
       li {
         list-style-position: outside;
@@ -189,16 +177,20 @@ $rounding-radius: 0.35em;
     margin: 0;
   }
 
-  a.fold {
-    width: 1em;
-    display: inline-block;
-    text-align: center;
-    font-size: 14px;
-    font-weight: bold;
-  }
-
   ul {
     list-style: none;
+  }
+}
+
+#footer {
+  p {
+    clear: both;
+    padding-top: 1em;
+    color: #777;
+
+    a {
+      color: inherit;
+    }
   }
 }
 
@@ -207,18 +199,13 @@ body.with-sidebar #main {
   float: left;
 }
 
-body.no-sidebar #main,
-body #main.full { 
+body.no-sidebar #main { 
   width: 100%;
 }
 
 #list {
   max-height: 300px;
   overflow: auto;
-}
-
-#item {
-  background: #FFF;
 }
 
 .errors ul {
@@ -330,56 +317,6 @@ table.main tfoot td {
   background: #DDD;
 }
 
-th.check,
-td.check {
-  width: 1px;
-  margin: 0;
-}
-
-th.check input,
-td.check input {
-  margin: 0 -.2em;
-  padding: 0;
-}
-
-th.status,
-td.status {
-  width: 2em;
-  color: #AAA;
-  padding: 0;
-  text-align: center;
-  vertical-align: middle;
-}
-
-th.status span,
-td.status span {
-  font-weight: bold;
-}
-
-th.status span {
-  top: .1em;
-}
-
-td.status.success {
-  color: green;
-}
-
-td.status.failure {
-  color: red;
-}
-
-tr.status.failure td {
-  background-color: #ffb7b7;
-}
-
-tr:nth-child(even).status.failure td {
-  background-color: #ffc7c7;
-}
-
-tbody tr.status.changed {
-  background-color: #FF9;
-}
-
 table.inspector td.key,
 table.inspector td.value {
   vertical-align: top;
@@ -405,20 +342,10 @@ table.inspector input {
   margin: 0;
 }
 
-table.inspector td.total {
-  font-weight: bold;
-}
-
 th.empty {
   text-align: left;
   background: transparent !important;
   padding-left: 1em !important;
-}
-
-td.empty {
-  text-align: center;
-  color: #999;
-  background: #F8F8F8;
 }
 
 .inspect-report .non-expandable-bullet:before {
@@ -432,10 +359,6 @@ td.empty {
 .expandable-list td,
 .expandable-list th {
   padding: .25em .5em .15em;
-}
-
-.content h4 {
-  margin-top: 1em;
 }
 
 .header input {
@@ -453,12 +376,6 @@ span.alt {
   font-style: italic;
 }
 
-p.error {
-  color: #C33;
-  background: #FEE;
-  padding: .5em 1em;
-}
-
 ul.actions {
   position: absolute;
   right: 1px;
@@ -469,29 +386,8 @@ ul.actions li {
   display: inline-block;
 }
 
-a.cancel {
-  color: #888;
-}
-
 a.icon span {
   display: none;
-}
-
-span.type {
-  top: 0.25em;
-  left: 0;
-  position: absolute;
-  display: block;
-  width: 16px;
-  height: 16px;
-}
-
-span.type span {
-  display: none;
-}
-
-span.node.type {
-  background: url(images/icons/computer.png);
 }
 
 /* Example tokeninput style #2: Facebook style */
@@ -612,18 +508,6 @@ div.token-input-dropdown-facebook ul li.token-input-selected-dropdown-item-faceb
     color: #fff;
 }
 
-#footer {
-  p {
-    clear: both;
-    padding-top: 1em;
-    color: #777;
-
-    a {
-      color: inherit;
-    }
-  }
-}
-
 .header {
   @include rounded-top;
   background: #DDD;
@@ -669,65 +553,6 @@ ol.timeline li {
   }
 }
 
-ul {
-  .status {
-    list-style: none;
-  }
-
-  li {
-    /* drop down menu */
-    .dropdown {
-      display: none;
-      left: 0;
-      position: absolute;
-      top: 1.5em;
-      background: #FFF;
-      border: 1px solid #CCC;
-      color: #666;
-      font-size: 14px;
-      width: 15em;
-      z-index: 7;
-
-      ul {
-        width: 100%;
-        margin-bottom: .25em;
-        max-height: 30em;
-        overflow: auto;
-      }
-
-      li {
-        list-style: none;
-
-        a {
-          display: block;
-          padding: .2em .5em;
-        }
-      }
-
-      .actions {
-        border-top: 1px solid #DDD;
-        background-color: #EEE;
-        clear: both;
-        padding: .25em .5em;
-      }
-
-      input {
-        display: inline;
-        vertical-align: middle;
-      }
-    }
-  }
-}
-
-span.sparkline {
-  vertical-align: bottom;
-}
-
-div.flot-graph {
-  margin-bottom: 10px;
-  width: 100%;
-}
-
 a.button {
   display: inline-block;
 }
@@ -735,11 +560,6 @@ a.button {
 a.button,
 button {
   @include buttony;
-}
-
-a.button.warning,
-button.warning {
-  background: #C66;
 }
 
 .header a.button,
@@ -818,10 +638,6 @@ button.warning {
 
       span.count {
         background: #DDD;
-
-        &.failure {
-            background: #DD9B9B;
-        }
       }
     }
   }
@@ -832,10 +648,6 @@ button.warning {
   background: #DDD;
   padding: 1px;
 
-  form {
-    padding: .25em;
-  }
-
   .pagination {
     font-size: 12px;
     padding: .1em .5em;
@@ -845,40 +657,6 @@ button.warning {
     a,
     span {
       padding: 0 0.2em;
-    }
-  }
-
-  .dropdown {
-    top: 1.75em;
-  }
-
-  ul {
-    float: left;
-    list-style: none;
-    margin-right: .25em;
-
-    li {
-      float: left;
-      position: relative;
-    }
-  }
-}
-
-.section {
-  &#flash {
-    margin-left: auto;
-    margin-right: auto;
-    width: 50%;
-    position: relative;
-
-    & .close {
-      position: absolute;
-      top: 0;
-      right: 0;
-    }
-
-    & img {
-    vertical-align: top;
     }
   }
 }
@@ -958,10 +736,6 @@ body.pages-home-action {
     width: 100%;
     .count {
       font-weight: bold;
-      padding-left: .3em;
-    }
-    .count,
-    .graph {
       padding-left: .3em;
     }
     .count,
