@@ -45,7 +45,7 @@ $rounding-radius: 0.35em;
   background: -webkit-gradient(linear, center top, center bottom, from(lighten($button-background, $button-gradient-percentage)), to(darken($button-background, $button-gradient-percentage)));
   border: 1px solid #DDD;
   border-color: #CCC #AAA #AAA #CCC;
-  color: white;
+  color: #FFF;
   cursor: pointer;
   font-size: 1em;
   line-height: 1.5em;
@@ -372,7 +372,7 @@ span.count {
 span.alt {
   color: #999;
   font-family: "Georgia", sefif;
-  font-weight: normal;
+  font-weight: 400;
   font-style: italic;
 }
 
@@ -415,7 +415,7 @@ ul.token-input-list-facebook li input {
     border: 0;
     width: 100px;
     padding: 3px 8px;
-    background-color: white;
+    background-color: #FFF;
     margin: 2px 0;
 }
 
@@ -676,7 +676,7 @@ ul.tabbed {
     float: left;
     border: solid 1px #CCC;
     margin-right: 4px;
-    color: white;
+    color: #FFF;
 
     a {
       color: #fff;
@@ -688,8 +688,8 @@ ul.tabbed {
       text-decoration: underline;
     }
     &.active {
-      border-bottom-color: white;
-      background-color: white;
+      border-bottom-color: #FFF;
+      background-color: #FFF;
       color: #2C66A8;
       a {
         color: #2C66A8;
@@ -837,7 +837,7 @@ body.delayed_job_failures_controller {
       }
       em {
         color: #000;
-        font-weight: normal;
+        font-weight: 400;
       }
     }
     dd {
