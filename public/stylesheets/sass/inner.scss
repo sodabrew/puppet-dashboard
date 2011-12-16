@@ -297,8 +297,8 @@ table.inspector th {
   color: #888;
 }
 
-table.main td,
-table.inspector td {
+table.main tbody td,
+table.inspector tbody td {
   border: 1px solid #DDD;
   padding: .25em .5em .15em;
   vertical-align: top;
@@ -315,6 +315,14 @@ table.main tbody tr.active td {
 
 table.main tfoot td {
   background: #DDD;
+}
+
+table thead th.status, table tbody td.status {
+  width: 2em;
+  color: #AAA;
+  padding: 0;
+  text-align: center;
+  vertical-align: middle;
 }
 
 table.inspector td.key,
@@ -572,7 +580,7 @@ button {
   margin-left: .25em;
 }
 
-.group {
+#sidebar .group {
   @include rounded;
   position: relative;
   border: 1px solid #DDD;
@@ -643,20 +651,22 @@ button {
   }
 }
 
-.actionbar {
-  @include rounded-bottom;
-  background: #DDD;
-  padding: 1px;
+body {
+  .actionbar {
+    @include rounded-bottom;
+    background: #DDD;
+    padding: 1px;
 
-  .pagination {
-    font-size: 12px;
-    padding: .1em .5em;
-    float: left;
-    padding-left: 0.5em;
+    .pagination {
+      font-size: 12px;
+      padding: .1em .5em;
+      float: left;
+      padding-left: 0.5em;
 
-    a,
-    span {
-      padding: 0 0.2em;
+      a,
+      span {
+        padding: 0 0.2em;
+      }
     }
   }
 }
