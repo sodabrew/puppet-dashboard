@@ -53,7 +53,7 @@ $rounding-radius: 0.35em;
   font-size: 1em;
   line-height: 1.5em;
   margin: 0.25em;
-  padding: .15em .65em;
+  padding: 0.15em 0.65em;
   white-space: nowrap;
 
   &:hover {
@@ -186,6 +186,79 @@ $rounding-radius: 0.35em;
   ul {
     list-style: none;
   }
+
+  .group {
+    @include rounded;
+    position: relative;
+    border: 1px solid #DDD;
+    background: #FFF;
+    margin: 0;
+    margin-right: 1em;
+    margin-bottom: 1em;
+
+    h3 {
+      @include rounded-top;
+
+      color: #444;
+      line-height: 1.25em;
+      position: relative;
+      display: block;
+      background: #DDD;
+
+      &.active {
+        background: #d2dde5;
+      }
+
+      a {
+        display: block;
+        padding: .25em .5em;
+      }
+    }
+
+    .footer.actionbar {
+      @include rounded-bottom;
+    }
+
+    span.count {
+      @include rounded(5px);
+      display: block;
+      position: absolute;
+      right: 3px;
+      top: 3px;
+      color: #FFF;
+      font-size: 12px;
+      padding: 0 .4em;
+      text-align: center;
+      background: #CCC;
+    }
+
+    ul {
+      max-height: 20em;
+      overflow: auto;
+      border-top: 1px solid #D8D8D8;
+
+      li {
+        position: relative;
+        font-size: 12px;
+        border-bottom: 1px solid #EEE;
+
+        &:last-child {
+          border: 0; }
+
+        &.active {
+          background: #FFFFCC; }
+
+        a {
+          padding: .25em .5em;
+          display: block;
+        }
+
+        span.count {
+          background: #DDD;
+        }
+      }
+    }
+  }
 }
 
 #footer {
@@ -214,70 +287,74 @@ body.no-sidebar #main {
   overflow: auto;
 }
 
-.errors ul {
-  list-style: none; margin-bottom: .5em;
-  padding: 0;
-  padding-right: 0.5em;
-  padding-left: 0.5em;
+.errors {
+  ul {
+    list-style: none; margin-bottom: .5em;
+    padding: 0;
+    padding-right: 0.5em;
+    padding-left: 0.5em;
+  }
+  
+  li {
+    padding-left: 20px;
+    background: url(images/icons/failure.png) left center no-repeat;
+  }
+
+  &.element h3 {
+    padding: .2em .5em;
+    color: #D55;
+    background: #FCC;
+  }
 }
 
-.errors li {
-  padding-left: 20px;
-  background: url(images/icons/failure.png) left center no-repeat;
-}
+form {
+  h3 {
+    font-size: 1em;
+  }
 
-.element.errors h3 {
-  padding: .2em .5em;
-  color: #D55;
-  background: #FCC;
-}
+  textarea {
+    width: 99%;
+  }
+  
+  input[readonly] {
+      background-color: #EEE;
+  }
 
-form h3 {
-  font-size: 1em;
-}
+  .inline {
+    display: inline;
+  }
 
-form input.inline,
-form label.inline {
-  display: inline;
-}
+  .header input {
+    border: 1px solid transparent;
+    font-size: 1.45em;
+    font-weight: bold;
+    margin: 2px;
+    width: 80%;
+  }
 
-form .header input {
-  border: 1px solid transparent;
-  font-size: 1.45em;
-  font-weight: bold;
-  margin: 2px;
-  width: 80%;
-}
-
-form input[readonly] {
-  background-color: #EEE;
-}
-
-form .header label {
-  display: none;
-}
-
-form textarea {
-  width: 99%;
+  .header label {
+    display: none;
+  }
 }
 
 form.search {
   float: right;
   background: transparent;
   padding: 0;
-}
 
-form.search input {
-  color: #444;
-  width: 20em;
-  margin: 0;
-  line-height: 1.4em;
-  padding: 0.35em;
-  border: 1px solid #CCC;
-}
+  input {
+    color: #444;
+    width: 20em;
+    margin: 0;
+    line-height: 1.4em;
+    padding: 0.35em;
+    border: 1px solid #CCC;
+  }
 
-form.search button {
-  margin: 0.25em 0.25em 0.25em 0em;
+  button {
+    margin: 0.25em;
+    margin-left: 0;
+  }
 }
 
 .fieldWithErrors input {
@@ -311,8 +388,8 @@ table.main tbody td,
 table.inspector tbody td {
   border: 1px solid #DDD;
   padding-top: 0.25em;
-  padding-right; 0.5em;
-  padding-left; 0.5em;
+  padding-right: 0.5em;
+  padding-left: 0.5em;
   padding-bottom: 0.15em;
   vertical-align: top;
 }
@@ -379,14 +456,10 @@ th.empty {
 
 .expandable-list td,
 .expandable-list th {
-  padding-top: .25em;
-  padding-right: .5em;
-  padding-left: .5em;
-  padding-bottom: .15em;
-}
-
-.header input {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  padding-top: 0.25em;
+  padding-right: 0.5em;
+  padding-left: 0.5em;
+  padding-bottom: 0.15em;
 }
 
 span.count {
@@ -404,10 +477,10 @@ ul.actions {
   position: absolute;
   right: 1px;
   top: 1px;
-}
 
-ul.actions li {
-  display: inline-block;
+  li {
+    display: inline-block;
+  }
 }
 
 a.icon span {
@@ -547,6 +620,10 @@ div.token-input-dropdown-facebook ul li.token-input-selected-dropdown-item-faceb
     line-height: 1.75em;
   }
 
+  input {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  }
+
   h2 {
     &.half {
       width: 0%;
@@ -558,6 +635,16 @@ div.token-input-dropdown-facebook ul li.token-input-selected-dropdown-item-faceb
     img {
       vertical-align: -0.15em;
     }
+  }
+
+  a.button,
+  button {
+    font-size: 1.2em;
+    margin: 0.15em 0;
+  }
+
+  ul.actions {
+    margin-left: 0.25em;
   }
 }
 
@@ -584,89 +671,6 @@ a.button {
 a.button,
 button {
   @include buttony;
-}
-
-.header a.button,
-.header button {
-  font-size: 1.2em;
-  margin: 0.15em 0;
-}
-
-.header ul.actions {
-  margin-left: 0.25em;
-}
-
-#sidebar .group {
-  @include rounded;
-  position: relative;
-  border: 1px solid #DDD;
-  background: #FFF;
-  margin: 0;
-  margin-right: 1em;
-  margin-bottom: 1em;
-
-  h3 {
-    @include rounded-top;
-
-    color: #444;
-    line-height: 1.25em;
-    position: relative;
-    display: block;
-    background: #DDD;
-
-    &.active {
-      background: #d2dde5;
-    }
-
-    a {
-      display: block;
-      padding: .25em .5em;
-    }
-  }
-
-  .footer.actionbar {
-    @include rounded-bottom;
-  }
-
-  span.count {
-    @include rounded(5px);
-    display: block;
-    position: absolute;
-    right: 3px;
-    top: 3px;
-    color: #FFF;
-    font-size: 12px;
-    padding: 0 .4em;
-    text-align: center;
-    background: #CCC;
-  }
-
-  ul {
-    max-height: 20em;
-    overflow: auto;
-    border-top: 1px solid #D8D8D8;
-
-    li {
-      position: relative;
-      font-size: 12px;
-      border-bottom: 1px solid #EEE;
-
-      &:last-child {
-        border: 0; }
-
-      &.active {
-        background: #FFFFCC; }
-
-      a {
-        padding: .25em .5em;
-        display: block;
-      }
-
-      span.count {
-        background: #DDD;
-      }
-    }
-  }
 }
 
 body {
