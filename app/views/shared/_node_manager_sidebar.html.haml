@@ -19,7 +19,7 @@
   %p.help
     %a{ :href => 'http://links.puppetlabs.com/dashboard1.2_node_summary_help', :target => '_blank' }
       Help
-  .node-summary
+  .node_summary
     %table.primary
       -# This conditional is ugly, but it saves us from duplicating the markup
       - Node.possible_derived_statuses.push( 'unreported', 'all' ).each do |status|

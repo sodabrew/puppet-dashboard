@@ -27,19 +27,14 @@
 
 @mixin icony-section($icon-name, $header-foreground, $header-background, $section-foreground, $section-background, $border-color) {
   @include rounded;
-  padding: 0;
-  padding-top: 10px;
-  padding-right: 10px;
+  padding: 10px 10px 0;
   background: $section-background;
   border: 1px solid $border-color;
   color: $section-foreground;
 
   h3 {
-    margin: -10px;
-    margin-bottom: 0.5em;
-    padding: 0.5em;
-    padding-right: 10px;
-    padding-left: 26px;
+    margin: -10px -10px .5em;
+    padding: .5em 10px .5em 26px;
     background: $header-background url('../images/icons/' + $icon-name + '.png') 5px center no-repeat;
     color: $header-foreground;
   }
@@ -56,20 +51,27 @@
 
 .element {
   width: 512px;
-  margin: 0;
-  margin-bottom: 0.5em;
+  margin: 0 0 .5em;
+}
+
+.element.header {
+  width: 100%;
 }
 
 .element.actions {
   background: #DDD;
   width: 100%;
-  padding: 0.2em 0;
+  padding: .2em 0;
 }
 
 .element.errors {
   border: 1px solid #FCC;
   background: #FEE;
   color: #F66;
+}
+
+.in-place {
+  display: none;
 }
 
 .collapsed {
@@ -112,6 +114,11 @@
   vertical-align: bottom;
 }
 
+.content {
+  padding: 1em;
+  background: #fff;
+}
+
 .actions {
   font-size: 12px;
 }
@@ -134,12 +141,33 @@
   vertical-align: baseline;
 }
 
+.icon.success {
+  background: url(images/icons/success.png) transparent center center no-repeat;
+}
+
+.icon.failed {
+  background: url(images/icons/failure.png) transparent center center no-repeat;
+}
+
+.icon.add {
+  background: url(images/icons/add.png) transparent center center no-repeat;
+}
+
 .icon.delete {
   background: url(images/icons/delete.png) transparent center center no-repeat;
 }
 
 .clear {
   clear: both;
+}
+
+.wrap {
+  word-wrap: break-word;
+  word-break: break-all;
+}
+
+.nowrap {
+  white-space: nowrap;
 }
 
 .item {
@@ -178,23 +206,27 @@
   &.success {
     @include icony-section('warning', #444, #CDC, #343, #DED, #CDC);
   }
+
+  &.notice {
+    @include icony-section('notice', #444, #CCC, #333, #DDD, #CCC);
+  }
 }
 
 .panel.tabbed {
   border: solid 1px #CCC;
-  background-color: #FFF;
+  background-color: white;
   padding: 1em;
   margin-top: 25px;
   margin-bottom: 1em;
 }
 
-.node-summary {
-  padding: 0 0.5em;
-  margin: 0.5em auto;
+.node_summary {
+  padding: 0 .5em;
+  margin: .5em auto;
 }
 
 .delayed-job {
-  padding-bottom: 0.5em;
+  padding-bottom: .5em;
 }
 
 .help {
@@ -229,7 +261,7 @@ h5,
 h6 {
   color: #333;
   font-weight: bold;
-  margin-bottom: 0.5em;
+  margin-bottom: .5em;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 

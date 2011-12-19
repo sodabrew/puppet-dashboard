@@ -36,7 +36,7 @@
                     = sources.map{|p| link_to(p.name,p)}.join(", ")
       - else
         = describe_no_matches_as 'No child groups'
-    .clear
+    .clearfix{:style => 'clear: both'}
   - if @node_group.all_nodes.present?
     .item
       .section
