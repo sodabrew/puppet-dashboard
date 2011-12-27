@@ -40,7 +40,7 @@ check_dashboard_enabled_option() {
 
 check_puppet_dashboard_worker_status() {
     RETVAL=1
-    for pidfile in $(ls -1 "${DASHBOARD_HOME}"/tmp/pids/delayed_job.*.pid 2>/dev/null)
+    for pidfile in $(ls -1 "${DASHBOARD_HOME}"/tmp/pids/delayed_job*.pid 2>/dev/null)
     do
       status_of_proc -p $pidfile ${DASHBOARD_RUBY} "Puppet Dashboard Worker (pid $(cat $pidfile))"  ||  return $?
       RETVAL=$?
@@ -53,7 +53,7 @@ check_puppet_dashboard_worker_status() {
 
 stop_puppet_dashboard_workers() {
     RETVAL=0
-    for pidfile in $(ls -1 "${DASHBOARD_HOME}"/tmp/pids/delayed_job.*.pid 2>/dev/null)
+    for pidfile in $(ls -1 "${DASHBOARD_HOME}"/tmp/pids/delayed_job*.pid 2>/dev/null)
     do
       start-stop-daemon --stop --quiet --oknodo --pidfile $pidfile --retry 10
       ((RETVAL=RETVAL+$?))
