@@ -1,0 +1,18 @@
+/*
+    IMPORTANT: This stylesheet is processed using SASS!
+
+    Edit this file:
+        public/stylesheets/sass/global.scss
+
+    And after a Rails action, it'll generate a fresh copy of:
+        public/stylesheets/global.css
+
+    Be sure to edit the right file, all changes to the .css file will be lost!
+*/
+
+@import 'reset';
+@import 'jquery.ui.custom';
+@import 'jquery.ui.combobox';
+@import 'tipsy';
+@import 'colorbox';
+@import 'standard';
