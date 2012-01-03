@@ -209,11 +209,6 @@ td.empty {
   background: #F8F8F8;
 }
 
-ul.tabbed {
-  @include clearfix;
-  display: block;
-}
-
 .in-place {
   display: none;
 }
@@ -1127,7 +1122,8 @@ ul {
 }
 
 ul.tabbed {
-  display: none;
+  @include clearfix;
+  display: block;
   font: bold 14px Arial;
   width: 100%;
   float: left;

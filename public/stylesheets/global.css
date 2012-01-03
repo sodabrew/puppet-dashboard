@@ -1554,17 +1554,6 @@ td.empty {
   color: #999;
   background: #F8F8F8; }
 
-ul.tabbed {
-  display: block;
-  display: block; }
-  ul.tabbed:after {
-    content: "\0020";
-    display: block;
-    height: 0;
-    clear: both;
-    visibility: hidden;
-    overflow: hidden; }
-
 .in-place {
   display: none; }
 
@@ -2307,12 +2296,20 @@ ul li {
     vertical-align: top; }
 
 ul.tabbed {
-  display: none;
+  display: block;
+  display: block;
   font: bold 14px Arial;
   width: 100%;
   float: left;
   margin: 0;
   padding: 0; }
+  ul.tabbed:after {
+    content: "\0020";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+    overflow: hidden; }
   ul.tabbed li {
     -webkit-border-radius: 0.35em 0.35em 0 0;
     -moz-border-radius: 0.35em 0.35em 0 0;
