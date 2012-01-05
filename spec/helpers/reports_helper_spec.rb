@@ -9,7 +9,13 @@ describe ReportsHelper do
 
     it "should make anything that looks like an md5 into a filebucket link" do
       helper.popup_md5s(@text).gsub(/\s/, '').should == <<-HEREDOC.gsub(/\s/, '')
-        content changed '<a
+        content <a
+          class=\"popup-md5\"
+          href=\"#\"
+          onclick=\"display_file_popup( '/files/diff?file1=b84b7c77fb71f0d945f186513a09e185&amp;file2=d28d2d3560fa76f0dbb1a452f8c38169'); 
+          return false;\">
+          changed
+        </a> '<a
           class=\"popup-md5\"
           href=\"#\"
           onclick=\"display_file_popup( '/files/show?file=b84b7c77fb71f0d945f186513a09e185'); return false;\">
@@ -25,7 +31,13 @@ describe ReportsHelper do
 
     it "should make the link text be a label if it's passed in" do
       helper.popup_md5s(@text, :label => 'foo').gsub(/\s/, '').should == <<-HEREDOC.gsub(/\s/, '')
-        content changed '<a
+        content <a
+          class=\"popup-md5\"
+          href=\"#\"
+          onclick=\"display_file_popup( '/files/diff?file1=b84b7c77fb71f0d945f186513a09e185&amp;file2=d28d2d3560fa76f0dbb1a452f8c38169'); 
+          return false;\">
+          changed
+        </a> '<a
           class=\"popup-md5\"
           href=\"#\"
           onclick=\"display_file_popup( '/files/show?file=b84b7c77fb71f0d945f186513a09e185'); return false;\">
@@ -41,7 +53,13 @@ describe ReportsHelper do
 
     it "should not link md5s if they're in the excluded list" do
       helper.popup_md5s(@text, :exclude_md5s => ['{md5}d28d2d3560fa76f0dbb1a452f8c38169']).gsub(/\s/, '').should == <<-HEREDOC.gsub(/\s/, '')
-        content changed '<a
+        content <a
+          class=\"popup-md5\"
+          href=\"#\"
+          onclick=\"display_file_popup( '/files/diff?file1=b84b7c77fb71f0d945f186513a09e185&amp;file2=d28d2d3560fa76f0dbb1a452f8c38169'); 
+          return false;\">
+          changed
+        </a> '<a
           class=\"popup-md5\"
           href=\"#\"
           onclick=\"display_file_popup( '/files/show?file=b84b7c77fb71f0d945f186513a09e185'); return false;\">
