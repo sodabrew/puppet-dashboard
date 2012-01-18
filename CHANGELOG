@@ -1,3 +1,9 @@
+1.2.5rc1
+===
+89f6341 (#5879) Removes 'url' column from 'nodes' table
+da28abf Added some documentation on writing plugins.
+b448067 Fix path to pid files
+
 v1.2.4
 ===
 09d555a (#11063) Building deb package should keep the source tarball
