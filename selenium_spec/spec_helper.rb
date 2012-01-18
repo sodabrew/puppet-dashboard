@@ -13,7 +13,7 @@ $DRIVER_IMPLICIT_WAIT = 10
 $DRIVER_HUB_URL = "http://192.168.100.228:4444/wd/hub"
 $DRIVER_CAPABILITIES = Selenium::WebDriver::Remote::Capabilities.firefox
 
-def get_driver()
+def get_web_driver()
   if $DRIVER == :remote
     driver = Selenium::WebDriver.for(:remote, :url => $DRIVER_HUB_URL, :desired_capabilities => $DRIVER_CAPABILITIES)
   else
