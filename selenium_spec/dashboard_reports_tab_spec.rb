@@ -15,12 +15,13 @@ describe "the Dashboard Reports tab" do
     it 'should exist' do
       reports_link = @driver.find_element(:link => "Reports")
       reports_link.displayed?.should be_true
-      @driver.action.click(reports_link).perform
     end
   end
 
   describe 'reports table' do
     it 'should allow status icons to be displayed with a graphical tooltip' do
+      reports_link = @driver.find_element(:link => "Reports")
+      @driver.action.click(reports_link).perform
       @driver.find_element(:css => "table.inspector.main").should be_true
     end
   end
