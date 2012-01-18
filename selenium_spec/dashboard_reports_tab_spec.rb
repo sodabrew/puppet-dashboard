@@ -11,7 +11,7 @@ describe "the Dashboard Reports tab" do
   describe 'reports menu item' do
     it 'should exist' do
       reports_link = browser.find_element(:link => "Reports")
-      reports_link.displayed?.should be_true
+      reports_link.should be_displayed
     end
   end
 
