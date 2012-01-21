@@ -9,7 +9,6 @@ CHANGELOG usr/share/puppet-dashboard
 LICENSE usr/share/puppet-dashboard
 README.markdown usr/share/puppet-dashboard
 README_PACKAGES.markdown usr/share/puppet-dashboard
-RELEASE_NOTES.md usr/share/puppet-dashboard
 Rakefile usr/share/puppet-dashboard
 script usr/share/puppet-dashboard
 spec usr/share/puppet-dashboard
