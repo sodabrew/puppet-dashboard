@@ -96,23 +96,19 @@ status () {
 case "$1" in
     start)
         start
-        exit $?
         ;;
     stop)
         stop
-        exit $?
         ;;
     restart)
         restart
-        exit $?
         ;;
     status)
         status
-        exit $?
         ;;
     *)
         echo "Usage: $0 {start|stop|restart|status}"
         exit 2
 esac
 
-exit $RETVAL
+exit $?
