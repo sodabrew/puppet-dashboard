@@ -76,6 +76,22 @@ stop() {
         return $RETVAL
 }
 
+restart () {
+        stop && start
+}
+
+status () {
+        echo -n 'Puppet Dashboard is '
+        pidofproc -p ${PIDFILE} ${DASHBOARD_RUBY} > /dev/null
+        RETVAL=$?
+        if [ $RETVAL = 0 ]; then
+            echo 'running'
+        else
+            echo 'stopped'
+        fi
+        return $RETVAL
+}
+
 # See how we were called.
 case "$1" in
     start)
@@ -87,18 +103,12 @@ case "$1" in
         exit $?
         ;;
     restart)
-        stop && start
+        restart
         exit $?
         ;;
     status)
-        echo -n 'Puppet Dashboard is '
-        pidofproc -p ${PIDFILE} ${DASHBOARD_RUBY} > /dev/null
-        RETVAL=$?
-        if [ $RETVAL = 0 ]; then
-            echo 'running'
-        else
-            echo 'stopped'
-        fi
+        status
+        exit $?
         ;;
     *)
         echo "Usage: $0 {start|stop|restart|status}"
