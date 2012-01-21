@@ -92,6 +92,10 @@ status () {
         return $RETVAL
 }
 
+force_reload () {
+        restart
+}
+
 # See how we were called.
 case "$1" in
     start)
@@ -106,8 +110,11 @@ case "$1" in
     status)
         status
         ;;
+    force-reload)
+        force_reload
+        ;;
     *)
-        echo "Usage: $0 {start|stop|restart|status}"
+        echo "Usage: $0 {start|stop|restart|status|force-reload}"
         exit 2
 esac
 
