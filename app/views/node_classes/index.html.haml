@@ -10,16 +10,12 @@
   %table.main
     %thead
       %tr
-        -# %th.check
-          -# = check_box_tag "check_all"
         %th.name
           Name
     - if @node_classes.present?
       %tbody
         - for node_class in @node_classes
           %tr[node_class]
-            -# %td.check
-              -# = check_box_tag "check_all"
             %td.name
               = link_to h(node_class.name), node_class
       %tfoot

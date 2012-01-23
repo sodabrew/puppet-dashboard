@@ -37,7 +37,7 @@
           &darr; Latest report
         - column_filter[ selected_status ].each do |status|
           %th
-            = status.capitalize
+            = h status.capitalize
     %tfoot
       %tr
         %td{:colspan => container.nil? ? 8 : 9 }
@@ -57,9 +57,9 @@
           - unless container.nil?
             %td
               - if sources.include?(container)
-                = node.name
+                = h node.name
               - else
-                = sources.map{|s| link_to(s.name,s)}.join(", ")
+                = sources.map{|s| link_to(h(s.name), s)}.join(", ")
           %td.latest_report
             = node.last_apply_report ? link_to(h(node.last_apply_report.time), node.last_apply_report) : "Has not reported"
           - column_filter[ selected_status ].each do |status|

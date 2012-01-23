@@ -11,13 +11,13 @@
 
     %li{:class => te.object_type}
       %span.date
-        = te.created_at
+        = h te.created_at
         &rarr;
       -# Not all subjects can be linked, e.g. you can't link to a Parameter
-      - if not is_current and link = link_to(subject, te.subject) rescue nil
-        = te.subject_type
+      - if not is_current and link = link_to(h(subject), te.subject) rescue nil
+        = h te.subject_type
         = link
       - else
-        = subject
-      = te.action
-      = link_to_unless is_secondary, secondary, te.secondary_subject if te.secondary_subject_type
+        = h subject
+      = h te.action
+      = link_to_unless is_secondary, h(secondary), te.secondary_subject if te.secondary_subject_type
