@@ -3,7 +3,7 @@
   .header
     %h2
       Group:
-      = @node_group.name
+      = h @node_group.name
     %ul.actions
       - unless SETTINGS.enable_read_only_mode
         %li= link_to 'Edit', edit_node_group_path(@node_group), :class => "edit button", :rel => 'inspect'
@@ -28,12 +28,12 @@
             - @node_group.node_group_children_with_sources.sort.each do |group,sources|
               %tr
                 %td
-                  %strong= link_to(group.name,group)
+                  %strong= link_to(h(group.name), group)
                 %td
                   - if sources.include?(@node_group)
-                    = group.name
+                    = h group.name
                   - else
-                    = sources.map{|p| link_to(p.name,p)}.join(", ")
+                    = sources.map{|p| link_to(h(p.name), p)}.join(", ")
       - else
         = describe_no_matches_as 'No child groups'
     .clearfix{:style => 'clear: both'}

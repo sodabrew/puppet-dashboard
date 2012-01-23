@@ -4,7 +4,7 @@
   .header
     %h2.half
       - if action_name != 'index'
-        = action_name.titleize.capitalize
+        = h action_name.titleize.capitalize
         nodes
       - else
         Nodes

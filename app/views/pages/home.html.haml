@@ -11,9 +11,9 @@
     %ul#home-tabs.tabbed
       - tab_statuses.each do |tab_status|
         %li(id="#{tab_status}-tab")
-          %a{:href => "#"}= tab_status.humanize
+          %a{:href => "#"}= h tab_status.humanize
     - tab_statuses.each do |tab_status|
-      %div.panel(id=tab_status)
+      %div.panel(id = tab_status)
         = render 'nodes/nodes',
           :nodes           => instance_variable_get("@#{tab_status}_nodes"),
           :selected_status => tab_status,

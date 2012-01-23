@@ -1,14 +1,14 @@
 %table.inspector
   - if options[:caption]
-    %caption= options[:caption]
+    %caption= h options[:caption]
   %thead
     %tr
-      %th.key= (options[:key_title] || key).to_s.titleize
+      %th.key= h (options[:key_title] || key).to_s.titleize
       - unless options[:key_only]
-        %th.value{:colspan => 2}= (options[:value_title] || value).to_s.titleize
+        %th.value{:colspan => 2}= h (options[:value_title] || value).to_s.titleize
   %tbody
     - inspector.each do |key, value|
       %tr
-        %td.key= key
+        %td.key= h key
         - unless options[:key_only]
-          %td{:colspan => 2}= value
+          %td{:colspan => 2}= h value

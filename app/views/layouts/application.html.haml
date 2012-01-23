@@ -31,7 +31,7 @@
               .close= link_to_function icon(:close), "jQuery('#flash').hide()"
               %p
                 = icon(type)
-                = message
+                = h message
         = yield
       #footer
         %p= link_to "&copy; Copyright #{Time.now.year} Puppet Labs", 'http://puppetlabs.com/'

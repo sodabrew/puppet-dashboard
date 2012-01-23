@@ -9,14 +9,14 @@
 - path_for_show = "#{table.singularize}_path"
 
 .group
-  %h3{:class => active_if(controller_name == table && action_name == "index")}= link_to(label, send(path_for_index))
+  %h3{:class => active_if(controller_name == table && action_name == "index")}= link_to(h(label), send(path_for_index))
   - entries = type.with_nodes_count
   - unless entries.empty?
     %ul
       - for entry in entries
         %li{:class => active_if(controller_name == table && ivar && ivar == entry)}
-          = link_to entry.name, send(path_for_show, entry)
+          = link_to h(entry.name), send(path_for_show, entry)
           %span.count= entry.nodes_count
   .footer.actionbar
     - unless SETTINGS.enable_read_only_mode
-      = link_to "Add #{label.downcase}", send(path_for_new), :class => 'button'
+      = link_to "Add #{h(label.downcase)}", send(path_for_new), :class => 'button'
