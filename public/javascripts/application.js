@@ -51,6 +51,7 @@ jQuery(document).ready(function(J) {
         runtimes: runtime_data
       },
       {
+        background_color: "#fff",
         colors: { runtimes: "#009" },
         font_size: 9,
         grid: false,
@@ -97,6 +98,7 @@ jQuery(document).ready(function(J) {
         failed: failed_data
       },
       {
+        background_color: "#fff",
         colors: { pending: PENDING, changed: CHANGED, unchanged: UNCHANGED, failed: FAILED },
         datalabels: { changed: changed_data_label, unchanged: unchanged_data_label, pending: pending_data_label, failed: failed_data_label },
         font_size: 9,
