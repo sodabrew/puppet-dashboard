@@ -25,7 +25,7 @@
       - Node.possible_derived_statuses.push( 'unreported', 'all' ).each do |status|
         - if( status == 'all' )
           - node_count = Node.unhidden.count
-          - nodes_path = {:controlller => "nodes", :action => "index"}
+          - nodes_path = {:controller => "nodes", :action => "index"}
           - action_status = 'index'
         - else
           - node_count = Node.send(status).unhidden.count
