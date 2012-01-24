@@ -1,5 +1,5 @@
 - inventory_parameter ||= {}
 %br.clear
-= text_field_tag 'search_params[][fact]', inventory_parameter['fact']
+= text_field_tag 'search_params[][fact]', inventory_parameter['fact'], :placeholder => 'Fact Name'
 = select_tag 'search_params[][comparator]', options_for_select([['is', 'eq'], ['is not', 'ne'], ['>', 'gt'], ['>=', 'ge'], ['<', 'lt'], ['<=', 'le']], inventory_parameter['comparator'])
-= text_field_tag 'search_params[][value]', inventory_parameter['value']
+= text_field_tag 'search_params[][value]', inventory_parameter['value'], :placeholder => 'Fact Value'
