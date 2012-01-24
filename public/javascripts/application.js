@@ -139,6 +139,7 @@ jQuery(document).ready(function(J) {
   J('.pages_home_action #home-tabs li:first').click();
 
   init_sidebar_links();
+  init_skiplink_target();
 });
 
 function init_expandable_list() {
@@ -201,4 +202,17 @@ function init_sidebar_links() {
         return false;
       });
   });
+}
+
+function init_skiplink_target() {
+  var is_webkit = navigator.userAgent.toLowerCase().indexOf('webkit') > -1;
+  var is_opera = navigator.userAgent.toLowerCase().indexOf('opera') > -1;
+  if(is_webkit || is_opera)
+  {
+    var target = document.getElementById('skiptarget');
+    target.href="#skiptarget";
+    target.innerText="Start of main content";
+    target.setAttribute("tabindex" , "0");
+    document.getElementById('skiplink').setAttribute("onclick" , "document.getElementById('skiptarget').focus();");
+  }
 }

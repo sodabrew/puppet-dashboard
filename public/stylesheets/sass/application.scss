@@ -144,6 +144,38 @@ body {
     padding: 1.5em 0 2em;
   }
 
+  #skiplinkholder {
+    a,
+    a:link,
+    a:visited {
+      display: block;
+      width: 99%;
+      position: absolute;
+      top: 0;
+      left: -200%;
+      z-index: 2;
+    }
+
+    a:focus,
+    a:active {
+      left: 0;
+      top: 0;
+      z-index: 100;
+    }
+
+    a,
+    a:link,
+    a:visited {
+      color: #fff;
+      background: #336;
+      font-weight: bold;
+      font-size: 1.3em;
+      text-decoration: none;
+      border-bottom: solid #ccc 2px;
+      padding: 5px;
+    }
+  }
+
   #header {
     padding: 1em 0 0;
 
