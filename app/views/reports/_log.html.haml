@@ -5,12 +5,12 @@
       %table.inspector
         %thead
           %tr
-            %th Level
-            %th Message
-            %th Source
-            %th File
-            %th Line
-            %th Time
+            %th{:scope => :col} Level
+            %th{:scope => :col} Message
+            %th{:scope => :col} Source
+            %th{:scope => :col} File
+            %th{:scope => :col} Line
+            %th{:scope => :col} Time
         %tbody
           = render :partial => 'puppet/util/logs/log', :collection => puppet_log_sorter(report.logs.compact)
   - else

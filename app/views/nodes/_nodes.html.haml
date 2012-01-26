@@ -22,21 +22,21 @@
   %table.main
     %thead
       %tr
-        %th.empty{:colspan => container.nil? ? 3 : 4}
+        %th.empty{:scope => :col, :colspan => container.nil? ? 3 : 4}
           = link_to "Export nodes as CSV", url_for(:controller => "nodes", :action => selected_status == "all" ? :index : selected_status, :format => 'csv')
         - unless column_filter[ selected_status ] && column_filter[ selected_status ].empty?
-          %th(colspan="5")
+          %th{:scope => :col, :colspan => "5"}
             Resources
       %tr
-        %th.status
-        %th.node
+        %th.status{:scope => :col}
+        %th.node{:scope => :col}
           Node
         - unless container.nil?
-          %th Source
-        %th.latest_report.desc
+          %th{:scope => :col} Source
+        %th.latest_report.desc{:scope => :col}
           &darr; Latest report
         - column_filter[ selected_status ].each do |status|
-          %th
+          %th{:scope => :col}
             = status.capitalize
     %tfoot
       %tr

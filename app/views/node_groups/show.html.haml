@@ -22,8 +22,8 @@
         %table.inspector
           %thead
             %tr
-              %th Group
-              %th Source
+              %th{:scope => :col} Group
+              %th{:scope => :col} Source
           %tbody
             - @node_group.node_group_children_with_sources.sort.each do |group,sources|
               %tr

@@ -1,20 +1,20 @@
 %table.inspector.main
   %thead
     %tr
-      %th.status
+      %th.status{:scope => :col}
         &nbsp;
-      %th Reported at &darr;
+      %th{:scope => :col} Reported at &darr;
       - unless node
-        %th Node
-      %th Total
-      %th Failed
-      %th Changed
-      %th Unchanged
-      %th Pending
-      %th Skipped
-      %th Failed restarts
-      %th Config retrieval
-      %th Runtime
+        %th{:scope => :col} Node
+      %th{:scope => :col} Total
+      %th{:scope => :col} Failed
+      %th{:scope => :col} Changed
+      %th{:scope => :col} Unchanged
+      %th{:scope => :col} Pending
+      %th{:scope => :col} Skipped
+      %th{:scope => :col} Failed restarts
+      %th{:scope => :col} Config retrieval
+      %th{:scope => :col} Runtime
   %tfoot
     - if reports.present?
       - if defined? tfoot and tfoot

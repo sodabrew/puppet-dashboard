@@ -4,8 +4,8 @@
     %table.inspector
       %thead
         %tr
-          %th Group
-          %th Source
+          %th{:scope => :col} Group
+          %th{:scope => :col} Source
       %tbody
         - resource.node_groups_with_sources.sort.each do |group,sources|
           %tr
