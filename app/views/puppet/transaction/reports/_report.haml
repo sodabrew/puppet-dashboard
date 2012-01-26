@@ -14,10 +14,10 @@
     %table.inspector
       %thead
         %tr
-          %th Level
-          %th Message
-          %th Source
-          %th Time
+          %th{:scope => :col} Level
+          %th{:scope => :col} Message
+          %th{:scope => :col} Source
+          %th{:scope => :col} Time
       %tbody
         = render report.logs
 

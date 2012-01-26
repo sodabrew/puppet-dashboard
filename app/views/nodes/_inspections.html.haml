@@ -7,10 +7,10 @@
     %table.inspector
       %thead
         %tr
-          %th.status
-          %th Reported at
-          %th Total
-          %th Runtime
+          %th.status{:scope => :col}
+          %th{:scope => :col} Reported at
+          %th{:scope => :col} Total
+          %th{:scope => :col} Runtime
       %tbody
         - node.reports.inspections.limit(reports_limit).each do |report|
           %tr
