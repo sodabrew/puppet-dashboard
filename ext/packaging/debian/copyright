@@ -77,3 +77,75 @@ License: MIT
 Files: public/images/icons
 Copyright: (c) 2005 Mark James <mjames@gmail.com>
 License: Creative Commons Attribution 3.0 License
+
+Files: public/javascripts/excanvas.min.js
+Copyright: (c) 2007-2011 IOLA and Ole Laursen
+License: MIT
+
+Files: public/javascripts/excanvas.min.js
+Copyright: (c) 2009 Kilian Valkhof, Alex R. Young
+License: MIT
+
+Files: public/javascripts/jquery.colorbox.js
+Copyright: (c) 2010 Jack Moore <jack@colorpowered.com>
+License: MIT
+
+Files: public/javascripts/jquery.form.js
+Copyright: (c) 2009
+License: MIT/GPL
+
+Files: public/javascripts/jquery.livequery.js
+Copyright: (c) 2008 Brandon Aaron (http://brandonaaron.net)
+License: MIT/GPL
+
+Files: public/javascripts/jquery.min.js
+Copyright: (c) 2011 John Resig
+License: MIT/GPL 2
+
+Files: public/javascripts/jquery.placeholders.js
+Copyright: (c) 2009 Mark Dodwell
+License: MIT
+
+Files: public/javascripts/jquery.templating.js
+Copyright: (c) Yehuda Katz
+License: BSD/GPL
+
+Files: public/javascripts/jquery.tipsy.js
+Copyright: (c) 2008-2010  jason frame [jason@onehackoranother.com]
+License: MIT
+
+Files: public/javascripts/jquery.tokeninput.js
+Copyright: (c) 2009 James Smith (http://loopj.com)
+License: MIT/GPL
+
+Files: public/javascripts/jquery.ui.js
+Copyright: (c) 2011 AUTHORS.txt (http://jqueryui.com/about)
+License: MIT/GPL 2
+
+Files: public/javascripts/jquery.ui.combobox.js
+Copyright: unknown
+License: unknown
+
+Files: public/javascripts/jquery.ui.tabs.js
+Copyright: (c) 2011 AUTHORS.txt (http://jqueryui.com/about)
+License: MIT/GPL 2
+
+Files: public/javascripts/jrails.js
+Copyright: unknown
+License: unknown
+
+Files: public/javascripts/prototype.js
+Copyright: (c) 2005-2009 Sam Stephenson
+License: MIT
+
+Files: public/javascripts/raphael-min.js
+Copyright: (c) 2009 Dmitry Baranovskiy (http://raphaeljs.com)
+License: MIT
+
+Files: public/javascripts/bootstrap-dropdown.js
+Copyright: (c) 2011 Twitter, Inc.
+License: Apache 2.0
+
+Files: public/javascripts/.js
+Copyright: (c) 2011 Twitter, Inc.
+License: Apache 2.0
