@@ -113,7 +113,7 @@ fi
 %attr(-,puppet-dashboard,puppet-dashboard) %config(noreplace) %{_datadir}/%{name}/config/*
 %{initrddir}/puppet-dashboard
 %{initrddir}/puppet-dashboard-workers
-%{_sysconfdir}/sysconfig/puppet-dashboard
+%config(noreplace) %{_sysconfdir}/sysconfig/puppet-dashboard
 %{_sysconfdir}/logrotate.d/puppet-dashboard
 %attr(-,puppet-dashboard,puppet-dashboard) %doc %{_datadir}/puppet-dashboard/VERSION
 %attr(-,puppet-dashboard,puppet-dashboard) %{_datadir}/puppet-dashboard/Rakefile
