@@ -50,7 +50,7 @@
             = link_to "Hidden", hidden_nodes_path
 
   .footer.actionbar
-    - unless SETTINGS.enable_read_only_mode
+    - unless SETTINGS.enable_read_only_mode || session['ACCESS_CONTROL_ROLE'] == 'READ_ONLY'
       = link_to "Add node", new_node_path, :class => 'button'
 
 = render "shared/node_manager_sidebar_for_type", :type => NodeGroup
