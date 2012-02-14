@@ -5,6 +5,14 @@ Puppet Dashboard is a web interface for [Puppet](http://www.puppetlabs.com/). It
 
 For full documentation, see the [Puppet Dashboard 1.2 Manual](http://docs.puppetlabs.com/dashboard/manual/1.2).
 
+Browser Support
+---------------
+
+* Chrome (current versions)
+* Firefox 3.5 and higher
+* Safari 4 and higher
+* Internet Explorer 7 and higher
+
 Dependencies
 ------------
 
