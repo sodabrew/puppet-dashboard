@@ -11,4 +11,10 @@ describe Parameter do
     @parameter.save
     Parameter.find(@parameter.id).value.should == [1,2,3]
   end
+
+  it "strips whitespace from keys" do
+    @parameter.key = "test   "
+    @parameter.save
+    Parameter.find(@parameter.id).key.should == "test"
+  end
 end
