@@ -16,7 +16,7 @@ class ApplicationController < ActionController::Base
   private
 
   def raise_if_enable_read_only_mode
-    raise ReadOnlyEnabledError.new if SETTINGS.enable_read_only_mode
+    raise ReadOnlyEnabledError.new if SETTINGS.enable_read_only_mode || session['ACCESS_CONTROL_ROLE'] == 'READ_ONLY'
   end
 
   def raise_unless_using_external_node_classification
