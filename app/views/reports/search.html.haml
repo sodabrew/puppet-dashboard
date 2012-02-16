@@ -12,7 +12,7 @@
         - flash[:errors].each do |messages|
           %p
             - messages.each do |message|
-              %li= message
+              %li= h message
 
     .section
       - form_tag url_for(:action => :search), :method => :get do
@@ -38,6 +38,6 @@
               - results.each do |file|
                 %tr
                   = report_status_td(file.report)
-                  %td= link_to file.report.time, file.report
+                  %td= link_to h(file.report.time), file.report
                   %td= link_to h(file.report.host), file.report.node
                   %td= file.events.detect {|event| event.property == "content"}.previous_value.gsub("{md5}","") rescue "not recorded"

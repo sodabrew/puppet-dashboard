@@ -261,7 +261,7 @@ $.TokenList = function (input, settings) {
             $.each(
                 li_data,
                 function (i, element) {
-                    var this_token = $("<li><p>"+element.name+"</p> </li>")
+                    var this_token = $("<li><p>"+$('<a/>').text(element.name).html()+"</p> </li>")
                         .addClass(settings.classes.token)
                         .insertBefore(input_token);
 
@@ -319,7 +319,7 @@ $.TokenList = function (input, settings) {
 
     // Inner function to a token to the list
     function insert_token(id, value) {
-      var this_token = $("<li><p>"+ value +"</p> </li>")
+      var this_token = $("<li><p>"+ $('<a/>').text(value).html() +"</p> </li>")
       .addClass(settings.classes.token)
       .insertBefore(input_token);
 
@@ -476,7 +476,7 @@ $.TokenList = function (input, settings) {
 
             for(var i in results) {
                 if (results.hasOwnProperty(i)) {
-                    var this_li = $("<li>"+highlight_term(results[i].name, query)+"</li>")
+                    var this_li = $("<li>"+highlight_term($('<a/>').text(results[i].name).html(), query)+"</li>")
                                       .appendTo(dropdown_ul);
 
                     if(i%2) {

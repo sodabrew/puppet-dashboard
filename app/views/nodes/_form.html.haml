@@ -9,7 +9,7 @@
     = form.label :node, "Node"
     - if @readonly_name
       %p
-        = @node.name
+        = h @node.name
     - else
       = form.text_field :name, :placeholder => "Enter the node name here"
 

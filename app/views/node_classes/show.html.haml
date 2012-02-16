@@ -3,7 +3,7 @@
   .header
     %h2
       Class:
-      = @node_class.name
+      = h @node_class.name
     %ul.actions
       - unless SETTINGS.enable_read_only_mode || session['ACCESS_CONTROL_ROLE'] == 'READ_ONLY'
         %li= link_to 'Edit', edit_node_class_path(@node_class), :class => "edit button"

@@ -1,12 +1,12 @@
 -# FIXME Is anything using this partial?
 .report.grouping
-  %h2= report.time
+  %h2= h report.time
 
   .section
     %h3 Metrics
     - report.metrics.each do |name, metric|
       %table.inspector
-        %caption= name.capitalize
+        %caption= h name.capitalize
         = render metric
 
   .section

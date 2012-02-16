@@ -23,11 +23,11 @@
           - @delayed_job_failures.each do |e|
             - index += 1
             %dt
-              %strong= e.summary
+              %strong= h e.summary
               at
-              %em= e.created_at
+              %em= h e.created_at
             %dd
-              = e.details
+              = h e.details
               - if e.backtrace
                 %div.expandable-list
                   = link_to h('Backtrace'), {}, {:class => 'expandable-link collapsed-link', :id => "expand-#{index}"}
@@ -35,7 +35,7 @@
                     %table
                       - e.backtrace.each do |bt|
                         %tr
-                          %td= bt
+                          %td= h bt
         = pagination_for @delayed_job_failures
       - else
         %p No unread task failures.

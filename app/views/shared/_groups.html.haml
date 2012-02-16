@@ -10,11 +10,11 @@
         - resource.node_groups_with_sources.sort.each do |group,sources|
           %tr
             %td
-              %strong= link_to(group.name,group)
+              %strong= link_to(h(group.name),group)
             %td
               - if sources.include?(resource)
-                = resource.name
+                = h resource.name
               - else
-                = sources.map{|source| link_to(source.name,source)}.join(", ")
+                = sources.map{|source| link_to(h(source.name),source)}.join(", ")
   - else
     = describe_no_matches_as 'No groups'
