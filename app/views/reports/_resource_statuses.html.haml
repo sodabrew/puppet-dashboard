@@ -11,11 +11,11 @@
             - index += 1
             %dt{:class => cycle( 'odd', 'even' )}
               - if status.events.empty?
-                %span{:class => 'non-expandable-bullet'}= status.name
+                %span{:class => 'non-expandable-bullet'}= h status.name
               - else
                 = link_to h(status.name), {}, {:class => 'expandable-link collapsed-link', :id => "expand-#{index}"}
               - if status.file or status.line
-                = "(#{status.file}:#{status.line})"
+                = h "(#{status.file}:#{status.line})"
             %dd.expandable.collapsed{:id => "expandable-#{index}"}
               %table
                 %tr
@@ -23,8 +23,8 @@
                   %th{:scope => :col} Message
                 - status.events.each do |event|
                   %tr{:class => "status #{event.status}"}
-                    %td= event.property
-                    %td= popup_md5s( h(event.message), :exclude_md5s => [event.desired_value])
+                    %td= h event.property
+                    %td= popup_md5s(h(event.message), :exclude_md5s => [event.desired_value])
           %br
   - else
     %h3 Events

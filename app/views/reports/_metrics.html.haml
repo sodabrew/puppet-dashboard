@@ -3,7 +3,7 @@
   - if report.metrics.present?
     - report.metrics.group_by(&:category).sort.each do |category, metrics_in_category|
       .section
-        %h4= category.titleize
+        %h4= h category.titleize
         %table.inspector
           = render :partial => 'metrics/metrics_table', :locals => {:metrics => metrics_in_category}
   - else
