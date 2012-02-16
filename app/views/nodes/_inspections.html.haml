@@ -15,7 +15,7 @@
         - node.reports.inspections.limit(reports_limit).each do |report|
           %tr
             = report_status_td(report)
-            %td= link_to report.time, report
+            %td= link_to h(report.time), report
             %td= report.total_resources
             %td= report.total_time
       - if node.reports.inspections.count > reports_limit

@@ -6,7 +6,7 @@
       %p.error
         %strong Warning:
         The following parameters have multiple conflicting values:
-        = [*resource.errors.on(:parameters)].join(", ")
+        = h [*resource.errors.on(:parameters)].join(", ")
     %table.inspector
       %thead
         %tr
@@ -17,13 +17,13 @@
         - resource.compiled_parameters(true).each do |param|
           %tr
             %td{:style => ("background-color: pink;" if param.sources.size > 1)}
-              %tt= param.name
+              %tt= h param.name
             %td
-              %tt= param.value
+              %tt= h param.value
             %td
               - if param.sources == Set[resource]
-                = resource.name
+                = h resource.name
               - else
-                = param.sources.map{|source| link_to(source.name,node_group_path(source.id))}.join(", ")
+                = param.sources.map{|source| link_to(h(source.name),node_group_path(source.id))}.join(", ")
   - else
     = describe_no_matches_as 'No parameters'

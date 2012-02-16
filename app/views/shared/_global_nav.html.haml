@@ -9,7 +9,7 @@
           - css << "width: #{SETTINGS.custom_logo_width}"
           %a{:href => root_path, :title => SETTINGS.custom_logo_alt_text, :style => css.join('; ')} Puppet Dashboard
         %li#dashboard-version{:class => active_if(request.url == release_notes_url)}
-          = link_to APP_VERSION, APP_VERSION_LINK
+          = link_to h(APP_VERSION), APP_VERSION_LINK
         %li#navigation-home{:class => active_if(request.url == root_url)}
           = link_to "Home", root_path
         %li#navigation-nodes{:class => active_if(controller_name == "nodes" && action_name == "index")}

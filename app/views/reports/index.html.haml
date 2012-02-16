@@ -5,7 +5,7 @@
       Reports
       - if @node
         %span.alt for
-        = link_to @node.name, @node
+        = link_to h(@node.name), @node
       %span.count== (#{@reports.total_entries})
 
   .item
