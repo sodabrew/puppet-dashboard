@@ -76,21 +76,12 @@ stop() {
         return $RETVAL
 }
 
-# See how we were called.
-case "$1" in
-    start)
-        start
-        exit $?
-        ;;
-    stop)
+restart () {
         stop
-        exit $?
-        ;;
-    restart)
-        stop && start
-        exit $?
-        ;;
-    status)
+        start
+}
+
+status () {
         echo -n 'Puppet Dashboard is '
         pidofproc -p ${PIDFILE} ${DASHBOARD_RUBY} > /dev/null
         RETVAL=$?
@@ -99,10 +90,33 @@ case "$1" in
         else
             echo 'stopped'
         fi
+        return $RETVAL
+}
+
+force_reload () {
+        restart
+}
+
+# See how we were called.
+case "$1" in
+    start)
+        start
+        ;;
+    stop)
+        stop
+        ;;
+    restart)
+        restart
+        ;;
+    status)
+        status
+        ;;
+    force-reload)
+        force_reload
         ;;
     *)
-        echo "Usage: $0 {start|stop|restart|status}"
-        exit 1
+        echo "Usage: $0 {start|stop|restart|status|force-reload}"
+        exit 2
 esac
 
-exit $RETVAL
+exit $?

@@ -145,6 +145,7 @@ class NodesController < InheritedResources::Base
       format.json { render :text => collection.to_json, :content_type => 'application/json' }
       format.yaml { render :text => collection.to_yaml, :content_type => 'application/x-yaml' }
       format.csv do
+        response["Cache-Control"] = 'must-revalidate, post-check=0, pre-check=0'
         response["Content-Type"] = 'text/comma-separated-values;'
         response["Content-Disposition"] = "attachment;filename=#{scope_names.join("-")}-nodes.csv;"
 

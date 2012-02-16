@@ -15,8 +15,8 @@
       %table#parameters.inspector
         %thead
           %tr
-            %th.key Key
-            %th.value Value
+            %th.key{:scope => :col} Key
+            %th.value{:scope => :col} Value
         %tbody
           - if form.object.parameters.blank?
             = render :partial => 'parameters/parameter_input', :object => form.object.parameters.build

@@ -2,6 +2,11 @@
   margin: 0 1em 1em;
 }
 
+#skiptargetholder {
+  position: absolute;
+  left: -200%;
+}
+
 #header {
   margin-bottom: 1em;
 }

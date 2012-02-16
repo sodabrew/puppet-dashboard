@@ -51,7 +51,6 @@ install -p -d -m0755 $RPM_BUILD_ROOT/%{_datadir}/%{name}/vendor
 install -p -d -m0755 $RPM_BUILD_ROOT/%{_defaultdocdir}/%{name}-%{version}
 cp -p -r app bin config db ext lib public Rakefile script spec $RPM_BUILD_ROOT/%{_datadir}/%{name}
 install -Dp -m0644 config/database.yml.example $RPM_BUILD_ROOT/%{_datadir}/%{name}/config/database.yml
-install -Dp -m0644 RELEASE_NOTES.md $RPM_BUILD_ROOT/%{_datadir}/%{name}/RELEASE_NOTES.md
 install -Dp -m0644 VERSION $RPM_BUILD_ROOT/%{_datadir}/%{name}/VERSION
 mkdir -p $RPM_BUILD_ROOT/%{_datadir}/%{name}/spool
 
@@ -110,13 +109,12 @@ fi
 
 %files
 %defattr(-,root,root,)
-%doc CHANGELOG LICENSE README.markdown README_PACKAGES.markdown RELEASE_NOTES.md
+%doc CHANGELOG LICENSE README.markdown README_PACKAGES.markdown
 %attr(-,puppet-dashboard,puppet-dashboard) %config(noreplace) %{_datadir}/%{name}/config/*
 %{initrddir}/puppet-dashboard
 %{initrddir}/puppet-dashboard-workers
-%{_sysconfdir}/sysconfig/puppet-dashboard
-%{_sysconfdir}/logrotate.d/puppet-dashboard
-%attr(-,puppet-dashboard,puppet-dashboard) %doc %{_datadir}/puppet-dashboard/RELEASE_NOTES.md
+%config(noreplace) %{_sysconfdir}/sysconfig/puppet-dashboard
+%config %{_sysconfdir}/logrotate.d/puppet-dashboard
 %attr(-,puppet-dashboard,puppet-dashboard) %doc %{_datadir}/puppet-dashboard/VERSION
 %attr(-,puppet-dashboard,puppet-dashboard) %{_datadir}/puppet-dashboard/Rakefile
 %attr(-,puppet-dashboard,puppet-dashboard) %dir %{_datadir}/%{name}/config

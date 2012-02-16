@@ -24,7 +24,7 @@
       - Node.possible_derived_statuses.push( 'unreported', 'all' ).each do |status|
         - if( status == 'all' )
           - node_count = Node.unhidden.count
-          - nodes_path = '/nodes'
+          - nodes_path = {:controller => "nodes", :action => "index"}
           - action_status = 'index'
         - else
           - node_count = Node.send(status).unhidden.count
@@ -49,9 +49,12 @@
             = link_to "Hidden", hidden_nodes_path
 
   .footer.actionbar
-    - unless SETTINGS.enable_read_only_mode
+    - unless SETTINGS.enable_read_only_mode || session['ACCESS_CONTROL_ROLE'] == 'READ_ONLY'
       = link_to "Add node", new_node_path, :class => 'button'
 
 = render "shared/node_manager_sidebar_for_type", :type => NodeGroup
 - if SETTINGS.use_external_node_classification
   = render "shared/node_manager_sidebar_for_type", :type => NodeClass
+
+#skiptargetholder
+  = render 'shared/skiptarget'

@@ -1,5 +1,5 @@
 !!!
-%html{ :xmlns => "http://www.w3.org/1999/xhtml" }
+%html{ :lang => "en", "xml:lang" => "en", :xmlns => "http://www.w3.org/1999/xhtml" }
   %head
     - page_title = yield(:page_title)
     %title= [ page_title, 'Puppet Node Manager'].compact.join(' - ')
@@ -22,6 +22,8 @@
   - add_body_class "no-sidebar" unless @body_classes.include?('with-sidebar')
   %body{:class => @body_classes}
     #wrap
+      #skiplinkholder
+        = render 'shared/skiplink'
       #header
         = render 'shared/global_nav'
       #content

@@ -590,4 +590,35 @@ describe NodesController do
       it_should_behave_like "a scoped_index action"
     end
   end
+
+  describe 'read-only mode' do
+
+    let(:node) { Node.generate! }
+
+    ['configuration file', 'Rack middleware'].each do |source|
+      describe "when set by the #{source}" do
+        before :each do
+          SETTINGS.stubs(:enable_read_only_mode).returns(source == 'configuration file')
+          session.expects(:[]).with('ACCESS_CONTROL_ROLE').returns('READ_ONLY') if source == 'Rack middleware'
+        end
+
+        it "should raise an error when calling 'new'" do
+          lambda{ get :new }.should raise_error(ReadOnlyEnabledError)
+        end
+
+        it "should raise an error calling 'edit'" do
+          lambda{ get :edit, :id => node.name }.should raise_error(ReadOnlyEnabledError)
+        end
+
+        it "should raise an error when calling 'update'" do
+          params = { :id => node.id, :node => node.attributes }
+          lambda{ put :update, params }.should raise_error(ReadOnlyEnabledError)
+        end
+
+        it "should raise an error when calling 'create'" do
+          lambda{ post :create, 'node' => { 'name' => 'foo' } }.should raise_error(ReadOnlyEnabledError)
+        end
+      end
+    end
+  end
 end

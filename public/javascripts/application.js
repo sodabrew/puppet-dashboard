@@ -51,6 +51,7 @@ jQuery(document).ready(function(J) {
         runtimes: runtime_data
       },
       {
+        background_color: "#fff",
         colors: { runtimes: "#009" },
         font_size: 9,
         grid: false,
@@ -97,6 +98,7 @@ jQuery(document).ready(function(J) {
         failed: failed_data
       },
       {
+        background_color: "#fff",
         colors: { pending: PENDING, changed: CHANGED, unchanged: UNCHANGED, failed: FAILED },
         datalabels: { changed: changed_data_label, unchanged: unchanged_data_label, pending: pending_data_label, failed: failed_data_label },
         font_size: 9,
@@ -137,6 +139,7 @@ jQuery(document).ready(function(J) {
   J('.pages_home_action #home-tabs li:first').click();
 
   init_sidebar_links();
+  init_skiplink_target();
 });
 
 function init_expandable_list() {
@@ -199,4 +202,17 @@ function init_sidebar_links() {
         return false;
       });
   });
+}
+
+function init_skiplink_target() {
+  var is_webkit = navigator.userAgent.toLowerCase().indexOf('webkit') > -1;
+  var is_opera = navigator.userAgent.toLowerCase().indexOf('opera') > -1;
+  if(is_webkit || is_opera)
+  {
+    var target = document.getElementById('skiptarget');
+    target.href="#skiptarget";
+    target.innerText="Start of main content";
+    target.setAttribute("tabindex" , "0");
+    document.getElementById('skiplink').setAttribute("onclick" , "document.getElementById('skiptarget').focus();");
+  }
 }

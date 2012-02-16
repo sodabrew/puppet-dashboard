@@ -39,10 +39,6 @@ a img {
   border: none;
 }
 
-a {
-  outline: 0;
-}
-
 ul {
   list-style-position: inside;
 }
