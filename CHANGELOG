@@ -1,5 +1,46 @@
-1.2.5rc1
+1.2.6rc1
 ===
+3d02eb4 (#12658) Add robots.txt to dashboard
+b1d4cba (#12484) Strips whitespace from parameter keys
+7ac4d04 Add read-only access control hooks for Rack middleware
+5f5eeb5 (#12440) change config behavior for logrotate.d/puppet-dashboard
+8709e96 (#12153) Adds list of supported browsers to README.markdown
+06115f1 ($12440) Add additional config file to spec file
+346be63 (#12440) Add config flag to puppet-dashboard file in rh spec
+0caac10 (#12476) Add context to install.rake exceptions
+d14ad7c Fixed typo
+f99d5d2 (#10901) Adds Selenium documentation. Removes selenium_spec/
+4a0cf66 (#10901) Moves selenium tests to acceptance/selenium
+0eac8cc (#10562) Adds header so IE8 users can download nodes.csv
+d3f8fc4 (#4890) Add example configuration for using basic auth with Dashboard
+80382e7 (#4890) Remove AllowOverride AuthConfig from example vhost
+d01915f Fix fragile restart logic.
+48b7c40 (#5971) Add JavaScript copyright and license notices
+3af37cc (#6739) Remove RELEASE_NOTES.md from Dashboard
+3c2cef3 Adding a force-reload for LSB compliance.
+3a585d6 Removing duplicated exits.
+77393c6 Refactoring status and restart out into functions.
+b9d8f32 Fixing exit code for default case.
+bbe5cfd (#10901) Uses cleaner rspec syntax
+9b8345b (#10901) Replaces before filter, renames get_driver
+0d6c665 (#10901) Removes faulty dependency between unit tests
+7d112e1 (#10901) Adds selenium tests
+2522170 (#10901) displays tipsy tooltip for report statuses
+c92b4b9 (#9501) changes skipnav target, increases contrast
+72bb246 (#9501) adds skip navigation link
+2b5aee2 (#9527) adds placeholders to inventory search params
+735d127 (#9499) restores outline around links for keyboard users
+af48ea4 (#10902) Float and block individual node sections
+303491d (#9500) adds scope properties to table headers
+599f866 (#10886) removes errant 'node_description' string
+75dba78 (#10555) sets default language of Dashboard to English
+6385c62 (#9870) fixes background color of graphs in IE8
+2d20b60 Fixed bug where delayed jobs icon path was incorrect when dashboard was installed to a subdirectory of the web root.
+f86671d Fixed bug where the 'All' nodes link did not work when dashboard was installed to a subdirectory of the web root.
+
+1.2.5
+===
+4f1e654 (#11365) Rigorously escape user inputs (CVE-2012-0891)
 89f6341 (#5879) Removes 'url' column from 'nodes' table
 da28abf Added some documentation on writing plugins.
 b448067 Fix path to pid files
