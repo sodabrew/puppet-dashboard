@@ -1,4 +1,4 @@
-1.2.6rc1
+1.2.6
 ===
 3d02eb4 (#12658) Add robots.txt to dashboard
 b1d4cba (#12484) Strips whitespace from parameter keys
