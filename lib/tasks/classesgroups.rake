@@ -161,6 +161,72 @@ namespace :nodegroup do
     end
   end
 
+  desc 'Edit/Add parameters for a node group'
+  task :parameters => :environment do
+    group_name = ENV['name']
+
+    if group_name.nil?
+      puts 'Must specify node group name (name=<hostname>).'
+      exit 1
+    end
+
+    begin
+      group = NodeGroup.find_by_name(group_name)
+
+      if group.nil?
+        puts "Node group #{group_name} doesn\'t exist!"
+        exit 1
+      end
+    rescue => e
+      puts "There was a problem finding the node group: #{e.message}"
+      exit 1
+    end
+
+    if ENV['parameters'].nil?
+      puts "Must specify node group parameters (parameters=param1=val1,param2=val2)"
+      exit 1
+    end
+
+    given_parameters = Hash[ ENV['parameters'].split(',').map do |param|
+      param_array = param.split('=',2)
+      if param_array.size != 2
+        raise ArgumentError, "Could not parse parameter #{param_array.first} given. Perhaps you're missing a '='"
+      end
+      if param_array[0].nil? or param_array[0].empty?
+        raise ArgumentError, "Could not parse parameters. Please check your format. Perhaps you need to name a parameter before a '='"
+      end
+      if param_array[1].nil? or param_array[1].empty?
+        raise ArgumentError, "Could not parse parameters #{param_array.first}. Please check your format"
+      end
+      param_array
+    end ]
+
+    #Check if we need to change any existing parameters
+    group.parameters.each do |parameter|
+      if given_parameters.keys.include? parameter.name
+        #This deletes the key from the hash and returns the value
+        #in a single method call.
+        parameter.value = given_parameters.delete parameter.name
+      end
+    end
+
+    #Create new parameters
+    new_parameters = given_parameters.map do |name, parameter|
+      Parameter.new :key => name, :value => parameter
+    end
+
+    group.parameters = group.parameters + new_parameters
+
+    begin
+      group.save!
+      puts "Node group parameters successfully edited for #{group.name}!"
+    rescue => e
+      puts "There was a problem saving the node group: #{e.message}"
+      exit 1
+    end
+
+  end
+
   desc 'Edit a node group'
   task :edit => :environment do
     if ENV['name']
