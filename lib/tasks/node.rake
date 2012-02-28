@@ -73,11 +73,12 @@ namespace :node do
 
   desc 'Add/Edit class(es) for a node'
   task :classes => :environment do
+    node_name = ENV['name']
     begin
-      node = Node.find_by_name(ENV['name'])
+      node = Node.find_by_name(name_name)
 
       if node.nil?
-        puts 'Node doesn\'t exist!'
+        puts "Node #{node_name} doesn\'t exist!"
         exit 1
       end
     rescue NameError
@@ -114,13 +115,79 @@ namespace :node do
     end
   end
 
-  desc 'Edit/Add groups for a node'
-  task :groups => :environment do
+  desc 'Edit/Add parameters for a node'
+  task :parameters => :environment do
+    node_name = ENV['name']
+
+    if node_name.nil?
+      puts 'Must specify node name (name=<hostname>).'
+      exit 1
+    end
+
     begin
-      node = Node.find_by_name(ENV['name'])
+      node = Node.find_by_name(node_name)
 
       if node.nil?
-        puts 'Node doesn\'t exist!'
+        puts "Node #{node_name} doesn\'t exist!"
+        exit 1
+      end
+    rescue => e
+      puts "There was a problem finding the node: #{e.message}"
+      exit 1
+    end
+
+    if ENV['parameters'].nil?
+      puts "Must specify node parameters (parameters=param1=val1,param2=val2)"
+      exit 1
+    end
+
+    given_parameters = Hash[ ENV['parameters'].split(',').map do |param|
+      param_array = param.split('=',2)
+      if param_array.size != 2
+        raise ArgumentError, "Could not parse parameter #{param_array.first} given. Perhaps you're missing a '='"
+      end
+      if param_array[0].nil? or param_array[0].empty?
+        raise ArgumentError, "Could not parse parameters. Please check your format. Perhaps you need to name a parameter before a '='"
+      end
+      if param_array[1].nil? or param_array[1].empty?
+        raise ArgumentError, "Could not parse parameters #{param_array.first}. Please check your format"
+      end
+      param_array
+    end ]
+
+    #Check if we need to change any existing parameters
+    node.parameters.each do |parameter|
+      if given_parameters.keys.include? parameter.name
+        #This deletes the key from the hash and returns the value
+        #in a single method call.
+        parameter.value = given_parameters.delete parameter.name
+      end
+    end
+
+    #Create new parameters
+    new_parameters = given_parameters.map do |name, parameter|
+      Parameter.new :key => name, :value => parameter
+    end
+
+    node.parameters = node.parameters + new_parameters
+
+    begin
+      node.save!
+      puts "Node parameters successfully edited for #{node.name}!"
+    rescue => e
+      puts "There was a problem saving the node: #{e.message}"
+      exit 1
+    end
+  end
+
+  desc 'Edit/Add groups for a node'
+  task :groups => :environment do
+    node_name = ENV['name']
+    begin
+      node = Node.find_by_name(node_name)
+
+      if node.nil?
+        puts "Node #{node_name} doesn\'t exist!"
         exit 1
       end
     rescue NameError
