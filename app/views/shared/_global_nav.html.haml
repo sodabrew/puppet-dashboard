@@ -1,13 +1,16 @@
 .topbar
   .topbar-inner
     .container
-      %ul#global-navigation.navigation
+      %ul#logo-and-account.navigation
         %li#logo
           - css = ["background-repeat: no-repeat", "text-indent: -9000px"]
           - css << "background-image: url('#{SETTINGS.custom_logo_url}')"
           - css << "height: #{SETTINGS.custom_logo_height}"
           - css << "width: #{SETTINGS.custom_logo_width}"
           %a{:href => root_path, :title => SETTINGS.custom_logo_alt_text, :style => css.join('; ')} Puppet Dashboard
+        - Registry.each_callback :core, :account_widgets do |callback|
+          = callback.call self
+      %ul#global-navigation.navigation
         %li#dashboard-version{:class => active_if(request.url == release_notes_url)}
           = link_to h(APP_VERSION), APP_VERSION_LINK
         %li#navigation-home{:class => active_if(request.url == root_url)}
