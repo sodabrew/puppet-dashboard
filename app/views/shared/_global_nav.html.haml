@@ -28,3 +28,5 @@
             = link_to "Inventory Search", search_nodes_path
         - Registry.each_callback :core, :global_nav_widgets do |callback|
           = callback.call self
+        - Registry.each_callback :core, :account_widgets do |callback|
+          = callback.call self
