@@ -18,5 +18,5 @@
           = link_to h(entry.name), send(path_for_show, entry)
           %span.count= entry.nodes_count
   .footer.actionbar
-    - unless SETTINGS.enable_read_only_mode
+    - unless SETTINGS.enable_read_only_mode || session['ACCESS_CONTROL_ROLE'] == 'READ_ONLY'
       = link_to "Add #{h(label.downcase)}", send(path_for_new), :class => 'button'
