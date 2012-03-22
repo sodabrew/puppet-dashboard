@@ -1,3 +1,11 @@
+1.2.7rc1
+===
+f2c3d54 Fix regression in access control protections
+ecec120 Upgrade vendored rails from 2.3.12 to 2.3.14
+44d8da0 Refactor how account widgets are added to the header
+cd417f1 Add account information option to header
+0108c04 Add parameters support for nodes and node groups
+
 1.2.6
 ===
 3d02eb4 (#12658) Add robots.txt to dashboard
