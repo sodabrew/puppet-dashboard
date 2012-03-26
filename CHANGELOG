@@ -1,4 +1,4 @@
-1.2.7rc1
+1.2.7
 ===
 f2c3d54 Fix regression in access control protections
 ecec120 Upgrade vendored rails from 2.3.12 to 2.3.14
