@@ -626,10 +626,10 @@ body {
         background-position: 0% 50%;
         margin-bottom: .5em; }
       body .delayed-job p.ok em {
-        background: transparent url("../images/icons/delayed-job-ok.png") no-repeat 0% 50%; }
+        background: transparent url(/images/icons/delayed-job-ok.png) no-repeat 0% 50%; }
       body .delayed-job p.failure a {
-        background-image: url("../images/icons/delayed-job-failure.png"); }
+        background-image: url(/images/icons/delayed-job-failure.png); }
       body .delayed-job p.warning em {
-        background-image: url("../images/icons/delayed-job-warning.png"); }
+        background-image: url(/images/icons/delayed-job-warning.png); }
   a.autorefresh_link {
     color: #aaa; }

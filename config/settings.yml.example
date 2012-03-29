@@ -32,7 +32,7 @@ ca_port: 8140
 key_length: 1024
 
 # The "inventory service" allows you to connect to a puppet master to retrieve and node facts
-enable_inventory_service: false
+enable_inventory_service: true
 
 # Hostname of the inventory server.
 inventory_server: 'puppet'

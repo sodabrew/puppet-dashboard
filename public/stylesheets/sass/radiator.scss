@@ -1,0 +1,84 @@
+@mixin radiator_row($color) {
+  .percent {
+    background-color : $color;
+    border-radius: 0 3px 3px 0;
+  }
+  .label {
+    color : $color;
+  }
+  .count {
+    color : $color;
+    font-weight : bold;
+  }
+}
+body.radiator_controller {
+  font-size : 3em;
+  line-height : 1;
+  font-family : "Helvetica Neue",Arial,Helvetica,sans-serif;
+  background-color : #000;
+  table.node_summary {
+    padding : 20px;
+    .count_column {
+      width: 2em;
+    }
+    position : absolute;
+    height : 100%;
+    width : 100%;
+    tr {
+      &.unresponsive { @include radiator_row( #888 )}
+      &.failed       { @include radiator_row( #c21 )}
+      &.pending      { @include radiator_row( #e72 )}
+      &.changed      { @include radiator_row( #069 )}
+      &.unchanged    { @include radiator_row( #093 )}
+      &.unreported   { @include radiator_row( #aaa )}
+      &.all          {
+        color : #fff;
+        @include radiator_row( #fff );
+        background-color: #000;
+        .percent {
+          display: none;
+        }
+        td {
+          border-top : 1px solid #fff;
+        }
+      }
+      td {
+        color : #ccc;
+        font-weight : 100;
+        position : relative;
+        border-bottom : 1px solid #333;
+        .label,
+        .percent {
+          display : table-cell;
+        }
+        .percent {
+          color : #000;
+          overflow : hidden;
+          position : absolute;
+          top : 0px;
+          left : 0px;
+          width: 100%;
+          height : 100%;
+        }
+        .label {
+          height : 100%;
+          position : absolute;
+          top : 0px;
+          left : 0px;
+        }
+        .count {
+          text-align : right;
+          width : 1.5em;
+          display : inline-block;
+        }
+      }
+    }
+  }
+}
+/*
+  * hide all?
+  * how to show percent?
+  * full width & height
+  * secondary cannot be a table
+  * right-aligned counts
+*/
