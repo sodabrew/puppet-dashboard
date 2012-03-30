@@ -10,6 +10,10 @@ body.radiator_controller {
     width: 100%; }
     body.radiator_controller table.node_summary .count_column {
       width: 2em; }
+    body.radiator_controller table.node_summary tr:last-child td {
+      border-bottom: none; }
+    body.radiator_controller table.node_summary tr:last-child td:last-child p {
+      display: none; }
     body.radiator_controller table.node_summary tr.unresponsive .percent {
       background-color: #888888;
       border-radius: 0 3px 3px 0; }

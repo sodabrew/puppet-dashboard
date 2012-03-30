@@ -24,6 +24,16 @@ body.radiator_controller {
     position : absolute;
     height : 100%;
     width : 100%;
+    tr:last-child {
+      td {
+        border-bottom: none;
+      }
+      td:last-child {
+        p {
+          display: none;
+        }
+      }
+    }
     tr {
       &.unresponsive { @include radiator_row( #888 )}
       &.failed       { @include radiator_row( #c21 )}
