@@ -3,7 +3,9 @@
   %head
     - page_title = yield(:page_title)
     %title= [ page_title, 'Puppet Node Manager'].compact.join(' - ')
+    %meta{"http-equiv" => "refresh", :content => "60"}
     = stylesheet_link_tag 'reset', 'mixins', 'radiator'
+    = javascript_include_tag 'jquery-1.7.2', 'radiator'
 
   - add_body_class "#{controller.controller_name}_controller"
   - add_body_class "#{controller.controller_name}_#{controller.action_name}_action"
