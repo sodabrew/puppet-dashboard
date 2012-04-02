@@ -16,12 +16,13 @@
       %td.count_column
         %span.count= node_count
       %td
-        %p.label
-          %span
-            = status.capitalize
-        %p.percent{:style => "width: #{percent}%"}
-          %span
-            = status.capitalize
+        %div
+          %p.label
+            %span
+              = status.capitalize
+          %p.percent{:style => "width: #{percent}%"}
+            %span
+              = status.capitalize
 
   - if Node.hidden.count > 0
     %table.secondary

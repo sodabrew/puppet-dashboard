@@ -59,20 +59,21 @@ body.radiator_controller {
       color: #ccc;
       font-weight: 100;
       position: relative;
-      border-bottom: 1px solid #333; }
+      border-bottom: 1px solid #333;
+      vertical-align: baseline; }
+      body.radiator_controller table.node_summary tr td div {
+        position: relative;
+        height: 1em; }
       body.radiator_controller table.node_summary tr td .percent {
         color: #000;
         overflow: hidden;
-        position: absolute;
-        top: 0px;
-        left: 0px;
-        width: 100%;
-        height: 100%; }
+        position: relative;
+        top: -1em;
+        left: 0px; }
         body.radiator_controller table.node_summary tr td .percent span {
           margin-left: 0.1em; }
       body.radiator_controller table.node_summary tr td .label {
-        height: 100%;
-        position: absolute;
+        position: relative;
         top: 0px;
         left: 0px; }
         body.radiator_controller table.node_summary tr td .label span {
