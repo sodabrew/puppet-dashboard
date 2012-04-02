@@ -15,9 +15,11 @@
         %span.count= node_count
       %td
         %p.label
-          = status.capitalize
+          %span
+            = status.capitalize
         %p.percent{:style => "width: #{percent}%"}
-          = status.capitalize
+          %span
+            = status.capitalize
 
   - if Node.hidden.count > 0
     %table.secondary

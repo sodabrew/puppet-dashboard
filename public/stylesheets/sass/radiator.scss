@@ -8,7 +8,6 @@
   }
   .count {
     color : $color;
-    font-weight : bold;
   }
 }
 body.radiator_controller {
@@ -69,17 +68,27 @@ body.radiator_controller {
           left : 0px;
           width: 100%;
           height : 100%;
+
+          span {
+            margin-left: 0.1em;
+          }
         }
         .label {
           height : 100%;
           position : absolute;
           top : 0px;
           left : 0px;
+
+          span {
+            margin-left: 0.1em;
+          }
         }
         .count {
           text-align : right;
-          width : 1.5em;
+          width : 1.75em;
           display : inline-block;
+          font-weight : bold;
+          margin-top: -0.1em;
         }
       }
     }

@@ -20,48 +20,42 @@ body.radiator_controller {
     body.radiator_controller table.node_summary tr.unresponsive .label {
       color: #888888; }
     body.radiator_controller table.node_summary tr.unresponsive .count {
-      color: #888888;
-      font-weight: bold; }
+      color: #888888; }
     body.radiator_controller table.node_summary tr.failed .percent {
       background-color: #cc2211;
       border-radius: 0 3px 3px 0; }
     body.radiator_controller table.node_summary tr.failed .label {
       color: #cc2211; }
     body.radiator_controller table.node_summary tr.failed .count {
-      color: #cc2211;
-      font-weight: bold; }
+      color: #cc2211; }
     body.radiator_controller table.node_summary tr.pending .percent {
       background-color: #ee7722;
       border-radius: 0 3px 3px 0; }
     body.radiator_controller table.node_summary tr.pending .label {
       color: #ee7722; }
     body.radiator_controller table.node_summary tr.pending .count {
-      color: #ee7722;
-      font-weight: bold; }
+      color: #ee7722; }
     body.radiator_controller table.node_summary tr.changed .percent {
       background-color: #006699;
       border-radius: 0 3px 3px 0; }
     body.radiator_controller table.node_summary tr.changed .label {
       color: #006699; }
     body.radiator_controller table.node_summary tr.changed .count {
-      color: #006699;
-      font-weight: bold; }
+      color: #006699; }
     body.radiator_controller table.node_summary tr.unchanged .percent {
       background-color: #009933;
       border-radius: 0 3px 3px 0; }
     body.radiator_controller table.node_summary tr.unchanged .label {
       color: #009933; }
     body.radiator_controller table.node_summary tr.unchanged .count {
-      color: #009933;
-      font-weight: bold; }
+      color: #009933; }
     body.radiator_controller table.node_summary tr.unreported .percent {
       background-color: #aaaaaa;
       border-radius: 0 3px 3px 0; }
     body.radiator_controller table.node_summary tr.unreported .label {
       color: #aaaaaa; }
     body.radiator_controller table.node_summary tr.unreported .count {
-      color: #aaaaaa;
-      font-weight: bold; }
+      color: #aaaaaa; }
     body.radiator_controller table.node_summary tr.all {
       color: #fff;
       background-color: #000; }
@@ -71,8 +65,7 @@ body.radiator_controller {
       body.radiator_controller table.node_summary tr.all .label {
         color: white; }
       body.radiator_controller table.node_summary tr.all .count {
-        color: white;
-        font-weight: bold; }
+        color: white; }
       body.radiator_controller table.node_summary tr.all .percent {
         display: none; }
       body.radiator_controller table.node_summary tr.all td {
@@ -93,15 +86,21 @@ body.radiator_controller {
         left: 0px;
         width: 100%;
         height: 100%; }
+        body.radiator_controller table.node_summary tr td .percent span {
+          margin-left: 0.1em; }
       body.radiator_controller table.node_summary tr td .label {
         height: 100%;
         position: absolute;
         top: 0px;
         left: 0px; }
+        body.radiator_controller table.node_summary tr td .label span {
+          margin-left: 0.1em; }
       body.radiator_controller table.node_summary tr td .count {
         text-align: right;
-        width: 1.5em;
-        display: inline-block; }
+        width: 1.75em;
+        display: inline-block;
+        font-weight: bold;
+        margin-top: -0.1em; }
 
 /*
   * hide all?
