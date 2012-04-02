@@ -16,6 +16,7 @@ body.radiator_controller {
   table.node_summary {
     padding : 20px;
     .count_column {
+      min-width: 2em;
       width: 2em;
     }
     position : absolute;

@@ -9,6 +9,7 @@ body.radiator_controller {
     height: 100%;
     width: 100%; }
     body.radiator_controller table.node_summary .count_column {
+      min-width: 2em;
       width: 2em; }
     body.radiator_controller table.node_summary tr:last-child td {
       border-bottom: none; }
