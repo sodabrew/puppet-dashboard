@@ -245,6 +245,9 @@ body {
           background: #DDD; }
           body #content #sidebar .group ul li span.count.failure {
             background: #DD9B9B; }
+    body #content #sidebar .group #radiator {
+      float: right;
+      margin: 0.5em; }
   body #content #sidebar a.fold {
     width: 1em;
     display: inline-block;
