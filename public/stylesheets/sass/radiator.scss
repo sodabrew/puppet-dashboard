@@ -3,9 +3,7 @@
     background-color : $color;
     border-radius: 0 3px 3px 0;
   }
-  .label {
-    color : $color;
-  }
+  .label,
   .count {
     color : $color;
   }
@@ -29,7 +27,7 @@ body.radiator_controller {
       }
       td:last-child {
         p {
-          display: none;
+          //display: none;
         }
       }
     }
@@ -56,10 +54,6 @@ body.radiator_controller {
         font-weight : 100;
         position : relative;
         border-bottom : 1px solid #333;
-        .label,
-        .percent {
-          display : table-cell;
-        }
         .percent {
           color : #000;
           overflow : hidden;

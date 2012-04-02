@@ -12,49 +12,36 @@ body.radiator_controller {
       width: 2em; }
     body.radiator_controller table.node_summary tr:last-child td {
       border-bottom: none; }
-    body.radiator_controller table.node_summary tr:last-child td:last-child p {
-      display: none; }
     body.radiator_controller table.node_summary tr.unresponsive .percent {
       background-color: #888888;
       border-radius: 0 3px 3px 0; }
-    body.radiator_controller table.node_summary tr.unresponsive .label {
-      color: #888888; }
+    body.radiator_controller table.node_summary tr.unresponsive .label,
     body.radiator_controller table.node_summary tr.unresponsive .count {
       color: #888888; }
     body.radiator_controller table.node_summary tr.failed .percent {
       background-color: #cc2211;
       border-radius: 0 3px 3px 0; }
-    body.radiator_controller table.node_summary tr.failed .label {
-      color: #cc2211; }
-    body.radiator_controller table.node_summary tr.failed .count {
+    body.radiator_controller table.node_summary tr.failed .label, body.radiator_controller table.node_summary tr.failed .count {
       color: #cc2211; }
     body.radiator_controller table.node_summary tr.pending .percent {
       background-color: #ee7722;
       border-radius: 0 3px 3px 0; }
-    body.radiator_controller table.node_summary tr.pending .label {
-      color: #ee7722; }
-    body.radiator_controller table.node_summary tr.pending .count {
+    body.radiator_controller table.node_summary tr.pending .label, body.radiator_controller table.node_summary tr.pending .count {
       color: #ee7722; }
     body.radiator_controller table.node_summary tr.changed .percent {
       background-color: #006699;
       border-radius: 0 3px 3px 0; }
-    body.radiator_controller table.node_summary tr.changed .label {
-      color: #006699; }
-    body.radiator_controller table.node_summary tr.changed .count {
+    body.radiator_controller table.node_summary tr.changed .label, body.radiator_controller table.node_summary tr.changed .count {
       color: #006699; }
     body.radiator_controller table.node_summary tr.unchanged .percent {
       background-color: #009933;
       border-radius: 0 3px 3px 0; }
-    body.radiator_controller table.node_summary tr.unchanged .label {
-      color: #009933; }
-    body.radiator_controller table.node_summary tr.unchanged .count {
+    body.radiator_controller table.node_summary tr.unchanged .label, body.radiator_controller table.node_summary tr.unchanged .count {
       color: #009933; }
     body.radiator_controller table.node_summary tr.unreported .percent {
       background-color: #aaaaaa;
       border-radius: 0 3px 3px 0; }
-    body.radiator_controller table.node_summary tr.unreported .label {
-      color: #aaaaaa; }
-    body.radiator_controller table.node_summary tr.unreported .count {
+    body.radiator_controller table.node_summary tr.unreported .label, body.radiator_controller table.node_summary tr.unreported .count {
       color: #aaaaaa; }
     body.radiator_controller table.node_summary tr.all {
       color: #fff;
@@ -62,9 +49,7 @@ body.radiator_controller {
       body.radiator_controller table.node_summary tr.all .percent {
         background-color: white;
         border-radius: 0 3px 3px 0; }
-      body.radiator_controller table.node_summary tr.all .label {
-        color: white; }
-      body.radiator_controller table.node_summary tr.all .count {
+      body.radiator_controller table.node_summary tr.all .label, body.radiator_controller table.node_summary tr.all .count {
         color: white; }
       body.radiator_controller table.node_summary tr.all .percent {
         display: none; }
@@ -75,9 +60,6 @@ body.radiator_controller {
       font-weight: 100;
       position: relative;
       border-bottom: 1px solid #333; }
-      body.radiator_controller table.node_summary tr td .label,
-      body.radiator_controller table.node_summary tr td .percent {
-        display: table-cell; }
       body.radiator_controller table.node_summary tr td .percent {
         color: #000;
         overflow: hidden;
