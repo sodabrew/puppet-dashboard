@@ -1,9 +1,3 @@
-// Known Issues
-//
-// - Safari has a larger line-height than other browsers
-// - Arial is ugly
-// - Firefox has a scroll bar (even though all content is always visible)
-//
 @mixin radiator_row($color) {
   .percent {
     background-color : $color;
@@ -22,8 +16,8 @@ body.radiator_controller {
   table.node_summary {
     padding : 20px;
     .count_column {
-      min-width: 2em;
-      width: 2em;
+      min-width: 1.75em;
+      width: 1.75em;
     }
     position : absolute;
     height : 100%;
@@ -40,10 +34,10 @@ body.radiator_controller {
       &.changed      { @include radiator_row( #069 )}
       &.unchanged    { @include radiator_row( #093 )}
       &.unreported   { @include radiator_row( #aaa )}
-      &.all          {
+      &.total        {
         color : #fff;
+        background-color: #1A1A1A;
         @include radiator_row( #fff );
-        background-color: #000;
         .percent {
           display: none;
         }
@@ -59,14 +53,16 @@ body.radiator_controller {
         vertical-align: baseline;
         div {
           position: relative;
-          height: 1em;
+          height: 100%;
         }
         .percent {
           color : #000;
           overflow : hidden;
-          position : relative;
-          top : -1em;
-          left : 0px;
+          position : absolute;
+          top : 0;
+          left : 0;
+          height: 100%;
+          overflow: hidden;
 
           span {
             margin-left: 0.1em;
@@ -74,8 +70,8 @@ body.radiator_controller {
         }
         .label {
           position : relative;
-          top : 0px;
-          left : 0px;
+          height: 100%;
+          overflow: hidden;
 
           span {
             margin-left: 0.1em;
@@ -83,7 +79,7 @@ body.radiator_controller {
         }
         .count {
           text-align : right;
-          width : 1.75em;
+          width : 1.50em;
           display : inline-block;
           font-weight : bold;
           margin-top: -0.12em;
