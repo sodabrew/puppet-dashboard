@@ -13,7 +13,7 @@
   }
 }
 body.radiator_controller {
-  font-size : 8em;
+  font-size : 815%;
   line-height : 1;
   font-family : "Helvetica Neue",Arial,Helvetica,sans-serif;
   background-color: #000;
@@ -54,7 +54,7 @@ body.radiator_controller {
       }
       td {
         color : #ccc;
-        font-weight : 100;
+        font-weight : normal;
         position : relative;
         border-bottom : 1px solid #333;
         vertical-align: baseline;
@@ -64,7 +64,6 @@ body.radiator_controller {
         }
         .percent {
           color : #000;
-          overflow : hidden;
           position : absolute;
           top : 0;
           left : 0;
