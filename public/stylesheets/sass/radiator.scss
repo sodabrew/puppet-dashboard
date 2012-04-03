@@ -7,17 +7,21 @@
   .count {
     color : $color;
   }
+
+  .label {
+    border-left: 1px #333 dashed;
+  }
 }
 body.radiator_controller {
   font-size : 8em;
   line-height : 1;
   font-family : "Helvetica Neue",Arial,Helvetica,sans-serif;
-  background-color : #000;
+  background-color: #000;
   table.node_summary {
     padding : 20px;
     .count_column {
-      min-width: 1.75em;
-      width: 1.75em;
+      min-width: 2em;
+      width: 2em;
     }
     position : absolute;
     height : 100%;
@@ -25,6 +29,9 @@ body.radiator_controller {
     tr:last-child {
       td {
         border-bottom: none;
+        .label {
+          border-left: 0px #000 solid;
+        }
       }
     }
     tr {
@@ -36,7 +43,7 @@ body.radiator_controller {
       &.unreported   { @include radiator_row( #aaa )}
       &.total        {
         color : #fff;
-        background-color: #1A1A1A;
+        background-color: #181818;
         @include radiator_row( #fff );
         .percent {
           display: none;
@@ -71,7 +78,6 @@ body.radiator_controller {
         .label {
           position : relative;
           height: 100%;
-          overflow: hidden;
 
           span {
             margin-left: 0.1em;
@@ -79,7 +85,7 @@ body.radiator_controller {
         }
         .count {
           text-align : right;
-          width : 1.50em;
+          width : 1.75em;
           display : inline-block;
           font-weight : bold;
           margin-top: -0.12em;
