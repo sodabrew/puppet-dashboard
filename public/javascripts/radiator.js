@@ -6,9 +6,9 @@ $(function() {
 })
 
 function resizeMe() {
-  var preferredHeight = 383;
+  var preferredHeight = 944;
   var displayHeight = $(window).height();
   var percentage = displayHeight / preferredHeight;
-  var newFontSize = Math.floor("300" * percentage) - 10;
+  var newFontSize = Math.floor("800" * percentage) - 20;
   $("body").css("font-size", newFontSize + "%")
 }
