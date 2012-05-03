@@ -31,4 +31,4 @@
         - Registry.each_callback :core, :account_widgets do |callback|
           = callback.call self
         %li#navigation-groups
-          = link_to "#{session[:autorefresh] ? "Deactivate autorefresh" : "Activate autorefresh"}", "#{request.path}?autorefresh=#{session[:autorefresh] ? "false" : "true"}", :class => "autorefresh_link"
+          = link_to "#{session[:autorefresh] ? "Disable autorefresh" : "Enable autorefresh"}", "#{request.path}?autorefresh=#{session[:autorefresh] ? "false" : "true"}", :class => "autorefresh_link"
