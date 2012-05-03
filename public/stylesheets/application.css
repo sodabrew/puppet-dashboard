@@ -631,3 +631,5 @@ body {
         background-image: url("../images/icons/delayed-job-failure.png"); }
       body .delayed-job p.warning em {
         background-image: url("../images/icons/delayed-job-warning.png"); }
+  .autorefresh_link {
+    color: #aaa; }
