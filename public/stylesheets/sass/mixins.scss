@@ -1,0 +1,24 @@
+@mixin node_summary_row($color) {
+  a {
+    color : $color;
+  }
+  .percent {
+    a {
+      background-color : $color;
+    }
+  }
+  &.hover,
+  &.active,
+  &:hover {
+    background-color : $color;
+    a {
+      color : #fff;
+      text-decoration : none;
+    }
+    .percent {
+      a {
+        background-color : #fff;
+      }
+    }
+  }
+}

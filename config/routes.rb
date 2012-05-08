@@ -40,6 +40,8 @@ ActionController::Routing::Routes.draw do |map|
   map.header '/header.:format', :controller => :pages, :action => :header
 
   map.root :controller => :pages, :action => :home
+  
+  map.connect 'radiator', :controller => :radiator, :action => :index
 
   map.connect ':controller/:action/:id'
   map.connect ':controller/:action/:id.:format'
