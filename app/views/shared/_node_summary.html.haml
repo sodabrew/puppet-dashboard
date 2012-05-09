@@ -1,0 +1,33 @@
+%table.node_summary
+  - Node.possible_derived_statuses.push( 'unreported', 'all' ).each do |status|
+    - if( status == 'all' )
+      - status = 'total'
+      - node_count = Node.unhidden.count
+      - nodes_path = {:controller => "nodes", :action => "index"}
+      - action_status = 'index'
+      - percent = '0'
+    - else
+      - node_count = Node.send(status).unhidden.count
+      - nodes_path = eval("#{status}_nodes_path")
+      - action_status = status
+      - percent = percentage(node_count, Node.unhidden.count).to_i
+
+    %tr{:class => "#{status} #{active_if(controller_name == 'nodes' && action_name == action_status && parent.nil?)}"}
+      %td.count_column
+        %span.count= node_count
+      %td
+        %div
+          %p.label
+            %span
+              = status.capitalize
+          %p.percent{:style => "width: #{percent}%"}
+            %span
+              = status.capitalize
+
+  - if Node.hidden.count > 0
+    %table.secondary
+      %tr{:class => active_if(controller_name == 'nodes' && action_name == 'hidden' && parent.nil?)}
+        %td.count
+          = link_to h(Node.hidden.count), hidden_nodes_path
+        %td.label
+          = link_to "Hidden", hidden_nodes_path

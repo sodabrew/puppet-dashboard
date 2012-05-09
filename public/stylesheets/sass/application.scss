@@ -9,6 +9,7 @@
 
     Be sure to edit the right file, all changes to the .css file will be lost!
 */
+@import 'mixins.scss';
 
 $button_background: #5c80a8;
 $button_gradient_percentage: 10%;
@@ -96,31 +97,6 @@ $rounding_radius: 0.35em;
     td {
         background: $background_color;
     }
-}
-
-@mixin node_summary_row($color) {
-  a {
-    color : $color;
-  }
-  .percent {
-    a {
-      background-color : $color;
-    }
-  }
-  &.hover,
-  &.active,
-  &:hover {
-    background-color : $color;
-    a {
-      color : #fff;
-      text-decoration : none;
-    }
-    .percent {
-      a {
-        background-color : #fff;
-      }
-    }
-  }
 }
 
 @mixin clearfix {
@@ -445,6 +421,11 @@ body {
             }
           }
         }
+      }
+
+      #radiator {
+        float: right;
+        margin: 0.5em;
       }
     }
 
@@ -842,4 +823,7 @@ body {
       }
     }
   }
+}
+a.autorefresh_link {
+  color: #aaa;
 }
