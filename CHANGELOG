@@ -1,3 +1,24 @@
+1.2.8rc1
+===
+48734f7 Adds autorefresh_link styling to application.scss
+35d6dc4 Fixing small issues in prep for being merged into master
+856e078 Improves font consistency
+fd6f373 Fixes aspect ratio for portrait orientations
+35e10a9 Fixes line-height inconsistencies
+e9c41d1 Fixes broken font-size algorithm
+4a4ba99 Fixes the minimum width of the count column
+f6e5f76 Cross-browser compatibility fixes
+505306c Renames 'All' with 'Total' and exposes it in CSS
+9f29984 Adds Radiator View link to the node summary sidebar
+6bda9bd Fixing text alignment and margins
+0570efe Adds font resizing and auto-refresh (every 60 seconds)
+c646e60 (#10297) Removes 'All' and borders from bottom of radiator view
+d63dadc (#10297) Adds initial radiator view
+0557bea cleanup
+22a9147 renamed autofresh links
+89aaa55 added autorefresh mechanism
+ddffe5b (#13565) Delete junk backup files
+
 1.2.7
 ===
 f2c3d54 Fix regression in access control protections
