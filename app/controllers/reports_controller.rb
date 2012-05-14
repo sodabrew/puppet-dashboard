@@ -1,5 +1,5 @@
 class ReportsController < InheritedResources::Base
-  belongs_to :node, :optional => true, :finder => :find_by_url!
+  belongs_to :node, :optional => true
   protect_from_forgery :except => [:create, :upload]
 
   before_filter :raise_if_enable_read_only_mode, :only => [:new, :edit, :update, :destroy]
