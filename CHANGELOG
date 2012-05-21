@@ -1,9 +1,6 @@
-1.2.8rc2
+1.2.8
 ===
 e3ed27e (#5879) Remove finder on obsolete URL column
-
-1.2.8rc1
-===
 48734f7 Adds autorefresh_link styling to application.scss
 35d6dc4 Fixing small issues in prep for being merged into master
 856e078 Improves font consistency
