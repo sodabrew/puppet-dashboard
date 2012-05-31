@@ -75,7 +75,7 @@ namespace :node do
   task :classes => :environment do
     node_name = ENV['name']
     begin
-      node = Node.find_by_name(name_name)
+      node = Node.find_by_name(node_name)
 
       if node.nil?
         puts "Node #{node_name} doesn\'t exist!"
