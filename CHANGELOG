@@ -1,3 +1,8 @@
+1.2.9rc1
+===
+d114b09 Fix the node:classes rake task
+8fed1f8 Update contributors in readme
+
 1.2.8
 ===
 e3ed27e (#5879) Remove finder on obsolete URL column
