@@ -24,11 +24,13 @@ binary-install/puppet-dashboard::
 		VERSION \
 	    $(CURDIR)/debian/$(cdbs_curpkg)/usr/share/puppet-dashboard
 	cp $(CURDIR)/config/database.yml.example $(CURDIR)/debian/$(cdbs_curpkg)/etc/puppet-dashboard/database.yml
+	cp $(CURDIR)/config/settings.yml.example $(CURDIR)/debian/$(cdbs_curpkg)/etc/puppet-dashboard/settings.yml
 	cp -r $(CURDIR)/public $(CURDIR)/debian/$(cdbs_curpkg)/var/$(cdbs_curpkg)
 	chmod -R a+rx $(CURDIR)/debian/$(cdbs_curpkg)/usr/share/puppet-dashboard/script
 	rm -rf $(CURDIR)/debian/$(cdbs_curpkg)/usr/share/puppet-dashboard/ext/packaging
 	# Clean up the "extra" files
 	rm -f $(CURDIR)/debian/$(cdbs_curpkg)/usr/share/puppet-dashboard/config/database.yml.example
+	rm -f $(CURDIR)/debian/$(cdbs_curpkg)/usr/share/puppet-dashboard/config/settings.yml.example
 	rm -f $(CURDIR)/debian/$(cdbs_curpkg)/usr/share/puppet-dashboard/vendor/plugins/*/*LICENSE
 	rm -f $(CURDIR)/debian/$(cdbs_curpkg)/usr/share/puppet-dashboard/vendor/plugins/*/License.txt
 	rm -f $(CURDIR)/debian/$(cdbs_curpkg)/usr/share/puppet-dashboard/vendor/gems/*/*LICENSE
