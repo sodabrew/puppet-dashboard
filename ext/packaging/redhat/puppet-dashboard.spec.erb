@@ -1,15 +1,15 @@
-%global confdir ext/packaging/redhat
-%global initrddir /etc/rc.d/init.d
+%global confdir       ext/packaging/redhat
+%global initrddir     /etc/rc.d/init.d
 # VERSION is subbed out during rake srpm process
-%global realversion <%= version %>
-%global rpmversion <%= rpmversion %>
+%global realversion   <%= version %>
+%global rpmversion    <%= rpmversion %>
+%global dbuser        puppet-dashboard
 
 Name:           puppet-dashboard
 Version:        %{rpmversion}
 Release:        <%= release -%>%{?dist}
 Summary:        Systems Management web application
 Group:          Applications/System
-# Remember to verify this
 License:        ASL 2.0
 URL:            http://www.puppetlabs.com
 Source0:        http://yum.puppetlabs.com/sources/%{name}-%{realversion}.tar.gz
@@ -29,10 +29,10 @@ Puppet Dashboard is a systems management web application for managing
 Puppet installations and is written using the Ruby on Rails framework.
 
 %pre
-getent group puppet-dashboard > /dev/null || groupadd -r puppet-dashboard
-getent passwd puppet-dashboard > /dev/null || \
-  useradd -r -g puppet-dashboard -d %{_datadir}/puppet-dashboard -s /sbin/nologin \
-  -c "Puppet Dashboard" puppet-dashboard
+getent group %{dbuser} > /dev/null || groupadd -r %{dbuser}
+getent passwd %{dbuser} > /dev/null || \
+  useradd -r -g %{dbuser} -d %{_datadir}/puppet-dashboard -s /sbin/nologin \
+  -c "Puppet Dashboard" %{dbuser}
 exit 0
 
 %prep
@@ -50,21 +50,18 @@ install -p -d -m0755 $RPM_BUILD_ROOT/%{_datadir}/%{name}/tmp
 install -p -d -m0755 $RPM_BUILD_ROOT/%{_datadir}/%{name}/vendor
 install -p -d -m0755 $RPM_BUILD_ROOT/%{_datadir}/%{name}/certs
 install -p -d -m0755 $RPM_BUILD_ROOT/%{_defaultdocdir}/%{name}-%{version}
-cp -p -r app bin config db ext lib public Rakefile script spec $RPM_BUILD_ROOT/%{_datadir}/%{name}
-install -Dp -m0644 config/database.yml.example $RPM_BUILD_ROOT/%{_datadir}/%{name}/config/database.yml
-install -Dp -m0644 config/settings.yml.example $RPM_BUILD_ROOT/%{_datadir}/%{name}/config/settings.yml
+install -p -d -m0755 $RPM_BUILD_ROOT/%{_datadir}/%{name}/spool
+cp -p -r app bin config db ext lib public Rakefile script spec vendor $RPM_BUILD_ROOT/%{_datadir}/%{name}
+install -Dp -m0640 config/database.yml.example $RPM_BUILD_ROOT/%{_datadir}/%{name}/config/database.yml
+install -Dp -m0640 config/settings.yml.example $RPM_BUILD_ROOT/%{_datadir}/%{name}/config/settings.yml
 install -Dp -m0644 VERSION $RPM_BUILD_ROOT/%{_datadir}/%{name}/VERSION
-mkdir -p $RPM_BUILD_ROOT/%{_datadir}/%{name}/spool
+chmod a+x $RPM_BUILD_ROOT/%{_datadir}/%{name}/script/*
 
 # Add sysconfig and init script
 install -Dp -m0755 %{confdir}/%{name}.init $RPM_BUILD_ROOT/%{initrddir}/puppet-dashboard
 install -Dp -m0755 %{confdir}/puppet-dashboard-workers.init $RPM_BUILD_ROOT/%{initrddir}/puppet-dashboard-workers
 install -Dp -m0644 %{confdir}/%{name}.sysconfig $RPM_BUILD_ROOT/%{_sysconfdir}/sysconfig/puppet-dashboard
 install -Dp -m0644 %{confdir}/%{name}.logrotate $RPM_BUILD_ROOT/%{_sysconfdir}/logrotate.d/puppet-dashboard
-
-cp -p -r vendor $RPM_BUILD_ROOT/%{_datadir}/%{name}/
-chmod a+x $RPM_BUILD_ROOT/%{_datadir}/%{name}/script/*
-rm -f -r $RPM_BUILD_ROOT/%{_datadir}/%{name}/.git*
 
 mv CHANGELOG timestamp
 iconv -f ISO-8859-1 -t UTF-8 -o CHANGELOG timestamp
@@ -83,6 +80,7 @@ rm timestamp
 
 
 # Clean up some rpmlint issues
+rm -f -r $RPM_BUILD_ROOT/%{_datadir}/%{name}/.git*
 rm -f $RPM_BUILD_ROOT/%{_datadir}/%{name}/spec/models/.gitignore
 rm -f $RPM_BUILD_ROOT/%{_datadir}/%{name}/app/views/layouts/.gitignore
 rm -f $RPM_BUILD_ROOT/%{_datadir}/%{name}/public/stylesheets/.gitignore
