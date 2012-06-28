@@ -51,7 +51,8 @@ install -p -d -m0755 $RPM_BUILD_ROOT/%{_datadir}/%{name}/vendor
 install -p -d -m0755 $RPM_BUILD_ROOT/%{_datadir}/%{name}/certs
 install -p -d -m0755 $RPM_BUILD_ROOT/%{_defaultdocdir}/%{name}-%{version}
 install -p -d -m0755 $RPM_BUILD_ROOT/%{_datadir}/%{name}/spool
-cp -p -r app bin config db ext lib public Rakefile script spec vendor $RPM_BUILD_ROOT/%{_datadir}/%{name}
+install -p -d -m0755 $RPM_BUILD_ROOT/%{_datadir}/%{name}/examples
+cp -p -r app bin config db ext lib public Rakefile script spec examples vendor $RPM_BUILD_ROOT/%{_datadir}/%{name}
 install -Dp -m0640 config/database.yml.example $RPM_BUILD_ROOT/%{_datadir}/%{name}/config/database.yml
 install -Dp -m0640 config/settings.yml.example $RPM_BUILD_ROOT/%{_datadir}/%{name}/config/settings.yml
 install -Dp -m0644 VERSION $RPM_BUILD_ROOT/%{_datadir}/%{name}/VERSION
@@ -131,6 +132,7 @@ fi
 %attr(-,puppet-dashboard,puppet-dashboard) %dir %{_datadir}/%{name}/tmp
 %attr(-,puppet-dashboard,puppet-dashboard) %{_datadir}/%{name}/vendor
 %attr(-,puppet-dashboard,puppet-dashboard) %{_datadir}/%{name}/certs
+%attr(-,puppet-dashboard,puppet-dashboard) %{_datadir}/%{name}/examples
 #%attr(-,puppet-dashboard,puppet-dashboard) %dir /var/log/%{name}
 
 %changelog
