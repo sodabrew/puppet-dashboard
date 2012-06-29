@@ -20,6 +20,7 @@ binary-install/puppet-dashboard::
 	    Rakefile \
 	    script \
 	    spec \
+      examples \
 	    vendor \
 		VERSION \
 	    $(CURDIR)/debian/$(cdbs_curpkg)/usr/share/puppet-dashboard

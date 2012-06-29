@@ -1,0 +1,17 @@
+#!/bin/bash
+
+# Example script to clean up after Dashboard by pruning old reports.
+# Options for the rake task specifying time requirements for report
+# deletion can be modified in this script. As specified below, this task will
+# delete reports older than one month. To view options for the task,
+# run `rake reports:prune` in the directory containing puppet-dashboard's
+# code.
+
+set -u
+
+PUPPET_DB_PATH=/usr/share/puppet-dashboard
+
+output=`rake -s -f ${PUPPET_DB_PATH}/Rakefile RAILS_ENV=production reports:prune upto=1 unit=mon 2>&1 1> /dev/null`
+if [ $? -ne 0 ]; then
+  logger -i "${output}"
+fi
