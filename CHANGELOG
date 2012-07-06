@@ -1,3 +1,11 @@
+1.2.10rc1
+===
+5de691f (#11849) Add rake task to install cron job to clean up database reports
+07c75a3 cleanup on puppet-dashboard spec file
+b70344d create certs directory with installation
+d9b7eeb Install a default settings.yml file with database.yml
+e17269f Patch puppet-dashboard for CVE-2012-2660
+
 1.2.9
 ===
 d114b09 Fix the node:classes rake task
