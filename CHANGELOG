@@ -1,4 +1,4 @@
-1.2.10rc1
+1.2.10
 ===
 5de691f (#11849) Add rake task to install cron job to clean up database reports
 07c75a3 cleanup on puppet-dashboard spec file
