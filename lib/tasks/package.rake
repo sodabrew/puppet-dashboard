@@ -5,8 +5,9 @@ def get_version
 end
 
 def get_debversion
+  release = ENV["RELEASE"] ||= "1"
   version = get_version
-  version.include?("rc") ? version.sub(/rc[0-9]+/, '-0.1\0') : version + '-1puppetlabs1'
+  version.include?("rc") ? version.sub(/rc[0-9]+/, '-0.1\0') : version + "-1puppetlabs#{release}"
 end
 
 def get_rpmversion
