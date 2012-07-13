@@ -35,7 +35,7 @@ configure)
     find /etc/puppet-dashboard -type f -exec chmod a-x {} \;
 
     if [ ! -h /usr/share/puppet-dashboard/config/database.yml ]; then
-        ln -s ../../../../etc/puppet-dashboard/database.yml /usr/share/puppet-dashboard/config/database.yml
+        ln -s /etc/puppet-dashboard/database.yml /usr/share/puppet-dashboard/config/database.yml
     fi
     
     if [ ! -h /usr/share/puppet-dashboard/config/settings.yml ]; then
