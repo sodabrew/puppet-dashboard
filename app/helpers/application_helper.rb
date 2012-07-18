@@ -123,7 +123,7 @@ module ApplicationHelper
     return nil if ! scope.first.class.respond_to? :per_page
     content_tag(:div, :class => 'pagination') do
       [content_tag(:span){ "Per page: " }] +
-      [scope.first.class.per_page, 100, :all].map do |n|
+      [scope.first.class.per_page, 100].sort.push(:all).uniq.map do |n|
         if (params[:per_page] || scope.per_page.to_s) == n.to_s
           content_tag(:span, :class => "current"){ n }
         else
