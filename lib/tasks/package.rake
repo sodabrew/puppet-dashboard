@@ -97,7 +97,8 @@ namespace :package do
     base="#{temp}/#{name}-#{debversion}"
     sh "cp pkg/tar/#{name}-#{version}.tar.gz #{temp}"
     cd temp do
-      sh "tar zxf *.tar.gz"
+      sh "cp #{name}-#{version}.tar.gz #{name}_#{version}.orig.tar.gz"
+      sh "tar zxf #{name}-#{version}.tar.gz"
       cd "#{name}-#{version}" do
         mv File.join('ext', 'packaging', 'debian'), '.'
         cmd = 'dpkg-buildpackage -a'
@@ -107,10 +108,7 @@ namespace :package do
           sh cmd
           dest_dir = File.join(RAILS_ROOT, 'pkg', 'deb')
           mkdir_p dest_dir
-          cp latest_file(File.join(temp, '*.deb')), dest_dir
-          cp latest_file(File.join(temp, '*.dsc')), dest_dir
-          cp latest_file(File.join(temp, '*.changes')), dest_dir
-          cp latest_file(File.join(temp, '*.tar.gz')), dest_dir
+          cp FileList["#{temp}/*.deb", "#{temp}/*.dsc", "#{temp}/*.changes", "#{temp}/*.debian.tar.gz", "#{temp}/*.orig.tar.gz"], dest_dir
           puts
           puts "** Created package: "+ latest_file(File.expand_path(File.join(RAILS_ROOT, 'pkg', 'deb', '*.deb')))
         rescue
