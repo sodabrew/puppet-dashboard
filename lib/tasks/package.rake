@@ -1,13 +1,22 @@
 require 'erb'
 
 def get_version
-  `git describe`.strip
+  if File.exists?('.git')
+    %x{git describe}.chomp.gsub('-', '.').split('.')[0..3].join('.').gsub('v', '') 
+  else
+    %x{pwd}.strip!.split('.')[-1]
+  end
 end
 
 def get_debversion
   release = ENV["RELEASE"] ||= "1"
   version = get_version
   version.include?("rc") ? version.sub(/rc[0-9]+/, '-0.1\0') : version + "-1puppetlabs#{release}"
+end
+
+def get_origversion
+  debversion = get_debversion
+  debversion.split('-')[0]
 end
 
 def get_rpmversion
@@ -92,13 +101,16 @@ namespace :package do
     name = get_name
     version = get_version
     debversion = get_debversion
+    origversion = get_origversion
     dt = Time.now.strftime("%a, %d %b %Y %H:%M:%S %z")
     temp=`mktemp -d -t tmpXXXXXX`.strip!
     base="#{temp}/#{name}-#{debversion}"
     sh "cp pkg/tar/#{name}-#{version}.tar.gz #{temp}"
     cd temp do
-      sh "tar zxf *.tar.gz"
-      cd "#{name}-#{version}" do
+      sh "tar zxf #{name}-#{version}.tar.gz"
+      sh "mv #{name}-#{version} #{name}-#{debversion}"
+      sh "mv #{name}-#{version}.tar.gz #{name}_#{origversion}.orig.tar.gz"
+      cd "#{name}-#{debversion}" do
         mv File.join('ext', 'packaging', 'debian'), '.'
         cmd = 'dpkg-buildpackage -a'
         cmd << ' -us -uc' if ENV['UNSIGNED'] == '1'
@@ -107,10 +119,7 @@ namespace :package do
           sh cmd
           dest_dir = File.join(RAILS_ROOT, 'pkg', 'deb')
           mkdir_p dest_dir
-          cp latest_file(File.join(temp, '*.deb')), dest_dir
-          cp latest_file(File.join(temp, '*.dsc')), dest_dir
-          cp latest_file(File.join(temp, '*.changes')), dest_dir
-          cp latest_file(File.join(temp, '*.tar.gz')), dest_dir
+          cp FileList["#{temp}/*.deb", "#{temp}/*.dsc", "#{temp}/*.changes", "#{temp}/*.debian.tar.gz", "#{temp}/*.orig.tar.gz"], dest_dir
           puts
           puts "** Created package: "+ latest_file(File.expand_path(File.join(RAILS_ROOT, 'pkg', 'deb', '*.deb')))
         rescue
