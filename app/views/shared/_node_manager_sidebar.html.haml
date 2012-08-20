@@ -1,11 +1,11 @@
 - add_body_class 'with-sidebar'
 
 .group.delayed-job
-  %h3= link_to "Background Tasks", "/delayed_job_failures"
+  %h3= link_to "Background Tasks", "#{root_path}delayed_job_failures"
 
   - if DelayedJobFailure.unread.count > 0
     %p.failure
-      = link_to "#{ pluralize DelayedJobFailure.unread.count, 'new failed task' }", "/delayed_job_failures"
+      = link_to "#{ pluralize DelayedJobFailure.unread.count, 'new failed task' }", "#{root_path}delayed_job_failures"
   - if Delayed::Job.count > 0
     %p.warning
       %em= "#{ pluralize Delayed::Job.count, 'pending task' }"
@@ -50,7 +50,7 @@
 
   .footer.actionbar
     #radiator
-      = link_to "Radiator View", '/radiator'
+      = link_to "Radiator View", "#{root_path}radiator"
     - unless SETTINGS.enable_read_only_mode || session['ACCESS_CONTROL_ROLE'] == 'READ_ONLY'
       = link_to "Add node", new_node_path, :class => 'button'
 

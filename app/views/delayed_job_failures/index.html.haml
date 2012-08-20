@@ -7,9 +7,9 @@
   .item
     %ul.tabbed
       %li{ :class => active_if( controller.action_name == 'index' )}
-        = link_to "#{DelayedJobFailure.unread.count > 0 ? DelayedJobFailure.unread.count : ''} New failed tasks", '/delayed_job_failures'
+        = link_to "#{DelayedJobFailure.unread.count > 0 ? DelayedJobFailure.unread.count : ''} New failed tasks", "#{root_path}delayed_job_failures"
       %li{ :class => active_if( controller.action_name == 'read' )}
-        = link_to 'Previously-read failures', '/delayed_job_failures/read'
+        = link_to 'Previously-read failures', "#{root_path}delayed_job_failures/read"
 
     %div.panel.tabbed
       - if @delayed_job_failures.count > 0
