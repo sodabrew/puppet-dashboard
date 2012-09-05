@@ -1,3 +1,23 @@
+1.2.11-rc1
+===
+101af75 Update supported debian versions and cows
+e6f6acf Fixup Rakefile for setting up packaging repo
+8f03e6c Add VERSION file to source
+da22ddd Add packaging data files
+42030b8 Remove obsolete package.rake file
+4201990 Fixup redhat spec erb for packaging repo
+71d302a re-template debian changelog
+3abf9df Move packaging up to ext to avoid conflict with pkging repo
+a8e2586 Fix spec tests broken by commit c64c013
+ffe7bdd (#15196) Make items per page configurable
+c64c013 (#10477) Clean up log files by moving message to debug
+df5a20a Autorefresh link gen fixed to work under passenger
+8806f60 (#15291) Add Vendor tag to Puppet-Dashboard spec file
+5eccef2 (#15523) Update Debian packaging rake task to create the debian and original tarballs
+63a0634 Add release number variable to packaging rake task
+a8a97dc Fixed linking of database.yml in debian postinst to use absolute path.
+d6619a1 Updated debian postinst script to link properly the settings.yml file to puppet-dashboard config directory.
+
 1.2.10
 ===
 5de691f (#11849) Add rake task to install cron job to clean up database reports
