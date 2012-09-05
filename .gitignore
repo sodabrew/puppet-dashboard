@@ -42,5 +42,4 @@ db/migrate/*_plugin_*.rb
 config/installed_plugins
 *.rpm
 pkg/*
-VERSION
 VERSION_LINK

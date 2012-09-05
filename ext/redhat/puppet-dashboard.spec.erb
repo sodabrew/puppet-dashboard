@@ -1,13 +1,13 @@
-%global confdir       ext/packaging/redhat
+%global confdir       ext/redhat
 %global initrddir     /etc/rc.d/init.d
 # VERSION is subbed out during rake srpm process
-%global realversion   <%= version %>
-%global rpmversion    <%= rpmversion %>
+%global realversion   <%= @version %>
+%global rpmversion    <%= @rpmversion %>
 %global dbuser        puppet-dashboard
 
 Name:           puppet-dashboard
 Version:        %{rpmversion}
-Release:        <%= release -%>%{?dist}
+Release:        <%= @rpmrelease -%>%{?dist}
 Summary:        Systems Management web application
 Group:          Applications/System
 License:        ASL 2.0
@@ -87,8 +87,7 @@ rm -f $RPM_BUILD_ROOT/%{_datadir}/%{name}/spec/models/.gitignore
 rm -f $RPM_BUILD_ROOT/%{_datadir}/%{name}/app/views/layouts/.gitignore
 rm -f $RPM_BUILD_ROOT/%{_datadir}/%{name}/public/stylesheets/.gitignore
 rm -f $RPM_BUILD_ROOT/%{_datadir}/%{name}/spec/views/.gitignore
-rm -rf $RPM_BUILD_ROOT/%{_datadir}/%{name}/ext/packaging
-
+rm -rf $RPM_BUILD_ROOT/%{_datadir}/%{name}/ext/{redhat,debian,build_defaults.yaml,project_data.yaml}
 
 %post
 
@@ -137,8 +136,8 @@ fi
 #%attr(-,puppet-dashboard,puppet-dashboard) %dir /var/log/%{name}
 
 %changelog
-* <%= spec_date %>  Michael Stahnke <stahnma@puppetlabs.com> -  <%= rpmversion %>-<%= release %>
-- Build for <%= version %>
+* <%= Time.now.strftime("%a %b %d %Y") %> Puppet Labs Release <info@puppetlabs.com> -  <%= @rpmversion %>-<%= @rpmrelease %>
+- Build for <%= @version %>
 
 * Mon Jul 04 2011 Michael Stahnke <stahnma@puppetlabs.com> - 1.1.9-2
 - Updating spec to fix some rpmlint issues

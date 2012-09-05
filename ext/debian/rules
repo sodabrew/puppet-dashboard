@@ -28,7 +28,7 @@ binary-install/puppet-dashboard::
 	cp $(CURDIR)/config/settings.yml.example $(CURDIR)/debian/$(cdbs_curpkg)/etc/puppet-dashboard/settings.yml
 	cp -r $(CURDIR)/public $(CURDIR)/debian/$(cdbs_curpkg)/var/$(cdbs_curpkg)
 	chmod -R a+rx $(CURDIR)/debian/$(cdbs_curpkg)/usr/share/puppet-dashboard/script
-	rm -rf $(CURDIR)/debian/$(cdbs_curpkg)/usr/share/puppet-dashboard/ext/packaging
+	rm -rf $(CURDIR)/debian/$(cdbs_curpkg)/usr/share/puppet-dashboard/ext/{redhat,debian,build_defaults.yaml,project_data.yaml}
 	# Clean up the "extra" files
 	rm -f $(CURDIR)/debian/$(cdbs_curpkg)/usr/share/puppet-dashboard/config/database.yml.example
 	rm -f $(CURDIR)/debian/$(cdbs_curpkg)/usr/share/puppet-dashboard/config/settings.yml.example
