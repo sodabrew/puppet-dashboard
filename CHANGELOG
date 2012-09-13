@@ -1,4 +1,4 @@
-1.2.11-rc1
+1.2.11
 ===
 101af75 Update supported debian versions and cows
 e6f6acf Fixup Rakefile for setting up packaging repo
