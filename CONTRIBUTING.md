@@ -32,7 +32,8 @@ Checklist (and a short version for the impatient)
     - Make sure that you have tests for the bug you are fixing, or
       feature you are adding.
 
-    - Make sure the test suite passes after your commit (rake spec unit).
+    - Make sure the test suite passes after your commit (rake spec; see below
+      for more).
 
   * Submission:
 
@@ -212,6 +213,31 @@ The long version
       location of your branch, and change the status to "In Topic
       Branch Pending Merge", along with any other commentary you may
       wish to make.
+
+Running the Tests
+=================
+
+You will need a fresh VM with *only* the gems described here installed.  Ruby
+does not play nicely with dependencies.  Consider using vagrant or an EC2
+instance.  These instructions are for a CentOS 6.3 VM, but similar-vintage
+distros should work.
+
+Install rubygems and the following gems (with `gem install`):
+
+    * rake
+    * mysql (this can also be installed as a system package)
+
+Install a MySQL server, and create a test database and user account.
+
+Copy `config/database.yml.example` to `config/database.yml` and edit its test
+section to include your new MySQL credentials.
+
+Copy `spec/spec.opts.example` to `spec/spec.opts`.  You can edit this
+file, but the defaults should do.
+
+Next, initialize your test database: `RAILS_ENV=test rake db:migrate`.
+
+Then run `./script/spec spec` to actually run the tests.
 
 How to track the status of your change after it's been submitted
 ================================================================
