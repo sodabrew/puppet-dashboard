@@ -1,11 +1,12 @@
 - add_body_class 'with-sidebar'
 
 .group.delayed-job
-  %h3= link_to "Background Tasks", "/delayed_job_failures"
+  - failures_node = {:controller => "delayed_job_failures", :action => "index"}
+  %h3= link_to "Background Tasks", failures_node
 
   - if DelayedJobFailure.unread.count > 0
     %p.failure
-      = link_to "#{ pluralize DelayedJobFailure.unread.count, 'new failed task' }", "/delayed_job_failures"
+      = link_to "#{ pluralize DelayedJobFailure.unread.count, 'new failed task' }", failures_node
   - if Delayed::Job.count > 0
     %p.warning
       %em= "#{ pluralize Delayed::Job.count, 'pending task' }"
