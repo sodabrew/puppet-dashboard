@@ -808,17 +808,17 @@ body {
       }
       &.ok {
         em {
-          background : transparent url( /images/icons/delayed-job-ok.png ) no-repeat 0% 50%;
+          background : transparent url( ../images/icons/delayed-job-ok.png ) no-repeat 0% 50%;
         }
       }
       &.failure {
         a {
-          background-image : url( /images/icons/delayed-job-failure.png );
+          background-image : url( ../images/icons/delayed-job-failure.png );
         }
       }
       &.warning {
         em {
-          background-image : url( /images/icons/delayed-job-warning.png );
+          background-image : url( ../images/icons/delayed-job-warning.png );
         }
       }
     }
