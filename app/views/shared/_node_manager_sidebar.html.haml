@@ -51,7 +51,7 @@
 
   .footer.actionbar
     #radiator
-      = link_to "Radiator View", '/radiator'
+      = link_to "Radiator View", {:controller => "radiator", :action => "index"}
     - unless SETTINGS.enable_read_only_mode || session['ACCESS_CONTROL_ROLE'] == 'READ_ONLY'
       = link_to "Add node", new_node_path, :class => 'button'
 

@@ -21,5 +21,10 @@ describe '/pages/home.html.haml' do
       render
       should have_tag('a[href="/delayed_job_failures"]', 'Background Tasks')
     end
+
+    it "should have a correct radiator link" do
+      render
+      should have_tag('a[href="/radiator"]', 'Radiator View')
+    end
   end
 end
