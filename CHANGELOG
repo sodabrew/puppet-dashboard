@@ -1,3 +1,10 @@
+1.2.12-rc1
+===
+5ac77d0 Update default cows and mocks
+9fea666 Specify the location of the favicon in error pages
+83e926b fail better in package repo rake tasks
+6c0c8e0 (#16428) more accurate CONTRIBUTING.md
+
 1.2.11
 ===
 101af75 Update supported debian versions and cows
