@@ -2,6 +2,9 @@
 # Configure your app in config/environment.rb and config/environments/*.rb
 
 RAILS_ROOT = "#{File.dirname(__FILE__)}/.." unless defined?(RAILS_ROOT)
+Dir["#{RAILS_ROOT}/vendor/gems/**"].each do |dir|
+  $:.unshift(File.directory?(lib = "#{dir}/lib") ? lib : dir)
+end
 
 module Rails
   class << self

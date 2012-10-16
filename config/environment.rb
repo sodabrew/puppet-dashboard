@@ -24,6 +24,9 @@ Rails::Initializer.run do |config|
 
   # Add additional load paths for your own custom dirs
   config.autoload_paths += %W( #{RAILS_ROOT}/app/mixins )
+  Dir["#{RAILS_ROOT}/vendor/gems/**"].each do |dir|
+    config.autoload_paths.unshift(File.directory?(lib = "#{dir}/lib") ? lib : dir)
+  end
 
   # Specify gems that this application depends on and have them installed with rake gems:install
   # config.gem "bj"
