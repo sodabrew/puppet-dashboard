@@ -64,7 +64,7 @@ start() {
 
 stop() {
         echo -n $"Stopping Puppet Dashboard: "
-        killproc -p ${PIDFILE} puppet-dashboard
+        killproc -p ${PIDFILE} puppet-dashboard -INT
         RETVAL=$?
         if [ $RETVAL = 0 ]; then
             echo_success

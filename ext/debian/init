@@ -69,7 +69,7 @@ case $1 in
     ;;
     stop)
         log_daemon_msg "Stopping Puppet Dashboard"
-        if start-stop-daemon --stop --quiet --oknodo --pidfile ${PIDFILE} --user ${DASHBOARD_USER} --retry 10; then
+        if start-stop-daemon --stop --quiet --oknodo --signal INT --pidfile ${PIDFILE} --user ${DASHBOARD_USER} --retry 10; then
             log_end_msg 0
         else
             log_end_msg 1
