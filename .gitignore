@@ -36,7 +36,7 @@ spec/watchr.rb
 tags
 results/*
 certs
-vendor/plugins/puppet_*
+vendor/bundle
 db/schema.rb
 db/migrate/*_plugin_*.rb
 config/installed_plugins

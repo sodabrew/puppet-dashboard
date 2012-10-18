@@ -1,13 +1,15 @@
-source 'http://rubygems.org'
+source :rubygems
 
-gem 'rails', '~> 3.0.6'
+gem 'rails'         , '~> 3.2'
+gem 'mysql2'        , '~> 0.3.11'
+gem 'jquery-rails'  , '~> 2.1'
+gem 'sass-rails'    , '~> 3.2'
+gem 'coffee-rails'  , '~> 3.2'
+gem 'uglifier'      , '~> 1.0'
+
 gem 'thin'
-gem 'mysql2'
-gem 'jquery-rails'
-
 gem 'rack'
 gem 'haml'
-gem 'sass'
 
 gem 'daemons'
 gem 'json_pure'
@@ -15,7 +17,7 @@ gem 'mocha'
 gem 'will_paginate'
 
 # TODO: rails generate delayed_job:upgrade
-gem 'delayed_job_active_record', '~> 3.0'
+gem 'delayed_job_active_record', '~> 0.3'
 
 # TODO: probably needs some upgrade steps?
 gem 'timeline_fu'
