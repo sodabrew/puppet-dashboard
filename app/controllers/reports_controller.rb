@@ -34,8 +34,6 @@ class ReportsController < InheritedResources::Base
     end
   end
 
-  filter_parameter_logging :report
-
   def upload
     begin
       @@n ||= 0
