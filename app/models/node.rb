@@ -28,12 +28,12 @@ class Node < ActiveRecord::Base
     ["failed", "pending", "changed", "unchanged"]
   end
 
-  named_scope :with_last_report, :include => :last_apply_report
-  named_scope :by_report_date, :order => 'reported_at DESC'
+  scope :with_last_report, :include => :last_apply_report
+  scope :by_report_date, :order => 'reported_at DESC'
 
-  named_scope :search, lambda{|q| q.blank? ? {} : {:conditions => ['name LIKE ?', "%#{q}%"]} }
+  scope :search, lambda{|q| q.blank? ? {} : {:conditions => ['name LIKE ?', "%#{q}%"]} }
 
-  named_scope :by_latest_report, proc { |order|
+  scope :by_latest_report, proc { |order|
     direction = {1 => 'ASC', 0 => 'DESC'}[order]
     direction ? {:order => "reported_at #{direction}"} : {}
   }
@@ -46,7 +46,7 @@ class Node < ActiveRecord::Base
   fires :updated, :on => :update
   fires :removed, :on => :destroy
 
-  named_scope :unresponsive, lambda {{
+  scope :unresponsive, lambda {{
     :conditions => [
       "last_apply_report_id IS NOT NULL AND reported_at < ?",
       SETTINGS.no_longer_reporting_cutoff.seconds.ago
@@ -54,7 +54,7 @@ class Node < ActiveRecord::Base
   }}
 
   possible_statuses.each do |node_status|
-    named_scope node_status, lambda {{
+    scope node_status, lambda {{
       :conditions => [
         "last_apply_report_id IS NOT NULL AND reported_at >= ? AND nodes.status = '#{node_status}'",
         SETTINGS.no_longer_reporting_cutoff.seconds.ago
@@ -62,11 +62,11 @@ class Node < ActiveRecord::Base
     }}
   end
 
-  named_scope :unreported, :conditions => {:reported_at => nil}
+  scope :unreported, :conditions => {:reported_at => nil}
 
-  named_scope :hidden, :conditions => {:hidden => true}
+  scope :hidden, :conditions => {:hidden => true}
 
-  named_scope :unhidden, :conditions => {:hidden => false}
+  scope :unhidden, :conditions => {:hidden => false}
 
   def self.find_by_id_or_name!(identifier)
     find_by_id(identifier) or find_by_name!(identifier)

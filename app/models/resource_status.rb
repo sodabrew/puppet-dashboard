@@ -6,35 +6,35 @@ class ResourceStatus < ActiveRecord::Base
 
   serialize :tags, Array
 
-  named_scope :inspections, { :joins => :report, :conditions => "reports.kind = 'inspect'" }
+  scope :inspections, { :joins => :report, :conditions => "reports.kind = 'inspect'" }
 
-  named_scope :latest_inspections, {
+  scope :latest_inspections, {
     :conditions => "nodes.last_inspect_report_id = resource_statuses.report_id",
     :include    => [:report => :node],
   }
 
-  named_scope :by_file_content, lambda {|content|
+  scope :by_file_content, lambda {|content|
     {
       :conditions => ["resource_statuses.resource_type = 'File' AND resource_events.property = 'content' AND resource_events.previous_value = ?", "{md5}#{content}"],
       :include => :events,
     }
   }
 
-  named_scope :without_file_content, lambda {|content|
+  scope :without_file_content, lambda {|content|
     {
       :conditions => ["resource_statuses.resource_type = 'File' AND resource_events.property = 'content' AND resource_events.previous_value != ?", "{md5}#{content}"],
       :include => :events,
     }
   }
 
-  named_scope :by_file_title, lambda {|title|
+  scope :by_file_title, lambda {|title|
     {
       :conditions => ["resource_statuses.resource_type = 'File' AND resource_statuses.title = ?", title],
       :include => :events,
     }
   }
 
-  named_scope :pending, lambda { |predicate|
+  scope :pending, lambda { |predicate|
     predicate = predicate ? '' : 'NOT'
     {
       :conditions => <<-SQL
@@ -47,7 +47,7 @@ class ResourceStatus < ActiveRecord::Base
     }
   }
 
-  named_scope :failed, lambda { |predicate|
+  scope :failed, lambda { |predicate|
     {
       :conditions => {:failed => predicate}
     }
