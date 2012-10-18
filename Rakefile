@@ -47,4 +47,7 @@ if File.exist?(build_defs_file)
   end
 end
 
+require File.expand_path('../config/application', __FILE__)
+include Rake::DSL
+
 PuppetDashboard::Application.load_tasks
