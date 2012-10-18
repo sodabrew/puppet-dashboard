@@ -24,6 +24,6 @@ gem 'timeline_fu'
 
 group :development, :test do
   gem 'rspec-rails'
-  gem 'factory_girl'
+  gem 'factory_girl', '< 3.0' # supports ruby 1.8.7
   gem 'thoughtbot-shoulda'
 end
