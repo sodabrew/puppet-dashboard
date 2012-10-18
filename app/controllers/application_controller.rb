@@ -11,6 +11,8 @@ class ApplicationController < ActionController::Base
   before_filter :set_timezone
   before_filter :set_autorefresh
 
+  protect_from_forgery
+
   private
 
   def set_autorefresh
