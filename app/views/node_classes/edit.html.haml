@@ -1,6 +1,6 @@
 #sidebar= render 'shared/node_manager_sidebar'
 #main
-  - form_for(@node_class) do |f|
+  = form_for(@node_class) do |f|
     = render f
     .element.actions
       %button Update
