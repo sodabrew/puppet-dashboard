@@ -15,7 +15,7 @@
               %li= h message
 
     .section
-      - form_tag url_for(:action => :search), :method => :get do
+      = form_tag url_for(:action => :search), :method => :get do
         = label_tag 'file_title', 'File title'
         = text_field_tag 'file_title', @title, :size => 100
         = label_tag 'file_content', 'File checksum (md5)'
