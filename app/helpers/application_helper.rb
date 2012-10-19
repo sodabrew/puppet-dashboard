@@ -192,7 +192,7 @@ module ApplicationHelper
   # Return HTML describing that no matches were found using the +message+.
   # The +message+ is raw HTML, escape it yourself if necessary.
   def describe_no_matches_as(message)
-    return "<span class='nomatches'>&mdash; #{message} &mdash;</span>"
+    return "<span class='nomatches'>&mdash; #{message} &mdash;</span>".html_safe
   end
 
   # Return HTML describing that no matches were found for the collection
