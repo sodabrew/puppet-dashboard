@@ -134,7 +134,7 @@ module ApplicationHelper
   end
 
   def icon(name, options={})
-    image_tag "icons/#{name}.png", options
+    image_tag "/images/icons/#{name}.png", options
   end
 
   # Return status icon for the +node+.
@@ -251,7 +251,7 @@ module ApplicationHelper
       javascript << "  });\n"
     end
     javascript << "});"
-    return javascript
+    return javascript.html_safe
   end
 
   # Asynchronously loads data from a URL and injects it into the element specified. The

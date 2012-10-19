@@ -2,11 +2,11 @@
   %h3 Parameters
   - # Conflicting parameters are okay here, since we just want to warn
   - unless resource.compiled_parameters(true).empty?
-    - if resource.errors.on(:parameters)
+    - if resource.errors.has_key?(:parameters)
       %p.error
         %strong Warning:
         The following parameters have multiple conflicting values:
-        = h [*resource.errors.on(:parameters)].join(", ")
+        = h resource.errors[:parameters].join(", ")
     %table.inspector
       %thead
         %tr

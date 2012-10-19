@@ -11,6 +11,7 @@ class Node < ActiveRecord::Base
   validates_presence_of :name
   validates_uniqueness_of :name
   attr_readonly :name
+  attr_accessible :name, :description, :parameter_attributes, :assigned_node_group_ids, :assigned_node_class_ids
 
   has_many :node_class_memberships, :dependent => :destroy
   has_many :node_classes, :through => :node_class_memberships

@@ -69,6 +69,6 @@ class Status
   private
 
   def self.execute(sql)
-    ActiveRecord::Base.connection.execute(sql).all_hashes.map{|datum| new datum}
+    ActiveRecord::Base.connection.select_all(sql).map{|datum| new datum}
   end
 end

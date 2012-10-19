@@ -24,6 +24,7 @@ class NodeGroup < ActiveRecord::Base
 
   validates_presence_of :name
   validates_uniqueness_of :name
+  attr_accessible :name, :assigned_node_group_ids, :assigned_node_ids, :parameter_attributes, :assigned_node_class_ids
 
   default_scope :order => 'node_groups.name ASC'
 

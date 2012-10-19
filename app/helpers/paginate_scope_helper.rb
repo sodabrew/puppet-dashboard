@@ -1,3 +1,5 @@
+require 'will_paginate/array'
+
 module PaginateScopeHelper
   # Return a paginated +scope+.
   def paginate_scope(scope, opts={})
