@@ -3,7 +3,7 @@
   %head
     - page_title = yield(:page_title)
     %title= [ page_title, 'Puppet Node Manager'].compact.join(' - ')
-    %link{ :href => image_path("favicon.ico"), :rel => "shortcut icon" }
+    %link{ :href => "/favicon.ico", :rel => "shortcut icon" }
     %meta{ :content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type" }
     - if session[:autorefresh]
       %meta{ :content => "5; URL=#{request.url}", "http-equiv" => "refresh" }
