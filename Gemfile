@@ -14,6 +14,7 @@ gem 'haml'
 gem 'daemons'
 gem 'json_pure'
 gem 'will_paginate'
+gem 'inherited_resources'
 
 # TODO: rails generate delayed_job:upgrade
 gem 'delayed_job_active_record', '~> 0.3'
