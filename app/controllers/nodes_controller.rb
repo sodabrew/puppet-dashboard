@@ -58,7 +58,7 @@ class NodesController < InheritedResources::Base
       render :text => node.to_yaml, :content_type => 'application/x-yaml'
     rescue ParameterConflictError => e
       raise e unless request.format == :yaml
-      render :text => "Node \"#{resource.name}\" has conflicting parameter(s): #{resource.errors.on(:parameters).to_a.to_sentence}", :content_type => 'text/plain', :status => 500
+      render :text => "Node \"#{resource.name}\" has conflicting parameter(s): #{resource.errors[:parameters].to_a.to_sentence}", :content_type => 'text/plain', :status => 500
     rescue NodeClassificationDisabledError => e
       render :text => "Node classification has been disabled", :content_type => 'text/plain', :status => 403
     end
@@ -146,14 +146,9 @@ class NodesController < InheritedResources::Base
       format.yaml { render :text => collection.to_yaml, :content_type => 'application/x-yaml' }
       format.csv do
         response["Cache-Control"] = 'must-revalidate, post-check=0, pre-check=0'
-        response["Content-Type"] = 'text/comma-separated-values;'
-        response["Content-Disposition"] = "attachment;filename=#{scope_names.join("-")}-nodes.csv;"
-
-        render :text => proc { |response,output|
-          collection.to_csv do |line|
-            output.write(line)
-          end
-        }, :layout => false
+        response["Content-Disposition"] = "attachment;filename=#{scope_names.join('-')}-nodes.csv;"
+        render :text => collection.to_csv, :stream => true, :layout => false,
+               :content_type => 'text/comma-separated-values'
       end
     end
   end
