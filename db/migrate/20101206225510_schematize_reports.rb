@@ -1,4 +1,4 @@
-require "#{RAILS_ROOT}/lib/progress_bar"
+require "#{Rails.root}/lib/progress_bar"
 
 class Report < ActiveRecord::Base
   serialize :report, Puppet::Transaction::Report

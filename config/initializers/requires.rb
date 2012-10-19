@@ -1,7 +1,7 @@
 # Local libraries
-require "#{RAILS_ROOT}/lib/has_many_through_dependent"
-require "#{RAILS_ROOT}/lib/association_collection_dependent"
-require "#{RAILS_ROOT}/lib/has_parameters"
-require "#{RAILS_ROOT}/lib/active_model_scopes"
-require "#{RAILS_ROOT}/lib/puppet/report"
-require "#{RAILS_ROOT}/lib/csv_extensions"
+require "#{Rails.root}/lib/has_many_through_dependent"
+require "#{Rails.root}/lib/association_collection_dependent"
+require "#{Rails.root}/lib/has_parameters"
+require "#{Rails.root}/lib/active_model_scopes"
+require "#{Rails.root}/lib/puppet/report"
+require "#{Rails.root}/lib/csv_extensions"

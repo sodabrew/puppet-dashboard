@@ -19,10 +19,6 @@ class Array
   include CsvSerializable
 end
 
-class ActiveRecord::NamedScope::Scope
-  include CsvSerializable
-end
-
 class ActiveRecord::Base
   def self.to_csv_properties
     column_names
