@@ -5,7 +5,7 @@ class AddSuccessAndLastReportToNodes < ActiveRecord::Migration
 
     Node.reset_column_information
 
-    require "#{RAILS_ROOT}/lib/progress_bar"
+    require "#{Rails.root}/lib/progress_bar"
     nodes = Node.all
     pbar = ProgressBar.new("Migrating:", nodes.size, STDOUT)
     nodes.each do |node|

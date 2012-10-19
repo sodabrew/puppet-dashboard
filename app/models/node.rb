@@ -1,4 +1,6 @@
 require 'puppet_https'
+require 'node_group_graph'
+require 'find_from_form'
 
 class Node < ActiveRecord::Base
   def self.per_page; SETTINGS.nodes_per_page end # Pagination

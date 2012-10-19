@@ -8,7 +8,7 @@ describe Report do
       @now = Time.now
       Time.stubs(:now).returns(@now)
       @node = Node.generate
-      @report_yaml = File.read(File.join(RAILS_ROOT, "spec/fixtures/sample_report.yml"))
+      @report_yaml = File.read(File.join(Rails.root, "spec/fixtures/sample_report.yml"))
       @report_data = YAML.load(@report_yaml).extend(ReportExtensions)
     end
 
@@ -80,7 +80,7 @@ describe Report do
 
   describe "post transformer munging" do
     let :report_yaml do
-      File.read(File.join(RAILS_ROOT, "spec/fixtures/reports/puppet26/resource_status_test.yaml"))
+      File.read(File.join(Rails.root, "spec/fixtures/reports/puppet26/resource_status_test.yaml"))
     end
     let :report do
       Report.create_from_yaml(report_yaml)
@@ -173,7 +173,7 @@ describe Report do
     it "should populate report related tables from a version 0 yaml report" do
       Time.zone = 'UTC'
       @node = Node.generate(:name => 'sample_node')
-      report_yaml = File.read(File.join(RAILS_ROOT, "spec/fixtures/reports/puppet25/1_changed_0_failures.yml"))
+      report_yaml = File.read(File.join(Rails.root, "spec/fixtures/reports/puppet25/1_changed_0_failures.yml"))
       Report.count.should == 0
       Report.create_from_yaml(report_yaml)
       Report.count.should == 1
@@ -220,7 +220,7 @@ describe Report do
 
       it "should populate report related tables from a version 1 yaml report" do
         @node = Node.generate(:name => 'puppet.puppetlabs.vm')
-        @report_yaml = File.read(File.join(RAILS_ROOT, "spec/fixtures/reports/puppet26/report_ok_service_started_ok.yaml"))
+        @report_yaml = File.read(File.join(Rails.root, "spec/fixtures/reports/puppet26/report_ok_service_started_ok.yaml"))
         file = '/etc/puppet/manifests/site.pp'
         Report.create_from_yaml(@report_yaml)
         Report.count.should == 1
@@ -298,7 +298,7 @@ describe Report do
 
     it "should populate report related tables from a version 2 report" do
       @node = Node.generate(:name => 'paul-berrys-macbook-pro-3.local')
-      @report_yaml = File.read(File.join(RAILS_ROOT, "spec/fixtures/reports/version2/example.yaml"))
+      @report_yaml = File.read(File.join(Rails.root, "spec/fixtures/reports/version2/example.yaml"))
       file = '/Users/pberry/puppet_labs/test_data/master/manifests/site.pp'
       Report.create_from_yaml(@report_yaml)
       Report.count.should == 1
@@ -456,7 +456,7 @@ describe Report do
   describe "When destroying" do
     it "should destroy all dependent model objects" do
       @node = Node.generate(:name => 'puppet.puppetlabs.vm')
-      @report_yaml = File.read(File.join(RAILS_ROOT, "spec/fixtures/reports/puppet26/report_ok_service_started_ok.yaml"))
+      @report_yaml = File.read(File.join(Rails.root, "spec/fixtures/reports/puppet26/report_ok_service_started_ok.yaml"))
       file = '/etc/puppet/manifests/site.pp'
       report = Report.create_from_yaml(@report_yaml)
       ResourceStatus.count.should_not == 0
