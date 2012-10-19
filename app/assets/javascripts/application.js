@@ -13,4 +13,17 @@
 //= require jquery
 //= require jquery_ujs
 //= require_tree .
-/////= javascript_include_tag 'prototype', 'jquery-ui.min', 'jquery.tokeninput', 'excanvas.min', 'raphael-min', 'grafico.min', 'jquery.form', 'jquery.placeholders', 'jquery.ui.combobox', 'jquery.colorbox.js', 'jquery.tipsy', 'search', 'application', :cache => 'all'
+//= require prototype
+//= require dashboard
+//= require jquery-ui.min
+//= require jquery.tokeninput
+//= require excanvas.min
+//= require raphael-min
+//= require grafico.min
+//= require jquery.form
+//= require jquery.placeholders
+//= require jquery.ui.combobox
+//= require jquery.colorbox.js
+//= require jquery.tipsy
+//= require search
+//= require application
