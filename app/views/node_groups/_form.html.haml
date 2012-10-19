@@ -3,7 +3,7 @@
 = header_for(form)
 
 .item
-  = form.error_messages
+  = render :partial => 'shared/form_errors', :collection => form.object.errors
 
   .element
     = form.label :name

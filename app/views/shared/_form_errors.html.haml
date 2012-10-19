@@ -1,0 +1,6 @@
+- if false
+  %div {:id => "error_explanation"}
+    %h2 pluralize(errors.count, "error") errors:
+    %ul
+      - errors.full_messages.each do |msg|
+        %li msg

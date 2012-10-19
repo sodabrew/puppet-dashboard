@@ -51,6 +51,11 @@ GEM
     factory_girl (2.6.4)
       activesupport (>= 2.3.9)
     haml (3.1.7)
+    haml-rails (0.3.5)
+      actionpack (>= 3.1, < 4.1)
+      activesupport (>= 3.1, < 4.1)
+      haml (~> 3.1)
+      railties (>= 3.1, < 4.1)
     has_scope (0.5.1)
     hike (1.2.1)
     i18n (0.6.1)
@@ -149,7 +154,7 @@ DEPENDENCIES
   daemons
   delayed_job_active_record (~> 0.3)
   factory_girl (< 3.0)
-  haml
+  haml-rails (~> 0.3.5)
   inherited_resources
   jquery-rails (~> 2.1)
   json_pure
