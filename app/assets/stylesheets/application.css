@@ -10,5 +10,17 @@
  *
  *= require_self
  *= require_tree .
-**********= stylesheet_link_tag 'reset', 'layout', 'forms', 'tables', 'jquery.ui.custom', 'jquery.ui.combobox', 'typography', 'links', 'token-input-facebook', 'tipsy', 'application', 'colorbox', 'help', :cache => 'all'
+ *= require dashboard
+ *= require reset
+ *= require layout
+ *= require forms
+ *= require tables
+ *= require jquery.ui.custom
+ *= require jquery.ui.combobox
+ *= require typography
+ *= require links
+ *= require token-input-facebook
+ *= require tipsy
+ *= require colorbox
+ *= require help
  */
