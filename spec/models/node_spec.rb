@@ -1,4 +1,4 @@
-require File.expand_path(File.join(File.dirname(__FILE__), *%w[.. spec_helper]))
+require 'spec_helper'
 
 describe Node do
   describe 'attributes' do

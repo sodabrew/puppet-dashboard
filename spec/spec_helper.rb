@@ -4,9 +4,10 @@ $LOAD_PATH.push File.dirname(__FILE__)
 # from the project root directory.
 ENV["RAILS_ENV"] = "test"
 require File.expand_path(File.dirname(__FILE__) + "/../config/environment")
+require 'test/unit'
 require 'mocha'
-require 'spec/autorun'
-require 'spec/rails'
+require 'rspec/autorun'
+require 'rspec/rails'
 require 'shoulda'
 require 'factory_girl'
 require 'factory_girl/syntax/generate'
@@ -16,7 +17,7 @@ require 'spec/factories'
 # in ./support/ and its subdirectories.
 Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each {|f| require f}
 
-Spec::Runner.configure do |config|
+RSpec.configure do |config|
   config.mock_with :mocha
   config.prepend_before :each do
     verbosity = $VERBOSE
