@@ -10,7 +10,7 @@ describe "/nodes/show.html.haml" do
       render
     end
 
-    specify { response.should be_success }
+    specify { rendered.should be_success }
     it { should have_tag('h2', /#{@node.name}/) }
   end
 end

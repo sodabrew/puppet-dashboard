@@ -5,12 +5,12 @@ describe "/node_groups/index.html.haml" do
 
   describe "successful render" do
     before :each do
-      template.stubs(:action_name => 'index')
+      view.stubs(:action_name => 'index')
       assigns[:node_groups] = @node_groups = [ NodeGroup.generate!, NodeGroup.generate! ].paginate
       render
     end
 
-    specify { response.should be_a_success }
+    specify { rendered.should be_a_success }
 
     it "has node class items" do
       should have_tag('.node_group', @node_groups.size)

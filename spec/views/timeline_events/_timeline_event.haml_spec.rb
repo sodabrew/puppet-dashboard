@@ -19,11 +19,11 @@ describe "/timeline_events/_timeline_event.html.haml" do
     context "when this node is the subject" do
       before :each do
         subject = @node.timeline_events.first(:conditions => {:subject_type => "Node", :event_type => "created"})
-        template.stubs(:timeline_event => subject)
+        view.stubs(:timeline_event => subject)
         render
       end
 
-      subject { response }
+      subject { rendered }
 
       it "should describe the action on this node" do
         should have_text /This node\s+was created/
@@ -34,11 +34,11 @@ describe "/timeline_events/_timeline_event.html.haml" do
       context "and is linkable" do
         before :each do
           subject = @node.timeline_events.first(:conditions => {:subject_type => "NodeClass", :event_type => "added_to"})
-          template.stubs(:timeline_event => subject)
+          view.stubs(:timeline_event => subject)
           render
         end
 
-        subject { response }
+        subject { rendered }
 
         it "should describe the action on that subject" do
           should have_text /NodeClass.+?#{@node_class.name}.+?was added to\s+this node/sm
@@ -52,11 +52,11 @@ describe "/timeline_events/_timeline_event.html.haml" do
       context "and is not linkable" do
         before :each do
           subject = @node.timeline_events.first(:conditions => {:subject_type => "Parameter", :event_type => "added_to"})
-          template.stubs(:timeline_event => subject)
+          view.stubs(:timeline_event => subject)
           render
         end
 
-        subject { response }
+        subject { rendered }
 
         it "should describe the action on that subject" do
           should have_text /#{h @parameter.name}\s+was added to\s+this node/sm
@@ -70,12 +70,12 @@ describe "/timeline_events/_timeline_event.html.haml" do
 
     context "without an assigned node" do
       before :each do
-        template.stubs(:timeline_event => @node.timeline_events.first)
+        view.stubs(:timeline_event => @node.timeline_events.first)
         assigns[:node] = nil
         render
       end
 
-      subject { response }
+      subject { rendered }
 
       it "should do nothing" do
         should be_blank
@@ -85,11 +85,11 @@ describe "/timeline_events/_timeline_event.html.haml" do
 
   context "wihtout a timeline_event" do
     before :each do
-      template.stubs(:timeline_event => nil)
+      view.stubs(:timeline_event => nil)
       render
     end
 
-    subject { response }
+    subject { rendered }
 
     it "should do nothing" do
       should be_blank

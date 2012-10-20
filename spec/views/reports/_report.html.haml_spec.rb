@@ -6,10 +6,10 @@ describe "/reports/_report.html.haml" do
   describe "successful render" do
     before :each do
       assigns[:report] = @report = Report.generate!
-      template.stubs(:resource => @report)
+      view.stubs(:resource => @report)
       render :locals => {:report => @report}
     end
 
-    specify { response.should be_success }
+    specify { rendered.should be_success }
   end
 end

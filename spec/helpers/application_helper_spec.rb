@@ -48,7 +48,7 @@ describe ApplicationHelper do
 
  describe "#pagination_for" do
     before :each do
-      @template.stubs( :request => request, :params => params, :url_for => 'someurl')
+      @view.stubs( :request => request, :params => params, :url_for => 'someurl')
     end
 
     context "when given paginated records" do

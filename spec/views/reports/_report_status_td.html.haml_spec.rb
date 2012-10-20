@@ -9,7 +9,7 @@ describe "/reports/_report_status_td.html.haml" do
       render :locals => {:report => @report}
     end
 
-    specify { response.should be_success }
+    specify { rendered.should be_success }
     it { should have_tag('td.status.changed img[src=?]', /.+changed.+/) }
   end
 end

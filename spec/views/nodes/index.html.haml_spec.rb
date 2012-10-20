@@ -12,7 +12,7 @@ describe '/nodes/index' do
 
   describe "search fields" do
     before :each do
-      template.stubs(
+      view.stubs(
         :action_name => 'index',
         :parent => nil
       )

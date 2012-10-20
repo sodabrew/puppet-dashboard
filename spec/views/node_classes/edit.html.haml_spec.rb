@@ -9,7 +9,7 @@ describe "/node_classes/edit.html.haml" do
       render
     end
 
-    specify { response.should be_success }
+    specify { rendered.should be_success }
     it { should have_tag('form[method=?][action=?]', 'post', node_class_path(@node_class)) }
   end
 end
