@@ -1,4 +1,4 @@
-require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
+require 'spec_helper'
 
 describe "/reports/index.html.haml" do
   describe "the response"  do

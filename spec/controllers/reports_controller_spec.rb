@@ -1,5 +1,4 @@
-require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
-
+require 'spec_helper'
 require 'shared_behaviors/controller_mixins'
 
 describe ReportsController do
@@ -16,7 +15,7 @@ describe ReportsController do
   it_should_behave_like "without JSON pagination"
 
   describe "#upload" do
-    describe "correctly formatted POST", :shared => true do
+    shared_examples_for "correctly formatted POST" do
       it { should_not raise_error }
       it { should change(Report, :count).by(1) }
       it { should change { Node.find_by_name("sample_node") }.from(nil) }

@@ -1,4 +1,4 @@
-require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
+require 'spec_helper'
 
 describe "/timeline_events/_timeline_event.html.haml" do
   context "with a node" do

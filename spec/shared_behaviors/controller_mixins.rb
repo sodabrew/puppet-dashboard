@@ -1,7 +1,7 @@
 # USAGE: Your `describe` block must define a `model` method that returns the
 # ActiveRecord model class to use for describing this behavior.
 
-describe "with search by q and tag", :shared => true do
+shared_examples_for "with search by q and tag" do
   describe "when searching" do
     before :each do
       SETTINGS.stubs(:use_external_node_classification).returns(true)
@@ -47,7 +47,7 @@ describe "with search by q and tag", :shared => true do
   end
 end
 
-describe "without JSON pagination", :shared => true do
+shared_examples_for "without JSON pagination" do
   describe "without JSON pagination" do
     describe "GET index" do
       describe "as HTML" do
