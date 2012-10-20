@@ -15,38 +15,38 @@ describe '/nodes/edit' do
       @node.name = ''
       @node.valid?
       do_render
-      response.should have_tag('div.errors')
+      rendered.should have_tag('div.errors')
     end
   end
 
   describe 'when no errors are available' do
     it 'should not display error messages' do
       do_render
-      response.should_not have_tag('div.errors')
+      rendered.should_not have_tag('div.errors')
     end
   end
 
   it 'should have a form for editing the node' do
     do_render
-    response.should have_tag('form[id=?]', "edit_node_#{@node.id}")
+    rendered.should have_tag('form[id=?]', "edit_node_#{@node.id}")
   end
 
   describe 'for the node edit form' do
     it 'should post to the update node action' do
       do_render
-      response.should have_tag('form[id=?][method=?][action=?]', "edit_node_#{@node.id}", 'post', node_path(@node))
+      rendered.should have_tag('form[id=?][method=?][action=?]', "edit_node_#{@node.id}", 'post', node_path(@node))
     end
 
     it 'should set the form method to PUT' do
       do_render
-      response.should have_tag('form[id=?]', "edit_node_#{@node.id}") do
+      rendered.should have_tag('form[id=?]', "edit_node_#{@node.id}") do
         with_tag('input[name=?][value=?]', '_method', 'put')
       end
     end
 
     it 'should have a name input' do
       do_render
-      response.should have_tag('form[id=?]', "edit_node_#{@node.id}") do
+      rendered.should have_tag('form[id=?]', "edit_node_#{@node.id}") do
         with_tag('input[type=?][name=?]', 'text', 'node[name]')
       end
     end
@@ -54,14 +54,14 @@ describe '/nodes/edit' do
     it 'should populate the name input' do
       @node.name = 'Test Node'
       do_render
-      response.should have_tag('form[id=?]', "edit_node_#{@node.id}") do
+      rendered.should have_tag('form[id=?]', "edit_node_#{@node.id}") do
         with_tag('input[name=?][value=?]', 'node[name]', @node.name)
       end
     end
 
     it 'should have a description input' do
       do_render
-      response.should have_tag('form[id=?]', "edit_node_#{@node.id}") do
+      rendered.should have_tag('form[id=?]', "edit_node_#{@node.id}") do
         with_tag('textarea[name=?]', 'node[description]')
       end
     end
@@ -69,7 +69,7 @@ describe '/nodes/edit' do
     it 'should populate the description input' do
       @node.description = 'Test Description'
       do_render
-      response.should have_tag('form[id=?]', "edit_node_#{@node.id}") do
+      rendered.should have_tag('form[id=?]', "edit_node_#{@node.id}") do
         with_tag('textarea[name=?]', 'node[description]', @node.description)
       end
     end
@@ -86,7 +86,7 @@ describe '/nodes/edit' do
 
         render
 
-        response.should have_tag('table#parameters')
+        rendered.should have_tag('table#parameters')
       end
 
       it "should not allow editing parameters with node classification disabled" do
@@ -94,7 +94,7 @@ describe '/nodes/edit' do
 
         render
 
-        response.should_not have_tag('table#parameters')
+        rendered.should_not have_tag('table#parameters')
       end
     end
 
@@ -109,21 +109,21 @@ describe '/nodes/edit' do
         SETTINGS.stubs(:use_external_node_classification).returns(true)
 
         do_render
-        response.should have_tag('input#node_class_ids')
+        rendered.should have_tag('input#node_class_ids')
       end
 
       it 'should not provide a means to edit the associated classes when not using node classification' do
         SETTINGS.stubs(:use_external_node_classification).returns(false)
 
         do_render
-        response.should_not have_tag('input#node_class_ids')
+        rendered.should_not have_tag('input#node_class_ids')
       end
 
       it 'should show the associated classes when using node classification' do
         SETTINGS.stubs(:use_external_node_classification).returns(true)
         do_render
 
-        response.should have_tag('#tokenizer') do
+        rendered.should have_tag('#tokenizer') do
           struct = get_json_struct_for_token_list('#node_class_ids')
           struct.should have(3).items
 
@@ -137,7 +137,7 @@ describe '/nodes/edit' do
         SETTINGS.stubs(:use_external_node_classification).returns(false)
         do_render
 
-        response.should_not have_tag('#node_class_ids')
+        rendered.should_not have_tag('#node_class_ids')
       end
     end
 
@@ -152,7 +152,7 @@ describe '/nodes/edit' do
         SETTINGS.stubs(:use_external_node_classification).returns(true)
         do_render
 
-        response.should have_tag('#tokenizer') do
+        rendered.should have_tag('#tokenizer') do
           struct = get_json_struct_for_token_list('#node_group_ids')
           struct.should have(4).items
 
@@ -166,7 +166,7 @@ describe '/nodes/edit' do
         SETTINGS.stubs(:use_external_node_classification).returns(false)
         do_render
 
-        response.should have_tag('#tokenizer') do
+        rendered.should have_tag('#tokenizer') do
           struct = get_json_struct_for_token_list('#node_group_ids')
           struct.should have(4).items
 
@@ -178,13 +178,13 @@ describe '/nodes/edit' do
     end
 
     def get_json_struct_for_token_list(selector)
-      json = response.body[/'#{selector}'.+?prePopulate: (\[.*?\])/m, 1]
+      json = rendered.body[/'#{selector}'.+?prePopulate: (\[.*?\])/m, 1]
       ActiveSupport::JSON.decode(json)
     end
   end
 
   it 'should link to view the node' do
     do_render
-    response.should have_tag('a[href=?]', node_path(@node))
+    rendered.should have_tag('a[href=?]', node_path(@node))
   end
 end

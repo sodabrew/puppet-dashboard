@@ -3,7 +3,7 @@ require 'shared_behaviors/controller_mixins'
 require 'shared_behaviors/sorted_index'
 
 describe NodeGroupsController do
-  integrate_views
+  render_views
   def model; NodeGroup end
 
   it_should_behave_like "without JSON pagination"

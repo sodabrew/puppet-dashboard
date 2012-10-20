@@ -8,7 +8,7 @@ describe "/reports/index.html.haml" do
       render
     end
 
-    specify { response.should be_a_success }
+    specify { rendered.should be_a_success }
     it { should have_tag('.report', @reports.size) }
     it { should have_tag("#report_#{@reports.first.id}") }
   end
@@ -20,7 +20,7 @@ describe "/reports/index.html.haml" do
       render
     end
 
-    specify { response.should be_a_success }
+    specify { rendered.should be_a_success }
     it { should have_tag('.report', 1) }
     it { should have_tag("#report_#{@report.id}") }
   end

@@ -9,7 +9,7 @@ describe "/node_groups/new.html.haml" do
       render
     end
 
-    specify { response.should be_a_success }
+    specify { rendered.should be_a_success }
     it { should have_tag('form[method=post][action=?]', node_groups_path) }
   end
 end

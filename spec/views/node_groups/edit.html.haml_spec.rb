@@ -8,7 +8,7 @@ describe "/node_groups/edit.html.haml" do
       assigns[:node_group] = @node_group = NodeGroup.generate!
     end
 
-    specify { render; response.should be_a_success }
+    specify { render; rendered.should be_a_success }
     it { render; should have_tag('form[method=post][action=?]', node_group_path(@node_group)) }
 
     describe "in editing interface" do
@@ -22,7 +22,7 @@ describe "/node_groups/edit.html.haml" do
 
           render
 
-          response.should have_tag('table#parameters')
+          rendered.should have_tag('table#parameters')
         end
 
         it "should not allow editing parameters with node classification disabled" do
@@ -30,7 +30,7 @@ describe "/node_groups/edit.html.haml" do
 
           render
 
-          response.should_not have_tag('table#parameters')
+          rendered.should_not have_tag('table#parameters')
         end
       end
 
@@ -44,11 +44,11 @@ describe "/node_groups/edit.html.haml" do
         end
 
         it 'should provide a means to edit the associated classes' do
-          response.should have_tag('input#node_class_ids')
+          rendered.should have_tag('input#node_class_ids')
         end
 
         it 'should show the associated classes' do
-          response.should have_tag('#tokenizer') do
+          rendered.should have_tag('#tokenizer') do
             struct = get_json_struct_for_token_list('#node_class_ids')
             struct.should have(3).items
 
@@ -69,11 +69,11 @@ describe "/node_groups/edit.html.haml" do
         end
 
         it 'should provide a means to edit the associated groups' do
-          response.should have_tag('input[id=node_group_ids]')
+          rendered.should have_tag('input[id=node_group_ids]')
         end
 
         it 'should show the associated groups' do
-          response.should have_tag('#tokenizer') do
+          rendered.should have_tag('#tokenizer') do
             struct = get_json_struct_for_token_list('#node_group_ids')
             struct.should have(4).items
 
@@ -85,7 +85,7 @@ describe "/node_groups/edit.html.haml" do
       end
 
       def get_json_struct_for_token_list(selector)
-        json = response.body[/'#{selector}'.+?prePopulate: (\[.*?\])/m, 1]
+        json = rendered.body[/'#{selector}'.+?prePopulate: (\[.*?\])/m, 1]
         ActiveSupport::JSON.decode(json)
       end
     end

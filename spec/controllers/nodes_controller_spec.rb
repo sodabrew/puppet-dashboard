@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe NodesController do
   include ReportSupport
-  integrate_views
+  render_views
 
   describe "#index" do
     before :each do

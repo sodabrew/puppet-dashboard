@@ -6,11 +6,11 @@ describe "/reports/_report_status_icon.html.haml" do
   describe "successful render" do
     before :each do
       assigns[:report] = @report = Report.generate!(:status => "changed")
-      template.stubs(:resource => @report)
+      view.stubs(:resource => @report)
       render :locals => {:report => @report}
     end
 
-    specify { response.should be_success }
+    specify { rendered.should be_success }
     it { should have_tag('img[src=?]', /.+changed.+/) }
   end
 end
