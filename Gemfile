@@ -27,5 +27,6 @@ group :development, :test do
   gem 'sqlite3'
   gem 'rspec-rails'
   gem 'factory_girl', '< 3.0' # supports ruby 1.8.7
-  gem 'thoughtbot-shoulda'
+  gem 'shoulda-matchers'
+  gem 'rspec-html-matchers'
 end
