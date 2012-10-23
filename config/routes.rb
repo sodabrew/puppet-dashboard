@@ -51,11 +51,13 @@ PuppetDashboard::Application.routes do
     end
   end
 
+  match 'files/:action/:file1/:file2' => 'files#:action'
+  match 'files/:action/:file'         => 'files#:action'
+
   resources :node_group_memberships, :as => :memberships
 
-  # FIXME: Not sure how to convert these to rails 3
-  # map.upload "reports/upload", :controller => :reports, :action => "upload", :conditions => { :method => :post }
-  # map.header '/header.:format', :controller => :pages, :action => :header
+  match 'reports/upload' => 'reports#upload', :via => :post
+  match '/header.:format' => 'pages#header'
 
   match 'radiator' => 'radiator#index', :via => :get
   match 'release_notes' => 'pages#release_notes', :via => :get
