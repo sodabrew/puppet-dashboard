@@ -22,8 +22,8 @@ describe NodeGroupsController do
       response.should be_success
 
       assigns[:node_group].errors.full_messages.should == ["Name can't be blank"]
-      assigns[:class_data].should == {:class=>"#node_class_ids", :data_source=>"/node_classes.json", :objects=>[]}
-      assigns[:group_data].should == {:class=>"#node_group_ids", :data_source=>"/node_groups.json", :objects=>[]}
+      assigns[:class_data].should include({:class=>"#node_class_ids", :data_source=>"/node_classes.json", :objects=>[]})
+      assigns[:group_data].should include({:class=>"#node_group_ids", :data_source=>"/node_groups.json", :objects=>[]})
     end
   end
 
@@ -33,8 +33,8 @@ describe NodeGroupsController do
 
       response.should render_template('node_groups/new')
       response.should be_success
-      assigns[:class_data].should == {:class=>"#node_class_ids", :data_source=>"/node_classes.json", :objects=>[]}
-      assigns[:group_data].should == {:class=>"#node_group_ids", :data_source=>"/node_groups.json", :objects=>[]}
+      assigns[:class_data].should include({:class=>"#node_class_ids", :data_source=>"/node_classes.json", :objects=>[]})
+      assigns[:group_data].should include({:class=>"#node_group_ids", :data_source=>"/node_groups.json", :objects=>[]})
     end
   end
 
@@ -50,8 +50,8 @@ describe NodeGroupsController do
       response.should render_template('edit')
       response.should be_success
 
-      assigns[:class_data].should == {:class=>"#node_class_ids", :data_source=>"/node_classes.json", :objects=>[]}
-      assigns[:group_data].should == {:class=>"#node_group_ids", :data_source=>"/node_groups.json", :objects=>[]}
+      assigns[:class_data].should include({:class=>"#node_class_ids", :data_source=>"/node_classes.json", :objects=>[]})
+      assigns[:group_data].should include({:class=>"#node_group_ids", :data_source=>"/node_groups.json", :objects=>[]})
     end
   end
 
@@ -76,7 +76,7 @@ describe NodeGroupsController do
 
         do_put
 
-        @node_group.reload.parameters.to_hash.should == {'foo' => 'bar'}
+        @node_group.reload.parameters.to_hash.should include({'foo' => 'bar'})
       end
 
       it "should allow specification of node classes" do
@@ -85,7 +85,7 @@ describe NodeGroupsController do
 
         do_put
 
-        @node_group.reload.node_classes.should == [node_class]
+        @node_group.reload.node_classes.should include([node_class])
       end
     end
 

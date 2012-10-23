@@ -66,17 +66,11 @@ describe NodesController do
                             'change_count',    'out_of_sync_count', 'skipped',        'failed' ]
       end
 
-      def body_from_proc
-        body = StringIO.new
-        response.body.call(response, body)
-        body.string
-      end
-
       it "should make correct CSV" do
         get :index, :format => "csv"
 
         response.should be_success
-        body_from_proc.split("\n").should =~ [
+        response.body.split("\n").should =~ [
           header,
           "#{@node.name},changed,1,0,0,1,#{@resource.resource_type},#{@resource.title},#{@resource.evaluation_time},#{@resource.file},#{@resource.line},#{@resource.time},#{@resource.change_count},#{@resource.out_of_sync_count},#{@resource.skipped},#{@resource.failed}"
         ]
@@ -89,7 +83,7 @@ describe NodesController do
         get :index, :format => "csv"
 
         response.should be_success
-        body_from_proc.split("\n").should =~ [
+        response.body.split("\n").should =~ [
           header,
           "#{@node.name},changed,1,0,0,1,#{@resource.resource_type},#{@resource.title},#{@resource.evaluation_time},#{@resource.file},#{@resource.line},#{@resource.time},#{@resource.change_count},#{@resource.out_of_sync_count},#{@resource.skipped},#{@resource.failed}",
           "#{unreported_node.name},,,,,,,,,,,,,,,"
@@ -102,7 +96,7 @@ describe NodesController do
           get :index, :format => "csv"
 
           response.should be_success
-          CSV.parse(body_from_proc).last.first.should == name
+          CSV.parse(response.body).last.first.should == name
         end
       end
 
@@ -128,7 +122,7 @@ describe NodesController do
         get :index, :format => "csv"
 
         response.should be_success
-        body_from_proc.split("\n").should =~ [
+        response.body.split("\n").should =~ [
           header,
           %Q[#{@node.name},failed,2,0,1,1,File,/etc/sudoers,1.0,/etc/puppet/manifests/site.pp,1,#{res1.time},1,1,false,false],
           %Q[#{@node.name},failed,2,0,1,1,File,/etc/hosts,2.0,/etc/puppet/manifests/site.pp,5,#{res2.time},2,2,false,true]
@@ -142,8 +136,8 @@ describe NodesController do
       get :new
 
       response.should be_success
-      assigns[:class_data].should == {:class=>"#node_class_ids", :data_source=>"/node_classes.json", :objects=>[]}
-      assigns[:group_data].should == {:class=>"#node_group_ids", :data_source=>"/node_groups.json", :objects=>[]}
+      assigns[:class_data].should include({:class=>"#node_class_ids", :data_source=>"/node_classes.json", :objects=>[]})
+      assigns[:group_data].should include({:class=>"#node_group_ids", :data_source=>"/node_groups.json", :objects=>[]})
     end
   end
 
@@ -159,8 +153,8 @@ describe NodesController do
       response.should be_success
 
       assigns[:node].errors.full_messages.should == ["Name can't be blank"]
-      assigns[:class_data].should == {:class=>"#node_class_ids", :data_source=>"/node_classes.json", :objects=>[]}
-      assigns[:group_data].should == {:class=>"#node_group_ids", :data_source=>"/node_groups.json", :objects=>[]}
+      assigns[:class_data].should include({:class=>"#node_class_ids", :data_source=>"/node_classes.json", :objects=>[]})
+      assigns[:group_data].should include({:class=>"#node_group_ids", :data_source=>"/node_groups.json", :objects=>[]})
     end
   end
 
@@ -231,7 +225,7 @@ describe NodesController do
 
           response.should be_success
           struct = yaml_from_response_body
-          struct.should == {'classes' => []}
+          struct.should include({'classes' => []})
         end
       end
 
@@ -264,8 +258,8 @@ describe NodesController do
       response.should render_template('edit')
       response.should be_success
 
-      assigns[:class_data].should == {:class=>"#node_class_ids", :data_source=>"/node_classes.json", :objects=>[]}
-      assigns[:group_data].should == {:class=>"#node_group_ids", :data_source=>"/node_groups.json", :objects=>[]}
+      assigns[:class_data].should include({:class=>"#node_class_ids", :data_source=>"/node_classes.json", :objects=>[]})
+      assigns[:group_data].should include({:class=>"#node_group_ids", :data_source=>"/node_groups.json", :objects=>[]})
     end
 
     it 'should work when given a node name' do
@@ -353,7 +347,7 @@ describe NodesController do
 
         do_put
 
-        @node.reload.parameters.to_hash.should == {'foo' => 'bar'}
+        @node.reload.parameters.to_hash.should include({'foo' => 'bar'})
       end
 
       it "should allow specification of node classes" do
