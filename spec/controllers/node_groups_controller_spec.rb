@@ -99,7 +99,7 @@ describe NodeGroupsController do
 
         do_put
 
-        response.code.should == '403'
+        response.should be_forbidden
         response.body.should =~ /Node classification has been disabled/
 
         @node_group.reload.parameters.to_hash.should_not be_present
@@ -111,7 +111,7 @@ describe NodeGroupsController do
 
         do_put
 
-        response.code.should == '403'
+        response.should be_forbidden
         response.body.should =~ /Node classification has been disabled/
 
         @node_group.reload.node_classes.should_not be_present
