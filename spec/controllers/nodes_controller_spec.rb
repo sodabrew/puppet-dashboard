@@ -53,7 +53,7 @@ describe NodesController do
 
           response.body.should =~ /Node classification has been disabled/
           response.should_not be_success
-          response.response_code.should == 403
+          response.should be_forbidden
         end
       end
     end
@@ -242,7 +242,7 @@ describe NodesController do
 
           response.body.should =~ /Node classification has been disabled/
           response.should_not be_success
-          response.response_code.should == 403
+          response.should be_forbidden
         end
       end
     end
@@ -376,7 +376,7 @@ describe NodesController do
 
         do_put
 
-        response.code.should == '403'
+        response.should be_forbidden
         response.body.should =~ /Node classification has been disabled/
 
         @node.reload.parameters.to_hash.should_not be_present
@@ -388,7 +388,7 @@ describe NodesController do
 
         do_put
 
-        response.code.should == '403'
+        response.should be_forbidden
         response.body.should =~ /Node classification has been disabled/
 
         @node.reload.node_classes.should_not be_present
