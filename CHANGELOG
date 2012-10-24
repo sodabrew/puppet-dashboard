@@ -1,3 +1,9 @@
+1.2.13-rc1
+===
+c2e4a4a (#17161) Fix stylesheet URLs for IE colorbox images
+5378b46 Update debian and redhat init script to use INT instead of term to stop
+a3f2588 (#9296) Fix loading rack for rubygems >= 1.8
+
 1.2.12
 ===
 5ac77d0 Update default cows and mocks
