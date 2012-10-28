@@ -9,7 +9,6 @@ describe "/nodes/new.html.haml" do
       render
     end
 
-    specify { response.should be_success }
-    it { should have_tag('form[method=post][action=?]', nodes_path) }
+    it { rendered.should have_tag('form[method=post]', :with => { :action => nodes_path }) }
   end
 end

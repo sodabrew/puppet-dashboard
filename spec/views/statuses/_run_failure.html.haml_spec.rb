@@ -6,7 +6,7 @@ describe "/statuses/_run_failure.html.haml" do
   describe "successful render" do
     specify do
       render
-      rendered.should be_success
+      rendered.should be_an_instance_of(String)
     end
 
     it "should display the specified number of days of data" do

@@ -8,8 +8,7 @@ describe "/node_groups/edit.html.haml" do
       assigns[:node_group] = @node_group = NodeGroup.generate!
     end
 
-    specify { render; rendered.should be_a_success }
-    it { render; should have_tag('form[method=post][action=?]', node_group_path(@node_group)) }
+    it { render; rendered.should have_tag('form', :with => { :method => 'post', :action => node_group_path(@node_group) }) }
 
     describe "in editing interface" do
       describe "for parameters" do
@@ -49,7 +48,7 @@ describe "/node_groups/edit.html.haml" do
 
         it 'should show the associated classes' do
           rendered.should have_tag('#tokenizer') do
-            struct = get_json_struct_for_token_list('#node_class_ids')
+            struct = get_json_struct_for_token_list($_, '#node_class_ids')
             struct.should have(3).items
 
             (0..2).each do |idx|
@@ -74,7 +73,7 @@ describe "/node_groups/edit.html.haml" do
 
         it 'should show the associated groups' do
           rendered.should have_tag('#tokenizer') do
-            struct = get_json_struct_for_token_list('#node_group_ids')
+            struct = get_json_struct_for_token_list($_, '#node_group_ids')
             struct.should have(4).items
 
             (0..3).each do |idx|
@@ -84,9 +83,9 @@ describe "/node_groups/edit.html.haml" do
         end
       end
 
-      def get_json_struct_for_token_list(selector)
-        json = rendered.body[/'#{selector}'.+?prePopulate: (\[.*?\])/m, 1]
-        ActiveSupport::JSON.decode(json)
+      def get_json_struct_for_token_list(string, selector)
+          json = string[/'#{selector}'.+?prePopulate: (\[.*?\])/m, 1]
+          ActiveSupport::JSON.decode(json)
       end
     end
   end

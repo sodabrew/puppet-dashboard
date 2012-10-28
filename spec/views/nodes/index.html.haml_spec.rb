@@ -7,7 +7,7 @@ describe '/nodes/index' do
   end
 
   def do_render
-    render '/nodes/index'
+    render :template => '/nodes/index'
   end
 
   describe "search fields" do

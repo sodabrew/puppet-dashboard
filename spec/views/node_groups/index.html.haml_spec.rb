@@ -10,13 +10,8 @@ describe "/node_groups/index.html.haml" do
       render
     end
 
-    specify { rendered.should be_a_success }
-
-    it "has node class items" do
-      should have_tag('.node_group', @node_groups.size)
-      should have_tag("#node_group_#{@node_groups.last.id}")
-    end
-
-    it { should have_tag('form.search') }
+    it { rendered.should have_tag('.node_group', :count => @node_groups.size) }
+    it { rendered.should have_tag("#node_group_#{@node_groups.last.id}") }
+    it { rendered.should have_tag('form.search') }
   end
 end

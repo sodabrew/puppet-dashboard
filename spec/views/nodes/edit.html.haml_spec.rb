@@ -7,7 +7,7 @@ describe '/nodes/edit' do
   end
 
   def do_render
-    render '/nodes/edit'
+    render :template => '/nodes/edit'
   end
 
   describe 'when errors are available' do
@@ -15,62 +15,62 @@ describe '/nodes/edit' do
       @node.name = ''
       @node.valid?
       do_render
-      rendered.should have_tag('div.errors')
+      rendered.should have_tag('div.field_with_errors')
     end
   end
 
   describe 'when no errors are available' do
     it 'should not display error messages' do
       do_render
-      rendered.should_not have_tag('div.errors')
+      rendered.should_not have_tag('div.field_with_errors')
     end
   end
 
   it 'should have a form for editing the node' do
     do_render
-    rendered.should have_tag('form[id=?]', "edit_node_#{@node.id}")
+    rendered.should have_tag("form[id=edit_node_#{@node.id}]")
   end
 
   describe 'for the node edit form' do
     it 'should post to the update node action' do
       do_render
-      rendered.should have_tag('form[id=?][method=?][action=?]', "edit_node_#{@node.id}", 'post', node_path(@node))
+      rendered.should have_tag('form[method=post]', :with => { :id => "edit_node_#{@node.id}", :action => node_path(@node) })
     end
 
     it 'should set the form method to PUT' do
       do_render
-      rendered.should have_tag('form[id=?]', "edit_node_#{@node.id}") do
-        with_tag('input[name=?][value=?]', '_method', 'put')
+      rendered.should have_tag("form[id=edit_node_#{@node.id}]") do
+        with_tag('input[name=_method][value=put]')
       end
     end
 
     it 'should have a name input' do
       do_render
-      rendered.should have_tag('form[id=?]', "edit_node_#{@node.id}") do
-        with_tag('input[type=?][name=?]', 'text', 'node[name]')
+      rendered.should have_tag("form[id=edit_node_#{@node.id}]") do
+        with_tag('input[type=text]', :with => { :name => 'node[name]' })
       end
     end
 
     it 'should populate the name input' do
       @node.name = 'Test Node'
       do_render
-      rendered.should have_tag('form[id=?]', "edit_node_#{@node.id}") do
-        with_tag('input[name=?][value=?]', 'node[name]', @node.name)
+      rendered.should have_tag("form[id=edit_node_#{@node.id}]") do
+        with_tag('input', :with => { :name => 'node[name]', :value => @node.name })
       end
     end
 
     it 'should have a description input' do
       do_render
-      rendered.should have_tag('form[id=?]', "edit_node_#{@node.id}") do
-        with_tag('textarea[name=?]', 'node[description]')
+      rendered.should have_tag("form[id=edit_node_#{@node.id}]") do
+        with_tag('textarea', :with => { :name => 'node[description]' })
       end
     end
 
     it 'should populate the description input' do
       @node.description = 'Test Description'
       do_render
-      rendered.should have_tag('form[id=?]', "edit_node_#{@node.id}") do
-        with_tag('textarea[name=?]', 'node[description]', @node.description)
+      rendered.should have_tag("form[id=edit_node_#{@node.id}]") do
+        with_tag('textarea', :with => { :name => 'node[description]' }, :text => /#{@node.description}/)
       end
     end
   end
@@ -124,7 +124,7 @@ describe '/nodes/edit' do
         do_render
 
         rendered.should have_tag('#tokenizer') do
-          struct = get_json_struct_for_token_list('#node_class_ids')
+          struct = get_json_struct_for_token_list($_, '#node_class_ids')
           struct.should have(3).items
 
           (0..2).each do |idx|
@@ -153,7 +153,7 @@ describe '/nodes/edit' do
         do_render
 
         rendered.should have_tag('#tokenizer') do
-          struct = get_json_struct_for_token_list('#node_group_ids')
+          struct = get_json_struct_for_token_list($_, '#node_group_ids')
           struct.should have(4).items
 
           (0..3).each do |idx|
@@ -167,7 +167,7 @@ describe '/nodes/edit' do
         do_render
 
         rendered.should have_tag('#tokenizer') do
-          struct = get_json_struct_for_token_list('#node_group_ids')
+          struct = get_json_struct_for_token_list($_, '#node_group_ids')
           struct.should have(4).items
 
           (0..3).each do |idx|
@@ -177,14 +177,14 @@ describe '/nodes/edit' do
       end
     end
 
-    def get_json_struct_for_token_list(selector)
-      json = rendered.body[/'#{selector}'.+?prePopulate: (\[.*?\])/m, 1]
+    def get_json_struct_for_token_list(string, selector)
+      json = string[/'#{selector}'.+?prePopulate: (\[.*?\])/m, 1]
       ActiveSupport::JSON.decode(json)
     end
   end
 
   it 'should link to view the node' do
     do_render
-    rendered.should have_tag('a[href=?]', node_path(@node))
+    rendered.should have_tag('a', :with => { :href => node_path(@node) })
   end
 end
