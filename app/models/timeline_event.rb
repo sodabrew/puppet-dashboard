@@ -11,6 +11,8 @@ class TimelineEvent < ActiveRecord::Base
   }
   scope :recent, order('created_at DESC, id DESC').limit(10)
 
+  attr_accessible :subject, :secondary_subject, :event_type
+
   def subject_name
     subject ? subject.name : "A #{subject_type.downcase}"
   end

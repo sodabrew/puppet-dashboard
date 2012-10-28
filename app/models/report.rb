@@ -9,6 +9,14 @@ class Report < ActiveRecord::Base
 
   accepts_nested_attributes_for :metrics, :resource_statuses, :logs
 
+  attr_accessible :time, :resource_statuses_attributes, :puppet_version, \
+                  :host, :logs_attributes, :status, :configuration_version, \
+                  :kind, :metrics_attributes, :source, :tags, :message, \
+                  :line, :file, :level, :events_attributes, \
+                  :out_of_sync_count, :title, :evaluation_time, \
+                  :skipped, :failed, :change_count, :resource_type, \
+                  :name, :category, :value
+
   before_validation :assign_to_node
   validates_presence_of :host, :time, :kind
   validates_uniqueness_of :host,

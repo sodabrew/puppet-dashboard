@@ -5,6 +5,8 @@ class ResourceEvent < ActiveRecord::Base
   serialize :previous_value
   serialize :historical_value
 
+  attr_accessible :property, :message, :name, :status, :time, :historical_value, :audited
+
   # The "natural" order of properties is that 'ensure' comes before anything
   # else, then alphabetically sorted by the property name.
   def <=>(that)
