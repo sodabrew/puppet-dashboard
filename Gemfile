@@ -29,4 +29,5 @@ group :development, :test do
   gem 'factory_girl', '< 3.0' # supports ruby 1.8.7
   gem 'shoulda-matchers'
   gem 'rspec-html-matchers'
+  gem 'execjs' # Will use system-available JS runtime
 end
