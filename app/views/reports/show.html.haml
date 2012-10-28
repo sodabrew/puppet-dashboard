@@ -1,4 +1,4 @@
-#sidebar= render 'shared/node_manager_sidebar'
+#sidebar= render :partial => 'shared/node_manager_sidebar'
 #main
   %div{ :class => @report ? @report.kind + '-report' : '' }
-    = render 'report', :report => @report
+    = render :partial => 'report', :report => @report

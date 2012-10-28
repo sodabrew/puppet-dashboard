@@ -1,5 +1,5 @@
 - parameter = parameter_input  # change silly partial-based variable name
-- object_name = params[:controller].singularize
+- object_name = controller.controller_name.singularize
 %tr
   %td.key
     = text_field_tag "#{object_name}[parameter_attributes][][key]", parameter.key, :placeholder => "key"
