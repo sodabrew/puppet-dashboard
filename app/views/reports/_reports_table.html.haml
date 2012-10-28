@@ -4,7 +4,7 @@
       %th.status{:scope => :col}
         &nbsp;
       %th{:scope => :col} Reported at &darr;
-      - unless node
+      - unless defined?(node)
         %th{:scope => :col} Node
       %th{:scope => :col} Total
       %th{:scope => :col} Failed
@@ -16,16 +16,16 @@
       %th{:scope => :col} Config retrieval
       %th{:scope => :col} Runtime
   %tfoot
-    - if reports.present?
-      - if defined? tfoot and tfoot
-        = render tfoot, :reports => reports, :node => node
+    - if defined?(reports)
+      - if defined?(tfoot) and tfoot
+        = render :inline => tfoot, :locals => { :reports => reports, :node => node }
       - else
         - if reports.total_pages > 1
           %tr
-            %td{:colspan => node ? 13 : 12}
+            %td{:colspan => defined?(node) ? 13 : 12}
               = pagination_for(reports)
   %tbody
-    - if reports.present?
+    - if defined? reports
       - for report in reports
         %tr.nowrap[report]
           = report_status_td(report)
@@ -42,5 +42,5 @@
           %td #{report.config_retrieval_time} s
           %td #{report.total_time} s
     - else
-      %td.empty{:colspan => node ? 13 : 12}
+      %td.empty{:colspan => defined?(node) ? 13 : 12}
         = describe_no_matches_for :reports

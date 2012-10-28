@@ -1,6 +1,6 @@
 .item
   .section
-    = render 'statuses/run_failure'
+    = render :partial => 'statuses/run_failure'
   .section
     - reports = Report.all(:limit => 30, :order => 'time DESC')
-    = render 'statuses/run_time', :reports => reports
+    = render :partial => 'statuses/run_time', :locals => { :reports => reports }
