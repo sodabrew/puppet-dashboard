@@ -18,14 +18,14 @@ class Report < ActiveRecord::Base
   after_save :update_node
   after_destroy :replace_last_report
 
-  default_scope :order => 'time DESC', :include => :node
+  default_scope includes(:node).order('time DESC')
 
-  scope :inspections, :conditions => {:kind => "inspect"}, :include => :metrics
-  scope :applies,     :conditions => {:kind => "apply"  }, :include => :metrics
-  scope :changed,     :conditions => {:kind => "apply", :status => 'changed'   }, :include => :metrics
-  scope :unchanged,   :conditions => {:kind => "apply", :status => 'unchanged' }, :include => :metrics
-  scope :failed,      :conditions => {:kind => "apply", :status => 'failed'    }, :include => :metrics
-  scope :pending,     :conditions => {:kind => "apply", :status => 'pending'   }, :include => :metrics
+  scope :inspections, includes(:metrics).where(:kind => 'inspect')
+  scope :applies,     includes(:metrics).where(:kind => 'apply')
+  scope :changed,     includes(:metrics).where(:kind => 'apply', :status => 'changed'   )
+  scope :unchanged,   includes(:metrics).where(:kind => 'apply', :status => 'unchanged' )
+  scope :failed,      includes(:metrics).where(:kind => 'apply', :status => 'failed'    )
+  scope :pending,     includes(:metrics).where(:kind => 'apply', :status => 'pending'   )
 
   def total_resources
     metric_value("resources", "total")

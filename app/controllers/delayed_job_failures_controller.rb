@@ -26,13 +26,11 @@ class DelayedJobFailuresController < ApplicationController
   def get_failures(read)
     respond_to do |format|
       format.html do
-        paginate_scope(DelayedJobFailure.all(:order => 'created_at DESC',
-                                             :conditions => { :read => read }))
+        paginate_scope(DelayedJobFailure.where(:read => read).order('created_at DESC'))
       end
 
       format.all do
-        DelayedJobFailure.all(:order => 'created_at DESC',
-                              :conditions => { :read => read })
+        DelayedJobFailure.where(:read => read).order('created_at DESC')
       end
     end
   end

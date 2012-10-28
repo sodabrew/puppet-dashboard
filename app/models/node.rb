@@ -30,14 +30,14 @@ class Node < ActiveRecord::Base
     ["failed", "pending", "changed", "unchanged"]
   end
 
-  scope :with_last_report, :include => :last_apply_report
-  scope :by_report_date, :order => 'reported_at DESC'
+  scope :with_last_report, includes(:last_apply_report)
+  scope :by_report_date, order('reported_at DESC')
 
-  scope :search, lambda{|q| q.blank? ? {} : {:conditions => ['name LIKE ?', "%#{q}%"]} }
+  scope :search, lambda{ |q| where('name LIKE ?', "%#{q}%") unless q.blank? }
 
   scope :by_latest_report, proc { |order|
     direction = {1 => 'ASC', 0 => 'DESC'}[order]
-    direction ? {:order => "reported_at #{direction}"} : {}
+    order("reported_at #{direction}") if direction
   }
 
   has_parameters
@@ -48,27 +48,25 @@ class Node < ActiveRecord::Base
   fires :updated, :on => :update
   fires :removed, :on => :destroy
 
-  scope :unresponsive, lambda {{
-    :conditions => [
-      "last_apply_report_id IS NOT NULL AND reported_at < ?",
-      SETTINGS.no_longer_reporting_cutoff.seconds.ago
-    ]
-  }}
+  scope :unresponsive, lambda {
+    where("last_apply_report_id IS NOT NULL AND reported_at < ?",
+          SETTINGS.no_longer_reporting_cutoff.seconds.ago)
+  }
 
   possible_statuses.each do |node_status|
-    scope node_status, lambda {{
-      :conditions => [
-        "last_apply_report_id IS NOT NULL AND reported_at >= ? AND nodes.status = '#{node_status}'",
-        SETTINGS.no_longer_reporting_cutoff.seconds.ago
-      ]
-    }}
+    scope node_status, lambda {
+      where("last_apply_report_id IS NOT NULL AND
+             reported_at >= ? AND
+             nodes.status = '#{node_status}'",
+             SETTINGS.no_longer_reporting_cutoff.seconds.ago)
+    }
   end
 
-  scope :unreported, :conditions => {:reported_at => nil}
+  scope :unreported, where(:reported_at => nil)
 
-  scope :hidden, :conditions => {:hidden => true}
+  scope :hidden, where(:hidden => true)
 
-  scope :unhidden, :conditions => {:hidden => false}
+  scope :unhidden, where(:hidden => false)
 
   def self.find_by_id_or_name!(identifier)
     find_by_id(identifier) or find_by_name!(identifier)
@@ -218,9 +216,20 @@ class Node < ActiveRecord::Base
   end
 
   def self.resource_status_totals(resource_status, scope='all')
-    scope ||="all"
+    scope ||= 'all'
     raise ArgumentError, "No such status #{resource_status}" unless possible_statuses.unshift("total").include?(resource_status)
-    options = {:conditions => "metrics.category = 'resources' AND metrics.name = '#{resource_status}'", :joins => 'left join metrics on metrics.report_id = nodes.last_apply_report_id'}
-    ['all', 'index'].include?(scope) ? Node.sum(:value, options).to_i : Node.send(scope).sum(:value, options).to_i
+
+    case scope
+    when *['all', 'index']
+      Node.
+           joins('LEFT JOIN metrics ON metrics.report_id = nodes.last_apply_report_id').
+           where("metrics.category = 'resources' AND
+                  metrics.name = '#{resource_status}'").sum(:value).to_i
+    else
+      Node.send(scope).
+           joins('LEFT JOIN metrics ON metrics.report_id = nodes.last_apply_report_id').
+           where("metrics.category = 'resources' AND
+                  metrics.name = '#{resource_status}'").sum(:value).to_i
+    end
   end
 end

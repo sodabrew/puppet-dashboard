@@ -27,7 +27,7 @@ class NodeGroup < ActiveRecord::Base
 
   default_scope :order => 'node_groups.name ASC'
 
-  scope :search, lambda{|q| q.blank? ? {} : {:conditions => ['name LIKE ?', "%#{q}%"]} }
+  scope :search, lambda{|q| where('name LIKE ?', "%#{q}%") unless q.blank? }
 
   scope :with_nodes_count,
     :select => 'node_groups.*, count(nodes.id) as nodes_count',

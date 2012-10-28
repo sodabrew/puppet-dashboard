@@ -6,52 +6,49 @@ class ResourceStatus < ActiveRecord::Base
 
   serialize :tags, Array
 
-  scope :inspections, { :joins => :report, :conditions => "reports.kind = 'inspect'" }
+  scope :inspections, joins(:report).where("reports.kind = 'inspect'")
 
-  scope :latest_inspections, {
-    :conditions => "nodes.last_inspect_report_id = resource_statuses.report_id",
-    :include    => [:report => :node],
+  scope :latest_inspections, lambda {
+    includes(:report => :node).where(<<-SQL)
+      nodes.last_inspect_report_id = resource_statuses.report_id
+    SQL
   }
 
   scope :by_file_content, lambda {|content|
-    {
-      :conditions => ["resource_statuses.resource_type = 'File' AND resource_events.property = 'content' AND resource_events.previous_value = ?", "{md5}#{content}"],
-      :include => :events,
-    }
+    includes(:events).where(<<-SQL, "{md5}#{content}")
+      resource_statuses.resource_type = 'File' AND
+      resource_events.property = 'content' AND
+      resource_events.previous_value = ?
+    SQL
   }
 
   scope :without_file_content, lambda {|content|
-    {
-      :conditions => ["resource_statuses.resource_type = 'File' AND resource_events.property = 'content' AND resource_events.previous_value != ?", "{md5}#{content}"],
-      :include => :events,
-    }
+    includes(:events).where(<<-SQL, "{md5}#{content}")
+      resource_statuses.resource_type = 'File' AND
+      resource_events.property = 'content' AND
+      resource_events.previous_value != ?
+    SQL
   }
 
   scope :by_file_title, lambda {|title|
-    {
-      :conditions => ["resource_statuses.resource_type = 'File' AND resource_statuses.title = ?", title],
-      :include => :events,
-    }
+    includes(:events).where(<<-SQL, title)
+      resource_statuses.resource_type = 'File' AND
+      resource_statuses.title = ?
+    SQL
   }
 
   scope :pending, lambda { |predicate|
     predicate = predicate ? '' : 'NOT'
-    {
-      :conditions => <<-SQL
+    where(<<-SQL)
         resource_statuses.id #{predicate} IN (
           SELECT resource_statuses.id FROM resource_statuses
             INNER JOIN resource_events ON resource_statuses.id = resource_events.resource_status_id
             WHERE resource_events.status = 'noop'
         )
-      SQL
-    }
+    SQL
   }
 
-  scope :failed, lambda { |predicate|
-    {
-      :conditions => {:failed => predicate}
-    }
-  }
+  scope :failed, lambda { |predicate| where(:failed => predicate) }
 
   def self.to_csv_properties
     [:resource_type, :title, :evaluation_time, :file, :line, :time, :change_count, :out_of_sync_count, :skipped, :failed]
