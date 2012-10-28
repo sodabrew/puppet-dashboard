@@ -7,10 +7,9 @@ describe "/reports/_report_status_icon.html.haml" do
     before :each do
       assigns[:report] = @report = Report.generate!(:status => "changed")
       view.stubs(:resource => @report)
-      render :locals => {:report => @report}
+      render :partial => 'reports/report_status_icon', :locals => { :report => @report }
     end
 
-    specify { rendered.should be_success }
-    it { should have_tag('img[src=?]', /.+changed.+/) }
+    it { rendered.should have_tag('img', :with => { :src => '/images/icons/changed.png' }) }
   end
 end

@@ -26,7 +26,7 @@ describe "/timeline_events/_timeline_event.html.haml" do
       subject { rendered }
 
       it "should describe the action on this node" do
-        should have_text /This node\s+was created/
+        should =~ /This node\s+was created/
       end
     end
 
@@ -41,11 +41,11 @@ describe "/timeline_events/_timeline_event.html.haml" do
         subject { rendered }
 
         it "should describe the action on that subject" do
-          should have_text /NodeClass.+?#{@node_class.name}.+?was added to\s+this node/sm
+          should =~ /NodeClass.+?#{@node_class.name}.+?was added to\s+this node/sm
         end
 
         it "should link to the subject" do
-          should have_tag 'a[href=?]', node_class_path(@node_class), @node_class.name
+          should have_tag 'a', :with => { :href => node_class_path(@node_class) }, :text => @node_class.name
         end
       end
 
@@ -59,7 +59,7 @@ describe "/timeline_events/_timeline_event.html.haml" do
         subject { rendered }
 
         it "should describe the action on that subject" do
-          should have_text /#{h @parameter.name}\s+was added to\s+this node/sm
+          should =~ /#{ERB::Util.html_escape(@parameter.name)}\s+was added to\s+this node/sm
         end
 
         it "should not link to the subject" do

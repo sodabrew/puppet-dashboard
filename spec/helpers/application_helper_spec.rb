@@ -36,19 +36,19 @@ describe ApplicationHelper do
     it "should return a header for a form with a new record" do
       record = Node.spawn
       form = stub(:object => record)
-      helper.header_for(form).should have_text /Add node/
+      helper.header_for(form).should =~ /Add node/
     end
 
     it "should return a header for a form with an existing object" do
       record = Node.generate
       form = stub(:object => record)
-      helper.header_for(form).should have_text /Edit node/
+      helper.header_for(form).should =~ /Edit node/
     end
   end
 
  describe "#pagination_for" do
     before :each do
-      @view.stubs( :request => request, :params => params, :url_for => 'someurl')
+      @template.stubs( :request => request, :params => params, :url_for => 'someurl')
     end
 
     context "when given paginated records" do
@@ -98,7 +98,7 @@ describe ApplicationHelper do
 
   describe "#icon" do
     it "should return an image tag to an icon" do
-      helper.icon('foo').should have_tag('img[src=?]', image_path('icons/foo.png'))
+      helper.icon('foo').should have_tag('img', :with => { :src => image_path('icons/foo.png')})
     end
   end
 

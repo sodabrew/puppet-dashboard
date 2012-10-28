@@ -8,9 +8,8 @@ describe "/reports/index.html.haml" do
       render
     end
 
-    specify { rendered.should be_a_success }
-    it { should have_tag('.report', @reports.size) }
-    it { should have_tag("#report_#{@reports.first.id}") }
+    it { rendered.should have_tag('.report', :count => @reports.size) }
+    it { rendered.should have_tag("#report_#{@reports.first.id}") }
   end
 
   describe "the response with a report lacking metrics" do
@@ -20,8 +19,7 @@ describe "/reports/index.html.haml" do
       render
     end
 
-    specify { rendered.should be_a_success }
-    it { should have_tag('.report', 1) }
-    it { should have_tag("#report_#{@report.id}") }
+    it { rendered.should have_tag('.report', :count => 1) }
+    it { rendered.should have_tag("#report_#{@report.id}") }
   end
 end
