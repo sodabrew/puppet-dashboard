@@ -18,11 +18,14 @@ class NodeClass < ActiveRecord::Base
 
   default_scope :order => 'node_classes.name ASC'
 
-  scope :search, lambda{|q| q.blank? ? {} : {:conditions => ['name LIKE ?', "%#{q}%"]} }
+  scope :search, lambda{|q| where('name LIKE ?', "%#{q}%") unless q.blank? }
 
   scope :with_nodes_count,
     :select => 'node_classes.*, count(nodes.id) as nodes_count',
-    :joins => 'LEFT OUTER JOIN node_class_memberships ON (node_classes.id = node_class_memberships.node_class_id) LEFT OUTER JOIN nodes ON (nodes.id = node_class_memberships.node_id)',
+    :joins => <<-SQL,
+      LEFT OUTER JOIN node_class_memberships ON (node_classes.id = node_class_memberships.node_class_id)
+      LEFT OUTER JOIN nodes ON (nodes.id = node_class_memberships.node_id)
+    SQL
     :group => 'node_classes.id'
 
   def to_json(options)
