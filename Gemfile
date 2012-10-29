@@ -24,7 +24,6 @@ gem 'timeline_fu'
 
 group :development, :test do
   gem 'mocha', :require => false
-  gem 'test-unit'
   gem 'sqlite3'
   gem 'rspec-rails'
   gem 'factory_girl', '< 3.0' # supports ruby 1.8.7
