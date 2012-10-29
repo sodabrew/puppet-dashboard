@@ -25,7 +25,7 @@
             %td{:colspan => defined?(node) ? 13 : 12}
               = pagination_for(reports)
   %tbody
-    - if defined? reports
+    - if defined? reports and reports.size > 0
       - for report in reports
         %tr.nowrap[report]
           = report_status_td(report)
