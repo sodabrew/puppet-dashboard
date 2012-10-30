@@ -7,6 +7,8 @@ class Parameter < ActiveRecord::Base
   belongs_to :parameterable, :polymorphic => true
   validates_presence_of :key
 
+  attr_accessible :key, :value, :parameterable_id, :parameterable_type, :created_at, :updated_at
+
   serialize :value
 
   fires :added_to,      :on => :create,   :secondary_subject => 'parameterable'
