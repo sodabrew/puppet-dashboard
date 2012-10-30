@@ -59,7 +59,7 @@
               - if sources.include?(container)
                 = h node.name
               - else
-                = sources.map{|s| link_to(h(s.name), s)}.join(", ")
+                = raw sources.map{ |s| link_to(h(s.name), s) }.join(", ")
           %td.latest_report
             = node.last_apply_report ? link_to(h(node.last_apply_report.time), node.last_apply_report) : "Has not reported"
           - column_filter[ selected_status ].each do |status|

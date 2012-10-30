@@ -33,7 +33,7 @@
                   - if sources.include?(@node_group)
                     = h group.name
                   - else
-                    = sources.map{|p| link_to(h(p.name), p)}.join(", ")
+                    = raw sources.map{ |p| link_to(h(p.name), p) }.join(", ")
       - else
         = describe_no_matches_as 'No child groups'
     .clearfix{:style => 'clear: both'}
