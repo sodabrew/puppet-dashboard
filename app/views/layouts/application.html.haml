@@ -5,16 +5,13 @@
     %title= [ page_title, 'Puppet Node Manager'].compact.join(' - ')
     %link{ :href => "/favicon.ico", :rel => "shortcut icon" }
     %meta{ :content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type" }
-    - if session[:autorefresh]
-      %meta{ :content => "5; URL=#{request.url}", "http-equiv" => "refresh" }
 
     = stylesheet_link_tag 'application'
+    = javascript_include_tag 'application'
 
     :javascript
       var relative_url_root = '#{ActionController::Base.relative_url_root}';
       $.noConflict();
-
-    = javascript_include_tag 'application'
 
     - Registry.each_callback :core, :head_extensions do |widget|
       = widget.call self

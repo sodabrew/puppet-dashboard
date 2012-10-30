@@ -31,4 +31,4 @@
         - Registry.each_callback :core, :account_widgets do |callback|
           = callback.call self
         %li#navigation-autorefresh
-          = link_to "#{session[:autorefresh] ? "Disable autorefresh" : "Enable autorefresh"}", "#{File.join(root_path,request.path)}?autorefresh=#{session[:autorefresh] ? "false" : "true"}", :class => "autorefresh_link"
+          <label><input type="checkbox" name="autorefresh" style="vertical-align: baseline;" /> Refresh this page automatically? <span id="autorefresh_countdown" style="display: inline-block; width: 1em; text-align: right;">&nbsp;</span></label>
