@@ -260,14 +260,14 @@ describe Node do
         @param_2.update_attribute(:key, 'foo')
 
         lambda {@node.compiled_parameters}.should raise_error(ParameterConflictError)
-        @node.errors.on(:parameters).should == "foo"
+        @node.errors[:parameters].should =~ ["foo"]
       end
 
       it "should not raise an error if there are two sibling parameters with the same key and value" do
         @param_2.update_attributes(:key => @param_1.key, :value => @param_1.value)
 
         lambda {@node.compiled_parameters}.should_not raise_error(ParameterConflictError)
-        @node.errors.on(:parameters).should be_nil
+        @node.errors[:parameters].should be_empty
       end
 
       it "should not raise an error if there are parameter conflicts that can be resolved at a higher level" do
@@ -280,7 +280,7 @@ describe Node do
         @node_group_a.node_groups << @node_group_c << @node_group_d
 
         lambda {@node.compiled_parameters}.should_not raise_error(ParameterConflictError)
-        @node.errors.on(:parameters).should be_nil
+        @node.errors[:parameters].should be_empty
       end
 
       it "should include parameters of the node itself" do
