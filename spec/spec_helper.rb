@@ -17,6 +17,7 @@ require 'factories'
 Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each {|f| require f}
 
 RSpec.configure do |config|
+  config.use_transactional_fixtures = true
   config.mock_with :mocha
   config.prepend_before :each do
     verbosity = $VERBOSE
