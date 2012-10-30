@@ -3,6 +3,7 @@ require 'spec_helper'
 class InheritedFromApplicationController < ApplicationController
   def generic_action
     @time_zone = Time.zone
+    render :nothing => true
   end
 end
 
