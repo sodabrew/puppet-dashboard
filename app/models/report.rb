@@ -7,7 +7,7 @@ class Report < ActiveRecord::Base
   has_many :metrics, :dependent => :destroy
   has_many :events, :through => :resource_statuses
 
-  accepts_nested_attributes_for :metrics, :resource_statuses, :logs
+  accepts_nested_attributes_for :metrics, :resource_statuses, :logs, :events
 
   attr_accessible :time, :resource_statuses_attributes, :puppet_version, \
                   :host, :logs_attributes, :status, :configuration_version, \
