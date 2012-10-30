@@ -51,17 +51,15 @@ PuppetDashboard::Application.routes do
     end
   end
 
+  resources :node_group_memberships, :as => :memberships
+
   match 'files/:action/:file1/:file2' => 'files#:action'
   match 'files/:action/:file'         => 'files#:action'
 
-  resources :node_group_memberships, :as => :memberships
-
-  match 'reports/upload' => 'reports#upload', :via => :post
   match '/header.:format' => 'pages#header'
+  match 'reports/upload'  => 'reports#upload', :via => :post
+  match 'release_notes'   => 'pages#release_notes', :via => :get
 
-  match 'radiator' => 'radiator#index', :via => :get
-  match 'release_notes' => 'pages#release_notes', :via => :get
+  get ':controller(/:action(/:id(.:format)))'
 
-  match ':controller/:action/:id'
-  match ':controller/:action/:id.:format'
 end

@@ -185,7 +185,7 @@ module ApplicationHelper
   # Return HTML describing the search if one is present in params[:q].
   def describe_search_if_present
     if params[:q].present?
-      return "matching &ldquo;#{h params[:q]}&rdquo;"
+      return "matching &ldquo;#{h params[:q]}&rdquo;".html_safe
     end
   end
 
