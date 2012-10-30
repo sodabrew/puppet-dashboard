@@ -31,4 +31,4 @@
         - Registry.each_callback :core, :account_widgets do |callback|
           = callback.call self
         %li#navigation-autorefresh
-          <label><input type="checkbox" name="autorefresh" style="vertical-align: baseline;" /> Refresh this page automatically? <span id="autorefresh_countdown" style="display: inline-block; width: 1em; text-align: right;">&nbsp;</span></label>
+          <label><input type="checkbox" id="autorefresh" style="vertical-align: baseline;" /> Refresh this page automatically? <span id="autorefresh_countdown" style="display: inline-block; width: 1em; text-align: right;">&nbsp;</span></label>

@@ -1,7 +1,7 @@
-$(document).ready(function() {
+jQuery(function($) {
   var refresh_timer;
 
-  $('input[name="autorefresh"]').change(function() {
+  $('input#autorefresh').change(function() {
     if (this.checked) {
       var refresh_count = 15; // Refresh after 15 seconds
       $('span#autorefresh_countdown').text(refresh_count);
@@ -25,7 +25,7 @@ $(document).ready(function() {
   });
 
   if ($.cookie('autorefresh')) {
-    $('input[name="autorefresh"]').prop('checked', true);
-    $('input[name="autorefresh"]').change(); // prop does not fire events
+    $('input#autorefresh').prop('checked', true);
+    $('input#autorefresh').change(); // prop does not fire events
   }
 });
