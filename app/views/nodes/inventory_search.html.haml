@@ -17,7 +17,7 @@
 
     - if @nodes
       .section
-        = render :partial => 'statuses/run_failure', :nodes => @nodes
+        = render :partial => 'statuses/run_failure', :locals => { :nodes => @nodes }
       .section
         %h3 Nodes
-        = render :partial => 'nodes/nodes', :nodes => @nodes
+        = render :partial => 'nodes/nodes', :locals => { :nodes => @nodes }
