@@ -24,6 +24,6 @@
               - if param.sources == Set[resource]
                 = h resource.name
               - else
-                = param.sources.map{|source| link_to(h(source.name),node_group_path(source.id))}.join(", ")
+                = raw param.sources.map{ |source| link_to(h(source.name), node_group_path(source.id)) }.join(", ")
   - else
     = describe_no_matches_as 'No parameters'
