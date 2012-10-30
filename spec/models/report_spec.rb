@@ -53,7 +53,7 @@ describe Report do
       node = Node.generate(:name => @report_data.host)
       report = Report.create_from_yaml(@report_yaml)
       node.reload
-      node.reported_at.should be_close(@report_data.time.in_time_zone, 1.second)
+      node.reported_at.should be_within(1).of(@report_data.time.in_time_zone)
     end
 
     it "does not update the node's reported_at timestamp for inspect reports" do
