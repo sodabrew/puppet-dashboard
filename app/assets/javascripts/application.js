@@ -13,13 +13,11 @@
 //= require jquery
 //= require jquery_ujs
 //= require_tree .
-//= require prototype
 //= require dashboard
 //= require jquery-ui.min
 //= require jquery.tokeninput
 //= require excanvas.min
 //= require raphael-min
-//= require grafico.min
 //= require jquery.form
 //= require jquery.placeholders
 //= require jquery.ui.combobox
