@@ -5,7 +5,7 @@ describe "/node_groups/edit.html.haml" do
 
   describe "when successfully rendered" do
     before :each do
-      assigns[:node_group] = @node_group = NodeGroup.generate!
+      @node_group = NodeGroup.generate!
     end
 
     it { render; rendered.should have_tag('form', :with => { :method => 'post', :action => node_group_path(@node_group) }) }
@@ -37,7 +37,7 @@ describe "/node_groups/edit.html.haml" do
         before :each do
           @classes = Array.new(6) { NodeClass.generate! }
           @node_group.node_classes << @classes[0..2]
-          assigns[:class_data] = {:class => '#node_class_ids', :data_source => node_classes_path(:format => :json), :objects => @node_group.node_classes}
+          @class_data = {:class => '#node_class_ids', :data_source => node_classes_path(:format => :json), :objects => @node_group.node_classes}
 
           render
         end
@@ -48,7 +48,7 @@ describe "/node_groups/edit.html.haml" do
 
         it 'should show the associated classes' do
           rendered.should have_tag('#tokenizer') do
-            struct = get_json_struct_for_token_list($_, '#node_class_ids')
+            struct = get_json_struct_for_token_list(rendered, '#node_class_ids')
             struct.should have(3).items
 
             (0..2).each do |idx|
@@ -62,7 +62,7 @@ describe "/node_groups/edit.html.haml" do
         before :each do
           @groups = Array.new(6) { NodeGroup.generate! }
           @node_group.node_groups << @groups[0..3]
-          assigns[:group_data] = {:class => '#node_group_ids', :data_source => node_groups_path(:format => :json),  :objects => @node_group.node_groups}
+          @group_data = {:class => '#node_group_ids', :data_source => node_groups_path(:format => :json),  :objects => @node_group.node_groups}
 
           render
         end
@@ -73,7 +73,7 @@ describe "/node_groups/edit.html.haml" do
 
         it 'should show the associated groups' do
           rendered.should have_tag('#tokenizer') do
-            struct = get_json_struct_for_token_list($_, '#node_group_ids')
+            struct = get_json_struct_for_token_list(rendered, '#node_group_ids')
             struct.should have(4).items
 
             (0..3).each do |idx|
