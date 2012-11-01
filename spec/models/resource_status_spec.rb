@@ -22,19 +22,19 @@ describe ResourceStatus do
 
     describe ".by_file_title" do
       it "should find only the resource_statuses containing the given file" do
-        ResourceStatus.by_file_title("/etc/hosts").should == @matching_report.resource_statuses
+        ResourceStatus.by_file_title("/etc/hosts").should =~ @matching_report.resource_statuses
       end
     end
 
     describe ".by_file_content" do
       it "should find only the resource_statuses containing the given file content" do
-        ResourceStatus.by_file_content("ab07acbb1e496801937adfa772424bf7").should == @matching_report.resource_statuses
+        ResourceStatus.by_file_content("ab07acbb1e496801937adfa772424bf7").should =~ @matching_report.resource_statuses
       end
     end
 
     describe ".by_file_title.by_file_content" do
       it "should find only the reports containing a file with the given title and content" do
-        ResourceStatus.by_file_title("/etc/hosts").by_file_content("ab07acbb1e496801937adfa772424bf7").should == @matching_report.resource_statuses
+        ResourceStatus.by_file_title("/etc/hosts").by_file_content("ab07acbb1e496801937adfa772424bf7").should =~ @matching_report.resource_statuses
       end
 
       it "should ignore reports that have matching title and matching content in different files" do
@@ -55,7 +55,7 @@ describe ResourceStatus do
 
     describe ".by_file_title.without_file_content" do
       it "should only return statuses from reports that have a file of the name with unmatching contents" do
-        ResourceStatus.by_file_title('/etc/sudoers').without_file_content("ab07acbb1e496801937adfa772424bf7").should == @unmatching_report.resource_statuses
+        ResourceStatus.by_file_title('/etc/sudoers').without_file_content("ab07acbb1e496801937adfa772424bf7").should =~ @unmatching_report.resource_statuses
       end
     end
   end
