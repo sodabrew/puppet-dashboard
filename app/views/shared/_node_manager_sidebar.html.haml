@@ -39,7 +39,7 @@
           %td.label
             = link_to h(status.capitalize), nodes_path
           %td.percent
-            = link_to "#{percent}<em>%</em>", nodes_path, {:style => "width: #{percent}%"}
+            = link_to "#{percent}<em>%</em>".html_safe, nodes_path, {:style => "width: #{percent}%"}
 
     - if Node.hidden.count > 0
       %table.secondary

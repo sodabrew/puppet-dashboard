@@ -18,7 +18,7 @@
           = widget.call self, report
       %li(id="#{user_facing[name].downcase}-tab")
         %a= h user_facing[name]
-  = panels
+  = raw panels
 
 - Registry.each_callback :report, :tail do |thing|
   = thing.call self, report
