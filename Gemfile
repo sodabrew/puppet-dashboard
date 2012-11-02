@@ -7,14 +7,14 @@ gem 'sass-rails'    , '~> 3.2'
 gem 'haml-rails'    , '~> 0.3.5'
 gem 'coffee-rails'  , '~> 3.2'
 gem 'uglifier'      , '~> 1.0'
+gem 'will_paginate' , '~> 3.0'
+gem 'inherited_resources' , '~> 1.0'
 
 gem 'thin'
 gem 'rack'
 
 gem 'daemons'
 gem 'json_pure'
-gem 'will_paginate'
-gem 'inherited_resources'
 
 # TODO: rails generate delayed_job:upgrade
 gem 'delayed_job_active_record', '~> 0.3'

@@ -160,7 +160,7 @@ DEPENDENCIES
   delayed_job_active_record (~> 0.3)
   factory_girl (< 3.0)
   haml-rails (~> 0.3.5)
-  inherited_resources
+  inherited_resources (~> 1.0)
   jquery-rails (~> 2.1)
   json_pure
   mocha
@@ -175,4 +175,4 @@ DEPENDENCIES
   thin
   timeline_fu
   uglifier (~> 1.0)
-  will_paginate
+  will_paginate (~> 3.0)
