@@ -47,22 +47,18 @@ describe ApplicationHelper do
   end
 
  describe "#pagination_for" do
-    before :each do
-      @template.stubs( :request => request, :params => params, :url_for => 'someurl')
-    end
-
     context "when given paginated records" do
       subject { helper.pagination_for([*(1..100)].paginate) }
 
-      it { should have_tag('div.actionbar') }
-      it { should have_tag('a', /Next/) }
+      it { rendered.should have_tag('div.actionbar') }
+      it { rendered.should have_tag('a', :text => /Next/) }
     end
 
     context "when not given paginated records" do
       subject { helper.pagination_for([]) }
 
-      it { should have_tag('div.actionbar') }
-      it { should_not have_tag('a', /Next/) }
+      it { rendered.should have_tag('div.actionbar') }
+      it { rendered.should_not have_tag('a', :text => /Next/) }
     end
 
     describe "when rendering the page size control" do
@@ -71,7 +67,7 @@ describe ApplicationHelper do
           def self.per_page; 51 ; end
         end
         paginated_results = [foo.new].paginate
-        helper.pagination_for(paginated_results).should have_tag('a', /51/)
+        helper.pagination_for(paginated_results).should have_tag('a', :text => /51/)
       end
 
       it "should render spans instead of links for the current pagination size" do
@@ -79,7 +75,7 @@ describe ApplicationHelper do
           def self.per_page; 51 ; end
         end
         paginated_results = [foo.new].paginate(:per_page => 100)
-        helper.pagination_for(paginated_results).should have_tag('span', /100/)
+        helper.pagination_for(paginated_results).should have_tag('span', :text => /100/)
       end
 
       it "should render spans instead of links for the current pagination size supplied in the url" do
@@ -88,7 +84,7 @@ describe ApplicationHelper do
         end
         params[:per_page] = "all"
         paginated_results = [foo.new]
-        helper.pagination_for(paginated_results).should have_tag('span', /all/)
+        helper.pagination_for(paginated_results).should have_tag('span', :text => /all/)
       end
 
 
