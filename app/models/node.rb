@@ -11,7 +11,8 @@ class Node < ActiveRecord::Base
   validates_presence_of :name
   validates_uniqueness_of :name
 
-  attr_readonly :name, :created_at
+  # attr_readonly :name, :created_at # FIXME: these should be readonly, but inherit_resources isn't creating new instances right
+  attr_accessible :name, :created_at # FIXME: ^^
   attr_accessible :description, :parameter_attributes, :assigned_node_group_ids, :assigned_node_class_ids, :node_class_ids, :node_group_ids
   attr_accessible :reported_at, :last_inspect_report_id, :hidden, :updated_at, :last_apply_report_id, :status, :value, :report, :category
 
