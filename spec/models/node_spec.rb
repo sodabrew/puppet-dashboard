@@ -445,7 +445,7 @@ describe Node do
     it("should destroy dependent reports") do
       @report = Report.generate!(:host => @node.name)
       @node.destroy
-      Report.all.should_not include(@report)
+      Report.all.should_not include([@report])
     end
 
     it "should remove class memberships" do
