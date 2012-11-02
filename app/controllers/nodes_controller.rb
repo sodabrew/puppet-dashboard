@@ -142,14 +142,12 @@ class NodesController < InheritedResources::Base
       set_collection_ivar(scope.with_last_report.by_report_date)
 
       format.html { render :index }
-      format.json { render :text => collection.to_json, :content_type => 'application/json' }
-      format.yaml { render :text => collection.to_yaml, :content_type => 'application/x-yaml' }
-      format.csv do
-        response["Cache-Control"] = 'must-revalidate, post-check=0, pre-check=0'
-        response["Content-Disposition"] = "attachment;filename=#{scope_names.join('-')}-nodes.csv;"
-        render :text => collection.to_csv, :stream => true, :layout => false,
-               :content_type => 'text/comma-separated-values'
-      end
+      format.json { render :json => collection }
+      format.yaml { render :yaml => collection }
+      format.csv {
+        expires_in 0, 'must-revalidate' => true, :private => true
+        render :csv => collection, :filename => "#{scope_names.join('-')}-nodes"
+      }
     end
   end
 end
