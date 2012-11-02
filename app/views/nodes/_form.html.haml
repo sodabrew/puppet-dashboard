@@ -7,11 +7,7 @@
 
   .element
     = form.label :node, "Node"
-    - if @readonly_name
-      %p
-        = h @node.name
-    - else
-      = form.text_field :name, :placeholder => "Enter the node name here"
+    = form.text_field :name, :placeholder => "Enter the node name here", :disabled => !form.object.name.nil?
 
   .element.textarea
     = form.label :description
