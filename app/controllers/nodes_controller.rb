@@ -64,8 +64,6 @@ class NodesController < InheritedResources::Base
   end
 
   def edit
-    # Make the node name readonly
-    @readonly_name = "readonly"
     edit! do |format|
       format.html {
         set_group_and_class_autocomplete_data_sources(@node)

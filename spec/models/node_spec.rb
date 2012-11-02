@@ -313,7 +313,7 @@ describe Node do
 
     it "should not remove classes if node_class_ids and node_class_names are unspecified" do
       @node.node_classes << @classes.first
-      lambda {@node.update_attribute(:name, 'new_name')}.should_not change{@node.node_classes.size}
+      lambda {@node.update_attribute(:description, 'new_desc')}.should_not change{@node.node_classes.size}
     end
 
     describe "via node_class_ids" do
@@ -377,7 +377,7 @@ describe Node do
 
     it "should not remove groups if node_group_ids and node_group_names are unspecified" do
       @node.node_groups << @groups.first
-      lambda {@node.update_attribute(:name, 'new_name')}.should_not change{@node.node_groups.size}
+      lambda {@node.update_attribute(:description, 'new_desc')}.should_not change{@node.node_groups.size}
     end
 
     describe "via node_group_ids" do
