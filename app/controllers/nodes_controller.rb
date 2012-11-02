@@ -54,8 +54,7 @@ class NodesController < InheritedResources::Base
       show!
     rescue ActiveRecord::RecordNotFound => e
       raise e unless request.format == :yaml
-      node = {'classes' => []}
-      render :text => node.to_yaml, :content_type => 'application/x-yaml'
+      render :yaml => {'classes' => []}
     rescue ParameterConflictError => e
       raise e unless request.format == :yaml
       render :text => "Node \"#{resource.name}\" has conflicting parameter(s): #{resource.errors[:parameters].to_a.to_sentence}", :content_type => 'text/plain', :status => 500
