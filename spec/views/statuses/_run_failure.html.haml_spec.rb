@@ -14,15 +14,12 @@ describe "/statuses/_run_failure.html.haml" do
 
       32.times do |n|
         report_yaml = report_yaml_with(:host => "node", :time => n.days.ago)
-
         Report.create_from_yaml(report_yaml)
       end
 
       SETTINGS.stubs(:daily_run_history_length).returns(20)
 
-      assigns[:node] = @node
       render
-
       rendered.should have_tag("tr.labels th", :count => 20)
     end
   end

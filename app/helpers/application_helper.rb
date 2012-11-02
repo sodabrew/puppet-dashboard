@@ -179,7 +179,7 @@ module ApplicationHelper
   end
 
   def wrap_on_slashes(str)
-    (h str).gsub("/","/<wbr />")
+    (h str).gsub("/","/<wbr />").html_safe
   end
 
   # Return HTML describing the search if one is present in params[:q].

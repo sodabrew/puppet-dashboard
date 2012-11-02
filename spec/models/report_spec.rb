@@ -263,7 +263,7 @@ describe Report do
           [ 'Schedule'   ,  'monthly' ,  "0.00" ,  nil ,  nil ,  ['monthly'    ,  'schedule'] ,  0, false ],
           [ 'Schedule'   ,  'never'   ,  "0.00" ,  nil ,  nil ,  ['never'      ,  'schedule'] ,  0, false ],
           [ 'Service'    ,  'mysqld'  ,  "1.56" ,  file,  8   ,  ['class'      ,  'default'   ,  'mysqld' ,  'node' ,  'service'] ,  1, false ],
-          [ 'Exec'       ,'/bin/true' ,  "0.10" ,  file ,  9  ,  ['class'      ,  'default'   ,  'exec' ,  'node' ] ,  1, true ],
+          [ 'Exec'       ,'/bin/true' ,  "0.10" ,  file,  9   ,  ['class'      ,  'default'   ,  'exec'   ,  'node'             ] ,  1, true ],
         ]
         report.events.map { |t| [
           t.property,
