@@ -9,7 +9,7 @@ class Node < ActiveRecord::Base
   extend FindFromForm
 
   validates_presence_of :name
-  validates_uniqueness_of :name
+  validates_uniqueness_of :name, :case_sensitive => false
 
   attr_accessible :name, :created_at
   attr_accessible :description, :parameter_attributes, :assigned_node_group_ids, :assigned_node_class_ids, :node_class_ids, :node_group_ids
@@ -71,6 +71,12 @@ class Node < ActiveRecord::Base
 
   scope :unhidden, where(:hidden => false)
 
+  # Enforce lowercase node name
+  before_save :name_downcase
+  def name_downcase
+    self.name.downcase!
+  end
+
   def self.find_by_id_or_name!(identifier)
     find_by_id(identifier) or find_by_name!(identifier)
   end
@@ -86,13 +92,14 @@ class Node < ActiveRecord::Base
           "production/facts_search/search?#{ queries.join('&') }"
 
     matches = JSON.parse(PuppetHttps.get(url, 'pson'))
+    matches.map!(&:downcase)
     nodes = Node.find_all_by_name(matches)
-    found = nodes.map(&:name).map(&:downcase)
-    matched_nodes = matches.map do |m|
-      Node.create!(:name => m) unless found.include? m.downcase
+    found = nodes.map(&:name)
+    created_nodes = matches.map do |m|
+      Node.create!(:name => m) unless found.include? m
     end
 
-    return nodes + matched_nodes.compact
+    return nodes + created_nodes.compact
   end
 
   def configuration
