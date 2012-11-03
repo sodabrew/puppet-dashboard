@@ -85,7 +85,7 @@ describe NodeGroupsController do
 
         do_put
 
-        @node_group.reload.node_classes.should include([node_class])
+        @node_group.reload.node_classes.should =~ [node_class]
       end
     end
 
