@@ -5,7 +5,6 @@ PuppetDashboard::Application.routes do
   resources :node_classes do
     collection do
       get :search
-      resources :nodes, :constraints => {:id => /.*/}
     end
   end
 
@@ -15,7 +14,6 @@ PuppetDashboard::Application.routes do
     end
     collection do
       get :search
-      resources :nodes, :constraints => {:id => /.*/}
     end
   end
 
