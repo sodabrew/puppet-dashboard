@@ -28,6 +28,10 @@ class NodeClass < ActiveRecord::Base
     SQL
     :group => 'node_classes.id'
 
+  def self.find_by_id_or_name!(identifier)
+    find_by_id(identifier) or find_by_name!(identifier)
+  end
+
   def to_json(options)
     super({:methods => :description, :only => [:name, :id]}.merge(options))
   end

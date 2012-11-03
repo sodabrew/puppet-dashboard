@@ -39,6 +39,10 @@ class NodeGroup < ActiveRecord::Base
 
   assigns_related :node_class, :node_group, :node
 
+  def self.find_by_id_or_name!(identifier)
+    find_by_id(identifier) or find_by_name!(identifier)
+  end
+
   def inspect; "#<NodeGroup id:#{id}, name:#{name.inspect}>" end
 
   def to_json(options)
