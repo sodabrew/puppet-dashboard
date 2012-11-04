@@ -50,6 +50,7 @@ FILE
     File.stubs(:read).with {|filename| File.basename(filename) == "settings.yml"}.returns(@settings_file_all)
     File.stubs(:read).with {|filename| File.basename(filename) == "settings.yml.example"}.returns(@sample_file)
     ::Rails.logger.expects(:debug).with {|msg| msg !~ /Using default values/}
+    ::Rails.logger.expects(:debug).with {|msg| msg !~ /Using default values/}
 
     SettingsReader.read.should == OpenStruct.new(
       "foo"                      => "bar",
