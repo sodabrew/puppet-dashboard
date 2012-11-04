@@ -36,6 +36,7 @@ FILE
   end
 
   it "should use values from settings.yml.example if settings.yml does not exist" do
+    File.stubs(:read).with {|filename| File.basename(filename) == "settings.yml"}.raises(Errno::ENOENT)
     File.stubs(:read).with {|filename| File.basename(filename) == "settings.yml.example"}.returns(@sample_file)
     ::Rails.logger.expects(:debug).with {|msg| msg =~ /Using default values for unspecified settings "bat", "daily_run_history_length", and "foo"/}
 
