@@ -18,6 +18,7 @@ class ResourceStatus < ActiveRecord::Base
     SQL
   }
 
+  # FIXME: Not working yet.
   scope :by_file_content, lambda {|content|
     includes(:events).where(<<-SQL, "{md5}#{content}")
       resource_statuses.resource_type = 'File' AND

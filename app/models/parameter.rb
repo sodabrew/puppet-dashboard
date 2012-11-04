@@ -1,5 +1,3 @@
-require 'trimmer'
-
 class Parameter < ActiveRecord::Base
   include Trimmer
   trimmed_fields :key
