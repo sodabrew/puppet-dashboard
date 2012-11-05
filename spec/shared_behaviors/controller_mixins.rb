@@ -57,13 +57,8 @@ shared_examples_for "without JSON pagination" do
         end
         subject { assigns[model.name.tableize] }
 
-        # NOTE: Once upon a time, the collection was paginated until it was realized that this broke the charts.
-        # it "paginates by the page parameter" do
-          # should be_a_kind_of(WillPaginate::Collection)
-        # end
-
         it "will paginate" do
-          should be_a_kind_of(WillPaginate::Collection)
+          should respond_to(:paginate)
         end
       end
 
