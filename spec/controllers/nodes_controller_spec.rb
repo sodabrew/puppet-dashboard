@@ -510,7 +510,7 @@ describe NodesController do
       specify { response.should be_success }
 
       it "should be paginated" do
-        assigns[:reports].should be_a_kind_of(WillPaginate::Collection)
+        assigns[:reports].should respond_to(:paginate)
       end
     end
   end

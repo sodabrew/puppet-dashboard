@@ -41,7 +41,7 @@
     %tfoot
       %tr
         %td{:colspan => container.nil? ? 8 : 9 }
-          = pagination_for nodes, more_link, (node_count - nodes.count)
+          = pagination_for nodes, more_link, (node_count - nodes.per_page)
     %tbody
       %tr
         %td{:colspan => container.nil? ? 3 : 4} Total
