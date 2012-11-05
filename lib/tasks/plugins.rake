@@ -27,6 +27,7 @@ namespace :puppet do
         raise "Plugin #{plugin_name} not found in vendor/plugins."
       end
 
+      puts "Copying database migrations."
       Dir.glob(File.join(plugin_dir, 'db', 'migrate', '*.rb')) do |source_file|
         base_file_name = File.basename(source_file)
 
@@ -38,6 +39,19 @@ namespace :puppet do
         FileUtils.cp source_file, "db/migrate/#{base_file_name}"
       end
 
+      # Copy over replacement views
+      Dir.glob(File.join(Rails.root, 'app', 'views', 'shared', '*.haml')) do |file_to_replace|
+        file_absolute_path = File.join(plugin_dir, 'app', 'views', 'shared', File.basename(file_to_replace))
+        source_file = Pathname.new(file_absolute_path)
+        target_file = Pathname.new(file_to_replace)
+        if File.exists?(file_absolute_path)
+          puts "Replacing '#{file_to_replace}' with plugin file '#{file_absolute_path}'."
+          target_file.unlink
+          File.copy(source_file, target_file)
+        end
+      end
+
+      puts "Copying public files from '#{plugin_dir}/public/' to '#{Rails.root}/public/'."
       source_dir = Pathname.new(File.join(plugin_dir, 'public'))
       dest_dir   = Pathname.new(File.join(Rails.root, 'public'))
       link_contents(source_dir, dest_dir) if source_dir.directory?
