@@ -1,4 +1,4 @@
-1.2.13-rc1
+1.2.13
 ===
 c2e4a4a (#17161) Fix stylesheet URLs for IE colorbox images
 5378b46 Update debian and redhat init script to use INT instead of term to stop
