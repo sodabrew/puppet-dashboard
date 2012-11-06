@@ -12,8 +12,6 @@ describe "/timeline_events/_timeline_event.html.haml" do
 
       @parameter = Parameter.generate! :parameterable => @node
       @node.reload
-
-      assigns[:node] = @node
     end
 
     context "when this node is the subject" do
@@ -71,7 +69,7 @@ describe "/timeline_events/_timeline_event.html.haml" do
     context "without an assigned node" do
       before :each do
         view.stubs(:timeline_event => @node.timeline_events.first)
-        assigns[:node] = nil
+        @node = nil
         render
       end
 
