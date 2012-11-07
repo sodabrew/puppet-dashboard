@@ -6,6 +6,10 @@
 /pkg/*
 /ext/packaging
 
+# Ignore your configs
+/config/settings.yml
+/config/database.yml
+
 # Ignore bundler config
 /.bundle
 /vendor/bundle
