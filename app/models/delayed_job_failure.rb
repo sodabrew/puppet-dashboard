@@ -3,4 +3,7 @@ class DelayedJobFailure < ActiveRecord::Base
 
   scope :unread, where(:read => false)
   serialize :backtrace
+
+  # attr_readonly :created_at # FIXME
+  attr_accessible :summary, :backtrace, :details, :read, :created_at, :updated_at
 end
