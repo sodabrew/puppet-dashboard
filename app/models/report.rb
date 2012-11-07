@@ -104,7 +104,7 @@ class Report < ActiveRecord::Base
     DelayedJobFailure.create!(
       :summary   => "Importing report #{File.basename(report_file)}",
       :details   => e.to_s,
-      :backtrace => e.application_backtrace
+      :backtrace => Rails.backtrace_cleaner.clean(e.backtrace)
     )
     return nil
   end
