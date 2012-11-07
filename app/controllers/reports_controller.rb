@@ -5,6 +5,8 @@ class ReportsController < InheritedResources::Base
   before_filter :raise_if_enable_read_only_mode, :only => [:new, :edit, :update, :destroy]
   before_filter :handle_raw_post, :only => [:create, :upload]
 
+  attr_accessor :errors
+
   def index
     index! do |success,failure|
       success.html do
