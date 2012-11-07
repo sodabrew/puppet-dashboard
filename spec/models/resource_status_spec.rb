@@ -43,7 +43,7 @@ describe ResourceStatus do
         @other_unmatching_report.resource_statuses.create!(:resource_type => "File", :title => "/etc/sudoers", :events_attributes => [{:property => "content", :previous_value => "{md5}ab07acbb1e496801937adfa772424bf7"}])
         ResourceStatus.by_file_title("/etc/hosts").should == @matching_report.resource_statuses + [@other_unmatching_report.resource_statuses.first]
         ResourceStatus.by_file_content("ab07acbb1e496801937adfa772424bf7").should == @matching_report.resource_statuses + [@other_unmatching_report.resource_statuses.last]
-        ResourceStatus.by_file_title("/etc/hosts").by_file_content("ab07acbb1e496801937adfa772424bf7").should == @matching_report.resource_statuses
+        ResourceStatus.by_file_title("/etc/hosts").by_file_content("ab07acbb1e496801937adfa772424bf7").should ==  [] + @matching_report.resource_statuses
       end
     end
 
