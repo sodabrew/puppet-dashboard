@@ -53,7 +53,7 @@ class ReportsController < InheritedResources::Base
   end
 
   def search
-    flash[:errors] = []
+    @errors = []
     inspected_resources = ResourceStatus.latest_inspections.order("nodes.name")
 
     @title = params[:file_title].to_s.strip
@@ -63,14 +63,14 @@ class ReportsController < InheritedResources::Base
       # Don't do anything; user just navigated to the search page
     else
       if !@title.present?
-        flash[:errors] << "Please specify the file title to search for"
+        @errors << "Please specify the file title to search for"
       end
       if !@content.present?
-        flash[:errors] << "Please specify the file content to search for"
+        @errors << "Please specify the file content to search for"
       elsif !is_md5?(@content)
-        flash[:errors] << "#{@content} is not a valid md5 checksum"
+        @errors << "#{@content} is not a valid md5 checksum"
       end
-      if flash[:errors].empty?
+      if @errors.empty?
         @matching_files = inspected_resources.by_file_title(@title).by_file_content(@content)
         @unmatching_files = inspected_resources.by_file_title(@title).without_file_content(@content)
       end
