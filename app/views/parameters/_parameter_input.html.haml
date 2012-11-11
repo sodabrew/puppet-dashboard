@@ -1,11 +1,46 @@
-- parameter = parameter_input  # change silly partial-based variable name
+- parameters = parameter_input  # change silly partial-based variable name
 - object_name = controller.controller_name.singularize
-%tr
-  %td.key
-    = text_field_tag "#{object_name}[parameter_attributes][][key]", parameter.key, :placeholder => "key"
-  %td.value
-    %div
-      = text_field_tag "#{object_name}[parameter_attributes][][value]", parameter.value, :placeholder => "value"
-      .popup-actions
-        %a.icon.delete{:href => '#'}
-          %span (delete)
+%h3 Parameters
+%table#parameters.inspector
+  %thead
+    %tr
+      %th.key{:scope => :col} Key
+      %th.value{:scope => :col} Value
+      %th.actions{:scope => :col}
+  %tfoot
+    %tr
+      %td{:colspan => 3}
+        %a.button.add{:href => '#',
+          :onclick => "jQuery('table#parameters tr.parameter').first().clone().appendTo('table#parameters tbody').show('fast').find('input').val('').css('color', 'black')".html_safe} Add parameter
+
+  %tbody
+    - # non-visible row that we will clone for the Add Parameter button
+    %tr.parameter{ :style => 'display: none;' }
+      %td.key
+        = text_field_tag "#{object_name}[parameter_attributes][][key]", '', :placeholder => "key"
+      %td.value
+        = text_field_tag "#{object_name}[parameter_attributes][][value]", '', :placeholder => "value"
+      %td.actions
+        %a.icon.delete{:href => '#',
+          :onclick => "jQuery(this).parents('tr').remove()".html_safe} Remove parameter
+
+    - # existing parameters
+    - parameters.each do |param|
+      %tr.parameter
+        %td.key
+          = text_field_tag "#{object_name}[parameter_attributes][][key]", param.key, :placeholder => "key"
+        %td.value
+          = text_field_tag "#{object_name}[parameter_attributes][][value]", param.value, :placeholder => "value"
+        %td.actions
+          %a.icon.delete{:href => '#',
+            :onclick => "jQuery(this).parents('tr').remove()".html_safe} Remove parameter
+
+    - # one blank row
+    %tr.parameter
+      %td.key
+        = text_field_tag "#{object_name}[parameter_attributes][][key]", '', :placeholder => "key"
+      %td.value
+        = text_field_tag "#{object_name}[parameter_attributes][][value]", '', :placeholder => "value"
+      %td.actions
+        %a.icon.delete{:href => '#',
+          :onclick => "jQuery(this).parents('tr').remove()".html_safe} Remove parameter
