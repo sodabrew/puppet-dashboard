@@ -16,11 +16,9 @@ gem 'rack'
 gem 'daemons'
 gem 'json_pure'
 
-# TODO: rails generate delayed_job:upgrade
-gem 'delayed_job_active_record', '~> 0.3'
-
-# TODO: probably needs some upgrade steps?
-gem 'timeline_fu'
+gem 'delayed_job', '~> 3.0'
+gem 'delayed_job_active_record', '~> 0.3.3'
+gem 'timeline_fu', '~> 0.3.0'
 
 group :development, :test do
   gem 'mocha', :require => false
