@@ -15,17 +15,7 @@
 
   - if SETTINGS.use_external_node_classification
     .element
-      %h3 Parameters
-      %table#parameters.inspector
-        %tbody
-          - if form.object.parameters.blank?
-            = render :partial => 'parameters/parameter_input', :object => form.object.parameters.build
-          - else
-            = render :partial => 'parameters/parameter_input', :collection => form.object.parameters
-        %tfoot
-          %tr
-            %td{:colspan => 2}
-              = link_to_function("Add parameter", :class => "add button") { |page|  page.insert_html :bottom, 'parameters', :partial => 'parameters/parameter_input', :object => form.object.parameters.build }
+      = render :partial => 'parameters/parameter_input', :object => form.object.parameters
 
     = render :partial => 'shared/tokenized_text_box',
       :locals => { :model => 'node_class',
