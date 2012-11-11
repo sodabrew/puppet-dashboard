@@ -3,7 +3,7 @@
 = header_for(form)
 
 .item
-  = render :partial => 'shared/form_errors', :collection => form.object.errors
+  = render :partial => 'shared/form_errors', :object => form.object.errors
 
   .element
     = form.label :node, "Node"
