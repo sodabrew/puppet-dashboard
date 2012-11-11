@@ -7,6 +7,17 @@ nodes, and view inventory data and backed-up file contents.
 
 For full documentation, see the [Puppet Dashboard 1.2 Manual](http://docs.puppetlabs.com/dashboard/manual/1.2).
 
+Rails 3 Branch
+--------------
+
+This is the Rails 3 branch of Puppet Dashboard. A great number of changes are
+on this branch vs. the mainline PD 1.2.x / Rails 2 branch. A short summary:
+
+* Update to Rails 3.2, Bundler 1.x, rspec 2, and many other gems.
+* Update jQuery to 1.8.
+* Use Rails mass-assignment protection.
+* Remove Prototype JS.
+
 Dependencies
 ------------
 
@@ -22,7 +33,7 @@ Fast Install
 * Create a MySQL database and user, and set `max_allowed_packet` to 32M.
 * `gem install bundler`
 * `bundle install --path vendor/bundle`
-* `bundle exec rake db:migrate`
+* `bundle exec rake db:setup`
 * `bundle exec rails start`
 * Set up Puppet to be Dashboard-aware.
 * Start the delayed job worker processes.
@@ -36,45 +47,8 @@ Puppet Dashboard uses Mark James' fine [Silk icons](http://www.famfamfam.com/lab
 
 Thanks, Mark!
 
-Contributors
+Contributing
 ------------
 
-* Adrien Thebo <adrien@puppetlabs.com>
-* Andreas Zuber <zuber@puzzle.ch>
-* Andrew Maier <dev+andrewmaier@hashrocket.com>
-* Bruno Leon <bruno.leon@savoirfairelinux.com>
-* Carl Caum <carl@carlcaum.com>
-* Chad Metcalf <chad@cloudera.com>
-* Chris W <cwacek@gmail.com>
-* Daniel Pittman <daniel@puppetlabs.com>
-* Daniel Sauble <djsauble@puppetlabs.com>
-* Danijel Ilisin <danijel.ilisin@sinnerschrader.com>
-* Devon Harless <devon@puppetlabs.com>
-* Evan Sparkman <evansparkman@esdezines.(none)>
-* Ian Ward Comfort <icomfort@stanford.edu>
-* Igal Koshevoy <igal@pragmaticraft.com>
-* Jacob Helwig <jacob@puppetlabs.com>
-* James Turnbull <james@puppetlabs.com>
-* Jesse Wolfe <jes5199@gmail.com>
-* Jonathan Grochowski <jonathan@puppetlabs.com>
-* Josh Cooper <josh@puppetlabs.com>
-* Joshua Harlan Lifton <lifton@puppetlabs.com>
-* Matt Robinson <matt@puppetlabs.com>
-* Matthaus Litteken <matthaus@puppetlabs.com>
-* Max Martin <max@puppetlabs.com>
-* Michael Stahnke <stahnma@puppetlabs.com>
-* Moses Mendoza <moses@puppetlabs.com>
-* Nick Fagerlund <nick.fagerlund@gmail.com>
-* Nick Lewis <nick@puppetlabs.com>
-* Nigel Kersten <nigel@puppetlabs.com>
-* Patrick Carlisle <patrick@puppetlabs.com>
-* Paul Berry <paul@puppetlabs.com>
-* Peter Meier <peter.meier@immerda.ch>
-* Pieter van de Bruggen <pieter@puppetlabs.com>
-* Randall Hansen <randall@puppetlabs.com>
-* Rein Henrichs <reinh@reinh.com>
-* Richard Clamp <richardc@unixbeard.net>
-* Rick Bradley <rick@rickbradley.com>
-* Rob <rob@ldg.net>
-* Saj Goonatilleke <sg@redu.cx>
-* Scott Smith <scott@ohlol.net>
+To contribute to this project, please read [CONTRIBUTING](puppet-dashboard/blob/rails3/CONTRIBUTING.md).
+A list of contributors is found in [CONTRIBUTORS](puppet-dashboard/blob/rails3/CONTRIBUTORS.md). Thanks!
