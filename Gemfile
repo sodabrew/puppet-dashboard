@@ -1,5 +1,6 @@
 source :rubygems
 
+gem 'rake'          , '~> 0.9.3'
 gem 'rails'         , '~> 3.2'
 gem 'mysql2'        , '~> 0.3.11'
 gem 'jquery-rails'  , '~> 2.1'
@@ -21,7 +22,7 @@ gem 'delayed_job_active_record', '~> 0.3.3'
 gem 'timeline_fu', '~> 0.3.0'
 
 group :development, :test do
-  gem 'mocha', :require => false
+  gem 'mocha', '~> 0.12.0', :require => false
   gem 'sqlite3'
   gem 'rspec-rails'
   gem 'factory_girl', '< 3.0' # supports ruby 1.8.7
