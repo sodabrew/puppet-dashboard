@@ -8,9 +8,13 @@ namespace :puppet do
         target_file = Pathname.new(target_dir + source_file.basename)
 
         if source_file.directory?
-          target_file.mkdir unless target_file.exist?
+          unless target_file.exist?
+            puts "Creating directory #{target_file}."
+            target_file.mkdir
+          end
           link_contents(source_file, target_file)
         else
+          puts "Copying '#{source_file}' to '#{target_file}'."
           target_file.unlink if target_file.exist?
           File.copy(source_file, target_file)
         end
@@ -27,6 +31,7 @@ namespace :puppet do
         raise "Plugin #{plugin_name} not found in vendor/plugins."
       end
 
+      puts "Copying database migrations."
       Dir.glob(File.join(plugin_dir, 'db', 'migrate', '*.rb')) do |source_file|
         base_file_name = File.basename(source_file)
 
@@ -35,9 +40,11 @@ namespace :puppet do
             "Migrations for this plugin must be named in the form: YYYYMMDDHHMMSS_plugin_#{plugin_name}_*.rb"
         end
 
+        puts "Copying #{base_file_name}."
         FileUtils.cp source_file, "db/migrate/#{base_file_name}"
       end
 
+      puts "Copying public files from '#{plugin_dir}/public/' to '#{Rails.root}/public/'."
       source_dir = Pathname.new(File.join(plugin_dir, 'public'))
       dest_dir   = Pathname.new(File.join(Rails.root, 'public'))
       link_contents(source_dir, dest_dir) if source_dir.directory?
