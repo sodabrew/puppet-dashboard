@@ -35,17 +35,17 @@ class Status
     sql = <<-SQL
       SELECT
         COUNT(*)                                            as total,
-        SUM(CASE status when "unchanged" then 1 else 0 end) as unchanged,
-        SUM(CASE status when "changed" then 1 else 0 end)   as changed,
-        SUM(CASE status when "pending" then 1 else 0 end)   as pending,
-        SUM(CASE status when "failed" then 1 else 0 end)    as failed,
+        SUM(CASE status when 'unchanged' then 1 else 0 end) as unchanged,
+        SUM(CASE status when 'changed' then 1 else 0 end)   as changed,
+        SUM(CASE status when 'pending' then 1 else 0 end)   as pending,
+        SUM(CASE status when 'failed' then 1 else 0 end)    as failed,
         #{boundary_groupings}                               as start
       FROM reports
     SQL
 
     sql << "WHERE kind = 'apply'\n"
-    sql << "AND time < \"#{newest_accepatable_data.utc.to_s(:db)}\"\n"
-    sql << "AND time >= \"#{utc_date_boundaries.last.utc.to_s(:db)}\"\n"
+    sql << "AND time < '#{newest_accepatable_data.utc.to_s(:db)}'\n"
+    sql << "AND time >= '#{utc_date_boundaries.last.utc.to_s(:db)}'\n"
     sql << "AND node_id = #{options[:node].id}\n"                      if options[:node]
     sql << "AND node_id IN (#{options[:nodes].map(&:id).join(',')})\n" if options[:nodes].present?
     sql << "GROUP BY start\n"
