@@ -1,3 +1,16 @@
+1.2.15-rc1
+===
+8133354 In will_paginate 2.x, default per_page is hardcoded 30.
+3c80866 Now that we ship 1.8.7, we can build for el5
+5b4d83f Unit tests for out-of-bounds-pagination.
+251674b Handle out-of-range and bogus pagination inputs.
+757c518 (maint) fix failing tests
+0aadf88 (maint) fix session killing
+4ca7363 Verbosity++ for puppet:plugin:install rake task
+6dfb877 Make SQL status query more PostgreSQL-friendly.
+54b9714 Modified to add the additional behavior in a saner way per dpittman's suggestion.
+b11c36a (#16333) Override AR MySQL connector to set sql_mode
+
 1.2.13
 ===
 c2e4a4a (#17161) Fix stylesheet URLs for IE colorbox images
