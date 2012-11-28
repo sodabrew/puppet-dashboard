@@ -2,7 +2,7 @@
 %html{ :lang => "en", "xml:lang" => "en", :xmlns => "http://www.w3.org/1999/xhtml" }
   %head
     - page_title = yield(:page_title)
-    %title= [ page_title, 'Puppet Node Manager'].compact.join(' - ')
+    %title= [ page_title, 'Puppet Node Manager'].compact.reject(&:blank?).join(' - ')
     %link{ :href => "/favicon.ico", :rel => "shortcut icon" }
     %meta{ :content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type" }
 
