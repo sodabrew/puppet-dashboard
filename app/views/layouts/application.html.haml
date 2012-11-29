@@ -27,8 +27,9 @@
       #header
         = render 'shared/global_nav'
       #content
-        - [:success, :warning, :failure].each do |type|
+        - [:success, :warning, :failure, :notice, :alert].each do |type|
           - if message = flash[type]
+            - type = :warning if type == :alert
             %div.section#flash{:class => type}
               .close= link_to_function icon(:close), "jQuery('#flash').hide()"
               %p
@@ -36,4 +37,7 @@
                 = h message
         = yield
       #footer
-        %p= link_to "&copy; Copyright #{Time.now.year} Puppet Labs".html_safe, 'http://puppetlabs.com/'
+        %p
+          = link_to raw("&copy; Copyright #{Time.now.year} Puppet Labs"), 'http://puppetlabs.com/'
+          &mdash;
+          = link_to h(APP_VERSION), APP_VERSION_LINK
