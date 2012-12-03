@@ -1,0 +1,11 @@
+= stylesheet_link_tag 'popups', :cache => 'all'
+#popupWindowGlass
+#popupWindowLayoutHelperTable
+  #popupWindowLayoutHelperTableCell
+    #popupWindow
+      = h(message).gsub("\\n", "<br/>").gsub(" ", "&nbsp;")
+      #popupWindowButtons
+        %button{:onclick => on_confirm_clicked_script}
+          = confirm_label
+        or
+        = link_to_function 'Cancel', "$('popupWindowGlass').parentNode.parentNode.removeChild($('popupWindowGlass').parentNode);"
