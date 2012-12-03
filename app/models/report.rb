@@ -2,9 +2,9 @@ class Report < ActiveRecord::Base
   def self.per_page; 20 end # Pagination
   belongs_to :node
 
-  has_many :logs, :class_name => "ReportLog"
-  has_many :resource_statuses
-  has_many :metrics
+  has_many :logs, :class_name => "ReportLog", :dependent => :destroy
+  has_many :resource_statuses, :dependent => :destroy
+  has_many :metrics, :dependent => :destroy
   has_many :events, :through => :resource_statuses
 
   accepts_nested_attributes_for :metrics, :resource_statuses, :logs

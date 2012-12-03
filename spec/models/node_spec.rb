@@ -157,9 +157,16 @@ describe Node do
       @node.configuration.keys.sort.should == ['classes', 'name', 'parameters']
     end
 
-    it "should return the names of the node's classes in the returned class list" do
+#This does not seem to work any more
+#    it "should return the names of the node's classes in the returned class list" do
+#      @node.node_classes = @classes = Array.new(3) { NodeClass.generate! }
+#      @node.configuration['classes'].sort.should == @classes.collect(&:name).sort
+#    end
+
+    #This is a new version of the former test
+    it "should return the names of the node's classes in the keys of the returned class list" do
       @node.node_classes = @classes = Array.new(3) { NodeClass.generate! }
-      @node.configuration['classes'].sort.should == @classes.collect(&:name).sort
+      @node.configuration['classes'].keys.sort.should == @classes.collect(&:name).sort
     end
 
     it "should return the node's compiled parameters in the returned parameters list" do
@@ -232,7 +239,7 @@ describe Node do
     describe "handling parameters in the graph" do
 
       it "should return the compiled parameters" do
-        @node.compiled_parameters.should == [
+        @node.compiled_parameters.sort{|a,b| a[:value] <=> b[:value]}.should == [
           { :name => 'foo', :value => '1', :sources => Set[@node_group_a] },
           { :name => 'bar', :value => '2', :sources => Set[@node_group_b]  }
         ]
@@ -243,7 +250,7 @@ describe Node do
         @node_group_a1.parameters << Parameter.create(:key => 'foo', :value => '2')
         @node_group_a.node_groups << @node_group_a1
 
-        @node.compiled_parameters.should == [
+        @node.compiled_parameters.sort{|a,b| a[:value] <=> b[:value]}.should == [
           { :name => 'foo', :value => '1', :sources => Set[@node_group_a] },
           { :name => 'bar', :value => '2', :sources => Set[@node_group_b] }
         ]
@@ -264,12 +271,12 @@ describe Node do
       end
 
       it "should not raise an error if there are parameter conflicts that can be resolved at a higher level" do
-        @param_3 = Parameter.generate(:key => 'foo', :value => '3')
-        @param_4 = Parameter.generate(:key => 'foo', :value => '4')
+        param_3 = Parameter.generate(:key => 'foo', :value => '3')
+        param_4 = Parameter.generate(:key => 'foo', :value => '4')
         @node_group_c = NodeGroup.generate!
-        @node_group_c.parameters << @param_3
+        @node_group_c.parameters << param_3
         @node_group_d = NodeGroup.generate!
-        @node_group_d.parameters << @param_4
+        @node_group_d.parameters << param_4
         @node_group_a.node_groups << @node_group_c << @node_group_d
 
         lambda {@node.compiled_parameters}.should_not raise_error(ParameterConflictError)
@@ -290,7 +297,7 @@ describe Node do
         @node_group_a.node_groups << @node_group_c
         @node_group_a.node_groups << @node_group_d
 
-        @node.compiled_parameters.should == [
+        @node.compiled_parameters.sort{|a,b| a[:value] <=> b[:value]}.should == [
           { :name => 'foo', :value => '1', :sources => Set[@node_group_a] },
           { :name => 'bar', :value => '2', :sources => Set[@node_group_b] }
         ]
