@@ -1,11 +1,9 @@
 class ReportsController < InheritedResources::Base
-  belongs_to :node, :optional => true
+  belongs_to :node, :optional => true, :finder => :find_by_url!
   protect_from_forgery :except => [:create, :upload]
 
   before_filter :raise_if_enable_read_only_mode, :only => [:new, :edit, :update, :destroy]
   before_filter :handle_raw_post, :only => [:create, :upload]
-
-  attr_accessor :errors
 
   def index
     index! do |success,failure|
@@ -55,7 +53,7 @@ class ReportsController < InheritedResources::Base
   end
 
   def search
-    @errors = []
+    flash[:errors] = []
     inspected_resources = ResourceStatus.latest_inspections.order("nodes.name")
 
     @title = params[:file_title].to_s.strip
@@ -65,14 +63,14 @@ class ReportsController < InheritedResources::Base
       # Don't do anything; user just navigated to the search page
     else
       if !@title.present?
-        @errors << "Please specify the file title to search for"
+        flash[:errors] << "Please specify the file title to search for"
       end
       if !@content.present?
-        @errors << "Please specify the file content to search for"
+        flash[:errors] << "Please specify the file content to search for"
       elsif !is_md5?(@content)
-        @errors << "#{@content} is not a valid md5 checksum"
+        flash[:errors] << "#{@content} is not a valid md5 checksum"
       end
-      if @errors.empty?
+      if flash[:errors].empty?
         @matching_files = inspected_resources.by_file_title(@title).by_file_content(@content)
         @unmatching_files = inspected_resources.by_file_title(@title).without_file_content(@content)
       end

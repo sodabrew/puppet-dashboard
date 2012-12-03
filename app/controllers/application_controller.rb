@@ -12,19 +12,8 @@ class ApplicationController < ActionController::Base
   filter_parameter_logging :password
 
   before_filter :set_timezone
-  before_filter :set_autorefresh
 
   private
-
-  def set_autorefresh
-    if params[:autorefresh]
-      if params[:autorefresh] == "true"
-        session[:autorefresh] = true
-      else
-        session.delete(:autorefresh)
-      end
-    end
-  end
 
   def raise_if_enable_read_only_mode
     raise ReadOnlyEnabledError.new if SETTINGS.enable_read_only_mode || session['ACCESS_CONTROL_ROLE'] == 'READ_ONLY'
@@ -85,4 +74,17 @@ class ApplicationController < ActionController::Base
       :objects     => source_object.node_groups
     }
   end
+
+  def force_create?
+    !params[:force_create].nil? && params[:force_create] == "true"
+  end
+
+  def force_update?
+    !params[:force_update].nil? && params[:force_update] == "true"
+  end
+
+  def force_delete?
+    !params[:force_delete].nil? && params[:force_delete] == "true"
+  end
+
 end

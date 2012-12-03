@@ -1,0 +1,151 @@
+This package was debianized by James Turnbull <james@lovedthanlost.net> on Thu, 25 Mar 2010 21:09:10 +1100.
+
+It was downloaded from http://github.com/puppetlabs/puppet-dashboard
+
+Upstream Author:
+
+    Puppet Labs <info@puppetlabs.com>
+
+Copyright:
+
+    Copyright (C) 2009-2010  Puppet Labs
+
+License: Apache-2.0
+    On Debian systems, the complete text of the GNU General
+    Public License can be found in '/usr/share/common-licenses/Apache-2.0'.
+
+The Debian packaging is copyright 2011 Michael Stahnke <stahnma@puppetlabs.com>,
+and is licensed under the Apache-2.0, see `/usr/share/common-licenses/Apache-2.0'.
+
+Files: vendor/plugins/inherited_resources
+Copyright: (c) 2009 Jose Valim
+License: MIT
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in
+ all copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ THE SOFTWARE.
+
+Files: vendor/plugins/rspec-rails
+Copyright: (c) 2005-2009 The RSpec Development Team
+License: MIT
+
+Files: vendor/plugins/timeline_fu
+Copyright: (c) 2008 James Golick
+License: MIT
+
+Files: vendor/plugins/will_paginate
+Copyright: (c) 2007 PJ Hyett and Mislav Marohnic
+License: MIT
+
+Files: vendor/gems/haml
+Copyright: (c) 2006-2009 Hampton Catlin, Nathan Weizenbaum, and Chris Eppstein
+License: MIT
+
+Files: vendor/gems/mocha
+Copyright: (c) 2006 Revieworld Ltd
+License: MIT
+
+Files: vendor/gems/rack
+Copyright: (C) 2007, 2008, 2009 Christian Neukirchen
+License: MIT
+
+Files: vendor/gems/rspec
+Copyright: (c) 2005-2009 The RSpec Development Team
+License: MIT
+
+Files: vendor/gems/thoughtbot-shoulda
+Copyright: (c) 2007, Tammer Saleh, Thoughtbot, Inc
+License: MIT
+
+Files: vendor/rails
+Copyright: (c) 2004-2009 David Heinemeier Hansson <david@loudthinking.com>
+License: MIT
+
+Files: public/images/icons
+Copyright: (c) 2005 Mark James <mjames@gmail.com>
+License: Creative Commons Attribution 3.0 License
+
+Files: public/javascripts/excanvas.min.js
+Copyright: (c) 2007-2011 IOLA and Ole Laursen
+License: MIT
+
+Files: public/javascripts/excanvas.min.js
+Copyright: (c) 2009 Kilian Valkhof, Alex R. Young
+License: MIT
+
+Files: public/javascripts/jquery.colorbox.js
+Copyright: (c) 2010 Jack Moore <jack@colorpowered.com>
+License: MIT
+
+Files: public/javascripts/jquery.form.js
+Copyright: (c) 2009
+License: MIT/GPL
+
+Files: public/javascripts/jquery.livequery.js
+Copyright: (c) 2008 Brandon Aaron (http://brandonaaron.net)
+License: MIT/GPL
+
+Files: public/javascripts/jquery.min.js
+Copyright: (c) 2011 John Resig
+License: MIT/GPL 2
+
+Files: public/javascripts/jquery.placeholders.js
+Copyright: (c) 2009 Mark Dodwell
+License: MIT
+
+Files: public/javascripts/jquery.templating.js
+Copyright: (c) Yehuda Katz
+License: BSD/GPL
+
+Files: public/javascripts/jquery.tipsy.js
+Copyright: (c) 2008-2010  jason frame [jason@onehackoranother.com]
+License: MIT
+
+Files: public/javascripts/jquery.tokeninput.js
+Copyright: (c) 2009 James Smith (http://loopj.com)
+License: MIT/GPL
+
+Files: public/javascripts/jquery.ui.js
+Copyright: (c) 2011 AUTHORS.txt (http://jqueryui.com/about)
+License: MIT/GPL 2
+
+Files: public/javascripts/jquery.ui.combobox.js
+Copyright: unknown
+License: unknown
+
+Files: public/javascripts/jquery.ui.tabs.js
+Copyright: (c) 2011 AUTHORS.txt (http://jqueryui.com/about)
+License: MIT/GPL 2
+
+Files: public/javascripts/jrails.js
+Copyright: unknown
+License: unknown
+
+Files: public/javascripts/prototype.js
+Copyright: (c) 2005-2009 Sam Stephenson
+License: MIT
+
+Files: public/javascripts/raphael-min.js
+Copyright: (c) 2009 Dmitry Baranovskiy (http://raphaeljs.com)
+License: MIT
+
+Files: public/javascripts/bootstrap-dropdown.js
+Copyright: (c) 2011 Twitter, Inc.
+License: Apache 2.0
+
+Files: public/javascripts/.js
+Copyright: (c) 2011 Twitter, Inc.
+License: Apache 2.0

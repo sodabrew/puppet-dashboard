@@ -1,0 +1,122 @@
+#!/bin/bash
+#
+# Init script for puppet-dashboard
+#
+# chkconfig: - 85 15
+# description: Init script for puppet-dashboard
+
+# Source function library.
+. /etc/rc.d/init.d/functions
+
+if [ -f /etc/sysconfig/puppet-dashboard ]; then
+    . /etc/sysconfig/puppet-dashboard
+fi
+
+DASHBOARD_HOME=${DASHBOARD_HOME:-/usr/share/puppet-dashboard}
+DASHBOARD_USER=${DASHBOARD_USER:-puppet-dashboard}
+DASHBOARD_RUBY=${DASHBOARD_RUBY:-/usr/bin/ruby}
+DASHBOARD_ENVIRONMENT=${DASHBOARD_ENVIRONMENT:-production}
+DASHBOARD_IFACE=${DASHBOARD_IFACE:-0.0.0.0}
+DASHBOARD_PORT=${DASHBOARD_PORT:-3000}
+
+PIDFILE=/var/run/puppet-dashboard.pid
+RETVAL=0
+
+check_status() {
+        pidofproc -p ${PIDFILE} ${DASHBOARD_RUBY} > /dev/null
+}
+
+start() {
+        echo -n $"Starting Puppet Dashboard: "
+
+        # Don't start it twice.
+        check_status
+        RETVAL=$?
+        if [ $RETVAL = 0 ]; then
+            echo -n "Already running"
+            echo_success
+            echo
+            return 0
+        fi
+
+        # This is a no longer a dirty, dirty hack, we now daemonize the server.
+        # Also: We have access to daemon.
+        daemon --user ${DASHBOARD_USER} --pidfile ${PIDFILE} "${DASHBOARD_RUBY} ${DASHBOARD_HOME}/script/server -e ${DASHBOARD_ENVIRONMENT} -p ${DASHBOARD_PORT} -b ${DASHBOARD_IFACE} -d"
+
+        # Grab the pid. pidof doesn't work well here, so we use pgrep
+        local PID=`pgrep -f "${DASHBOARD_RUBY} ${DASHBOARD_HOME}/script/server -e ${DASHBOARD_ENVIRONMENT} -p ${DASHBOARD_PORT} -b ${DASHBOARD_IFACE} -d"`
+        echo $PID > ${PIDFILE}
+
+        sleep 5
+
+        check_status
+        RETVAL=$?
+
+        if [ $RETVAL = 0 ]; then
+            echo_success
+        else
+            echo_failure
+        fi
+
+        echo
+        return $RETVAL
+}
+
+stop() {
+        echo -n $"Stopping Puppet Dashboard: "
+        killproc -p ${PIDFILE} puppet-dashboard
+        RETVAL=$?
+        if [ $RETVAL = 0 ]; then
+            echo_success
+        else
+            echo_failure
+        fi
+
+        echo
+        return $RETVAL
+}
+
+restart () {
+        stop
+        start
+}
+
+status () {
+        echo -n 'Puppet Dashboard is '
+        pidofproc -p ${PIDFILE} ${DASHBOARD_RUBY} > /dev/null
+        RETVAL=$?
+        if [ $RETVAL = 0 ]; then
+            echo 'running'
+        else
+            echo 'stopped'
+        fi
+        return $RETVAL
+}
+
+force_reload () {
+        restart
+}
+
+# See how we were called.
+case "$1" in
+    start)
+        start
+        ;;
+    stop)
+        stop
+        ;;
+    restart)
+        restart
+        ;;
+    status)
+        status
+        ;;
+    force-reload)
+        force_reload
+        ;;
+    *)
+        echo "Usage: $0 {start|stop|restart|status|force-reload}"
+        exit 2
+esac
+
+exit $?

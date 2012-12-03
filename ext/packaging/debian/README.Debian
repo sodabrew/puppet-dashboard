@@ -1,0 +1,30 @@
+Puppet Dashboard for Debian
+===========================
+
+Overview
+--------
+
+This package installs the Puppet Dashboard into `/usr/share/puppet-dashboard` -- this directory will be referred to as the "Puppet Dashboard directory" throughout this document. 
+
+Please also read the general usage and installation instructions in the `README.markdown` file in the Puppet Dashboard directory.
+
+Installation
+------------
+
+1. Install a MySQL server if you don't already have one, e.g.:
+
+    sudo apt-get install mysql-server
+
+1. Create an `/etc/puppet-dashboard/database.yml` file. Please see `/usr/share/doc/puppet-dashboard/examples/database.yml.example` for an example.
+
+2. Create the database by running the following commands from the Puppet Dashboard directory:
+
+    rake RAILS_ENV=production db:create
+
+3. Apply the database migrations by running the following commands from the Puppet Dashboard directory, you will need to do this after upgrading to a new release:
+
+    rake RAILS_ENV=production db:migrate
+
+4. Start the Puppet Dashboard server:
+
+    sudo service puppet-dashboard start

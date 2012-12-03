@@ -1,8 +1,11 @@
-= focus (@readonly_name ? :node_description : :node_name)
+= focus(@readonly_name ? :node_description : :node_name)
 
 = header_for(form)
 
 .item
+  .section
+    #error_messages{:style => "display: none;"}
+
   = form.error_messages
 
   .element

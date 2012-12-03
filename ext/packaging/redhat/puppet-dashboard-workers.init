@@ -1,0 +1,98 @@
+#!/bin/bash
+#
+# puppet-dashboard-workers		Start up the puppet-dashboard-workers
+#
+# chkconfig: - 95 5
+# description: Delayed_job (or DJ) encapsulates the common pattern of \
+#              asynchronously executing longer tasks in the background.
+#
+# processname: puppet-dashboard-workers
+
+# source function library
+. /etc/rc.d/init.d/functions
+
+name=puppet-dashboard-workers
+
+# pull in sysconfig settings
+# first the general dashboard settings, then the dedicated settings for
+# the workers
+[ -f /etc/sysconfig/puppet-dashboard ] && . /etc/sysconfig/puppet-dashboard
+[ -f /etc/sysconfig/$name ] && . /etc/sysconfig/$name
+
+# The default dashboard root if not set in sysconfig
+: ${DASHBOARD_HOME:=/usr/share/puppet-dashboard}
+
+RETVAL=0
+prog="${name}"
+lockfile=/var/lock/subsys/$prog
+
+start()
+{
+	echo -n $"Starting $prog: "
+	daemon --user ${DASHBOARD_USER} "bash -e -c '
+		export PATH='${PATH}';
+		export RUBYLIB='${RUBYLIB:-}';
+		export RAILS_ENV=production;
+		${DASHBOARD_RUBY} ${DASHBOARD_HOME}/script/delayed_job -p dashboard -n ${CPUS:-2} -m start;'"
+	RETVAL=$?
+	[ $RETVAL -eq 0 ] && touch $lockfile
+	echo
+	return $RETVAL
+}
+
+stop()
+{
+	echo -n $"Stopping $prog: "
+	bash -e -c "
+		export PATH='${PATH}';
+		export RUBYLIB='${RUBYLIB}';
+		export RAILS_ENV=production;
+		${DASHBOARD_RUBY} ${DASHBOARD_HOME}/script/delayed_job -p dashboard -n ${CPUS:-2} -m stop;"
+	RETVAL=$?
+	[ $RETVAL -eq 0 ] && (rm -f $lockfile; echo_success) || echo_failure
+	echo
+}
+
+restart() {
+	stop
+	start
+}
+
+rh_status() {
+	RETVAL=1
+	for pidfile in $(ls -1 "${DASHBOARD_HOME}"/tmp/pids/delayed_job.*.pid 2>/dev/null)
+	do
+		status -p $pidfile puppet-dashboard-workers || return $?
+		RETVAL=$?
+	done
+	return $RETVAL
+}
+
+rh_status_q() {
+	rh_status >/dev/null 2>&1
+}
+
+case "$1" in
+	start)
+		rh_status_q && exit 0
+		start
+		;;
+	stop)
+		if ! rh_status_q; then
+			rm -f $lockfile
+			exit 0
+		fi
+		stop
+		;;
+	restart)
+		restart
+		;;
+	status)
+		rh_status
+		RETVAL=$?
+		;;
+	*)
+		echo $"Usage: $0 {start|stop|restart|status}"
+		RETVAL=2
+esac
+exit $RETVAL

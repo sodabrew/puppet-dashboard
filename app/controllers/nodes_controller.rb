@@ -6,6 +6,8 @@ class NodesController < InheritedResources::Base
 
   layout lambda {|c| c.request.xhr? ? false : 'application' }
 
+  include ConflictAnalyzer
+
   def index
     raise NodeClassificationDisabledError.new if !SETTINGS.use_external_node_classification and request.format == :yaml
     scoped_index :unhidden
@@ -24,11 +26,35 @@ class NodesController < InheritedResources::Base
   end
 
   def create
-    create! do |success, failure|
-      failure.html {
-        set_group_and_class_autocomplete_data_sources(@node)
-        render :new
-      }
+    ActiveRecord::Base.transaction do
+
+      create! do |success, failure|
+        success.html {
+          node = Node.find_by_name(params[:node][:name])
+ 
+          unless(force_create?)
+ 
+            new_conflicts_message = get_new_conflicts_message({}, node)
+            unless new_conflicts_message.nil?
+              html = render_to_string(:template => "shared/_confirm",
+                                      :layout => false,
+                                      :locals => { :message => new_conflicts_message, :confirm_label => "Create", :on_confirm_clicked_script => "$('force_create').value = 'true'; $('submit_button').click();" })
+              render :json => { :status => "ok", :valid => "false", :confirm_html => html }, :content_type => 'application/json'
+              raise ActiveRecord::Rollback
+            end
+          end
+ 
+          render :json => { :status => "ok", :valid => "true", :redirect_to => url_for(node) }, :content_type => 'application/json'
+        };
+ 
+        failure.html {
+          set_group_and_class_autocomplete_data_sources(@node)
+          html = render_to_string(:template => "shared/_error",
+                                  :layout => false,
+                                  :locals => { :object_name => 'node', :object => @node })
+          render :json => { :status => "error", :error_html => html }, :content_type => 'application/json'
+        }
+      end
     end
   end
 
@@ -59,6 +85,9 @@ class NodesController < InheritedResources::Base
     rescue ParameterConflictError => e
       raise e unless request.format == :yaml
       render :text => "Node \"#{resource.name}\" has conflicting parameter(s): #{resource.errors.on(:parameters).to_a.to_sentence}", :content_type => 'text/plain', :status => 500
+    rescue ClassParameterConflictError => e
+        raise e unless request.format == :yaml
+        render :text => "Node \"#{resource.name}\" has conflicting class parameter(s): #{resource.errors.on(:classParameters).to_a.to_sentence}", :content_type => 'text/plain', :status => 500
     rescue NodeClassificationDisabledError => e
       render :text => "Node classification has been disabled", :content_type => 'text/plain', :status => 403
     end
@@ -75,11 +104,38 @@ class NodesController < InheritedResources::Base
   end
 
   def update
-    update! do |success, failure|
-      failure.html {
-        set_group_and_class_autocomplete_data_sources(@node)
-        render :edit
-      }
+    ActiveRecord::Base.transaction do
+      old_conflicts = force_update? ? nil : get_current_conflicts(Node.find_by_id(params[:id]))
+
+      update! do |success, failure|
+        success.html {
+          node = Node.find_by_id(params[:id])
+
+          unless(force_update?)
+
+            new_conflicts_message = get_new_conflicts_message(old_conflicts, node)
+            unless new_conflicts_message.nil?
+              html = render_to_string(:template => "shared/_confirm",
+                                      :layout => false,
+                                      :locals => { :message => new_conflicts_message, :confirm_label => "Update", :on_confirm_clicked_script => "$('force_update').value = 'true'; $('submit_button').click();" })
+              render :json => { :status => "ok", :valid => "false", :confirm_html => html }, :content_type => 'application/json'
+              raise ActiveRecord::Rollback
+            end
+          end
+ 
+          render :json => { :status => "ok", :valid => "true", :redirect_to => url_for(node) }, :content_type => 'application/json'
+        };
+ 
+        failure.html {
+          node = Node.find_by_id(params[:id])
+
+          set_group_and_class_autocomplete_data_sources(node)
+          html = render_to_string(:template => "shared/_error",
+                                  :layout => false,
+                                  :locals => { :object_name => 'node', :object => node })
+          render :json => { :status => "error", :error_html => html }, :content_type => 'application/json'
+        }
+      end
     end
   end
 
@@ -157,4 +213,5 @@ class NodesController < InheritedResources::Base
       end
     end
   end
+
 end

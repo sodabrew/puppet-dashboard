@@ -1,0 +1,10 @@
+# IMPORTANT: Be sure you have checked the values below, appropriately
+# configured 'config/database.yml' in your DASHBOARD_HOME, and
+# created and migrated the database.
+. /etc/default/puppet-dashboard
+### START=no
+
+#  Number of dashboard workers to start.  This will be the number of jobs that
+#  can be concurrently processed.  A simple recommendation would be to start
+#  with the number of cores you have available.
+NUM_DELAYED_JOB_WORKERS=2

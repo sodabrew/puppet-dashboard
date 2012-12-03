@@ -157,15 +157,22 @@ describe Node do
       @node.configuration.keys.sort.should == ['classes', 'name', 'parameters']
     end
 
-    it "should return the names of the node's classes in the returned class list" do
+#This does not seem to work any more
+#    it "should return the names of the node's classes in the returned class list" do
+#      @node.node_classes = @classes = Array.new(3) { NodeClass.generate! }
+#      @node.configuration['classes'].sort.should == @classes.collect(&:name).sort
+#    end
+
+    #This is a new version of the former test
+    it "should return the names of the node's classes in the keys of the returned class list" do
       @node.node_classes = @classes = Array.new(3) { NodeClass.generate! }
-      @node.configuration['classes'].sort.should == @classes.collect(&:name).sort
+      @node.configuration['classes'].keys.sort.should == @classes.collect(&:name).sort
     end
 
     it "should return the node's compiled parameters in the returned parameters list" do
       @node.stubs(:compiled_parameters).returns [
-        OpenStruct.new(:name => 'a', :value => 'b', :sources => Set[:foo]),
-        OpenStruct.new(:name => 'c', :value => 'd', :sources => Set[:bar])
+        { :name => 'a', :value => 'b', :sources => Set[:foo] },
+        { :name => 'c', :value => 'd', :sources => Set[:bar] }
       ]
       @node.configuration['parameters'].should == { 'a' => 'b', 'c' => 'd' }
     end
@@ -176,23 +183,23 @@ describe Node do
 
     it "should create parameter objects for new parameters" do
       lambda {
-        @node.parameter_attributes = [{:key => :key, :value => :value}]
+        @node.parameter_attributes = {"1" => {:key => :key, :value => :value}}
         @node.save
       }.should change(Parameter, :count).by(1)
     end
 
     it "should create and destroy parameters based on updated parameters" do
-      @node.parameter_attributes = [{:key => :key1, :value => :value1}]
+      @node.parameter_attributes = {"1" => {:key => :key1, :value => :value1}}
       lambda {
-        @node.parameter_attributes = [{:key => :key2, :value => :value2}]
+        @node.parameter_attributes = {"1" => {:key => :key2, :value => :value2}}
         @node.save
       }.should_not change(Parameter, :count)
     end
 
     it "should create timeline events for creation and destruction" do
-      @node.parameter_attributes = [{:key => :key1, :value => :value1}]
+      @node.parameter_attributes = {"1" => {:key => :key1, :value => :value1}}
       lambda {
-        @node.parameter_attributes = [{:key => :key2, :value => :value2}]
+        @node.parameter_attributes = {"1" => {:key => :key2, :value => :value2}}
         @node.save
       }.should change(TimelineEvent, :count).by_at_least(2)
     end
@@ -215,6 +222,97 @@ describe Node do
       @node.node_groups << @node_group_b
     end
 
+    describe "collecting global parameters conflicts" do
+      it "should find 1 conflict" do
+        param_3 = Parameter.generate(:key => 'foo', :value => '2')
+        @node_group_b.parameters << param_3
+        @node.global_conflicts.length.should == 1
+      end
+
+      it "should not find any conflicts when the parameter is overridden" do
+        node_group_a1 = NodeGroup.generate! :name => "A1"
+        @node_group_a.node_groups << node_group_a1
+        param_3 = Parameter.generate(:key => 'foo', :value => '2')
+        node_group_a1.parameters << param_3
+        @node.global_conflicts.length.should == 0
+      end
+
+      it "should find 1 conflict" do
+        node_group_b1 = NodeGroup.generate! :name => "B1"
+        @node_group_b.node_groups << node_group_b1
+        param_3 = Parameter.generate(:key => 'foo', :value => '2')
+        node_group_b1.parameters << param_3
+        @node.global_conflicts.length.should == 1
+      end
+    end
+
+    describe "collecting class parameters conflicts" do
+      before :each do
+        @node_class_a = NodeClass.generate :name => "a"
+        @node_class_b = NodeClass.generate :name => "b"
+        @node_class_c = NodeClass.generate :name => "c"
+
+        @node_group_a.node_classes << @node_class_a
+        @node_group_b.node_classes << @node_class_b
+
+        @node_group_a1 = NodeGroup.generate! :name => "A1"
+        @node_group_a2 = NodeGroup.generate! :name => "A2"
+
+        @node_group_a.node_groups << @node_group_a1
+        @node_group_a.node_groups << @node_group_a2
+
+        @node_group_a_class_memberships_a = NodeGroupClassMembership.find_by_node_group_id_and_node_class_id(@node_group_a.id, @node_class_a.id)
+        @node_group_a_class_memberships_a.parameters << Parameter.generate(:key => 'p1', :value => '1')
+        @node_group_b_class_memberships_b = NodeGroupClassMembership.find_by_node_group_id_and_node_class_id(@node_group_b.id, @node_class_b.id)
+        @node_group_b_class_memberships_b.parameters << Parameter.generate(:key => 'p1', :value => '2')
+      end
+
+      it "should not find any conflicts when different classes use the same parameter with different values" do
+        @node.class_conflicts.length.should == 0
+      end
+
+      it "should find 1 conflict" do
+        @node_group_b.node_classes << @node_class_a
+        node_group_b_class_memberships_a = NodeGroupClassMembership.find_by_node_group_id_and_node_class_id(@node_group_b.id, @node_class_a.id)
+        node_group_b_class_memberships_a.parameters << Parameter.generate(:key => 'p1', :value => '2')
+        
+        @node.class_conflicts.length.should == 1
+      end
+
+      it "should not find any conflicts when the competing parameters have the same value" do
+        @node_group_b.node_classes << @node_class_a
+        node_group_b_class_memberships_a = NodeGroupClassMembership.find_by_node_group_id_and_node_class_id(@node_group_b.id, @node_class_a.id)
+        node_group_b_class_memberships_a.parameters << Parameter.generate(:key => 'p1', :value => '1')
+
+        @node.class_conflicts.length.should == 0
+      end
+
+      describe "on a tree with more levels" do
+        before :each do
+          @node_group_a1.node_classes << @node_class_c
+          @node_group_a2.node_classes << @node_class_c
+
+          node_group_a1_class_memberships_c = NodeGroupClassMembership.find_by_node_group_id_and_node_class_id(@node_group_a1.id, @node_class_c.id)
+          node_group_a1_class_memberships_c.parameters << Parameter.generate(:key => 'p1', :value => '1')
+
+          node_group_a2_class_memberships_c = NodeGroupClassMembership.find_by_node_group_id_and_node_class_id(@node_group_a2.id, @node_class_c.id)
+          node_group_a2_class_memberships_c.parameters << Parameter.generate(:key => 'p1', :value => '2')
+        end
+
+        it "should find 1 conflict" do
+          @node.class_conflicts.length.should == 1
+        end
+
+        it "should not find any conflicts when the conflicting parameter is overridden" do
+          @node_group_a.node_classes << @node_class_c
+          node_group_a_class_memberships_c = NodeGroupClassMembership.find_by_node_group_id_and_node_class_id(@node_group_a.id, @node_class_c.id)
+          node_group_a_class_memberships_c.parameters << Parameter.generate(:key => 'p1', :value => '3')
+
+          @node.class_conflicts.length.should == 0
+        end
+      end
+    end
+
     describe "when a group is included twice" do
       before :each do
         @node_group_c = NodeGroup.generate! :name => "C"
@@ -232,9 +330,9 @@ describe Node do
     describe "handling parameters in the graph" do
 
       it "should return the compiled parameters" do
-        @node.compiled_parameters.should == [
-          OpenStruct.new(:name => 'foo', :value => '1', :sources => Set[@node_group_a]),
-          OpenStruct.new(:name => 'bar', :value => '2', :sources => Set[@node_group_b])
+        @node.compiled_parameters.sort{|a,b| a[:value] <=> b[:value]}.should == [
+          { :name => 'foo', :value => '1', :sources => Set[@node_group_a] },
+          { :name => 'bar', :value => '2', :sources => Set[@node_group_b]  }
         ]
       end
 
@@ -243,9 +341,9 @@ describe Node do
         @node_group_a1.parameters << Parameter.create(:key => 'foo', :value => '2')
         @node_group_a.node_groups << @node_group_a1
 
-        @node.compiled_parameters.should == [
-          OpenStruct.new(:name => 'foo', :value => '1', :sources => Set[@node_group_a]),
-          OpenStruct.new(:name => 'bar', :value => '2', :sources => Set[@node_group_b])
+        @node.compiled_parameters.sort{|a,b| a[:value] <=> b[:value]}.should == [
+          { :name => 'foo', :value => '1', :sources => Set[@node_group_a] },
+          { :name => 'bar', :value => '2', :sources => Set[@node_group_b] }
         ]
       end
 
@@ -264,12 +362,12 @@ describe Node do
       end
 
       it "should not raise an error if there are parameter conflicts that can be resolved at a higher level" do
-        @param_3 = Parameter.generate(:key => 'foo', :value => '3')
-        @param_4 = Parameter.generate(:key => 'foo', :value => '4')
+        param_3 = Parameter.generate(:key => 'foo', :value => '3')
+        param_4 = Parameter.generate(:key => 'foo', :value => '4')
         @node_group_c = NodeGroup.generate!
-        @node_group_c.parameters << @param_3
+        @node_group_c.parameters << param_3
         @node_group_d = NodeGroup.generate!
-        @node_group_d.parameters << @param_4
+        @node_group_d.parameters << param_4
         @node_group_a.node_groups << @node_group_c << @node_group_d
 
         lambda {@node.compiled_parameters}.should_not raise_error(ParameterConflictError)
@@ -277,10 +375,9 @@ describe Node do
       end
 
       it "should include parameters of the node itself" do
+        @node.parameters.clear
         @node.parameters << Parameter.create(:key => "node_parameter", :value => "exist")
-
-        @node.compiled_parameters.first.name.should == "node_parameter"
-        @node.compiled_parameters.first.value.should == "exist"
+        @node.compiled_parameters.select { |param| param[:name] == "node_parameter" && param[:value] == "exist"}.length.should == 1
       end
 
       it "should retain the history of its parameters" do
@@ -291,9 +388,9 @@ describe Node do
         @node_group_a.node_groups << @node_group_c
         @node_group_a.node_groups << @node_group_d
 
-        @node.compiled_parameters.should == [
-          OpenStruct.new(:name => 'foo', :value => '1', :sources => Set[@node_group_a]),
-          OpenStruct.new(:name => 'bar', :value => '2', :sources => Set[@node_group_b])
+        @node.compiled_parameters.sort{|a,b| a[:value] <=> b[:value]}.should == [
+          { :name => 'foo', :value => '1', :sources => Set[@node_group_a] },
+          { :name => 'bar', :value => '2', :sources => Set[@node_group_b] }
         ]
       end
     end

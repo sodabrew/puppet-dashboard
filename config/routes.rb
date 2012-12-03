@@ -3,6 +3,14 @@ ActionController::Routing::Routes.draw do |map|
     classes.resources :nodes, :requirements => {:id => /.*/}
   end
 
+  map.resources :node_class_memberships, :collection => {:search => :get} do |memberships|
+    memberships.resources :nodes, :requirements => {:id => /.*/}
+  end
+
+  map.resources :node_group_class_memberships, :collection => {:search => :get} do |memberships|
+    memberships.resources :node_groups, :requirements => {:id => /.*/}
+  end
+
   map.resources :node_groups,
     :member     => { :diff  => :get },
     :collection => {:search => :get } do |groups|
@@ -40,8 +48,6 @@ ActionController::Routing::Routes.draw do |map|
   map.header '/header.:format', :controller => :pages, :action => :header
 
   map.root :controller => :pages, :action => :home
-  
-  map.connect 'radiator', :controller => :radiator, :action => :index
 
   map.connect ':controller/:action/:id'
   map.connect ':controller/:action/:id.:format'

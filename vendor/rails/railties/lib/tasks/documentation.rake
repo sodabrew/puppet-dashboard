@@ -1,5 +1,3 @@
-begin
-  require 'rdoc/task'
 namespace :doc do
   desc "Generate documentation for the application. Set custom template with TEMPLATE=/path/to/rdoc/template.rb or title with TITLE=\"Custom Title\""
   RDoc::Task.new("app") { |rdoc|
@@ -87,7 +85,4 @@ namespace :doc do
       end
     end
   end
-end
-rescue LoadError
-  $stderr.puts 'Please install RDoc 2.4.2+ to generate documentation.'
 end

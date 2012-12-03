@@ -1,0 +1,19 @@
+Source: puppet-dashboard
+Section: web
+Priority: extra
+Maintainer: James Turnbull <james@puppetlabs.com>
+Build-Depends: debhelper (>= 7), cdbs
+Build-Depends-Indep: po-debconf
+Standards-Version: 3.8.4
+Homepage: http://github.com/puppetlabs/puppet-dashboard
+
+Package: puppet-dashboard
+Architecture: all
+Pre-Depends: debconf
+Depends: ruby, ruby1.8 (>= 1.8.7), rake (>=0.8.3), dbconfig-common, libdbd-mysql-ruby, mysql-client, rubygems, libhttpclient-ruby1.8
+Suggests: mysql-server
+Recommends: libapache2-mod-passenger
+Description: Dashboard for Puppet
+ The Puppet Dashboard is a web application for managing the Puppet configuration
+ management tool.
+

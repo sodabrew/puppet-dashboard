@@ -1,0 +1,118 @@
+#!/bin/sh
+### BEGIN INIT INFO
+# Provides:          puppet-dashboard
+# Required-Start:    $local_fs $remote_fs $network $syslog
+# Required-Stop:     $local_fs $remote_fs $network $syslog
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# X-Interactive:     true
+# Short-Description: Start/stop puppet-dashboard web server
+### END INIT INFO
+#
+# puppet-dashboard   This init.d script is used to start puppet-dashboard.
+
+ENV="env -i LANG=C PATH=/usr/local/bin:/usr/bin:/bin"
+PIDFILE="/var/run/puppet-dashboard.pid"
+
+set -e
+
+. /lib/lsb/init-functions
+
+test -f /etc/default/rcS && . /etc/default/rcS
+test -f /etc/default/puppet-dashboard && . /etc/default/puppet-dashboard
+
+# Set defaults in case they're not in the above defaults file:
+DASHBOARD_HOME=${DASHBOARD_HOME:-/usr/share/puppet-dashboard}
+DASHBOARD_USER=${DASHBOARD_USER:-www-data}
+DASHBOARD_RUBY=${DASHBOARD_RUBY:-/usr/bin/ruby}
+DASHBOARD_ENVIRONMENT=${DASHBOARD_ENVIRONMENT:-production}
+DASHBOARD_IFACE=${DASHBOARD_IFACE:-0.0.0.0}
+DASHBOARD_PORT=${DASHBOARD_PORT:-3000}
+
+check_dashboard_enabled_option() {
+    if [ ! "$START" = "yes" ]; then
+        log_warning_msg "Not starting Puppet Dashboard, disabled via /etc/default/puppet-dashboard"
+        return 1
+    else
+        return 0
+    fi
+}
+
+check_puppet_dashboard_status() {
+    status_of_proc -p ${PIDFILE} ${DASHBOARD_RUBY} "Puppet Dashboard"
+}
+
+start_puppet_dashboard() {
+    start-stop-daemon --start --quiet --oknodo --make-pidfile --pidfile ${PIDFILE} --user ${DASHBOARD_USER} --chuid ${DASHBOARD_USER} --exec ${DASHBOARD_RUBY} -- ${DASHBOARD_HOME}/script/server -e ${DASHBOARD_ENVIRONMENT} -p ${DASHBOARD_PORT} -b ${DASHBOARD_IFACE} &
+
+    # This is a dirty, dirty hack, but it's rather difficult to get
+    # script/server to daemonize in any way, and still give us useful debugging
+    # output (or a real exit code) if it fails to start.
+
+    sleep 5
+
+    check_puppet_dashboard_status
+}
+
+case $1 in
+    start)
+        log_daemon_msg "Starting Puppet Dashboard"
+        if ! check_dashboard_enabled_option; then
+            log_end_msg 0
+            exit
+        fi
+        if start_puppet_dashboard; then
+            log_end_msg 0
+        else
+            log_end_msg 1
+        fi
+    ;;
+    stop)
+        log_daemon_msg "Stopping Puppet Dashboard"
+        if start-stop-daemon --stop --quiet --oknodo --pidfile ${PIDFILE} --user ${DASHBOARD_USER} --retry 10; then
+            log_end_msg 0
+        else
+            log_end_msg 1
+        fi
+    ;;
+    restart)
+        log_daemon_msg "Restarting Puppet Dashboard"
+        set +e
+        start-stop-daemon --stop --quiet --retry 30 --pidfile ${PIDFILE}
+        RET="$?"
+        set -e
+        case ${RET} in
+            0)
+                # Old server stopped
+                if ! check_dashboard_enabled_option; then
+                    log_end_msg 0
+                    exit
+                fi
+                if start_puppet_dashboard; then
+                    log_end_msg 0
+                else
+                    log_end_msg 1
+                fi
+                ;;
+            1)
+                # Server not running
+                log_progress_msg "(not running)"
+                log_end_msg 0
+                ;;
+            *)
+                # Failed to stop
+                log_progress_msg "(failed to stop)"
+                log_end_msg 1
+                ;;
+        esac
+    ;;
+    status)
+        check_puppet_dashboard_status && exit 0 || exit $?
+    ;;
+    *)
+        log_action_msg "Usage: /etc/init.d/puppet-dashboard {start|stop|restart|status}"
+        exit 1
+    ;;
+esac
+
+exit 0

@@ -1,0 +1,25 @@
+= javascript_include_tag 'validation_response', :cache => 'validation'
+#sidebar= render 'shared/node_manager_sidebar'
+#main
+  - @node_class_id = @node_group_class_membership.node_class_id
+  - @node_class = NodeClass.find_by_id(@node_class_id)
+  - @node_group_id = @node_group_class_membership.node_group_id
+  - @node_group = NodeGroup.find_by_id(@node_group_id)
+
+  .header
+    %h2
+      Node Class:
+      = h @node_class.name
+    %ul.actions
+      - unless SETTINGS.enable_read_only_mode || session['ACCESS_CONTROL_ROLE'] == 'READ_ONLY'
+        %li= link_to 'Edit', edit_node_group_class_membership_path(@node_group_class_membership), :class => "edit button"
+        %li= link_to_remote 'Delete', :url => url_for(@node_group_class_membership) + "?force_delete=false", :confirm => 'Are you sure?', :method => :delete, :html => { :id => "delete_button", :class => "delete button" }, :success => "form_submit_success(request.responseJSON, 'error_messages')", :failure => "alert(\'Oops!! An error occurred.\')"
+
+  .item
+    .section
+      #error_messages{:style => "display: none;"}
+      %h3 Assigned To Node Group
+      = link_to @node_group.name, node_group_path(@node_group)
+
+    .section
+      = render 'parameters'
