@@ -1,3 +1,4 @@
+= javascript_include_tag 'validation_response', :cache => 'validation'
 #sidebar= render 'shared/node_manager_sidebar'
 #main
   - @node_class_memberhip = NodeClassMembership.find_by_id(params[:id])
@@ -13,7 +14,7 @@
     %ul.actions
       - unless SETTINGS.enable_read_only_mode || session['ACCESS_CONTROL_ROLE'] == 'READ_ONLY'
         %li= link_to 'Edit', edit_node_class_membership_path(@node_class_membership), :class => "edit button"
-        %li= link_to 'Delete', @node_class_membership, :confirm => 'Are you sure?', :method => :delete, :class => "delete button"
+        %li= link_to_remote 'Delete', :url => url_for(@node_class_membership) + "?force_delete=false", :confirm => 'Are you sure?', :method => :delete, :html => { :id => "delete_button", :class => "delete button" }, :success => "form_submit_success(request.responseJSON, 'error_messages')", :failure => "alert(\'Oops!! An error occurred.\')"
 
   .item
     .section

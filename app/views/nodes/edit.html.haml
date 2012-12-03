@@ -1,8 +1,10 @@
+= javascript_include_tag 'validation_response', :cache => 'validation'
 #sidebar= render 'shared/node_manager_sidebar'
 #main
-  - form_for @node, :url => node_path(params[:id])  do |f|
+  - remote_form_for @node, :url => node_path(params[:id]), :success => "form_submit_success(request.responseJSON, 'error_messages')", :failure => "alert(\'Oops!! An error occurred.\')", :html => {:id => "param_form"} do |f|
+    %input{:id => "force_update", :name => "force_update", :type => "hidden", :value => "false"}
     = render f
     .element.actions
-      %button Save changes
+      %button{:id => "submit_button"} Update
       or
       = link_to 'Cancel', node_path(params[:id])

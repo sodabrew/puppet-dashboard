@@ -183,23 +183,23 @@ describe Node do
 
     it "should create parameter objects for new parameters" do
       lambda {
-        @node.parameter_attributes = [{:key => :key, :value => :value}]
+        @node.parameter_attributes = {"1" => {:key => :key, :value => :value}}
         @node.save
       }.should change(Parameter, :count).by(1)
     end
 
     it "should create and destroy parameters based on updated parameters" do
-      @node.parameter_attributes = [{:key => :key1, :value => :value1}]
+      @node.parameter_attributes = {"1" => {:key => :key1, :value => :value1}}
       lambda {
-        @node.parameter_attributes = [{:key => :key2, :value => :value2}]
+        @node.parameter_attributes = {"1" => {:key => :key2, :value => :value2}}
         @node.save
       }.should_not change(Parameter, :count)
     end
 
     it "should create timeline events for creation and destruction" do
-      @node.parameter_attributes = [{:key => :key1, :value => :value1}]
+      @node.parameter_attributes = {"1" => {:key => :key1, :value => :value1}}
       lambda {
-        @node.parameter_attributes = [{:key => :key2, :value => :value2}]
+        @node.parameter_attributes = {"1" => {:key => :key2, :value => :value2}}
         @node.save
       }.should change(TimelineEvent, :count).by_at_least(2)
     end
@@ -220,6 +220,97 @@ describe Node do
 
       @node.node_groups << @node_group_a
       @node.node_groups << @node_group_b
+    end
+
+    describe "collecting global parameters conflicts" do
+      it "should find 1 conflict" do
+        param_3 = Parameter.generate(:key => 'foo', :value => '2')
+        @node_group_b.parameters << param_3
+        @node.global_conflicts.length.should == 1
+      end
+
+      it "should not find any conflicts when the parameter is overridden" do
+        node_group_a1 = NodeGroup.generate! :name => "A1"
+        @node_group_a.node_groups << node_group_a1
+        param_3 = Parameter.generate(:key => 'foo', :value => '2')
+        node_group_a1.parameters << param_3
+        @node.global_conflicts.length.should == 0
+      end
+
+      it "should find 1 conflict" do
+        node_group_b1 = NodeGroup.generate! :name => "B1"
+        @node_group_b.node_groups << node_group_b1
+        param_3 = Parameter.generate(:key => 'foo', :value => '2')
+        node_group_b1.parameters << param_3
+        @node.global_conflicts.length.should == 1
+      end
+    end
+
+    describe "collecting class parameters conflicts" do
+      before :each do
+        @node_class_a = NodeClass.generate :name => "a"
+        @node_class_b = NodeClass.generate :name => "b"
+        @node_class_c = NodeClass.generate :name => "c"
+
+        @node_group_a.node_classes << @node_class_a
+        @node_group_b.node_classes << @node_class_b
+
+        @node_group_a1 = NodeGroup.generate! :name => "A1"
+        @node_group_a2 = NodeGroup.generate! :name => "A2"
+
+        @node_group_a.node_groups << @node_group_a1
+        @node_group_a.node_groups << @node_group_a2
+
+        @node_group_a_class_memberships_a = NodeGroupClassMembership.find_by_node_group_id_and_node_class_id(@node_group_a.id, @node_class_a.id)
+        @node_group_a_class_memberships_a.parameters << Parameter.generate(:key => 'p1', :value => '1')
+        @node_group_b_class_memberships_b = NodeGroupClassMembership.find_by_node_group_id_and_node_class_id(@node_group_b.id, @node_class_b.id)
+        @node_group_b_class_memberships_b.parameters << Parameter.generate(:key => 'p1', :value => '2')
+      end
+
+      it "should not find any conflicts when different classes use the same parameter with different values" do
+        @node.class_conflicts.length.should == 0
+      end
+
+      it "should find 1 conflict" do
+        @node_group_b.node_classes << @node_class_a
+        node_group_b_class_memberships_a = NodeGroupClassMembership.find_by_node_group_id_and_node_class_id(@node_group_b.id, @node_class_a.id)
+        node_group_b_class_memberships_a.parameters << Parameter.generate(:key => 'p1', :value => '2')
+        
+        @node.class_conflicts.length.should == 1
+      end
+
+      it "should not find any conflicts when the competing parameters have the same value" do
+        @node_group_b.node_classes << @node_class_a
+        node_group_b_class_memberships_a = NodeGroupClassMembership.find_by_node_group_id_and_node_class_id(@node_group_b.id, @node_class_a.id)
+        node_group_b_class_memberships_a.parameters << Parameter.generate(:key => 'p1', :value => '1')
+
+        @node.class_conflicts.length.should == 0
+      end
+
+      describe "on a tree with more levels" do
+        before :each do
+          @node_group_a1.node_classes << @node_class_c
+          @node_group_a2.node_classes << @node_class_c
+
+          node_group_a1_class_memberships_c = NodeGroupClassMembership.find_by_node_group_id_and_node_class_id(@node_group_a1.id, @node_class_c.id)
+          node_group_a1_class_memberships_c.parameters << Parameter.generate(:key => 'p1', :value => '1')
+
+          node_group_a2_class_memberships_c = NodeGroupClassMembership.find_by_node_group_id_and_node_class_id(@node_group_a2.id, @node_class_c.id)
+          node_group_a2_class_memberships_c.parameters << Parameter.generate(:key => 'p1', :value => '2')
+        end
+
+        it "should find 1 conflict" do
+          @node.class_conflicts.length.should == 1
+        end
+
+        it "should not find any conflicts when the conflicting parameter is overridden" do
+          @node_group_a.node_classes << @node_class_c
+          node_group_a_class_memberships_c = NodeGroupClassMembership.find_by_node_group_id_and_node_class_id(@node_group_a.id, @node_class_c.id)
+          node_group_a_class_memberships_c.parameters << Parameter.generate(:key => 'p1', :value => '3')
+
+          @node.class_conflicts.length.should == 0
+        end
+      end
     end
 
     describe "when a group is included twice" do

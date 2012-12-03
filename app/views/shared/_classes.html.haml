@@ -8,7 +8,7 @@
           %th{:scope => :col} Source
           %th{:scope => :col} Parameters
       %tbody
-        - resource.node_classes_with_sources.each do |node_class,sources|
+        - resource.node_classes_with_sources.sort.each do |node_class,sources|
           %tr
             %td.name
               %strong= link_to(h(node_class.name),node_class)
