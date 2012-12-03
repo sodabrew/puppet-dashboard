@@ -1,0 +1,24 @@
+#sidebar= render 'shared/node_manager_sidebar'
+#main
+  - @node_class_memberhip = NodeClassMembership.find_by_id(params[:id])
+  - @node_class_id = @node_class_membership.node_class_id
+  - @node_class = NodeClass.find_by_id(@node_class_id)
+  - @node_id = @node_class_membership.node_id
+  - @node = Node.find_by_id(@node_id)
+
+  .header
+    %h2
+      Node Class:
+      = h @node_class.name
+    %ul.actions
+      - unless SETTINGS.enable_read_only_mode || session['ACCESS_CONTROL_ROLE'] == 'READ_ONLY'
+        %li= link_to 'Edit', edit_node_class_membership_path(@node_class_membership), :class => "edit button"
+        %li= link_to 'Delete', @node_class_membership, :confirm => 'Are you sure?', :method => :delete, :class => "delete button"
+
+  .item
+    .section
+      %h3 Assigned To Node
+      = link_to @node.name, node_path(@node)
+      
+    .section
+      = render 'parameters'

@@ -1,0 +1,41 @@
+puppet-dashboard (1.1.1-1) intrepid jaunty karmic lucid meerkat narwhal; urgency=low
+
+  * 1.1.1-1 feature release
+
+ -- Michael Stahnke  <stahnma@puppetlabs.com>  Tue, 17 May 2011 15:08:00 -0700
+
+puppet-dashboard (1.1.0-1) intrepid jaunty karmic lucid meerkat narwhal; urgency=low
+
+  * 1.1.0-1 feature release
+
+ -- James Turnbull <james@puppetlabs.com>  Thu, 07 Apr 2011 14:23:00 -0700
+
+puppet-dashboard (1.0.4-1) intrepid jaunty karmic lucid meerkat narwhal; urgency=low
+
+  * 1.0.4-1 maintenance release
+
+ -- James Turnbull <james@puppetlabs.com>  Tue, 19 Oct 2010 15:11:54 -0700
+
+puppet-dashboard (1.0.4rc2-1) lucid; urgency=low
+
+  * 1.0.4rc2-1 maintenance release
+
+ -- James Turnbull <james@puppetlabs.com>  Wed, 01 Sep 2010 16:59:19 -0700
+
+puppet-dashboard (1.0.3) lucid; urgency=low
+
+  * 1.0.3 maintenance release
+
+ -- James Turnbull <james@puppetlabs.com>  Thu, 29 Jul 2010 20:50:17 +1000
+
+puppet-dashboard (1.0.1) lucid; urgency=low
+
+  * 1.0.1 maintenance release
+
+ -- James Turnbull <james@puppetlabs.com>  Fri, 17 Jul 2010 17:22:13 +1000
+
+puppet-dashboard (1.0) lucid; urgency=low
+
+  * Initial Release
+
+ -- James Turnbull <james@lovedthanlost.net>  Thu, 25 Mar 2010 20:58:22 +1000

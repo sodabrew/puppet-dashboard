@@ -130,18 +130,14 @@ module ActiveSupport
       end
 
       def merge!(other_hash)
-        if block_given?
-          other_hash.each { |k, v| self[k] = key?(k) ? yield(k, self[k], v) : v }
-        else
-          other_hash.each { |k, v| self[k] = v }
-        end
+        other_hash.each {|k,v| self[k] = v }
         self
       end
 
       alias_method :update, :merge!
 
-      def merge(other_hash, &block)
-        dup.merge!(other_hash, &block)
+      def merge(other_hash)
+        dup.merge!(other_hash)
       end
 
       # When replacing with another hash, the initial order of our keys must come from the other hash -ordered or not.

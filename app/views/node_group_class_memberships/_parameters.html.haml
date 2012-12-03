@@ -1,0 +1,27 @@
+.element
+
+
+  %h3 Parameters    
+
+  - unless @node_group.compile_class_parameters(resource).blank?
+
+    %table.inspector
+      %thead
+        %tr 
+          %th{:scope => :col} Key 
+          %th{:scope => :col} Value
+          %th{:scope => :col} Source
+      %tbody
+        - @node_group.compile_class_parameters(resource).each do |param|
+          %tr
+            %td{:style => ("background-color: pink;" if param.sources.size > 1)}
+              %tt= h param.name
+            %td
+              %tt= h param.value
+            %td
+              - if param.sources == Set[resource]
+                = h.resource.name
+              -else
+                = param.sources.map{|source| link_to(h(source.name),node_group_path(source.id))}.join(", ")
+  - else
+    = describe_no_matches_as 'No parameters'

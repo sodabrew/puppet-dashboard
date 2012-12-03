@@ -1,5 +1,5 @@
 class Report < ActiveRecord::Base
-  def self.per_page; SETTINGS.reports_per_page end # Pagination
+  def self.per_page; 20 end # Pagination
   belongs_to :node
 
   has_many :logs, :class_name => "ReportLog"

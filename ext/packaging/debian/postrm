@@ -1,0 +1,9 @@
+#!/bin/sh -e
+
+if [ "$1" = "purge" ]; then
+   if test -d /usr/share/puppet-dashboard; then
+       rm -rf /usr/share/puppet-dashboard
+   fi
+fi
+
+#DEBHELPER#

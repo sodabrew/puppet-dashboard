@@ -1,0 +1,39 @@
+#!/bin/sh -e
+
+# Move a conffile without triggering a dpkg question
+mv_conffile() {
+    local OLDCONFFILE="$1"
+    local NEWCONFFILE="$2"
+
+    [ -e "$OLDCONFFILE" ] || return 0
+
+    echo "Preserving user changes to $NEWCONFFILE ..."
+    mv -f "$NEWCONFFILE" "$NEWCONFFILE".dpkg-new
+    mv -f "$OLDCONFFILE" "$NEWCONFFILE"
+}
+
+case "$1" in
+configure)
+    for item in config/environment.rb public log tmp spool; do
+        chown -R www-data:www-data /usr/share/puppet-dashboard/${item}
+    done
+
+    if [ ! -d /etc/puppet-dashboard ]; then
+        mkdir /etc/puppet-dashboard
+    fi
+
+    if [ -f /usr/share/puppet-dashboard/config/database.yml ] && [ ! -e /etc/puppet-dashboard/database.yml ]; then
+        mv_conffile "/usr/share/puppet-dashboard/config/database.yml" "/etc/puppet-dashboard/database.yml"
+    fi
+
+    chown -R www-data:www-data /etc/puppet-dashboard
+    chmod -R o-rwx /etc/puppet-dashboard
+    find /etc/puppet-dashboard -type f -exec chmod a-x {} \;
+
+    if [ ! -h /usr/share/puppet-dashboard/config/database.yml ]; then
+        ln -s ../../../../etc/puppet-dashboard/database.yml /usr/share/puppet-dashboard/config/database.yml
+    fi
+
+esac
+
+#DEBHELPER#

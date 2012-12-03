@@ -6,10 +6,10 @@
       Search Latest Inspect Reports
 
   .item
-    - if errors.present?
+    - if flash[:errors].present?
       %div{:class => "section error"}
         %h3 Errors
-        - errors.each do |messages|
+        - flash[:errors].each do |messages|
           %p
             - messages.each do |message|
               %li= h message

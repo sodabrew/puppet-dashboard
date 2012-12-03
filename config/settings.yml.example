@@ -80,10 +80,4 @@ disable_legacy_report_upload_url: false
 # Disables the UI and controller actions for editing nodes, classes, groups and reports.  Report submission is still allowed
 enable_read_only_mode: false
 
-# Default number of items of each kind to display per page
-nodes_per_page: 20
-classes_per_page: 50
-groups_per_page: 50
-reports_per_page: 20
-
 #===[ fin ]=============================================================

@@ -1,0 +1,9 @@
+#
+# path to where you installed puppet dashboard
+#
+DASHBOARD_HOME=/usr/share/puppet-dashboard
+DASHBOARD_USER=puppet-dashboard
+DASHBOARD_RUBY=/usr/bin/ruby
+DASHBOARD_ENVIRONMENT=production
+DASHBOARD_IFACE=0.0.0.0
+DASHBOARD_PORT=3000

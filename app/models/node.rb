@@ -1,7 +1,7 @@
 require 'puppet_https'
 
 class Node < ActiveRecord::Base
-  def self.per_page; SETTINGS.nodes_per_page end # Pagination
+  def self.per_page; 20 end # Pagination
 
   include NodeGroupGraph
   extend FindFromForm
@@ -93,9 +93,14 @@ class Node < ActiveRecord::Base
   end
 
   def configuration
+    classes = Hash.new
+    node_classes_with_parameters.each do |node_class,parameters|
+      classes[node_class] = parameters
+    end
+
     {
       'name'       => name,
-      'classes'    => all_node_classes.collect(&:name),
+      'classes'    => classes,
       'parameters' => parameter_list
     }
   end

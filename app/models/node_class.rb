@@ -1,5 +1,5 @@
 class NodeClass < ActiveRecord::Base
-  def self.per_page; SETTINGS.classes_per_page end # Pagination
+  def self.per_page; 50 end # Pagination
 
   include NodeGroupGraph
   extend FindFromForm
