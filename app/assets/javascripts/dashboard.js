@@ -47,29 +47,29 @@ jQuery(document).ready(function(J) {
     var label_data = J(this).find("tr.labels th").mapHtml();
     var runtime_data = J(this).find("tr.runtimes td").mapHtmlFloat();
 
-    new Grafico.LineGraph($(id),
-      {
-        runtimes: runtime_data
-      },
-      {
-        background_color: "#fff",
-        colors: { runtimes: "#009" },
-        font_size: 9,
-        grid: false,
-        label_color: '#666',
-        labels: label_data,
-        label_rotation: -30,
-        markers: "value",
-        meanline: true,
-        padding_top: 10,
-        left_padding: 50,
-        // show_horizontal_labels: false,
-        show_ticks: false,
-        start_at_zero: false,
-        stroke_width: 3,
-        vertical_label_unit: "s"
-      }
-    );
+    // new Grafico.LineGraph($(id),
+    //   {
+    //     runtimes: runtime_data
+    //   },
+    //   {
+    //     background_color: "#fff",
+    //     colors: { runtimes: "#009" },
+    //     font_size: 9,
+    //     grid: false,
+    //     label_color: '#666',
+    //     labels: label_data,
+    //     label_rotation: -30,
+    //     markers: "value",
+    //     meanline: true,
+    //     padding_top: 10,
+    //     left_padding: 50,
+    //     // show_horizontal_labels: false,
+    //     show_ticks: false,
+    //     start_at_zero: false,
+    //     stroke_width: 3,
+    //     vertical_label_unit: "s"
+    //   }
+    // );
 
     J(this).hide();
   });
@@ -91,32 +91,33 @@ jQuery(document).ready(function(J) {
     var pending_data_label = J.map(pending_data, function(item, index){return item+" pending"});
     var failed_data_label = J.map(failed_data, function(item, index){return item+" failed"});
 
-    new Grafico.StackedBarGraph($(id),
-      {
-        unchanged: unchanged_data,
-        changed: changed_data,
-        pending: pending_data,
-        failed: failed_data
-      },
-      {
-        background_color: "#fff",
-        colors: { pending: PENDING, changed: CHANGED, unchanged: UNCHANGED, failed: FAILED },
-        datalabels: { changed: changed_data_label, unchanged: unchanged_data_label, pending: pending_data_label, failed: failed_data_label },
-        font_size: 9,
-        grid: false,
-        label_color: '#666',
-        label_rotation: -30,
-        labels: label_data,
-        padding_top: 10,
-        left_padding: 50,
-        show_ticks: false
-      }
-    );
+    // new Grafico.StackedBarGraph($(id),
+    //   {
+    //     unchanged: unchanged_data,
+    //     changed: changed_data,
+    //     pending: pending_data,
+    //     failed: failed_data
+    //   },
+    //   {
+    //     background_color: "#fff",
+    //     colors: { pending: PENDING, changed: CHANGED, unchanged: UNCHANGED, failed: FAILED },
+    //     datalabels: { changed: changed_data_label, unchanged: unchanged_data_label, pending: pending_data_label, failed: failed_data_label },
+    //     font_size: 9,
+    //     grid: false,
+    //     label_color: '#666',
+    //     label_rotation: -30,
+    //     labels: label_data,
+    //     padding_top: 10,
+    //     left_padding: 50,
+    //     show_ticks: false
+    //   }
+    // );
 
     J(this).hide();
   });
   init_expandable_list();
 
+  console.log("This is run...");
   J('.reports_show_action #report-tabs').show();
   J('.reports_show_action .panel').addClass('tabbed');
   J('.reports_show_action #report-tabs li').click(function() {
