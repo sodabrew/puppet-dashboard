@@ -117,7 +117,6 @@ jQuery(document).ready(function(J) {
   });
   init_expandable_list();
 
-  console.log("This is run...");
   J('.reports_show_action #report-tabs').show();
   J('.reports_show_action .panel').addClass('tabbed');
   J('.reports_show_action #report-tabs li').click(function() {
