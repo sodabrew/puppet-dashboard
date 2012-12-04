@@ -16,9 +16,9 @@ describe NodeGroupsController do
       assigns[:node_group].name.should == 'foo'
     end
 
-    it "should render new when creation fails" do
+    it "should render error when creation fails" do
       post :create, 'node_group' => { }
-      response.should render_template('node_groups/new')
+      response.should render_template('shared/_error.html.haml')
       response.should be_success
 
       assigns[:node_group].errors.full_messages.should == ["Name can't be blank"]
@@ -72,7 +72,7 @@ describe NodeGroupsController do
       end
 
       it "should allow specification of 'parameter_attributes'" do
-        @params[:node_group].merge! :parameter_attributes => [{:key => 'foo', :value => 'bar'}]
+        @params[:node_group].merge! :parameter_attributes => {"1" => {:key => 'foo', :value => 'bar'}}
 
         do_put
 
@@ -95,7 +95,7 @@ describe NodeGroupsController do
       end
 
       it "should fail if parameter_attributes are specified" do
-        @params[:node_group].merge! :parameter_attributes => [{:key => 'foo', :value => 'bar'}]
+        @params[:node_group].merge! :parameter_attributes => {"1" => {:key => 'foo', :value => 'bar'}}
 
         do_put
 
@@ -119,8 +119,8 @@ describe NodeGroupsController do
 
       it "should succeed if parameter_attributes and node classes are omitted" do
         do_put
-
-        response.should be_redirect
+        response.code.should == '200'
+        response.body.should =~ /\{"status":"ok","redirect_to":"[^"]+","valid":"true"\}/
       end
     end
   end

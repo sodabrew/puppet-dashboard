@@ -1,11 +1,12 @@
 - parameter = parameter_input  # change silly partial-based variable name
+- parameter_index = defined?(parameter_input_counter) ? (parameter_input_counter+1) : 0
 - object_name = params[:controller].singularize
 %tr
   %td.key
-    = text_field_tag "#{object_name}[parameter_attributes][][key]", parameter.key, :placeholder => "key"
+    = text_field_tag "#{object_name}[parameter_attributes][#{parameter_index}][key]", parameter.key, :placeholder => "key"
   %td.value
     %div
-      = text_field_tag "#{object_name}[parameter_attributes][][value]", parameter.value, :placeholder => "value"
+      = text_field_tag "#{object_name}[parameter_attributes][#{parameter_index}][value]", parameter.value, :placeholder => "value"
       .popup-actions
         %a.icon.delete{:href => '#'}
           %span (delete)

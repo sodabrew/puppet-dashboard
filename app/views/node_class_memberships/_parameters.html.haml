@@ -3,8 +3,13 @@
 
   %h3 Parameters    
 
-  - unless @node.compile_class_parameters(resource).blank?
-
+  - # Conflicting parameters are okay here, since we just want to warn
+  - unless @node.compile_class_parameters(resource, true).blank?
+    - if @node.errors.on(:classParameters)
+      %p.error
+        %strong Warning:
+        The following parameters have multiple conflicting values:
+        = h [*@node.errors.on(:classParameters).map { |error| error.gsub(%r{^.*/}, "")}].join(", ")
     %table.inspector
       %thead
         %tr 
@@ -12,7 +17,7 @@
           %th{:scope => :col} Value
           %th{:scope => :col} Source
       %tbody
-        - @node.compile_class_parameters(resource).each do |param|
+        - @node.compile_class_parameters(resource, true).each do |param|
           %tr
             %td{:style => ("background-color: pink;" if param[:sources].size > 1)}
               %tt= h param[:name]
