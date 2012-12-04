@@ -57,6 +57,7 @@ PuppetDashboard::Application.routes do
   match '/header.:format' => 'pages#header'
   match 'reports/upload'  => 'reports#upload', :via => :post
   match 'release_notes'   => 'pages#release_notes', :via => :get
+  match '/delayed_job_failures/read_all' => 'delayed_job_failures#read_all', :via => :post
 
   get ':controller(/:action(/:id(.:format)))'
 

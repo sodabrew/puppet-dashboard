@@ -15,7 +15,7 @@
       - if @delayed_job_failures.count > 0
         - if @read == false
           #mark-as-read
-            = form_tag request.url, :method => :post do
+            = form_tag request.url + "/read_all", :method => :post do
               %button{:name => :mark_all_read} Mark all as read
               (and we'll stop notifying you about them)
         %dl
