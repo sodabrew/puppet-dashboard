@@ -3,6 +3,10 @@ Registry.add_callback :core, :node_view_widgets, "100_description" do |view_rend
   view_renderer.render 'nodes/description', :node => node
 end
 
+Registry.add_callback :core, :node_view_widgets, "110_conflicts" do |view_renderer, node|
+  view_renderer.render 'shared/conflicts', :resource => node
+end
+
 Registry.add_callback :core, :node_view_widgets, "200_parameters" do |view_renderer, node|
   if SETTINGS.use_external_node_classification
     view_renderer.render 'shared/parameters', :resource => node
