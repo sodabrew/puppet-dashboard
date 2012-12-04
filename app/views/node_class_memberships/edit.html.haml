@@ -1,0 +1,14 @@
+#sidebar= render 'shared/node_manager_sidebar'
+#main
+  - @node_class_memberhip = NodeClassMembership.find_by_id(params[:id])
+  - @node_class_id = @node_class_membership.node_class_id
+  - @node_class = NodeClass.find_by_id(@node_class_id)
+  - @node_id = @node_class_membership.node_id
+  - @node = Node.find_by_id(@node_id)
+
+  - form_for(@node_class_membership) do |f|
+    = render f
+    .element.actions
+      %button Update
+      or go to
+      = link_to @node.name, "/nodes/#{@node_id}"

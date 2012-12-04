@@ -42,6 +42,77 @@ module NodeGroupGraph
     node_classes_with_sources.keys
   end
 
+  def compile_class_parameters(class_membership)
+    compiled_parameters = self.walk_parent_groups do |group,parents|
+      # Pick-up conflicts that our parents had
+      parent_params = parents.map(&:parameters).flatten
+      conflicts = parents.map(&:conflicts).inject(Set.new,&:merge)
+
+      params = Hash.new
+
+      membership = if group.is_a? NodeGroup
+                      NodeGroupClassMembership.find_by_node_group_id_and_node_class_id(group.id, class_membership.node_class_id)
+                    else
+                      NodeClassMembership.find_by_node_id_and_node_class_id(group.id, class_membership.node_class_id)
+                    end
+
+      #If a parent group doesn't have the class declared, skip it
+      if membership
+        membership.parameters.to_hash.each do |key,value|
+          params[key] = OpenStruct.new :name => key, :value => value, :sources => Set[group]
+        end
+      end
+
+      #Now collect our inherited params and their conflicts
+      inherited = {}
+      parent_params.each do |parameter|
+        if inherited[parameter.name] && inherited[parameter.name].value != parameter.value
+          conflicts.add(parameter.name)
+          inherited[parameter.name].sources << parameter.sources.first
+        else
+          inherited[parameter.name] = OpenStruct.new :name => parameter.name, :value => parameter.value, :sources => parameter.sources
+        end
+      end
+
+      # Resolve all conflicts resolved by the node/group itself
+      conflicts.delete_if {|key| params[key]}
+
+      OpenStruct.new :parameters => params.reverse_merge(inherited).values, :conflicts => conflicts
+    end
+
+    compiled_parameters.conflicts.each { |key| errors.add(:parameters,key) }
+
+    #raise ParameterConflictError or @compiled_parameters.conflicts.empty?
+    compiled_parameters.parameters
+  end
+
+  def node_classes_with_parameters
+    return @node_classes_with_parameters if @node_classes_with_parameters
+    all = {}
+    self.walk_parent_groups do |group,_|
+      group.node_classes.each do |node_class|
+        node_class_parameters = Hash.new
+        if group.class == NodeGroup
+          if membership = NodeGroupClassMembership.find_by_node_group_id_and_node_class_id(group.id,node_class.id)
+            self.compile_class_parameters(membership).each do |param|
+              node_class_parameters[param.name] = param.value
+            end
+          end
+        else
+          if membership = NodeClassMembership.find_by_node_id_and_node_class_id(group.id,node_class.id)
+            self.compile_class_parameters(membership).each do |param|
+              node_class_parameters[param.name] = param.value
+            end
+          end
+        end
+
+        all[node_class.name] ||= Hash.new
+        all[node_class.name] = node_class_parameters
+      end
+    end
+    @node_classes_with_sources = all
+  end
+
   # Returns a hash of all the classes for this group/node, direct or inherited.
   # Each key is a class, and each value is the Set of groups from which we inherit
   # that class.
@@ -72,6 +143,7 @@ module NodeGroupGraph
     end
     @nodes_with_sources = all
   end
+
 
   # Collects all the parameters of the node, starting at the "most distant" groups
   # and working its ways up to the node itself. If there is a conflict between two
