@@ -16,6 +16,7 @@ gem 'rack'
 
 gem 'daemons'
 gem 'json_pure'
+gem 'system_timer', :platforms => :ruby_18
 
 gem 'delayed_job', '~> 3.0'
 gem 'delayed_job_active_record', '~> 0.3.3'
