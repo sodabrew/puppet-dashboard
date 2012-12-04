@@ -157,17 +157,10 @@ describe Node do
       @node.configuration.keys.should =~ ['classes', 'name', 'parameters']
     end
 
-#This won't work any more once class parameters are introduced
-    it "should return the names of the node's classes in the returned class list" do
+    it "should return the names of the node's classes in the keys of the returned class list" do
       @node.node_classes = @classes = Array.new(3) { NodeClass.generate! }
-      @node.configuration['classes'].should =~ @classes.collect(&:name)
+      @node.configuration['classes'].keys.should =~ @classes.collect(&:name)
     end
-
-#This will replace the previous test once class parameters are introduced
-#    it "should return the names of the node's classes in the keys of the returned class list" do
-#      @node.node_classes = @classes = Array.new(3) { NodeClass.generate! }
-#      @node.configuration['classes'].keys.should =~ @classes.collect(&:name)
-#    end
 
     it "should return the node's compiled parameters in the returned parameters list" do
       @node.stubs(:compiled_parameters).returns [
