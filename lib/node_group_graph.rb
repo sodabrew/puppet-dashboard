@@ -45,10 +45,10 @@ module NodeGroupGraph
   def compile_class_parameters(class_membership)
     compiled_parameters = self.walk_parent_groups do |group,parents|
       # Pick-up conflicts that our parents had
-      parent_params = parents.map(&:parameters).flatten
-      conflicts = parents.map(&:conflicts).inject(Set.new,&:merge)
+      parent_params = parents.map{|parent| parent[:parameters]}.flatten
+      conflicts = parents.map{|parent| parent[:conflicts]}.inject(Set.new,&:merge)
 
-      params = Hash.new
+      params = {}
 
       membership = if group.is_a? NodeGroup
                       NodeGroupClassMembership.find_by_node_group_id_and_node_class_id(group.id, class_membership.node_class_id)
@@ -58,32 +58,32 @@ module NodeGroupGraph
 
       #If a parent group doesn't have the class declared, skip it
       if membership
-        membership.parameters.to_hash.each do |key,value|
-          params[key] = OpenStruct.new :name => key, :value => value, :sources => Set[group]
+        membership.parameters.each do |param|
+          params[param.key] = { :name => param.key, :value => param.value, :sources => Set[group] }
         end
       end
 
       #Now collect our inherited params and their conflicts
       inherited = {}
       parent_params.each do |parameter|
-        if inherited[parameter.name] && inherited[parameter.name].value != parameter.value
-          conflicts.add(parameter.name)
-          inherited[parameter.name].sources << parameter.sources.first
+        if inherited[parameter[:name]] && inherited[parameter[:name]][:value] != parameter[:value]
+          conflicts.add(parameter[:name])
+          inherited[parameter[:name]][:sources] << parameter[:sources].first
         else
-          inherited[parameter.name] = OpenStruct.new :name => parameter.name, :value => parameter.value, :sources => parameter.sources
+          inherited[parameter[:name]] = { :name => parameter[:name], :value => parameter[:value], :sources => parameter[:sources] }
         end
       end
 
       # Resolve all conflicts resolved by the node/group itself
       conflicts.delete_if {|key| params[key]}
 
-      OpenStruct.new :parameters => params.reverse_merge(inherited).values, :conflicts => conflicts
+      { :parameters => params.reverse_merge(inherited).values.sort{|a,b| a[:name] <=> b[:name]}, :conflicts => conflicts.sort }
     end
 
-    compiled_parameters.conflicts.each { |key| errors.add(:parameters,key) }
+    compiled_parameters[:conflicts].each { |key| errors.add(:parameters,key) }
 
     #raise ParameterConflictError or @compiled_parameters.conflicts.empty?
-    compiled_parameters.parameters
+    compiled_parameters[:parameters]
   end
 
   def node_classes_with_parameters
@@ -95,13 +95,13 @@ module NodeGroupGraph
         if group.class == NodeGroup
           if membership = NodeGroupClassMembership.find_by_node_group_id_and_node_class_id(group.id,node_class.id)
             self.compile_class_parameters(membership).each do |param|
-              node_class_parameters[param.name] = param.value
+              node_class_parameters[param[:name]] = param[:value]
             end
           end
         else
           if membership = NodeClassMembership.find_by_node_id_and_node_class_id(group.id,node_class.id)
             self.compile_class_parameters(membership).each do |param|
-              node_class_parameters[param.name] = param.value
+              node_class_parameters[param[:name]] = param[:value]
             end
           end
         end
@@ -154,38 +154,38 @@ module NodeGroupGraph
     unless @compiled_parameters
       @compiled_parameters = self.walk_parent_groups do |group,parents|
         # Pick-up conflicts that our parents had
-        parent_params = parents.map(&:parameters).flatten
-        conflicts = parents.map(&:conflicts).inject(Set.new,&:merge)
+        parent_params = parents.map{|parent| parent[:parameters]}.flatten
+        conflicts = parents.map{|parent| parent[:conflicts]}.inject(Set.new,&:merge)
 
         params = {}
         group.parameters.to_hash.each do |key,value|
-          params[key] = OpenStruct.new :name => key, :value => value, :sources => Set[group]
+          params[key] = { :name => key, :value => value, :sources => Set[group] }
         end
 
         #Now collect our inherited params and their conflicts
         inherited = {}
         parent_params.each do |parameter|
-          if inherited[parameter.name] && inherited[parameter.name].value != parameter.value
-            conflicts.add(parameter.name)
-            inherited[parameter.name].sources << parameter.sources.first
+          if inherited[parameter[:name]] && inherited[parameter[:name]][:value] != parameter[:value]
+            conflicts.add(parameter[:name])
+            inherited[parameter[:name]][:sources] << parameter[:sources].first
           else
-            inherited[parameter.name] = OpenStruct.new :name => parameter.name, :value => parameter.value, :sources => parameter.sources
+            inherited[parameter[:name]] = { :name => parameter[:name], :value => parameter[:value], :sources => parameter[:sources] }
           end
         end
 
         # Resolve all conflicts resolved by the node/group itself
         conflicts.delete_if {|key| params[key]}
 
-        OpenStruct.new :parameters => params.reverse_merge(inherited).values, :conflicts => conflicts
+        { :parameters => params.reverse_merge(inherited).values.sort{|a,b| a[:name] <=> b[:name]}, :conflicts => conflicts.sort }
       end
-      @compiled_parameters.conflicts.each { |key| errors.add(:parameters,key) }
+      @compiled_parameters[:conflicts].each { |key| errors.add(:parameters,key) }
     end
-    raise ParameterConflictError unless allow_conflicts or @compiled_parameters.conflicts.empty?
-    @compiled_parameters.parameters
+    raise ParameterConflictError unless allow_conflicts or @compiled_parameters[:conflicts].empty?
+    @compiled_parameters[:parameters]
   end
 
   def parameter_list
-    compiled_parameters.map{|param| {param.name => param.value} }.inject({},&:merge)
+    compiled_parameters.map{|param| {param[:name] => param[:value]} }.inject({},&:merge)
   end
 
   def walk_parent_groups(&block)

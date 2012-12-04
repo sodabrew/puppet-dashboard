@@ -171,8 +171,8 @@ describe Node do
 
     it "should return the node's compiled parameters in the returned parameters list" do
       @node.stubs(:compiled_parameters).returns [
-        OpenStruct.new(:name => 'a', :value => 'b', :sources => Set[:foo]),
-        OpenStruct.new(:name => 'c', :value => 'd', :sources => Set[:bar])
+        { :name => 'a', :value => 'b', :sources => Set[:foo] },
+        { :name => 'c', :value => 'd', :sources => Set[:bar] }
       ]
       @node.configuration['parameters'].should == { 'a' => 'b', 'c' => 'd' }
     end
@@ -240,8 +240,8 @@ describe Node do
 
       it "should return the compiled parameters" do
         @node.compiled_parameters.should =~ [
-          OpenStruct.new(:name => 'foo', :value => '1', :sources => Set[@node_group_a]),
-          OpenStruct.new(:name => 'bar', :value => '2', :sources => Set[@node_group_b])
+          { :name => 'foo', :value => '1', :sources => Set[@node_group_a] },
+          { :name => 'bar', :value => '2', :sources => Set[@node_group_b]  }
         ]
       end
 
@@ -251,8 +251,8 @@ describe Node do
         @node_group_a.node_groups << @node_group_a1
 
         @node.compiled_parameters.should =~ [
-          OpenStruct.new(:name => 'foo', :value => '1', :sources => Set[@node_group_a]),
-          OpenStruct.new(:name => 'bar', :value => '2', :sources => Set[@node_group_b])
+          { :name => 'foo', :value => '1', :sources => Set[@node_group_a] },
+          { :name => 'bar', :value => '2', :sources => Set[@node_group_b] }
         ]
       end
 
@@ -284,9 +284,9 @@ describe Node do
       end
 
       it "should include parameters of the node itself" do
+        @node.parameters.clear
         @node.parameters << Parameter.create(:key => "node_parameter", :value => "exist")
-
-        @node.compiled_parameters.should be_any {|p| p.name == "node_parameter" && p.value == "exist"}
+        @node.compiled_parameters.should be_any {|p| p[:name] == "node_parameter" && p[:value] == "exist"}
       end
 
       it "should retain the history of its parameters" do
@@ -298,8 +298,8 @@ describe Node do
         @node_group_a.node_groups << @node_group_d
 
         @node.compiled_parameters.should =~ [
-          OpenStruct.new(:name => 'foo', :value => '1', :sources => Set[@node_group_a]),
-          OpenStruct.new(:name => 'bar', :value => '2', :sources => Set[@node_group_b])
+          { :name => 'foo', :value => '1', :sources => Set[@node_group_a] },
+          { :name => 'bar', :value => '2', :sources => Set[@node_group_b] }
         ]
       end
     end
