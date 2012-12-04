@@ -151,8 +151,15 @@ namespace :nodegroup do
          nodegroup.node_classes = classes
          if nodegroup.save
            puts "Class '#{classname}' added to node group '#{name}'"
+          end
         end
       end
+
+    rescue => e
+      puts e.message
+      exit 1
+    end
+  end
     end
 
     rescue => e
