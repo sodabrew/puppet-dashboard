@@ -6,8 +6,9 @@
         %tr
           %th.name{:scope => :col} Class
           %th{:scope => :col} Source
+          %th{:scope => :col} Parameters
       %tbody
-        - resource.node_classes_with_sources.each do |node_class,sources|
+        - resource.node_classes_with_sources.sort.each do |node_class,sources|
           %tr
             %td.name
               %strong= link_to(h(node_class.name),node_class)
@@ -16,6 +17,17 @@
                 = h resource.name
               - else
                 = raw sources.map{ |source| link_to(h(source.name),source) }.join(", ")
+            %td
+              - if resource.class == NodeGroup
+                - membership = NodeGroupClassMembership.find_by_node_group_id_and_node_class_id(resource.id, node_class.id)
+                - path       = membership.nil? ? nil : node_group_class_membership_path(membership)
+              - else
+                - membership = NodeClassMembership.find_by_node_id_and_node_class_id(resource.id, node_class.id)
+                - path       = membership.nil? ? nil : node_class_membership_path(membership)
+              - unless path.nil?
+                = link_to(h('Show Parameters'),path) unless path.nil?
+              - else
+                = "Source is not #{resource.name}"
   - else
     = describe_no_matches_as 'No classes'
 %br.clear

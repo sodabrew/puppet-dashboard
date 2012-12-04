@@ -1,8 +1,12 @@
+= javascript_include_tag 'ajax_helper', :cache => 'ajax_form_support'
 #sidebar= render 'shared/node_manager_sidebar'
 #main
-  = form_for(@node_group) do |f|
+  = form_for @node_group, :html => {:id => "param_form"} do |f|
+    %input{:id => "force_create", :name => "force_create", :type => "hidden", :value => "false"}
     = render f
     .element.actions
-      %button Create
+      %button{:id => "submit_button"} Create
       or
       = link_to 'Cancel', node_groups_path
+  %script{:type=>"text/javascript"}
+    register_ajax_submit("#param_form");

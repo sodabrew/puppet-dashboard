@@ -1,6 +1,10 @@
 class NodeClassMembership < ActiveRecord::Base
   validates_presence_of :node_id, :node_class_id
 
+  include NodeGroupGraph
+
+  has_parameters
+
   belongs_to :node
   belongs_to :node_class
 

@@ -3,6 +3,9 @@
 = header_for(form)
 
 .item
+  .section
+    #error_messages{:style => "display: none;"}
+
   = render :partial => 'shared/form_errors', :object => form.object.errors
 
   .element

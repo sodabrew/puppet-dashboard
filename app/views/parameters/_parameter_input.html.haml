@@ -1,4 +1,6 @@
 - parameters = parameter_input  # change silly partial-based variable name
+- parameter_index = 0
+- new_id_placeholder = "NEW_ID_PLACEHOLDER"
 - object_name = controller.controller_name.singularize
 %h3 Parameters
 %table#parameters.inspector
@@ -11,36 +13,46 @@
     %tr
       %td{:colspan => 3}
         %a.button.add{:href => '#',
-          :onclick => "jQuery('table#parameters tr.parameter').first().clone().appendTo('table#parameters tbody').show('fast').find('input').val('').css('color', 'black')".html_safe} Add parameter
+          :onclick => "jQuery('table#parameters tr.parameter').first().clone().appendTo('table#parameters tbody').show('fast').find('input').val('').css('color', 'black'); set_parameter_index();".html_safe} Add parameter
 
   %tbody
     - # non-visible row that we will clone for the Add Parameter button
     %tr.parameter{ :style => 'display: none;' }
       %td.key
-        = text_field_tag "#{object_name}[parameter_attributes][][key]", '', :placeholder => "key"
+        = text_field_tag "#{object_name}[parameter_attributes][#{new_id_placeholder}][key]", '', :placeholder => "key"
       %td.value
-        = text_field_tag "#{object_name}[parameter_attributes][][value]", '', :placeholder => "value"
+        = text_field_tag "#{object_name}[parameter_attributes][#{new_id_placeholder}][value]", '', :placeholder => "value"
       %td.actions
         %a.icon.delete{:href => '#',
           :onclick => "jQuery(this).parents('tr').remove()".html_safe} Remove parameter
 
     - # existing parameters
     - parameters.each do |param|
+      - parameter_index += 1
       %tr.parameter
         %td.key
-          = text_field_tag "#{object_name}[parameter_attributes][][key]", param.key, :placeholder => "key"
+          = text_field_tag "#{object_name}[parameter_attributes][#{parameter_index}][key]", param.key, :placeholder => "key"
         %td.value
-          = text_field_tag "#{object_name}[parameter_attributes][][value]", param.value, :placeholder => "value"
+          = text_field_tag "#{object_name}[parameter_attributes][#{parameter_index}][value]", param.value, :placeholder => "value"
         %td.actions
           %a.icon.delete{:href => '#',
             :onclick => "jQuery(this).parents('tr').remove()".html_safe} Remove parameter
 
     - # one blank row
+    - parameter_index += 1
     %tr.parameter
       %td.key
-        = text_field_tag "#{object_name}[parameter_attributes][][key]", '', :placeholder => "key"
+        = text_field_tag "#{object_name}[parameter_attributes][#{parameter_index}][key]", '', :placeholder => "key"
       %td.value
-        = text_field_tag "#{object_name}[parameter_attributes][][value]", '', :placeholder => "value"
+        = text_field_tag "#{object_name}[parameter_attributes][#{parameter_index}][value]", '', :placeholder => "value"
       %td.actions
         %a.icon.delete{:href => '#',
           :onclick => "jQuery(this).parents('tr').remove()".html_safe} Remove parameter
+:javascript
+  function set_parameter_index() {
+    var new_index = new Date().getTime();
+    jQuery("##{object_name}_parameter_attributes_#{new_id_placeholder}_key").attr("id", "#{object_name}_parameter_attributes_" + new_index + "_key");
+    jQuery("[name='#{object_name}[parameter_attributes][#{new_id_placeholder}][key]']").attr("name", "#{object_name}[parameter_attributes][" + new_index + "][key]");
+    jQuery("##{object_name}_parameter_attributes_#{new_id_placeholder}_value").attr("id", "#{object_name}_parameter_attributes_" + new_index + "_value");
+    jQuery("[name='#{object_name}[parameter_attributes][#{new_id_placeholder}][value]']").attr("name", "#{object_name}[parameter_attributes][" + new_index + "][value]");
+  }
