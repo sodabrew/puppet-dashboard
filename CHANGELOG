@@ -1,4 +1,4 @@
-1.2.15-rc1
+1.2.15
 ===
 8133354 In will_paginate 2.x, default per_page is hardcoded 30.
 3c80866 Now that we ship 1.8.7, we can build for el5
