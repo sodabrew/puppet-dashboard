@@ -60,10 +60,10 @@ describe NodesController do
 
     context "as CSV" do
       let :header do
-        CSV.generate_line [ 'name',            'status',            'resource_count', 'pending_count',
-                            'failed_count',    'compliant_count',   'resource_type',  'title',
-                            'evaluation_time', 'file',              'line',           'time',
-                            'change_count',    'out_of_sync_count', 'skipped',        'failed' ]
+        UseThisCSV.generate_line %w[name            status            resource_count pending_count
+                                    failed_count    compliant_count   resource_type  title
+                                    evaluation_time file              line           time
+                                    change_count    out_of_sync_count skipped        failed ], :row_sep => ''
       end
 
       it "should make correct CSV" do
@@ -96,7 +96,7 @@ describe NodesController do
           get :index, :format => "csv"
 
           response.should be_success
-          CSV.parse(response.body).last.first.should == name
+          UseThisCSV.parse(response.body).last.first.should == name
         end
       end
 

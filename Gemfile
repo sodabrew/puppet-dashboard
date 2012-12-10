@@ -16,6 +16,7 @@ gem 'rack'
 
 gem 'daemons'
 gem 'json_pure'
+gem 'fastercsv', :platforms => :ruby_18
 gem 'system_timer', :platforms => :ruby_18
 
 gem 'delayed_job', '~> 3.0'
