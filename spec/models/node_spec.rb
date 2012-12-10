@@ -105,18 +105,18 @@ describe Node do
 
     it "should find the nodes that match the list of names given" do
       PuppetHttps.stubs(:get).returns('["foo", "bar"]')
-      Node.find_from_inventory_search('').should =~ [@foo, @bar]
+      Node.find_from_inventory_search.should =~ [@foo, @bar]
     end
 
     it "should create nodes that don't exist" do
       PuppetHttps.stubs(:get).returns('["foo", "bar", "baz"]')
-      Node.find_from_inventory_search('').map(&:name).should =~ ['foo', 'bar', 'baz']
+      Node.find_from_inventory_search.map(&:name).should =~ ['foo', 'bar', 'baz']
     end
 
     it "should look-up nodes case-insensitively" do
       baz = Node.generate :name => "BAZ"
       PuppetHttps.stubs(:get).returns('["foo", "BAR", "baz"]')
-      Node.find_from_inventory_search('').should =~ [@foo, @bar, baz]
+      Node.find_from_inventory_search.should =~ [@foo, @bar, baz]
     end
   end
 

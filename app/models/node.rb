@@ -77,7 +77,7 @@ class Node < ActiveRecord::Base
     find_by_id(identifier) or find_by_name!(identifier)
   end
 
-  def self.find_from_inventory_search(search_params)
+  def self.find_from_inventory_search(search_params={})
     queries = search_params.map do |param|
       fact  = CGI::escape(param['fact'])
       value = CGI::escape(param['value'])
