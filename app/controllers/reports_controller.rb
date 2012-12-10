@@ -8,8 +8,8 @@ class ReportsController < InheritedResources::Base
   attr_accessor :errors
 
   def index
-    index! do |success,failure|
-      success.html do
+    index! do |format|
+      format.html do
         if params[:kind] == "inspect"
           @reports = paginate_scope Report.inspections
         else
