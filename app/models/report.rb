@@ -154,11 +154,11 @@ class Report < ActiveRecord::Base
 
   def add_missing_metrics
     ['pending', 'unchanged'].each do |additional_status|
-      next if metrics.detect {|m| m.category == 'resources' and m.name == additional_status }
-      metrics << metrics.new(
+      next if metrics.any? {|m| m.category == 'resources' and m.name == additional_status }
+      metrics << Metric.new(
         :category => 'resources',
         :name     => additional_status,
-        :value    => resource_statuses.select {|rs| rs.status == additional_status  }.length
+        :value    => resource_statuses.select {|rs| rs.status == additional_status }.length
       )
     end
   end
