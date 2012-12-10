@@ -147,7 +147,7 @@ class Node < ActiveRecord::Base
 
     rows.map do |row|
       CSV.generate_line row
-    end.join("\n")
+    end.join
   end
 
   def timeline_events

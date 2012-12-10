@@ -60,10 +60,10 @@ describe NodesController do
 
     context "as CSV" do
       let :header do
-        CSV.generate_line [ 'name',            'status',            'resource_count', 'pending_count',
-                            'failed_count',    'compliant_count',   'resource_type',  'title',
-                            'evaluation_time', 'file',              'line',           'time',
-                            'change_count',    'out_of_sync_count', 'skipped',        'failed' ]
+        CSV.generate_line %w[name            status            resource_count pending_count
+                             failed_count    compliant_count   resource_type  title
+                             evaluation_time file              line           time
+                             change_count    out_of_sync_count skipped        failed ], :row_sep => ''
       end
 
       it "should make correct CSV" do

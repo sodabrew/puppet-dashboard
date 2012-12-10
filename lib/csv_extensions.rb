@@ -1,22 +1,18 @@
-require 'csv'
-
-module CsvSerializable
-  def to_csv(&blk)
-    header = first.class.to_csv_header if first.class.respond_to?(:to_csv_header)
-    if blk
-      yield header + "\n" if header
-      each {|x| yield x.to_csv + "\n"}
-      nil
-    else
-      lines = map(&:to_csv)
-      lines.unshift header if header
-      lines.join("\n")
-    end
-  end
+# In Ruby 1.9 and up, FasterCSV is in stdlib and is called CSV.
+if RUBY_VERSION < '1.9'
+  require 'fastercsv'
+  CSV = FasterCSV
+else
+  require 'csv'
 end
 
 class Array
-  include CsvSerializable
+  def to_csv
+    header = first.class.to_csv_header if first.class.respond_to?(:to_csv_header)
+    lines = map(&:to_csv)
+    lines.unshift header if header
+    lines.join
+  end
 end
 
 class ActiveRecord::Base
