@@ -422,7 +422,7 @@ describe Report do
 
       it "not unlink the file if create_from_yaml fails" do
         File.expects(:unlink).with('/tmp/foo').never
-        Report.expects(:create_from_yaml).raises(ActiveRecord::StatementInvalid)
+        Report.stubs(:create_from_yaml).raises(ActiveRecord::StatementInvalid)
         Report.create_from_yaml_file('/tmp/foo', :delete => true)
       end
 
