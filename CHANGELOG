@@ -1,3 +1,7 @@
+1.2.16-unreleased
+===
+d052a9c Add tabs to filter Reports based on status
+
 1.2.15
 ===
 8133354 In will_paginate 2.x, default per_page is hardcoded 30.
