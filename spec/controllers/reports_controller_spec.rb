@@ -5,10 +5,6 @@ require 'shared_behaviors/controller_mixins'
 describe ReportsController do
   before :each do
     @yaml = File.read(Rails.root.join('spec', 'fixtures', 'sample_report.yml'))
-    @failed = Report.create!(:host => "failed", :time => 1.week.ago.to_date, :status => "failed", :kind => "apply")
-    @unchanged = Report.create!(:host => "unchanged", :time => 1.week.ago.to_date, :status => "unchanged", :kind => "apply")
-    @pending = Report.create!(:host => "pending", :time => 1.week.ago.to_date, :status => "pending", :kind => "apply")
-    @changed = Report.create!(:host => "changed", :time => 1.week.ago.to_date, :status => "changed", :kind => "apply")
   end
 
   def model; Report end
@@ -90,82 +86,6 @@ describe ReportsController do
     end
   end
 
-  describe "#index" do
-    it "should render the index template and show all reports" do
-      get('index')
-      response.code.should == '200'
-      response.should render_template("reports/index")
-      assigns[:controller_action].should == 'all'
-      assigns[:reports].should include @failed
-      assigns[:reports].should include @pending
-      assigns[:reports].should include @changed
-      assigns[:reports].should include @unchanged
-    end
-  end
-
-  describe "#all" do
-    it "should render the index template and show all reports" do
-      get('all')
-      response.code.should == '200'
-      response.should render_template("reports/index")
-      assigns[:controller_action].should == 'all'
-      assigns[:reports].should include @failed
-      assigns[:reports].should include @pending
-      assigns[:reports].should include @changed
-      assigns[:reports].should include @unchanged
-    end
-  end
-
-  describe "#failed" do
-    it "should render the index template and show only failed reports" do
-      get('failed')
-      response.code.should == '200'
-      response.should render_template("reports/index")
-      assigns[:controller_action].should == 'failed'
-      assigns[:reports].should include @failed
-      assigns[:reports].should_not include @pending
-      assigns[:reports].should_not include @changed
-      assigns[:reports].should_not include @unchanged
-    end
-  end
-  describe "#pending" do
-    it "should render the index template and show only pending reports" do
-      get('pending')
-      response.code.should == '200'
-      response.should render_template("reports/index")
-      assigns[:controller_action].should == 'pending'
-      assigns[:reports].should_not include @failed
-      assigns[:reports].should include @pending
-      assigns[:reports].should_not include @changed
-      assigns[:reports].should_not include @unchanged
-    end
-  end
-  describe "#changed" do
-    it "should render the index template and show only changed reports" do
-      get('changed')
-      response.code.should == '200'
-      response.should render_template("reports/index")
-      assigns[:controller_action].should == 'changed'
-      assigns[:reports].should_not include @failed
-      assigns[:reports].should_not include @pending
-      assigns[:reports].should include @changed
-      assigns[:reports].should_not include @unchanged
-    end
-  end
-
-  describe "#unchanged" do
-    it "should render the index template and show only unchanged reports" do
-      get('unchanged')
-      response.code.should == '200'
-      response.should render_template("reports/index")
-      assigns[:controller_action].should == 'unchanged'
-      assigns[:reports].should_not include @failed
-      assigns[:reports].should_not include @pending
-      assigns[:reports].should_not include @changed
-      assigns[:reports].should include @unchanged
-    end
-  end
-
   describe "#search" do
     it "should render the search form if there are no parameters" do
       get('search')
@@ -233,4 +153,5 @@ describe ReportsController do
     @request.env.delete('RAW_POST_DATA')
     response
   end
+
 end
