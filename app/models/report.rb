@@ -20,8 +20,13 @@ class Report < ActiveRecord::Base
 
   default_scope :order => 'time DESC', :include => :node
 
-  named_scope :inspections, :conditions => {:kind => "inspect"}, :include => :metrics
-  named_scope :applies,     :conditions => {:kind => "apply"  }, :include => :metrics
+  named_scope :inspections, :conditions => {:kind => "inspect"                       }, :include => :metrics
+  named_scope :applies,     :conditions => {:kind => "apply"                         }, :include => :metrics
+  named_scope :all,         :conditions => {:kind => "apply"                         }, :include => :metrics
+  named_scope :changed,     :conditions => {:kind => "apply", :status => 'changed'   }, :include => :metrics
+  named_scope :unchanged,   :conditions => {:kind => "apply", :status => 'unchanged' }, :include => :metrics
+  named_scope :failed,      :conditions => {:kind => "apply", :status => 'failed'    }, :include => :metrics
+  named_scope :pending,     :conditions => {:kind => "apply", :status => 'pending'   }, :include => :metrics
 
   def total_resources
     metric_value("resources", "total")
