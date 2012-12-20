@@ -190,7 +190,7 @@ describe ReportsController do
           get('search', :file_content => "ab07acbb1e496801937adfa772424bf7")
           assigns[:matching_files].should == nil
           assigns[:unmatching_files].should == nil
-          subject.errors.should include "Please specify the file title to search for"
+          assigns[:errors].should include "Please specify the file title to search for"
         end
       end
 
@@ -199,7 +199,7 @@ describe ReportsController do
           get('search')
           assigns[:matching_files].should == nil
           assigns[:unmatching_files].should == nil
-          subject.errors.should be_empty
+          assigns[:errors].should be_empty
         end
       end
 
@@ -208,7 +208,7 @@ describe ReportsController do
           get('search', :file_title => "", :file_content => "")
           assigns[:matching_files].should == nil
           assigns[:unmatching_files].should == nil
-          subject.errors.should include "Please specify the file title to search for"
+          assigns[:errors].should include "Please specify the file title to search for"
         end
       end
     end
