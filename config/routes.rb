@@ -28,7 +28,12 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :reports,
     :collection => {
-      :search => :get,
+      :search    => :get,
+      :all       => :get,
+      :failed    => :get,
+      :pending   => :get,
+      :changed   => :get,
+      :unchanged => :get
     }
 
   map.resources :node_group_memberships, :as => :memberships
