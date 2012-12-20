@@ -1,6 +1,11 @@
 1.2.16-unreleased
 ===
-d052a9c Add tabs to filter Reports based on status
+5635147 New feature: Add tabs to filter Reports based on status
+c77afe9 Spec fix: Report.create_from_yaml does several retries, update test mocks to allow this
+9d162d3 Spec fix: Fix reports unit tests by another approach from 757c518
+3784739 Bug fix: Revert 757c518 which broke Reports Search
+ba35090 Bug fix: 'verb'! do |success, failure| is only for verbs create, update, destroy; everything else must use 'verb'! do |format|.
+9c8626b Bug fix: Call Metric.new instead of metrics.new, which caused a duplication of all metrics.
 
 1.2.15
 ===
