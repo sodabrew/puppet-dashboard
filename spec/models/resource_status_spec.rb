@@ -49,7 +49,7 @@ describe ResourceStatus do
 
     describe ".latest_inspections" do
       it "should only return statuses from reports that are the latest inspect report for their node" do
-        ResourceStatus.latest_inspections.should =~ @matching_report.resource_statuses
+        ResourceStatus.latest_inspections.should == @matching_report.resource_statuses
       end
     end
 
