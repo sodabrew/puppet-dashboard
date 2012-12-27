@@ -1,4 +1,4 @@
-1.2.16-rc1
+1.2.16
 ===
 5635147 New feature: Add tabs to filter Reports based on status
 c77afe9 Spec fix: Report.create_from_yaml does several retries, update test mocks to allow this
