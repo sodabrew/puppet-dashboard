@@ -286,7 +286,7 @@ describe Node do
       it "should include parameters of the node itself" do
         @node.parameters << Parameter.create(:key => "node_parameter", :value => "exist")
 
-        @node.compiled_parameters.index{|p| p.name == "node_parameter" && p.value == "exist"}.should_not be_nil
+        @node.compiled_parameters.should be_any {|p| p.name == "node_parameter" && p.value == "exist"}
       end
 
       it "should retain the history of its parameters" do
