@@ -1,4 +1,4 @@
-require File.expand_path(File.join(File.dirname(__FILE__), *%w[.. .. spec_helper]))
+require 'spec_helper'
 
 describe '/pages/home.html.haml' do
   describe "successful render" do
@@ -12,19 +12,14 @@ describe '/pages/home.html.haml' do
       assigns[:unchanged_nodes] = []
     end 
 
-    specify do
-      render
-      response.should be_success
-    end
+    render
+  end
 
-    it "should have a correct delayed_job_failures link" do
-      render
-      should have_tag('a[href="/delayed_job_failures"]', 'Background Tasks')
-    end
+  it "should have a correct delayed_job_failures link" do
+    rendered.should have_tag('a', :href => '/delayed_job_failures', :text => 'Background Tasks')
+  end
 
-    it "should have a correct radiator link" do
-      render
-      should have_tag('a[href="/radiator"]', 'Radiator View')
-    end
+  it "should have a correct radiator link" do
+    rendered.should have_tag('a', :href => '/radiator', :text => 'Radiator View')
   end
 end
