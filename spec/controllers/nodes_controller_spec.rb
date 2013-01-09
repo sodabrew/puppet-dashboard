@@ -92,10 +92,11 @@ describe NodesController do
 
       %w[foo,_-' bar/\\$^ <ba"z>>].each do |name|
         it "should handle a node named #{name}" do
-          node = Node.generate!(:name => name)
+          node = Node.generate!(:name => name, :reported_at => @node.reported_at - 1)  # cannot be nil since PGS and MySQL sort nils differently
           get :index, :format => "csv"
 
           response.should be_success
+
           CSV.parse(response.body).last.first.should == name
         end
       end

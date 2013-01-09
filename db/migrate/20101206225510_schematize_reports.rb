@@ -66,7 +66,9 @@ class SchematizeReports < ActiveRecord::Migration
     add_index :metrics, [:report_id]
 
     # The name of this index is wrong, it's really only an index on node_id
-    remove_index "reports", :name => "index_reports_on_node_id_and_success"
+    if index_name_exists?("reports", "index_reports_on_node_id_and_success", false)
+      remove_index "reports", :name => "index_reports_on_node_id_and_success"
+    end
 
     remove_index "reports", ["time", "node_id", "status"]
     rename_table :reports, :old_reports
