@@ -1,3 +1,7 @@
+1.2.18
+===
+6aa4294 Apply suggested workaround for CVE-2013-0156 as Dashboard does not use xml parameter parsing.
+
 1.2.17
 ===
 5b7bdca Patch for CVE-2012-5664: options hashes should only be extracted if there are extra parameters
