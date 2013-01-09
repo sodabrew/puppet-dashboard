@@ -80,6 +80,7 @@ GEM
     multi_json (1.4.0)
     mysql2 (0.3.11)
     nokogiri (1.5.5)
+    pg (0.14.1)
     polyglot (0.3.3)
     rack (1.4.1)
     rack-cache (1.2)
@@ -173,6 +174,7 @@ DEPENDENCIES
   json_pure
   mocha (~> 0.12.0)
   mysql2 (~> 0.3.11)
+  pg (~> 0.11)
   rack
   rails (~> 3.2)
   rake (~> 0.9.3)

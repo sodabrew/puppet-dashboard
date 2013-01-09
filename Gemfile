@@ -2,7 +2,6 @@ source :rubygems
 
 gem 'rake'          , '~> 0.9.3'
 gem 'rails'         , '~> 3.2'
-gem 'mysql2'        , '~> 0.3.11'
 gem 'jquery-rails'  , '~> 2.1'
 gem 'sass-rails'    , '~> 3.2'
 gem 'haml-rails'    , '~> 0.3.5'
@@ -31,4 +30,12 @@ group :development, :test do
   gem 'shoulda-matchers'
   gem 'rspec-html-matchers'
   gem 'execjs' # Will use system-available JS runtime
+end
+
+group :postgresql do
+  gem 'pg', '~> 0.11'
+end
+
+group :mysql do
+  gem 'mysql2', '~> 0.3.11'
 end

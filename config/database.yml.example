@@ -40,7 +40,7 @@
 # - encoding
 # - adapter
 # 
-# At the moment, "adapter" can only be "mysql", and "encoding" should always
+# At the moment, "adapter" can be "mysql2" or "postgresql", and "encoding" should always
 # be "utf8".
 # 
 production:
@@ -48,19 +48,19 @@ production:
   username: dashboard
   password:
   encoding: utf8
-  adapter: mysql
+  adapter: postgresql
 
 development:
   database: dashboard_development
   username: dashboard
   password:
   encoding: utf8
-  adapter: mysql
+  adapter: postgresql
 
 test:
   database: dashboard_test
   username: dashboard
   password:
   encoding: utf8
-  adapter: mysql
+  adapter: postgresql
 
