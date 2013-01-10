@@ -1,100 +1,103 @@
-//= require <jquery>
+(function ($) {
+  "use strict";
 
-/*!
- * Cross-browser Placeholder Plugin for jQuery
- *
- * Copyright (c) 2009 Mark Dodwell
- * Licensed under the MIT license.
- *
- * Requires: jQuery v1.3.2
- * Version: 0.1.3
- */
-(function($) {  
-  
-  var debug = false;
-  var placeholderColor = debug ? "red" : "#aaa";
-  var placeholderAttributeName = "placeholder"
-  var blurClass = "blur";
-  var autoload = true;
-  
-  $.fn.placeholders = function() {  
-    return $(this).each(function() {      
-      var el = $(this);
-      
-      // save original color in cache
-      el.data("placeholder.original_color", el.css("color"));
-      
-      // show if blank
-      var placeholder = el.attr(placeholderAttributeName);
-      var val = el.val() || "";
-      if (val == "") el.activatePlaceholder().val(placeholder);
+  $.extend({
+    placeholder: {
+      settings: {
+        focusClass: 'placeholderFocus',
+        activeClass: 'placeholder',
+        overrideSupport: false,
+        preventRefreshIssues: true
+      }
+    }
 
-      // hide placeholders on focus
-      el.focus(function() {
-        if (el.data('placeholder.activated')) el.deactivatePlaceholder().val("");
-      });
-    
-      // toggle placeholders on change
-      el.bind("change", function() {
-        var val = el.val() || "";
-        if (val == "") {
-          el.activatePlaceholder().val(placeholder);
-        } else {
-          el.deactivatePlaceholder();
+  });
+
+  // check browser support for placeholder
+  $.support.placeholder = 'placeholder' in document.createElement('input');
+
+  // Replace the val function to never return placeholders
+  $.fn.plVal = $.fn.val;
+  $.fn.val = function (value) {
+    if (typeof value === 'undefined') {
+      return $.fn.plVal.call(this);
+    } else {
+      var el = $(this[0]);
+      var currentValue = el.plVal();
+      var returnValue = $(this).plVal(value);
+      if (el.hasClass($.placeholder.settings.activeClass) && currentValue === el.attr('placeholder')) {
+        el.removeClass($.placeholder.settings.activeClass);
+        return returnValue;
+      }
+
+      if (el.hasClass($.placeholder.settings.activeClass) && el.plVal() === el.attr('placeholder')) {
+        return '';
+      }
+
+      return $.fn.plVal.call(this, value);
+    }
+  };
+
+  // Clear placeholder values upon page reload
+  $(window).bind('beforeunload.placeholder', function () {
+    var els = $('input.' + $.placeholder.settings.activeClass);
+    if (els.length > 0) {
+      els.val('').attr('autocomplete', 'off');
+    }
+  });
+
+
+  // plugin code
+  $.fn.placeholder = function (opts) {
+    opts = $.extend({}, $.placeholder.settings, opts);
+
+    // we don't have to do anything if the browser supports placeholder
+    if (!opts.overrideSupport && $.support.placeholder) {
+      return this;
+    }
+
+    return this.each(function () {
+      var $el = $(this);
+
+      // skip if we do not have the placeholder attribute
+      if (!$el.is('[placeholder]')) {
+        return;
+      }
+
+      // we cannot do password fields, but supported browsers can
+      if ($el.is(':password')) {
+        return;
+      }
+
+      // Prevent values from being reapplied on refresh
+      if (opts.preventRefreshIssues) {
+        $el.attr('autocomplete', 'off');
+      }
+
+      $el.bind('focus.placeholder', function () {
+        var $el = $(this);
+        if (this.value === $el.attr('placeholder') && $el.hasClass(opts.activeClass)) {
+          $el.val('').removeClass(opts.activeClass).addClass(opts.focusClass);
         }
       });
 
-      // show placeholders on blur if empty
-      el.blur(function() {
-        var val = el.val() || "";    
-        if (val == "") el.activatePlaceholder().val(placeholder);
+      $el.bind('blur.placeholder', function () {
+        var $el = $(this);
+
+        $el.removeClass(opts.focusClass);
+
+        if (this.value === '') {
+          $el.val($el.attr('placeholder')).addClass(opts.activeClass);
+        }
       });
-      
-      // remove form placeholders before submit -- only bind once per form
-      var form = el.closest("form");
-      if (form && !form.data('placeholder.clearer_set')) {
-        el.closest("form").bind("submit", function() {
-          form.find("*[" + placeholderAttributeName + "]").each(function() {
-            var el = $(this);
-            if (el.data('placeholder.activated')) el.val("");
-          });
-          return true;
-        });
-        form.data('placeholder.clearer_set', true)
-      }
+
+      $el.triggerHandler('blur');
+
+      // Prevent incorrect form values being posted
+      $el.parents('form').submit(function () {
+        $el.triggerHandler('focus.placeholder');
+      });
+
     });
   };
-  
-  $.fn.activatePlaceholder = function() { 
-    var el = $(this);
-    return el.data('placeholder.activated', true)
-      .css("color", placeholderColor)
-      .addClass(blurClass);
-  };
-  
-  $.fn.deactivatePlaceholder = function() { 
-    var el = $(this);
-    return el.data('placeholder.activated', false)
-      .css("color", el.data("placeholder.original_color"))
-      .removeClass(blurClass);
-  };
-  
-  function clearAllPlaceholders(parent) {
-    $("*[" + placeholderAttributeName + "]").each(function() {
-      var el = $(this);
-      if (el.data('placeholder.activated')) el.val("");
-    });
-  };
-  
-  function arePlaceholdersSupported() {
-    var i = document.createElement('input');
-    return 'placeholder' in i;
-  };
-  
-  // load em up!
-  $(function() {
-    if (autoload) $("*[" + placeholderAttributeName + "]").placeholders();
-    $(window).unload(clearAllPlaceholders); // handles Firefox's autocomplete
-  });
-  
-})(jQuery);
+}(jQuery));
