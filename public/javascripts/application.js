@@ -7,6 +7,10 @@ var ALL          = '#000';
 
 jQuery(document).ready(function(J) {
   J(":input[placeholder]").placeholder();
+  J.ajaxSetup({ 
+    'beforeSend': function(xhr) {xhr.setRequestHeader("Accept", "text/html")}
+  })
+
   J('table.main .status img[title]').tipsy({gravity: 's'});
 
   J('button.drop, a.drop').click( function(e) {

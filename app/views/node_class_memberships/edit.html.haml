@@ -1,4 +1,4 @@
-= javascript_include_tag 'validation_response', :cache => 'validation'
+= javascript_include_tag 'ajax_helper', :cache => 'ajax_form_support'
 #sidebar= render 'shared/node_manager_sidebar'
 #main
   - @node_class_memberhip = NodeClassMembership.find_by_id(params[:id])
@@ -7,10 +7,12 @@
   - @node_id = @node_class_membership.node_id
   - @node = Node.find_by_id(@node_id)
 
-  - remote_form_for @node_class_membership, :url => url_for(@node_class_membership), :success => "form_submit_success(request.responseJSON, 'error_messages')", :failure => "alert(\'Oops!! An error occurred.\')", :html => {:id => "param_form"} do |f|
+  - form_for @node_class_membership, :url => url_for(@node_class_membership), :html => {:id => "param_form"} do |f|
     %input{:id => "force_update", :name => "force_update", :type => "hidden", :value => "false"}
     = render f
     .element.actions
       %button{:id => "submit_button"} Update
       or go to
       = link_to @node.name, "/nodes/#{@node_id}"
+  %script{:type=>"text/javascript"}
+    register_ajax_submit("#param_form");
