@@ -217,14 +217,14 @@ namespace :node do
     end
   end
 
-  desc 'Add/Edit class(es) for a node'
+  desc 'Replace class(es) for a node'
   task :classes => :environment do
     node_name = ENV['name']
     begin
       node = Node.find_by_name(node_name)
 
       if node.nil?
-        puts "Node #{node_name} doesn\'t exist!"
+        puts "Node #{node_name} doesn't exist!"
         exit 1
       end
     rescue NameError
@@ -326,7 +326,7 @@ namespace :node do
     end
   end
 
-  desc 'Edit/Add groups for a node'
+  desc 'Replace groups for a node'
   task :groups => :environment do
     node_name = ENV['name']
     begin
