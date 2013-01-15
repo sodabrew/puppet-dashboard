@@ -50,6 +50,152 @@ namespace :node do
     end
   end
 
+  desc "Add group(s) to a node"
+  task :addgroup => :environment do
+    node_name = ENV['name']
+    begin
+      node = Node.find_by_name(node_name)
+
+      if node.nil?
+        puts "Node #{node_name} doesn't exist!"
+        exit 1
+      end
+    rescue NameError
+      puts 'Must specify node name (name=<hostname>).'
+      exit 1
+    rescue => e
+      puts "There was a problem finding the node: #{e.message}"
+      exit 1
+    end
+
+    groups = node.node_groups
+
+    if ENV['group']
+      ENV['group'].split(/,\s*/).each do |g|
+        ng = NodeGroup.find_by_name(g)
+        unless ng.nil?
+          groups << ng unless groups.include?(ng)
+        end
+      end
+    else
+      puts 'Must specify group(s) to add to node'
+      exit 1
+    end
+
+    node.node_groups = groups
+
+    begin
+      node.save!
+      puts "Node groups successfully edited for #{node.name}!"
+    rescue => e
+      puts "There was a problem saving the node: #{e.message}"
+      exit 1
+    end
+  end
+
+  desc "List groups for a node"
+  task :listgroups => :environment do
+    node_name = ENV['name']
+    begin
+      node = Node.find_by_name(node_name)
+
+      if node.nil?
+        puts "Node #{node_name} doesn't exist!"
+        exit 1
+      end
+    rescue NameError
+      puts 'Must specify node name (name=<hostname>).'
+      exit 1
+    rescue => e
+      puts "There was a problem finding the node: #{e.message}"
+      exit 1
+    end
+
+    begin
+      groups = node.node_groups
+
+      groups.each do |group|
+        puts group.name
+      end
+    rescue => e
+      puts e.message
+      exit 1
+    end
+  end
+
+  desc "Add class(s) to a node"
+  task :addclass => :environment do
+    node_name = ENV['name']
+    begin
+      node = Node.find_by_name(node_name)
+
+      if node.nil?
+        puts "Node #{node_name} doesn't exist!"
+        exit 1
+      end
+    rescue NameError
+      puts 'Must specify node name (name=<hostname>).'
+      exit 1
+    rescue => e
+      puts "There was a problem finding the node: #{e.message}"
+      exit 1
+    end
+
+    classes = node.node_classes
+
+    if ENV['class']
+      ENV['class'].split(/,\s*/).each do |c|
+        nc = NodeClass.find_by_name(c)
+        unless nc.nil?
+          classes << nc unless classes.include?(nc)
+        end
+      end
+    else
+      puts 'Must specify class(es) to add to node'
+      exit 1
+    end
+
+    node.node_classes = classes
+
+    begin
+      node.save!
+      puts "Node classes successfully edited for #{node.name}!"
+    rescue => e
+      puts "There was a problem saving the node: #{e.message}"
+      exit 1
+    end
+  end
+
+  desc "List classes for a node"
+  task :listclasses => :environment do
+    node_name = ENV['name']
+    begin
+      node = Node.find_by_name(node_name)
+
+      if node.nil?
+        puts "Node #{node_name} doesn't exist!"
+        exit 1
+      end
+    rescue NameError
+      puts 'Must specify node name (name=<hostname>).'
+      exit 1
+    rescue => e
+      puts "There was a problem finding the node: #{e.message}"
+      exit 1
+    end
+
+    begin
+      classes = node.node_classes
+
+      classes.each do |klass|
+        puts klass.name
+      end
+    rescue => e
+      puts e.message
+      exit 1
+    end
+  end
+
   desc 'Remove a node'
   task :del => :environment do
     if ENV['name']
