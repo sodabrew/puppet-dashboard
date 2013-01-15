@@ -1,3 +1,7 @@
+1.2.19
+===
+04c1dba Fix for CVE-2013-0155
+
 1.2.18
 ===
 6aa4294 Apply suggested workaround for CVE-2013-0156 as Dashboard does not use xml parameter parsing.
