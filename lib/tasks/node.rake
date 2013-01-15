@@ -1,3 +1,22 @@
+def get_node
+  node_name = ENV['name']
+  begin
+    node = Node.find_by_name(node_name)
+
+    if node.nil?
+      puts "Node #{node_name} doesn't exist!"
+      exit 1
+    end
+  rescue NameError
+    puts 'Must specify node name (name=<hostname>).'
+    exit 1
+  rescue => e
+    puts "There was a problem finding the node: #{e.message}"
+    exit 1
+  end
+  node
+end
+
 namespace :node do
   desc 'Add a new node'
   task :add => :environment do
@@ -52,21 +71,7 @@ namespace :node do
 
   desc "Add group(s) to a node"
   task :addgroup => :environment do
-    node_name = ENV['name']
-    begin
-      node = Node.find_by_name(node_name)
-
-      if node.nil?
-        puts "Node #{node_name} doesn't exist!"
-        exit 1
-      end
-    rescue NameError
-      puts 'Must specify node name (name=<hostname>).'
-      exit 1
-    rescue => e
-      puts "There was a problem finding the node: #{e.message}"
-      exit 1
-    end
+    node = get_node
 
     groups = node.node_groups
 
@@ -95,21 +100,7 @@ namespace :node do
 
   desc "List groups for a node"
   task :listgroups => :environment do
-    node_name = ENV['name']
-    begin
-      node = Node.find_by_name(node_name)
-
-      if node.nil?
-        puts "Node #{node_name} doesn't exist!"
-        exit 1
-      end
-    rescue NameError
-      puts 'Must specify node name (name=<hostname>).'
-      exit 1
-    rescue => e
-      puts "There was a problem finding the node: #{e.message}"
-      exit 1
-    end
+    node = get_node
 
     begin
       groups = node.node_groups
@@ -125,21 +116,7 @@ namespace :node do
 
   desc "Add class(s) to a node"
   task :addclass => :environment do
-    node_name = ENV['name']
-    begin
-      node = Node.find_by_name(node_name)
-
-      if node.nil?
-        puts "Node #{node_name} doesn't exist!"
-        exit 1
-      end
-    rescue NameError
-      puts 'Must specify node name (name=<hostname>).'
-      exit 1
-    rescue => e
-      puts "There was a problem finding the node: #{e.message}"
-      exit 1
-    end
+    node = get_node
 
     classes = node.node_classes
 
@@ -168,21 +145,7 @@ namespace :node do
 
   desc "List classes for a node"
   task :listclasses => :environment do
-    node_name = ENV['name']
-    begin
-      node = Node.find_by_name(node_name)
-
-      if node.nil?
-        puts "Node #{node_name} doesn't exist!"
-        exit 1
-      end
-    rescue NameError
-      puts 'Must specify node name (name=<hostname>).'
-      exit 1
-    rescue => e
-      puts "There was a problem finding the node: #{e.message}"
-      exit 1
-    end
+    node = get_node
 
     begin
       classes = node.node_classes
@@ -198,19 +161,8 @@ namespace :node do
 
   desc 'Remove a node'
   task :del => :environment do
-    if ENV['name']
-      name = ENV['name']
-    else
-      puts 'Must specify node name (name=<hostname>).'
-      exit 1
-    end
-
     begin
-      n = Node.find_by_name(name)
-      n.destroy
-    rescue NoMethodError
-      puts 'Node does not exist!'
-      exit 1
+      get_node.destroy
     rescue => e
       puts e.message
       exit 1
@@ -219,21 +171,7 @@ namespace :node do
 
   desc 'Replace class(es) for a node'
   task :classes => :environment do
-    node_name = ENV['name']
-    begin
-      node = Node.find_by_name(node_name)
-
-      if node.nil?
-        puts "Node #{node_name} doesn't exist!"
-        exit 1
-      end
-    rescue NameError
-      puts 'Must specify node name (name=<hostname>).'
-      exit 1
-    rescue => e
-      puts "There was a problem finding the node: #{e.message}"
-      exit 1
-    end
+    node = get_node
 
     classes = []
 
@@ -263,29 +201,7 @@ namespace :node do
 
   desc 'Edit/Add parameters for a node'
   task :parameters => :environment do
-    node_name = ENV['name']
-
-    if node_name.nil?
-      puts 'Must specify node name (name=<hostname>).'
-      exit 1
-    end
-
-    begin
-      node = Node.find_by_name(node_name)
-
-      if node.nil?
-        puts "Node #{node_name} doesn\'t exist!"
-        exit 1
-      end
-    rescue => e
-      puts "There was a problem finding the node: #{e.message}"
-      exit 1
-    end
-
-    if ENV['parameters'].nil?
-      puts "Must specify node parameters (parameters=param1=val1,param2=val2)"
-      exit 1
-    end
+    node = get_node
 
     given_parameters = Hash[ ENV['parameters'].split(',').map do |param|
       param_array = param.split('=',2)
@@ -328,21 +244,7 @@ namespace :node do
 
   desc 'Replace groups for a node'
   task :groups => :environment do
-    node_name = ENV['name']
-    begin
-      node = Node.find_by_name(node_name)
-
-      if node.nil?
-        puts "Node #{node_name} doesn\'t exist!"
-        exit 1
-      end
-    rescue NameError
-      puts 'Must specify node name (name=<hostname>).'
-      exit 1
-    rescue => e
-      puts "There was a problem finding the node: #{e.message}"
-      exit 1
-    end
+    node = get_node
 
     groups = []
 
