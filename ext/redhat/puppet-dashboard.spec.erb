@@ -65,11 +65,6 @@ install -Dp -m0755 %{confdir}/puppet-dashboard-workers.init $RPM_BUILD_ROOT/%{in
 install -Dp -m0644 %{confdir}/%{name}.sysconfig $RPM_BUILD_ROOT/%{_sysconfdir}/sysconfig/puppet-dashboard
 install -Dp -m0644 %{confdir}/%{name}.logrotate $RPM_BUILD_ROOT/%{_sysconfdir}/logrotate.d/puppet-dashboard
 
-mv CHANGELOG timestamp
-iconv -f ISO-8859-1 -t UTF-8 -o CHANGELOG timestamp
-touch -r timestamp CHANGELOG
-rm timestamp
-
 # Put logs in /var/log and symlink in /usr/share (FHS work)
 #mkdir -p $RPM_BUILD_ROOT/var/log/%{name}
 #if $(stat $RPM_BUILD_ROOT/%{_datadir}/%{name}/log/*) ; then
@@ -110,7 +105,7 @@ fi
 
 %files
 %defattr(-,root,root,)
-%doc CHANGELOG LICENSE README.markdown README_PACKAGES.markdown
+%doc LICENSE README.markdown README_PACKAGES.markdown
 %attr(-,puppet-dashboard,puppet-dashboard) %config(noreplace) %{_datadir}/%{name}/config/*
 %{initrddir}/puppet-dashboard
 %{initrddir}/puppet-dashboard-workers
