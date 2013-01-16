@@ -5,7 +5,6 @@ db usr/share/puppet-dashboard
 ext usr/share/puppet-dashboard
 lib usr/share/puppet-dashboard
 public usr/share/puppet-dashboard
-CHANGELOG usr/share/puppet-dashboard
 LICENSE usr/share/puppet-dashboard
 README.markdown usr/share/puppet-dashboard
 README_PACKAGES.markdown usr/share/puppet-dashboard
