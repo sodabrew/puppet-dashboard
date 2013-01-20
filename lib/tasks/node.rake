@@ -199,9 +199,17 @@ namespace :node do
     end
   end
 
-  desc 'Edit/Add parameters for a node'
+  desc 'Show/Edit/Add parameters for a node'
   task :parameters => :environment do
     node = get_node
+
+    # Show parameters
+    if ENV['parameters'].nil?
+      node.parameters.each do |p|
+        puts "#{p.key}=#{p.value}"
+      end
+      exit
+    end
 
     given_parameters = Hash[ ENV['parameters'].split(',').map do |param|
       param_array = param.split('=',2)
@@ -217,25 +225,26 @@ namespace :node do
       param_array
     end ]
 
-    #Check if we need to change any existing parameters
-    node.parameters.each do |parameter|
-      if given_parameters.keys.include? parameter.name
-        #This deletes the key from the hash and returns the value
-        #in a single method call.
-        parameter.value = given_parameters.delete parameter.name
-      end
-    end
-
-    #Create new parameters
-    new_parameters = given_parameters.map do |name, parameter|
-      Parameter.new :key => name, :value => parameter
-    end
-
-    node.parameters = node.parameters + new_parameters
-
     begin
-      node.save!
-      puts "Node parameters successfully edited for #{node.name}!"
+      ActiveRecord::Base.transaction do
+        given_parameters.each do |key, value|
+          param, *dupes = *node.parameters.find_all_by_key(key)
+          if param
+            # Change existing parameters
+            param.value = value
+            param.save!
+            # If there were duplicate params from the previous buggy version of
+            # this code, remove them
+            dupes.each { |d| d.destroy }
+          else
+            # Create new parameters
+            node.parameters.create(:key => key, :value => value)
+          end
+        end
+
+        node.save!
+        puts "Node parameters successfully edited for #{node.name}!"
+      end
     rescue => e
       puts "There was a problem saving the node: #{e.message}"
       exit 1

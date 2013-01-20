@@ -234,7 +234,7 @@ namespace :nodegroup do
     end
   end
 
-  desc 'Edit/Add parameters for a node group'
+  desc 'Show/Edit/Add parameters for a node group'
   task :parameters => :environment do
     group_name = ENV['name']
 
@@ -255,9 +255,12 @@ namespace :nodegroup do
       exit 1
     end
 
+    # Show parameters
     if ENV['parameters'].nil?
-      puts "Must specify node group parameters (parameters=param1=val1,param2=val2)"
-      exit 1
+      group.parameters.each do |p|
+        puts "#{p.key}=#{p.value}"
+      end
+      exit
     end
 
     given_parameters = Hash[ ENV['parameters'].split(',').map do |param|
@@ -274,25 +277,26 @@ namespace :nodegroup do
       param_array
     end ]
 
-    #Check if we need to change any existing parameters
-    group.parameters.each do |parameter|
-      if given_parameters.keys.include? parameter.name
-        #This deletes the key from the hash and returns the value
-        #in a single method call.
-        parameter.value = given_parameters.delete parameter.name
-      end
-    end
-
-    #Create new parameters
-    new_parameters = given_parameters.map do |name, parameter|
-      Parameter.new :key => name, :value => parameter
-    end
-
-    group.parameters = group.parameters + new_parameters
-
     begin
-      group.save!
-      puts "Node group parameters successfully edited for #{group.name}!"
+      ActiveRecord::Base.transaction do
+        given_parameters.each do |key, value|
+          param, *dupes = *group.parameters.find_all_by_key(key)
+          if param
+            # Change existing parameters
+            param.value = value
+            param.save!
+            # If there were duplicate params from the previous buggy version of
+            # this code, remove them
+            dupes.each { |d| d.destroy }
+          else
+            # Create new parameters
+            group.parameters.create(:key => key, :value => value)
+          end
+        end
+
+        group.save!
+        puts "Node group parameters successfully edited for #{group.name}!"
+      end
     rescue => e
       puts "There was a problem saving the node group: #{e.message}"
       exit 1
