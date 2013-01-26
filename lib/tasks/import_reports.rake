@@ -13,7 +13,7 @@ namespace :reports do
     raise "Report dir is not readable: #{report_dir}" unless File.readable?(report_dir)
     reports = FileList[File.join(report_dir, '**', '*.yaml')]
 
-    STDOUT.puts "Importing #{reports.size} #{plural['report', reports.size]} from #{report_dir} in the background"
+    puts "Importing #{reports.size} #{plural['report', reports.size]} from #{report_dir} in the background"
 
     skipped = 0
     pbar = ProgressBar.new("Importing:", reports.size, STDOUT)
@@ -31,8 +31,8 @@ namespace :reports do
 
     successes = reports.size - skipped
 
-    STDOUT.puts "#{successes} of #{reports.size} #{plural['report', successes]} queued"
-    STDOUT.puts "#{skipped} #{plural['report', skipped]} skipped" if skipped > 0
+    puts "#{successes} of #{reports.size} #{plural['report', successes]} queued"
+    puts "#{skipped} #{plural['report', skipped]} skipped" if skipped > 0
   end
 
 
@@ -49,7 +49,7 @@ namespace :reports do
     plural = lambda{|str, count| str + (count != 1 ? 's' : '')}
     reports = FileList[File.join(report_dir, '**', '*.yaml')]
 
-    STDOUT.puts "Importing #{reports.size} #{plural['report', reports.size]} from #{report_dir} (#{concurrent} at once)"
+    puts "Importing #{reports.size} #{plural['report', reports.size]} from #{report_dir} (#{concurrent} at once)"
 
     skipped = 0
     pbar = ProgressBar.new("Importing:", reports.size, STDOUT)
@@ -114,7 +114,7 @@ namespace :reports do
 
     successes = reports.size - skipped
 
-    STDOUT.puts "#{successes} of #{reports.size} #{plural['report', successes]} imported"
-    STDOUT.puts "#{skipped} #{plural['report', skipped]} skipped" if skipped > 0
+    puts "#{successes} of #{reports.size} #{plural['report', successes]} imported"
+    puts "#{skipped} #{plural['report', skipped]} skipped" if skipped > 0
   end
 end
