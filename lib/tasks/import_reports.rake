@@ -1,6 +1,6 @@
 require "#{RAILS_ROOT}/lib/progress_bar"
 namespace :reports do
-  DEFAULT_DIR = '/var/lib/puppet/reports/'
+  DEFAULT_DIR = '/var/lib/puppet/reports'
   DEFAULT_URL = 'http://localhost:3000/reports/upload'
 
   desc "Import stored YAML reports from your puppet report directory (or $REPORT_DIR)"
@@ -8,6 +8,9 @@ namespace :reports do
     report_dir = ENV['REPORT_DIR'] || DEFAULT_DIR
 
     plural = lambda{|str, count| str + (count != 1 ? 's' : '')}
+    raise "Report dir does not exist: #{report_dir}" unless File.exists?(report_dir)
+    raise "Report dir is not a directory: #{report_dir}" unless File.directory?(report_dir)
+    raise "Report dir is not readable: #{report_dir}" unless File.readable?(report_dir)
     reports = FileList[File.join(report_dir, '**', '*.yaml')]
 
     STDOUT.puts "Importing #{reports.size} #{plural['report', reports.size]} from #{report_dir} in the background"
