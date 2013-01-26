@@ -1,16 +1,14 @@
 require 'spec_helper'
 
-describe '/pages/home.html.haml' do
-  describe "successful render" do
-    before :each do
-      assigns[:all_nodes] = @all_nodes = [Node.generate!]
-      assigns[:unreported_nodes] = []
-      assigns[:unresponsive_nodes] = []
-      assigns[:failed_nodes] = []
-      assigns[:pending_nodes] = []
-      assigns[:changed_nodes] = []
-      assigns[:unchanged_nodes] = []
-    end 
+describe '/pages/home' do
+  before :each do
+    @all_nodes          = [Node.generate!]
+    @unreported_nodes   = []
+    @unresponsive_nodes = []
+    @failed_nodes       = []
+    @pending_nodes      = []
+    @changed_nodes      = []
+    @unchanged_nodes    = []
 
     render
   end

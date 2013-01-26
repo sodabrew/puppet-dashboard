@@ -21,7 +21,8 @@ describe NodesController do
       it "should return JSON" do
         struct = json_from_response_body
         struct.size.should == 1
-        struct.first["name"].should == @node.name
+        # FIXME: why did I have to add ["node"] here?
+        struct.first["node"]["name"].should == @node.name
       end
     end
 
@@ -188,7 +189,8 @@ describe NodesController do
         response.should be_success
 
         struct = json_from_response_body
-        struct["name"].should == @node.name
+        # FIXME: why did I have to add ["node"] here?
+        struct["node"]["name"].should == @node.name
       end
 
       it "should return an error for an unknown node" do
