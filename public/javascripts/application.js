@@ -6,6 +6,7 @@ var UNCHANGED    = '#093';
 var ALL          = '#000';
 
 jQuery(document).ready(function(J) {
+  J(":input[placeholder]").placeholder();
   J('table.main .status img[title]').tipsy({gravity: 's'});
 
   J('button.drop, a.drop').click( function(e) {
