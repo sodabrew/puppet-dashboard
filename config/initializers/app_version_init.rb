@@ -20,7 +20,7 @@ def get_app_version_link
   if File.exists?(Rails.root.join('VERSION_LINK'))
     return File.read(Rails.root.join('VERSION_LINK')).strip
   else
-    return "https://github.com/puppetlabs/puppet-dashboard/commits/#{APP_VERSION.sub(/.*?g([0-9a-f]*)/, "\\1")}"
+    return "https://github.com/puppetlabs/puppet-dashboard/blob/#{APP_VERSION.sub(/.*?g([0-9a-f]*)/, "\\1")}/CHANGELOG"
   end
 end
 
