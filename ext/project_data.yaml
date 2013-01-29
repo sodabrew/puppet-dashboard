@@ -7,4 +7,4 @@ summary: 'The Puppet Dashboard is a web application for managing the Puppet conf
 description: 'Puppet Dashboard is a systems management web application for managing Puppet installations and is written using the Ruby on Rails framework.'
 version_file: 'VERSION'
 # files and gem_files are space separated lists
-files: 'acceptance app bin config db examples ext lib log public script spec spool tmp vendor CHANGELOG CONTRIBUTING.md LICENSE PLUGINS.md README.markdown README_PACKAGES.markdown Rakefile SELENIUM.md VERSION'
+files: 'acceptance app bin config db examples ext lib log public script spec spool tmp vendor CHANGELOG CONTRIBUTING.md LICENSE PLUGINS.md README.markdown README_PACKAGES.markdown Rakefile SELENIUM.md'

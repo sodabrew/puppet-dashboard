@@ -1,3 +1,8 @@
+1.2.20
+===
+e937353 Update VERSION for 1.2.20 release
+25b5bca Remove CHANGELOG file, update version link
+
 1.2.19
 ===
 04c1dba Fix for CVE-2013-0155
