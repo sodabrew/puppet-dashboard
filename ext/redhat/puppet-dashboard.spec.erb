@@ -56,7 +56,7 @@ install -p -d -m0755 $RPM_BUILD_ROOT/%{_datadir}/%{name}/examples
 cp -p -r app bin config db ext lib public Rakefile script spec examples vendor $RPM_BUILD_ROOT/%{_datadir}/%{name}
 install -Dp -m0640 config/database.yml.example $RPM_BUILD_ROOT/%{_datadir}/%{name}/config/database.yml
 install -Dp -m0640 config/settings.yml.example $RPM_BUILD_ROOT/%{_datadir}/%{name}/config/settings.yml
-install -Dp -m0644 VERSION $RPM_BUILD_ROOT/%{_datadir}/%{name}/VERSION
+install -Dp -m0644 CHANGELOG $RPM_BUILD_ROOT/%{_datadir}/%{name}/CHANGELOG
 chmod a+x $RPM_BUILD_ROOT/%{_datadir}/%{name}/script/*
 
 # Add sysconfig and init script
@@ -64,6 +64,11 @@ install -Dp -m0755 %{confdir}/%{name}.init $RPM_BUILD_ROOT/%{initrddir}/puppet-d
 install -Dp -m0755 %{confdir}/puppet-dashboard-workers.init $RPM_BUILD_ROOT/%{initrddir}/puppet-dashboard-workers
 install -Dp -m0644 %{confdir}/%{name}.sysconfig $RPM_BUILD_ROOT/%{_sysconfdir}/sysconfig/puppet-dashboard
 install -Dp -m0644 %{confdir}/%{name}.logrotate $RPM_BUILD_ROOT/%{_sysconfdir}/logrotate.d/puppet-dashboard
+
+mv CHANGELOG timestamp
+iconv -f ISO-8859-1 -t UTF-8 -o CHANGELOG timestamp
+touch -r timestamp CHANGELOG
+rm timestamp
 
 # Put logs in /var/log and symlink in /usr/share (FHS work)
 #mkdir -p $RPM_BUILD_ROOT/var/log/%{name}
@@ -105,13 +110,13 @@ fi
 
 %files
 %defattr(-,root,root,)
-%doc LICENSE README.markdown README_PACKAGES.markdown
+%doc CHANGELOG LICENSE README.markdown README_PACKAGES.markdown
 %attr(-,puppet-dashboard,puppet-dashboard) %config(noreplace) %{_datadir}/%{name}/config/*
 %{initrddir}/puppet-dashboard
 %{initrddir}/puppet-dashboard-workers
 %config(noreplace) %{_sysconfdir}/sysconfig/puppet-dashboard
 %config %{_sysconfdir}/logrotate.d/puppet-dashboard
-%attr(-,puppet-dashboard,puppet-dashboard) %doc %{_datadir}/puppet-dashboard/VERSION
+%attr(-,puppet-dashboard,puppet-dashboard) %doc %{_datadir}/puppet-dashboard/CHANGELOG
 %attr(-,puppet-dashboard,puppet-dashboard) %{_datadir}/puppet-dashboard/Rakefile
 %attr(-,puppet-dashboard,puppet-dashboard) %dir %{_datadir}/%{name}/config
 %attr(-,puppet-dashboard,puppet-dashboard) %{_datadir}/%{name}/app

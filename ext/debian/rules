@@ -22,7 +22,6 @@ binary-install/puppet-dashboard::
 	    spec \
       examples \
 	    vendor \
-		VERSION \
 	    $(CURDIR)/debian/$(cdbs_curpkg)/usr/share/puppet-dashboard
 	cp $(CURDIR)/config/database.yml.example $(CURDIR)/debian/$(cdbs_curpkg)/etc/puppet-dashboard/database.yml
 	cp $(CURDIR)/config/settings.yml.example $(CURDIR)/debian/$(cdbs_curpkg)/etc/puppet-dashboard/settings.yml
