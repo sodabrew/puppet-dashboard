@@ -28,6 +28,14 @@ module Rack
 
     DEFAULT_SEP = /[&;] */n
 
+    class << self
+      attr_accessor :key_space_limit
+    end
+
+    # The default number of bytes to allow parameter keys to take up.
+    # This helps prevent a rogue client from flooding a Request.
+    self.key_space_limit = 65536
+
     # Stolen from Mongrel, with some small modifications:
     # Parses a query string by breaking it up at the '&'
     # and ';' characters.  You can also use this to parse
@@ -36,8 +44,19 @@ module Rack
     def parse_query(qs, d = nil)
       params = {}
 
+      max_key_space = Utils.key_space_limit
+      bytes = 0
+
       (qs || '').split(d ? /[#{d}] */n : DEFAULT_SEP).each do |p|
         k, v = p.split('=', 2).map { |x| unescape(x) }
+
+        if k
+          bytes += k.size
+          if bytes > max_key_space
+            raise RangeError, "exceeded available parameter key space"
+          end
+        end
+
         if cur = params[k]
           if cur.class == Array
             params[k] << v
@@ -56,8 +75,19 @@ module Rack
     def parse_nested_query(qs, d = nil)
       params = {}
 
+      max_key_space = Utils.key_space_limit
+      bytes = 0
+
       (qs || '').split(d ? /[#{d}] */n : DEFAULT_SEP).each do |p|
         k, v = unescape(p).split('=', 2)
+
+        if k
+          bytes += k.size
+          if bytes > max_key_space
+            raise RangeError, "exceeded available parameter key space"
+          end
+        end
+
         normalize_params(params, k, v)
       end
 
@@ -174,8 +204,8 @@ module Rack
         path    = "; path="    + value[:path]   if value[:path]
         # According to RFC 2109, we need dashes here.
         # N.B.: cgi.rb uses spaces...
-        expires = "; expires=" + value[:expires].clone.gmtime.
-          strftime("%a, %d-%b-%Y %H:%M:%S GMT") if value[:expires]
+        expires = "; expires=" +
+          rfc2822(value[:expires].clone.gmtime) if value[:expires]
         secure = "; secure"  if value[:secure]
         httponly = "; HttpOnly" if value[:httponly]
         value = value[:value]
@@ -186,12 +216,12 @@ module Rack
         "#{domain}#{path}#{expires}#{secure}#{httponly}"
 
       case header["Set-Cookie"]
-      when Array
-        header["Set-Cookie"] << cookie
-      when String
-        header["Set-Cookie"] = [header["Set-Cookie"], cookie]
-      when nil
+      when nil, ''
         header["Set-Cookie"] = cookie
+      when String
+        header["Set-Cookie"] = [header["Set-Cookie"], cookie].join("\n")
+      when Array
+        header["Set-Cookie"] = (header["Set-Cookie"] + [cookie]).join("\n")
       end
 
       nil
@@ -199,13 +229,24 @@ module Rack
     module_function :set_cookie_header!
 
     def delete_cookie_header!(header, key, value = {})
-      unless Array === header["Set-Cookie"]
-        header["Set-Cookie"] = [header["Set-Cookie"]].compact
+      case header["Set-Cookie"]
+      when nil, ''
+        cookies = []
+      when String
+        cookies = header["Set-Cookie"].split("\n")
+      when Array
+        cookies = header["Set-Cookie"]
       end
 
-      header["Set-Cookie"].reject! { |cookie|
-        cookie =~ /\A#{escape(key)}=/
+      cookies.reject! { |cookie|
+        if value[:domain]
+          cookie =~ /\A#{escape(key)}=.*domain=#{value[:domain]}/
+        else
+          cookie =~ /\A#{escape(key)}=/
+        end
       }
+
+      header["Set-Cookie"] = cookies.join("\n")
 
       set_cookie_header!(header, key,
                  {:value => '', :path => nil, :domain => nil,
@@ -214,6 +255,22 @@ module Rack
       nil
     end
     module_function :delete_cookie_header!
+
+    # Modified version of stdlib time.rb Time#rfc2822 to use '%d-%b-%Y' instead
+    # of '% %b %Y'.
+    # It assumes that the time is in GMT to comply to the RFC 2109.
+    #
+    # NOTE: I'm not sure the RFC says it requires GMT, but is ambigous enough
+    # that I'm certain someone implemented only that option.
+    # Do not use %a and %b from Time.strptime, it would use localized names for
+    # weekday and month.
+    #
+    def rfc2822(time)
+      wday = Time::RFC2822_DAY_NAME[time.wday]
+      mon = Time::RFC2822_MONTH_NAME[time.mon - 1]
+      time.strftime("#{wday}, %d-#{mon}-%Y %H:%M:%S GMT")
+    end
+    module_function :rfc2822
 
     # Return the bytesize of String; uses String#length under Ruby 1.8 and
     # String#bytesize under 1.9.
@@ -227,6 +284,18 @@ module Rack
       end
     end
     module_function :bytesize
+
+    # Constant time string comparison.
+    def secure_compare(a, b)
+      return false unless bytesize(a) == bytesize(b)
+
+      l = a.unpack("C*")
+
+      r, i = 0, -1
+      b.each_byte { |v| r |= v ^ l[i+=1] }
+      r == 0
+    end
+    module_function :secure_compare
 
     # Context allows the use of a compatible middleware at different points
     # in a request handling stack. A compatible middleware must define
@@ -462,6 +531,9 @@ module Rack
 
           rx = /(?:#{EOL})?#{Regexp.quote boundary}(#{EOL}|--)/n
 
+          max_key_space = Utils.key_space_limit
+          bytes = 0
+
           loop {
             head = nil
             body = ''
@@ -475,6 +547,13 @@ module Rack
                 filename = head[/Content-Disposition:.* filename=(?:"((?:\\.|[^\"])*)"|([^;\s]*))/ni, 1]
                 content_type = head[/Content-Type: (.*)#{EOL}/ni, 1]
                 name = head[/Content-Disposition:.*\s+name="?([^\";]*)"?/ni, 1] || head[/Content-ID:\s*([^#{EOL}]*)/ni, 1]
+
+                if name
+                  bytes += name.size
+                  if bytes > max_key_space
+                    raise RangeError, "exceeded available parameter key space"
+                  end
+                end
 
                 if content_type || filename
                   body = Tempfile.new("RackMultipart")
