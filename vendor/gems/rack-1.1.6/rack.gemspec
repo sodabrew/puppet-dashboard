@@ -3,7 +3,7 @@ require 'rack' # For Rack.release
 
 Gem::Specification.new do |s|
   s.name            = "rack"
-  s.version         = Rack.release
+  s.version         = "1.1.6"
   s.platform        = Gem::Platform::RUBY
   s.summary         = "a modular Ruby webserver interface"
 
@@ -33,7 +33,8 @@ EOF
 
   s.add_development_dependency 'test-spec'
 
-  s.add_development_dependency 'camping', '< 1.5'
+  s.add_development_dependency 'activesupport', '< 2'
+  s.add_development_dependency 'camping', '< 1.6'
   s.add_development_dependency 'fcgi'
   s.add_development_dependency 'memcache-client'
   s.add_development_dependency 'mongrel'
