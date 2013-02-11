@@ -225,7 +225,7 @@ module ActionController
         not_trusted_addrs = remote_addr_list.reject {|addr| addr =~ TRUSTED_PROXIES}
         return not_trusted_addrs.first unless not_trusted_addrs.empty?
       end
-      remote_ips = @env['HTTP_X_FORWARDED_FOR'] && @env['HTTP_X_FORWARDED_FOR'].split(',')
+      remote_ips = @env['HTTP_X_FORWARDED_FOR'].present? && @env['HTTP_X_FORWARDED_FOR'].split(',')
 
       if @env.include? 'HTTP_CLIENT_IP'
         if ActionController::Base.ip_spoofing_check && remote_ips && !remote_ips.include?(@env['HTTP_CLIENT_IP'])
@@ -464,29 +464,6 @@ EOM
       @env['SERVER_PORT'].to_i
     end
 
-    # Address CVE-2102-2660
-    # Source: https://groups.google.com/forum/?fromgroups#!topic/rubyonrails-security/8SA-M3as7A8
-    protected
-      # Remove nils from the params hash
-      def deep_munge(hash)
-        hash.each_value do |v|
-          case v
-          when Array
-            v.grep(Hash) { |x| deep_munge(x) }
-          when Hash
-            deep_munge(v)
-          end
-        end
-
-        keys = hash.keys.find_all { |k| hash[k] == [nil] }
-        keys.each { |k| hash[k] = nil }
-        hash
-      end
-
-      def parse_query(qs)
-        deep_munge(super)
-      end
-
     private
       def named_host?(host)
         !(host.nil? || /\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/.match(host))
@@ -514,5 +491,28 @@ EOM
           value
         end
       end
+    protected
+
+    # Remove nils from the params hash
+    def deep_munge(hash)
+      keys = hash.keys.find_all { |k| hash[k] == [nil] }
+      keys.each { |k| hash[k] = nil }
+
+      hash.each_value do |v|
+        case v
+        when Array
+          v.grep(Hash) { |x| deep_munge(x) }
+          v.compact!
+        when Hash
+          deep_munge(v)
+        end
+      end
+
+      hash
+    end
+
+    def parse_query(qs)
+      deep_munge(super)
+    end
   end
 end
