@@ -2,7 +2,6 @@
 name: rspec-rails
 version: !ruby/object:Gem::Version 
   hash: 19
-  prerelease: 
   segments: 
   - 1
   - 3
@@ -198,7 +197,7 @@ required_rubygems_version: !ruby/object:Gem::Requirement
 requirements: []
 
 rubyforge_project: rspec
-rubygems_version: 1.6.2
+rubygems_version: 1.3.9.5
 signing_key: 
 specification_version: 3
 summary: rspec-rails 1.3.4
