@@ -2,7 +2,6 @@
 name: haml
 version: !ruby/object:Gem::Version 
   hash: 7
-  prerelease: 
   segments: 
   - 3
   - 1
@@ -100,7 +99,7 @@ required_rubygems_version: !ruby/object:Gem::Requirement
 requirements: []
 
 rubyforge_project: haml
-rubygems_version: 1.6.2
+rubygems_version: 1.3.9.5
 signing_key: 
 specification_version: 3
 summary: An elegant, structured XHTML/XML templating engine.

@@ -59,7 +59,7 @@ describe "/timeline_events/_timeline_event.html.haml" do
         subject { response }
 
         it "should describe the action on that subject" do
-          should have_text /#{@parameter.name}\s+was added to\s+this node/sm
+          should have_text /#{h @parameter.name}\s+was added to\s+this node/sm
         end
 
         it "should not link to the subject" do
