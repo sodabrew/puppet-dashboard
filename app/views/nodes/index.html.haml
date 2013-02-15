@@ -18,3 +18,7 @@
     .section
       %h3 Nodes
       = render 'nodes', :nodes => @nodes, :selected_status => action_name
+    - if action_name == 'failed'
+      .section
+        %h3 Latest report errors
+        = render 'log_detail', :nodes => @nodes
