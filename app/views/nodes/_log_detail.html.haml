@@ -1,0 +1,36 @@
+- nodes           = paginate_scope(local_assigns[:nodes])
+
+- unless nodes.empty?
+  %table.inspector
+    %thead
+      %tr
+        %th{:scope => :col} Hostname
+        %th{:scope => :col} Level
+        %th{:scope => :col} Message
+        %th{:scope => :col} Source
+        %th{:scope => :col} File
+        %th{:scope => :col} Line
+        %th{:scope => :col} Time
+    %tbody
+      - nodes.each do |node|
+        - if node.last_apply_report.logs.present?
+          - node.last_apply_report.logs.each do |log|
+            - if (log.level == 'err')
+              %tr.puppet_log
+                %td.node
+                  = link_to h(node.name), node
+                %td.loglevel
+                  = log.level
+                %td
+                  = log.message
+                %td
+                  = log.source
+                %td
+                  = log.file
+                %td
+                  = log.line
+                %td.nowrap
+                  = link_to h(node.last_apply_report.time), node.last_apply_report
+- else
+  %p
+    = describe_no_matches_for :nodes
