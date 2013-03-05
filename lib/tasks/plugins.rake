@@ -1,5 +1,5 @@
 require 'pathname'
-require 'ftools'
+require 'fileutils'
 
 namespace :puppet do
   namespace :plugin do
@@ -16,7 +16,7 @@ namespace :puppet do
         else
           puts "Copying '#{source_file}' to '#{target_file}'."
           target_file.unlink if target_file.exist?
-          File.copy(source_file, target_file)
+          FileUtils.cp(source_file, target_file)
         end
       end
     end
