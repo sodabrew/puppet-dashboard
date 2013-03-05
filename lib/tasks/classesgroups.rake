@@ -1,21 +1,12 @@
+$: << File.dirname(__FILE__)
+require 'rake_helpers'
+
 namespace :nodeclass do
   desc 'List node classes'
   task :list => :environment do
-    regex = false
-
-    if ENV['match']
-      regex = ENV['match']
-    end
-
-    NodeClass.find(:all).each do |nodeclass|
-      if regex
-        if nodeclass.name =~ /#{regex}/
-          puts nodeclass.name
-        end
-      else
-        puts nodeclass.name
-      end
-    end
+    names = NodeClass.all.map(&:name)
+    regex = ENV['match'] # if nil, everything matches
+    names.grep(/#{regex}/).map{|n| puts n}
   end
 
   desc 'Add a new node class'
@@ -32,25 +23,15 @@ namespace :nodeclass do
       exit 1
     end
 
-    klass = NodeClass.new(:name => name)
-
-    if klass.save
-      puts 'Class successfully created!'
-    end
+    NodeClass.new(:name => name).save!
+    puts 'Class successfully created!'
   end
 
   desc 'Delete a node class'
   task :del => :environment do
-    if ENV['name']
-      name = ENV['name']
-    else
-      puts 'Must specify class name (name=<class>).'
-      exit 1
-    end
-
     begin
-      nc = NodeClass.find_by_name(name)
-      nc.destroy
+      get_class(ENV['name']).destroy
+      puts 'Group successfully deleted!'
     rescue NoMethodError
       puts 'Class doesn\'t exist!'
       exit 1
@@ -64,43 +45,17 @@ end
 namespace :nodegroup do
   desc 'List node groups'
   task :list => :environment do
-    regex = false
-
-    if ENV['match']
-      regex = ENV['match']
-    end
-
-    NodeGroup.find(:all).each do |nodegroup|
-      if regex
-        if nodegroup.name =~ /#{regex}/
-          puts nodegroup.name
-        end
-      else
-        puts nodegroup.name
-      end
-    end
+    names = NodeGroup.all.map(&:name)
+    regex = ENV['match'] # if nil, everything matches
+    names.grep(/#{regex}/).map{|n| puts n}
   end
 
   desc 'List classes that belong to a node group'
   task :listclasses => :environment do
-    if ENV['name']
-      name = ENV['name']
-    else
-      puts 'Must specify group name (name=<group>).'
-      exit 1
-    end
+    nodegroup = get_group(ENV['name'])
 
     begin
-      nodegroup = NodeGroup.find_by_name(name)
-      if nodegroup.nil?
-        puts "Group doesn't exist!"
-        exit 1
-      end
-
-      classes = nodegroup.node_classes
-      classes.each do |klass|
-        puts klass.name
-      end
+      nodegroup.node_classes.map(&:name).map{|n| puts n}
     rescue => e
       puts e.message
       exit 1
@@ -121,66 +76,30 @@ namespace :nodegroup do
       exit 1
     end
 
-    classes = []
+    nodegroup = NodeGroup.new(:name => name)
 
     if ENV['classes']
-      ENV['classes'].split(/,\s*/).each do |klass|
-        nc = NodeClass.find_by_name(klass)
-        unless nc.nil?
-          classes << nc
-        end
-      end
+      classes = ENV['classes'].split(',').map(&:strip)
+      nodegroup.node_classes = NodeClass.find_all_by_name(classes)
     end
 
-    nodegroup = NodeGroup.new(:name => name)
-    nodegroup.node_classes = classes
-
-    if nodegroup.save
-      puts 'Group successfully created!'
-    end
+    nodegroup.save!
+    puts 'Group successfully created!'
   end
 
   desc 'Add a class to a nodegroup'
   task :addclass => :environment do
-    if ENV['name']
-      name = ENV['name']
-    else
-      puts 'Must specify group name (name=<group>).'
-      exit 1
-    end
-
-    if ENV['class']
-      classname = ENV['class']
-    else
-      puts 'Must specify class name (class=<classname>).'
-      exit 1
-    end
+    nodegroup = get_group(ENV['name'])
+    nodeclass = get_class(ENV['class'])
 
     begin
-      nodegroup = NodeGroup.find_by_name(name)
-      if nodegroup.nil?
-        puts 'Group doesn\'t exist!'
-        exit 1
-      end
-
-      nc = NodeClass.find_by_name(classname)
-      if nc.nil?
-        puts 'Class doesn\'t exist!'
-        exit 1
-      else
-       classes = nodegroup.node_classes
-       if classes.include?(nc)
-         puts "Group '#{name}' already includes class '#{classname}'"
-         exit 0
-       else
-         classes << nc
-         nodegroup.node_classes = classes
-         if nodegroup.save
-           puts "Class '#{classname}' added to node group '#{name}'"
-          end
-        end
-      end
-
+     classes = nodegroup.node_classes
+     if classes.include?(nodeclass)
+       puts "Group '#{nodegroup.name}' already includes class '#{nodeclass.name}'"
+     else
+       classes << nodeclass
+       puts "Class '#{nodeclass.name}' added to node group '#{nodegroup.name}'"
+     end
     rescue => e
       puts e.message
       exit 1
@@ -189,45 +108,17 @@ namespace :nodegroup do
 
   desc 'Remove a class from a nodegroup'
   task :delclass => :environment do
-    if ENV['name']
-      name = ENV['name']
-    else
-      puts 'Must specify group name (name=<group>).'
-      exit 1
-    end
-
-    if ENV['class']
-      classname = ENV['class']
-    else
-      puts 'Must specify class name (class=<classname>).'
-      exit 1
-    end
+    nodegroup = get_group(ENV['name'])
+    nodeclass = get_class(ENV['class'])
 
     begin
-      nodegroup = NodeGroup.find_by_name(name)
-      if nodegroup.nil?
-        puts "Group doesn't exist!"
-        exit 1
-      end
-
-      nc = NodeClass.find_by_name(classname)
-      if nc.nil?
-        puts "Class doesn't exist!"
-        exit 1
+      classes = nodegroup.node_classes
+      unless classes.include?(nodeclass)
+        puts "Group '#{nodegroup.name}' does not include class '#{nodeclass.name}'"
       else
-        classes = nodegroup.node_classes
-        unless classes.include?(nc)
-          puts "Group '#{name}' does not include class '#{classname}'"
-          exit 0
-        else
-          classes.delete(nc)
-          nodegroup.node_classes = classes
-          if nodegroup.save
-            puts "Class '#{classname}' removed from node group '#{name}'"
-          end
-        end
+        classes.delete(nodeclass)
+        puts "Class '#{nodeclass.name}' removed from node group '#{nodegroup.name}'"
       end
-
     rescue => e
       puts e.message
       exit 1
@@ -236,28 +127,11 @@ namespace :nodegroup do
 
   desc 'Show/Edit/Add parameters for a node group'
   task :parameters => :environment do
-    group_name = ENV['name']
-
-    if group_name.nil?
-      puts 'Must specify node group name (name=<hostname>).'
-      exit 1
-    end
-
-    begin
-      group = NodeGroup.find_by_name(group_name)
-
-      if group.nil?
-        puts "Node group #{group_name} doesn\'t exist!"
-        exit 1
-      end
-    rescue => e
-      puts "There was a problem finding the node group: #{e.message}"
-      exit 1
-    end
+    nodegroup = get_group(ENV['name'])
 
     # Show parameters
-    if ENV['parameters'].nil?
-      group.parameters.each do |p|
+    unless ENV['parameters']
+      nodegroup.parameters.each do |p|
         puts "#{p.key}=#{p.value}"
       end
       exit
@@ -280,7 +154,7 @@ namespace :nodegroup do
     begin
       ActiveRecord::Base.transaction do
         given_parameters.each do |key, value|
-          param, *dupes = *group.parameters.find_all_by_key(key)
+          param, *dupes = *nodegroup.parameters.find_all_by_key(key)
           if param
             # Change existing parameters
             param.value = value
@@ -290,12 +164,12 @@ namespace :nodegroup do
             dupes.each { |d| d.destroy }
           else
             # Create new parameters
-            group.parameters.create(:key => key, :value => value)
+            nodegroup.parameters.create(:key => key, :value => value)
           end
         end
 
-        group.save!
-        puts "Node group parameters successfully edited for #{group.name}!"
+        nodegroup.save!
+        puts "Node group parameters successfully edited for #{nodegroup.name}!"
       end
     rescue => e
       puts "There was a problem saving the node group: #{e.message}"
@@ -306,35 +180,15 @@ namespace :nodegroup do
 
   desc 'Edit a node group'
   task :edit => :environment do
-    if ENV['name']
-      name = ENV['name']
-    else
-      puts 'Must specify group name (name=<group>).'
-      exit 1
-    end
+    nodegroup = get_group(ENV['name'])
+
+    exit unless ENV['classes']
 
     begin
-      nodegroup = NodeGroup.find_by_name(name)
-
-      classes = []
-
-      if ENV['classes']
-        ENV['classes'].split(/,\s*/).each do |klass|
-          nc = NodeClass.find_by_name(klass)
-          unless nc.nil?
-            classes << nc
-          end
-        end
-      end
-
-      nodegroup.node_classes = classes
-
-      if nodegroup.save
-        puts 'Group successfully edited!'
-      end
-    rescue NoMethodError
-      puts 'Group doesn\'t exist!'
-      exit 1
+      classes = ENV['classes'].split(',').map(&:strip)
+      nodegroup.node_classes = NodeClass.find_all_by_name(classes)
+      nodegroup.save!
+      puts 'Group successfully edited!'
     rescue => e
       puts e.message
       exit 1
@@ -343,46 +197,23 @@ namespace :nodegroup do
 
   desc 'Delete a node group'
   task :del => :environment do
-    if ENV['name']
-      name = ENV['name']
-    else
-      puts 'Must specify group name (name=<group>).'
-      exit 1
-    end
-
     begin
-      nodegroup = NodeGroup.find_by_name(name)
-      nodegroup.destroy
-    rescue NoMethodError
-      puts 'Group doesn\'t exist!'
-      exit 1
+      get_group(ENV['name']).destroy
+      puts 'Group successfully deleted!'
     rescue => e
       puts e.message
+      exit 1
     end
   end
 
   desc 'Automatically adds all nodes to a group'
   task :add_all_nodes => :environment do
-    if ENV['group']
-      groupname = ENV['group']
-    else
-      puts 'Must specify group name (group=<groupname>).'
-      exit 1
-    end
-
-    group = NodeGroup.find_by_name(groupname)
-    if group.nil?
-      puts "Cannot find group: #{groupname}"
-      exit 1
-    end
+    group = get_group(ENV['name'])
 
     begin
-      Node.find(:all).each do |node|
+      Node.all.each do |node|
         node_groups = node.node_groups
-        unless node_groups.include?(group)
-          node_groups.push(group)
-          node.node_groups = node_groups
-        end
+        node_groups << group unless node_groups.include?(group)
       end
     rescue => e
       puts "There was a problem adding all nodes to the group '#{group}': #{e.message}"
