@@ -4,11 +4,12 @@ require 'rake'
 require(File.join(File.dirname(__FILE__), 'config', 'boot'))
 
 ["rake/testtask","rdoc/task","thread","tasks/rails"].each do |dependency|
-	begin
-		require dependency
-	rescue LoadError
-		puts "Could not load #{dependency}. Some rake tasks may not be available without #{dependency}."
-	end
+  begin
+    require dependency
+  rescue LoadError => e
+    puts "Could not load #{dependency}. Some rake tasks may not be available without #{dependency}."
+    puts "The load error generated the following message: #{e.message}"
+  end
 end
 
 Dir['ext/packaging/tasks/**/*'].sort.each { |t| load t }
