@@ -1,14 +1,15 @@
 # Add your own tasks in files placed in lib/tasks ending in .rake,
 # for example lib/tasks/capistrano.rake, and they will automatically be available to Rake.
-
-require(File.join(File.dirname(__FILE__), 'config', 'boot'))
-require 'thread'
-
 require 'rake'
-require 'rake/testtask'
-require 'rdoc/task'
+require(File.join(File.dirname(__FILE__), 'config', 'boot'))
 
-require 'tasks/rails'
+["rake/testtask","rdoc/task","thread","tasks/rails"].each do |dependency|
+	begin
+		require dependency
+	rescue LoadError
+		puts "Could not load #{dependency}. Some rake tasks may not be available without #{dependency}."
+	end
+end
 
 Dir['ext/packaging/tasks/**/*'].sort.each { |t| load t }
 
