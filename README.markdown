@@ -5,30 +5,19 @@ Puppet Dashboard is a web interface for [Puppet](http://www.puppetlabs.com/).
 It can view and analyze Puppet reports, assign Puppet classes and parameters to
 nodes, and view inventory data and backed-up file contents.
 
-For full documentation, see the [Puppet Dashboard 1.2 Manual](http://docs.puppetlabs.com/dashboard/manual/1.2).
-
-Rails 3 Branch
---------------
-
-This is the Rails 3 branch of Puppet Dashboard. A great number of changes are
-on this branch vs. the mainline PD 1.2.x / Rails 2 branch. A short summary:
-
-* Update to Rails 3.2, Bundler 1.x, rspec 2, and many other gems.
-* Update jQuery to 1.8.
-* Use Rails mass-assignment protection.
-* Remove Prototype JS.
+For full documentation, see the [Puppet Dashboard Manual](http://docs.puppetlabs.com/dashboard/manual).
 
 Dependencies
 ------------
 
-* Ruby 1.8.7
+* Ruby 1.8.7 or 1.9.3
 * Bundler >= 1.1
-* MySQL >= 5.1
+* MySQL >= 5.1 or PostgreSQL >= 9.0
 
 Fast Install
 ------------
 
-* Check out the code.
+* Check out the code or download a release package.
 * Create a MySQL database and user, and set `max_allowed_packet` to 32M.
 * Edit your `config/settings.yml` and `config/database.yml` files.
 * `gem install bundler`
@@ -39,8 +28,6 @@ Fast Install
 * `bundle exec rails server`
 * Set up Puppet to be Dashboard-aware.
 * Start the delayed job worker processes.
-
-For detailed installation, setup, and usage instructions, see the [Puppet Dashboard 1.2 Manual](http://docs.puppetlabs.com/dashboard/manual/1.2).
 
 Icons
 -----
