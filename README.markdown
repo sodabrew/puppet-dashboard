@@ -29,12 +29,14 @@ Fast Install
 ------------
 
 * Check out the code.
-* Edit your `config/settings.yml` and `config/database.yml` files.
 * Create a MySQL database and user, and set `max_allowed_packet` to 32M.
+* Edit your `config/settings.yml` and `config/database.yml` files.
 * `gem install bundler`
 * `bundle install --path vendor/bundle`
+* Generate a new secret_token in config/settings.yml:
+  `echo "secret_token: '$(bundle exec rake secret)'" >> config/settings.yml`
 * `bundle exec rake db:setup`
-* `bundle exec rails start`
+* `bundle exec rails server`
 * Set up Puppet to be Dashboard-aware.
 * Start the delayed job worker processes.
 
