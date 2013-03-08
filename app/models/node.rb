@@ -56,8 +56,9 @@ class Node < ActiveRecord::Base
     scope node_status, lambda {
       where("last_apply_report_id IS NOT NULL AND
              reported_at >= ? AND
-             nodes.status = '#{node_status}'",
-             SETTINGS.no_longer_reporting_cutoff.seconds.ago)
+             nodes.status = ?",
+             SETTINGS.no_longer_reporting_cutoff.seconds.ago,
+             node_status)
     }
   end
 
@@ -230,12 +231,12 @@ class Node < ActiveRecord::Base
       Node.
            joins('LEFT JOIN metrics ON metrics.report_id = nodes.last_apply_report_id').
            where("metrics.category = 'resources' AND
-                  metrics.name = '#{resource_status}'").sum(:value).to_i
+                  metrics.name = ?", resource_status).sum(:value).to_i
     else
       Node.send(scope).
            joins('LEFT JOIN metrics ON metrics.report_id = nodes.last_apply_report_id').
            where("metrics.category = 'resources' AND
-                  metrics.name = '#{resource_status}'").sum(:value).to_i
+                  metrics.name = ?", resource_status).sum(:value).to_i
     end
   end
 end
