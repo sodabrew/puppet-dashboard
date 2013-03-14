@@ -31,7 +31,8 @@ rescue LoadError
   end
 end
 
-gem 'rack', '~> 1.1.0'
+# http://projects.puppetlabs.com/issues/11669
+# gem 'rack', '~> 1.1.0'
 require 'rack'
 require 'action_controller/cgi_ext'
 
