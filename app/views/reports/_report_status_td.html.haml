@@ -1,2 +1,2 @@
 %td.status{:class => report.status}
-  = render 'reports/report_status_icon', :report => report
+  = render :partial => 'reports/report_status_icon', :locals => { :report => report }

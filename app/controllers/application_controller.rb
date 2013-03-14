@@ -8,23 +8,11 @@ class ApplicationController < ActionController::Base
 
   helper :all # include all helpers, all the time
 
-  # Scrub sensitive parameters from your log
-  filter_parameter_logging :password
-
   before_filter :set_timezone
-  before_filter :set_autorefresh
+
+  protect_from_forgery
 
   private
-
-  def set_autorefresh
-    if params[:autorefresh]
-      if params[:autorefresh] == "true"
-        session[:autorefresh] = true
-      else
-        session.delete(:autorefresh)
-      end
-    end
-  end
 
   def raise_if_enable_read_only_mode
     raise ReadOnlyEnabledError.new if SETTINGS.enable_read_only_mode || session['ACCESS_CONTROL_ROLE'] == 'READ_ONLY'

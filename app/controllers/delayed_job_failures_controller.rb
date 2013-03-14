@@ -2,18 +2,20 @@ class DelayedJobFailuresController < ApplicationController
   def index
     @read = false
     @delayed_job_failures = get_failures(@read)
+  end
 
-    if params.has_key? :mark_all_read then
-      DelayedJobFailure.transaction do
-        # Can't just update_all, because this is a WillPaginate collection,
-        # and it has a limited API.  Alas. --daniel 2011-06-20
-        DelayedJobFailure.all.each do |event|
-          event.read = true
-          event.save!
-        end
+  def read_all
+    DelayedJobFailure.transaction do
+      # Can't just update_all, because this is a WillPaginate collection,
+      # and it has a limited API.  Alas. --daniel 2011-06-20
+      DelayedJobFailure.all.each do |event|
+        event.read = true
+        event.save!
       end
-      @delayed_job_failures = []
     end
+    @delayed_job_failures = []
+
+    redirect_to "/"
   end
 
   def read
@@ -26,13 +28,11 @@ class DelayedJobFailuresController < ApplicationController
   def get_failures(read)
     respond_to do |format|
       format.html do
-        paginate_scope(DelayedJobFailure.all(:order => 'created_at DESC',
-                                             :conditions => { :read => read }))
+        paginate_scope(DelayedJobFailure.where(:read => read).order('created_at DESC'))
       end
 
       format.all do
-        DelayedJobFailure.all(:order => 'created_at DESC',
-                              :conditions => { :read => read })
+        DelayedJobFailure.where(:read => read).order('created_at DESC')
       end
     end
   end

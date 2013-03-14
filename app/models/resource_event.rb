@@ -1,9 +1,23 @@
 class ResourceEvent < ActiveRecord::Base
   belongs_to :resource_status
 
-  serialize :desired_value
-  serialize :previous_value
-  serialize :historical_value
+  # Only perform YAMLization on non-strings.
+  class ValueWrapper
+    def self.load(val)
+      YAML.load(val) rescue val
+    end
+
+    def self.dump(val)
+      val.is_a?(String) ? val : YAML.dump(val)
+    end
+  end
+
+  serialize :desired_value, ValueWrapper
+  serialize :previous_value, ValueWrapper
+  serialize :historical_value, ValueWrapper
+
+  attr_readonly   :resource_status_id
+  attr_accessible :desired_value, :message, :name, :property, :status, :time, :historical_value, :previous_value, :audited
 
   # The "natural" order of properties is that 'ensure' comes before anything
   # else, then alphabetically sorted by the property name.

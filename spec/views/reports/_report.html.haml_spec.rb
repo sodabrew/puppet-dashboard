@@ -1,4 +1,4 @@
-require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
+require 'spec_helper'
 
 describe "/reports/_report.html.haml" do
   include ReportsHelper
@@ -6,10 +6,10 @@ describe "/reports/_report.html.haml" do
   describe "successful render" do
     before :each do
       assigns[:report] = @report = Report.generate!
-      template.stubs(:resource => @report)
-      render :locals => {:report => @report}
+      view.stubs(:resource => @report)
+      render 'reports/report', :report => @report
     end
 
-    specify { response.should be_success }
+    #FIXME: put a test here.
   end
 end

@@ -41,4 +41,10 @@ class NodeGroupsController < InheritedResources::Base
       }
     end
   end
+
+  protected
+
+  def resource
+    get_resource_ivar || set_resource_ivar(end_of_association_chain.find_by_id_or_name!(params[:id]))
+  end
 end

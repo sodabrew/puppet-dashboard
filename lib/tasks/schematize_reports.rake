@@ -13,7 +13,7 @@ namespace :reports do
     puts "Restarting the migration will resume where you left off"
     puts
 
-    require "#{RAILS_ROOT}/lib/progress_bar"
+    require "#{Rails.root}/lib/progress_bar"
     pbar = ProgressBar.new("Migrating:", old_report_count, STDOUT)
 
     while OldReport.count > 0 do

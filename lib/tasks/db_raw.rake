@@ -1,6 +1,6 @@
 namespace :db do
   namespace :raw do
-    desc 'Dump database to FILE or name of RAILS_ENV'
+    desc 'Dump database to FILE or name of Rails.env'
     task :dump do
       verbose(true) unless Rake.application.options.silent
 

@@ -1,0 +1,20 @@
+# Each of the sections matches a DB env in .travis.yml
+
+sqlite: &sqlite
+  adapter: sqlite3
+  database: db/dashboard_test.sqlite3
+  timeout: 5000
+  pool: 5
+
+mysql: &mysql
+  adapter: mysql2
+  username: root
+  database: dashboard_test
+  encoding: utf8
+
+postgres: &postgres
+  adapter: postgresql
+  username: postgres
+  database: dashboard_test
+  encoding: utf8
+

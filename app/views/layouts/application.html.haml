@@ -2,19 +2,17 @@
 %html{ :lang => "en", "xml:lang" => "en", :xmlns => "http://www.w3.org/1999/xhtml" }
   %head
     - page_title = yield(:page_title)
-    %title= [ page_title, 'Puppet Node Manager'].compact.join(' - ')
-    %link{ :href => image_path("favicon.ico"), :rel => "shortcut icon" }
+    %title= [ page_title, 'Puppet Node Manager'].compact.reject(&:blank?).join(' - ')
+    %link{ :href => "/favicon.ico", :rel => "shortcut icon" }
     %meta{ :content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type" }
-    - if session[:autorefresh]
-      %meta{ :content => "5; URL=#{request.url}", "http-equiv" => "refresh" }
 
-    = javascript_include_tag 'jquery.min'
+    = stylesheet_link_tag 'application'
+    = javascript_include_tag 'application'
+
     :javascript
       var relative_url_root = '#{ActionController::Base.relative_url_root}';
       $.noConflict();
 
-    = stylesheet_link_tag 'reset', 'layout', 'forms', 'tables', 'jquery.ui.custom', 'jquery.ui.combobox', 'typography', 'links', 'token-input-facebook', 'tipsy', 'application', 'colorbox', 'help', :cache => 'all'
-    = javascript_include_tag 'prototype', 'jquery-ui.min', 'jquery.tokeninput', 'excanvas.min', 'raphael-min', 'grafico.min', 'jquery.form', 'jquery.placeholders', 'jquery.ui.combobox', 'jquery.colorbox.js', 'jquery.tipsy', 'search', 'application', :cache => 'all'
     - Registry.each_callback :core, :head_extensions do |widget|
       = widget.call self
 
@@ -29,8 +27,9 @@
       #header
         = render 'shared/global_nav'
       #content
-        - [:success, :warning, :failure].each do |type|
+        - [:success, :warning, :failure, :notice, :alert].each do |type|
           - if message = flash[type]
+            - type = :warning if type == :alert
             %div.section#flash{:class => type}
               .close= link_to_function icon(:close), "jQuery('#flash').hide()"
               %p
@@ -38,4 +37,7 @@
                 = h message
         = yield
       #footer
-        %p= link_to "&copy; Copyright #{Time.now.year} Puppet Labs", 'http://puppetlabs.com/'
+        %p
+          = link_to raw("&copy; Copyright #{Time.now.year} Puppet Labs"), 'http://puppetlabs.com/'
+          &mdash;
+          = link_to h(APP_VERSION), APP_VERSION_LINK

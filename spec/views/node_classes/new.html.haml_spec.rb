@@ -1,4 +1,4 @@
-require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
+require 'spec_helper'
 
 describe "/node_classes/new.html.haml" do
   include NodeClassesHelper
@@ -9,7 +9,6 @@ describe "/node_classes/new.html.haml" do
       render
     end
 
-    specify { response.should be_a_success }
-    it { should have_tag('form[method=?][action=?]', 'post', node_class_path(@node_class)) }
+    it { rendered.should have_tag('form', :with => { :method => 'post', :action => node_class_path(@node_class) }) }
   end
 end

@@ -1,0 +1,6 @@
+- unless form_errors.empty?
+  %div{:id => "error_explanation"}
+    %h2= pluralize(form_errors.count, "error") + ":"
+    %ul
+      - form_errors.full_messages.each do |msg|
+        %li= msg

@@ -3,7 +3,7 @@ namespace :reports do
   task :update_report_data => :environment do
     report_count = Report.count
 
-    require "#{RAILS_ROOT}/lib/progress_bar"
+    require "#{Rails.root}/lib/progress_bar"
     pbar = ProgressBar.new("Updating:", report_count, STDOUT)
 
     offset = 0

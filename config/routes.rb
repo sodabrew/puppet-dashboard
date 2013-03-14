@@ -1,53 +1,64 @@
-ActionController::Routing::Routes.draw do |map|
-  map.resources :node_classes, :collection => {:search => :get} do |classes|
-    classes.resources :nodes, :requirements => {:id => /.*/}
+PuppetDashboard::Application.routes do
+
+  root :to => 'pages#home'
+  
+  resources :node_classes do
+    collection do
+      get :search
+    end
   end
 
-  map.resources :node_groups,
-    :member     => { :diff  => :get },
-    :collection => {:search => :get } do |groups|
-      groups.resources :nodes, :requirements => {:id => /.*/}
+  resources :node_groups do
+    member do
+      get :diff
     end
+    collection do
+      get :search
+    end
+  end
 
-  map.resources :nodes,
-    :member => {
-      :hide    => :put,
-      :unhide  => :put,
-      :facts   => :get,
-      :reports => :get},
-    :collection => {
-     :unreported   => :get,
-     :failed       => :get,
-     :pending      => :get,
-     :unresponsive => :get,
-     :changed      => :get,
-     :unchanged    => :get,
-     :hidden       => :get,
-     :search       => :get},
-    :requirements => {:id => /[^\/]+/}
+  constraints(:id => /[^\/]+/) do
+    resources :nodes do
+      member do
+        put :hide
+        put :unhide
+        get :facts
+        get :reports
+      end
+      collection do
+        get :unreported
+        get :failed
+        get :pending
+        get :unresponsive
+        get :changed
+        get :unchanged
+        get :hidden
+        get :search
+      end
+    end
+  end
 
-  map.resources :reports,
-    :collection => {
-      :search    => :get,
-      :all       => :get,
-      :failed    => :get,
-      :pending   => :get,
-      :changed   => :get,
-      :unchanged => :get
-    }
+  resources :reports do
+    collection do
+      get :search
+      get :all
+      get :failed
+      get :pending
+      get :changed
+      get :unchanged
+    end
+  end
 
-  map.resources :node_group_memberships, :as => :memberships
+  resources :node_group_memberships, :as => :memberships
 
-  map.upload "reports/upload", :controller => :reports, :action => "upload", :conditions => { :method => :post }
+  match 'files/:action/:file1/:file2' => 'files#:action'
+  match 'files/:action/:file'         => 'files#:action'
 
-  map.release_notes '/release_notes', :controller => :pages, :action => :release_notes
+  match '/header.:format' => 'pages#header'
+  match 'reports/upload'  => 'reports#upload', :via => :post
+  match 'release_notes'   => 'pages#release_notes', :via => :get
+  match '/delayed_job_failures/read_all' => 'delayed_job_failures#read_all', :via => :post
 
-  map.header '/header.:format', :controller => :pages, :action => :header
+  get ':controller(/:action(/:id(.:format)))'
 
-  map.root :controller => :pages, :action => :home
-  
-  map.connect 'radiator', :controller => :radiator, :action => :index
-
-  map.connect ':controller/:action/:id'
-  map.connect ':controller/:action/:id.:format'
 end

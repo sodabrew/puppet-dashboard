@@ -25,16 +25,24 @@ class NodeGroup < ActiveRecord::Base
   validates_presence_of :name
   validates_uniqueness_of :name
 
-  default_scope :order => 'name ASC'
+  attr_accessible :name, :node_ids, :parameter_attributes, :node_class_ids, :node_group_ids
+  attr_accessible :assigned_node_group_ids, :assigned_node_ids, :assigned_node_class_ids
+  attr_accessible :assigned_node_group_names, :assigned_node_names, :assigned_node_class_names
 
-  named_scope :search, lambda{|q| q.blank? ? {} : {:conditions => ['name LIKE ?', "%#{q}%"]} }
+  default_scope :order => 'node_groups.name ASC'
 
-  named_scope :with_nodes_count,
+  scope :search, lambda{|q| where('name LIKE ?', "%#{q}%") unless q.blank? }
+
+  scope :with_nodes_count,
     :select => 'node_groups.*, count(nodes.id) as nodes_count',
     :joins => 'LEFT OUTER JOIN node_group_memberships ON (node_groups.id = node_group_memberships.node_group_id) LEFT OUTER JOIN nodes ON (nodes.id = node_group_memberships.node_id)',
     :group => 'node_groups.id'
 
   assigns_related :node_class, :node_group, :node
+
+  def self.find_by_id_or_name!(identifier)
+    find_by_id(identifier) or find_by_name!(identifier)
+  end
 
   def inspect; "#<NodeGroup id:#{id}, name:#{name.inspect}>" end
 

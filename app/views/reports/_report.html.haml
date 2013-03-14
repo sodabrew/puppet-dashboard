@@ -1,6 +1,6 @@
 .header
   %h2
-    = render 'report_title', :report => report
+    = render :partial => 'report_title', :locals => { :report => report }
   - unless SETTINGS.enable_read_only_mode || session['ACCESS_CONTROL_ROLE'] == 'READ_ONLY'
     %ul.actions
       - Registry.each_callback :report, :actions do |thing|
@@ -18,7 +18,8 @@
           = widget.call self, report
       %li(id="#{user_facing[name].downcase}-tab")
         %a= h user_facing[name]
-  = panels
+  - panels.each do |panel|
+    = raw panel
 
 - Registry.each_callback :report, :tail do |thing|
   = thing.call self, report

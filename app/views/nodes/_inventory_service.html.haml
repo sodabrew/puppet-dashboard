@@ -2,7 +2,7 @@
   .section
     %h3 Inventory
     %div#inventory
-      = image_tag "loading.gif"
+      = image_tag "/images/loading.gif"
       = "Loading node inventory"
     %script{:type => 'text/javascript'}= load_asynchronously("div#inventory", facts_node_path(node))
 

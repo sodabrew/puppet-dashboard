@@ -1,4 +1,4 @@
-require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
+require 'spec_helper'
 require 'shared_behaviors/controller_mixins'
 require 'shared_behaviors/sorted_index'
 

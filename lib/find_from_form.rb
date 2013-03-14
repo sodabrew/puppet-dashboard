@@ -28,7 +28,7 @@ module FindFromForm
 
           send("#{model.pluralize}=", my_models.flatten.uniq)
         rescue ActiveRecord::RecordInvalid, ActiveRecord::RecordNotFound => e
-          self.errors.add_to_base(e.message)
+          self.errors[:base] << e.message
           return false
         end
       end

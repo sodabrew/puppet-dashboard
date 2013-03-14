@@ -1,46 +1,25 @@
-*.swp
-*.swo
-.DS_Store
-.dotest/*
-.semver
-.rvmrc
-/*.sql
-/.sass-cache/*
-Makefile
-README.markdown.html
-config/database.yml
-config/settings.yml
-coverage.info
-coverage/*
-db/*.db
-db/*.sqlite3
-db/dump.sql
-doc/api
-doc/app
-log/*.log*
-log/*.pid
-log/mcollective*
-public/javascripts/all.js
-public/stylesheets/all.css
-public/javascripts/plugin-*
-public/javascripts/plugin_*
-public/stylesheets/sass/plugin-*
-public/stylesheets/sass/plugin_*
-public/stylesheets/plugin-*
-public/stylesheets/plugin_*
-public/images/plugin-*
-public/images/plugin_*
-spec/rcov.opts
-spec/spec.opts
-spec/watchr.rb
-tags
-results/*
-certs
-vendor/plugins/puppet_*
-db/schema.rb
-db/migrate/*_plugin_*.rb
-config/installed_plugins
-*.rpm
-pkg/*
-VERSION_LINK
-ext/packaging
+# Ignore Ruby selection
+/.rvmrc
+/.rbenv
+
+# Ignore packaging tools
+/pkg/*
+/ext/packaging
+
+# Ignore your configs
+/config/settings.yml
+/config/database.yml
+
+# Ignore bundler config
+/.bundle
+/vendor/bundle
+
+# Ignore the default SQLite database
+/db/*.sqlite3
+
+# Ignore all logfiles and tempfiles
+/log/*.log
+/tmp
+
+# Ignore asset pipeline output
+/public/assets

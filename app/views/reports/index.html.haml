@@ -1,5 +1,5 @@
 - tab_statuses = Node.possible_statuses.unshift("all")
-#sidebar= render 'shared/node_manager_sidebar'
+#sidebar= render :partial => 'shared/node_manager_sidebar'
 #main
   .header
     %h2
@@ -17,4 +17,4 @@
             %a{:href => '/reports'}= h tab_status.humanize
           - else
             %a{:href => "/reports/#{tab_status}"}= h tab_status.humanize
-    = render 'reports/reports_table', :reports => @reports, :node => @node
+    = render :partial => 'reports/reports_table', :locals => { :reports => @reports, :node => @node }

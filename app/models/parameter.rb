@@ -1,11 +1,12 @@
-require 'trimmer'
-
 class Parameter < ActiveRecord::Base
   include Trimmer
   trimmed_fields :key
 
   belongs_to :parameterable, :polymorphic => true
   validates_presence_of :key
+
+  attr_accessible :created_at
+  attr_accessible :key, :value, :parameterable_id, :parameterable_type, :updated_at
 
   serialize :value
 

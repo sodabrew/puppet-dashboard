@@ -13,7 +13,7 @@ class NodeGroupEdge < ActiveRecord::Base
   def validate_dag
     def dfs(group, seen)
       if seen.include?(group)
-        self.errors.add_to_base(
+        self.errors[:base] << (
           "Creating a dependency from group '#{from.name}' to " \
           + (from.name == to.name ? "itself" : "group '#{to.name}'") \
           + " creates a cycle")

@@ -2,12 +2,20 @@ class Report < ActiveRecord::Base
   def self.per_page; SETTINGS.reports_per_page end # Pagination
   belongs_to :node
 
-  has_many :logs, :class_name => "ReportLog", :dependent => :destroy
-  has_many :resource_statuses, :dependent => :destroy
-  has_many :metrics, :dependent => :destroy
+  has_many :logs,   :class_name => 'ReportLog',     :dependent => :destroy
+  has_many :metrics,                                :dependent => :destroy
+  has_many :resource_statuses,                      :dependent => :destroy
   has_many :events, :through => :resource_statuses
 
-  accepts_nested_attributes_for :metrics, :resource_statuses, :logs
+  accepts_nested_attributes_for :metrics, :resource_statuses, :logs, :events
+
+  attr_accessible :time, :resource_statuses_attributes, :puppet_version, \
+                  :host, :logs_attributes, :status, :configuration_version, \
+                  :kind, :metrics_attributes, :source, :tags, :message, \
+                  :line, :file, :level, :events_attributes, \
+                  :out_of_sync_count, :title, :evaluation_time, \
+                  :skipped, :failed, :change_count, :resource_type, \
+                  :name, :category, :value
 
   before_validation :assign_to_node
   validates_presence_of :host, :time, :kind
@@ -18,14 +26,14 @@ class Report < ActiveRecord::Base
   after_save :update_node
   after_destroy :replace_last_report
 
-  default_scope :order => 'time DESC', :include => :node
+  default_scope includes(:node).order('time DESC')
 
-  named_scope :inspections, :conditions => {:kind => "inspect"                       }, :include => :metrics
-  named_scope :applies,     :conditions => {:kind => "apply"                         }, :include => :metrics
-  named_scope :changed,     :conditions => {:kind => "apply", :status => 'changed'   }, :include => :metrics
-  named_scope :unchanged,   :conditions => {:kind => "apply", :status => 'unchanged' }, :include => :metrics
-  named_scope :failed,      :conditions => {:kind => "apply", :status => 'failed'    }, :include => :metrics
-  named_scope :pending,     :conditions => {:kind => "apply", :status => 'pending'   }, :include => :metrics
+  scope :inspections, includes(:metrics).where(:kind => 'inspect')
+  scope :applies,     includes(:metrics).where(:kind => 'apply')
+  scope :changed,     includes(:metrics).where(:kind => 'apply', :status => 'changed'   )
+  scope :unchanged,   includes(:metrics).where(:kind => 'apply', :status => 'unchanged' )
+  scope :failed,      includes(:metrics).where(:kind => 'apply', :status => 'failed'    )
+  scope :pending,     includes(:metrics).where(:kind => 'apply', :status => 'pending'   )
 
   def total_resources
     metric_value("resources", "total")
@@ -96,7 +104,7 @@ class Report < ActiveRecord::Base
     DelayedJobFailure.create!(
       :summary   => "Importing report #{File.basename(report_file)}",
       :details   => e.to_s,
-      :backtrace => e.application_backtrace
+      :backtrace => Rails.backtrace_cleaner.clean(e.backtrace)
     )
     return nil
   end
