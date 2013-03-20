@@ -2,7 +2,8 @@
 - parameter_index = 0
 - new_id_placeholder = "NEW_ID_PLACEHOLDER"
 - object_name = controller.controller_name.singularize
-%h3 Parameters
+- entity_name = defined?(entity_name) ? entity_name : 'parameter'
+%h3= entity_name.capitalize.pluralize
 %table#parameters.inspector
   %thead
     %tr
@@ -13,7 +14,8 @@
     %tr
       %td{:colspan => 3}
         %a.button.add{:href => '#',
-          :onclick => "jQuery('table#parameters tr.parameter').first().clone().appendTo('table#parameters tbody').show('fast').find('input').val('').css('color', 'black'); set_parameter_index();".html_safe} Add parameter
+          :onclick => "jQuery('table#parameters tr.parameter').first().clone().appendTo('table#parameters tbody').show('fast').find('input').val('').css('color', 'black'); set_parameter_index();".html_safe}
+          = "Add #{entity_name}"
 
   %tbody
     - # non-visible row that we will clone for the Add Parameter button
@@ -24,7 +26,8 @@
         = text_field_tag "#{object_name}[parameter_attributes][#{new_id_placeholder}][value]", '', :placeholder => "value"
       %td.actions
         %a.icon.delete{:href => '#',
-          :onclick => "jQuery(this).parents('tr').remove()".html_safe} Remove parameter
+          :onclick => "jQuery(this).parents('tr').remove()".html_safe}
+          = "Remove #{entity_name}"
 
     - # existing parameters
     - parameters.each do |param|
@@ -36,7 +39,8 @@
           = text_field_tag "#{object_name}[parameter_attributes][#{parameter_index}][value]", param.value, :placeholder => "value"
         %td.actions
           %a.icon.delete{:href => '#',
-            :onclick => "jQuery(this).parents('tr').remove()".html_safe} Remove parameter
+            :onclick => "jQuery(this).parents('tr').remove()".html_safe}
+            = "Remove #{entity_name}"
 
     - # one blank row
     - parameter_index += 1
@@ -47,7 +51,8 @@
         = text_field_tag "#{object_name}[parameter_attributes][#{parameter_index}][value]", '', :placeholder => "value"
       %td.actions
         %a.icon.delete{:href => '#',
-          :onclick => "jQuery(this).parents('tr').remove()".html_safe} Remove parameter
+          :onclick => "jQuery(this).parents('tr').remove()".html_safe}
+          = "Remove #{entity_name}"
 :javascript
   function set_parameter_index() {
     var new_index = new Date().getTime();

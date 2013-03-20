@@ -129,7 +129,7 @@ namespace :node do
     end
   end
 
-  desc 'Show/Edit/Add parameters for a node'
+  # deprecated - use variables instead
   task :parameters => :environment do
     node = get_node(ENV['name'])
 
@@ -174,6 +174,58 @@ namespace :node do
 
         node.save!
         puts "Node parameters successfully edited for #{node.name}!"
+      end
+    rescue => e
+      puts "There was a problem saving the node: #{e.message}"
+      exit 1
+    end
+  end
+
+  desc 'Show/Edit/Add variables for a node'
+  task :variables => :environment do
+    node = get_node(ENV['name'])
+
+    # Show variables
+    unless ENV['variables']
+      node.parameters.each do |p|
+        puts "#{p.key}=#{p.value}"
+      end
+      exit
+    end
+
+    given_parameters = Hash[ ENV['variables'].split(',').map do |param|
+      param_array = param.split('=',2)
+      if param_array.size != 2
+        raise ArgumentError, "Could not parse variable #{param_array.first} given. Perhaps you're missing a '='"
+      end
+      if param_array[0].nil? or param_array[0].empty?
+        raise ArgumentError, "Could not parse variables. Please check your format. Perhaps you need to name a variable before a '='"
+      end
+      if param_array[1].nil? or param_array[1].empty?
+        raise ArgumentError, "Could not parse variables #{param_array.first}. Please check your format"
+      end
+      param_array
+    end ]
+
+    begin
+      ActiveRecord::Base.transaction do
+        given_parameters.each do |key, value|
+          param, *dupes = *node.parameters.find_all_by_key(key)
+          if param
+            # Change existing variables
+            param.value = value
+            param.save!
+            # If there were duplicate params from the previous buggy version of
+            # this code, remove them
+            dupes.each { |d| d.destroy }
+          else
+            # Create new variables
+            node.parameters.create(:key => key, :value => value)
+          end
+        end
+
+        node.save!
+        puts "Node variables successfully edited for #{node.name}!"
       end
     rescue => e
       puts "There was a problem saving the node: #{e.message}"
