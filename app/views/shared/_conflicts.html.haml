@@ -1,10 +1,10 @@
 - unless resource.global_conflicts.empty?
   .section.half
-    %h3.conflicts Global Parameters Conflicts
+    %h3.conflicts Variables Conflicts
     %table.inspector
       %thead
         %tr
-          %th{:scope => :col} Parameter
+          %th{:scope => :col} Variable
           %th{:scope => :col} Source
       %tbody
         - resource.global_conflicts.sort_by{ |param| param.name }.each do |param|

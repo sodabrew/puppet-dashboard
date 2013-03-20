@@ -52,15 +52,19 @@ module ConflictAnalyzer
     new_conflicts = get_new_conflicts(old_conflicts, initial_resource, related_resources)
     if new_conflicts.length > 0
       conflict_message = "<h2>You are going to introduce new conflicts!</h2>"
+      conflict_message += "<div style='overflow: auto; white-space: nowrap; max-width: 800px; max-height: 400px;'>"
       new_conflicts.keys.each do |entity_desc|
         entity_class = entity_desc.entity_class == NodeGroup ? "Group" : "Node"
         conflict_message += "<br>" + Rack::Utils.escape_html(entity_class) + ": <b>" + Rack::Utils.escape_html(entity_desc.entity_name) + "</b>"
         conflicts = new_conflicts[entity_desc]
         if conflicts[:global_conflicts].length > 0
-          conflict_message += "<br>&nbsp;&nbsp;Global conflicts:<br>"
+          conflict_message += "<br>&nbsp;&nbsp;Variable conflicts:<br>"
+          first = true
           conflicts[:global_conflicts].each do |conflict|
-            conflict_message += "&nbsp;&nbsp;&nbsp;&nbsp;<b>" + Rack::Utils.escape_html(conflict.name) + ": " +
-              conflict.sources.map{ |source| Rack::Utils.escape_html(source.name)}.join(", ") + "</b>"
+            conflict_message += "<br/>" unless first
+            first = false
+            conflict_message += "&nbsp;&nbsp;&nbsp;&nbsp;" + Rack::Utils.escape_html(conflict.name) + ": " +
+              conflict.sources.map{ |source| Rack::Utils.escape_html(source.name)}.join(", ")
           end
           conflict_message += "<br>"
         end
@@ -81,6 +85,7 @@ module ConflictAnalyzer
           conflict_message += "<br>"
         end
       end
+      conflict_message += "</div>"
     else
       conflict_message = nil;
     end

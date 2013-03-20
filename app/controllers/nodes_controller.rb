@@ -84,7 +84,7 @@ class NodesController < InheritedResources::Base
       render :text => node.to_yaml, :content_type => 'application/x-yaml'
     rescue ParameterConflictError => e
       raise e unless request.format == :yaml
-      render :text => "Node \"#{resource.name}\" has conflicting parameter(s): #{resource.errors.on(:parameters).to_a.to_sentence}", :content_type => 'text/plain', :status => 500
+      render :text => "Node \"#{resource.name}\" has conflicting variable(s): #{resource.errors.on(:parameters).to_a.to_sentence}", :content_type => 'text/plain', :status => 500
     rescue ClassParameterConflictError => e
         raise e unless request.format == :yaml
         render :text => "Node \"#{resource.name}\" has conflicting class parameter(s): #{resource.errors.on(:classParameters).to_a.to_sentence}", :content_type => 'text/plain', :status => 500
