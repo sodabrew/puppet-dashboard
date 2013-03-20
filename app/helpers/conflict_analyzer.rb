@@ -59,19 +59,24 @@ module ConflictAnalyzer
         if conflicts[:global_conflicts].length > 0
           conflict_message += "<br>&nbsp;&nbsp;Global conflicts:<br>"
           conflicts[:global_conflicts].each do |conflict|
-            conflict_message += "&nbsp;&nbsp;&nbsp;&nbsp;<b>" + Rack::Utils.escape_html(conflict.name) + "</b> <i>(" + Rack::Utils.escape_html(conflict.value) + ")</i>: <b>" +
-              conflict.sources.map{ |source| Rack::Utils.escape_html(source.name)}.join(",") + "</b>"
+            conflict_message += "&nbsp;&nbsp;&nbsp;&nbsp;<b>" + Rack::Utils.escape_html(conflict.name) + ": " +
+              conflict.sources.map{ |source| Rack::Utils.escape_html(source.name)}.join(", ") + "</b>"
           end
           conflict_message += "<br>"
         end
         if conflicts[:class_conflicts].length > 0
           conflict_message += "<br>&nbsp;&nbsp;Class conflicts:<br>"
           conflicts[:class_conflicts].keys.each do |node_class|
-            conflict_message += "&nbsp;&nbsp;&nbsp;&nbsp;" + Rack::Utils.escape_html(node_class.name) + ": "
+            conflict_message += "&nbsp;&nbsp;&nbsp;&nbsp;<div style='display: inline-block; vertical-align: top;'>" +
+              Rack::Utils.escape_html(node_class.name) + ":</div>&nbsp;<div style='display: inline-block;'>"
+            first = true
             conflicts[:class_conflicts][node_class].each do |conflict|
-              conflict_message += Rack::Utils.escape_html(conflict.name) + " (" + Rack::Utils.escape_html(conflict.value) + ") - " +
-                conflict.sources.map{ |source| Rack::Utils.escape_html(source.name)}.join(",")
+              conflict_message += "<br/>" unless first
+              first = false
+              conflict_message += Rack::Utils.escape_html(conflict.name) + " - " +
+                conflict.sources.map{ |source| Rack::Utils.escape_html(source.name)}.join(", ")
             end
+            conflict_message += "</div>"
           end
           conflict_message += "<br>"
         end
