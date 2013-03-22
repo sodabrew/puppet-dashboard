@@ -16,14 +16,14 @@
       %tbody
         - resource.compiled_parameters(true).each do |param|
           %tr
-            %td{:style => ("background-color: pink;" if param.sources.size > 1)}
-              %tt= h param.name
+            %td{:style => ("background-color: pink;" if param[:sources].size > 1)}
+              %tt= h param[:name]
             %td
-              %tt= h param.value
+              %tt= h param[:value]
             %td
-              - if param.sources == Set[resource]
+              - if param[:sources] == Set[resource]
                 = h resource.name
               - else
-                = param.sources.map{|source| link_to(h(source.name),node_group_path(source.id))}.join(", ")
+                = param[:sources].map{|source| link_to(h(source.name),node_group_path(source.id))}.join(", ")
   - else
     = describe_no_matches_as 'No variables'
