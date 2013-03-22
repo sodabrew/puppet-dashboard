@@ -94,9 +94,17 @@ class Report < ActiveRecord::Base
     attribute_hash
   end
 
+  def self.read_file_contents(file)
+    File.read(file)
+  end
+
+  def self.remove_file(file)
+    File.unlink(file)
+  end
+
   def self.create_from_yaml_file(report_file, options = {})
-    report = create_from_yaml(File.read(report_file))
-    File.unlink(report_file) if options[:delete]
+    report = create_from_yaml(read_file_contents(report_file))
+    remove_file(report_file) if options[:delete]
     return report
   rescue Exception => e
     retries ||= 3

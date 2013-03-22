@@ -54,7 +54,11 @@ class SettingsReader
 
   # Return an OpenStruct object by reading the +filename+ and parsing it with ERB and YAML.
   def self.filename_to_hash(filename)
-    return YAML.load(ERB.new(File.read(filename)).result) rescue {}
+    return YAML.load(ERB.new(file_contents(filename)).result) rescue {}
+  end
+
+  def self.file_contents(filename)
+    File.read(filename)
   end
 
   def self.validate(settings)

@@ -398,11 +398,9 @@ describe Report do
   end
 
   describe "#create_from_yaml_file" do
-    it { pending "FIXME: the Mocha stub on File.expects(:read) sets $SAFE = 4 for later tests." }
-=begin
     describe "when create_from_yaml is successful" do
       before do
-        File.expects(:read).with('/tmp/foo').returns(@report_yaml)
+        Report.expects(:read_file_contents).with('/tmp/foo').returns(@report_yaml)
         Report.expects(:create_from_yaml).returns('i can haz report')
       end
 
@@ -411,7 +409,7 @@ describe Report do
       end
 
       it "should delete the file if delete option is specified" do
-        File.expects(:unlink).with('/tmp/foo')
+        Report.expects(:remove_file).with('/tmp/foo')
         Report.create_from_yaml_file('/tmp/foo', :delete => true)
       end
     end
@@ -419,11 +417,11 @@ describe Report do
 
     describe "when create_from_yaml fails" do
       before do
-        File.expects(:read).at_least_once.with('/tmp/foo').returns(@report_yaml)
+        Report.expects(:read_file_contents).at_least_once.with('/tmp/foo').returns(@report_yaml)
       end
 
       it "not unlink the file if create_from_yaml fails" do
-        File.expects(:unlink).with('/tmp/foo').never
+        Report.expects(:remove_file).with('/tmp/foo').never
         Report.stubs(:create_from_yaml).raises(ActiveRecord::StatementInvalid)
         Report.create_from_yaml_file('/tmp/foo', :delete => true)
       end
@@ -452,7 +450,6 @@ describe Report do
         DelayedJobFailure.first.backtrace.any? {|trace| trace =~ /report\.rb:\d+:in.*create_from_yaml_file/}.should be_true
       end
     end
-=end
   end
 
 
