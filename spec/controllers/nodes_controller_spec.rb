@@ -218,7 +218,7 @@ describe NodesController do
           get :show, :id => @node.name, :format => "yaml"
 
           response.should_not be_success
-          response.body.should =~ /has conflicting parameter\(s\)/
+          response.body.should =~ /has conflicting variable\(s\)/
         end
 
         it "should return YAML for an empty node when the node is not found" do
