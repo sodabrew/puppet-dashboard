@@ -34,8 +34,6 @@ class ReportsController < InheritedResources::Base
     end
   end
 
-  filter_parameter_logging :report
-
   def upload
     begin
       Report.delay.create_from_yaml(params[:report][:report])

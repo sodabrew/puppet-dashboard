@@ -39,7 +39,7 @@
           %td.label
             = link_to h(status.capitalize), nodes_path
           %td.percent
-            = link_to "#{percent}<em>%</em>", nodes_path, {:style => "width: #{percent}%"}
+            = link_to "#{percent}<em>%</em>".html_safe, nodes_path, {:style => "width: #{percent}%"}
 
     - if Node.hidden.count > 0
       %table.secondary
@@ -55,9 +55,9 @@
     - unless SETTINGS.enable_read_only_mode || session['ACCESS_CONTROL_ROLE'] == 'READ_ONLY'
       = link_to "Add node", new_node_path, :class => 'button'
 
-= render "shared/node_manager_sidebar_for_type", :type => NodeGroup
+= render :partial => "shared/node_manager_sidebar_for_type", :locals => { :type => NodeGroup }
 - if SETTINGS.use_external_node_classification
-  = render "shared/node_manager_sidebar_for_type", :type => NodeClass
+  = render :partial => "shared/node_manager_sidebar_for_type", :locals => { :type => NodeClass }
 
 #skiptargetholder
-  = render 'shared/skiptarget'
+  = render :partial => 'shared/skiptarget'

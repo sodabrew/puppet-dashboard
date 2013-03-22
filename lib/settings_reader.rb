@@ -18,7 +18,7 @@ class SettingsReader
   def self.read
     normal_file = "config/settings.yml"
     sample_file = "config/settings.yml.example"
-    rails_root = RAILS_ROOT rescue File.dirname(File.dirname(__FILE__))
+    rails_root = Rails.root rescue File.dirname(File.dirname(__FILE__))
 
     message = "** SettingsReader - "
 
@@ -40,7 +40,7 @@ class SettingsReader
       message << "Using default values for unspecified settings " << unspecified_keys.sort.map(&:inspect).to_sentence
     end
 
-    RAILS_DEFAULT_LOGGER.debug(message) rescue nil
+    Rails.logger.debug(message) rescue nil
 
     validate(settings)
 
@@ -48,7 +48,7 @@ class SettingsReader
   end
 
   def self.default_settings
-    rails_root = RAILS_ROOT rescue File.dirname(File.dirname(__FILE__))
+    rails_root = Rails.root rescue File.dirname(File.dirname(__FILE__))
     OpenStruct.new(self.filename_to_hash(File.join(rails_root, "config/settings.yml.example")))
   end
 

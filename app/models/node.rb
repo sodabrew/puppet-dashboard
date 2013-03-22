@@ -1,5 +1,3 @@
-require 'puppet_https'
-
 class Node < ActiveRecord::Base
   def self.per_page; SETTINGS.nodes_per_page end # Pagination
 
@@ -7,8 +5,12 @@ class Node < ActiveRecord::Base
   extend FindFromForm
 
   validates_presence_of :name
-  validates_uniqueness_of :name
-  attr_readonly :name
+  validates_uniqueness_of :name, :case_sensitive => false
+
+  # attr_readonly :name, :created_at # FIXME: these should be readonly, but inherit_resources isn't creating new instances right
+  attr_accessible :name, :created_at # FIXME: ^^
+  attr_accessible :description, :parameter_attributes, :assigned_node_group_ids, :assigned_node_class_ids, :node_class_ids, :node_group_ids
+  attr_accessible :reported_at, :last_inspect_report_id, :hidden, :updated_at, :last_apply_report_id, :status, :value, :report, :category
 
   has_many :node_class_memberships, :dependent => :destroy
   has_many :node_classes, :through => :node_class_memberships
@@ -28,14 +30,14 @@ class Node < ActiveRecord::Base
     ["failed", "pending", "changed", "unchanged"]
   end
 
-  named_scope :with_last_report, :include => :last_apply_report
-  named_scope :by_report_date, :order => 'reported_at DESC'
+  scope :with_last_report, includes(:last_apply_report)
+  scope :by_report_date, order('reported_at DESC')
 
-  named_scope :search, lambda{|q| q.blank? ? {} : {:conditions => ['name LIKE ?', "%#{q}%"]} }
+  scope :search, lambda{ |q| where('name LIKE ?', "%#{q}%") unless q.blank? }
 
-  named_scope :by_latest_report, proc { |order|
+  scope :by_latest_report, proc { |order|
     direction = {1 => 'ASC', 0 => 'DESC'}[order]
-    direction ? {:order => "reported_at #{direction}"} : {}
+    order("reported_at #{direction}") if direction
   }
 
   has_parameters
@@ -46,33 +48,37 @@ class Node < ActiveRecord::Base
   fires :updated, :on => :update
   fires :removed, :on => :destroy
 
-  named_scope :unresponsive, lambda {{
-    :conditions => [
-      "last_apply_report_id IS NOT NULL AND reported_at < ?",
-      SETTINGS.no_longer_reporting_cutoff.seconds.ago
-    ]
-  }}
+  scope :unresponsive, lambda {
+    where("last_apply_report_id IS NOT NULL AND reported_at < ?",
+          SETTINGS.no_longer_reporting_cutoff.seconds.ago)
+  }
 
   possible_statuses.each do |node_status|
-    named_scope node_status, lambda {{
-      :conditions => [
-        "last_apply_report_id IS NOT NULL AND reported_at >= ? AND nodes.status = '#{node_status}'",
-        SETTINGS.no_longer_reporting_cutoff.seconds.ago
-      ]
-    }}
+    scope node_status, lambda {
+      where("last_apply_report_id IS NOT NULL AND
+             reported_at >= ? AND
+             nodes.status = '#{node_status}'",
+             SETTINGS.no_longer_reporting_cutoff.seconds.ago)
+    }
   end
 
-  named_scope :unreported, :conditions => {:reported_at => nil}
+  scope :unreported, where(:reported_at => nil)
 
-  named_scope :hidden, :conditions => {:hidden => true}
+  scope :hidden, where(:hidden => true)
 
-  named_scope :unhidden, :conditions => {:hidden => false}
+  scope :unhidden, where(:hidden => false)
+
+  # Enforce lowercase node name
+  before_save :name_downcase
+  def name_downcase
+    self.name.downcase!
+  end
 
   def self.find_by_id_or_name!(identifier)
     find_by_id(identifier) or find_by_name!(identifier)
   end
 
-  def self.find_from_inventory_search(search_params)
+  def self.find_from_inventory_search(search_params={})
     queries = search_params.map do |param|
       fact  = CGI::escape(param['fact'])
       value = CGI::escape(param['value'])
@@ -83,13 +89,14 @@ class Node < ActiveRecord::Base
           "production/facts_search/search?#{ queries.join('&') }"
 
     matches = JSON.parse(PuppetHttps.get(url, 'pson'))
+    matches.map!(&:downcase)
     nodes = Node.find_all_by_name(matches)
-    found = nodes.map(&:name).map(&:downcase)
-    matched_nodes = matches.map do |m|
-      Node.create!(:name => m) unless found.include? m.downcase
+    found = nodes.map(&:name)
+    created_nodes = matches.map do |m|
+      Node.create!(:name => m) unless found.include? m
     end
 
-    return nodes + matched_nodes.compact
+    return nodes + created_nodes.compact
   end
 
   def configuration
@@ -121,7 +128,7 @@ class Node < ActiveRecord::Base
   end
 
   def self.to_csv_header
-    CSV.generate_line(Node.to_csv_properties + ResourceStatus.to_csv_properties)
+    UseThisCSV.generate_line(Node.to_csv_properties + ResourceStatus.to_csv_properties)
   end
 
   def self.to_csv_properties
@@ -140,8 +147,8 @@ class Node < ActiveRecord::Base
     end
 
     rows.map do |row|
-      CSV.generate_line row
-    end.join("\n")
+      UseThisCSV.generate_line row
+    end.join
   end
 
   def timeline_events
@@ -216,9 +223,20 @@ class Node < ActiveRecord::Base
   end
 
   def self.resource_status_totals(resource_status, scope='all')
-    scope ||="all"
+    scope ||= 'all'
     raise ArgumentError, "No such status #{resource_status}" unless possible_statuses.unshift("total").include?(resource_status)
-    options = {:conditions => "metrics.category = 'resources' AND metrics.name = '#{resource_status}'", :joins => 'left join metrics on metrics.report_id = nodes.last_apply_report_id'}
-    ['all', 'index'].include?(scope) ? Node.sum(:value, options).to_i : Node.send(scope).sum(:value, options).to_i
+
+    case scope
+    when *['all', 'index']
+      Node.
+           joins('LEFT JOIN metrics ON metrics.report_id = nodes.last_apply_report_id').
+           where("metrics.category = 'resources' AND
+                  metrics.name = '#{resource_status}'").sum(:value).to_i
+    else
+      Node.send(scope).
+           joins('LEFT JOIN metrics ON metrics.report_id = nodes.last_apply_report_id').
+           where("metrics.category = 'resources' AND
+                  metrics.name = '#{resource_status}'").sum(:value).to_i
+    end
   end
 end

@@ -1,4 +1,4 @@
-require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
+require 'spec_helper'
 
 describe "/reports/show.html.haml" do
   include ReportsHelper
@@ -6,12 +6,13 @@ describe "/reports/show.html.haml" do
   describe "successful render" do
     before :each do
       report_yaml = File.read(File.join(Rails.root, "spec/fixtures/reports/puppet26/report_ok_service_started_ok.yaml"))
-      assigns[:report] = @report = Report.create_from_yaml(report_yaml)
+      @report = Report.create_from_yaml(report_yaml)
       render
     end
 
-    specify { response.should be_success }
-    it { should have_tag('.status img[src=?]', /.+changed.+/) }
-    it { should have_tag('a[href=?]', node_path(@report.node)) }
+    # <span class='changed status'>
+    # <img alt="Changed" src="/images/icons/changed.png" title="Changed over 2 years ago" />
+    it { rendered.should have_tag('.status img', :with => { :src => '/images/icons/changed.png' }) }
+    it { rendered.should have_tag('a', :with => { :href => node_path(@report.node) }) }
   end
 end

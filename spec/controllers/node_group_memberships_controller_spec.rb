@@ -1,9 +1,9 @@
-require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
+require 'spec_helper'
 require 'shared_behaviors/controller_mixins'
 
 describe NodeGroupMembershipsController do
   describe "#create" do
-    integrate_views
+    render_views
 
     it "should accept a node id and group id and make a membership" do
       node = Node.generate!

@@ -3,7 +3,7 @@
 = header_for(form)
 
 .item
-  = form.error_messages
+  = render :partial => 'shared/form_errors', :object => form.object.errors
 
   .element
     = form.label :name
@@ -11,30 +11,13 @@
 
   - if SETTINGS.use_external_node_classification
     .element
-      %h3 Parameters
-      %table#parameters.inspector
-        %thead
-          %tr
-            %th.key{:scope => :col} Key
-            %th.value{:scope => :col} Value
-        %tbody
-          - if form.object.parameters.blank?
-            = render :partial => 'parameters/parameter_input', :object => form.object.parameters.build
-          - else
-            = render :partial => 'parameters/parameter_input', :collection => form.object.parameters
-        %tfoot
-          %tr
-            %td{:colspan => 2}
-              = link_to_function("Add parameter", :class => "add button") { |page|  page.insert_html :bottom, 'parameters', :partial => 'parameters/parameter_input', :object => form.object.parameters.build }
+      = render :partial => 'parameters/parameter_input', :object => form.object.parameters
+
     = render :partial => 'shared/tokenized_text_box',
-      :locals => { :model => 'node_class',
-        :title => 'Classes',
-        :source => 'node_group' }
+      :locals => { :model => 'node_class', :title => 'Classes', :source => 'node_group' }
 
   - {'node_group' => 'Groups', 'node' => 'Nodes'}.each do |model, title|
     = render :partial => 'shared/tokenized_text_box',
-      :locals => {:model => model,
-        :title => title,
-        :source => 'node_group'}
+      :locals => { :model => model, :title => title, :source => 'node_group' }
 
   %script#tokenizer{:type => "text/javascript"}= tokenize_input_class(@class_data, @group_data, @node_data)

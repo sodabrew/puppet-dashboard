@@ -1,4 +1,4 @@
-require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
+require 'spec_helper'
 
 describe "/node_groups/show.html.haml" do
   include NodeGroupsHelper
@@ -9,7 +9,6 @@ describe "/node_groups/show.html.haml" do
       render
     end
 
-    specify { response.should be_success }
-    it { should have_tag('h2', "Group:\n#{@node_group.name}") }
+    it { rendered.should have_tag 'h2', :text => /Group:\n#{@node_group.name}/ }
   end
 end

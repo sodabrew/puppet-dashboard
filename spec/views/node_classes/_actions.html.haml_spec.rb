@@ -1,4 +1,4 @@
-require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
+require 'spec_helper'
 
 describe "/node_classes/_actions.html.haml" do
   include NodeClassesHelper
@@ -6,7 +6,6 @@ describe "/node_classes/_actions.html.haml" do
   describe "successful render" do
     before { render }
 
-    specify { response.should be_success }
-    it { should have_tag('a[href=?]', new_node_class_path) }
+    it { rendered.should have_tag('a', :with => { :href => new_node_class_path }) }
   end
 end

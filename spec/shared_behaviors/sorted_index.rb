@@ -1,4 +1,4 @@
-describe "sorted index", :shared => true do
+shared_examples_for "sorted index" do
   describe "when retrieving" do
     it "should be sorted by default" do
       c = model.generate! :name => "c"

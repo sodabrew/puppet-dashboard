@@ -23,4 +23,4 @@
           %tr
             %td{:colspan => 5}
               .actionbar
-                = link_to "More &raquo;", reports_node_path(node, :kind => "inspect"), :class => 'button'
+                = link_to "More &raquo;".html_safe, reports_node_path(node, :kind => "inspect"), :class => 'button'

@@ -1,4 +1,7 @@
 class CreateDelayedJobs < ActiveRecord::Migration
+
+  @postgres = ActiveRecord::Base.connection.adapter_name.downcase =~ /postgres/
+
   def self.up
     create_table :delayed_jobs, :force => true do |table|
       # Allows some jobs to jump to the front of the queue
@@ -6,7 +9,8 @@ class CreateDelayedJobs < ActiveRecord::Migration
       # Provides for retries, but still fail eventually.
       table.integer  :attempts, :default => 0
       # YAML-encoded string of the object that will do work
-      table.text     :handler,  :limit => 16.megabytes
+      table.text     :handler,  :limit => 16.megabytes    unless @postgres
+      table.text     :handler                             if @postgres
       # reason for last failure (See Note below)
       table.text     :last_error
       # When to run. Could be Time.zone.now for immediately, or sometime in

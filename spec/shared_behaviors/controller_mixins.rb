@@ -1,7 +1,7 @@
 # USAGE: Your `describe` block must define a `model` method that returns the
 # ActiveRecord model class to use for describing this behavior.
 
-describe "with search by q and tag", :shared => true do
+shared_examples_for "with search by q and tag" do
   describe "when searching" do
     before :each do
       SETTINGS.stubs(:use_external_node_classification).returns(true)
@@ -47,7 +47,7 @@ describe "with search by q and tag", :shared => true do
   end
 end
 
-describe "without JSON pagination", :shared => true do
+shared_examples_for "without JSON pagination" do
   describe "without JSON pagination" do
     describe "GET index" do
       describe "as HTML" do
@@ -57,13 +57,8 @@ describe "without JSON pagination", :shared => true do
         end
         subject { assigns[model.name.tableize] }
 
-        # NOTE: Once upon a time, the collection was paginated until it was realized that this broke the charts.
-        # it "paginates by the page parameter" do
-          # should be_a_kind_of(WillPaginate::Collection)
-        # end
-
         it "will paginate" do
-          should be_a_kind_of(WillPaginate::Collection)
+          should respond_to(:paginate)
         end
       end
 

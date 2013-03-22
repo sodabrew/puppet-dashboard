@@ -15,6 +15,6 @@
               - if sources.include?(resource)
                 = h resource.name
               - else
-                = sources.map{|source| link_to(h(source.name),source)}.join(", ")
+                = raw sources.map{ |source| link_to(h(source.name), source) }.join(", ")
   - else
     = describe_no_matches_as 'No groups'

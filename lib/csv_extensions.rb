@@ -1,26 +1,18 @@
-require 'csv'
-
-module CsvSerializable
-  def to_csv(&blk)
-    header = first.class.to_csv_header if first.class.respond_to?(:to_csv_header)
-    if blk
-      yield header + "\n" if header
-      each {|x| yield x.to_csv + "\n"}
-      nil
-    else
-      lines = map(&:to_csv)
-      lines.unshift header if header
-      lines.join("\n")
-    end
-  end
+if RUBY_VERSION < '1.9'
+  require 'fastercsv'
+  UseThisCSV = FasterCSV
+else
+  require 'csv'
+  UseThisCSV = CSV
 end
 
 class Array
-  include CsvSerializable
-end
-
-class ActiveRecord::NamedScope::Scope
-  include CsvSerializable
+  def to_csv
+    header = first.class.to_csv_header if first.class.respond_to?(:to_csv_header)
+    lines = map(&:to_csv)
+    lines.unshift header if header
+    lines.join
+  end
 end
 
 class ActiveRecord::Base
@@ -29,7 +21,7 @@ class ActiveRecord::Base
   end
 
   def self.to_csv_header
-    CSV.generate_line to_csv_properties
+    UseThisCSV.generate_line to_csv_properties
   end
 
   def to_csv_array
@@ -37,6 +29,6 @@ class ActiveRecord::Base
   end
 
   def to_csv
-    CSV.generate_line to_csv_array
+    UseThisCSV.generate_line to_csv_array
   end
 end

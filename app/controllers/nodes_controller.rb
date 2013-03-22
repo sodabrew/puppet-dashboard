@@ -54,19 +54,16 @@ class NodesController < InheritedResources::Base
       show!
     rescue ActiveRecord::RecordNotFound => e
       raise e unless request.format == :yaml
-      node = {'classes' => []}
-      render :text => node.to_yaml, :content_type => 'application/x-yaml'
+      render :yaml => {'classes' => []}
     rescue ParameterConflictError => e
       raise e unless request.format == :yaml
-      render :text => "Node \"#{resource.name}\" has conflicting parameter(s): #{resource.errors.on(:parameters).to_a.to_sentence}", :content_type => 'text/plain', :status => 500
+      render :text => "Node \"#{resource.name}\" has conflicting parameter(s): #{resource.errors[:parameters].to_a.to_sentence}", :content_type => 'text/plain', :status => 500
     rescue NodeClassificationDisabledError => e
       render :text => "Node classification has been disabled", :content_type => 'text/plain', :status => 403
     end
   end
 
   def edit
-    # Make the node name readonly
-    @readonly_name = "readonly"
     edit! do |format|
       format.html {
         set_group_and_class_autocomplete_data_sources(@node)
@@ -142,19 +139,12 @@ class NodesController < InheritedResources::Base
       set_collection_ivar(scope.with_last_report.by_report_date)
 
       format.html { render :index }
-      format.json { render :text => collection.to_json, :content_type => 'application/json' }
-      format.yaml { render :text => collection.to_yaml, :content_type => 'application/x-yaml' }
-      format.csv do
-        response["Cache-Control"] = 'must-revalidate, post-check=0, pre-check=0'
-        response["Content-Type"] = 'text/comma-separated-values;'
-        response["Content-Disposition"] = "attachment;filename=#{scope_names.join("-")}-nodes.csv;"
-
-        render :text => proc { |response,output|
-          collection.to_csv do |line|
-            output.write(line)
-          end
-        }, :layout => false
-      end
+      format.json { render :json => collection }
+      format.yaml { render :yaml => collection }
+      format.csv {
+        expires_in 0, 'must-revalidate' => true, :private => true
+        render :csv => collection, :filename => "#{scope_names.join('-')}-nodes"
+      }
     end
   end
 end

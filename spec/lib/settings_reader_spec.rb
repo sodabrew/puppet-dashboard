@@ -1,4 +1,4 @@
-require File.expand_path(File.join(File.dirname(__FILE__), *%w[.. spec_helper]))
+require 'spec_helper'
 
 describe SettingsReader do
   before :each do
@@ -26,7 +26,7 @@ FILE
   it "should use values from settings.yml if specified, and values from settings.yml.example if not" do
     File.stubs(:read).with {|filename| File.basename(filename) == "settings.yml"}.returns(@settings_file)
     File.stubs(:read).with {|filename| File.basename(filename) == "settings.yml.example"}.returns(@sample_file)
-    RAILS_DEFAULT_LOGGER.expects(:debug).with {|msg| msg =~ /Using default values for unspecified settings "bat"/}
+    ::Rails.logger.expects(:debug).with {|msg| msg =~ /Using default values for unspecified settings "bat"/}
 
     SettingsReader.read.should == OpenStruct.new(
       "foo"                      => "bar",
@@ -36,8 +36,9 @@ FILE
   end
 
   it "should use values from settings.yml.example if settings.yml does not exist" do
+    File.stubs(:read).with {|filename| File.basename(filename) == "settings.yml"}.raises(Errno::ENOENT)
     File.stubs(:read).with {|filename| File.basename(filename) == "settings.yml.example"}.returns(@sample_file)
-    RAILS_DEFAULT_LOGGER.expects(:debug).with {|msg| msg =~ /Using default values for unspecified settings "bat", "daily_run_history_length", and "foo"/}
+    ::Rails.logger.expects(:debug).with {|msg| msg =~ /Using default values for unspecified settings "bat", "daily_run_history_length", and "foo"/}
 
     SettingsReader.read.should == OpenStruct.new(
       "foo"                      => "bob",
@@ -49,7 +50,8 @@ FILE
   it "should not output a warning if settings.yml defines all settings" do
     File.stubs(:read).with {|filename| File.basename(filename) == "settings.yml"}.returns(@settings_file_all)
     File.stubs(:read).with {|filename| File.basename(filename) == "settings.yml.example"}.returns(@sample_file)
-    RAILS_DEFAULT_LOGGER.expects(:debug).with {|msg| msg !~ /Using default values/}
+    ::Rails.logger.expects(:debug).with {|msg| msg !~ /Using default values/}
+    ::Rails.logger.expects(:debug).with {|msg| msg !~ /Using default values/}
 
     SettingsReader.read.should == OpenStruct.new(
       "foo"                      => "bar",

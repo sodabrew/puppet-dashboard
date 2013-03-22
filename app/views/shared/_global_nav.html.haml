@@ -8,8 +8,6 @@
           - css << "height: #{SETTINGS.custom_logo_height}"
           - css << "width: #{SETTINGS.custom_logo_width}"
           %a{:href => root_path, :title => SETTINGS.custom_logo_alt_text, :style => css.join('; ')} Puppet Dashboard
-        %li#dashboard-version{:class => active_if(request.url == release_notes_url)}
-          = link_to h(APP_VERSION), APP_VERSION_LINK
         %li#navigation-home{:class => active_if(request.url == root_url)}
           = link_to "Home", root_path
         %li#navigation-nodes{:class => active_if(controller_name == "nodes" && action_name == "index")}
@@ -31,4 +29,4 @@
         - Registry.each_callback :core, :account_widgets do |callback|
           = callback.call self
         %li#navigation-autorefresh
-          = link_to "#{session[:autorefresh] ? "Disable autorefresh" : "Enable autorefresh"}", "#{File.join(root_path,request.path)}?autorefresh=#{session[:autorefresh] ? "false" : "true"}", :class => "autorefresh_link"
+          <label><input type="checkbox" id="autorefresh" style="vertical-align: baseline;" /> Refresh this page automatically? <span id="autorefresh_countdown" style="display: inline-block; width: 1em; text-align: right;">&nbsp;</span></label>
