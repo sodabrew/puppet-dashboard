@@ -63,8 +63,8 @@ module ConflictAnalyzer
           conflicts[:global_conflicts].each do |conflict|
             conflict_message += "<br/>" unless first
             first = false
-            conflict_message += "&nbsp;&nbsp;&nbsp;&nbsp;" + Rack::Utils.escape_html(conflict.name) + ": " +
-              conflict.sources.map{ |source| Rack::Utils.escape_html(source.name)}.join(", ")
+            conflict_message += "&nbsp;&nbsp;&nbsp;&nbsp;" + Rack::Utils.escape_html(conflict[:name]) + ": " +
+              conflict[:sources].map{ |source| Rack::Utils.escape_html(source.name)}.join(", ")
           end
           conflict_message += "<br>"
         end
@@ -77,8 +77,8 @@ module ConflictAnalyzer
             conflicts[:class_conflicts][node_class].each do |conflict|
               conflict_message += "<br/>" unless first
               first = false
-              conflict_message += Rack::Utils.escape_html(conflict.name) + " - " +
-                conflict.sources.map{ |source| Rack::Utils.escape_html(source.name)}.join(", ")
+              conflict_message += Rack::Utils.escape_html(conflict[:name]) + " - " +
+                conflict[:sources].map{ |source| Rack::Utils.escape_html(source.name)}.join(", ")
             end
             conflict_message += "</div>"
           end
@@ -103,7 +103,7 @@ module ConflictAnalyzer
         new_global_conflicts = current_conflicts[entity_desc][:global_conflicts].select { |current|
           existed = false
           old_conflicts[entity_desc][:global_conflicts].each do |old|
-            if old.name == current.name && old.sources = current.sources
+            if old[:name] == current[:name] && old[:sources] = current[:sources]
               existed = true
               break
             end
@@ -122,7 +122,7 @@ module ConflictAnalyzer
             new_class_conflicts[clazz] = current_class_conflicts[clazz].select { |current|
               existed = false
               old_class_conflicts[clazz].each do |old|
-                if old.name == current.name && old.sources = current.sources
+                if old[:name] == current[:name] && old[:sources] = current[:sources]
                   existed = true
                   break
                 end
