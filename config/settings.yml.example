@@ -86,4 +86,14 @@ classes_per_page: 50
 groups_per_page: 50
 reports_per_page: 20
 
+# Adds optional custom links in the top bar of puppet dashboard.
+# Exemple:
+# custom_links:
+#  -
+#    href: The href of your link
+#    title: The title that will be displayed
+#  -
+#    href: Another href
+#    title: Another link title
+
 #===[ fin ]=============================================================
