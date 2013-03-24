@@ -32,3 +32,8 @@
           = callback.call self
         %li#navigation-autorefresh
           = link_to "#{session[:autorefresh] ? "Disable autorefresh" : "Enable autorefresh"}", "#{File.join(root_path,request.path)}?autorefresh=#{session[:autorefresh] ? "false" : "true"}", :class => "autorefresh_link"
+          - if SETTINGS.custom_links
+            - for link in SETTINGS.custom_links
+              %li
+                %a{:href => "#{link["href"]}"}= link['title']
+
