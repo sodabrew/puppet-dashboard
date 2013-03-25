@@ -55,34 +55,26 @@ module ConflictAnalyzer
       conflict_message += "<div style='overflow: auto; white-space: nowrap; max-width: 800px; max-height: 400px;'>"
       new_conflicts.keys.each do |entity_desc|
         entity_class = entity_desc.entity_class == NodeGroup ? "Group" : "Node"
-        conflict_message += "<br>" + Rack::Utils.escape_html(entity_class) + ": <b>" + Rack::Utils.escape_html(entity_desc.entity_name) + "</b>"
+        conflict_message += "<br/>" + Rack::Utils.escape_html(entity_class) + ": <b>" + Rack::Utils.escape_html(entity_desc.entity_name) + "</b>"
         conflicts = new_conflicts[entity_desc]
         if conflicts[:global_conflicts].length > 0
-          conflict_message += "<br>&nbsp;&nbsp;Variable conflicts:<br>"
-          first = true
-          conflicts[:global_conflicts].each do |conflict|
-            conflict_message += "<br/>" unless first
-            first = false
-            conflict_message += "&nbsp;&nbsp;&nbsp;&nbsp;" + Rack::Utils.escape_html(conflict[:name]) + ": " +
-              conflict[:sources].map{ |source| Rack::Utils.escape_html(source.name)}.join(", ")
+          conflict_message += "<br/>"
+          conflicts[:global_conflicts].sort_by { |conflict| conflict[:name] }.each do |conflict|
+            conflict_message += "&nbsp;&nbsp;Variable:  <b>" + Rack::Utils.escape_html(conflict[:name]) + "</b><br/>"
+            conflict_message += "&nbsp;&nbsp;&nbsp;&nbsp;Sources: " +
+              conflict[:sources].sort_by { |source| source.name }.map{ |source| Rack::Utils.escape_html(source.name)}.join(", ") + "<br/>"
           end
-          conflict_message += "<br>"
         end
         if conflicts[:class_conflicts].length > 0
-          conflict_message += "<br>&nbsp;&nbsp;Class conflicts:<br>"
-          conflicts[:class_conflicts].keys.each do |node_class|
-            conflict_message += "&nbsp;&nbsp;&nbsp;&nbsp;<div style='display: inline-block; vertical-align: top;'>" +
-              Rack::Utils.escape_html(node_class.name) + ":</div>&nbsp;<div style='display: inline-block;'>"
-            first = true
-            conflicts[:class_conflicts][node_class].each do |conflict|
-              conflict_message += "<br/>" unless first
-              first = false
-              conflict_message += Rack::Utils.escape_html(conflict[:name]) + " - " +
-                conflict[:sources].map{ |source| Rack::Utils.escape_html(source.name)}.join(", ")
+          conflict_message += "<br/>"
+          conflicts[:class_conflicts].keys.sort_by { |node_class| node_class.name }.each do |node_class|
+            conflict_message += "&nbsp;&nbsp;Class: <b>" + Rack::Utils.escape_html(node_class.name) + "</b><br/>"
+            conflicts[:class_conflicts][node_class].sort_by { |conflict| conflict[:name] }.each do |conflict|
+              conflict_message += "&nbsp;&nbsp;&nbsp;&nbsp;Parameter: <b>" + Rack::Utils.escape_html(conflict[:name]) + "</b><br/>"
+              conflict_message += "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Sources: " +
+                conflict[:sources].sort_by { |source| source.name }.map{ |source| Rack::Utils.escape_html(source.name)}.join(", ") + "<br/>"
             end
-            conflict_message += "</div>"
           end
-          conflict_message += "<br>"
         end
       end
       conflict_message += "</div>"
