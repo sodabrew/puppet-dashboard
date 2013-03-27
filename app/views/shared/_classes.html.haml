@@ -1,6 +1,11 @@
 .section.half
   %h3 Classes
   - unless resource.all_node_classes.empty?
+    - class_conflicts = resource.class_conflicts
+    - unless class_conflicts.empty?
+      %p.error
+        %strong Warning:
+        Parameter values conflict.
     %table.inspector
       %thead
         %tr
@@ -17,7 +22,7 @@
                 = h resource.name
               - else
                 = sources.map{|source| link_to(h(source.name),source)}.join(", ")
-            %td
+            %td{:style => ("background-color: pink;" if class_conflicts[node_class])}
               - if resource.class == NodeGroup
                 - membership = NodeGroupClassMembership.find_by_node_group_id_and_node_class_id(resource.id, node_class.id)
                 - path       = membership.nil? ? nil : node_group_class_membership_path(membership)
@@ -25,9 +30,19 @@
                 - membership = NodeClassMembership.find_by_node_id_and_node_class_id(resource.id, node_class.id)
                 - path       = membership.nil? ? nil : node_class_membership_path(membership)
               - unless path.nil?
-                = link_to(h('Show Parameters'),path) unless path.nil?
+                - param_cnt = resource.compile_class_parameters(membership, true).length
+                - param_message = param_cnt == 0 ? 'None' : (param_cnt == 1 ? '1 Parameter' : param_cnt.to_s + ' Parameters')
+                = link_to(h(param_message),path) unless path.nil?
               - else
-                = "Source is not #{resource.name}"
+                - param_names = Set.new
+                - sources.each do |source|
+                  - membership = NodeGroupClassMembership.find_by_node_group_id_and_node_class_id(source.id, node_class.id)
+                  - if membership
+                    - membership.parameters.each do |param|
+                      - param_names << param.key
+                - param_cnt = param_names.length
+                - param_message = param_cnt == 0 ? 'None' : (param_cnt == 1 ? '1 Parameter' : param_cnt.to_s + ' Parameters')
+                = class_conflicts[node_class] ? "#{param_message}: edit sources to resolve conflict." : "#{param_message}"
   - else
     = describe_no_matches_as 'No classes'
 %br.clear

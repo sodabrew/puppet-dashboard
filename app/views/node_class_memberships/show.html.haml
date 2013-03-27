@@ -22,4 +22,4 @@
       = link_to @node.name, node_path(@node)
 
     .section
-      = render 'parameters'
+      = render 'shared/parameters', :parent => @node, :membership => resource, :node_class => @node_class

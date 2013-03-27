@@ -11,7 +11,6 @@
         %li= link_to_remote 'Delete', :url => url_for(@node_group) + "?force_delete=false", :confirm => 'Are you sure?', :method => :delete, :html => { :id => "delete_button", :class => "delete button" }, :success => "form_submit_success(request.responseJSON, 'error_messages')", :failure => "alert(\'Oops!! An error occurred.\')"
 
   .item
-    = render 'shared/conflicts', :resource => @node_group
     - if SETTINGS.use_external_node_classification
       = render 'shared/variables', :resource => @node_group
     = render 'shared/groups', :resource => @node_group

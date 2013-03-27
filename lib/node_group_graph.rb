@@ -73,7 +73,7 @@ module NodeGroupGraph
         parent_params.each do |parameter|
           if inherited[parameter[:name]] && inherited[parameter[:name]][:value] != parameter[:value]
             conflicts.add(parameter[:name])
-            inherited[parameter[:name]][:sources] << parameter[:sources].first
+            inherited[parameter[:name]][:sources].merge(parameter[:sources])
           else
             inherited[parameter[:name]] = { :name => parameter[:name], :value => parameter[:value], :sources => parameter[:sources] }
           end
