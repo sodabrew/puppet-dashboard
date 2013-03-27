@@ -1,0 +1,11 @@
+- use_links = !defined?(links) || links
+%td{:rowspan => param[:sources].length}
+  %tt= h param[:name]
+- first_src = true
+- param[:sources].sort_by{ |source| source.name }.each do |source|
+  - if first_src
+    - first_src = false
+    = render 'shared/parameters_part2', :source => source, :param => param, :node_class_id => node_class_id, :links => use_links
+  - else
+    %tr
+      = render 'shared/parameters_part2', :source => source, :param => param, :node_class_id => node_class_id, :links => use_links

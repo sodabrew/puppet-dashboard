@@ -452,7 +452,7 @@ describe NodesController do
           @params[:node].merge!({"assigned_node_group_ids" => ["#{@node_group_a.id},#{@node_group_b.id},"]})
           do_put
 
-          response.should render_template('shared/_confirm.html.haml')
+          response.should render_template('shared/_variable_conflicts_table.html.haml')
         end
 
         it "should return JSON containing redirect_to URL when update is forced" do
@@ -501,7 +501,7 @@ describe NodesController do
           @params[:node].merge!({"assigned_node_group_ids" => ["#{@node_group_a.id},#{@node_group_b.id},"]})
           do_put
 
-          response.should render_template('shared/_confirm.html.haml')
+          response.should render_template('shared/_class_parameter_conflicts_table.html.haml')
         end
 
         it "should return JSON containing redirect_to URL when update is forced" do

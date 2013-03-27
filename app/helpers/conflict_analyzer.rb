@@ -51,30 +51,23 @@ module ConflictAnalyzer
   def get_new_conflicts_message_as_html(old_conflicts, initial_resource, related_resources = [])
     new_conflicts = get_new_conflicts(old_conflicts, initial_resource, related_resources)
     if new_conflicts.length > 0
-      conflict_message = "<h2>You are going to introduce new conflicts!</h2>"
+      conflict_message = "<h2>Caution: Introducing conflicts.</h2>"
       conflict_message += "<div style='overflow: auto; white-space: nowrap; max-width: 800px; max-height: 400px;'>"
       new_conflicts.keys.each do |entity_desc|
-        entity_class = entity_desc.entity_class == NodeGroup ? "Group" : "Node"
-        conflict_message += "<br/>" + Rack::Utils.escape_html(entity_class) + ": <b>" + Rack::Utils.escape_html(entity_desc.entity_name) + "</b>"
+
+        entity_name = entity_desc.entity_class == NodeGroup ? "group" : "node"
+        entity_message = "The following " + entity_name + " will be affected: <b>" + Rack::Utils.escape_html(entity_desc.entity_name) + "</b>"
+
         conflicts = new_conflicts[entity_desc]
         if conflicts[:global_conflicts].length > 0
           conflict_message += "<br/>"
-          conflicts[:global_conflicts].sort_by { |conflict| conflict[:name] }.each do |conflict|
-            conflict_message += "&nbsp;&nbsp;Variable:  <b>" + Rack::Utils.escape_html(conflict[:name]) + "</b><br/>"
-            conflict_message += "&nbsp;&nbsp;&nbsp;&nbsp;Sources: " +
-              conflict[:sources].sort_by { |source| source.name }.map{ |source| Rack::Utils.escape_html(source.name)}.join(", ") + "<br/>"
-          end
+          conflict_message += render_to_string(:partial => 'shared/variable_conflicts_table', :layout => false, :locals => { :conflicts => conflicts[:global_conflicts] })
+          conflict_message += entity_message
         end
         if conflicts[:class_conflicts].length > 0
           conflict_message += "<br/>"
-          conflicts[:class_conflicts].keys.sort_by { |node_class| node_class.name }.each do |node_class|
-            conflict_message += "&nbsp;&nbsp;Class: <b>" + Rack::Utils.escape_html(node_class.name) + "</b><br/>"
-            conflicts[:class_conflicts][node_class].sort_by { |conflict| conflict[:name] }.each do |conflict|
-              conflict_message += "&nbsp;&nbsp;&nbsp;&nbsp;Parameter: <b>" + Rack::Utils.escape_html(conflict[:name]) + "</b><br/>"
-              conflict_message += "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Sources: " +
-                conflict[:sources].sort_by { |source| source.name }.map{ |source| Rack::Utils.escape_html(source.name)}.join(", ") + "<br/>"
-            end
-          end
+          conflict_message += render_to_string(:partial => 'shared/class_parameter_conflicts_table', :layout => false, :locals => { :conflicts => conflicts[:class_conflicts] })
+          conflict_message += entity_message
         end
       end
       conflict_message += "</div>"
@@ -83,6 +76,22 @@ module ConflictAnalyzer
     end
 
     conflict_message;
+  end
+
+  def self.get_parameter_value(source, parameter_key, node_class_id = nil)
+
+    parameterable = 
+      if node_class_id.nil?
+        source
+      elsif source.is_a? NodeGroup
+        NodeGroupClassMembership.find_by_node_group_id_and_node_class_id(source.id, node_class_id)
+      else
+        NodeClassMembership.find_by_node_id_and_node_class_id(source.id, node_class_id)
+      end
+
+    param = Parameter.find_by_parameterable_type_and_parameterable_id_and_key(parameterable.class.name, parameterable.id, parameter_key)
+
+    param ? param.value : nil
   end
 
   def get_new_conflicts(old_conflicts, initial_resource, related_resources = [])
