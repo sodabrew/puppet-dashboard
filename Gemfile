@@ -26,7 +26,7 @@ group :assets do
 end
 
 group :development, :test do
-  gem 'mocha', '~> 0.12.0', :require => false
+  gem 'mocha', '~> 0.13.3', :require => false
   gem 'sqlite3'
   gem 'rspec-rails'
   gem 'factory_girl', '< 3.0' # supports ruby 1.8.7
@@ -35,7 +35,7 @@ group :development, :test do
 end
 
 group :postgresql do
-  gem 'pg', '~> 0.11'
+  gem 'pg', '~> 0.15'
 end
 
 group :mysql do
