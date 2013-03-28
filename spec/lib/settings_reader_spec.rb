@@ -50,8 +50,7 @@ FILE
   it "should not output a warning if settings.yml defines all settings" do
     SettingsReader.stubs(:file_contents).with {|filename| File.basename(filename) == "settings.yml"}.returns(@settings_file_all)
     SettingsReader.stubs(:file_contents).with {|filename| File.basename(filename) == "settings.yml.example"}.returns(@sample_file)
-    ::Rails.logger.expects(:debug).with {|msg| msg !~ /Using default values/}
-    ::Rails.logger.expects(:debug).with {|msg| msg !~ /Using default values/}
+    ::Rails.logger.expects(:debug).with {|msg| msg !~ /Using default values/}.at_least_once
 
     SettingsReader.read.should == OpenStruct.new(
       "foo"                      => "bar",
