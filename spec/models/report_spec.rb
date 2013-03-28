@@ -398,53 +398,58 @@ describe Report do
   end
 
   describe "#create_from_yaml_file" do
-    it { pending "FIXME: the Mocha stub on File.expects(:read) sets $SAFE = 4 for later tests." }
-=begin
+    let(:myStubbedClass) {
+      #we've had some really weird issues with mocha stub pollution in Ruby 1.8.7
+      #this subclass should resolve it
+      k = Class.new(Report)
+      k.table_name = Report.table_name
+      k
+    }
     describe "when create_from_yaml is successful" do
       before do
-        File.expects(:read).with('/tmp/foo').returns(@report_yaml)
-        Report.expects(:create_from_yaml).returns('i can haz report')
+        myStubbedClass.expects(:read_file_contents).with('/tmp/foo').returns(@report_yaml)
+        myStubbedClass.expects(:create_from_yaml).returns('i can haz report')
       end
 
       it "should call create_from_yaml on the file passed in and return the results" do
-        Report.create_from_yaml_file('/tmp/foo').should == "i can haz report"
+        myStubbedClass.create_from_yaml_file('/tmp/foo').should == "i can haz report"
       end
 
       it "should delete the file if delete option is specified" do
-        File.expects(:unlink).with('/tmp/foo')
-        Report.create_from_yaml_file('/tmp/foo', :delete => true)
+        myStubbedClass.expects(:remove_file).with('/tmp/foo')
+        myStubbedClass.create_from_yaml_file('/tmp/foo', :delete => true)
       end
     end
 
 
     describe "when create_from_yaml fails" do
       before do
-        File.expects(:read).at_least_once.with('/tmp/foo').returns(@report_yaml)
+        myStubbedClass.expects(:read_file_contents).at_least_once.with('/tmp/foo').returns(@report_yaml)
       end
 
       it "not unlink the file if create_from_yaml fails" do
-        File.expects(:unlink).with('/tmp/foo').never
-        Report.stubs(:create_from_yaml).raises(ActiveRecord::StatementInvalid)
-        Report.create_from_yaml_file('/tmp/foo', :delete => true)
+        myStubbedClass.expects(:remove_file).with('/tmp/foo').never
+        myStubbedClass.stubs(:create_from_yaml).raises(ActiveRecord::StatementInvalid)
+        myStubbedClass.create_from_yaml_file('/tmp/foo', :delete => true)
       end
 
       it "should retry 3 times in the case of a failure" do
-        Report.expects(:create_from_yaml).times(3).
+        myStubbedClass.expects(:create_from_yaml).times(3).
           raises(ActiveRecord::StatementInvalid).then.
           raises(ActiveRecord::StatementInvalid).then.
           returns("FINALLY!")
 
-        Report.create_from_yaml_file('/tmp/foo').should == "FINALLY!"
+        myStubbedClass.create_from_yaml_file('/tmp/foo').should == "FINALLY!"
       end
 
       it "should create a DelayedJobFailure after 3 failures and return nil" do
-        Report.expects(:create_from_yaml).times(3).
+        myStubbedClass.expects(:create_from_yaml).times(3).
           raises(ActiveRecord::StatementInvalid).then.
           raises(ActiveRecord::StatementInvalid).then.
           raises(ActiveRecord::StatementInvalid).then.
           returns("Sir not appearing in this expectation")
 
-        Report.create_from_yaml_file('/tmp/foo').should == nil
+        myStubbedClass.create_from_yaml_file('/tmp/foo').should == nil
 
         DelayedJobFailure.count.should == 1
         DelayedJobFailure.first.summary.should == 'Importing report foo'
@@ -452,7 +457,6 @@ describe Report do
         DelayedJobFailure.first.backtrace.any? {|trace| trace =~ /report\.rb:\d+:in.*create_from_yaml_file/}.should be_true
       end
     end
-=end
   end
 
 
