@@ -144,15 +144,15 @@ jQuery(document).ready(function(J) {
 });
 
 function init_expandable_list() {
-  jQuery( '.expand-all' ).live( 'click', function() {
+  jQuery( '.expand-all' ).on( 'click', function() {
     jQuery('.expandable-link.collapsed-link').each(toggle_expandable_link);
     return false;
   });
-  jQuery( '.collapse-all' ).live( 'click', function() {
+  jQuery( '.collapse-all' ).on( 'click', function() {
     jQuery('.expandable-link').not('.collapsed-link').each(toggle_expandable_link);
     return false;
   });
-  jQuery( '.expandable-link' ).live( 'click', function() {
+  jQuery( '.expandable-link' ).on( 'click', function() {
     toggle_expandable_link.call(this);
     return false;
   });
