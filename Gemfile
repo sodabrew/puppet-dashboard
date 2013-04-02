@@ -7,6 +7,7 @@ gem 'inherited_resources' , '1.4.0' # Pin this until they fix ruby 1.8.7 compat
 
 gem 'thin'
 gem 'rack'
+gem 'dalli'
 
 gem 'daemons'
 gem 'json_pure'
