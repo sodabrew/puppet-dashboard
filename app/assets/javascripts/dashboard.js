@@ -42,34 +42,60 @@ jQuery(document).ready(function(J) {
 
   J("table.data.runtime").each(function(i){
     var id = "table_runtime"+i;
-    J("<div id='"+id+"' style='height:150px; width: auto'></div>").insertAfter(J(this));
+    J("<div id='"+id+"' style='height:150px; width: auto;'></div>").insertAfter(J(this));
 
     var label_data = J(this).find("tr.labels th").mapHtml();
     var runtime_data = J(this).find("tr.runtimes td").mapHtmlFloat();
 
-    // new Grafico.LineGraph($(id),
-    //   {
-    //     runtimes: runtime_data
-    //   },
-    //   {
-    //     background_color: "#fff",
-    //     colors: { runtimes: "#009" },
-    //     font_size: 9,
-    //     grid: false,
-    //     label_color: '#666',
-    //     labels: label_data,
-    //     label_rotation: -30,
-    //     markers: "value",
-    //     meanline: true,
-    //     padding_top: 10,
-    //     left_padding: 50,
-    //     // show_horizontal_labels: false,
-    //     show_ticks: false,
-    //     start_at_zero: false,
-    //     stroke_width: 3,
-    //     vertical_label_unit: "s"
-    //   }
-    // );
+    J.jqplot(id, [runtime_data], {
+      seriesColors: ["#009"],
+      captureRightClick: false,
+      seriesDefaults:{
+        markerOptions: {
+          show: false
+        },
+        pointLabels: {
+          show: false
+        }
+      },
+      highlighter: {
+        show: true,
+        sizeAdjust: 5,
+        tooltipAxes: 'y'
+      },
+      axes: {
+        xaxis: {
+          renderer: J.jqplot.CategoryAxisRenderer,
+          tickRenderer: J.jqplot.CanvasAxisTickRenderer,
+          ticks: label_data,
+          tickOptions: {
+            angle: -30,
+            fontSize: '9px',
+            textColor: '#666'
+          }
+        },
+        yaxis: {
+          // Don't pad out the bottom of the data range.  By default,
+          // axes scaled as if data extended 10% above and below the
+          // actual range to prevent data points right on grid boundaries.
+          // Don't want to do that here.
+          padMin: 0,
+
+          tickOptions: {
+            formatString: '%.1f s'
+          }
+        }
+      },
+      grid: {
+        background: '#fff',
+        drawGridlines: false,
+        borderWidth: 1,
+        shadow: false
+      },
+      legend: {
+        show: false,
+      }      
+    });
 
     J(this).hide();
   });
@@ -78,7 +104,7 @@ jQuery(document).ready(function(J) {
 
   J("table.data.status").each(function(i){
     var id = "table_status"+i;
-    J("<div id='"+id+"' style='height: 150px; width: auto;'></div>").insertAfter(J(this));
+    J("<div id='"+id+"' style='height: 150px; width: auto; margin-right: 100px;'></div>").insertAfter(J(this));
 
     var label_data = J(this).find("tr.labels th").mapHtml();
     var changed_data = J(this).find("tr.changed td").mapHtmlInt();
@@ -91,27 +117,76 @@ jQuery(document).ready(function(J) {
     var pending_data_label = J.map(pending_data, function(item, index){return item+" pending"});
     var failed_data_label = J.map(failed_data, function(item, index){return item+" failed"});
 
-    // new Grafico.StackedBarGraph($(id),
-    //   {
-    //     unchanged: unchanged_data,
-    //     changed: changed_data,
-    //     pending: pending_data,
-    //     failed: failed_data
-    //   },
-    //   {
-    //     background_color: "#fff",
-    //     colors: { pending: PENDING, changed: CHANGED, unchanged: UNCHANGED, failed: FAILED },
-    //     datalabels: { changed: changed_data_label, unchanged: unchanged_data_label, pending: pending_data_label, failed: failed_data_label },
-    //     font_size: 9,
-    //     grid: false,
-    //     label_color: '#666',
-    //     label_rotation: -30,
-    //     labels: label_data,
-    //     padding_top: 10,
-    //     left_padding: 50,
-    //     show_ticks: false
-    //   }
-    // );
+    J.jqplot(id, [changed_data, unchanged_data, pending_data, failed_data], {
+      stackSeries: true,
+      captureRightClick: false,
+      seriesDefaults:{
+        renderer:J.jqplot.BarRenderer,
+        rendererOptions: {
+          barMargin: 0,
+          shadow: false,
+          highlightMouseDown: true
+        },
+        pointLabels: {
+          show: false
+        }
+      },
+      series: [
+        {
+          label: 'Changed',
+          color: CHANGED
+        },
+        {
+          label: 'Unchanged',
+          color: UNCHANGED
+        },
+        {
+          label: 'Pending',
+          color: PENDING
+        },
+        {
+          label: 'Failed',
+          color: FAILED
+        }
+      ],
+      highlighter: {
+        show: true,
+        showMarker: false,
+        sizeAdjust: 5,
+        tooltipAxes: 'y',
+        tooltipLocation: 'n'
+      },
+      axes: {
+        xaxis: {
+          renderer: J.jqplot.CategoryAxisRenderer,
+          tickRenderer: J.jqplot.CanvasAxisTickRenderer,
+          ticks: label_data,
+          tickOptions: {
+            angle: -30,
+            fontSize: '9px',
+            textColor: '#666'
+          }
+        },
+        yaxis: {
+          // Don't pad out the data range.  By default,
+          // axes scaled as if data extended 10% above and below the
+          // actual range to prevent data points right on grid boundaries.
+          // Don't want to do that here.
+          pad: 0
+        }
+      },
+      grid: {
+        background: '#fff',
+        drawGridlines: false,
+        borderWidth: 0,
+        shadow: false
+      },
+      legend: {
+        show: true,
+        location: 'ne',
+        placement: 'outside'
+      }      
+    });
 
     J(this).hide();
   });
