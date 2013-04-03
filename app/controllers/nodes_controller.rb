@@ -9,7 +9,7 @@ class NodesController < InheritedResources::Base
   include ConflictAnalyzer
   include ConflictHtml
 
-  caches_action :index, :layout => false, :expires_in => 5.minutes
+  caches_action :index, :layout => false, :expires_in => 5.minutes, :cache_path => Proc.new { |c| c.request.request_uri }
 
   def index
     raise NodeClassificationDisabledError.new if !SETTINGS.use_external_node_classification and request.format == :yaml
