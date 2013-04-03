@@ -1,5 +1,5 @@
 class PagesController < ApplicationController
-  caches_action :home, :expires_in => 5.minutes
+  caches_action :home, :layout => false, :expires_in => 5.minutes
 
   def home
     @all_nodes = Node.unhidden.by_report_date
