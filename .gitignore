@@ -20,3 +20,7 @@
 /tmp
 
 /public/assets
+
+# Ignore packaging artifacts
+/ext/packaging
+/pkg
