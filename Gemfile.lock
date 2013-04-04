@@ -163,6 +163,7 @@ DEPENDENCIES
   execjs
   factory_girl (< 3.0)
   fastercsv
+  haml (~> 3.1.8)
   haml-rails (~> 0.3.5)
   inherited_resources (~> 1.0)
   jquery-rails (~> 2.1)
