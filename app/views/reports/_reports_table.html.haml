@@ -18,7 +18,7 @@
   %tfoot
     - if defined?(reports)
       - if defined?(tfoot) and tfoot
-        = render :inline => tfoot, :locals => { :reports => reports, :node => node }
+        = render tfoot, :reports => reports, :node => node
       - else
         - if reports.total_pages > 1
           %tr
