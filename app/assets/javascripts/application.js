@@ -23,4 +23,10 @@
 //= require jquery.tipsy
 //= require search
 //= require autorefresh
+//= require jquery.jqplot
+//= require jqplot.barRenderer
+//= require jqplot.categoryAxisRenderer
+//= require jqplot.canvasTextRenderer
+//= require jqplot.canvasAxisTickRenderer
+//= require jqplot.highlighter
 //= require application
