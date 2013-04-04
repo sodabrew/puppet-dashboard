@@ -46,6 +46,7 @@ jQuery(document).ready(function(J) {
 
     var label_data = J(this).find("tr.labels th").mapHtml();
     var runtime_data = J(this).find("tr.runtimes td").mapHtmlFloat();
+    var format = "%" + (Math.max.apply(null, runtime_data) < 3 ? ".1f" : "d") + " s"; 
 
     J.jqplot(id, [runtime_data], {
       seriesColors: ["#009"],
@@ -82,7 +83,7 @@ jQuery(document).ready(function(J) {
           padMin: 0,
 
           tickOptions: {
-            formatString: '%.1f s'
+            formatString: format
           }
         }
       },
