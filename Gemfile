@@ -16,6 +16,7 @@ gem 'system_timer', :platforms => :ruby_18
 gem 'delayed_job', '~> 3.0'
 gem 'delayed_job_active_record', '~> 0.3.3'
 gem 'timeline_fu', '~> 0.3.0'
+gem 'haml', '~> 3.1.8'
 
 group :assets do
   gem 'sass-rails'    , '~> 3.2'

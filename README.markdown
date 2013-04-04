@@ -42,6 +42,15 @@ Fast Install
 
 For detailed installation, setup, and usage instructions, see the [Puppet Dashboard 1.2 Manual](http://docs.puppetlabs.com/dashboard/manual/1.2).
 
+Production Environment
+----------------------
+
+Dashboard is currently configured to serve static assets when `RAILS_ENV=production`. In high-traffic
+environments, you may wish to farm this out to Apache or nginx.  Additionally, you must explicitly
+precompile assets for production using:
+ * `RAILS_ENV=production bundle exec rake assets:precompile` 
+
+
 Icons
 -----
 
