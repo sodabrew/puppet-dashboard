@@ -43,7 +43,7 @@ check_puppet_dashboard_status() {
 }
 
 start_puppet_dashboard() {
-    start-stop-daemon --start --quiet --oknodo --make-pidfile --pidfile ${PIDFILE} --user ${DASHBOARD_USER} --chuid ${DASHBOARD_USER} --exec ${DASHBOARD_RUBY} -- ${DASHBOARD_HOME}/script/server -e ${DASHBOARD_ENVIRONMENT} -p ${DASHBOARD_PORT} -b ${DASHBOARD_IFACE} -d
+    start-stop-daemon --start --quiet --oknodo --make-pidfile --background --pidfile ${PIDFILE} --user ${DASHBOARD_USER} --chuid ${DASHBOARD_USER} --exec ${DASHBOARD_RUBY} -- ${DASHBOARD_HOME}/script/server -e ${DASHBOARD_ENVIRONMENT} -p ${DASHBOARD_PORT} -b ${DASHBOARD_IFACE}
 
     # This is a dirty, dirty hack, but it's rather difficult to get
     # script/server to daemonize in any way, and still give us useful debugging
