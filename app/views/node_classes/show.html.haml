@@ -14,6 +14,8 @@
       .section
         = render 'statuses/run_failure', :nodes => @node_class.all_nodes
     .section
+      #error_messages{:style => "display: none;"}
+
       %h3 Nodes in this class
       - if @node_class.all_nodes.present?
         = render 'nodes/nodes', :nodes => @node_class.all_nodes, :container => @node_class

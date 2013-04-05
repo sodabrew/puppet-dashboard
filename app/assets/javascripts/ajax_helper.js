@@ -1,4 +1,5 @@
 function form_submit_success(jsonResponse, error_messages_element_id) {
+
   if(jsonResponse.status == "error") {
     errorMessagesElement = document.getElementById(error_messages_element_id);
     errorMessagesElement.style.display = "block";
@@ -33,4 +34,12 @@ function register_ajax_submit(form_id) {
     }, 0);
     return false;
   });
+}
+
+function bind_response_events(xhr_element_id, error_element_id) {
+  jQuery(xhr_element_id)
+    .bind("ajax:success", function(event, data, status, xhr) {
+      form_submit_success(data, error_element_id);
+    })
+    .bind("ajax:failure", function() { alert('Oops!! An error occurred.') });
 }

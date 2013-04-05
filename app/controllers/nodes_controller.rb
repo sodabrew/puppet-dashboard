@@ -38,7 +38,7 @@ class NodesController < InheritedResources::Base
             unless new_conflicts_message.nil?
               html = render_to_string(:template => "shared/_confirm",
                                       :layout => false,
-                                      :locals => { :message => new_conflicts_message, :confirm_label => "Create", :on_confirm_clicked_script => "$('force_create').value = 'true'; $('submit_button').click();" })
+                                      :locals => { :message => new_conflicts_message, :confirm_label => "Create", :on_confirm_clicked_script => "jQuery('#force_create').attr('value', 'true'); jQuery('#submit_button').click();" })
               render :json => { :status => "ok", :valid => "false", :confirm_html => html }, :content_type => 'application/json'
               raise ActiveRecord::Rollback
             end
@@ -114,7 +114,7 @@ class NodesController < InheritedResources::Base
             unless new_conflicts_message.nil?
               html = render_to_string(:template => "shared/_confirm",
                                       :layout => false,
-                                      :locals => { :message => new_conflicts_message, :confirm_label => "Update", :on_confirm_clicked_script => "$('force_update').value = 'true'; $('submit_button').click();" })
+                                      :locals => { :message => new_conflicts_message, :confirm_label => "Update", :on_confirm_clicked_script => "jQuery('#force_update').attr('value', 'true'); jQuery('#submit_button').click();" })
               render :json => { :status => "ok", :valid => "false", :confirm_html => html }, :content_type => 'application/json'
               raise ActiveRecord::Rollback
             end

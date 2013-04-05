@@ -19,7 +19,7 @@ class NodeClassMembershipsController < InheritedResources::Base
             unless new_conflicts_message.nil?
               html = render_to_string(:template => "shared/_confirm",
                                       :layout => false,
-                                      :locals => { :message => new_conflicts_message, :confirm_label => "Update", :on_confirm_clicked_script => "$('force_update').value = 'true'; $('submit_button').click();" })
+                                      :locals => { :message => new_conflicts_message, :confirm_label => "Update", :on_confirm_clicked_script => "jQuery('#force_update').attr(value, 'true'); jQuery('#submit_button').click();" })
               render :json => { :status => "ok", :valid => "false", :confirm_html => html }, :content_type => 'application/json'
               raise ActiveRecord::Rollback
             end
@@ -45,27 +45,34 @@ class NodeClassMembershipsController < InheritedResources::Base
     ActiveRecord::Base.transaction do
       old_conflicts = get_current_conflicts(membership_node)
 
-      destroy! do |_, format| # only one format is used for destroy (success/failure is not recognized)
-                              # TODO recognize and report failed delete
+      begin
+        destroy! do |success, failure|
 
-        membership_node = Node.find_by_id(membership_node.id)
+          membership_node = Node.find_by_id(membership_node.id)
 
-        format.html {
+          success.html {
 
-          unless(force_delete?)
-            new_conflicts_message = get_new_conflicts_message_as_html(old_conflicts, membership_node)
+            unless(force_delete?)
+              new_conflicts_message = get_new_conflicts_message_as_html(old_conflicts, membership_node)
 
-            unless new_conflicts_message.nil?
-              html = render_to_string(:template => "shared/_confirm",
-                                      :layout => false,
-                                      :locals => { :message => new_conflicts_message, :confirm_label => "Delete", :on_confirm_clicked_script => "eval($('delete_button').getAttribute('onclick').replace('?force_delete=false', '?force_delete=true').replace('return false;', '').replace('confirm(\\'Are you sure?\\')', 'true'));" })
-              render :json => { :status => "ok", :valid => "false", :confirm_html => html }, :content_type => 'application/json'
-              raise ActiveRecord::Rollback
+              unless new_conflicts_message.nil?
+                html = render_to_string(:template => "shared/_confirm",
+                                        :layout => false,
+                                        :locals => { :message => new_conflicts_message, :confirm_label => "Delete", :on_confirm_clicked_script => "jQuery('#force_delete_button').click();" })
+                render :json => { :status => "ok", :valid => "false", :confirm_html => html }, :content_type => 'application/json'
+                raise ActiveRecord::Rollback
+              end
             end
-          end
 
-          render :json => { :status => "ok", :valid => "true", :redirect_to => url_for(membership_node) }, :content_type => 'application/json'
-        }
+            render :json => { :status => "ok", :valid => "true", :redirect_to => url_for(membership_node) }, :content_type => 'application/json'
+          };
+
+          failure.html {
+            render :json => { :status => "error", :error_html => "<p class='error'>An error occurred.<p/>" }, :content_type => 'application/json'
+          }
+        end
+      rescue => e
+        render :json => { :status => "error", :error_html => "<p class='error'>" + e.message + "<p/>" }, :content_type => 'application/json'
       end
     end
   end

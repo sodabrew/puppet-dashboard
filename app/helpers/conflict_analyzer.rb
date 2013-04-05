@@ -52,20 +52,18 @@ module ConflictAnalyzer
     new_conflicts = get_new_conflicts(old_conflicts, initial_resource, related_resources)
     if new_conflicts.length > 0
       conflict_message = "<h2>Caution: Introducing conflicts.</h2>"
-      conflict_message += "<div style='overflow: auto; white-space: nowrap; max-width: 800px; max-height: 400px;'>"
+      conflict_message += "<div style='overflow: auto; white-space: nowrap; min-width: 350px; max-width: 800px; max-height: 400px;'>"
       new_conflicts.keys.each do |entity_desc|
 
         entity_name = entity_desc.entity_class == NodeGroup ? "group" : "node"
-        entity_message = "The following " + entity_name + " will be affected: <b>" + Rack::Utils.escape_html(entity_desc.entity_name) + "</b>"
+        entity_message = "<div>The following " + entity_name + " will be affected: <b>" + Rack::Utils.escape_html(entity_desc.entity_name) + "</b></div>"
 
         conflicts = new_conflicts[entity_desc]
         if conflicts[:global_conflicts].length > 0
-          conflict_message += "<br/>"
           conflict_message += render_to_string(:partial => 'shared/variable_conflicts_table', :layout => false, :locals => { :conflicts => conflicts[:global_conflicts] })
           conflict_message += entity_message
         end
         if conflicts[:class_conflicts].length > 0
-          conflict_message += "<br/>"
           conflict_message += render_to_string(:partial => 'shared/class_parameter_conflicts_table', :layout => false, :locals => { :conflicts => conflicts[:class_conflicts] })
           conflict_message += entity_message
         end

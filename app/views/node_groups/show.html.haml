@@ -1,4 +1,3 @@
-= javascript_include_tag 'ajax_helper', :cache => 'ajax_form_support'
 #sidebar= render 'shared/node_manager_sidebar'
 #main
   .header
@@ -8,9 +7,13 @@
     %ul.actions
       - unless SETTINGS.enable_read_only_mode || session['ACCESS_CONTROL_ROLE'] == 'READ_ONLY'
         %li= link_to 'Edit', edit_node_group_path(@node_group), :class => "edit button", :rel => 'inspect'
-        %li= link_to_remote 'Delete', :url => url_for(@node_group) + "?force_delete=false", :confirm => 'Are you sure?', :method => :delete, :html => { :id => "delete_button", :class => "delete button" }, :success => "form_submit_success(request.responseJSON, 'error_messages')", :failure => "alert(\'Oops!! An error occurred.\')"
-
+        %li
+          = link_to 'Delete', url_for(@node_group) + "?force_delete=false", :remote => true, :confirm => 'Are you sure?', :method => :delete, :id => "delete_button", :class => "delete button"
+          = link_to 'Force Delete', url_for(@node_group) + "?force_delete=true", :remote => true, :method => :delete, :id => "force_delete_button", :style => "display: none"
   .item
+    .section
+      #error_messages{:style => "display: none;"}
+
     - if SETTINGS.use_external_node_classification
       = render 'shared/variables', :resource => @node_group
     = render 'shared/groups', :resource => @node_group
@@ -52,3 +55,6 @@
         = render 'nodes/nodes', :nodes => @node_group.all_nodes, :container => @node_group
       - else
         = describe_no_matches_for :nodes, :group
+:javascript
+  bind_response_events('#delete_button', 'error_messages');
+  bind_response_events('#force_delete_button', 'error_messages');

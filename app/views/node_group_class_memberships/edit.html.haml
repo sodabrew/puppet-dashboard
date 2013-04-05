@@ -1,4 +1,3 @@
-= javascript_include_tag 'ajax_helper', :cache => 'ajax_form_support'
 #sidebar= render 'shared/node_manager_sidebar'
 #main
   - @node_class_id = @node_group_class_membership.node_class_id
@@ -6,7 +5,7 @@
   - @node_group_id = @node_group_class_membership.node_group_id
   - @node_group = NodeGroup.find_by_id(@node_group_id)
 
-  - form_for(@node_group_class_membership, :url => url_for(@node_group_class_membership), :html => {:id => "param_form"}) do |f|
+  = form_for(@node_group_class_membership, :url => url_for(@node_group_class_membership), :html => {:id => "param_form"}) do |f|
     %input{:id => "force_update", :name => "force_update", :type => "hidden", :value => "false"}
     = render f
     .element.actions

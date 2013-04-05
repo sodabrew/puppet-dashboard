@@ -2,7 +2,7 @@
 
 .item
   .section
-    = h form.error_messages
+    #error_messages{:style => "display: none;"}
 
     %h3 Assigned To Node:
     = link_to @node.name, node_path(@node)

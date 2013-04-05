@@ -1,11 +1,10 @@
-= stylesheet_link_tag 'popups', :cache => 'popups'
 #popupWindowGlass
 #popupWindowLayoutHelperTable
   #popupWindowLayoutHelperTableCell
     #popupWindow
-      = message
+      = raw message
       #popupWindowButtons
         %button{:onclick => on_confirm_clicked_script}
           = confirm_label
         or
-        = link_to_function 'Cancel', "$('popupWindowGlass').parentNode.parentNode.removeChild($('popupWindowGlass').parentNode);"
+        = link_to_function 'Cancel', "jQuery('#popupWindowGlass').parent().detach();"
