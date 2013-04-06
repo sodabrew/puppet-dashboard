@@ -41,11 +41,7 @@ start() {
 
         # This is a no longer a dirty, dirty hack, we now daemonize the server.
         # Also: We have access to daemon.
-        daemon --user ${DASHBOARD_USER} --pidfile ${PIDFILE} "${DASHBOARD_RUBY} ${DASHBOARD_HOME}/script/server -e ${DASHBOARD_ENVIRONMENT} -p ${DASHBOARD_PORT} -b ${DASHBOARD_IFACE} -d"
-
-        # Grab the pid. pidof doesn't work well here, so we use pgrep
-        local PID=`pgrep -f "${DASHBOARD_RUBY} ${DASHBOARD_HOME}/script/server -e ${DASHBOARD_ENVIRONMENT} -p ${DASHBOARD_PORT} -b ${DASHBOARD_IFACE} -d"`
-        echo $PID > ${PIDFILE}
+        daemon --user ${DASHBOARD_USER} --pidfile ${PIDFILE} "${DASHBOARD_RUBY} ${DASHBOARD_HOME}/script/server -e ${DASHBOARD_ENVIRONMENT} -p ${DASHBOARD_PORT} -b ${DASHBOARD_IFACE}"
 
         sleep 5
 
