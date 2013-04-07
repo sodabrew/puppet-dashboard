@@ -1,9 +1,9 @@
+# In Ruby 1.9 and up, FasterCSV is in stdlib and is called CSV.
 if RUBY_VERSION < '1.9'
   require 'fastercsv'
-  UseThisCSV = FasterCSV
+  CSV = FasterCSV
 else
   require 'csv'
-  UseThisCSV = CSV
 end
 
 class Array
@@ -21,7 +21,7 @@ class ActiveRecord::Base
   end
 
   def self.to_csv_header
-    UseThisCSV.generate_line to_csv_properties
+    CSV.generate_line to_csv_properties
   end
 
   def to_csv_array
@@ -29,6 +29,6 @@ class ActiveRecord::Base
   end
 
   def to_csv
-    UseThisCSV.generate_line to_csv_array
+    CSV.generate_line to_csv_array
   end
 end
