@@ -12,15 +12,20 @@
 /.bundle
 /vendor/bundle
 
-# Ignore the default SQLite database.
+# Ignore the default SQLite database
 /db/*.sqlite3
 
-# Ignore all logfiles and tempfiles.
+# Ignore all logfiles and tempfiles
 /log/*.log
 /tmp
 
+# Ignore asset pipeline output
 /public/assets
 
 # Ignore packaging artifacts
 /ext/packaging
 /pkg
+
+# Ignore Ruby selection tools
+/.rvmrc
+/.rbenv
