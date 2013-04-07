@@ -128,7 +128,7 @@ class Node < ActiveRecord::Base
   end
 
   def self.to_csv_header
-    UseThisCSV.generate_line(Node.to_csv_properties + ResourceStatus.to_csv_properties)
+    CSV.generate_line(Node.to_csv_properties + ResourceStatus.to_csv_properties)
   end
 
   def self.to_csv_properties
@@ -147,7 +147,7 @@ class Node < ActiveRecord::Base
     end
 
     rows.map do |row|
-      UseThisCSV.generate_line row
+      CSV.generate_line row
     end.join
   end
 
