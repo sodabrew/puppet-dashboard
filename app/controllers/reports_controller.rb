@@ -5,7 +5,7 @@ class ReportsController < InheritedResources::Base
   before_filter :raise_if_enable_read_only_mode, :only => [:new, :edit, :update, :destroy]
   before_filter :handle_raw_post, :only => [:create, :upload]
 
-  caches_action :index, :layout => false, :expires_in => 5.minutes
+  caches_action :index, :layout => false, :expires_in => 5.minutes, :cache_path => Proc.new { |c| c.request.request_uri }
 
   def index
     index! do |format|
