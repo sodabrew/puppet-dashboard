@@ -150,7 +150,7 @@ describe NodesController do
 
     it "should render error when creation fails" do
       post :create, 'node' => { }
-      response.should render_template('shared/_error.html.haml')
+      response.should render_template('shared/_error')
       response.should be_success
 
       assigns[:node].errors.full_messages.should == ["Name can't be blank"]
@@ -320,7 +320,7 @@ describe NodesController do
 
         it 'should render error' do
           do_put
-          response.should render_template('shared/_error.html.haml')
+          response.should render_template('shared/_error')
         end
       end
 
@@ -452,7 +452,7 @@ describe NodesController do
           @params[:node].merge!({"assigned_node_group_ids" => ["#{@node_group_a.id},#{@node_group_b.id},"]})
           do_put
 
-          response.should render_template('shared/_variable_conflicts_table.html.haml')
+          response.should render_template('shared/_variable_conflicts_table')
         end
 
         it "should return JSON containing redirect_to URL when update is forced" do
@@ -501,7 +501,7 @@ describe NodesController do
           @params[:node].merge!({"assigned_node_group_ids" => ["#{@node_group_a.id},#{@node_group_b.id},"]})
           do_put
 
-          response.should render_template('shared/_class_parameter_conflicts_table.html.haml')
+          response.should render_template('shared/_class_parameter_conflicts_table')
         end
 
         it "should return JSON containing redirect_to URL when update is forced" do
