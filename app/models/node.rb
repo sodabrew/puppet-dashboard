@@ -7,6 +7,9 @@ class Node < ActiveRecord::Base
   validates_presence_of :name
   validates_uniqueness_of :name, :case_sensitive => false
 
+  # Enforce lowercase node name
+  before_save lambda { self.name = self.name.downcase }
+
   # attr_readonly :name, :created_at # FIXME: these should be readonly, but inherit_resources isn't creating new instances right
   attr_accessible :name, :created_at # FIXME: ^^
   attr_accessible :description, :parameter_attributes, :assigned_node_group_ids, :assigned_node_class_ids, :node_class_ids, :node_group_ids
@@ -68,12 +71,6 @@ class Node < ActiveRecord::Base
   scope :hidden, where(:hidden => true)
 
   scope :unhidden, where(:hidden => false)
-
-  # Enforce lowercase node name
-  before_save :name_downcase
-  def name_downcase
-    self.name.downcase!
-  end
 
   def self.find_by_id_or_name!(identifier)
     find_by_id(identifier) or find_by_name!(identifier)
