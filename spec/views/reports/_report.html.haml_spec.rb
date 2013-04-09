@@ -10,6 +10,6 @@ describe "/reports/_report.html.haml" do
       render 'reports/report', :report => @report
     end
 
-    #FIXME: put a test here.
+    it { rendered.should have_tag('span.status', :text => /Report/) }
   end
 end
