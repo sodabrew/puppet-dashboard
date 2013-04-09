@@ -75,15 +75,15 @@ class ApplicationController < ActionController::Base
   end
 
   def force_create?
-    !params[:force_create].nil? && params[:force_create] == "true"
+    params[:force_create] == "true"
   end
 
   def force_update?
-    !params[:force_update].nil? && params[:force_update] == "true"
+    params[:force_update] == "true"
   end
 
   def force_delete?
-    !params[:force_delete].nil? && params[:force_delete] == "true"
+    params[:force_delete] == "true"
   end
 
 end
