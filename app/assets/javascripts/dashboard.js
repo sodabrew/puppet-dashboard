@@ -42,7 +42,10 @@ jQuery(document).ready(function(J) {
 
   J("table.data.runtime").each(function(i){
     var id = "table_runtime"+i;
-    J("<div id='"+id+"' style='height:150px; width: auto;'></div>").insertAfter(J(this));
+    var selector = "<div id='"+id+"' style='height:150px; width: auto;'></div>";
+    if (J(selector).length == 0) {
+      J(selector).insertAfter(J(this));
+    }
 
     var label_data = J(this).find("tr.labels th").mapHtml();
     var runtime_data = J(this).find("tr.runtimes td").mapHtmlFloat();
