@@ -2,7 +2,12 @@ jQuery(function($) {
   var refresh_timer;
 
   $('input#autorefresh').change(function() {
-    if (this.checked) {
+    // Prevent autorefresh on form pages
+    // TODO: Even better, prevent autorefresh when any form element has focus
+    if (/(new)|(edit)$/.test(window.location.pathname)) {
+      $('span#autorefresh_countdown').html('&hellip;');
+      $('li#navigation-autorefresh input').prop('disabled', true);
+    } else if (this.checked) {
       var refresh_count = 15; // Refresh after 15 seconds
       $('span#autorefresh_countdown').text(refresh_count);
       $.cookie('autorefresh', 'on', {'path': '/'});
