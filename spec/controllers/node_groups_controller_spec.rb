@@ -38,12 +38,12 @@ describe NodeGroupsController do
     end
   end
 
-  describe '#edit' do
+  describe "#edit" do
     before :each do
       @node_group = NodeGroup.generate!
     end
 
-    it 'should render the edit template' do
+    it "should render the edit template" do
       get :edit, :id => @node_group
       assigns[:node_group].should == @node_group
 
@@ -86,6 +86,45 @@ describe NodeGroupsController do
         do_put
 
         @node_group.reload.node_classes.should =~ [node_class]
+      end
+
+      it "should be able to remove assigned classes" do
+        node_class = NodeClass.generate!
+        @node_group.node_classes << node_class
+        @node_group.save!
+        @node_group.reload.node_classes.should =~ [node_class]
+
+        @params[:node_group].merge! :assigned_node_class_ids => []
+
+        do_put
+
+        @node_group.reload.node_classes.should be_empty
+      end
+
+      it "should be able to remove assigned groups" do
+        node_subgroup = NodeGroup.generate!
+        @node_group.node_groups << node_subgroup
+        @node_group.save!
+        @node_group.reload.node_groups.should =~ [node_subgroup]
+
+        @params[:node_group].merge! :assigned_node_group_ids => []
+
+        do_put
+
+        @node_group.reload.node_groups.should be_empty
+      end
+
+      it "should be able to remove assigned nodes" do
+        node = Node.generate!
+        @node_group.nodes << node
+        @node_group.save!
+        @node_group.reload.nodes.should =~ [node]
+
+        @params[:node_group].merge! :assigned_node_ids => []
+
+        do_put
+
+        @node_group.reload.nodes.should be_empty
       end
     end
 

@@ -1,6 +1,6 @@
 class ActiveRecord::Associations::HasManyThroughAssociation
   private
-  def delete_records(records)
+  def delete_records(records, method)
     klass         = @reflection.through_reflection.klass
     method_map    = {:destroy => :destroy_all}
     method_name   = method_map.fetch(@reflection.options[:dependent], :delete_all)
