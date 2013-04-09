@@ -60,5 +60,8 @@ module PuppetDashboard
 
     # Version of your assets, change this if you want to expire all your assets
     config.assets.version = '1.0'
+
+    # Don't load the entire application and database drivers just to run rake assets:precompile
+    config.assets.initialize_on_precompile = false
   end
 end
