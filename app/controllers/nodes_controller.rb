@@ -7,6 +7,7 @@ class NodesController < InheritedResources::Base
   layout lambda {|c| c.request.xhr? ? false : 'application' }
 
   include ConflictAnalyzer
+  include ConflictHtml
 
   def index
     raise NodeClassificationDisabledError.new if !SETTINGS.use_external_node_classification and request.format == :yaml
@@ -31,22 +32,18 @@ class NodesController < InheritedResources::Base
       create! do |success, failure|
         success.html {
           node = Node.find_by_name(params[:node][:name])
- 
+
           unless(force_create?)
- 
+
             new_conflicts_message = get_new_conflicts_message_as_html({}, node)
-            unless new_conflicts_message.nil?
-              html = render_to_string(:template => "shared/_confirm",
-                                      :layout => false,
-                                      :locals => { :message => new_conflicts_message, :confirm_label => "Create", :on_confirm_clicked_script => "jQuery('#force_create').attr('value', 'true'); jQuery('#submit_button').click();" })
-              render :json => { :status => "ok", :valid => "false", :confirm_html => html }, :content_type => 'application/json'
-              raise ActiveRecord::Rollback
+            if new_conflicts_message
+              render_conflicts_html new_conflicts_message, "Create", "jQuery('#force_create').attr('value', 'true'); jQuery('#submit_button').click();"
             end
           end
- 
+
           render :json => { :status => "ok", :valid => "true", :redirect_to => url_for(node) }, :content_type => 'application/json'
         };
- 
+
         failure.html {
           set_group_and_class_autocomplete_data_sources(@node)
           html = render_to_string(:template => "shared/_error",
@@ -111,18 +108,14 @@ class NodesController < InheritedResources::Base
           unless(force_update?)
 
             new_conflicts_message = get_new_conflicts_message_as_html(old_conflicts, node)
-            unless new_conflicts_message.nil?
-              html = render_to_string(:template => "shared/_confirm",
-                                      :layout => false,
-                                      :locals => { :message => new_conflicts_message, :confirm_label => "Update", :on_confirm_clicked_script => "jQuery('#force_update').attr('value', 'true'); jQuery('#submit_button').click();" })
-              render :json => { :status => "ok", :valid => "false", :confirm_html => html }, :content_type => 'application/json'
-              raise ActiveRecord::Rollback
+            if new_conflicts_message
+              render_conflicts_html new_conflicts_message, "Update", "jQuery('#force_update').attr('value', 'true'); jQuery('#submit_button').click();"
             end
           end
- 
+
           render :json => { :status => "ok", :valid => "true", :redirect_to => url_for(node) }, :content_type => 'application/json'
         };
- 
+
         failure.html {
           node = Node.find_by_id(params[:id])
 

@@ -4,6 +4,7 @@ class NodeGroupsController < InheritedResources::Base
 
   include SearchableIndex
   include ConflictAnalyzer
+  include ConflictHtml
 
   def new
     new! do |format|
@@ -36,12 +37,8 @@ class NodeGroupsController < InheritedResources::Base
           unless(force_create?)
 
             new_conflicts_message = get_new_conflicts_message_as_html(old_conflicts, node_group)
-            unless new_conflicts_message.nil?
-              html = render_to_string(:template => "shared/_confirm",
-                                      :layout => false,
-                                      :locals => { :message => new_conflicts_message, :confirm_label => "Create", :on_confirm_clicked_script => "jQuery('#force_create').attr('value', 'true'); jQuery('#submit_button').click();" })
-              render :json => { :status => "ok", :valid => "false", :confirm_html => html }, :content_type => 'application/json'
-              raise ActiveRecord::Rollback
+            if new_conflicts_message
+              render_conflicts_html new_conflicts_message, "Create", "jQuery('#force_create').attr('value', 'true'); jQuery('#submit_button').click();"
             end
           end
 
@@ -75,23 +72,9 @@ class NodeGroupsController < InheritedResources::Base
 
       update! do |success, failure|
         success.html {
-          node_group = NodeGroup.find_by_id(params[:id])
- 
-          unless(force_update?)
- 
-            new_conflicts_message = get_new_conflicts_message_as_html(old_conflicts, node_group)
-            unless new_conflicts_message.nil?
-              html = render_to_string(:template => "shared/_confirm",
-                                      :layout => false,
-                                      :locals => { :message => new_conflicts_message, :confirm_label => "Update", :on_confirm_clicked_script => "jQuery('#force_update').attr('value', 'true'); jQuery('#submit_button').click();" })
-              render :json => { :status => "ok", :valid => "false", :confirm_html => html }, :content_type => 'application/json'
-              raise ActiveRecord::Rollback
-            end
-          end
- 
-          render :json => { :status => "ok", :valid => "true", :redirect_to => url_for(node_group) }, :content_type => 'application/json'
+          update_success_helper old_conflicts, :class => NodeGroup, :conflict_attribute => nil
         };
- 
+
         failure.html {
           node_group = NodeGroup.find_by_id(params[:id])
 
@@ -107,38 +90,9 @@ class NodeGroupsController < InheritedResources::Base
   end
 
   def destroy
-
-    ActiveRecord::Base.transaction do
-      old_conflicts = force_delete? ? nil : get_current_conflicts(NodeGroup.find_by_id(params[:id]))
-
-      begin
-        destroy! do |success, failure|
-          success.html {
-
-            unless(force_delete?)
-              node_group = NodeGroup.find_by_id(params[:id])
-              new_conflicts_message = get_new_conflicts_message_as_html(old_conflicts, node_group)
-
-              unless new_conflicts_message.nil?
-                html = render_to_string(:template => "shared/_confirm",
-                                        :layout => false,
-                                        :locals => { :message => new_conflicts_message, :confirm_label => "Delete", :on_confirm_clicked_script => "jQuery('#force_delete_button').click();" })
-                render :json => { :status => "ok", :valid => "false", :confirm_html => html }, :content_type => 'application/json'
-                raise ActiveRecord::Rollback
-              end
-            end
-
-            render :json => { :status => "ok", :valid => "true", :redirect_to => node_groups_path }, :content_type => 'application/json'
-          };
-
-          failure.html {
-            render :json => { :status => "error", :error_html => "<p class='error'>An error occurred.<p/>" }, :content_type => 'application/json'
-          }
-        end
-      rescue => e
-        render :json => { :status => "error", :error_html => "<p class='error'>" + e.message + "<p/>" }, :content_type => 'application/json'
-      end
-    end
+    destroy_helper  :class => NodeGroup,
+                    :owner_class => NodeGroup,
+                    :index_redirect => true
   end
 
   protected
