@@ -4,8 +4,8 @@
     - page_title = yield(:page_title)
     %title= 'Puppet Node Manager'
     %meta{"http-equiv" => "refresh", :content => "60"}
-    = stylesheet_link_tag 'reset', 'mixins', 'radiator'
-    = javascript_include_tag 'jquery', 'radiator'
+    = stylesheet_link_tag 'application.radiator'
+    = javascript_include_tag 'application.radiator'
 
   - add_body_class "#{controller.controller_name}_controller"
   - add_body_class "#{controller.controller_name}_#{controller.action_name}_action"

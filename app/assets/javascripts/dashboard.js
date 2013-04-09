@@ -173,7 +173,8 @@ jQuery(document).ready(function(J) {
           // axes scaled as if data extended 10% above and below the
           // actual range to prevent data points right on grid boundaries.
           // Don't want to do that here.
-          pad: 0
+          pad: 0,
+          min: 0
         }
       },
       grid: {
