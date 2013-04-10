@@ -28,25 +28,25 @@ describe '/nodes/edit' do
 
   it 'should have a form for editing the node' do
     do_render
-    rendered.should have_tag("form[id=edit_node_#{@node.id}]")
+    response.should have_tag('form[id=param_form]')
   end
 
   describe 'for the node edit form' do
     it 'should post to the update node action' do
       do_render
-      rendered.should have_tag('form[method=post]', :with => { :id => "edit_node_#{@node.id}", :action => node_path(@node) })
+      response.should have_tag('form[method=post]', :with => { :id => "param_form", :action => node_path(@node) })
     end
 
     it 'should set the form method to PUT' do
       do_render
-      rendered.should have_tag("form[id=edit_node_#{@node.id}]") do
+      response.should have_tag('form[id=param_form]') do
         with_tag('input[name=_method][value=put]')
       end
     end
 
     it 'should have a name input' do
       do_render
-      rendered.should have_tag("form[id=edit_node_#{@node.id}]") do
+      response.should have_tag('form[id=param_form]') do
         with_tag('input[type=text]', :with => { :name => 'node[name]' })
       end
     end
@@ -54,14 +54,14 @@ describe '/nodes/edit' do
     it 'should populate the name input' do
       @node.name = 'Test Node'
       do_render
-      rendered.should have_tag("form[id=edit_node_#{@node.id}]") do
+      response.should have_tag('form[id=param_form]') do
         with_tag('input', :with => { :name => 'node[name]', :value => @node.name })
       end
     end
 
     it 'should have a description input' do
       do_render
-      rendered.should have_tag("form[id=edit_node_#{@node.id}]") do
+      response.should have_tag('form[id=param_form]') do
         with_tag('textarea', :with => { :name => 'node[description]' })
       end
     end
@@ -69,7 +69,7 @@ describe '/nodes/edit' do
     it 'should populate the description input' do
       @node.description = 'Test Description'
       do_render
-      rendered.should have_tag("form[id=edit_node_#{@node.id}]") do
+      response.should have_tag('form[id=param_form]') do
         with_tag('textarea', :with => { :name => 'node[description]' }, :text => /#{@node.description}/)
       end
     end
@@ -78,7 +78,7 @@ describe '/nodes/edit' do
   describe 'editing interface' do
     describe "for parameters" do
       before :each do
-        @node.parameter_attributes = [{:key => 'foo', :value => 'bar'}]
+        @node.parameter_attributes = {"1" => {:key => 'foo', :value => 'bar'}}
       end
 
       it "should allow editing parameters with node classification enabled" do
