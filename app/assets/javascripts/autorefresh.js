@@ -3,8 +3,8 @@ jQuery(function($) {
 
   $('input#autorefresh').change(function() {
     // Prevent autorefresh on form pages
-    // TODO: Even better, prevent autorefresh when any form element has focus
-    if (/(new)|(edit)$/.test(window.location.pathname)) {
+    // TODO: In addition, prevent autorefresh when any form element has focus
+    if (/(new)|(edit)|(search)$/.test(window.location.pathname)) {
       $('span#autorefresh_countdown').html('&hellip;');
       $('li#navigation-autorefresh input').prop('disabled', true);
     } else if (this.checked) {
