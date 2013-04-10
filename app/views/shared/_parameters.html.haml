@@ -1,12 +1,11 @@
 .section
   %h3 Parameters
   - # Conflicting parameters are okay here, since we just want to warn
-  - unless resource.compiled_parameters(true).empty?
-    - if resource.errors.has_key?(:parameters)
+  - unless parent.compile_class_parameters(membership, true).empty?
+    - if parent.errors.has_key?(:classParameters)
       %p.error
         %strong Warning:
-        The following parameters have multiple conflicting values:
-        = h resource.errors[:parameters].join(", ")
+        Parameter values conflict.
     %table.inspector
       %thead
         %tr
@@ -14,16 +13,8 @@
           %th{:scope => :col} Value
           %th{:scope => :col} Source
       %tbody
-        - resource.compiled_parameters(true).each do |param|
+        - parent.compile_class_parameters(membership, true).sort_by{ |param| param[:name] }.each do |param|
           %tr
-            %td{:style => ("background-color: pink;" if param.sources.size > 1)}
-              %tt= h param.name
-            %td
-              %tt= h param.value
-            %td
-              - if param.sources == Set[resource]
-                = h resource.name
-              - else
-                = raw param.sources.map{ |source| link_to(h(source.name), node_group_path(source.id)) }.join(", ")
+            = render 'shared/parameters_part1', :param => param, :node_class_id => node_class.id
   - else
     = describe_no_matches_as 'No parameters'

@@ -1,0 +1,12 @@
+= header_for(form)
+
+.item
+  .section
+    #error_messages{:style => "display: none;"}
+
+    %h3 Assigned To Node Group:
+    = link_to @node_group.name, node_group_path(@node_group)
+
+  .section
+    .element
+      = render :partial => 'parameters/parameter_input', :object => form.object.parameters

@@ -1,0 +1,17 @@
+#sidebar= render 'shared/node_manager_sidebar'
+#main
+  - @node_class_memberhip = NodeClassMembership.find_by_id(params[:id])
+  - @node_class_id = @node_class_membership.node_class_id
+  - @node_class = NodeClass.find_by_id(@node_class_id)
+  - @node_id = @node_class_membership.node_id
+  - @node = Node.find_by_id(@node_id)
+
+  = form_for @node_class_membership, :url => url_for(@node_class_membership), :html => {:id => "param_form"} do |f|
+    %input{:id => "force_update", :name => "force_update", :type => "hidden", :value => "false"}
+    = render f
+    .element.actions
+      %button{:id => "submit_button"} Update
+      or go to
+      = link_to @node.name, "/nodes/#{@node_id}"
+  %script{:type=>"text/javascript"}
+    register_ajax_submit("#param_form");

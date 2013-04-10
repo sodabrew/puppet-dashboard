@@ -30,3 +30,6 @@
 //= require jqplot.canvasAxisTickRenderer
 //= require jqplot.highlighter
 //= require application
+//= require ajax_helper
+//= require validation_response
+

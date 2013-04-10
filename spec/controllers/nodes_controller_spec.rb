@@ -148,9 +148,9 @@ describe NodesController do
       assigns[:node].name.should == 'foo'
     end
 
-    it "should render new when creation fails" do
+    it "should render error when creation fails" do
       post :create, 'node' => { }
-      response.should render_template('nodes/new')
+      response.should render_template('shared/_error')
       response.should be_success
 
       assigns[:node].errors.full_messages.should == ["Name can't be blank"]
@@ -218,7 +218,7 @@ describe NodesController do
           get :show, :id => @node.name, :format => "yaml"
 
           response.should_not be_success
-          response.body.should =~ /has conflicting parameter\(s\)/
+          response.body.should =~ /has conflicting variable\(s\)/
         end
 
         it "should return YAML for an empty node when the node is not found" do
@@ -318,9 +318,9 @@ describe NodesController do
           assigns[:node].errors[:name].should_not be_blank
         end
 
-        it 'should render the update action' do
+        it 'should render error' do
           do_put
-          response.should render_template('edit')
+          response.should render_template('shared/_error')
         end
       end
 
@@ -336,6 +336,16 @@ describe NodesController do
           assigns[:node].should be_valid
         end
       end
+
+      it 'should response with JSON that contains redirect URL' do
+        do_put
+        json_response = json_from_response_body
+        response.code.should == '200'
+        response_hash = JSON.parse(response.body)
+        response_hash["status"].should == "ok"
+        response_hash["valid"].should == "true"
+        response_hash["redirect_to"].should =~ /#{node_path(@node)}$/
+      end
     end
 
     describe "when node classification is enabled" do
@@ -344,7 +354,7 @@ describe NodesController do
       end
 
       it "should allow specification of 'parameter_attributes'" do
-        @params[:node].merge! :parameter_attributes => [{:key => 'foo', :value => 'bar'}]
+        @params[:node].merge! :parameter_attributes => {"1" => {:key => 'foo', :value => 'bar'}}
 
         do_put
 
@@ -367,7 +377,7 @@ describe NodesController do
       end
 
       it "should fail if parameter_attributes are specified" do
-        @params[:node].merge! :parameter_attributes => [{:key => 'foo', :value => 'bar'}]
+        @params[:node].merge! :parameter_attributes => {"1" => {:key => 'foo', :value => 'bar'}}
 
         do_put
 
@@ -395,14 +405,124 @@ describe NodesController do
 
         do_put
 
-        response.should redirect_to(node_path(@node))
+        response.code.should == '200'
+        response_hash = JSON.parse(response.body)
+        response_hash["status"].should == "ok"
+        response_hash["valid"].should == "true"
+        response_hash["redirect_to"].should =~ /#{node_path(@node)}$/
+
         @node.node_groups.should == [node_group]
       end
 
       it "should succeed if parameter_attributes and node classes are omitted" do
         do_put
+        response.code.should == '200'
+        response_hash = JSON.parse(response.body)
+        response_hash["status"].should == "ok"
+        response_hash["valid"].should == "true"
+        response_hash["redirect_to"].should_not be_empty
+      end
+    end
 
-        response.should be_redirect
+    describe "when conflicts exist" do
+      before :each do
+        @node_group_a = NodeGroup.generate! :name => "A"
+        @node_group_b = NodeGroup.generate! :name => "B"
+      end
+
+      describe "when global parameters conflicts exists" do
+        before :each do
+          @param_1 = Parameter.generate(:key => 'foo', :value => '1')
+          @param_2 = Parameter.generate(:key => 'foo', :value => '2')
+
+          @node_group_a.parameters << @param_1
+          @node_group_b.parameters << @param_2
+        end
+
+        it "should return JSON containing valid='false'" do
+          @params[:node].merge!({"assigned_node_group_ids" => ["#{@node_group_a.id},#{@node_group_b.id},"]})
+          do_put
+
+          response = json_from_response_body
+          response["status"].should == "ok"
+          response["valid"].should == "false"
+        end
+
+        it "should render conflicts prompt" do
+          @params[:node].merge!({"assigned_node_group_ids" => ["#{@node_group_a.id},#{@node_group_b.id},"]})
+          do_put
+
+          response.should render_template('shared/_variable_conflicts_table')
+        end
+
+        it "should return JSON containing redirect_to URL when update is forced" do
+          @params[:node].merge!({"assigned_node_group_ids" => ["#{@node_group_a.id},#{@node_group_b.id},"]})
+          @params.merge!({ :force_update => "true" })
+          do_put
+
+          response.code.should == '200'
+          response_hash = JSON.parse(response.body)
+          response_hash["status"].should == "ok"
+          response_hash["valid"].should == "true"
+          response_hash["redirect_to"].should =~ /#{node_path(@node)}$/
+        end
+
+        it "should not render conflicts prompt when update is forced" do
+          @params[:node].merge!({"assigned_node_group_ids" => ["#{@node_group_a.id},#{@node_group_b.id},"]})
+          @params.merge!({ :force_update => "true" })
+          do_put
+
+          response.should_not render_template('shared/_confirm.html.haml')
+        end
+      end
+
+      describe "when class parameters conflicts exists" do
+        before :each do
+          @node_class_a = NodeClass.generate! :name => "class_a"
+          @node_group_a.node_classes << @node_class_a
+          @node_group_b.node_classes << @node_class_a
+
+          @node_group_a_class_memberships_a = NodeGroupClassMembership.find_by_node_group_id_and_node_class_id(@node_group_a.id, @node_class_a.id)
+          @node_group_a_class_memberships_a.parameters << Parameter.generate(:key => 'foo', :value => '1')
+          @node_group_b_class_memberships_a = NodeGroupClassMembership.find_by_node_group_id_and_node_class_id(@node_group_b.id, @node_class_a.id)
+          @node_group_b_class_memberships_a.parameters << Parameter.generate(:key => 'foo', :value => '2')
+        end
+
+        it "should return JSON containing valid='false'" do
+          @params[:node].merge!({"assigned_node_group_ids" => ["#{@node_group_a.id},#{@node_group_b.id},"]})
+          do_put
+
+          response = json_from_response_body
+          response["status"].should == "ok"
+          response["valid"].should == "false"
+        end
+
+        it "should render conflicts prompt" do
+          @params[:node].merge!({"assigned_node_group_ids" => ["#{@node_group_a.id},#{@node_group_b.id},"]})
+          do_put
+
+          response.should render_template('shared/_class_parameter_conflicts_table')
+        end
+
+        it "should return JSON containing redirect_to URL when update is forced" do
+          @params[:node].merge!({"assigned_node_group_ids" => ["#{@node_group_a.id},#{@node_group_b.id},"]})
+          @params.merge!({ :force_update => "true" })
+          do_put
+
+          response.code.should == '200'
+          response_hash = JSON.parse(response.body)
+          response_hash["status"].should == "ok"
+          response_hash["valid"].should == "true"
+          response_hash["redirect_to"].should =~ /#{node_path(@node)}$/
+        end
+
+        it "should not render conflicts prompt when update is forced" do
+          @params[:node].merge!({"assigned_node_group_ids" => ["#{@node_group_a.id},#{@node_group_b.id},"]})
+          @params.merge!({ :force_update => "true" })
+          do_put
+
+          response.should_not render_template('shared/_confirm.html.haml')
+        end
       end
     end
   end

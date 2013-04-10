@@ -1,0 +1,10 @@
+%table.inspector{:style => 'margin-top: 1.5em;'}
+  %thead
+    %tr
+      %th{:scope => :col} Variable
+      %th{:scope => :col} Value
+      %th{:scope => :col} Source
+  %tbody
+    - conflicts.sort_by { |conflict| conflict[:name] }.each do |conflict|
+      %tr
+        = render 'shared/parameters_part1', :param => conflict, :node_class_id => nil, :links => false
