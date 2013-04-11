@@ -1,0 +1,2 @@
+class ClassParameterConflictError < StandardError
+end

@@ -37,6 +37,10 @@ h3 {
   margin: 0;
 }
 
+h3.conflicts {
+  color:#c33;
+}
+
 h4 {
   font-size: 1em;
   line-height: 1.28em;
