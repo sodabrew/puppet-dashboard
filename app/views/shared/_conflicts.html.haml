@@ -1,0 +1,47 @@
+- unless resource.global_conflicts.empty?
+  .section.half
+    %h3.conflicts Global Parameters Conflicts
+    %table.inspector
+      %thead
+        %tr
+          %th{:scope => :col} Parameter
+          %th{:scope => :col} Source
+      %tbody
+        - resource.global_conflicts.sort_by{ |param| param[:name] }.each do |param|
+          %tr
+            %td
+              %tt= h param[:name]
+            %td
+              = param[:sources].sort_by{ |source| source.name }.map{|source| link_to(h(source.name),node_group_path(source.id))}.join(", ")
+
+- unless resource.class_conflicts.empty?
+  .section.half
+    %h3.conflicts Class Parameters Conflicts
+    %table.inspector
+      %thead
+        %tr
+          %th{:scope => :col} Class
+          %th{:scope => :col} Parameter
+          %th{:scope => :col} Source
+      %tbody
+        - resource.class_conflicts.sort_by{ |entry| entry[0].name }.each do |node_class, params|
+          %tr
+            %td{:rowspan => params.length}
+              %tt= h node_class.name
+            - first = true
+            - params.sort_by{ |param| param[:name] }.each do |param|
+              - if first
+                - first = false
+                %td
+                  %tt= h param[:name]
+                %td
+                  = param[:sources].map{|source| link_to(h(source.name),node_group_path(source.id))}.join(", ")
+              - else
+                %tr
+                  %td
+                    %tt= h param[:name]
+                  %td
+                    = param[:sources].sort_by{ |source| source.name }.map{|source| link_to(h(source.name),node_group_path(source.id))}.join(", ")
+
+- unless resource.global_conflicts.empty? && resource.class_conflicts.empty?
+  %br.clear
