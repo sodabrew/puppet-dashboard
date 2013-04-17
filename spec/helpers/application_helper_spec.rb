@@ -272,4 +272,19 @@ describe ApplicationHelper do
       end
     end
   end
+
+  describe "meta_refresh_tag" do
+    context "when no default_delay is specified" do
+      it "should fall back to 60 seconds" do
+        helper.meta_refresh_tag().should include('<meta content="60" http-equiv="refresh" />')
+      end
+    end
+    
+    context "when a default delay of 600 seconds is specified" do
+      it "should return a meta tag configured for 600 seconds" do
+        helper.meta_refresh_tag(:default_delay=>600) include('<meta content="600" http-equiv="refresh" />')
+      end
+    end
+  end
+  
 end
