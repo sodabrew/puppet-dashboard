@@ -3,7 +3,7 @@
   %head
     - page_title = yield(:page_title)
     %title= [ page_title, 'Puppet Node Manager'].compact.join(' - ')
-    = meta_refresh_tag
+    = meta_refresh_tag :default_delay => 60
     = stylesheet_link_tag 'reset', 'mixins', 'radiator'
     = javascript_include_tag 'jquery-1.7.2', 'radiator'
 
