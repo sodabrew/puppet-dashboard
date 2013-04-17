@@ -271,9 +271,12 @@ module ApplicationHelper
   end
   
   def meta_refresh_tag
-    if (request.env['refresh'] == false )
+    delay = 60
+    if (params['refresh'] == false )
       return
+    elsif (params['refresh'].to_i > 0)
+      delay = params['refresh'].to_i
     end
-    
-    return tag(:meta, "http-equiv" => "refresh", :content => "60")
+    return tag(:meta, "http-equiv" => "refresh", :content => delay)
+  end
 end
