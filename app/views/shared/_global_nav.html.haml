@@ -19,8 +19,6 @@
             = link_to "Classes", node_classes_path
         %li#navigation-reports{:class => active_if(controller_name == "reports" && action_name == "index")}
           = link_to "Reports", reports_path
-        %li#navigation-file-search{:class => active_if(controller_name == "reports" && action_name == "search")}
-          = link_to "File Search", search_reports_path
         - if SETTINGS.enable_inventory_service
           %li#navigation-inventory-search{:class => active_if(controller_name == "nodes" && action_name == "search")}
             = link_to "Inventory Search", search_nodes_path
