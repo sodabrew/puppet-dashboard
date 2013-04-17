@@ -269,4 +269,15 @@ module ApplicationHelper
   def add_body_class(klass)
     (@body_classes ||= []).push(klass).uniq!
   end
+  
+  def meta_refresh_tag(default_delay=60)
+    if (params['refresh'] == false )
+      return
+    elsif (params['refresh'].to_i > 0)
+      delay = params['refresh'].to_i
+    else
+      delay = default_delay
+    end
+    return tag(:meta, "http-equiv" => "refresh", :content => delay)
+  end
 end
