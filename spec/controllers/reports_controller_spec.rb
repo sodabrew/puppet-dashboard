@@ -152,67 +152,6 @@ describe ReportsController do
     end
   end
 
-  describe "#search" do
-    it "should render the search form if there are no parameters" do
-      get('search')
-      response.should be_success
-      response.should render_template("reports/search")
-      assigns[:matching_files].should == nil
-      assigns[:unmatching_files].should == nil
-    end
-
-    describe "when searching for files" do
-      before do
-        @matching_report = Report.create!(:host => "foo", :time => 1.week.ago.to_date, :status => "unchanged", :kind => "inspect")
-        @matching_report.resource_statuses.create!(:resource_type => "File", :title => "/etc/hosts", :events_attributes => [{:property => "content", :previous_value => "{md5}ab07acbb1e496801937adfa772424bf7"}])
-
-        @other_matching_report = Report.create!(:host => "bar", :time => 1.week.ago.to_date, :status => "unchanged", :kind => "inspect")
-        @other_matching_report.resource_statuses.create!(:resource_type => "File", :title => "/etc/hosts", :events_attributes => [{:property => "content", :previous_value => "{md5}ab07acbb1e496801937adfa772424bf7"}])
-
-        @unmatching_file_report = Report.create!(:host => "baz", :time => 1.week.ago.to_date, :status => "unchanged", :kind => "inspect")
-        @unmatching_file_report.resource_statuses.create!(:resource_type => "File", :title => "/etc/sudoers", :events_attributes => [{:property => "content", :previous_value => "{md5}ab07acbb1e496801937adfa772424bf7"}])
-
-        @unmatching_content_report = Report.create!(:host => "banana", :time => 1.week.ago.to_date, :status => "unchanged", :kind => "inspect")
-        @unmatching_content_report.resource_statuses.create!(:resource_type => "File", :title => "/etc/hosts", :events_attributes => [{:property => "content", :previous_value => "{md5}aa876288711c4198cfcda790b58d7e95"}])
-      end
-
-      describe "when both file title and content are specified" do
-        it "should return both matching and unmatching nodes" do
-          get('search', :file_title => "/etc/hosts", :file_content => "ab07acbb1e496801937adfa772424bf7")
-          assigns[:matching_files].to_a.should =~ @matching_report.resource_statuses + @other_matching_report.resource_statuses
-          assigns[:unmatching_files].to_a.should =~ @unmatching_content_report.resource_statuses
-        end
-      end
-
-      describe "when only file content is specified" do
-        it "should not perform a search, and should add an error message" do
-          get('search', :file_content => "ab07acbb1e496801937adfa772424bf7")
-          assigns[:matching_files].should == nil
-          assigns[:unmatching_files].should == nil
-          assigns[:errors].should include "Please specify the file title to search for"
-        end
-      end
-
-      describe "when the page first loads" do
-        it "should not perform a search, and should not add error messages" do
-          get('search')
-          assigns[:matching_files].should == nil
-          assigns[:unmatching_files].should == nil
-          assigns[:errors].should be_empty
-        end
-      end
-
-      describe "when nothing is specified" do
-        it "should not perform a search, and should add error messages" do
-          get('search', :file_title => "", :file_content => "")
-          assigns[:matching_files].should == nil
-          assigns[:unmatching_files].should == nil
-          assigns[:errors].should include "Please specify the file title to search for"
-        end
-      end
-    end
-  end
-
   def post_with_body(action, body, headers)
     @request.env['RAW_POST_DATA'] = body
     response = post(action, {}, headers)

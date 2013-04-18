@@ -46,37 +46,12 @@ class ReportsController < InheritedResources::Base
     end
   end
 
-  def search
-    @errors = []
-    inspected_resources = ResourceStatus.latest_inspections.order("nodes.name")
-
-    @title = params[:file_title].to_s.strip
-    @content = params[:file_content].to_s.strip
-
-    if params[:file_title] == nil and params[:file_content] == nil
-      # Don't do anything; user just navigated to the search page
-    else
-      if !@title.present?
-        @errors << "Please specify the file title to search for"
-      end
-      if !@content.present?
-        @errors << "Please specify the file content to search for"
-      elsif !is_md5?(@content)
-        @errors << "#{@content} is not a valid md5 checksum"
-      end
-      if @errors.empty?
-        @matching_files = inspected_resources.by_file_title(@title).by_file_content(@content)
-        @unmatching_files = inspected_resources.by_file_title(@title).without_file_content(@content)
-      end
-    end
-  end
-
   private
 
   def collection
     get_collection_ivar || set_collection_ivar(
-      request.format == :html ? 
-        paginate_scope(end_of_association_chain) : 
+      request.format == :html ?
+        paginate_scope(end_of_association_chain) :
         end_of_association_chain
     )
   end
