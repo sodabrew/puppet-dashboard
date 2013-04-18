@@ -11,8 +11,10 @@
           = link_to 'Delete', url_for(@node_group) + "?force_delete=false", :remote => true, :confirm => 'Are you sure?', :method => :delete, :id => "delete_button", :class => "delete button"
           = link_to 'Force Delete', url_for(@node_group) + "?force_delete=true", :remote => true, :method => :delete, :id => "force_delete_button", :style => "display: none"
   .item
-    .section
-      #error_messages{:style => "display: none;"}
+    .section#error_messages{:style => "display: none;"}
+
+    - unless @node_group.description.blank?
+      .section.description= simple_format h(@node_group.description)
 
     - if SETTINGS.use_external_node_classification
       = render 'shared/variables', :resource => @node_group
@@ -55,6 +57,7 @@
         = render 'nodes/nodes', :nodes => @node_group.all_nodes, :container => @node_group
       - else
         = describe_no_matches_for :nodes, :group
+      %br.clear
 :javascript
   bind_response_events('#delete_button', 'error_messages');
   bind_response_events('#force_delete_button', 'error_messages');

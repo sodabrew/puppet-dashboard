@@ -24,7 +24,7 @@ class NodeGroup < ActiveRecord::Base
 
   validates_presence_of :name
   validates_uniqueness_of :name
-  attr_accessible :name, :node_ids, :parameter_attributes, :node_class_ids, :node_group_ids
+  attr_accessible :name, :description, :node_ids, :parameter_attributes, :node_class_ids, :node_group_ids
   attr_accessible :assigned_node_group_ids, :assigned_node_ids, :assigned_node_class_ids
   attr_accessible :assigned_node_group_names, :assigned_node_names, :assigned_node_class_names
 
