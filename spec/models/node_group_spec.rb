@@ -229,6 +229,13 @@ describe NodeGroup do
         group.size.should == 2
         group.should include(@groups.first, @groups.last)
       end
+
+      it "should work with the description field" do
+        @groups.each {|o| o.description.should be_nil}
+
+        obj = NodeGroup.generate! :name => "anobj", :description => "A Node Group"
+        obj.description.should == "A Node Group"
+      end
     end
   end
 
