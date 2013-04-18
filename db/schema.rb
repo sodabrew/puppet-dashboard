@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121111212016) do
+ActiveRecord::Schema.define(:version => 20130418064011) do
 
   postgres = ActiveRecord::Base.connection.adapter_name.downcase =~ /postgres/
 
@@ -59,8 +59,9 @@ ActiveRecord::Schema.define(:version => 20121111212016) do
 
   create_table "node_classes", :force => true do |t|
     t.string   "name"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.text     "description"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
   end
 
   create_table "node_group_class_memberships", :force => true do |t|
@@ -86,8 +87,9 @@ ActiveRecord::Schema.define(:version => 20121111212016) do
 
   create_table "node_groups", :force => true do |t|
     t.string   "name"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.text     "description"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
   end
 
   create_table "nodes", :force => true do |t|
