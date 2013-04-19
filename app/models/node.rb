@@ -25,8 +25,12 @@ class Node < ActiveRecord::Base
   belongs_to :last_apply_report, :class_name => 'Report'
   belongs_to :last_inspect_report, :class_name => 'Report'
 
-  def self.possible_derived_statuses
-    self.possible_statuses.unshift("unresponsive")
+  def self.radiator_statuses
+    ["unresponsive", "failed", "pending", "changed", "unchanged", "unreported", "all"]
+  end
+
+  def self.home_statuses
+    ["all", "unresponsive", "failed", "pending", "changed", "unchanged"]
   end
 
   def self.possible_statuses

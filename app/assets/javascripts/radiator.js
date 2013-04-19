@@ -1,11 +1,10 @@
 jQuery(function($) {
-  $(window).bind('resize', function()
-  {
+  $(window).bind('resize', function() {
     resizeMe();
   }).trigger('resize');
 
   function resizeMe() {
-    var preferredHeight = 944;
+    var preferredHeight = 1100;
     var displayHeight = $(window).height();
     var percentageHeight = displayHeight / preferredHeight;
 

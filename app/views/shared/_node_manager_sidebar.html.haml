@@ -22,7 +22,7 @@
   .node_summary
     %table.primary
       -# This conditional is ugly, but it saves us from duplicating the markup
-      - Node.possible_derived_statuses.push( 'unreported', 'all' ).each do |status|
+      - Node.radiator_statuses.each do |status|
         - if( status == 'all' )
           - node_count = Node.unhidden.count
           - nodes_path = {:controller => "nodes", :action => "index"}
