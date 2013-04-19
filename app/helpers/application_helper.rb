@@ -248,7 +248,7 @@ module ApplicationHelper
     inputs.each do |input|
       javascript << "  J('#{input[:class]}').tokenInput('#{input[:data_source]}', {\n"
       javascript << "    prePopulate: #{input[:objects].map {|object| {:id => object.id, :name => object.name}}.to_json},\n"
-      javascript << "    onResult: function(results) { var alreadyAssigned = J('#{input[:class]}').parent().find('.token-input-token-facebook p');\nvar myresults = results;\nalreadyAssigned.each(function(i){ myresults = myresults.filter(function(element,index,arry){ return alreadyAssigned[i].innerText != element.name;});}); return myresults;}\n"
+      javascript << "    onResult: autosuggestResultFilter('#{input[:class]}')"
       javascript << "  });\n"
     end
     javascript << "});"
