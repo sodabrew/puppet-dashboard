@@ -56,6 +56,13 @@ describe NodeClass do
         classes.size.should == 2
         classes.should include(@classes.first, @classes.last)
       end
+
+      it "should work with the description field" do
+        @classes.each {|o| o.description.should be_nil}
+
+        obj = NodeClass.generate! :name => "anobj", :description => "A Node Class"
+        obj.description.should == "A Node Class"
+      end
     end
 
     describe "find_from_form_ids" do

@@ -3,14 +3,15 @@
 = header_for(form)
 
 .item
-  .section
-    #error_messages{:style => "display: none;"}
-
   = render :partial => 'shared/form_errors', :object => form.object.errors
 
   .element
     = form.label :name
     = form.text_field :name, :placeholder => "Group name"
+
+  .element.textarea
+    = form.label :description
+    = form.text_area :description, :rows => 4, :placeholder => "Enter a description for this group here..."
 
   - if SETTINGS.use_external_node_classification
     .element

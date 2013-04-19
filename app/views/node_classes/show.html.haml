@@ -10,14 +10,19 @@
         %li= link_to 'Delete', @node_class, :confirm => 'Are you sure?', :method => :delete, :class => "delete button"
 
   .item
+    .section#error_messages{:style => "display: none;"}
+
+    - unless @node_class.description.blank?
+      .section.description= simple_format h(@node_class.description)
+
     - if @node_class.all_nodes.present?
       .section
         = render 'statuses/run_failure', :nodes => @node_class.all_nodes
-    .section
-      #error_messages{:style => "display: none;"}
 
-      %h3 Nodes in this class
+    .section
+      %h3 Nodes for this class
       - if @node_class.all_nodes.present?
         = render 'nodes/nodes', :nodes => @node_class.all_nodes, :container => @node_class
       - else
         = describe_no_matches_for :nodes, :class
+      %br.clear
