@@ -2,7 +2,6 @@
 # Add your own tasks in files placed in lib/tasks ending in .rake,
 # for example lib/tasks/capistrano.rake, and they will automatically be available to Rake.
 require 'rake'
-require(File.join(File.dirname(__FILE__), 'config', 'boot'))
 
 ["rake/testtask","rdoc/task","thread","tasks/rails"].each do |dependency|
   begin
@@ -47,7 +46,18 @@ if File.exist?(build_defs_file)
   end
 end
 
-require File.expand_path('../config/application', __FILE__)
 include Rake::DSL
 
-PuppetDashboard::Application.load_tasks
+# We have packaging tasks that we want to be able to run without
+# all of the gems installed. Rails, rather than Bundler, is a good
+# proxy to whether we have a skeleton gemset for packaging or a full
+# operational gemset.
+begin
+  require 'rails'
+  require(File.join(File.dirname(__FILE__), 'config', 'boot'))
+  require File.expand_path('../config/application', __FILE__)
+
+  PuppetDashboard::Application.load_tasks
+rescue LoadError
+  STDERR.puts "Warning: Rails rake tasks currently unavailable because we can't find the 'rails' gem"
+end
