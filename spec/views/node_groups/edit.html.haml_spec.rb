@@ -8,7 +8,7 @@ describe "/node_groups/edit.html.haml" do
       @node_group = NodeGroup.generate!
     end
 
-    it { render; rendered.should have_tag('form', :with => { :method => 'post', :action => node_group_path(@node_group) }) }
+    it { render; rendered.should have_tag('form', :with => { :method => 'post', :action => node_group_path(@node_group.id) }) }
 
     describe "in editing interface" do
       describe "for parameters" do

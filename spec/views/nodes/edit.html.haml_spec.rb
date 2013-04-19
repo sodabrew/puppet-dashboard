@@ -2,8 +2,7 @@ require 'spec_helper'
 
 describe '/nodes/edit' do
   before :each do
-    assigns[:node] = @node = Node.generate!
-    params[:id] = @node.id
+    @node = Node.generate!
   end
 
   def do_render
@@ -34,7 +33,7 @@ describe '/nodes/edit' do
   describe 'for the node edit form' do
     it 'should post to the update node action' do
       do_render
-      response.should have_tag('form[method=post]', :with => { :id => "param_form", :action => node_path(@node) })
+      response.should have_tag('form[method=post]', :with => { :id => "param_form", :action => node_path(@node.id) })
     end
 
     it 'should set the form method to PUT' do
@@ -182,6 +181,6 @@ describe '/nodes/edit' do
 
   it 'should link to view the node' do
     do_render
-    rendered.should have_tag('a', :with => { :href => node_path(@node) })
+    rendered.should have_tag('a', :with => { :href => node_path(@node.id) })
   end
 end
