@@ -57,6 +57,9 @@ ActiveRecord::Schema.define(:version => 20130418064011) do
     t.datetime "updated_at",    :null => false
   end
 
+  add_index "node_class_memberships", ["node_class_id"], :name => "index_node_class_memberships_on_node_class_id"
+  add_index "node_class_memberships", ["node_id"], :name => "index_node_class_memberships_on_node_id"
+
   create_table "node_classes", :force => true do |t|
     t.string   "name"
     t.text     "description"
@@ -71,6 +74,9 @@ ActiveRecord::Schema.define(:version => 20130418064011) do
     t.datetime "updated_at",    :null => false
   end
 
+  add_index "node_group_class_memberships", ["node_class_id"], :name => "index_node_group_class_memberships_on_node_class_id"
+  add_index "node_group_class_memberships", ["node_group_id"], :name => "index_node_group_class_memberships_on_node_group_id"
+
   create_table "node_group_edges", :force => true do |t|
     t.integer  "to_id"
     t.integer  "from_id"
@@ -78,12 +84,18 @@ ActiveRecord::Schema.define(:version => 20130418064011) do
     t.datetime "updated_at", :null => false
   end
 
+  add_index "node_group_edges", ["from_id"], :name => "index_node_group_edges_on_from_id"
+  add_index "node_group_edges", ["to_id"], :name => "index_node_group_edges_on_to_id"
+
   create_table "node_group_memberships", :force => true do |t|
     t.integer  "node_id"
     t.integer  "node_group_id"
     t.datetime "created_at",    :null => false
     t.datetime "updated_at",    :null => false
   end
+
+  add_index "node_group_memberships", ["node_group_id"], :name => "index_node_group_memberships_on_node_group_id"
+  add_index "node_group_memberships", ["node_id"], :name => "index_node_group_memberships_on_node_id"
 
   create_table "node_groups", :force => true do |t|
     t.string   "name"
