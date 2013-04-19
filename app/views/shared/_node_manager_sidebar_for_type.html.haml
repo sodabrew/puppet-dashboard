@@ -9,7 +9,7 @@
 - path_for_show = "#{table.singularize}_path"
 
 .group
-  %h3{:class => active_if(controller_name == table && action_name == "index")}= link_to(h(label), send(path_for_index))
+  %h3{:class => active_if(controller_name == table && action_name == "index")}= link_to(h(label.pluralize), send(path_for_index))
   - entries = type.with_nodes_count
   - unless entries.empty?
     %ul
