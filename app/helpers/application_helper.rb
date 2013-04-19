@@ -247,7 +247,8 @@ module ApplicationHelper
     javascript = "jQuery(document).ready(function(J) {\n"
     inputs.each do |input|
       javascript << "  J('#{input[:class]}').tokenInput('#{input[:data_source]}', {\n"
-      javascript << "    prePopulate: #{input[:objects].map {|object| {:id => object.id, :name => object.name}}.to_json}\n"
+      javascript << "    prePopulate: #{input[:objects].map {|object| {:id => object.id, :name => object.name}}.to_json},\n"
+      javascript << "    onResult: autosuggestResultFilter('#{input[:class]}')"
       javascript << "  });\n"
     end
     javascript << "});"

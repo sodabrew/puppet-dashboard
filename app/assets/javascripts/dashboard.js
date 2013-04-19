@@ -298,3 +298,16 @@ function init_skiplink_target() {
     document.getElementById('skiplink').setAttribute("onclick" , "document.getElementById('skiptarget').focus();");
   }
 }
+
+function autosuggestResultFilter(class_id) {
+	return function(results) { 
+		var alreadyAssigned = jQuery(class_id).parent().find('.token-input-token-facebook p');
+		var myresults = results;
+		alreadyAssigned.each(function(i){
+			myresults = myresults.filter(function(element,index,array){ 
+				return alreadyAssigned[i].innerText != element.name;
+			});
+		});
+		return myresults;
+	};
+};
