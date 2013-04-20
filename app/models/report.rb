@@ -130,6 +130,13 @@ class Report < ActiveRecord::Base
     report_hash["resource_statuses"] = report_hash["resource_statuses"].values
 
     report = Report.new(Report.attribute_hash_from(report_hash)).munge
+
+    # munge will capture metrics about the number of unchanged items
+    # then we can remove them to save space in the resource_statuses table
+    if SETTINGS.disable_report_unchanged_events
+      report.resource_statuses.delete_if {|rs| rs.status == 'unchanged' }
+    end
+
     report.save!
     report
   end

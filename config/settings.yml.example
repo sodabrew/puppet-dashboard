@@ -77,6 +77,10 @@ custom_logo_alt_text: 'Puppet Dashboard'
 # "http://dashboard_servername/reports/upload"
 disable_legacy_report_upload_url: false
 
+# Set this to true to prevent storing details about not-changed events
+# which saves a tremendous amount of space in the resource_statuses table.
+disable_report_unchanged_events: false
+
 # Disables the UI and controller actions for editing nodes, classes, groups and reports.  Report submission is still allowed
 enable_read_only_mode: false
 
