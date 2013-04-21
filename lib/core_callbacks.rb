@@ -37,7 +37,7 @@ end
 
 # Report view widgets
 Registry.add_callback :core, :report_view_widgets, "800_resource_statuses" do |view_renderer, report|
-  statuses = report.resource_statuses.all(:order => 'resource_type, title').group_by(&:status)
+  statuses = report.resource_statuses.all(:order => 'resource_type, title', :include => :events).group_by(&:status)
   statuses = %w[failed pending changed unchanged].map { |k| (v = statuses[k]) && [k, v] }
   view_renderer.render 'reports/resource_statuses', :report => report, :statuses => statuses.compact
 end
