@@ -62,6 +62,18 @@ namespace :nodegroup do
     end
   end
 
+  desc 'List child groups that belong to a node group'
+  task :listgroups => :environment do
+    nodegroup = get_group(ENV['name'])
+
+    begin
+      nodegroup.node_groups.map(&:name).map{|n| puts n}
+    rescue => e
+      puts e.message
+      exit 1
+    end
+  end
+
   desc 'Add a new node group'
   task :add => :environment do
     if ENV['name']
@@ -106,6 +118,25 @@ namespace :nodegroup do
     end
   end
 
+  desc 'Add a child group to a nodegroup'
+  task :addgroup => :environment do
+    nodegroup = get_group(ENV['name'])
+    addlgroup = get_group(ENV['group'])
+
+    begin
+     groups = nodegroup.node_groups
+     if groups.include?(addlgroup)
+       puts "Group '#{nodegroup.name}' already includes group '#{addlgroup.name}'"
+     else
+       groups << addlgroup
+       puts "Group '#{addlgroup.name}' added to node group '#{nodegroup.name}'"
+     end
+    rescue => e
+      puts e.message
+      exit 1
+    end
+  end
+
   desc 'Remove a class from a nodegroup'
   task :delclass => :environment do
     nodegroup = get_group(ENV['name'])
@@ -118,6 +149,25 @@ namespace :nodegroup do
       else
         classes.delete(nodeclass)
         puts "Class '#{nodeclass.name}' removed from node group '#{nodegroup.name}'"
+      end
+    rescue => e
+      puts e.message
+      exit 1
+    end
+  end
+
+  desc 'Remove a child group from a nodegroup'
+  task :delgroup => :environment do
+    nodegroup = get_group(ENV['name'])
+    addlgroup = get_group(ENV['group'])
+
+    begin
+      groups = nodegroup.node_groups
+      unless groups.include?(addlgroup)
+        puts "Group '#{nodegroup.name}' does not include groups '#{addlgroup.name}'"
+      else
+        groups.delete(addlgroup)
+        puts "Group '#{addlgroup.name}' removed from node group '#{nodegroup.name}'"
       end
     rescue => e
       puts e.message
