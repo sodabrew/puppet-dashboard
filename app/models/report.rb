@@ -7,15 +7,10 @@ class Report < ActiveRecord::Base
   has_many :resource_statuses,                      :dependent => :destroy
   has_many :events, :through => :resource_statuses
 
-  accepts_nested_attributes_for :metrics, :resource_statuses, :logs, :events
+  accepts_nested_attributes_for :logs, :metrics, :resource_statuses, :events
 
-  attr_accessible :time, :resource_statuses_attributes, :puppet_version, \
-                  :host, :logs_attributes, :status, :configuration_version, \
-                  :kind, :metrics_attributes, :source, :tags, :message, \
-                  :line, :file, :level, :events_attributes, \
-                  :out_of_sync_count, :title, :evaluation_time, \
-                  :skipped, :failed, :change_count, :resource_type, \
-                  :name, :category, :value
+  attr_accessible :host, :time, :status, :kind, :puppet_version, :configuration_version
+  attr_accessible :logs_attributes, :metrics_attributes, :resource_statuses_attributes, :events_attributes
 
   before_validation :assign_to_node
   validates_presence_of :host, :time, :kind
