@@ -10,20 +10,16 @@ class ReportsController < InheritedResources::Base
       format.html do
         if params[:kind] == "inspect"
           @reports = paginate_scope Report.inspections
+          @tab = false
+        elsif Node.possible_statuses.include?(params[:status])
+          @reports = paginate_scope Report.send(params[:status])
+          @tab = params[:status]
         else
-          @controller_action = 'all'
           @reports = paginate_scope Report.applies
+          @tab = 'all'
         end
       end
     end
-  end
-
-  [:failed, :changed, :unchanged, :pending].each do |action|
-    define_method(action) {
-      @reports = paginate_scope Report.send(action)
-      @controller_action = action.to_s
-      render :index
-    }
   end
 
   def create

@@ -53,11 +53,6 @@ PuppetDashboard::Application.routes do
   resources :reports do
     collection do
       get :search
-      get :all
-      get :failed
-      get :pending
-      get :changed
-      get :unchanged
     end
   end
 
