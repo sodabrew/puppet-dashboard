@@ -159,11 +159,18 @@ class NodesController < InheritedResources::Base
     end
   end
 
-  # TODO: routing currently can't handle nested resources due to node's id
-  # requirements
   def reports
     @node = resource
-    @reports = params[:kind] == "inspect" ? @node.reports.inspections : @node.reports.applies
+    if params[:kind] == "inspect"
+      @reports = @node.reports.inspections
+      @tab = false
+    elsif Node.possible_statuses.include?(params[:status])
+      @reports = @node.reports.send(params[:status])
+      @tab = params[:status]
+    else
+      @reports = @node.reports.applies
+      @tab = 'all'
+    end
     respond_to do |format|
       format.html { @reports = paginate_scope(@reports); render 'reports/index' }
     end
