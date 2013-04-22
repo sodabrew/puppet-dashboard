@@ -13,11 +13,12 @@
   - panels = []
   %ul#report-tabs.tabbed
     - Registry.each_callback :core, :report_view_widgets do |name, widget|
+      - panel_id = user_facing[name].downcase
       - panels << capture_haml do
-        %div.panel(id="#{user_facing[name].downcase}")
+        %div.panel(id="#{panel_id}")
           = widget.call self, report
-      %li(id="#{user_facing[name].downcase}-tab")
-        %a= h user_facing[name]
+      %li(id="#{panel_id}-tab")
+        %a(href= "##{panel_id}-tab")= h user_facing[name]
   - panels.each do |panel|
     = raw panel
 
