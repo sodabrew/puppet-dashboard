@@ -220,6 +220,9 @@ jQuery(document).ready(function(J) {
   });
   J('.pages_home_action #home-tabs li:first').click();
 
+  // If there's a tab id in the location hash, click it!
+  J(window.location.hash).click();
+
   init_sidebar_links();
   init_skiplink_target();
 });
