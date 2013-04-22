@@ -1,6 +1,6 @@
 class ResourceStatus < ActiveRecord::Base
   belongs_to :report, :include => :node
-  has_many :events, :class_name => 'ResourceEvent', :dependent => :destroy
+  has_many :events, :class_name => 'ResourceEvent', :dependent => :delete_all
 
   attr_readonly   :report_id
   attr_accessible :resource_type, :title, :evaluation_time, :file, :line, \
