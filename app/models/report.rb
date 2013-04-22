@@ -2,9 +2,10 @@ class Report < ActiveRecord::Base
   def self.per_page; SETTINGS.reports_per_page end # Pagination
   belongs_to :node
 
-  has_many :logs, :class_name => "ReportLog", :dependent => :destroy
-  has_many :resource_statuses, :dependent => :destroy
-  has_many :metrics, :dependent => :destroy
+  # See the after_destroy delete_resources method for more delete_all action
+  has_many :logs,   :class_name => 'ReportLog',     :dependent => :delete_all
+  has_many :metrics,                                :dependent => :delete_all
+  has_many :resource_statuses
   has_many :events, :through => :resource_statuses
 
   accepts_nested_attributes_for :metrics, :resource_statuses, :logs
@@ -16,6 +17,7 @@ class Report < ActiveRecord::Base
     :allow_nil => true,
     :message   => "already has a report for time and kind"
   after_save :update_node
+  after_destroy :delete_resources
   after_destroy :replace_last_report
 
   default_scope :order => 'time DESC', :include => :node
@@ -183,6 +185,13 @@ class Report < ActiveRecord::Base
 
       rs.status = resource_status_status
     end
+  end
+
+  # It is too expensive to use has_many ... :dependent => :destroy
+  # and unfortunately :dependent => :delete_all doesn't work :through.
+  def delete_resources
+    ResourceEvent.delete_all(:resource_status_id => resource_statuses.map(&:id))
+    ResourceStatus.delete_all(:report_id => id)
   end
 
   def replace_last_report
