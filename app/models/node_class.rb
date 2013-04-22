@@ -28,6 +28,10 @@ class NodeClass < ActiveRecord::Base
     SQL
     :group => 'node_classes.id'
 
+  def to_param
+    SETTINGS.numeric_url_slugs ? id.to_s : name
+  end
+
   def self.find_by_id_or_name!(identifier)
     find_by_id(identifier) or find_by_name!(identifier)
   end

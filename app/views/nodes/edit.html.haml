@@ -1,11 +1,11 @@
 #sidebar= render 'shared/node_manager_sidebar'
 #main
-  = form_for @node, :url => node_path(params[:id]), :html => {:id => "param_form"} do |f|
+  = form_for @node, :url => node_path(@node.id), :html => {:id => "param_form"} do |f|
     %input{:id => "force_update", :name => "force_update", :type => "hidden", :value => "false"}
     = render f
     .element.actions
       %button{:id => "submit_button"} Update
       or
-      = link_to 'Cancel', node_path(params[:id])
+      = link_to 'Cancel', node_path(@node.id)
   %script{:type=>"text/javascript"}
     register_ajax_submit("#param_form");
