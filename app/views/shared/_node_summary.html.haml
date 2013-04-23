@@ -2,6 +2,7 @@
   %tr{:style => 'text-color: white;'}
     %td{:colspan => 2}
       Puppet Node Summary
+      %span#status
 
   - @node_summary['display'].each do |status_pair|
     - status = status_pair['key']
@@ -14,7 +15,9 @@
 
     %tr{:class => status}
       %td.count_column
-        %span.count= node_count
+        %p.count
+          %span
+            = node_count
       %td
         %div
           %p.label
