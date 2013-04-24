@@ -676,7 +676,7 @@ body {
 
     table.primary { // this is marked up as a table, but not rendered that way
       tr {
-        cursor : pointer;
+        cursor: pointer;
         position: relative;
 
         &.unresponsive { @include node_summary_row( #888 )}
