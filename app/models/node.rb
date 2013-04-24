@@ -25,6 +25,14 @@ class Node < ActiveRecord::Base
   belongs_to :last_apply_report, :class_name => 'Report'
   belongs_to :last_inspect_report, :class_name => 'Report'
 
+  has_parameters
+
+  assigns_related :node_class, :node_group
+
+  fires :created, :on => :create
+  fires :updated, :on => :update
+  fires :removed, :on => :destroy
+
   def self.radiator_statuses
     ["unresponsive", "failed", "pending", "changed", "unchanged", "unreported", "all"]
   end
@@ -47,13 +55,14 @@ class Node < ActiveRecord::Base
     order("reported_at #{direction}") if direction
   }
 
-  has_parameters
+  scope :hidden,     where(:hidden => true)
+  scope :unhidden,   where(:hidden => false)
+  scope :unreported, where(:reported_at => nil)
 
-  assigns_related :node_class, :node_group
-
-  fires :created, :on => :create
-  fires :updated, :on => :update
-  fires :removed, :on => :destroy
+  scope :responsive, lambda {
+    where("last_apply_report_id IS NOT NULL AND reported_at >= ?",
+          SETTINGS.no_longer_reporting_cutoff.seconds.ago)
+  }
 
   scope :unresponsive, lambda {
     where("last_apply_report_id IS NOT NULL AND reported_at < ?",
@@ -62,19 +71,9 @@ class Node < ActiveRecord::Base
 
   possible_statuses.each do |node_status|
     scope node_status, lambda {
-      where("last_apply_report_id IS NOT NULL AND
-             reported_at >= ? AND
-             nodes.status = ?",
-             SETTINGS.no_longer_reporting_cutoff.seconds.ago,
-             node_status)
+      responsive.where("nodes.status = ?", node_status)
     }
   end
-
-  scope :unreported, where(:reported_at => nil)
-
-  scope :hidden, where(:hidden => true)
-
-  scope :unhidden, where(:hidden => false)
 
   def to_param
     SETTINGS.numeric_url_slugs ? id.to_s : name
@@ -136,6 +135,10 @@ class Node < ActiveRecord::Base
 
   def compliant_count
     last_apply_report.resource_statuses.pending(false).failed(false).count rescue nil
+  end
+
+  def self.count_by_status
+    Hash[possible_statuses.map{|s| [s, 0]}].merge(unhidden.responsive.group('status').count)
   end
 
   def self.to_csv_header

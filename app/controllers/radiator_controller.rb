@@ -3,14 +3,19 @@ class RadiatorController < InheritedResources::Base
 
   def index
     @node_summary = { 'display' => [] }
-    Node.radiator_statuses.map do |status|
+
+    # Get the primary statuses in one query
+    @node_summary.merge!(Node.count_by_status)
+
+    # Continue the loop to pick up other radiator statuses
+    Node.radiator_statuses.each do |status|
       case status
       when 'all'
         @node_summary['display'] << { 'key' => 'all', 'name' => 'Total' }
         @node_summary[status] = Node.unhidden.count
       else
         @node_summary['display'] << { 'key' => status, 'name' => status.capitalize }
-        @node_summary[status] = Node.send(status).unhidden.count
+        @node_summary[status] = @node_summary[status] || Node.send(status).unhidden.count
       end
     end
 
