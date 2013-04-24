@@ -21,7 +21,7 @@ body.radiator_controller {
     padding : 20px;
     .count_column {
       min-width: 2em;
-      width: 2em;
+      width: 2.5em;
     }
     position : absolute;
     height : 100%;
@@ -84,7 +84,7 @@ body.radiator_controller {
         }
         .count {
           text-align : right;
-          width : 1.75em;
+          width : 2em;
           display : inline-block;
           font-weight : bold;
           margin-top: -0.12em;
