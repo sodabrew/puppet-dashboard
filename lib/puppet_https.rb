@@ -6,6 +6,7 @@ class PuppetHttps
     connection = Net::HTTP.new(url.host, url.port)
     connection.use_ssl = true
     if authenticate
+      connection.verify_mode = OpenSSL::SSL::VERIFY_PEER
       certpath = File.join(Rails.root, SETTINGS.certificate_path)
       pkey_path = File.join(Rails.root, SETTINGS.private_key_path)
       if File.exists?(certpath)
@@ -14,6 +15,8 @@ class PuppetHttps
       if File.exists?(pkey_path)
         connection.key = OpenSSL::PKey::RSA.new(File.read(pkey_path))
       end
+    else
+      connection.verify_mode = OpenSSL::SSL::VERIFY_NONE
     end
     connection.start { |http| http.request(req) }
   end
