@@ -1,6 +1,7 @@
 Contributors
 ------------
 
+* Aaron Stone <aaron@serendipity.cx>
 * Adrien Thebo <adrien@puppetlabs.com>
 * Andreas Zuber <zuber@puzzle.ch>
 * Andrew Maier <dev+andrewmaier@hashrocket.com>
@@ -13,14 +14,18 @@ Contributors
 * Danijel Ilisin <danijel.ilisin@sinnerschrader.com>
 * Devon Harless <devon@puppetlabs.com>
 * Evan Sparkman <evansparkman@esdezines.(none)>
+* Filip Hrbek <filip.hrbek@gmail.com>
+* Glenn Poston <gposton1040@gmail.com>
 * Ian Ward Comfort <icomfort@stanford.edu>
 * Igal Koshevoy <igal@pragmaticraft.com>
 * Jacob Helwig <jacob@puppetlabs.com>
 * James Turnbull <james@puppetlabs.com>
+* Jeff Weiss <jeff.weiss@puppetlabs.com>
 * Jesse Wolfe <jes5199@gmail.com>
 * Jonathan Grochowski <jonathan@puppetlabs.com>
 * Josh Cooper <josh@puppetlabs.com>
 * Joshua Harlan Lifton <lifton@puppetlabs.com>
+* Karel Brezina <karel.brezina@gmail.com>
 * Matt Robinson <matt@puppetlabs.com>
 * Matthaus Litteken <matthaus@puppetlabs.com>
 * Max Martin <max@puppetlabs.com>
@@ -40,3 +45,4 @@ Contributors
 * Rob <rob@ldg.net>
 * Saj Goonatilleke <sg@redu.cx>
 * Scott Smith <scott@ohlol.net>
+* Zachary Adam Kaplan <razic@viralkitty.com>
