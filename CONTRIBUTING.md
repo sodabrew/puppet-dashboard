@@ -41,7 +41,7 @@ Checklist (and a short version for the impatient)
 
       - Make sure you have a [Redmine account](http://projects.puppetlabs.com)
 
-      - Sign the [Contributor License Agreement](https://projects.puppetlabs.com/contributor_licenses/sign)
+      - Sign the [Contributor License Agreement](https://cla.puppetlabs.com/)
 
     * Preferred method:
 
@@ -122,7 +122,7 @@ The long version
       Labs Contributor License Agreement (CLA).
 
       You can access the CLA via the
-      [Contributor License Agreement link](https://projects.puppetlabs.com/contributor_licenses/sign)
+      [Contributor License Agreement link](https://cla.puppetlabs.com/)
       in the top menu bar of our Redmine instance.  Once you've signed
       the CLA, a badge will show up next to your name on the
       [Puppet Project Overview Page](http://projects.puppetlabs.com/projects/puppet?jump=welcome),
@@ -274,7 +274,7 @@ Additional Resources
 
 * [Patchwork](https://patchwork.puppetlabs.com)
 
-* [Contributor License Agreement](https://projects.puppetlabs.com/contributor_licenses/sign)
+* [Contributor License Agreement](https://cla.puppetlabs.com/)
 
 * [General GitHub documentation](http://help.github.com/)
 

@@ -39,14 +39,13 @@ start() {
             return 0
         fi
 
-        # This is a no longer a dirty, dirty hack, we now daemonize the server.
-        # Also: We have access to daemon.
-        daemon --user ${DASHBOARD_USER} --pidfile ${PIDFILE} "${DASHBOARD_RUBY} ${DASHBOARD_HOME}/script/server -e ${DASHBOARD_ENVIRONMENT} -p ${DASHBOARD_PORT} -b ${DASHBOARD_IFACE} -d"
+        # Use daemon to background the server and write the pidfile,
+        # instead of rails / webrick.
+        daemon --user ${DASHBOARD_USER} --pidfile ${PIDFILE} "${DASHBOARD_RUBY} ${DASHBOARD_HOME}/script/server -e ${DASHBOARD_ENVIRONMENT} -p ${DASHBOARD_PORT} -b ${DASHBOARD_IFACE}"
 
-        # Grab the pid. pidof doesn't work well here, so we use pgrep
-        local PID=`pgrep -f "${DASHBOARD_RUBY} ${DASHBOARD_HOME}/script/server -e ${DASHBOARD_ENVIRONMENT} -p ${DASHBOARD_PORT} -b ${DASHBOARD_IFACE} -d"`
-        echo $PID > ${PIDFILE}
-
+        # Wait five seconds, then check if the pid is still valid,
+        # since daemon returns success if the process is executed,
+        # but does not return an error if it exits right away.
         sleep 5
 
         check_status
