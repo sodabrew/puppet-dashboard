@@ -26,7 +26,7 @@ class BasicSchema < ActiveRecord::Migration
 
   def self.down
     drop_table :assignments
-    drop_table :ndoes
+    drop_table :nodes
     drop_table :services
   end
 end
