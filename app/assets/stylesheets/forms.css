@@ -2,6 +2,7 @@ form {
 }
 
 form .element {
+  padding-right: 20%;
   margin: 0 0 .5em;
 }
 
