@@ -60,10 +60,12 @@ class NodesController < InheritedResources::Base
   end
 
   def search
+    @comparators = [['is', 'eq'], ['is not', 'ne'], ['>', 'gt'], ['>=', 'ge'], ['<', 'lt'], ['<=', 'le']]
     index! do |format|
       format.html {
-        @search_params = params['search_params'] || []
+        @search_params = params['node']['parameter_attributes'].values rescue []
         @search_params.delete_if {|param| param.values.any?(&:blank?)}
+        @search_params.each {|param| param['fact'] = param['key'] }
         nodes = @search_params.empty? ? [] : Node.find_from_inventory_search(@search_params)
         set_collection_ivar(nodes)
         render :inventory_search
