@@ -354,7 +354,7 @@ describe NodesController do
       end
 
       it "should allow specification of 'parameter_attributes'" do
-        @params[:node].merge! :parameter_attributes => {"1" => {:key => 'foo', :value => 'bar'}}
+        @params[:node].merge! :parameter_attributes => [{:key => 'foo', :value => 'bar'}]
 
         do_put
 
@@ -377,7 +377,7 @@ describe NodesController do
       end
 
       it "should fail if parameter_attributes are specified" do
-        @params[:node].merge! :parameter_attributes => {"1" => {:key => 'foo', :value => 'bar'}}
+        @params[:node].merge! :parameter_attributes => [{:key => 'foo', :value => 'bar'}]
 
         do_put
 
@@ -533,12 +533,12 @@ describe NodesController do
     end
 
     it "should strip empty search parameters" do
-      expected_param = {'facts' => 'foo', 'comparator' => 'eq', 'value' => 'bar'}
+      expected_param = {'fact' => 'foo', 'comparator' => 'eq', 'value' => 'bar'}
       @params['search_params'] = [
-        {'facts' => '', 'comparator' => '', 'values' => ''},
-        {'facts' => 'foo', 'comparator' => '', 'values' => ''},
-        {'facts' => '', 'comparator' => 'eq', 'values' => ''},
-        {'facts' => '', 'comparator' => '', 'values' => 'bar'},
+        {'fact' => '', 'comparator' => '', 'values' => ''},
+        {'fact' => 'foo', 'comparator' => '', 'values' => ''},
+        {'fact' => '', 'comparator' => 'eq', 'values' => ''},
+        {'fact' => '', 'comparator' => '', 'values' => 'bar'},
         expected_param,
       ]
 

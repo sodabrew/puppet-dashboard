@@ -77,7 +77,7 @@ describe '/nodes/edit' do
   describe 'editing interface' do
     describe "for parameters" do
       before :each do
-        @node.parameter_attributes = {"1" => {:key => 'foo', :value => 'bar'}}
+        @node.parameter_attributes = [{:key => 'foo', :value => 'bar'}]
       end
 
       it "should allow editing parameters with node classification enabled" do

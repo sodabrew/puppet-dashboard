@@ -1,8 +1,8 @@
 - parameters = parameter_input  # change silly partial-based variable name
 - parameter_index = 0
-- new_id_placeholder = "NEW_ID_PLACEHOLDER"
 - object_name = controller.controller_name.singularize
-- entity_name = defined?(entity_name) && entity_name ? entity_name : 'parameter'
+- form_prefix = form_prefix || "#{object_name}[parameter_attributes]"
+- entity_name = entity_name || 'parameter'
 - comparators = comparators || nil
 - colspan = comparators ? 4 : 3
 %h3= entity_name.capitalize.pluralize
@@ -25,12 +25,12 @@
     - # non-visible row that we will clone for the Add Parameter button
     %tr.parameter{ :style => 'display: none;' }
       %td.key
-        = text_field_tag "#{object_name}[parameter_attributes][#{new_id_placeholder}][key]", '', :placeholder => "key", :disabled => true
+        = text_field_tag "NEW_KEY", '', :placeholder => "key", :disabled => true
       - if comparators
         %td.comparator
-          = select_tag "#{object_name}[parameter_attributes][#{new_id_placeholder}][comparator]", options_for_select(comparators), :disabled => true
+          = select_tag "NEW_COMP", options_for_select(comparators), :disabled => true
       %td.value
-        = text_field_tag "#{object_name}[parameter_attributes][#{new_id_placeholder}][value]", '', :placeholder => "value", :disabled => true
+        = text_field_tag "NEW_VALUE", '', :placeholder => "value", :disabled => true
       %td.actions
         %a.icon.delete{:href => '#',
           :onclick => "jQuery(this).parents('tr').remove()".html_safe}
@@ -41,12 +41,12 @@
       - parameter_index += 1
       %tr.parameter
         %td.key
-          = text_field_tag "#{object_name}[parameter_attributes][#{parameter_index}][key]", param.key, :placeholder => "key"
+          = text_field_tag "#{form_prefix}[][key]", param[:key], :placeholder => "key"
         - if comparators
           %td.comparator
-            = select_tag "#{object_name}[parameter_attributes][#{parameter_index}][comparator]", options_for_select(comparators)
+            = select_tag "#{form_prefix}[][comparator]", options_for_select(comparators, param[:comparator])
         %td.value
-          = text_field_tag "#{object_name}[parameter_attributes][#{parameter_index}][value]", param.value, :placeholder => "value"
+          = text_field_tag "#{form_prefix}[][value]", param[:value], :placeholder => "value"
         %td.actions
           %a.icon.delete{:href => '#',
             :onclick => "jQuery(this).parents('tr').remove()".html_safe}
@@ -56,12 +56,12 @@
     - parameter_index += 1
     %tr.parameter
       %td.key
-        = text_field_tag "#{object_name}[parameter_attributes][#{parameter_index}][key]", '', :placeholder => "key"
+        = text_field_tag "#{form_prefix}[][key]", '', :placeholder => "key"
       - if comparators
         %td.comparator
-          = select_tag "#{object_name}[parameter_attributes][#{parameter_index}][comparator]", options_for_select(comparators)
+          = select_tag "#{form_prefix}[][comparator]", options_for_select(comparators)
       %td.value
-        = text_field_tag "#{object_name}[parameter_attributes][#{parameter_index}][value]", '', :placeholder => "value"
+        = text_field_tag "#{form_prefix}[][value]", '', :placeholder => "value"
       %td.actions
         %a.icon.delete{:href => '#',
           :onclick => "jQuery(this).parents('tr').remove()".html_safe}
@@ -69,13 +69,13 @@
 :javascript
   function set_parameter_index(param_tr) {
     var new_index = new Date().getTime();
-    param_tr.find( jQuery("[name='#{object_name}[parameter_attributes][#{new_id_placeholder}][key]']") )
-      .attr("id", "#{object_name}_parameter_attributes_" + new_index + "_key")
-      .attr("name", "#{object_name}[parameter_attributes][" + new_index + "][key]");
-    param_tr.find( jQuery("[name='#{object_name}[parameter_attributes][#{new_id_placeholder}][comparator]']") )
-      .attr("id", "#{object_name}_parameter_attributes_" + new_index + "_comparator")
-      .attr("name", "#{object_name}[parameter_attributes][" + new_index + "][comparator]");
-    param_tr.find( jQuery("[name='#{object_name}[parameter_attributes][#{new_id_placeholder}][value]']") )
-      .attr("id", "#{object_name}_parameter_attributes_" + new_index + "_value")
-      .attr("name", "#{object_name}[parameter_attributes][" + new_index + "][value]");
+    param_tr.find( jQuery("[name='NEW_KEY']") )
+      .attr("id", "#{form_prefix.tr('[]', '_')}" + new_index + "_key")
+      .attr("name", "#{form_prefix}[][key]");
+    param_tr.find( jQuery("[name='NEW_COMP']") )
+      .attr("id", "#{form_prefix.tr('[]', '_')}" + new_index + "_comparator")
+      .attr("name", "#{form_prefix}[][comparator]");
+    param_tr.find( jQuery("[name='NEW_VALUE']") )
+      .attr("id", "#{form_prefix.tr('[]', '_')}" + new_index + "_value")
+      .attr("name", "#{form_prefix}[][value]");
   }

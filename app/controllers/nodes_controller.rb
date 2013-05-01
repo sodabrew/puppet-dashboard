@@ -34,7 +34,6 @@ class NodesController < InheritedResources::Base
           node = Node.find_by_name(params[:node][:name])
 
           unless(force_create?)
-
             new_conflicts_message = get_new_conflicts_message_as_html({}, node)
             if new_conflicts_message
               render_conflicts_html new_conflicts_message, "Create", "jQuery('#force_create').attr('value', 'true'); jQuery('#submit_button').click();"
@@ -63,9 +62,9 @@ class NodesController < InheritedResources::Base
     @comparators = [['is', 'eq'], ['is not', 'ne'], ['>', 'gt'], ['>=', 'ge'], ['<', 'lt'], ['<=', 'le']]
     index! do |format|
       format.html {
-        @search_params = params['node']['parameter_attributes'].values rescue []
+        @search_params = params['search_params'] || []
+        @search_params.each {|param| param['fact'] = param['fact'] || param['key'] }
         @search_params.delete_if {|param| param.values.any?(&:blank?)}
-        @search_params.each {|param| param['fact'] = param['key'] }
         nodes = @search_params.empty? ? [] : Node.find_from_inventory_search(@search_params)
         set_collection_ivar(nodes)
         render :inventory_search
@@ -108,7 +107,6 @@ class NodesController < InheritedResources::Base
           node = Node.find_by_id(params[:id])
 
           unless(force_update?)
-
             new_conflicts_message = get_new_conflicts_message_as_html(old_conflicts, node)
             if new_conflicts_message
               render_conflicts_html new_conflicts_message, "Update", "jQuery('#force_update').attr('value', 'true'); jQuery('#submit_button').click();"
