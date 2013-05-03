@@ -14,7 +14,7 @@
       - tab_statuses.each do |tab_status|
         %li{:id => "#{tab_status}-tab", :class => (tab_status == @controller_action ? 'active' : '')  }
           - if tab_status == 'all'
-            %a{:href => '/reports'}= h tab_status.humanize
+            %a{:href => url_for(:action => 'reports')}= h tab_status.humanize
           - else
-            %a{:href => "/reports/#{tab_status}"}= h tab_status.humanize
+            %a{:href => url_for(:action => 'reports', :controller => tab_status)}= h tab_status.humanize
     = render 'reports/reports_table', :reports => @reports, :node => @node
