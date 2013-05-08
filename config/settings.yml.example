@@ -89,6 +89,16 @@ reports_per_page: 20
 # Previously Dashboard used only ID numbers as URL slugs, set to true to return to that style.
 numeric_url_slugs: false
 
+# Adds optional custom links in the top bar of puppet dashboard.
+# Exemple that will add two links:
+#custom_links:
+# -
+#   href: /link/href
+#   title: The title that will be displayed
+# -
+#   href: /node_groups/1
+#   title: Special group
+
 # Generate a new secret_token for production use!
 secret_token: 'b1bbd28f6f9ebfc25f09da9bff4643f75d5ad8c8da8b60234168c81cd6d32c15e5e5421196ee99da248d37d84f73c9ecb38608fc0d8b2709872290a3f43b244e'
 #===[ fin ]=============================================================

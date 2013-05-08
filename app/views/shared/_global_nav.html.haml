@@ -26,5 +26,9 @@
           = callback.call self
         - Registry.each_callback :core, :account_widgets do |callback|
           = callback.call self
+        - if SETTINGS.custom_links
+          - for link in SETTINGS.custom_links
+            %li
+              %a{:href => "#{link["href"]}"}= link['title']
         %li#navigation-autorefresh
           <label><input type="checkbox" id="autorefresh" style="vertical-align: baseline;" /> Refresh this page automatically? <span id="autorefresh_countdown" style="display: inline-block; width: 1em; text-align: right;">&nbsp;</span></label>
