@@ -1,3 +1,5 @@
+require "#{Rails.root}/lib/progress_bar"
+
 namespace :reports do
   desc 'Prune old reports from the databases, will print help if run without arguments'
   task :prune => :environment do
@@ -49,20 +51,30 @@ UNITS:
     end
 
     cutoff = Time.now.gmtime - (upto * units[unit].to_i)
-    puts "Deleting reports before #{cutoff}..."
-
     # Iterate over the affected nodes, since each node's last report may have to be adjusted
     affected_nodes = Node.find(:all, :include => 'reports', :conditions => ['reports.time < ?', cutoff])
-    deleted_count = affected_nodes.inject(0) { |count, node| count + node.prune_reports(cutoff) }
+    puts "#{Time.now.to_s(:db)}: Deleting reports before #{cutoff} for #{affected_nodes.count} nodes"
 
-    puts "Deleted #{deleted_count} reports."
+    pbar = ProgressBar.new('Deleting', affected_nodes.count, STDOUT)
+    deleted_count = 0
+
+    begin
+      affected_nodes.each do |node|
+        deleted_count += node.prune_reports(cutoff)
+        pbar.inc
+      end
+    rescue SignalException
+      # Trap signals (e.g. CTRL-C) so that we can show how far we got
+    end
+
+    pbar.finish
+    puts
+    puts "#{Time.now.to_s(:db)}: Deleted #{deleted_count} reports."
   end
 
   namespace :prune do
     desc 'Delete orphaned records whose report has already been deleted'
     task :orphaned => :environment do
-      require "#{Rails.root}/lib/progress_bar"
-
       report_dependent_deletion = 'report_id not in (select id from reports)'
 
       orphaned_tables = ActiveSupport::OrderedHash[
