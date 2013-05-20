@@ -209,6 +209,29 @@ module NodeGroupGraph
     nodes_with_sources.keys
   end
 
+  def compare(a,b)
+    return -1 unless b
+    return 1  unless a
+    a <=> b
+  end
+
+  def all_nodes_ordered(s,o)
+    r = nodes_with_sources.keys
+    case s
+    when 'name'
+      ss = 'name'
+    when 'status'
+      ss = 'status'
+    else
+      ss = 'reported_at'
+    end
+    r = r.sort {|x,y| compare(x[ss], y[ss]) }
+    if (o == '0')
+      r = r.reverse!
+    end
+    return r
+  end
+
   def nodes_with_sources
     return @nodes_with_sources if @nodes_with_sources
     all = {}

@@ -192,7 +192,11 @@ class NodesController < InheritedResources::Base
       scope_names.each do |scope_name|
         scope = scope.send(scope_name)
       end
-      set_collection_ivar(scope.with_last_report.by_report_date)
+      order = params[:o]
+      sort = params[:s]
+      scope = scope.send(:custom_sort, sort, order)
+      set_collection_ivar(scope.with_last_report)
+
 
       format.html { render :index }
       format.json { render :json => collection }
