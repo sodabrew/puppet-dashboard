@@ -137,8 +137,13 @@ namespace :nodegroup do
       exit
     end
 
-    given_parameters = Hash[ ENV['parameters'].split(',').map do |param|
-      param_array = param.split('=',2)
+    #We do a ton of reversing here, because Ruby 1.8 doesn't have lookbehind
+    given_parameters = Hash[ ENV['parameters'].reverse.split(/,(?!\\)/).map do |param|
+      param_array = param.split(/=(?!\\)/,2).map do |reverse_element|
+        reverse_element.reverse.gsub('\\=', '=').gsub('\\,', ',')
+      end
+
+      param_array.reverse!
       if param_array.size != 2
         raise ArgumentError, "Could not parse parameter #{param_array.first} given. Perhaps you're missing a '='"
       end
