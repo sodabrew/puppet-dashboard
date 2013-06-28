@@ -1,7 +1,9 @@
 # Add your own tasks in files placed in lib/tasks ending in .rake,
 # for example lib/tasks/capistrano.rake, and they will automatically be available to Rake.
+RAKE_ROOT = File.dirname(__FILE__)
+
 require 'rake'
-require(File.join(File.dirname(__FILE__), 'config', 'boot'))
+require(File.join(RAKE_ROOT, 'config', 'boot'))
 
 ["rake/testtask","rdoc/task","thread","tasks/rails"].each do |dependency|
   begin
@@ -12,7 +14,10 @@ require(File.join(File.dirname(__FILE__), 'config', 'boot'))
   end
 end
 
-Dir['ext/packaging/tasks/**/*'].sort.each { |t| load t }
+begin
+  load File.join(RAKE_ROOT, 'ext', 'packaging', 'packaging.rake')
+rescue LoadError
+end
 
 build_defs_file = 'ext/build_defaults.yaml'
 if File.exist?(build_defs_file)
