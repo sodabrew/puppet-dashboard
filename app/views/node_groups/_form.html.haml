@@ -15,7 +15,7 @@
 
   - if SETTINGS.use_external_node_classification
     .element
-      = render :partial => 'parameters/parameter_input', :object => form.object.parameters, :locals => { :entity_name => 'variable' }
+      = render :partial => 'parameters/parameter_input', :object => form.object.parameters.sort_by{|param| param[:name]}, :locals => { :entity_name => 'variable' }
 
     = render :partial => 'shared/tokenized_text_box',
       :locals => { :model => 'node_class', :title => 'Classes', :source => 'node_group' }
