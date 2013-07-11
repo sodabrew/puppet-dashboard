@@ -22,6 +22,7 @@ group :assets do
   gem 'sass-rails'    , '~> 3.2'
   gem 'haml-rails'    , '~> 0.3.5'
   gem 'jquery-rails'  , '~> 2.1'
+  gem 'therubyracer'
   gem 'uglifier'      , '~> 1.0'
   gem 'execjs' # Will use system-available JS runtime
 end
