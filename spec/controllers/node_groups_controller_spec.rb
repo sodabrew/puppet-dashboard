@@ -72,7 +72,7 @@ describe NodeGroupsController do
       end
 
       it "should allow specification of 'parameter_attributes'" do
-        @params[:node_group].merge! :parameter_attributes => {"1" => {:key => 'foo', :value => 'bar'}}
+        @params[:node_group].merge! :parameter_attributes => [{:key => 'foo', :value => 'bar'}]
 
         do_put
 
@@ -134,7 +134,7 @@ describe NodeGroupsController do
       end
 
       it "should fail if parameter_attributes are specified" do
-        @params[:node_group].merge! :parameter_attributes => {"1" => {:key => 'foo', :value => 'bar'}}
+        @params[:node_group].merge! :parameter_attributes => [{:key => 'foo', :value => 'bar'}]
 
         do_put
 

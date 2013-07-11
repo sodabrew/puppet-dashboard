@@ -95,6 +95,10 @@ table.inspector td.value {
   width: 100%;
 }
 
+table.inspector td.comparator {
+  vertical-align: middle;
+}
+
 table.inspector tfoot td {
   border: 1px solid #DDD;
   background: #DDD;

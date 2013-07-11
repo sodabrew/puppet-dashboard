@@ -93,7 +93,7 @@ class Node < ActiveRecord::Base
     url = "https://#{SETTINGS.inventory_server}:#{SETTINGS.inventory_port}/" +
           "production/facts_search/search?#{ queries.join('&') }"
 
-    matches = JSON.parse(PuppetHttps.get(url, 'pson'))
+    matches = JSON.parse(PuppetHttps.get(url, 'pson')) rescue []
     matches.map!(&:downcase)
     nodes = Node.find_all_by_name(matches)
     found = nodes.map(&:name)

@@ -176,23 +176,23 @@ describe Node do
 
     it "should create parameter objects for new parameters" do
       lambda {
-        @node.parameter_attributes = {"1" => {:key => :key, :value => :value}}
+        @node.parameter_attributes = [{:key => :key, :value => :value}]
         @node.save
       }.should change(Parameter, :count).by(1)
     end
 
     it "should create and destroy parameters based on updated parameters" do
-      @node.parameter_attributes = {"1" => {:key => :key1, :value => :value1}}
+      @node.parameter_attributes = [{:key => :key1, :value => :value1}]
       lambda {
-        @node.parameter_attributes = {"1" => {:key => :key2, :value => :value2}}
+        @node.parameter_attributes = [{:key => :key2, :value => :value2}]
         @node.save
       }.should_not change(Parameter, :count)
     end
 
     it "should create timeline events for creation and destruction" do
-      @node.parameter_attributes = {"1" => {:key => :key1, :value => :value1}}
+      @node.parameter_attributes = [{:key => :key1, :value => :value1}]
       lambda {
-        @node.parameter_attributes = {"1" => {:key => :key2, :value => :value2}}
+        @node.parameter_attributes = [{:key => :key2, :value => :value2}]
         @node.save
       }.should change(TimelineEvent, :count).by_at_least(2)
     end
