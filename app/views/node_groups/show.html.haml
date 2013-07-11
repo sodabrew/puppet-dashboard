@@ -54,7 +54,7 @@
       - Registry.each_callback :core, :node_group_view_widgets do |thing|
         = thing.call self, @node_group
       - if @node_group.all_nodes.present?
-        = render 'nodes/nodes', :nodes => @node_group.all_nodes, :container => @node_group
+        = render 'nodes/nodes', :nodes => @node_group.all_nodes_ordered(params[:s], params[:o]), :container => @node_group
       - else
         = describe_no_matches_for :nodes, :group
       %br.clear

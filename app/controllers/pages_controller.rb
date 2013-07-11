@@ -1,6 +1,6 @@
 class PagesController < ApplicationController
   def home
-    @all_nodes = Node.unhidden.by_report_date
+    @all_nodes = Node.unhidden.custom_sort(params[:s], params[:o])
 
     @unreported_nodes         = @all_nodes.unreported
     @unresponsive_nodes       = @all_nodes.unresponsive

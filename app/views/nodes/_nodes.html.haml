@@ -28,13 +28,28 @@
           %th(colspan="5")
             Resources
       %tr
+        - if params[:o] 
+          - order = (Integer(params[:o]) + 1) % 2
+        - else
+          - order = 0
+        - if params[:s]
+          - sort_attr = params[:s]
+        - else
+          - sort_attr = "reported_at"
         %th.status
+          - if sort_attr == "status"
+            - arrow_state = order == 0 ? "&darr;" : "&uarr;"
+          = link_to "#{arrow_state} St".html_safe, url_for(:o => order, :s => "status")
         %th.node
-          Node
+          - if sort_attr == "name"
+            - arrow_name = order == 0 ? "&darr;" : "&uarr;"
+          = link_to "#{arrow_name} Node".html_safe, url_for(:o => order, :s => "name")
         - unless container.nil?
           %th Source
         %th.latest_report.desc
-          &darr; Latest report
+          - if sort_attr == "reported_at"
+            - arrow_report = order == 0 ? "&darr;" : "&uarr;"
+          = link_to "#{arrow_report} Latest report".html_safe, url_for(:o => order, :s => "reported_at")
         - column_filter[ selected_status ].each do |status|
           %th
             = h status.capitalize

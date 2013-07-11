@@ -49,6 +49,21 @@ class Node < ActiveRecord::Base
   scope :by_report_date, order('reported_at DESC')
 
   scope :search, lambda{ |q| where('name LIKE ?', "%#{q}%") unless q.blank? }
+  
+  scope :custom_sort, proc { |sort_attribute, order|
+    direction = {"1" => 'DESC', "0" => 'ASC'}[order]
+    sort_attr = {
+      'name' => 'name',
+      'status' => 'status',
+      'reported_at' => 'reported_at'
+    }[sort_attribute]
+    if (sort_attr && direction)
+      Rails.logger.debug "#{sort_attr} #{direction}"
+      {:order => "#{sort_attr} #{direction}"}
+    else
+      {:order => 'reported_at DESC'}
+    end
+  }
 
   scope :by_latest_report, proc { |order|
     direction = {1 => 'ASC', 0 => 'DESC'}[order]
