@@ -13,7 +13,7 @@ describe "/node_groups/edit.html.haml" do
     describe "in editing interface" do
       describe "for parameters" do
         before :each do
-          @node_group.parameter_attributes = {"1" => {:key => 'foo', :value => 'bar'}}
+          @node_group.parameter_attributes = [{:key => 'foo', :value => 'bar'}]
         end
 
         it "should allow editing parameters with node classification enabled" do

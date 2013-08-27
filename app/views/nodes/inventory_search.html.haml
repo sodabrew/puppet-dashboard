@@ -1,4 +1,3 @@
-- @index = 0
 #sidebar= render :partial => 'shared/node_manager_sidebar'
 #main
 
@@ -8,11 +7,8 @@
 
   .item
     .section
-      = form_tag url_for(:action => :search), :method => :get, :id => "search_params" do
-        = render :partial => 'nodes/inventory_parameter', :collection => @search_params
-        = render :partial => 'nodes/inventory_parameter'
-        = link_to_function("+", :id => "add_button", :class => "add button") { |page|  page.insert_html :before, 'add_button', :partial => 'nodes/inventory_parameter' }
-        %br
+      = form_for url_for(:action => :search), :method => :get, :id => "search_params" do |form|
+        = render :partial => 'parameters/parameter_input', :object => @search_params, :locals => { :entity_name => 'search criteria', :comparators => @comparators, :form_prefix => 'search_params' }
         %button#search_button Search
 
     - if @nodes
