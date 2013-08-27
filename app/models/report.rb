@@ -217,4 +217,17 @@ class Report < ActiveRecord::Base
       raise "There's no such thing as a #{kind.inspect} report"
     end
   end
+
+  # Delete many reports in one transaction without instantiating the models
+  # NOTE: does not fix up the last_report fields on the related Node
+  def self.bulk_delete(report_ids)
+    transaction do
+      status_ids = ResourceStatus.where(:report_id => report_ids).pluck(:id)
+      ResourceEvent.delete_all(:resource_status_id => status_ids)
+      ResourceStatus.delete_all(:report_id => report_ids)
+      ReportLog.delete_all(:report_id => report_ids)
+      Metric.delete_all(:report_id => report_ids)
+      Report.delete_all(:id => report_ids)
+    end
+  end
 end

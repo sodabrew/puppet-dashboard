@@ -218,6 +218,16 @@ class Node < ActiveRecord::Base
     end
   end
 
+  def prune_reports(cutoff)
+    transaction do
+      old_report_ids = self.reports.where('reports.time < ?', cutoff).pluck(:id)
+      deleted_count = Report.bulk_delete(old_report_ids)
+      self.find_and_assign_last_inspect_report
+      self.find_and_assign_last_apply_report
+      deleted_count
+    end
+  end
+
   def facts
     return @facts if @facts
     url = "https://#{SETTINGS.inventory_server}:#{SETTINGS.inventory_port}/" +
