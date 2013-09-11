@@ -73,6 +73,7 @@ strong {
 
 code, pre {
   font-family: "Monaco", "Courier New", Courier, fixed-width;
+  white-space: pre;
 }
 
 p.error {
