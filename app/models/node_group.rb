@@ -3,6 +3,7 @@ class NodeGroup < ActiveRecord::Base
 
   include NodeGroupGraph
   extend FindFromForm
+  extend FindByIdOrName
 
   has_many :node_group_class_memberships, :dependent => :destroy
   has_many :node_classes, :through => :node_group_class_memberships
@@ -41,10 +42,6 @@ class NodeGroup < ActiveRecord::Base
 
   def to_param
     SETTINGS.numeric_url_slugs ? id.to_s : name
-  end
-
-  def self.find_by_id_or_name!(identifier)
-    find_by_id(identifier) or find_by_name!(identifier)
   end
 
   def inspect; "#<NodeGroup id:#{id}, name:#{name.inspect}>" end

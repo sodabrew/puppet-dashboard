@@ -3,6 +3,7 @@ class Node < ActiveRecord::Base
 
   include NodeGroupGraph
   extend FindFromForm
+  extend FindByIdOrName
 
   validates_presence_of :name
   validates_uniqueness_of :name, :case_sensitive => false
@@ -77,10 +78,6 @@ class Node < ActiveRecord::Base
 
   def to_param
     SETTINGS.numeric_url_slugs ? id.to_s : name
-  end
-
-  def self.find_by_id_or_name!(identifier)
-    find_by_id(identifier) or find_by_name!(identifier)
   end
 
   def self.find_from_inventory_search(search_params={})
