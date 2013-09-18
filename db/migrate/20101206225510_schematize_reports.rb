@@ -1,15 +1,5 @@
 require "#{Rails.root}/lib/progress_bar"
 
-class Report < ActiveRecord::Base
-  serialize :report, Puppet::Transaction::Report
-
-  def report
-    rep = read_attribute(:report)
-    rep.extend(ReportExtensions) unless rep.nil? or rep.is_a? ReportExtensions
-    rep
-  end
-end
-
 class SchematizeReports < ActiveRecord::Migration
   def self.up
     create_table :report_logs do |t|

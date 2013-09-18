@@ -4,12 +4,19 @@ describe Report do
   include DescribeReports
 
   describe "on creation" do
+    let :node do
+      Node.generate
+    end
+    let :report_yaml do
+      File.read(File.join(Rails.root, "spec/fixtures/sample_report.yml"))
+    end
+    let :raw_report do
+      YAML.load(report_yaml, :safe => true, :deserialize_symbols => true)
+    end
+
     before :each do
-      @now = Time.now
-      Time.stubs(:now).returns(@now)
-      @node = Node.generate
-      @report_yaml = File.read(File.join(Rails.root, "spec/fixtures/sample_report.yml"))
-      @report_data = YAML.load(@report_yaml).extend(ReportExtensions)
+      now = Time.now
+      Time.stubs(:now).returns(now)
     end
 
     it "sets status correctly based on whether the report contains failures" do
@@ -23,11 +30,19 @@ describe Report do
     end
 
     it "should consider a blank report to be invalid" do
-      lambda { Report.create_from_yaml('') }.should raise_error(ArgumentError)
+      Report.create_from_yaml('').should == nil
+      DelayedJobFailure.count.should == 1
+      DelayedJobFailure.first.summary.should == 'Importing report'
+      DelayedJobFailure.first.details.should == 'The supplied report did not deserialize into a Hash'
+      DelayedJobFailure.first.backtrace.any? {|trace| trace =~ /report\.rb:\d+:in.*create_from_yaml/}.should be_true
     end
 
     it "should consider a report in incorrect format to be invalid" do
-      lambda { Report.create_from_yaml('foo bar baz bad data invalid') }.should raise_error(ArgumentError)
+      Report.create_from_yaml('foo bar baz bad data invalid').should == nil
+      DelayedJobFailure.count.should == 1
+      DelayedJobFailure.first.summary.should == 'Importing report'
+      DelayedJobFailure.first.details.should == 'The supplied report did not deserialize into a Hash'
+      DelayedJobFailure.first.backtrace.any? {|trace| trace =~ /report\.rb:\d+:in.*create_from_yaml/}.should be_true
     end
 
     it "should consider a report in correct format to be valid" do
@@ -36,24 +51,26 @@ describe Report do
     end
 
     it "is not created if a report for the same host exists with the same time and kind" do
-      Report.create_from_yaml(@report_yaml)
-      lambda {
-        Report.create_from_yaml(@report_yaml)
-      }.should raise_error(ActiveRecord::RecordInvalid, 'Validation failed: Host already has a report for time and kind')
+      Report.create_from_yaml(report_yaml)
+      Report.create_from_yaml(report_yaml)
       Report.count.should == 1
+      DelayedJobFailure.count.should == 1
+      DelayedJobFailure.first.summary.should == 'Importing report'
+      DelayedJobFailure.first.details.should == 'Validation failed: Host already has a report for time and kind'
+      DelayedJobFailure.first.backtrace.any? {|trace| trace =~ /report\.rb:\d+:in.*create_from_yaml/}.should be_true
     end
 
     it "creates a node by host if none exists" do
       lambda {
-        Report.create_from_yaml(@report_yaml)
-      }.should change { Node.count(:conditions => {:name => @report_data.host}) }.by(1)
+        Report.create_from_yaml(report_yaml)
+      }.should change { Node.count(:conditions => {:name => raw_report['host']}) }.by(1)
     end
 
     it "updates the node's reported_at timestamp for apply reports" do
-      node = Node.generate(:name => @report_data.host)
-      report = Report.create_from_yaml(@report_yaml)
+      node = Node.generate(:name => raw_report['host'])
+      report = Report.create_from_yaml(report_yaml)
       node.reload
-      node.reported_at.should be_within(1).of(@report_data.time.in_time_zone)
+      node.reported_at.should be_close(raw_report['time'].in_time_zone, 1.second)
     end
 
     it "does not update the node's reported_at timestamp for inspect reports" do
@@ -172,13 +189,13 @@ describe Report do
   describe "#create_from_yaml" do
     it "should populate report related tables from a version 0 yaml report" do
       Time.zone = 'UTC'
-      @node = Node.generate(:name => 'sample_node')
-      report_yaml = File.read(File.join(Rails.root, "spec/fixtures/reports/puppet25/1_changed_0_failures.yml"))
+      node = Node.generate(:name => 'sample_node')
+      report_yaml = File.read(File.join(RAILS_ROOT, "spec/fixtures/reports/puppet25/1_changed_0_failures.yml"))
       Report.count.should == 0
       Report.create_from_yaml(report_yaml)
       Report.count.should == 1
       report = Report.first
-      report.node.should == @node
+      report.node.should == node
       report.metrics.map {|t| [t.category, t.name, "%0.2f" % t.value]}.should =~ [
         ['time',      'config_retrieval' ,  '0.19'],
         ['time',      'file'             ,  '0.07'],
@@ -218,78 +235,78 @@ describe Report do
       report.status.should == 'changed'
     end
 
-      it "should populate report related tables from a version 1 yaml report" do
-        @node = Node.generate(:name => 'puppet.puppetlabs.vm')
-        @report_yaml = File.read(File.join(Rails.root, "spec/fixtures/reports/puppet26/report_ok_service_started_ok.yaml"))
-        file = '/etc/puppet/manifests/site.pp'
-        Report.create_from_yaml(@report_yaml)
-        Report.count.should == 1
-        report = Report.first
-        report.node.should == @node
-        report.metrics.map {|t| [t.category, t.name, "%0.2f" % t.value]}.should =~ [
-          ['time',      'schedule'         ,  '0.00'],
-          ['time',      'config_retrieval' ,  '0.16'],
-          ['time',      'filebucket'       ,  '0.00'],
-          ['time',      'service'          ,  '1.56'],
-          ['time',      'exec'             ,  '0.10'],
-          ['time',      'total'            ,  '1.82'],
-          ['resources', 'total'            ,  '9.00'],
-          ['resources', 'changed'          ,  '2.00'],
-          ['resources', 'unchanged'        ,  '7.00'],
-          ['resources', 'pending'          ,  '0.00'],
-          ['resources', 'out_of_sync'      ,  '2.00'],
-          ['changes',   'total'            ,  '2.00'],
-          ['events',    'total'            ,  '2.00'],
-          ['events',    'success'          ,  '2.00']
-        ]
+    it "should populate report related tables from a version 1 yaml report" do
+      node = Node.generate(:name => 'puppet.puppetlabs.vm')
+      report_yaml = File.read(File.join(RAILS_ROOT, "spec/fixtures/reports/puppet26/report_ok_service_started_ok.yaml"))
+      file = '/etc/puppet/manifests/site.pp'
+      Report.create_from_yaml(report_yaml)
+      Report.count.should == 1
+      report = Report.first
+      report.node.should == node
+      report.metrics.map {|t| [t.category, t.name, "%0.2f" % t.value]}.should =~ [
+        ['time',      'schedule'         ,  '0.00'],
+        ['time',      'config_retrieval' ,  '0.16'],
+        ['time',      'filebucket'       ,  '0.00'],
+        ['time',      'service'          ,  '1.56'],
+        ['time',      'exec'             ,  '0.10'],
+        ['time',      'total'            ,  '1.82'],
+        ['resources', 'total'            ,  '9.00'],
+        ['resources', 'changed'          ,  '2.00'],
+        ['resources', 'unchanged'        ,  '7.00'],
+        ['resources', 'pending'          ,  '0.00'],
+        ['resources', 'out_of_sync'      ,  '2.00'],
+        ['changes',   'total'            ,  '2.00'],
+        ['events',    'total'            ,  '2.00'],
+        ['events',    'success'          ,  '2.00']
+      ]
 
-        report.resource_statuses.map { |t| [
-          t.resource_type,
-          t.title,
-          "%0.2f" % t.evaluation_time,
-          t.file,
-          t.line,
-          #t.source_description,
-          t.tags.sort,
-          #t.time,
-          t.change_count,
-          t.failed
-        ] }.should =~ [
-          [ 'Filebucket' ,  'puppet'  ,  "0.00" ,  nil ,  nil ,  ['filebucket' ,  'puppet']   ,  0, false ],
-          [ 'Schedule'   ,  'puppet'  ,  "0.00" ,  nil ,  nil ,  ['puppet'     ,  'schedule'] ,  0, false ],
-          [ 'Schedule'   ,  'weekly'  ,  "0.00" ,  nil ,  nil ,  ['schedule'   ,  'weekly']   ,  0, false ],
-          [ 'Schedule'   ,  'daily'   ,  "0.00" ,  nil ,  nil ,  ['daily'      ,  'schedule'] ,  0, false ],
-          [ 'Schedule'   ,  'hourly'  ,  "0.00" ,  nil ,  nil ,  ['hourly'     ,  'schedule'] ,  0, false ],
-          [ 'Schedule'   ,  'monthly' ,  "0.00" ,  nil ,  nil ,  ['monthly'    ,  'schedule'] ,  0, false ],
-          [ 'Schedule'   ,  'never'   ,  "0.00" ,  nil ,  nil ,  ['never'      ,  'schedule'] ,  0, false ],
-          [ 'Service'    ,  'mysqld'  ,  "1.56" ,  file,  8   ,  ['class'      ,  'default'   ,  'mysqld' ,  'node' ,  'service'] ,  1, false ],
-          [ 'Exec'       ,'/bin/true' ,  "0.10" ,  file,  9   ,  ['class'      ,  'default'   ,  'exec'   ,  'node'             ] ,  1, true ],
-        ]
-        report.events.map { |t| [
-          t.property,
-          t.previous_value,
-          t.desired_value,
-          t.name,
-          t.status,
-        ] }.should =~ [
-          [ 'returns' , :notrun  , ['0']    , 'executed_command' , 'success' ],
-          [ 'ensure'  , :stopped , :running , 'service_started'  , 'success' ],
-        ]
+      report.resource_statuses.map { |t| [
+        t.resource_type,
+        t.title,
+        "%0.2f" % t.evaluation_time,
+        t.file,
+        t.line,
+        #t.source_description,
+        t.tags.sort,
+        #t.time,
+        t.change_count,
+        t.failed
+      ] }.should =~ [
+        [ 'Filebucket' ,  'puppet'  ,  "0.00" ,  nil ,  nil ,  ['filebucket' ,  'puppet']   ,  0, false ],
+        [ 'Schedule'   ,  'puppet'  ,  "0.00" ,  nil ,  nil ,  ['puppet'     ,  'schedule'] ,  0, false ],
+        [ 'Schedule'   ,  'weekly'  ,  "0.00" ,  nil ,  nil ,  ['schedule'   ,  'weekly']   ,  0, false ],
+        [ 'Schedule'   ,  'daily'   ,  "0.00" ,  nil ,  nil ,  ['daily'      ,  'schedule'] ,  0, false ],
+        [ 'Schedule'   ,  'hourly'  ,  "0.00" ,  nil ,  nil ,  ['hourly'     ,  'schedule'] ,  0, false ],
+        [ 'Schedule'   ,  'monthly' ,  "0.00" ,  nil ,  nil ,  ['monthly'    ,  'schedule'] ,  0, false ],
+        [ 'Schedule'   ,  'never'   ,  "0.00" ,  nil ,  nil ,  ['never'      ,  'schedule'] ,  0, false ],
+        [ 'Service'    ,  'mysqld'  ,  "1.56" ,  file,  8   ,  ['class'      ,  'default'   ,  'mysqld' ,  'node' ,  'service'] ,  1, false ],
+        [ 'Exec'       ,'/bin/true' ,  "0.10" ,  file,  9   ,  ['class'      ,  'default'   ,  'exec'   ,  'node'             ] ,  1, true ],
+      ]
+      report.events.map { |t| [
+        t.property,
+        t.previous_value,
+        t.desired_value,
+        t.name,
+        t.status,
+      ] }.should =~ [
+        [ 'returns' , :notrun  , ['0']    , 'executed_command' , 'success' ],
+        [ 'ensure'  , :stopped , :running , 'service_started'  , 'success' ],
+      ]
 
-        report.logs.map { |t| [
-          t.level,
-          t.message,
-          t.source,
-          t.tags.sort,
-          #t.time,
-          t.file,
-          t.line,
-        ] }.should =~ [
-          ['info', 'Caching catalog for puppet.puppetlabs.vm',    'Puppet', ['info'], nil, nil ],
-          ['info', "Applying configuration version '1279826342'", 'Puppet', ['info'], nil, nil ],
-          ['notice', 'executed successfully', "/Stage[main]//Node[default]/Exec[/bin/true]/returns", ['class', 'default', 'exec', 'node', 'notice'], file, 9 ],
-          ['notice', "ensure changed 'stopped' to 'running'", '/Stage[main]//Node[default]/Service[mysqld]/ensure', ['class', 'default', 'mysqld', 'node', 'notice', 'service'], file, 8 ],
-        ]
+      report.logs.map { |t| [
+        t.level,
+        t.message,
+        t.source,
+        t.tags.sort,
+        #t.time,
+        t.file,
+        t.line,
+      ] }.should =~ [
+        ['info', 'Caching catalog for puppet.puppetlabs.vm',    'Puppet', ['info'], nil, nil ],
+        ['info', "Applying configuration version '1279826342'", 'Puppet', ['info'], nil, nil ],
+        ['notice', 'executed successfully', "/Stage[main]//Node[default]/Exec[/bin/true]/returns", ['class', 'default', 'exec', 'node', 'notice'], file, 9 ],
+        ['notice', "ensure changed 'stopped' to 'running'", '/Stage[main]//Node[default]/Service[mysqld]/ensure', ['class', 'default', 'mysqld', 'node', 'notice', 'service'], file, 8 ],
+      ]
 
       report.configuration_version.should == '1279826342'
       report.puppet_version.should == '2.6.0'
@@ -297,14 +314,14 @@ describe Report do
     end
 
     it "should populate report related tables from a version 2 report" do
-      @node = Node.generate(:name => 'paul-berrys-macbook-pro-3.local')
-      @report_yaml = File.read(File.join(Rails.root, "spec/fixtures/reports/version2/example.yaml"))
+      node = Node.generate(:name => 'paul-berrys-macbook-pro-3.local')
+      report_yaml = File.read(File.join(RAILS_ROOT, "spec/fixtures/reports/version2/example.yaml"))
       file = '/Users/pberry/puppet_labs/test_data/master/manifests/site.pp'
-      Report.create_from_yaml(@report_yaml)
+      Report.create_from_yaml(report_yaml)
       Report.count.should == 1
 
       report = Report.first
-      report.node.should == @node
+      report.node.should == node
       report.status.should == 'pending'
       report.configuration_version.should == '1293756667'
       report.puppet_version.should == '2.6.4'
@@ -405,9 +422,10 @@ describe Report do
       k.table_name = Report.table_name
       k
     }
+
     describe "when create_from_yaml is successful" do
       before do
-        myStubbedClass.expects(:read_file_contents).with('/tmp/foo').returns(@report_yaml)
+        myStubbedClass.expects(:read_file_contents).with('/tmp/foo').returns('---')
         myStubbedClass.expects(:create_from_yaml).returns('i can haz report')
       end
 
@@ -424,37 +442,18 @@ describe Report do
 
     describe "when create_from_yaml fails" do
       before do
-        myStubbedClass.expects(:read_file_contents).at_least_once.with('/tmp/foo').returns(@report_yaml)
+        myStubbedClass.expects(:read_file_contents).at_least_once.with('/tmp/foo').returns('---')
       end
 
       it "not unlink the file if create_from_yaml fails" do
         myStubbedClass.expects(:remove_file).with('/tmp/foo').never
-        myStubbedClass.stubs(:create_from_yaml).raises(ActiveRecord::StatementInvalid)
+        myStubbedClass.stubs(:create_from_yaml).returns(nil)
         myStubbedClass.create_from_yaml_file('/tmp/foo', :delete => true)
       end
 
-      it "should retry 3 times in the case of a failure" do
-        myStubbedClass.expects(:create_from_yaml).times(3).
-          raises(ActiveRecord::StatementInvalid).then.
-          raises(ActiveRecord::StatementInvalid).then.
-          returns("FINALLY!")
-
-        myStubbedClass.create_from_yaml_file('/tmp/foo').should == "FINALLY!"
-      end
-
-      it "should create a DelayedJobFailure after 3 failures and return nil" do
-        myStubbedClass.expects(:create_from_yaml).times(3).
-          raises(ActiveRecord::StatementInvalid).then.
-          raises(ActiveRecord::StatementInvalid).then.
-          raises(ActiveRecord::StatementInvalid).then.
-          returns("Sir not appearing in this expectation")
-
+      it "should return nil if create_from_yaml fails" do
+        myStubbedClass.expects(:create_from_yaml).with('---').returns(nil)
         myStubbedClass.create_from_yaml_file('/tmp/foo').should == nil
-
-        DelayedJobFailure.count.should == 1
-        DelayedJobFailure.first.summary.should == 'Importing report foo'
-        DelayedJobFailure.first.details.should == 'ActiveRecord::StatementInvalid'
-        DelayedJobFailure.first.backtrace.any? {|trace| trace =~ /report\.rb:\d+:in.*create_from_yaml_file/}.should be_true
       end
     end
   end
@@ -462,10 +461,10 @@ describe Report do
 
   describe "When destroying" do
     it "should destroy all dependent model objects" do
-      @node = Node.generate(:name => 'puppet.puppetlabs.vm')
-      @report_yaml = File.read(File.join(Rails.root, "spec/fixtures/reports/puppet26/report_ok_service_started_ok.yaml"))
+      node = Node.generate(:name => 'puppet.puppetlabs.vm')
+      report_yaml = File.read(File.join(RAILS_ROOT, "spec/fixtures/reports/puppet26/report_ok_service_started_ok.yaml"))
       file = '/etc/puppet/manifests/site.pp'
-      report = Report.create_from_yaml(@report_yaml)
+      report = Report.create_from_yaml(report_yaml)
       ResourceStatus.count.should_not == 0
       ResourceEvent.count.should_not == 0
       ReportLog.count.should_not == 0
@@ -489,8 +488,8 @@ describe Report do
   end
 
   describe "setting denormalized fields on node" do
-    before :each do
-      @node = Node.generate(:name => "my_node")
+    let :node do
+      Node.generate(:name => "my_node")
     end
 
     ["apply", "inspect"].each do |kind|
@@ -499,167 +498,223 @@ describe Report do
       describe "from an #{kind} report" do
 
         describe "when creating the first report" do
-          before :each do
-            @node.last_apply_report.should == nil
-            @node.last_inspect_report.should == nil
-            @node.reported_at.should == nil
+          let :report do
+            node.last_apply_report.should == nil
+            node.last_inspect_report.should == nil
+            node.reported_at.should == nil
 
-            @report = Report.generate(:host => "my_node", :time => Time.now, :kind => kind)
-            @node.reload
+            report = Report.generate(:host => "my_node", :time => Time.now, :kind => kind)
+
+            node.reload
+
+            report
+          end
+
+          before :each do
+            report # force creation
           end
 
           it "should set the last_#{kind}_report to the report" do
-            @node.send("last_#{kind}_report").should == @report
-            @node.send("last_#{other_kind}_report").should == nil
+            node.send("last_#{kind}_report").should == report
+            node.send("last_#{other_kind}_report").should == nil
           end
 
           if kind == "apply"
             it "should set the reported_at time to the report's time" do
-              @node.reported_at.to_s.should == @report.time.to_s
-              @node.reported_at.to_i.should == @report.time.to_i
+              node.reported_at.to_s.should == report.time.to_s
+              node.reported_at.to_i.should == report.time.to_i
             end
           end
         end
 
         describe "when creating a subsequent report" do
+          let :old_apply_report do
+            node # force creation
+            Report.generate(:host => "my_node", :time =>  1.hour.ago, :kind => "apply")
+          end
+          let :old_inspect_report do
+            node # force creation
+            Report.generate(:host => "my_node", :time => 2.hours.ago, :kind => "inspect")
+          end
+          let :report do
+            node # force creation
+            old_apply_report # force creation
+            old_inspect_report # force creation
+
+            node.reload
+            node.last_apply_report.should == old_apply_report
+            node.last_inspect_report.should == old_inspect_report
+            node.reported_at.to_s.should == old_apply_report.time.to_s
+
+            report = Report.generate(:host => "my_node", :time => Time.now, :kind => kind)
+
+            node.reload
+
+            report
+          end
+
           before :each do
-            @old_apply_report   = Report.generate(:host => "my_node", :time =>  1.hour.ago, :kind => "apply")
-            @old_inspect_report = Report.generate(:host => "my_node", :time => 2.hours.ago, :kind => "inspect")
-            @node.reload
-            @node.last_apply_report.should == @old_apply_report
-            @node.last_inspect_report.should == @old_inspect_report
-            @node.reported_at.to_s.should == @old_apply_report.time.to_s
-
-            @report = Report.generate(:host => "my_node", :time => Time.now, :kind => kind)
-
-            @node.reload
+            report # force creation
           end
 
           it "should set the last_#{kind}_report to the report" do
-            @node.send("last_#{kind}_report").should == @report
-            @node.send("last_#{other_kind}_report").should == ( other_kind == "apply" ? @old_apply_report : @old_inspect_report )
+            node.send("last_#{kind}_report").should == report
+            node.send("last_#{other_kind}_report").should == ( other_kind == "apply" ? old_apply_report : old_inspect_report )
           end
 
           if kind == "apply"
             it "should set the reported_at time to the report's time" do
-              @node.reported_at.to_s.should == @report.time.to_s
-              @node.reported_at.to_i.should == @report.time.to_i
+              node.reported_at.to_s.should == report.time.to_s
+              node.reported_at.to_i.should == report.time.to_i
             end
           end
         end
 
         describe "when creating a prior report" do
-          before :each do
-            @old_apply_report   = Report.generate(:host => "my_node", :time =>  1.hour.ago, :kind => "apply")
-            @old_inspect_report = Report.generate(:host => "my_node", :time => 2.hours.ago, :kind => "inspect")
-            @node.reload
-            @node.last_apply_report.should == @old_apply_report
-            @node.last_inspect_report.should == @old_inspect_report
-            @node.reported_at.to_s.should == @old_apply_report.time.to_s
+          let :old_apply_report do
+            node # force creation
+            Report.generate(:host => "my_node", :time =>  1.hour.ago, :kind => "apply")
+          end
+          let :old_inspect_report do
+            node # force creation
+            Report.generate(:host => "my_node", :time => 2.hours.ago, :kind => "inspect")
+          end
 
-            @report = Report.generate(:host => "my_node", :time => 3.hours.ago, :kind => kind)
-            @node.reload
+          before :each do
+            node # force creation
+            old_apply_report # force creation
+            old_inspect_report # force creation
+
+            node.reload
+            node.last_apply_report.should == old_apply_report
+            node.last_inspect_report.should == old_inspect_report
+            node.reported_at.to_s.should == old_apply_report.time.to_s
+
+            Report.generate(:host => "my_node", :time => 3.hours.ago, :kind => kind)
+
+            node.reload
           end
 
           it "should not change any of last_apply_report, last_inspect_report, or reported_at" do
-            @node.last_apply_report.should == @old_apply_report
-            @node.last_inspect_report.should == @old_inspect_report
-            @node.reported_at.to_s.should == @old_apply_report.time.to_s
+            node.last_apply_report.should == old_apply_report
+            node.last_inspect_report.should == old_inspect_report
+            node.reported_at.to_s.should == old_apply_report.time.to_s
           end
         end
 
         describe "when deleting the latest report" do
+          let :older_apply_report do
+            node # force creation
+            Report.generate(:host => "my_node", :time => 3.hours.ago, :kind => "apply",   :status => "changed")
+          end
+          let :older_inspect_report do
+            node # force creation
+            Report.generate(:host => "my_node", :time => 4.hours.ago, :kind => "inspect", :status => "unchanged")
+          end
+
           before :each do
-            @newer_apply_report   = Report.generate(:host => "my_node", :time =>  1.hour.ago, :kind => "apply",   :status => "failed")
-            @newer_inspect_report = Report.generate(:host => "my_node", :time => 2.hours.ago, :kind => "inspect", :status => "unchanged")
-            @older_apply_report   = Report.generate(:host => "my_node", :time => 3.hours.ago, :kind => "apply",   :status => "changed")
-            @older_inspect_report = Report.generate(:host => "my_node", :time => 4.hours.ago, :kind => "inspect", :status => "unchanged")
+            node # force creation
+            newer_apply_report   = Report.generate(:host => "my_node", :time =>  1.hour.ago, :kind => "apply",   :status => "failed")
+            newer_inspect_report = Report.generate(:host => "my_node", :time => 2.hours.ago, :kind => "inspect", :status => "unchanged")
+            older_apply_report # force creation
+            older_inspect_report # force creation
 
             Report.count.should == 4
 
-            @node.reload
-            @node.last_apply_report.should == @newer_apply_report
-            @node.last_inspect_report.should == @newer_inspect_report
-            @node.reported_at.to_s.should == @newer_apply_report.time.to_s
+            node.reload
+            node.last_apply_report.should == newer_apply_report
+            node.last_inspect_report.should == newer_inspect_report
+            node.reported_at.to_s.should == newer_apply_report.time.to_s
 
-            @report = @node.send("last_#{kind}_report")
-            @report.destroy
-            @node.reload
+            node.send("last_#{kind}_report").destroy
+
+            node.reload
           end
 
           it "should set the last_#{kind}_report to the next most recent report" do
-            @node.send("last_#{kind}_report").should == ( kind == "apply" ? @older_apply_report : @older_inspect_report )
+            node.send("last_#{kind}_report").should == ( kind == "apply" ? older_apply_report : older_inspect_report )
           end
 
           if kind == "apply"
             it "should set the reported_at time to the next most recent report's time" do
-              @node.reported_at.to_s.should == @older_apply_report.time.to_s
+              node.reported_at.to_s.should == older_apply_report.time.to_s
             end
 
             it "should set the node status to the next most recent report's status" do
-              @node.status.should == @older_apply_report.status
+              node.status.should == older_apply_report.status
             end
           end
         end
 
         describe "when deleting the only report" do
           before :each do
-            @apply_report   = Report.generate(:host => "my_node", :time =>  1.hour.ago, :kind => "apply",   :status => "failed")
-            @inspect_report = Report.generate(:host => "my_node", :time => 2.hours.ago, :kind => "inspect", :status => "unchanged")
+            node # force creation
+            apply_report   = Report.generate(:host => "my_node", :time =>  1.hour.ago, :kind => "apply",   :status => "failed")
+            inspect_report = Report.generate(:host => "my_node", :time => 2.hours.ago, :kind => "inspect", :status => "unchanged")
 
             Report.count.should == 2
 
-            @node.reload
-            @node.last_apply_report.should == @apply_report
-            @node.last_inspect_report.should == @inspect_report
-            @node.reported_at.to_s.should == @apply_report.time.to_s
-            @node.status.should == "failed"
+            node.reload
+            node.last_apply_report.should == apply_report
+            node.last_inspect_report.should == inspect_report
+            node.reported_at.to_s.should == apply_report.time.to_s
+            node.status.should == "failed"
 
-            @report = @node.send("last_#{kind}_report")
-            @report.destroy
-            @node.reload
+            node.send("last_#{kind}_report").destroy
+
+            node.reload
           end
 
           it "should set the last_#{kind}_report to nil" do
-            @node.send("last_#{kind}_report").should == nil
+            node.send("last_#{kind}_report").should == nil
           end
 
           if kind == "apply"
             it "should set the reported_at time to nil" do
-              @node.reported_at.should == nil
+              node.reported_at.should == nil
             end
 
             it "should set the node status to nil" do
-              @node.status.should == nil
+              node.status.should == nil
             end
           end
         end
       end
 
       describe "when deleting some historical report" do
+        let :newer_apply_report do
+          node # force creation
+          Report.generate(:host => "my_node", :time =>  1.hour.ago, :kind => "apply",   :status => "failed")
+        end
+        let :newer_inspect_report do
+          node # force creation
+          Report.generate(:host => "my_node", :time => 2.hours.ago, :kind => "inspect", :status => "unchanged")
+        end
+
         before :each do
-          @newer_apply_report   = Report.generate(:host => "my_node", :time =>  1.hour.ago, :kind => "apply",   :status => "failed")
-          @newer_inspect_report = Report.generate(:host => "my_node", :time => 2.hours.ago, :kind => "inspect", :status => "unchanged")
-          @older_apply_report   = Report.generate(:host => "my_node", :time => 3.hours.ago, :kind => "apply",   :status => "changed")
-          @older_inspect_report = Report.generate(:host => "my_node", :time => 4.hours.ago, :kind => "inspect", :status => "unchanged")
+          node # force creation
+          newer_apply_report # force creation
+          newer_inspect_report # force creation
+          older_apply_report   = Report.generate(:host => "my_node", :time => 3.hours.ago, :kind => "apply",   :status => "changed")
+          older_inspect_report = Report.generate(:host => "my_node", :time => 4.hours.ago, :kind => "inspect", :status => "unchanged")
 
           Report.count.should == 4
 
-          @node.reload
-          @node.last_apply_report.should == @newer_apply_report
-          @node.last_inspect_report.should == @newer_inspect_report
-          @node.reported_at.to_s.should == @newer_apply_report.time.to_s
+          node.reload
+          node.last_apply_report.should == newer_apply_report
+          node.last_inspect_report.should == newer_inspect_report
+          node.reported_at.to_s.should == newer_apply_report.time.to_s
 
-          @older_apply_report.destroy
-          @older_inspect_report.destroy
-          @node.reload
+          older_apply_report.destroy
+          older_inspect_report.destroy
+          node.reload
         end
 
         it "should not change any of last_apply_report, last_inspect_report, reported_at, or status" do
-          @node.last_apply_report.should == @newer_apply_report
-          @node.last_inspect_report.should == @newer_inspect_report
-          @node.reported_at.to_s.should == @newer_apply_report.time.to_s
-          @node.status.should == @newer_apply_report.status
+          node.last_apply_report.should == newer_apply_report
+          node.last_inspect_report.should == newer_inspect_report
+          node.reported_at.to_s.should == newer_apply_report.time.to_s
+          node.status.should == newer_apply_report.status
         end
       end
 
