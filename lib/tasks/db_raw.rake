@@ -13,7 +13,7 @@ namespace :db do
       when 'sqlite3'
         source = struct.database
         sh "sqlite3 #{shellescape source} .dump > #{shellescape target}"
-      when 'mysql'
+      when 'mysql', 'mysql2'
         sh "mysqldump --add-locks --create-options --disable-keys --extended-insert --quick --set-charset #{mysql_credentials_for struct} > #{shellescape target_tmp}"
         mv target_tmp, target
       when 'postgresql'
@@ -39,7 +39,7 @@ namespace :db do
         target = struct.database
         mv target, "#{target}.old" if File.exist?(target)
         sh "sqlite3 #{shellescape target} < #{shellescape source}"
-      when 'mysql'
+      when 'mysql', 'mysql2'
         sh "mysql #{mysql_credentials_for struct} < #{shellescape source}"
       when 'postgresql'
         sh "psql #{postgresql_credentials_for struct} < #{shellescape source}"
@@ -52,15 +52,17 @@ namespace :db do
 
     desc "Optimize database tables to speed up queries. WARNING: May take a while."
     task :optimize => :environment do
-      case ActiveRecord::Base.connection
-      when ActiveRecord::ConnectionAdapters::MysqlAdapter
+      struct = database_settings
+      adapter = struct.adapter
+      case adapter
+      when 'mysql', 'mysql2'
         puts "Optimizing tables, this may take a while:"
         for table in ActiveRecord::Base.connection.select_values('SHOW TABLES').sort
           puts "* #{table}"
           ActiveRecord::Base.connection.execute("OPTIMIZE TABLE #{table}")
         end
       else
-        raise "Don't know how to optimize for database engine: #{ActiveRecord::Base.connection.adapter_name}"
+        raise "Don't know how to optimize for database engine: #{adapter}"
       end
     end
   end
