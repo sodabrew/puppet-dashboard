@@ -60,7 +60,7 @@ restart() {
 
 rh_status() {
 	RETVAL=1
-	for pidfile in $(ls -1 "${DASHBOARD_HOME}"/tmp/pids/delayed_job.*.pid 2>/dev/null)
+	for pidfile in $(ls -1 "${DASHBOARD_HOME}"/tmp/pids/delayed_job.*pid 2>/dev/null)
 	do
 		status -p $pidfile puppet-dashboard-workers || return $?
 		RETVAL=$?
