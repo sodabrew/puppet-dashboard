@@ -87,35 +87,42 @@ class Report < ActiveRecord::Base
   end
 
   def self.create_from_yaml_file(report_file, options = {})
-    report = create_from_yaml(File.read(report_file))
-    File.unlink(report_file) if options[:delete]
+    report = create_from_yaml(read_file_contents(report_file))
+    remove_file(report_file) if options[:delete] && report
+    report
+  end
+
+  def self.create_from_yaml(report_yaml)
+    raw_report = YAML.load(report_yaml, :safe => :true, :deserialize_symbols => true)
+
+    unless raw_report.is_a? Hash
+      raise ArgumentError, 'The supplied report did not deserialize into a Hash'
+    end
+
+    report_hash = ReportTransformer.apply(ReportSanitizer.sanitize(raw_report))
+
+    report_hash['resource_statuses'] = report_hash['resource_statuses'].values
+
+    report = Report.new(Report.attribute_hash_from(report_hash)).munge
+    report.save!
     return report
-  rescue Exception => e
+  rescue => e
     retries ||= 3
     retry if (retries -= 1) > 0
     DelayedJobFailure.create!(
-      :summary   => "Importing report #{File.basename(report_file)}",
+      :summary   => "Importing report",
       :details   => e.to_s,
-      :backtrace => e.application_backtrace
+      :backtrace => Rails.backtrace_cleaner.clean(e.backtrace)
     )
     return nil
   end
 
-  def self.create_from_yaml(report_yaml)
-    raw_report = YAML.load(report_yaml)
+  def self.read_file_contents(file)
+    File.read(file)
+  end
 
-    unless raw_report.is_a? Puppet::Transaction::Report
-      raise ArgumentError, "The supplied report is in invalid format '#{raw_report.class}', expected 'Puppet::Transaction::Report'"
-    end
-
-    raw_report.extend(ReportExtensions)
-    report_hash = ReportTransformer.apply(raw_report.to_hash)
-
-    report_hash["resource_statuses"] = report_hash["resource_statuses"].values
-
-    report = Report.new(Report.attribute_hash_from(report_hash)).munge
-    report.save!
-    report
+  def self.remove_file(file)
+    File.unlink(file)
   end
 
   def assign_to_node

@@ -19,6 +19,7 @@ Dependencies
 * Ruby 1.8.7
 * RubyGems
 * Rake >= 0.8.3
+* Safe_yaml
 * MySQL server 5.x
 * Ruby-MySQL bindings 2.7.x or 2.8.x
 
