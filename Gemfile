@@ -10,7 +10,7 @@ gem 'rack'
 
 gem 'daemons'
 gem 'json_pure'
-gem 'safe_yaml'
+gem 'safe_yaml',    :require => false
 gem 'fastercsv',    :platforms => :ruby_18
 gem 'system_timer', :platforms => :ruby_18
 
