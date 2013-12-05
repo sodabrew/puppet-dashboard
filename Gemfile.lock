@@ -120,6 +120,7 @@ GEM
       rspec-core (~> 2.13.0)
       rspec-expectations (~> 2.13.0)
       rspec-mocks (~> 2.13.0)
+    safe_yaml (1.0.0)
     sass (3.2.13)
     sass-rails (3.2.6)
       railties (~> 3.2.0)
@@ -175,6 +176,7 @@ DEPENDENCIES
   rake (~> 0.9.3)
   rspec-html-matchers
   rspec-rails (~> 2.13.0)
+  safe_yaml
   sass-rails (~> 3.2)
   shoulda-matchers (< 2.0)
   sqlite3
