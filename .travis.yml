@@ -9,6 +9,7 @@ services:
 rvm:
   - "1.8.7"
   - "1.9.3"
+  - "2.0.0"
 before_script:
   - cp config/database.yml.travis config/database.yml
   - 'echo "test: *${DB}" >> config/database.yml'
