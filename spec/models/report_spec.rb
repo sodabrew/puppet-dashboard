@@ -190,7 +190,7 @@ describe Report do
     it "should populate report related tables from a version 0 yaml report" do
       Time.zone = 'UTC'
       node = Node.generate(:name => 'sample_node')
-      report_yaml = File.read(File.join(RAILS_ROOT, "spec/fixtures/reports/puppet25/1_changed_0_failures.yml"))
+      report_yaml = File.read(File.join(Rails.root, "spec/fixtures/reports/puppet25/1_changed_0_failures.yml"))
       Report.count.should == 0
       Report.create_from_yaml(report_yaml)
       Report.count.should == 1
@@ -237,7 +237,7 @@ describe Report do
 
     it "should populate report related tables from a version 1 yaml report" do
       node = Node.generate(:name => 'puppet.puppetlabs.vm')
-      report_yaml = File.read(File.join(RAILS_ROOT, "spec/fixtures/reports/puppet26/report_ok_service_started_ok.yaml"))
+      report_yaml = File.read(File.join(Rails.root, "spec/fixtures/reports/puppet26/report_ok_service_started_ok.yaml"))
       file = '/etc/puppet/manifests/site.pp'
       Report.create_from_yaml(report_yaml)
       Report.count.should == 1
@@ -315,7 +315,7 @@ describe Report do
 
     it "should populate report related tables from a version 2 report" do
       node = Node.generate(:name => 'paul-berrys-macbook-pro-3.local')
-      report_yaml = File.read(File.join(RAILS_ROOT, "spec/fixtures/reports/version2/example.yaml"))
+      report_yaml = File.read(File.join(Rails.root, "spec/fixtures/reports/version2/example.yaml"))
       file = '/Users/pberry/puppet_labs/test_data/master/manifests/site.pp'
       Report.create_from_yaml(report_yaml)
       Report.count.should == 1
@@ -462,7 +462,7 @@ describe Report do
   describe "When destroying" do
     it "should destroy all dependent model objects" do
       node = Node.generate(:name => 'puppet.puppetlabs.vm')
-      report_yaml = File.read(File.join(RAILS_ROOT, "spec/fixtures/reports/puppet26/report_ok_service_started_ok.yaml"))
+      report_yaml = File.read(File.join(Rails.root, "spec/fixtures/reports/puppet26/report_ok_service_started_ok.yaml"))
       file = '/etc/puppet/manifests/site.pp'
       report = Report.create_from_yaml(report_yaml)
       ResourceStatus.count.should_not == 0
