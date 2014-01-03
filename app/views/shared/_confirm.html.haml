@@ -1,0 +1,10 @@
+#popupWindowGlass
+#popupWindowLayoutHelperTable
+  #popupWindowLayoutHelperTableCell
+    #popupWindow
+      = raw message
+      #popupWindowButtons
+        %button{:onclick => on_confirm_clicked_script}
+          = confirm_label
+        or
+        = link_to_function 'Cancel', "jQuery('#popupWindowGlass').parent().detach();"

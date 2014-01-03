@@ -1,8 +1,8 @@
-require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
+require 'spec_helper'
 
 describe NodesController do
   include ReportSupport
-  integrate_views
+  render_views
 
   describe "#index" do
     before :each do
@@ -53,30 +53,24 @@ describe NodesController do
 
           response.body.should =~ /Node classification has been disabled/
           response.should_not be_success
-          response.response_code.should == 403
+          response.should be_forbidden
         end
       end
     end
 
     context "as CSV" do
       let :header do
-        CSV.generate_line [ 'name',            'status',            'resource_count', 'pending_count',
-                            'failed_count',    'compliant_count',   'resource_type',  'title',
-                            'evaluation_time', 'file',              'line',           'time',
-                            'change_count',    'out_of_sync_count', 'skipped',        'failed' ]
-      end
-
-      def body_from_proc
-        body = StringIO.new
-        response.body.call(response, body)
-        body.string
+        CSV.generate_line %w[name            status            resource_count pending_count
+                             failed_count    compliant_count   resource_type  title
+                             evaluation_time file              line           time
+                             change_count    out_of_sync_count skipped        failed ], :row_sep => ''
       end
 
       it "should make correct CSV" do
         get :index, :format => "csv"
 
         response.should be_success
-        body_from_proc.split("\n").should =~ [
+        response.body.split("\n").should =~ [
           header,
           "#{@node.name},changed,1,0,0,1,#{@resource.resource_type},#{@resource.title},#{@resource.evaluation_time},#{@resource.file},#{@resource.line},#{@resource.time},#{@resource.change_count},#{@resource.out_of_sync_count},#{@resource.skipped},#{@resource.failed}"
         ]
@@ -89,7 +83,7 @@ describe NodesController do
         get :index, :format => "csv"
 
         response.should be_success
-        body_from_proc.split("\n").should =~ [
+        response.body.split("\n").should =~ [
           header,
           "#{@node.name},changed,1,0,0,1,#{@resource.resource_type},#{@resource.title},#{@resource.evaluation_time},#{@resource.file},#{@resource.line},#{@resource.time},#{@resource.change_count},#{@resource.out_of_sync_count},#{@resource.skipped},#{@resource.failed}",
           "#{unreported_node.name},,,,,,,,,,,,,,,"
@@ -98,11 +92,12 @@ describe NodesController do
 
       %w[foo,_-' bar/\\$^ <ba"z>>].each do |name|
         it "should handle a node named #{name}" do
-          node = Node.generate!(:name => name)
+          node = Node.generate!(:name => name, :reported_at => @node.reported_at - 1)  # cannot be nil since PGS and MySQL sort nils differently
           get :index, :format => "csv"
 
           response.should be_success
-          CSV.parse(body_from_proc).last.first.should == name
+
+          CSV.parse(response.body).last.first.should == name
         end
       end
 
@@ -128,7 +123,7 @@ describe NodesController do
         get :index, :format => "csv"
 
         response.should be_success
-        body_from_proc.split("\n").should =~ [
+        response.body.split("\n").should =~ [
           header,
           %Q[#{@node.name},failed,2,0,1,1,File,/etc/sudoers,1.0,/etc/puppet/manifests/site.pp,1,#{res1.time},1,1,false,false],
           %Q[#{@node.name},failed,2,0,1,1,File,/etc/hosts,2.0,/etc/puppet/manifests/site.pp,5,#{res2.time},2,2,false,true]
@@ -142,8 +137,8 @@ describe NodesController do
       get :new
 
       response.should be_success
-      assigns[:class_data].should == {:class=>"#node_class_ids", :data_source=>"/node_classes.json", :objects=>[]}
-      assigns[:group_data].should == {:class=>"#node_group_ids", :data_source=>"/node_groups.json", :objects=>[]}
+      assigns[:class_data].should include({:class=>"#node_class_ids", :data_source=>"/node_classes.json", :objects=>[]})
+      assigns[:group_data].should include({:class=>"#node_group_ids", :data_source=>"/node_groups.json", :objects=>[]})
     end
   end
 
@@ -153,14 +148,14 @@ describe NodesController do
       assigns[:node].name.should == 'foo'
     end
 
-    it "should render new when creation fails" do
+    it "should render error when creation fails" do
       post :create, 'node' => { }
-      response.should render_template('nodes/new')
+      response.should render_template('shared/_error')
       response.should be_success
 
       assigns[:node].errors.full_messages.should == ["Name can't be blank"]
-      assigns[:class_data].should == {:class=>"#node_class_ids", :data_source=>"/node_classes.json", :objects=>[]}
-      assigns[:group_data].should == {:class=>"#node_group_ids", :data_source=>"/node_groups.json", :objects=>[]}
+      assigns[:class_data].should include({:class=>"#node_class_ids", :data_source=>"/node_classes.json", :objects=>[]})
+      assigns[:group_data].should include({:class=>"#node_group_ids", :data_source=>"/node_groups.json", :objects=>[]})
     end
   end
 
@@ -223,7 +218,7 @@ describe NodesController do
           get :show, :id => @node.name, :format => "yaml"
 
           response.should_not be_success
-          response.body.should =~ /has conflicting parameter\(s\)/
+          response.body.should =~ /has conflicting variable\(s\)/
         end
 
         it "should return YAML for an empty node when the node is not found" do
@@ -231,7 +226,7 @@ describe NodesController do
 
           response.should be_success
           struct = yaml_from_response_body
-          struct.should == {'classes' => []}
+          struct.should include({'classes' => []})
         end
       end
 
@@ -242,7 +237,7 @@ describe NodesController do
 
           response.body.should =~ /Node classification has been disabled/
           response.should_not be_success
-          response.response_code.should == 403
+          response.should be_forbidden
         end
       end
     end
@@ -264,8 +259,8 @@ describe NodesController do
       response.should render_template('edit')
       response.should be_success
 
-      assigns[:class_data].should == {:class=>"#node_class_ids", :data_source=>"/node_classes.json", :objects=>[]}
-      assigns[:group_data].should == {:class=>"#node_group_ids", :data_source=>"/node_groups.json", :objects=>[]}
+      assigns[:class_data].should include({:class=>"#node_class_ids", :data_source=>"/node_classes.json", :objects=>[]})
+      assigns[:group_data].should include({:class=>"#node_group_ids", :data_source=>"/node_groups.json", :objects=>[]})
     end
 
     it 'should work when given a node name' do
@@ -323,9 +318,9 @@ describe NodesController do
           assigns[:node].errors[:name].should_not be_blank
         end
 
-        it 'should render the update action' do
+        it 'should render error' do
           do_put
-          response.should render_template('edit')
+          response.should render_template('shared/_error')
         end
       end
 
@@ -341,6 +336,16 @@ describe NodesController do
           assigns[:node].should be_valid
         end
       end
+
+      it 'should response with JSON that contains redirect URL' do
+        do_put
+        json_response = json_from_response_body
+        response.code.should == '200'
+        response_hash = JSON.parse(response.body)
+        response_hash["status"].should == "ok"
+        response_hash["valid"].should == "true"
+        response_hash["redirect_to"].should =~ /#{node_path(@node)}$/
+      end
     end
 
     describe "when node classification is enabled" do
@@ -349,11 +354,11 @@ describe NodesController do
       end
 
       it "should allow specification of 'parameter_attributes'" do
-        @params[:node].merge! :parameter_attributes => [{:key => 'foo', :value => 'bar'}]
+        @params[:node].merge! :parameter_attributes => {"1" => {:key => 'foo', :value => 'bar'}}
 
         do_put
 
-        @node.reload.parameters.to_hash.should == {'foo' => 'bar'}
+        @node.reload.parameters.to_hash.should include({'foo' => 'bar'})
       end
 
       it "should allow specification of node classes" do
@@ -372,11 +377,11 @@ describe NodesController do
       end
 
       it "should fail if parameter_attributes are specified" do
-        @params[:node].merge! :parameter_attributes => [{:key => 'foo', :value => 'bar'}]
+        @params[:node].merge! :parameter_attributes => {"1" => {:key => 'foo', :value => 'bar'}}
 
         do_put
 
-        response.code.should == '403'
+        response.should be_forbidden
         response.body.should =~ /Node classification has been disabled/
 
         @node.reload.parameters.to_hash.should_not be_present
@@ -388,7 +393,7 @@ describe NodesController do
 
         do_put
 
-        response.code.should == '403'
+        response.should be_forbidden
         response.body.should =~ /Node classification has been disabled/
 
         @node.reload.node_classes.should_not be_present
@@ -400,14 +405,124 @@ describe NodesController do
 
         do_put
 
-        response.should redirect_to(node_path(@node))
+        response.code.should == '200'
+        response_hash = JSON.parse(response.body)
+        response_hash["status"].should == "ok"
+        response_hash["valid"].should == "true"
+        response_hash["redirect_to"].should =~ /#{node_path(@node)}$/
+
         @node.node_groups.should == [node_group]
       end
 
       it "should succeed if parameter_attributes and node classes are omitted" do
         do_put
+        response.code.should == '200'
+        response_hash = JSON.parse(response.body)
+        response_hash["status"].should == "ok"
+        response_hash["valid"].should == "true"
+        response_hash["redirect_to"].should_not be_empty
+      end
+    end
 
-        response.should be_redirect
+    describe "when conflicts exist" do
+      before :each do
+        @node_group_a = NodeGroup.generate! :name => "A"
+        @node_group_b = NodeGroup.generate! :name => "B"
+      end
+
+      describe "when global parameters conflicts exists" do
+        before :each do
+          @param_1 = Parameter.generate(:key => 'foo', :value => '1')
+          @param_2 = Parameter.generate(:key => 'foo', :value => '2')
+
+          @node_group_a.parameters << @param_1
+          @node_group_b.parameters << @param_2
+        end
+
+        it "should return JSON containing valid='false'" do
+          @params[:node].merge!({"assigned_node_group_ids" => ["#{@node_group_a.id},#{@node_group_b.id},"]})
+          do_put
+
+          response = json_from_response_body
+          response["status"].should == "ok"
+          response["valid"].should == "false"
+        end
+
+        it "should render conflicts prompt" do
+          @params[:node].merge!({"assigned_node_group_ids" => ["#{@node_group_a.id},#{@node_group_b.id},"]})
+          do_put
+
+          response.should render_template('shared/_variable_conflicts_table')
+        end
+
+        it "should return JSON containing redirect_to URL when update is forced" do
+          @params[:node].merge!({"assigned_node_group_ids" => ["#{@node_group_a.id},#{@node_group_b.id},"]})
+          @params.merge!({ :force_update => "true" })
+          do_put
+
+          response.code.should == '200'
+          response_hash = JSON.parse(response.body)
+          response_hash["status"].should == "ok"
+          response_hash["valid"].should == "true"
+          response_hash["redirect_to"].should =~ /#{node_path(@node)}$/
+        end
+
+        it "should not render conflicts prompt when update is forced" do
+          @params[:node].merge!({"assigned_node_group_ids" => ["#{@node_group_a.id},#{@node_group_b.id},"]})
+          @params.merge!({ :force_update => "true" })
+          do_put
+
+          response.should_not render_template('shared/_confirm.html.haml')
+        end
+      end
+
+      describe "when class parameters conflicts exists" do
+        before :each do
+          @node_class_a = NodeClass.generate! :name => "class_a"
+          @node_group_a.node_classes << @node_class_a
+          @node_group_b.node_classes << @node_class_a
+
+          @node_group_a_class_memberships_a = NodeGroupClassMembership.find_by_node_group_id_and_node_class_id(@node_group_a.id, @node_class_a.id)
+          @node_group_a_class_memberships_a.parameters << Parameter.generate(:key => 'foo', :value => '1')
+          @node_group_b_class_memberships_a = NodeGroupClassMembership.find_by_node_group_id_and_node_class_id(@node_group_b.id, @node_class_a.id)
+          @node_group_b_class_memberships_a.parameters << Parameter.generate(:key => 'foo', :value => '2')
+        end
+
+        it "should return JSON containing valid='false'" do
+          @params[:node].merge!({"assigned_node_group_ids" => ["#{@node_group_a.id},#{@node_group_b.id},"]})
+          do_put
+
+          response = json_from_response_body
+          response["status"].should == "ok"
+          response["valid"].should == "false"
+        end
+
+        it "should render conflicts prompt" do
+          @params[:node].merge!({"assigned_node_group_ids" => ["#{@node_group_a.id},#{@node_group_b.id},"]})
+          do_put
+
+          response.should render_template('shared/_class_parameter_conflicts_table')
+        end
+
+        it "should return JSON containing redirect_to URL when update is forced" do
+          @params[:node].merge!({"assigned_node_group_ids" => ["#{@node_group_a.id},#{@node_group_b.id},"]})
+          @params.merge!({ :force_update => "true" })
+          do_put
+
+          response.code.should == '200'
+          response_hash = JSON.parse(response.body)
+          response_hash["status"].should == "ok"
+          response_hash["valid"].should == "true"
+          response_hash["redirect_to"].should =~ /#{node_path(@node)}$/
+        end
+
+        it "should not render conflicts prompt when update is forced" do
+          @params[:node].merge!({"assigned_node_group_ids" => ["#{@node_group_a.id},#{@node_group_b.id},"]})
+          @params.merge!({ :force_update => "true" })
+          do_put
+
+          response.should_not render_template('shared/_confirm.html.haml')
+        end
       end
     end
   end
@@ -516,7 +631,7 @@ describe NodesController do
       specify { response.should be_success }
 
       it "should be paginated" do
-        assigns[:reports].should be_a_kind_of(WillPaginate::Collection)
+        assigns[:reports].should respond_to(:paginate)
       end
     end
   end
@@ -600,6 +715,8 @@ describe NodesController do
         before :each do
           SETTINGS.stubs(:enable_read_only_mode).returns(source == 'configuration file')
           session.expects(:[]).with('ACCESS_CONTROL_ROLE').returns('READ_ONLY') if source == 'Rack middleware'
+          # Raising the ReadOnlyEnabledError exception will create a session[:flash] error entry, which we stub (but not expects)
+          session.stubs(:[]).with('flash').returns(ActionDispatch::Flash::FlashHash.new)
         end
 
         it "should raise an error when calling 'new'" do

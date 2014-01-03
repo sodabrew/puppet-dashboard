@@ -21,17 +21,19 @@
       Help
   .node_summary
     %table.primary
-      -# This conditional is ugly, but it saves us from duplicating the markup
-      - Node.possible_derived_statuses.push( 'unreported', 'all' ).each do |status|
-        - if( status == 'all' )
+      - node_summary = Node.count_by_status
+      - all_node_count = Node.unhidden.count
+      - Node.radiator_statuses.each do |status|
+        - case status
+        - when 'all'
           - node_count = Node.unhidden.count
           - nodes_path = {:controller => "nodes", :action => "index"}
           - action_status = 'index'
         - else
-          - node_count = Node.send(status).unhidden.count
+          - node_count = node_summary[status] || Node.send(status).unhidden.count
           - nodes_path = eval("#{status}_nodes_path")
           - action_status = status
-        - percent = percentage(node_count, Node.unhidden.count).to_i
+        - percent = percentage(node_count, all_node_count).to_i
 
         %tr{:class => "#{status} #{active_if(controller_name == 'nodes' && action_name == action_status && parent.nil?)}"}
           %td.count
@@ -39,7 +41,7 @@
           %td.label
             = link_to h(status.capitalize), nodes_path
           %td.percent
-            = link_to "#{percent}<em>%</em>", nodes_path, {:style => "width: #{percent}%"}
+            = link_to "#{percent}<em>%</em>".html_safe, nodes_path, {:style => "width: #{percent}%"}
 
     - if Node.hidden.count > 0
       %table.secondary
@@ -55,9 +57,9 @@
     - unless SETTINGS.enable_read_only_mode || session['ACCESS_CONTROL_ROLE'] == 'READ_ONLY'
       = link_to "Add node", new_node_path, :class => 'button'
 
-= render "shared/node_manager_sidebar_for_type", :type => NodeGroup
+= render :partial => "shared/node_manager_sidebar_for_type", :locals => { :type => NodeGroup }
 - if SETTINGS.use_external_node_classification
-  = render "shared/node_manager_sidebar_for_type", :type => NodeClass
+  = render :partial => "shared/node_manager_sidebar_for_type", :locals => { :type => NodeClass }
 
 #skiptargetholder
-  = render 'shared/skiptarget'
+  = render :partial => 'shared/skiptarget'

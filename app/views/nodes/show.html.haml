@@ -15,5 +15,7 @@
           %li= link_to 'Hide', hide_node_path(@node), :class => "hide button", :method => :put
         %li= link_to 'Delete', @node, :confirm => 'Are you sure you wish to delete this node?', :method => :delete, :class => "delete button"
   .item
+    .section#error_messages{:style => "display: none;"}
+
     - Registry.each_callback :core, :node_view_widgets do |widget|
       = widget.call self, @node

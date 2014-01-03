@@ -5,8 +5,8 @@ class NodeGroupMembershipsController < InheritedResources::Base
 
   def create
     create! do |success, failure|
-      success.json { render :text => @node_group_membership.to_json, :content_type => 'application/json', :status => 201 }
-      failure.json { render :text => {}.to_json, :content_type => 'application/json', :status => 422 }
+      success.json { render :json => @node_group_membership, :status => 201 }
+      failure.json { render :json => {}, :status => 422 }
     end
   end
 

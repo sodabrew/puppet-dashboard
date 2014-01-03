@@ -3,9 +3,9 @@ Registry.add_callback :core, :node_view_widgets, "100_description" do |view_rend
   view_renderer.render 'nodes/description', :node => node
 end
 
-Registry.add_callback :core, :node_view_widgets, "200_parameters" do |view_renderer, node|
+Registry.add_callback :core, :node_view_widgets, "200_variables" do |view_renderer, node|
   if SETTINGS.use_external_node_classification
-    view_renderer.render 'shared/parameters', :resource => node
+    view_renderer.render 'shared/variables', :resource => node
   end
 end
 
@@ -37,7 +37,7 @@ end
 
 # Report view widgets
 Registry.add_callback :core, :report_view_widgets, "800_resource_statuses" do |view_renderer, report|
-  statuses = report.resource_statuses.all(:order => 'resource_type, title').group_by(&:status)
+  statuses = report.resource_statuses.includes(:events).all(:order => 'resource_type, title').group_by(&:status)
   statuses = %w[failed pending changed unchanged].map { |k| (v = statuses[k]) && [k, v] }
   view_renderer.render 'reports/resource_statuses', :report => report, :statuses => statuses.compact
 end

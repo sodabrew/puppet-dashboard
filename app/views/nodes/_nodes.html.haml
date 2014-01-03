@@ -41,7 +41,7 @@
     %tfoot
       %tr
         %td{:colspan => container.nil? ? 8 : 9 }
-          = pagination_for nodes, more_link, (node_count - nodes.count)
+          = pagination_for nodes, more_link, (node_count - nodes.per_page)
     %tbody
       %tr
         %td{:colspan => container.nil? ? 3 : 4} Total
@@ -59,7 +59,7 @@
               - if sources.include?(container)
                 = h node.name
               - else
-                = sources.map{|s| link_to(h(s.name), s)}.join(", ")
+                = raw sources.map{ |s| link_to(h(s.name), s) }.join(", ")
           %td.latest_report
             = node.last_apply_report ? link_to(h(node.last_apply_report.time), node.last_apply_report) : "Has not reported"
           - column_filter[ selected_status ].each do |status|

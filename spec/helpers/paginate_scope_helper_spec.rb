@@ -1,4 +1,4 @@
-require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
+require 'spec_helper'
 
 describe PaginateScopeHelper do
   describe "#paginate_scope" do
@@ -60,7 +60,7 @@ describe PaginateScopeHelper do
       paginated_scope.total_pages.should == 1
       paginated_scope.count.should == 3
       paginated_scope.current_page.should == 1
-      paginated_scope.per_page.should == 30 # In will_paginate v3, it is WillPaginate.per_page
+      paginated_scope.per_page.should == WillPaginate.per_page
     end
   end
 end

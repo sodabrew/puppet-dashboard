@@ -1,4 +1,4 @@
-require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
+require 'spec_helper'
 
 describe NodeGroup do
   describe "associations" do
@@ -229,6 +229,13 @@ describe NodeGroup do
         group.size.should == 2
         group.should include(@groups.first, @groups.last)
       end
+
+      it "should work with the description field" do
+        @groups.each {|o| o.description.should be_nil}
+
+        obj = NodeGroup.generate! :name => "anobj", :description => "A Node Group"
+        obj.description.should == "A Node Group"
+      end
     end
   end
 
@@ -282,9 +289,9 @@ describe NodeGroup do
       new_group.nodes.should        be_empty
 
       new_group.errors.full_messages.should =~ [
-        "Couldn't find NodeGroup with ID=cow",
-        "Couldn't find NodeClass with ID=dog",
-        "Couldn't find Node with ID=pig"
+        "Couldn't find NodeGroup with id=cow",
+        "Couldn't find NodeClass with id=dog",
+        "Couldn't find Node with id=pig"
       ]
     end
   end

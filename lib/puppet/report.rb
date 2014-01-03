@@ -110,9 +110,10 @@ end
 module ReportExtensions #:nodoc:
   def self.extended(obj)
     case
-    when obj.instance_variables.include?('@report_format')
+    # TODO: map(&:to_sym) not required after Ruby 1.8 support is dropped.
+    when obj.instance_variables.map(&:to_sym).include?(:'@report_format')
       obj.extend ReportFormat2::Report
-    when obj.instance_variables.include?("@resource_statuses")
+    when obj.instance_variables.map(&:to_sym).include?(:'@resource_statuses')
       obj.extend ReportFormat1::Report
     else
       obj.extend ReportFormat0::Report

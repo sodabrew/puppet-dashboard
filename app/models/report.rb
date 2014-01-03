@@ -2,12 +2,16 @@ class Report < ActiveRecord::Base
   def self.per_page; SETTINGS.reports_per_page end # Pagination
   belongs_to :node
 
-  has_many :logs, :class_name => "ReportLog", :dependent => :destroy
-  has_many :resource_statuses, :dependent => :destroy
-  has_many :metrics, :dependent => :destroy
+  # See the after_destroy delete_resources method for more delete_all action
+  has_many :logs,   :class_name => 'ReportLog',     :dependent => :delete_all
+  has_many :metrics,                                :dependent => :delete_all
+  has_many :resource_statuses
   has_many :events, :through => :resource_statuses
 
-  accepts_nested_attributes_for :metrics, :resource_statuses, :logs
+  accepts_nested_attributes_for :logs, :metrics, :resource_statuses, :events
+
+  attr_accessible :host, :time, :status, :kind, :puppet_version, :configuration_version
+  attr_accessible :logs_attributes, :metrics_attributes, :resource_statuses_attributes, :events_attributes
 
   before_validation :assign_to_node
   validates_presence_of :host, :time, :kind
@@ -16,16 +20,17 @@ class Report < ActiveRecord::Base
     :allow_nil => true,
     :message   => "already has a report for time and kind"
   after_save :update_node
+  after_destroy :delete_resources
   after_destroy :replace_last_report
 
-  default_scope :order => 'time DESC', :include => :node
+  default_scope includes(:node).order('time DESC')
 
-  named_scope :inspections, :conditions => {:kind => "inspect"                       }, :include => :metrics
-  named_scope :applies,     :conditions => {:kind => "apply"                         }, :include => :metrics
-  named_scope :changed,     :conditions => {:kind => "apply", :status => 'changed'   }, :include => :metrics
-  named_scope :unchanged,   :conditions => {:kind => "apply", :status => 'unchanged' }, :include => :metrics
-  named_scope :failed,      :conditions => {:kind => "apply", :status => 'failed'    }, :include => :metrics
-  named_scope :pending,     :conditions => {:kind => "apply", :status => 'pending'   }, :include => :metrics
+  scope :inspections, includes(:metrics).where(:kind => 'inspect')
+  scope :applies,     includes(:metrics).where(:kind => 'apply')
+  scope :changed,     includes(:metrics).where(:kind => 'apply', :status => 'changed'   )
+  scope :unchanged,   includes(:metrics).where(:kind => 'apply', :status => 'unchanged' )
+  scope :failed,      includes(:metrics).where(:kind => 'apply', :status => 'failed'    )
+  scope :pending,     includes(:metrics).where(:kind => 'apply', :status => 'pending'   )
 
   def total_resources
     metric_value("resources", "total")
@@ -86,9 +91,17 @@ class Report < ActiveRecord::Base
     attribute_hash
   end
 
+  def self.read_file_contents(file)
+    File.read(file)
+  end
+
+  def self.remove_file(file)
+    File.unlink(file)
+  end
+
   def self.create_from_yaml_file(report_file, options = {})
-    report = create_from_yaml(File.read(report_file))
-    File.unlink(report_file) if options[:delete]
+    report = create_from_yaml(read_file_contents(report_file))
+    remove_file(report_file) if options[:delete]
     return report
   rescue Exception => e
     retries ||= 3
@@ -96,7 +109,7 @@ class Report < ActiveRecord::Base
     DelayedJobFailure.create!(
       :summary   => "Importing report #{File.basename(report_file)}",
       :details   => e.to_s,
-      :backtrace => e.application_backtrace
+      :backtrace => Rails.backtrace_cleaner.clean(e.backtrace)
     )
     return nil
   end
@@ -183,6 +196,13 @@ class Report < ActiveRecord::Base
 
       rs.status = resource_status_status
     end
+  end
+
+  # It is too expensive to use has_many ... :dependent => :destroy
+  # and unfortunately :dependent => :delete_all doesn't work :through.
+  def delete_resources
+    ResourceEvent.delete_all(:resource_status_id => resource_statuses.map(&:id))
+    ResourceStatus.delete_all(:report_id => id)
   end
 
   def replace_last_report

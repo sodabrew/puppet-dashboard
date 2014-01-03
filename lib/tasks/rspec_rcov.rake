@@ -3,20 +3,20 @@ namespace :spec do
     if defined?(Spec::Rake::SpecTask)
       desc 'Run all specs and save the code coverage data'
       Spec::Rake::SpecTask.new(:save) do |t|
-        t.spec_opts = ['--options', "\"#{RAILS_ROOT}/spec/spec.opts\""]
+        t.spec_opts = ['--options', "\"#{Rails.root}/spec/spec.opts\""]
         t.spec_files = FileList['spec/**/*/*_spec.rb']
         t.rcov = true
         t.rcov_opts = lambda do
-          IO.readlines("#{RAILS_ROOT}/spec/rcov.opts").map {|l| l.chomp.split " "}.flatten + ['--save']
+          IO.readlines("#{Rails.root}/spec/rcov.opts").map {|l| l.chomp.split " "}.flatten + ['--save']
         end
       end
 
       Spec::Rake::SpecTask.new(:diffraw) do |t|
-        t.spec_opts = ['--options', "\"#{RAILS_ROOT}/spec/spec.opts\""]
+        t.spec_opts = ['--options', "\"#{Rails.root}/spec/spec.opts\""]
         t.spec_files = FileList['spec/**/*/*_spec.rb']
         t.rcov = true
         t.rcov_opts = lambda do
-          IO.readlines("#{RAILS_ROOT}/spec/rcov.opts").map {|l| l.chomp.split " "}.flatten + ['--text-coverage-diff', '--no-color']
+          IO.readlines("#{Rails.root}/spec/rcov.opts").map {|l| l.chomp.split " "}.flatten + ['--text-coverage-diff', '--no-color']
         end
       end
 

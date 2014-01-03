@@ -1,4 +1,4 @@
-require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
+require 'spec_helper'
 
 describe "/node_classes/show.html.haml" do
   include NodeClassesHelper
@@ -9,7 +9,6 @@ describe "/node_classes/show.html.haml" do
       render
     end
 
-    specify { response.should be_a_success }
-    it { should have_tag('h2', "Class:\n#{@node_class.name}") }
+    it { rendered.should have_tag 'h2', :text => /Class:\n#{@node_class.name}/ }
   end
 end

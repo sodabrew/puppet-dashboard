@@ -62,6 +62,18 @@ namespace :nodegroup do
     end
   end
 
+  desc 'List child groups that belong to a node group'
+  task :listgroups => :environment do
+    nodegroup = get_group(ENV['name'])
+
+    begin
+      nodegroup.node_groups.map(&:name).map{|n| puts n}
+    rescue => e
+      puts e.message
+      exit 1
+    end
+  end
+
   desc 'Add a new node group'
   task :add => :environment do
     if ENV['name']
@@ -106,6 +118,25 @@ namespace :nodegroup do
     end
   end
 
+  desc 'Add a child group to a nodegroup'
+  task :addgroup => :environment do
+    nodegroup = get_group(ENV['name'])
+    addlgroup = get_group(ENV['group'])
+
+    begin
+     groups = nodegroup.node_groups
+     if groups.include?(addlgroup)
+       puts "Group '#{nodegroup.name}' already includes group '#{addlgroup.name}'"
+     else
+       groups << addlgroup
+       puts "Group '#{addlgroup.name}' added to node group '#{nodegroup.name}'"
+     end
+    rescue => e
+      puts e.message
+      exit 1
+    end
+  end
+
   desc 'Remove a class from a nodegroup'
   task :delclass => :environment do
     nodegroup = get_group(ENV['name'])
@@ -125,7 +156,26 @@ namespace :nodegroup do
     end
   end
 
-  desc 'Show/Edit/Add parameters for a node group'
+  desc 'Remove a child group from a nodegroup'
+  task :delgroup => :environment do
+    nodegroup = get_group(ENV['name'])
+    addlgroup = get_group(ENV['group'])
+
+    begin
+      groups = nodegroup.node_groups
+      unless groups.include?(addlgroup)
+        puts "Group '#{nodegroup.name}' does not include groups '#{addlgroup.name}'"
+      else
+        groups.delete(addlgroup)
+        puts "Group '#{addlgroup.name}' removed from node group '#{nodegroup.name}'"
+      end
+    rescue => e
+      puts e.message
+      exit 1
+    end
+  end
+
+  # deprecated - use variables instead
   task :parameters => :environment do
     nodegroup = get_group(ENV['name'])
 
@@ -170,6 +220,59 @@ namespace :nodegroup do
 
         nodegroup.save!
         puts "Node group parameters successfully edited for #{nodegroup.name}!"
+      end
+    rescue => e
+      puts "There was a problem saving the node group: #{e.message}"
+      exit 1
+    end
+
+  end
+
+  desc 'Show/Edit/Add variables for a node group'
+  task :variables => :environment do
+    nodegroup = get_group(ENV['name'])
+
+    # Show variables
+    unless ENV['variables']
+      nodegroup.parameters.each do |p|
+        puts "#{p.key}=#{p.value}"
+      end
+      exit
+    end
+
+    given_parameters = Hash[ ENV['variables'].split(',').map do |param|
+      param_array = param.split('=',2)
+      if param_array.size != 2
+        raise ArgumentError, "Could not parse variable #{param_array.first} given. Perhaps you're missing a '='"
+      end
+      if param_array[0].nil? or param_array[0].empty?
+        raise ArgumentError, "Could not parse variables. Please check your format. Perhaps you need to name a variable before a '='"
+      end
+      if param_array[1].nil? or param_array[1].empty?
+        raise ArgumentError, "Could not parse variables #{param_array.first}. Please check your format"
+      end
+      param_array
+    end ]
+
+    begin
+      ActiveRecord::Base.transaction do
+        given_parameters.each do |key, value|
+          param, *dupes = *nodegroup.parameters.find_all_by_key(key)
+          if param
+            # Change existing variables
+            param.value = value
+            param.save!
+            # If there were duplicate variables from the previous buggy version of
+            # this code, remove them
+            dupes.each { |d| d.destroy }
+          else
+            # Create new variables
+            nodegroup.parameters.create(:key => key, :value => value)
+          end
+        end
+
+        nodegroup.save!
+        puts "Node group variables successfully edited for #{nodegroup.name}!"
       end
     rescue => e
       puts "There was a problem saving the node group: #{e.message}"

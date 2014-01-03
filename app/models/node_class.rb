@@ -14,15 +14,27 @@ class NodeClass < ActiveRecord::Base
 
   validates_format_of :name, :with => /\A([a-z0-9][-\w]*)(::[a-z0-9][-\w]*)*\Z/, :message => "must contain a valid Puppet class name, e.g. 'foo' or 'foo::bar'"
   validates_uniqueness_of :name
+  attr_accessible :name, :description
 
-  default_scope :order => 'name ASC'
+  default_scope :order => 'node_classes.name ASC'
 
-  named_scope :search, lambda{|q| q.blank? ? {} : {:conditions => ['name LIKE ?', "%#{q}%"]} }
+  scope :search, lambda{|q| where('name LIKE ?', "%#{q}%") unless q.blank? }
 
-  named_scope :with_nodes_count,
+  scope :with_nodes_count,
     :select => 'node_classes.*, count(nodes.id) as nodes_count',
-    :joins => 'LEFT OUTER JOIN node_class_memberships ON (node_classes.id = node_class_memberships.node_class_id) LEFT OUTER JOIN nodes ON (nodes.id = node_class_memberships.node_id)',
+    :joins => <<-SQL,
+      LEFT OUTER JOIN node_class_memberships ON (node_classes.id = node_class_memberships.node_class_id)
+      LEFT OUTER JOIN nodes ON (nodes.id = node_class_memberships.node_id)
+    SQL
     :group => 'node_classes.id'
+
+  def to_param
+    SETTINGS.numeric_url_slugs ? id.to_s : name
+  end
+
+  def self.find_by_id_or_name!(identifier)
+    find_by_id(identifier) or find_by_name!(identifier)
+  end
 
   def to_json(options)
     super({:methods => :description, :only => [:name, :id]}.merge(options))

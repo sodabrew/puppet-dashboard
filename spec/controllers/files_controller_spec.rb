@@ -1,4 +1,4 @@
-require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
+require 'spec_helper'
 
 describe FilesController do
   before :each do
@@ -30,7 +30,7 @@ describe FilesController do
       get :diff, @options
 
       response.should_not be_success
-      response.status.should == '403 Forbidden'
+      response.should be_forbidden
       response.body.should == 'File bucket diffs have been disabled'
     end
 
@@ -41,7 +41,7 @@ describe FilesController do
         get :diff, @options
 
         response.should_not be_success
-        response.status.should == '400 Bad Request'
+        response.should be_bad_request
         response.body.should == 'Invalid md5: "Turkmenistan"'
       end
     end
@@ -71,7 +71,7 @@ describe FilesController do
       get :show, @options
 
       response.should_not be_success
-      response.status.should == '403 Forbidden'
+      response.should be_forbidden
       response.body.should == 'File bucket diffs have been disabled'
     end
 
@@ -81,7 +81,7 @@ describe FilesController do
       get :show, @options
 
       response.should_not be_success
-      response.status.should == '400 Bad Request'
+      response.should be_bad_request
       response.body.should == 'Invalid md5: "Turkmenistan"'
     end
 
@@ -97,7 +97,7 @@ describe FilesController do
       get :show, @options
 
       response.should_not be_success
-      response.status.should == '403'
+      response.should be_forbidden
       response.body.should have_tag(
         "p",
         "Connection not authorized: Forbidden request: localhost(127.0.0.1) " +
@@ -117,7 +117,7 @@ describe FilesController do
       get :show, @options
 
       response.should_not be_success
-      response.status.should == '404'
+      response.should be_not_found
       response.body.should have_tag(
         "p",
         "File contents not available: Could not find file_bucket_file md5/24d27c169c2c881eb09a065116f2aa5c"
@@ -132,7 +132,7 @@ describe FilesController do
       get :show, @options
 
       response.should_not be_success
-      response.status.should == '500 Internal Server Error'
+      response.should be_internal_server_error
       response.body.should have_tag(
         "p",
         "Could not connect to your filebucket server at filebucket:1337"
@@ -147,7 +147,7 @@ describe FilesController do
       get :show, @options
 
       response.should_not be_success
-      response.status.should == '500 Internal Server Error'
+      response.should be_internal_server_error
       response.body.should == 'oops'
     end
   end

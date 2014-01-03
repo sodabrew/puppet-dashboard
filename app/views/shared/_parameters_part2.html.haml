@@ -1,0 +1,4 @@
+%td{:style => ("background-color: pink;" if param[:sources].size > 1)}
+  %tt= ConflictAnalyzer.get_parameter_value(source, param[:name], node_class_id)
+%td
+  %tt= links ? link_to(h(source.name),node_group_path(source.id)) : h(source.name)

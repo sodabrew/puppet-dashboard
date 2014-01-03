@@ -1,0 +1,15 @@
+!!!
+%html
+  %head
+    - page_title = yield(:page_title)
+    %title= 'Puppet Node Manager'
+    %meta{"http-equiv" => "refresh", :content => "60"}
+    = stylesheet_link_tag 'application.radiator'
+    = javascript_include_tag 'application.radiator'
+
+  - add_body_class "#{controller.controller_name}_controller"
+  - add_body_class "#{controller.controller_name}_#{controller.action_name}_action"
+  - add_body_class "#{controller.controller_name}_form_action" if %w[new create edit update].include?(controller.action_name)
+  - add_body_class "no-sidebar" unless @body_classes.include?('with-sidebar')
+  %body{:class => @body_classes}
+    = yield

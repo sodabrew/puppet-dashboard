@@ -68,7 +68,7 @@ UNITS:
   namespace :prune do
     desc 'Delete orphaned records whose report has already been deleted'
     task :orphaned => :environment do
-      require "#{RAILS_ROOT}/lib/progress_bar"
+      require "#{Rails.root}/lib/progress_bar"
 
       report_dependent_deletion = 'report_id not in (select id from reports)'
 

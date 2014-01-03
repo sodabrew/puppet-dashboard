@@ -1,4 +1,4 @@
-require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
+require 'spec_helper'
 
 describe NodeClass do
   it { should validate_presence_of(:name) }
@@ -55,6 +55,13 @@ describe NodeClass do
 
         classes.size.should == 2
         classes.should include(@classes.first, @classes.last)
+      end
+
+      it "should work with the description field" do
+        @classes.each {|o| o.description.should be_nil}
+
+        obj = NodeClass.generate! :name => "anobj", :description => "A Node Class"
+        obj.description.should == "A Node Class"
       end
     end
 

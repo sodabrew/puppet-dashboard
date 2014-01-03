@@ -1,0 +1,22 @@
+%table.inspector{:style => 'margin-top: 1.5em;'}
+  %thead
+    %tr
+      %th{:scope => :col} Class
+      %th{:scope => :col} Parameter
+      %th{:scope => :col} Value
+      %th{:scope => :col} Source
+  %tbody
+    - conflicts.keys.sort_by { |node_class| node_class.name }.each do |node_class|
+      %tr
+        - class_srcs_cnt = 0
+        - conflicts[node_class].each { |param| param[:sources].each { |item| class_srcs_cnt += 1 }}
+        %td{:rowspan => class_srcs_cnt}
+          %strong= h(node_class.name)
+        - first_param = true
+        - conflicts[node_class].sort_by{ |param| param[:name] }.each do |param|
+          - if first_param
+            - first_param = false
+            = render 'shared/parameters_part1', :param => param, :node_class_id => node_class.id, :links => false
+          - else
+            %tr
+              = render 'shared/parameters_part1', :param => param, :node_class_id => node_class.id, :links => false

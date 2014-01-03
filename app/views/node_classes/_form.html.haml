@@ -3,8 +3,12 @@
 = header_for(form)
 
 .item
-  = h form.error_messages
+  = render :partial => 'shared/form_errors', :object => form.object.errors
 
   .element
     = form.label :name
     = form.text_field :name, :placeholder => "Class name"
+
+  .element.textarea
+    = form.label :description
+    = form.text_area :description, :rows => 4, :placeholder => "Enter a description for this class here..."

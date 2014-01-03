@@ -101,11 +101,11 @@ module ApplicationHelper
 
   # Return HTML with pagination controls for displaying an ActiveRecord +scope+.
   def pagination_for(scope, more_link=nil, count=nil)
-    count_str = count ? "#{count} " : ""
+    count_str = h(count ? "#{count} " : "")
     content_tag(:div, :class => 'actionbar') do
       pagination = if scope.respond_to?(:total_pages) && scope.total_pages > 1
         [
-        more_link ? content_tag(:span, :class => 'pagination') { link_to("#{count_str}More &raquo;", more_link) } : will_paginate(scope),
+        more_link ? content_tag(:span, :class => 'pagination') { link_to("#{count_str}More &raquo;".html_safe, more_link) } : will_paginate(scope),
         ]
       else
         []
@@ -114,7 +114,7 @@ module ApplicationHelper
         pagination_sizer_for(scope),
         tag(:br, :class=> 'clear')
       ]
-      pagination + pagination_sizer
+      (pagination + pagination_sizer).join.html_safe
     end
   end
 
@@ -122,19 +122,19 @@ module ApplicationHelper
     return nil if ! scope.first
     return nil if ! scope.first.class.respond_to? :per_page
     content_tag(:div, :class => 'pagination') do
-      [content_tag(:span){ "Per page: " }] +
+      content_tag(:span, "Per page: ") +
       [scope.first.class.per_page, 100].sort.push(:all).uniq.map do |n|
         if (params[:per_page] || scope.per_page.to_s) == n.to_s
-          content_tag(:span, :class => "current"){ n }
+          content_tag(:span, n, :class => "current")
         else
           link_to(n, params.merge({:per_page => n}))
         end
-      end
+      end.join.html_safe
     end
   end
 
   def icon(name, options={})
-    image_tag "icons/#{name}.png", options
+    image_tag "/images/icons/#{name}.png", options
   end
 
   # Return status icon for the +node+.
@@ -179,20 +179,20 @@ module ApplicationHelper
   end
 
   def wrap_on_slashes(str)
-    (h str).gsub("/","/<wbr />")
+    (h str).gsub("/","/<wbr />").html_safe
   end
 
   # Return HTML describing the search if one is present in params[:q].
   def describe_search_if_present
     if params[:q].present?
-      return "matching &ldquo;#{h params[:q]}&rdquo;"
+      return "matching &ldquo;#{h params[:q]}&rdquo;".html_safe
     end
   end
 
   # Return HTML describing that no matches were found using the +message+.
   # The +message+ is raw HTML, escape it yourself if necessary.
   def describe_no_matches_as(message)
-    return "<span class='nomatches'>&mdash; #{message} &mdash;</span>"
+    return "<span class='nomatches'>&mdash; #{message} &mdash;</span>".html_safe
   end
 
   # Return HTML describing that no matches were found for the collection
@@ -247,11 +247,12 @@ module ApplicationHelper
     javascript = "jQuery(document).ready(function(J) {\n"
     inputs.each do |input|
       javascript << "  J('#{input[:class]}').tokenInput('#{input[:data_source]}', {\n"
-      javascript << "    prePopulate: #{input[:objects].map {|object| {:id => object.id, :name => object.name}}.to_json}\n"
+      javascript << "    prePopulate: #{input[:objects].map {|object| {:id => object.id, :name => object.name}}.to_json},\n"
+      javascript << "    onResult: autosuggestResultFilter('#{input[:class]}')"
       javascript << "  });\n"
     end
     javascript << "});"
-    return javascript
+    return javascript.html_safe
   end
 
   # Asynchronously loads data from a URL and injects it into the element specified. The
