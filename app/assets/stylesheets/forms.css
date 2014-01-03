@@ -2,7 +2,7 @@ form {
 }
 
 form .element {
-  width: 512px;
+  padding-right: 20%;
   margin: 0 0 .5em;
 }
 

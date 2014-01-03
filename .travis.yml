@@ -1,7 +1,4 @@
 language: ruby
-branches:
-  only:
-    - rails3
 env:
   - DB=mysql
   - DB=postgres

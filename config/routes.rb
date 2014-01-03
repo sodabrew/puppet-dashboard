@@ -2,34 +2,23 @@ PuppetDashboard::Application.routes do
 
   root :to => 'pages#home'
 
-  resources :node_classes do
-    collection do
-      get :search
-    end
-  end
-
-  resources :node_class_memberships do
-    collection do
-      get :search
-    end
-  end
-
-  resources :node_group_class_memberships do
-    collection do
-      get :search
-    end
-  end
-
-  resources :node_groups do
-    member do
-      get :diff
-    end
-    collection do
-      get :search
-    end
-  end
-
+  # Nodes, Groups, and Classes may all have names or numeric ids
   constraints(:id => /[^\/]+/) do
+    resources :node_classes do
+      collection do
+        get :search
+      end
+    end
+
+    resources :node_groups do
+      member do
+        get :diff
+      end
+      collection do
+        get :search
+      end
+    end
+
     resources :nodes do
       member do
         put :hide
@@ -47,6 +36,18 @@ PuppetDashboard::Application.routes do
         get :hidden
         get :search
       end
+    end
+  end
+
+  resources :node_class_memberships do
+    collection do
+      get :search
+    end
+  end
+
+  resources :node_group_class_memberships do
+    collection do
+      get :search
     end
   end
 

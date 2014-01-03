@@ -127,6 +127,13 @@ class Report < ActiveRecord::Base
     report_hash["resource_statuses"] = report_hash["resource_statuses"].values
 
     report = Report.new(Report.attribute_hash_from(report_hash)).munge
+
+    # munge will capture metrics about the number of unchanged items
+    # then we can remove them to save space in the resource_statuses table
+    if SETTINGS.disable_report_unchanged_events
+      report.resource_statuses.delete_if {|rs| rs.status == 'unchanged' }
+    end
+
     report.save!
     report
   end
@@ -215,6 +222,19 @@ class Report < ActiveRecord::Base
       node.find_and_assign_last_inspect_report
     else
       raise "There's no such thing as a #{kind.inspect} report"
+    end
+  end
+
+  # Delete many reports in one transaction without instantiating the models
+  # NOTE: does not fix up the last_report fields on the related Node
+  def self.bulk_delete(report_ids)
+    transaction do
+      status_ids = ResourceStatus.where(:report_id => report_ids).pluck(:id)
+      ResourceEvent.delete_all(:resource_status_id => status_ids)
+      ResourceStatus.delete_all(:report_id => report_ids)
+      ReportLog.delete_all(:report_id => report_ids)
+      Metric.delete_all(:report_id => report_ids)
+      Report.delete_all(:id => report_ids)
     end
   end
 end

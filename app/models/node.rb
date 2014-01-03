@@ -3,6 +3,7 @@ class Node < ActiveRecord::Base
 
   include NodeGroupGraph
   extend FindFromForm
+  extend FindByIdOrName
 
   validates_presence_of :name
   validates_uniqueness_of :name, :case_sensitive => false
@@ -79,10 +80,6 @@ class Node < ActiveRecord::Base
     SETTINGS.numeric_url_slugs ? id.to_s : name
   end
 
-  def self.find_by_id_or_name!(identifier)
-    find_by_id(identifier) or find_by_name!(identifier)
-  end
-
   def self.find_from_inventory_search(search_params={})
     queries = search_params.map do |param|
       fact  = CGI::escape(param['fact'])
@@ -93,7 +90,7 @@ class Node < ActiveRecord::Base
     url = "https://#{SETTINGS.inventory_server}:#{SETTINGS.inventory_port}/" +
           "production/facts_search/search?#{ queries.join('&') }"
 
-    matches = JSON.parse(PuppetHttps.get(url, 'pson'))
+    matches = JSON.parse(PuppetHttps.get(url, 'pson')) rescue []
     matches.map!(&:downcase)
     nodes = Node.find_all_by_name(matches)
     found = nodes.map(&:name)
@@ -215,6 +212,16 @@ class Node < ActiveRecord::Base
       assign_last_inspect_report_if_newer(report)
     else
       self.save!
+    end
+  end
+
+  def prune_reports(cutoff)
+    transaction do
+      old_report_ids = self.reports.where('reports.time < ?', cutoff).pluck(:id)
+      deleted_count = Report.bulk_delete(old_report_ids)
+      self.find_and_assign_last_inspect_report
+      self.find_and_assign_last_apply_report
+      deleted_count
     end
   end
 
