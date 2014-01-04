@@ -4,7 +4,7 @@
 RAKE_ROOT = File.dirname(__FILE__)
 require 'rake'
 
-["rake/testtask","rdoc/task","thread","tasks/rails"].each do |dependency|
+["rake/testtask","rdoc/task","thread"].each do |dependency|
   begin
     require dependency
   rescue LoadError => e
