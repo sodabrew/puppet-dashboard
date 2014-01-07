@@ -114,6 +114,15 @@ class Node < ActiveRecord::Base
     }
   end
 
+  # Psych YAML calls this method
+  def encode_with(coder)
+    coder.tag = nil
+    configuration.each do |k, v|
+      coder[k] = v
+    end
+  end
+
+  # Syck YAML calls this method
   def to_yaml(opts={})
     configuration.to_yaml(opts)
   end
