@@ -85,14 +85,14 @@ describe NodeGroupsController do
 
         do_put
 
-        @node_group.reload.node_classes.should =~ [node_class]
+        @node_group.reload.node_classes.should == [node_class]
       end
 
       it "should be able to remove assigned classes" do
         node_class = NodeClass.generate!
         @node_group.node_classes << node_class
         @node_group.save!
-        @node_group.reload.node_classes.should =~ [node_class]
+        @node_group.reload.node_classes.should == [node_class]
 
         @params[:node_group].merge! :assigned_node_class_ids => []
 
@@ -105,7 +105,7 @@ describe NodeGroupsController do
         node_subgroup = NodeGroup.generate!
         @node_group.node_groups << node_subgroup
         @node_group.save!
-        @node_group.reload.node_groups.should =~ [node_subgroup]
+        @node_group.reload.node_groups.should == [node_subgroup]
 
         @params[:node_group].merge! :assigned_node_group_ids => []
 
@@ -118,7 +118,7 @@ describe NodeGroupsController do
         node = Node.generate!
         @node_group.nodes << node
         @node_group.save!
-        @node_group.reload.nodes.should =~ [node]
+        @node_group.reload.nodes.should == [node]
 
         @params[:node_group].merge! :assigned_node_ids => []
 

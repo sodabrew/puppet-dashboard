@@ -46,7 +46,8 @@ describe Status  do
           Report.generate!(:time => time)
         end
 
-        ActiveSupport::TimeZone.any_instance.stubs(:now).returns(Time.zone.parse("2011-03-14 00:30:00 -0700"))
+        time = Time.zone.parse("2011-03-14 00:30:00 -0700")
+        ActiveSupport::TimeZone.any_instance.stubs(:now).returns(time)
         SETTINGS.stubs(:daily_run_history_length).returns(4)
 
         Status.within_daily_run_history.map{|s| [s.start, s.total]}.
@@ -70,7 +71,8 @@ describe Status  do
           Report.generate!(:time => time)
         end
 
-        ActiveSupport::TimeZone.any_instance.stubs(:now).returns(Time.zone.parse("2010-11-08 00:00:00 -0800"))
+        time = Time.zone.parse("2010-11-08 00:00:00 -0800")
+        ActiveSupport::TimeZone.any_instance.stubs(:now).returns(time)
         SETTINGS.stubs(:daily_run_history_length).returns(3)
 
         Status.within_daily_run_history.map{|s| [s.start, s.total]}.
@@ -100,7 +102,8 @@ describe Status  do
           Report.generate!(:time => time)
         end
 
-        ActiveSupport::TimeZone.any_instance.stubs(:now).returns(Time.zone.parse("2011-03-18 00:00:00 -0800"))
+        time = Time.zone.parse("2011-03-18 00:00:00 -0800")
+        ActiveSupport::TimeZone.any_instance.stubs(:now).returns(time)
         SETTINGS.stubs(:daily_run_history_length).returns(135)
 
         Status.within_daily_run_history.map{|s| [s.start, s.total]}.
@@ -127,7 +130,8 @@ describe Status  do
           Report.generate!(:time => time)
         end
 
-        ActiveSupport::TimeZone.any_instance.stubs(:now).returns(Time.zone.parse("2009-11-11 00:00 PST"))
+        time = Time.zone.parse("2009-11-11 00:00 PST")
+        ActiveSupport::TimeZone.any_instance.stubs(:now).returns(time)
         SETTINGS.stubs(:daily_run_history_length).returns(2)
 
         Status.within_daily_run_history.map{|s| [s.start, s.total]}.
@@ -151,7 +155,8 @@ describe Status  do
         end
         Report.generate(:time => Time.zone.parse("2009-11-10 12:00 PST"), :kind => "inspect")
 
-        ActiveSupport::TimeZone.any_instance.stubs(:now).returns(Time.zone.parse("2009-11-10 00:00 PST"))
+        time = Time.zone.parse("2009-11-10 00:00 PST")
+        ActiveSupport::TimeZone.any_instance.stubs(:now).returns(time)
         SETTINGS.stubs(:daily_run_history_length).returns(1)
 
         Status.within_daily_run_history.map{|s| [s.start, s.total]}.
@@ -180,7 +185,8 @@ describe Status  do
           Report.generate!(:time => time)
         end
 
-        ActiveSupport::TimeZone.any_instance.stubs(:now).returns(Time.zone.parse("2011-03-14 00:30:00 +0900"))
+        time = Time.zone.parse("2011-03-14 00:30:00 +0900")
+        ActiveSupport::TimeZone.any_instance.stubs(:now).returns(time)
         SETTINGS.stubs(:daily_run_history_length).returns(4)
 
         Status.within_daily_run_history.map{|s| [s.start, s.total]}.
@@ -205,7 +211,8 @@ describe Status  do
           Report.generate!(:time => time)
         end
 
-        ActiveSupport::TimeZone.any_instance.stubs(:now).returns(Time.zone.parse("2010-11-08 00:00:00 +0900"))
+        time = Time.zone.parse("2010-11-08 00:00:00 +0900")
+        ActiveSupport::TimeZone.any_instance.stubs(:now).returns(time)
         SETTINGS.stubs(:daily_run_history_length).returns(3)
 
         Status.within_daily_run_history.map{|s| [s.start, s.total]}.
@@ -235,7 +242,8 @@ describe Status  do
           Report.generate!(:time => time)
         end
 
-        ActiveSupport::TimeZone.any_instance.stubs(:now).returns(Time.zone.parse("2011-03-18 00:00:00 +0900"))
+        time = Time.zone.parse("2011-03-18 00:00:00 +0900")
+        ActiveSupport::TimeZone.any_instance.stubs(:now).returns(time)
         SETTINGS.stubs(:daily_run_history_length).returns(135)
 
         Status.within_daily_run_history.map{|s| [s.start, s.total]}.
@@ -263,7 +271,8 @@ describe Status  do
           Report.generate!(:time => time)
         end
 
-        ActiveSupport::TimeZone.any_instance.stubs(:now).returns(Time.zone.parse("2009-11-11 00:00 JST"))
+        time = Time.zone.parse("2009-11-11 00:00 JST")
+        ActiveSupport::TimeZone.any_instance.stubs(:now).returns(time)
         SETTINGS.stubs(:daily_run_history_length).returns(2)
 
         Status.within_daily_run_history.map{|s| [s.start, s.total]}.
@@ -288,7 +297,8 @@ describe Status  do
         end
         Report.generate(:time => Time.zone.parse("2009-11-10 12:00 +09:00"), :kind => "inspect")
 
-        ActiveSupport::TimeZone.any_instance.stubs(:now).returns(Time.zone.parse("2009-11-10 00:00 +09:00"))
+        time = Time.zone.parse("2009-11-10 00:00 +09:00")
+        ActiveSupport::TimeZone.any_instance.stubs(:now).returns(time)
         SETTINGS.stubs(:daily_run_history_length).returns(1)
 
         Status.within_daily_run_history.map{|s| [s.start, s.total]}.

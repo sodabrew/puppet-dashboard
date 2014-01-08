@@ -3,7 +3,7 @@ source 'https://rubygems.org'
 gem 'rake'                , '~> 0.9.3'
 gem 'rails'               , '~> 3.2'
 gem 'will_paginate'       , '~> 3.0'
-gem 'inherited_resources' , '~> 1.0'
+gem 'inherited_resources' , '1.4.0' # Pin this until they fix ruby 1.8.7 compat
 
 gem 'thin'
 gem 'rack'
@@ -29,10 +29,11 @@ end
 group :development, :test do
   gem 'mocha', '~> 0.13.3', :require => false
   gem 'sqlite3'
-  gem 'rspec-rails'
+  gem 'rspec-rails', '~> 2.13.0'
   gem 'factory_girl', '< 3.0' # supports ruby 1.8.7
-  gem 'shoulda-matchers'
+  gem 'shoulda-matchers', '< 2.0' # support ruby 1.8.7
   gem 'rspec-html-matchers'
+  gem 'nokogiri', '< 1.6' # support ruby 1.8.7
 end
 
 group :postgresql do

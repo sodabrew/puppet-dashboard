@@ -42,7 +42,7 @@ describe NodesController do
 
         it "should propagate errors encountered when a node is invalid" do
           Node.any_instance.stubs(:compiled_parameters).raises ParameterConflictError
-          lambda {get :index, :format => "yaml"}.should raise_error(ParameterConflictError)
+          expect { get :index, :format => "yaml" }.to raise_error(ParameterConflictError)
         end
       end
 
@@ -177,7 +177,7 @@ describe NodesController do
         # NOTE: Uncaught RecordNotFound exceptions cause Rails to render a 404
         # Not Found response in production. We may want to add our own
         # friendlier error handling, rather than letting Rails handle these.
-        lambda { get :show, :id => 'not_a_valid_node' }.should raise_error(ActiveRecord::RecordNotFound)
+        expect { get :show, :id => 'not_a_valid_node' }.to raise_error(ActiveRecord::RecordNotFound)
       end
     end
 
@@ -195,7 +195,7 @@ describe NodesController do
         # NOTE: In the future, it may be better to return a JSON object that
         # better describes the error. Currently we're raising RecordNotFound,
         # which returns an HTML page.
-        lambda { get :show, :id => 'not_a_valid_node', :format => 'json' }.should raise_error(ActiveRecord::RecordNotFound)
+        expect { get :show, :id => 'not_a_valid_node', :format => 'json' }.to raise_error(ActiveRecord::RecordNotFound)
       end
     end
 
@@ -286,7 +286,7 @@ describe NodesController do
 
     it 'should fail when an invalid node id is given' do
       @params[:id] = 'unknown'
-      lambda { do_put }.should raise_error(ActiveRecord::RecordNotFound)
+      expect { do_put }.to raise_error(ActiveRecord::RecordNotFound)
     end
 
     it 'should work when given a node name' do
@@ -720,20 +720,20 @@ describe NodesController do
         end
 
         it "should raise an error when calling 'new'" do
-          lambda{ get :new }.should raise_error(ReadOnlyEnabledError)
+          expect { get :new }.to raise_error(ReadOnlyEnabledError)
         end
 
         it "should raise an error calling 'edit'" do
-          lambda{ get :edit, :id => node.name }.should raise_error(ReadOnlyEnabledError)
+          expect { get :edit, :id => node.name }.to raise_error(ReadOnlyEnabledError)
         end
 
         it "should raise an error when calling 'update'" do
           params = { :id => node.id, :node => node.attributes }
-          lambda{ put :update, params }.should raise_error(ReadOnlyEnabledError)
+          expect { put :update, params }.to raise_error(ReadOnlyEnabledError)
         end
 
         it "should raise an error when calling 'create'" do
-          lambda{ post :create, 'node' => { 'name' => 'foo' } }.should raise_error(ReadOnlyEnabledError)
+          expect { post :create, 'node' => { 'name' => 'foo' } }.to raise_error(ReadOnlyEnabledError)
         end
       end
     end

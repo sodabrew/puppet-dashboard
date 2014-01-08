@@ -4,7 +4,7 @@ $LOAD_PATH.push File.dirname(__FILE__)
 # from the project root directory.
 ENV["RAILS_ENV"] = "test"
 require File.expand_path(File.dirname(__FILE__) + "/../config/environment")
-require 'mocha_standalone'
+require 'mocha/api'
 require 'rspec/autorun'
 require 'rspec/rails'
 require 'shoulda/matchers/integrations/rspec'
