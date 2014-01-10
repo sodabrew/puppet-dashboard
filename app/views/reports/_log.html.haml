@@ -2,15 +2,15 @@
   %h3 Log
   - if report.logs.present?
     .section
-      %table.inspector
+      %table.inspector.puppet_log
         %thead
           %tr
-            %th{:scope => :col} Level
+            %th.log_level{:scope => :col} Level
             %th{:scope => :col} Message
-            %th{:scope => :col} Source
-            %th{:scope => :col} File
-            %th{:scope => :col} Line
-            %th{:scope => :col} Time
+            %th.source{:scope => :col} Source
+            %th.file{:scope => :col} File
+            %th.line{:scope => :col} Line
+            %th.time{:scope => :col} Time
         %tbody
           = render :partial => 'puppet/util/logs/log', :collection => puppet_log_sorter(report.logs.compact)
   - else

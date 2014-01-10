@@ -2,12 +2,10 @@
   %td.level
     %code= h log.level
   %td
-    %code= h log.message
-  %td
-    %code= h log.source
-  %td
-    %code= wrap_on_slashes(log.file)
-  %td
-    %code= h log.line
+    %pre
+      %code= h log.message
+  %td.wrap= h wrap_on_slashes(log.source)
+  %td.wrap= h wrap_on_slashes(log.file)
+  %td.wrap= h log.line
   %td.nowrap
     %code= h log.time
