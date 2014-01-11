@@ -644,6 +644,48 @@ body {
       }
     }
 
+    table.puppet_log {
+      table-layout: fixed;
+      thead {
+        th.log_level {
+          width: 4em;
+        }
+        th.message {
+          min-width: 30%;
+        }
+        th.line {
+          width: 2em;
+        }
+        @media screen and (min-width: 1024px) {
+          th.source {
+            width: 20%;
+          }
+          th.file {
+            width: 15%;
+          }
+          th.time {
+            width: 12em;
+          }
+        }
+        @media screen and (max-width: 1023px) {
+          th.source {
+            width: 12%;
+          }
+          th.file {
+            width: 12%;
+          }
+          th.time {
+            width: 8%
+          }
+        }
+      }
+      tbody {
+        td.wrap {
+          font-family: "Monaco", "Courier New", Courier, fixed-width;
+        }
+      }
+    }
+
     tr.puppet_log {
         &.puppet_log_level_err {
             @include reporty_level_row(#FFD6D6);
@@ -651,6 +693,13 @@ body {
 
         &.puppet_log_level_warning {
             @include reporty_level_row(#FFEBD6);
+        }
+        td {
+          width: 25%;
+        }
+        pre {
+          overflow: auto;
+          height: 100%
         }
     }
   }
