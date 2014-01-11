@@ -650,17 +650,33 @@ body {
         th.log_level {
           width: 4em;
         }
-        th.source {
-          width: 20%;
-        }
-        th.file {
-          width: 15%;
+        th.message {
+          min-width: 30%;
         }
         th.line {
-          width: 4em;
+          width: 2em;
         }
-        th.time {
-          width: 12em;
+        @media screen and (min-width: 1024px) {
+          th.source {
+            width: 20%;
+          }
+          th.file {
+            width: 15%;
+          }
+          th.time {
+            width: 12em;
+          }
+        }
+        @media screen and (max-width: 1023px) {
+          th.source {
+            width: 12%;
+          }
+          th.file {
+            width: 12%;
+          }
+          th.time {
+            width: 8%
+          }
         }
       }
       tbody {
