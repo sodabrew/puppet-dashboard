@@ -24,7 +24,7 @@
                 - status.events.each do |event|
                   %tr{:class => "status #{event.status}"}
                     %td= h event.property
-                    %td= popup_md5s(h(event.message), :exclude_md5s => [event.desired_value])
+                    %td= popup_md5s(h(event.message), :exclude_md5s => [event.desired_value]).html_safe
           %br
   - else
     %h3 Events
