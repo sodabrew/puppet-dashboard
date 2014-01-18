@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130418064011) do
+ActiveRecord::Schema.define(:version => 20140118072510) do
 
   postgres = ActiveRecord::Base.connection.adapter_name.downcase =~ /postgres/
 
@@ -39,6 +39,7 @@ ActiveRecord::Schema.define(:version => 20130418064011) do
     t.string   "queue"
   end
 
+  add_index "delayed_jobs", ["failed_at", "run_at", "locked_at", "locked_by"], :name => "index_delayed_jobs_multi"
   add_index "delayed_jobs", ["priority", "run_at"], :name => "delayed_jobs_priority"
 
   create_table "metrics", :force => true do |t|
@@ -48,6 +49,7 @@ ActiveRecord::Schema.define(:version => 20130418064011) do
     t.decimal "value",     :precision => 12, :scale => 6
   end
 
+  add_index "metrics", ["report_id", "category", "name"], :name => "index_metrics_multi"
   add_index "metrics", ["report_id"], :name => "index_metrics_on_report_id"
 
   create_table "node_class_memberships", :force => true do |t|
@@ -116,6 +118,7 @@ ActiveRecord::Schema.define(:version => 20130418064011) do
     t.integer  "last_inspect_report_id"
   end
 
+  add_index "nodes", ["last_apply_report_id"], :name => "index_nodes_on_last_apply_report_id"
   add_index "nodes", ["name"], :name => "uc_node_name", :unique => true
 
   create_table "old_reports", :force => true do |t|
@@ -136,6 +139,8 @@ ActiveRecord::Schema.define(:version => 20130418064011) do
     t.datetime "created_at",         :null => false
     t.datetime "updated_at",         :null => false
   end
+
+  add_index "parameters", ["parameterable_id", "parameterable_type", "key"], :name => "index_parameters_multi"
 
   create_table "report_logs", :force => true do |t|
     t.integer  "report_id",                :null => false
@@ -218,5 +223,8 @@ ActiveRecord::Schema.define(:version => 20130418064011) do
     t.datetime "created_at",             :null => false
     t.datetime "updated_at",             :null => false
   end
+
+  add_index "timeline_events", ["secondary_subject_id", "secondary_subject_type"], :name => "index_timeline_events_secondary"
+  add_index "timeline_events", ["subject_id", "subject_type"], :name => "index_timeline_events_primary"
 
 end
