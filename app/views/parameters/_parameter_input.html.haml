@@ -1,4 +1,4 @@
-- parameters = parameter_input  # change silly partial-based variable name
+- parameters = parameter_input.sort_by{|param| param[:key] || ''}
 - parameter_index = 0
 - object_name = controller.controller_name.singularize
 - form_prefix = form_prefix || "#{object_name}[parameter_attributes]"
