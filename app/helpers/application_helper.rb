@@ -63,17 +63,17 @@ module ApplicationHelper
 
   def error_messages_for(object_name, options)
     objects = [options.delete(:object)].flatten
-    count   = objects.inject(0) {|sum, object| sum + object.errors.count }
+    count   = objects.sum {|object| object.errors.count}
 
     return '' if count.zero?
 
     header_message = "Please correct #{count > 1 ? "these #{count} errors" : 'this error'}:"
-    error_messages = objects.sum {|object| object.errors.full_messages.map {|msg| content_tag(:li, h(msg)) } }.join
+    error_messages = objects.map {|object| object.errors.full_messages.map {|msg| content_tag(:li, h(msg)) } }.join.html_safe
 
-    contents = content_tag(:h3, header_message) +
-               content_tag(:ul, error_messages)
-
-    content_tag(:div, contents, :class => 'errors element')
+    content_tag(:div,
+                content_tag(:h3, header_message) +
+                content_tag(:ul, error_messages) ,
+                :class => 'errors element')
   end
 
   def active_if(condition)
