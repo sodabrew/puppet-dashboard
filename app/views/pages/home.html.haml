@@ -18,3 +18,4 @@
           :nodes           => instance_variable_get("@#{tab_status}_nodes"),
           :selected_status => tab_status,
           :more_link       => url_for(:controller => "nodes", :action => tab_status == "all" ? :index : tab_status, :page => 2)
+  %br.clear

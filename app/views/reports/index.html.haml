@@ -19,3 +19,5 @@
             - else
               %a{:href => url_for(:status => tab_status)}= h tab_status.humanize
     = render :partial => 'reports/reports_table', :locals => { :reports => @reports, :node => @node }
+
+    %br.clear
