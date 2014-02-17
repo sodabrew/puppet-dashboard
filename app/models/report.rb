@@ -129,10 +129,20 @@ class Report < ActiveRecord::Base
   rescue => e
     retries ||= 3
     retry if (retries -= 1) > 0
+
+    # Truncate because:
+    # 1) the problem is often near the top of the text
+    # 2) the TEXT field type has a maximum length of 64 KB
+    # (Go through some contortions to avoid copying 64+ KB)
+    details = e.to_s
+    details.slice!(65535)
+    backtrace = Rails.backtrace_cleaner.clean(e.backtrace)
+    backtrace.slice!(65535)
+
     DelayedJobFailure.create!(
       :summary   => "Importing report",
-      :details   => e.to_s,
-      :backtrace => Rails.backtrace_cleaner.clean(e.backtrace)
+      :details   => details,
+      :backtrace => backtrace
     )
     return nil
   end
