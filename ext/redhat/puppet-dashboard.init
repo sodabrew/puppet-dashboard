@@ -41,7 +41,7 @@ start() {
 
         # Use daemon to background the server and write the pidfile,
         # instead of rails / webrick.
-        daemon --user ${DASHBOARD_USER} --pidfile ${PIDFILE} "${DASHBOARD_RUBY} ${DASHBOARD_HOME}/script/server -e ${DASHBOARD_ENVIRONMENT} -p ${DASHBOARD_PORT} -b ${DASHBOARD_IFACE}"
+        daemon --user ${DASHBOARD_USER} --pidfile ${PIDFILE} "${DASHBOARD_RUBY} ${DASHBOARD_HOME}/script/rails server -e ${DASHBOARD_ENVIRONMENT} -p ${DASHBOARD_PORT} -b ${DASHBOARD_IFACE}"
 
         # Wait five seconds, then check if the pid is still valid,
         # since daemon returns success if the process is executed,

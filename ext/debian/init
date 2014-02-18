@@ -45,7 +45,7 @@ check_puppet_dashboard_status() {
 start_puppet_dashboard() {
     # Use start-stop-daemon to background the server and write the pidfile,
     # instead of rails / webrick.
-    start-stop-daemon --start --quiet --oknodo --make-pidfile --background --pidfile ${PIDFILE} --user ${DASHBOARD_USER} --chuid ${DASHBOARD_USER} --exec ${DASHBOARD_RUBY} -- ${DASHBOARD_HOME}/script/server -e ${DASHBOARD_ENVIRONMENT} -p ${DASHBOARD_PORT} -b ${DASHBOARD_IFACE}
+    start-stop-daemon --start --quiet --oknodo --make-pidfile --background --pidfile ${PIDFILE} --user ${DASHBOARD_USER} --chuid ${DASHBOARD_USER} --exec ${DASHBOARD_RUBY} -- ${DASHBOARD_HOME}/script/rails server -e ${DASHBOARD_ENVIRONMENT} -p ${DASHBOARD_PORT} -b ${DASHBOARD_IFACE}
 
     # Wait five seconds, then check if the pid is still valid,
     # since start-stop-daemon returns success if the process is executed,
