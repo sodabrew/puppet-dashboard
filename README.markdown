@@ -10,7 +10,7 @@ For full documentation, see the [Puppet Dashboard Manual](http://docs.puppetlabs
 Dependencies
 ------------
 
-* Ruby 1.8.7 or 1.9.3
+* Ruby 1.8.7, 1.9.3 or 2.0.0
 * Bundler >= 1.1
 * MySQL >= 5.1 or PostgreSQL >= 9.0
 
@@ -38,15 +38,9 @@ precompile assets for production using:
 
  * `RAILS_ENV=production bundle exec rake assets:precompile`
 
-Icons
------
-
-Puppet Dashboard uses Mark James' fine [Silk icons](http://www.famfamfam.com/lab/icons/silk/).
-
-Thanks, Mark!
-
 Contributing
 ------------
 
-To contribute to this project, please read [CONTRIBUTING](CONTRIBUTING.md).
-A list of contributors is found in [CONTRIBUTORS](CONTRIBUTORS.md). Thanks!
+To contribute to this project, please read [CONTRIBUTING](CONTRIBUTING.md).  
+A list of contributors is found in [CONTRIBUTORS](CONTRIBUTORS.md). Thanks!  
+This project uses the [Silk icons](http://www.famfamfam.com/lab/icons/silk/) by Mark James.  
