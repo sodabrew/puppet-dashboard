@@ -35,7 +35,10 @@ class NodeGroup < ActiveRecord::Base
 
   scope :with_nodes_count,
     :select => 'node_groups.*, count(nodes.id) as nodes_count',
-    :joins => 'LEFT OUTER JOIN node_group_memberships ON (node_groups.id = node_group_memberships.node_group_id) LEFT OUTER JOIN nodes ON (nodes.id = node_group_memberships.node_id)',
+    :joins => <<-SQL,
+      LEFT OUTER JOIN node_group_memberships ON (node_groups.id = node_group_memberships.node_group_id)
+      LEFT OUTER JOIN nodes ON (nodes.id = node_group_memberships.node_id)
+    SQL
     :group => 'node_groups.id'
 
   assigns_related :node_class, :node_group, :node
