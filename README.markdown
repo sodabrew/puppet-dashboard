@@ -43,4 +43,4 @@ Contributing
 
 To contribute to this project, please read [CONTRIBUTING](CONTRIBUTING.md).  
 A list of contributors is found in [CONTRIBUTORS](CONTRIBUTORS.md). Thanks!  
-This project uses the [Silk icons](http://www.famfamfam.com/lab/icons/silk/) by Mark James.  
+This project uses the [Silk icons](http://www.famfamfam.com/lab/icons/silk/) by Mark James.  Thank you!
