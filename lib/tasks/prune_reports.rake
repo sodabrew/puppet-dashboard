@@ -50,16 +50,22 @@ UNITS:
       exit 1
     end
 
+    # Thin query for nodes with reports that may be pruned.
+    # By selecting the 'id' column only, it does not eager load all of the
+    # nodes and definitely not all of the reports, making this much faster.
     cutoff = Time.now.gmtime - (upto * units[unit].to_i)
-    # Iterate over the affected nodes, since each node's last report may have to be adjusted
-    affected_nodes = Node.find(:all, :include => 'reports', :conditions => ['reports.time < ?', cutoff])
-    puts "#{Time.now.to_s(:db)}: Deleting reports before #{cutoff} for #{affected_nodes.count} nodes"
+    affected_nodes = Node.select('DISTINCT `nodes`.`id`') \
+                         .joins('LEFT OUTER JOIN `reports` ON `reports`.`node_id` = `nodes`.`id`') \
+                         .where(['`reports`.`time` < ?', cutoff])
+    deletion_count = affected_nodes.count
+    puts "#{Time.now.to_s(:db)}: Deleting reports before #{cutoff} for #{deletion_count} nodes"
 
-    pbar = ProgressBar.new('Deleting', affected_nodes.count, STDOUT)
+    pbar = ProgressBar.new('Deleting', deletion_count, STDOUT)
     deleted_count = 0
 
     begin
       affected_nodes.each do |node|
+        node.reload # Become a complete object (the query above returns shalow objects with 'id' only)
         deleted_count += node.prune_reports(cutoff)
         pbar.inc
       end
