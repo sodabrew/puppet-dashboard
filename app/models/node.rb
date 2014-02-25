@@ -216,10 +216,10 @@ class Node < ActiveRecord::Base
 
   def find_and_assign_last_inspect_report
     report = self.reports.inspections.first
-    self.last_inspect_report = nil
     if report
       assign_last_inspect_report_if_newer(report)
     else
+      self.last_inspect_report = nil
       self.save!
     end
   end
