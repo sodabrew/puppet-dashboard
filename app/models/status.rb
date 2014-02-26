@@ -50,7 +50,6 @@ class Status
     sql << "AND node_id IN (#{options[:nodes].map(&:id).join(',')})\n" if options[:nodes].present?
     sql << "GROUP BY start\n"
     sql << "ORDER BY start ASC\n"
-    sql << "LIMIT #{limit}\n"
 
     return execute(sql)
   end
