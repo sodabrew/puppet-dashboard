@@ -54,9 +54,9 @@ UNITS:
     # By selecting the 'id' column only, it does not eager load all of the
     # nodes and definitely not all of the reports, making this much faster.
     cutoff = Time.now.gmtime - (upto * units[unit].to_i)
-    affected_nodes = Node.select('DISTINCT `nodes`.`id`') \
-                         .joins('LEFT OUTER JOIN `reports` ON `reports`.`node_id` = `nodes`.`id`') \
-                         .where(['`reports`.`time` < ?', cutoff])
+    affected_nodes = Node.select('DISTINCT nodes.id') \
+                         .joins('LEFT OUTER JOIN reports ON reports.node_id = nodes.id') \
+                         .where(['reports.time < ?', cutoff])
     deletion_count = affected_nodes.count
     puts "#{Time.now.to_s(:db)}: Deleting reports before #{cutoff} for #{deletion_count} nodes"
 
