@@ -20,6 +20,26 @@
         = render 'statuses/run_failure', :nodes => @node_class.all_nodes
 
     .section
+      %h3 Groups referencing this class
+      - if @node_class.node_group_children.present?
+        %table.main
+          %thead
+            %tr
+              %th.name{:style => 'width: 33%;'}
+                Name
+              %th.description
+                Description
+          %tbody
+            - for node_group in @node_class.node_group_children
+              %tr[node_group]
+                %td.name
+                  = link_to h(node_group.name), node_group
+                %td.description
+                  = node_group.description
+      - else
+        = describe_no_matches_for :groups, :class
+
+    .section
       %h3 Nodes for this class
       - if @node_class.all_nodes.present?
         = render 'nodes/nodes', :nodes => @node_class.all_nodes, :container => @node_class
