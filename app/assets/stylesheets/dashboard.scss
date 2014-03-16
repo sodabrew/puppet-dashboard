@@ -377,6 +377,8 @@ body {
 
       .footer.actionbar {
         @include rounded_bottom;
+        // Overflow prevents div collapse if there are only floating elements
+        overflow: auto;
       }
 
       span.count {
