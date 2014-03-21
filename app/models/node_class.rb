@@ -27,7 +27,7 @@ class NodeClass < ActiveRecord::Base
       LEFT OUTER JOIN node_class_memberships ON (node_classes.id = node_class_memberships.node_class_id)
       LEFT OUTER JOIN nodes ON (nodes.id = node_class_memberships.node_id)
     SQL
-    :group => 'node_classes.id, node_classes.name'
+    :group => 'node_classes.id'
 
   def to_param
     SETTINGS.numeric_url_slugs ? id.to_s : name
