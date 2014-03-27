@@ -15,7 +15,7 @@ end
 
 class ReportTransformer::ReportTransformation
   def self.apply(report)
-    return report if report["report_format"] >= version
+    return report if report["report_format"] and report["report_format"] >= version
 
     transform(report)
 
