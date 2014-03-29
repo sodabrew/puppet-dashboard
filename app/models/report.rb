@@ -191,6 +191,7 @@ class Report < ActiveRecord::Base
   def recalculate_report_status
     self.status = 'pending' if resource_statuses.any? {|rs| rs.status == 'pending' } &&
       resource_statuses.none? {|rs| rs.status == 'failed'}
+    self.status = 'failed' if self.logs.any? {|l| l.level == 'err' } 
   end
 
   def add_missing_metrics
