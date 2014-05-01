@@ -82,7 +82,7 @@ class Report < ActiveRecord::Base
     attribute_hash["logs_attributes"] = attribute_hash.delete("logs")
     attribute_hash["logs_attributes"].each do |resource_logs_hash|
       log_message = resource_logs_hash["message"].to_s
-      resource_logs_hash["message"] = log_message.slice!(0, 65535) if log_message.length > 65535
+      resource_logs_hash["message"] = log_message.slice(0, 65535) if log_message.length > 65535
     end
     
     attribute_hash["resource_statuses_attributes"] = attribute_hash.delete("resource_statuses")
