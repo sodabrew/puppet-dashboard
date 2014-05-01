@@ -142,9 +142,9 @@ class Report < ActiveRecord::Base
     # 2) the TEXT field type has a maximum length of 64 KB
     # (Go through some contortions to avoid copying 64+ KB)
     details = e.to_s
-    details = details.slice!(0, 65535) if details.length > 65535
+    details = details.slice(0, 65535) if details.length > 65535
     backtrace = Rails.backtrace_cleaner.clean(e.backtrace)
-    backtrace = backtrace.slice!(0, 65535) if backtrace.length > 65535
+    backtrace = backtrace.slice(0, 65535) if backtrace.length > 65535
 
     DelayedJobFailure.create!(
       :summary   => "Importing report",
