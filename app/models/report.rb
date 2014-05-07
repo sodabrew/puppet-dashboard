@@ -77,7 +77,14 @@ class Report < ActiveRecord::Base
 
   def self.attribute_hash_from(report_hash)
     attribute_hash = report_hash.dup
+    
+    # message could grow larger than what database column size allow.
     attribute_hash["logs_attributes"] = attribute_hash.delete("logs")
+    attribute_hash["logs_attributes"].each do |resource_logs_hash|
+      log_message = resource_logs_hash["message"].to_s
+      resource_logs_hash["message"] = log_message.slice(0, 65535) if log_message.length > 65535
+    end
+    
     attribute_hash["resource_statuses_attributes"] = attribute_hash.delete("resource_statuses")
     attribute_hash["metrics_attributes"] = attribute_hash.delete("metrics")
     attribute_hash["resource_statuses_attributes"].each do |resource_status_hash|
@@ -135,9 +142,9 @@ class Report < ActiveRecord::Base
     # 2) the TEXT field type has a maximum length of 64 KB
     # (Go through some contortions to avoid copying 64+ KB)
     details = e.to_s
-    details.slice!(0, 65535) if details.length > 65535
+    details = details.slice(0, 65535) if details.length > 65535
     backtrace = Rails.backtrace_cleaner.clean(e.backtrace)
-    backtrace.slice!(0, 65535) if backtrace.length > 65535
+    backtrace = backtrace.slice(0, 65535) if backtrace.length > 65535
 
     DelayedJobFailure.create!(
       :summary   => "Importing report",
