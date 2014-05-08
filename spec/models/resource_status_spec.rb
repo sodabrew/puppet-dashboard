@@ -71,13 +71,13 @@ describe ResourceStatus do
 
     describe "true" do
       it "should return resource statuses which have no pending events" do
-        ResourceStatus.pending(true).map(&:title).should == ['pending']
+        ResourceStatus.pending(true).map(&:title).should =~ ['pending']
       end
     end
 
     describe "false" do
       it "should return resource statuses which have pending events" do
-        ResourceStatus.pending(false).map(&:title).should == ['successful', 'failed']
+        ResourceStatus.pending(false).map(&:title).should =~ ['successful', 'failed']
       end
     end
   end
