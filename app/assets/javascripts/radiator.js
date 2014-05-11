@@ -44,7 +44,7 @@ jQuery(function($) {
       if (refresh_count == 1) {
         $('span#status').html('&hellip;');
       } else if (refresh_count == 0) {
-        $.ajax(window.location)
+        $.getJSON(window.location)
           .done(function(data) {
             for(var key in data) {
               var row = $('tr.' + key);
