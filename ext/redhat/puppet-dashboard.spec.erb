@@ -52,8 +52,7 @@ install -p -d -m0755 $RPM_BUILD_ROOT/%{_datadir}/%{name}/vendor
 install -p -d -m0755 $RPM_BUILD_ROOT/%{_datadir}/%{name}/certs
 install -p -d -m0755 $RPM_BUILD_ROOT/%{_defaultdocdir}/%{name}-%{version}
 install -p -d -m0755 $RPM_BUILD_ROOT/%{_datadir}/%{name}/spool
-install -p -d -m0755 $RPM_BUILD_ROOT/%{_datadir}/%{name}/examples
-cp -p -r app bin config db ext lib public Rakefile script spec examples vendor $RPM_BUILD_ROOT/%{_datadir}/%{name}
+cp -p -r app bin config db ext lib public Rakefile script spec vendor $RPM_BUILD_ROOT/%{_datadir}/%{name}
 install -Dp -m0640 config/database.yml.example $RPM_BUILD_ROOT/%{_datadir}/%{name}/config/database.yml
 install -Dp -m0640 config/settings.yml.example $RPM_BUILD_ROOT/%{_datadir}/%{name}/config/settings.yml
 install -Dp -m0644 VERSION $RPM_BUILD_ROOT/%{_datadir}/%{name}/VERSION
@@ -105,7 +104,7 @@ fi
 
 %files
 %defattr(-,root,root,)
-%doc LICENSE README.markdown README_PACKAGES.markdown
+%doc LICENSE README.markdown
 %attr(-,puppet-dashboard,puppet-dashboard) %config(noreplace) %{_datadir}/%{name}/config/*
 %{initrddir}/puppet-dashboard
 %{initrddir}/puppet-dashboard-workers
@@ -127,12 +126,14 @@ fi
 %attr(-,puppet-dashboard,puppet-dashboard) %dir %{_datadir}/%{name}/tmp
 %attr(-,puppet-dashboard,puppet-dashboard) %{_datadir}/%{name}/vendor
 %attr(-,puppet-dashboard,puppet-dashboard) %{_datadir}/%{name}/certs
-%attr(-,puppet-dashboard,puppet-dashboard) %{_datadir}/%{name}/examples
 #%attr(-,puppet-dashboard,puppet-dashboard) %dir /var/log/%{name}
 
 %changelog
 * <%= Time.now.strftime("%a %b %d %Y") %> Puppet Labs Release <info@puppetlabs.com> -  <%= @rpmversion %>-<%= @rpmrelease %>
 - Build for <%= @version %>
+
+* Fri 23 May 2014 Chris Spence <chris@spence.org.uk> 
+- Removing no longer existent files
 
 * Mon Jul 04 2011 Michael Stahnke <stahnma@puppetlabs.com> - 1.1.9-2
 - Updating spec to fix some rpmlint issues
