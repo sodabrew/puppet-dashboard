@@ -3,15 +3,6 @@ require "#{Rails.root}/lib/progress_bar"
 namespace :reports do
   desc 'Prune old reports from the databases, will print help if run without arguments'
   task :prune => :environment do
-    units = {
-      'min' => '60',
-      'hr' => '3600',
-      'day' => '86400',
-      'wk' => '604800',
-      'mon' => '2592000',
-      'yr' => '31536000'
-    }
-    known_units = units.keys.join(',')
 
     usage = %{
 EXAMPLE:
@@ -28,20 +19,6 @@ UNITS:
     end
 
     errors = []
-
-    if ENV['upto'] =~ /^\d+$/
-      upto = ENV['upto'].to_i
-    else
-      errors << "You must specify how far up you want to prune as an integer, e.g.: upto={some integer}" \
-    end
-
-    if unit = ENV['unit']
-      unless units.has_key?(unit)
-        errors << "I don't know that unit. Valid units are: #{known_units}" \
-      end
-    else
-      errors << "You must specify the unit of time, .e.g.: unit={#{known_units}}" \
-    end
 
     if errors.present?
       puts errors.map { |error| "ERROR: #{error}" }
@@ -81,13 +58,13 @@ UNITS:
   namespace :prune do
     desc 'Delete orphaned records whose report has already been deleted'
     task :orphaned => :environment do
-      report_dependent_deletion = 'report_id not in (select id from reports)'
+      report_dependent_deletion = 'report_id NOT IN (SELECT id FROM reports)'
 
       orphaned_tables = ActiveSupport::OrderedHash[
         Metric,         report_dependent_deletion,
         ReportLog,      report_dependent_deletion,
         ResourceStatus, report_dependent_deletion,
-        ResourceEvent, 'resource_status_id not in (select id from resource_statuses)'
+        ResourceEvent, 'resource_status_id NOT IN (SELECT id FROM resource_statuses)'
       ]
 
       puts "Going to delete orphaned records from #{orphaned_tables.keys.map(&:table_name).join(', ')}\n"
@@ -106,7 +83,7 @@ UNITS:
         DELETION_BATCH_SIZE = 1000
         while deletion_count > 0
           ActiveRecord::Base.connection.execute(
-            "delete from #{model.table_name} where #{deletion_where_clause} limit #{DELETION_BATCH_SIZE}"
+            "DELETE FROM #{model.table_name} WHERE #{deletion_where_clause} LIMIT #{DELETION_BATCH_SIZE}"
           )
           pbar.inc(DELETION_BATCH_SIZE)
           deletion_count -= DELETION_BATCH_SIZE

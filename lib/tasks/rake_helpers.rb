@@ -47,3 +47,32 @@ rescue => e
   exit 1
 end
 
+class TimeString
+  UNITS = {
+    'min' => 60,
+    'hr'  => 3600,
+    'day' => 86400,
+    'wk'  => 604800,
+    'mon' => 2592000,
+    'yr'  => 31536000
+  }
+  KNOWN_UNITS = units.keys.join(', ')
+
+  def interpret_string(str)
+    if ENV['upto'] =~ /^\d+$/
+      upto = ENV['upto'].to_i
+    else
+      errors << "You must specify how far up you want to prune as an integer, e.g.: upto={some integer}" \
+    end
+
+    if unit = ENV['unit']
+      unless units.has_key?(unit)
+        errors << "I don't know that unit. Valid units are: #{known_units}" \
+      end
+    else
+      errors << "You must specify the unit of time, e.g.: unit=day" \
+    end
+
+    Time.now.gmtime - (upto * str.to_i)
+  end
+end
