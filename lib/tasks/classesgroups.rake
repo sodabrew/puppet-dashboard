@@ -14,12 +14,12 @@ namespace :nodeclass do
     if ENV['name']
       name = ENV['name']
     else
-      puts 'Must specify class name (name=<class>).'
+      $stderr.puts 'Must specify class name (name=<class>).'
       exit 1
     end
 
     if NodeClass.find_by_name(name)
-      puts 'Class already exists!'
+      $stderr.puts 'Class already exists!'
       exit 1
     end
 
@@ -33,10 +33,10 @@ namespace :nodeclass do
       get_class(ENV['name']).destroy
       puts 'Group successfully deleted!'
     rescue NoMethodError
-      puts 'Class doesn\'t exist!'
+      $stderr.puts 'Class doesn\'t exist!'
       exit 1
     rescue => e
-      puts e.message
+      $stderr.puts e.message
       exit 1
     end
   end
@@ -57,7 +57,7 @@ namespace :nodegroup do
     begin
       nodegroup.node_classes.map(&:name).map{|n| puts n}
     rescue => e
-      puts e.message
+      $stderr.puts e.message
       exit 1
     end
   end
@@ -69,7 +69,7 @@ namespace :nodegroup do
     begin
       nodegroup.node_groups.map(&:name).map{|n| puts n}
     rescue => e
-      puts e.message
+      $stderr.puts e.message
       exit 1
     end
   end
@@ -79,12 +79,12 @@ namespace :nodegroup do
     if ENV['name']
       name = ENV['name']
     else
-      puts 'Must specify group name (name=<group>).'
+      $stderr.puts 'Must specify group name (name=<group>).'
       exit 1
     end
 
     if NodeGroup.find_by_name(name)
-      puts 'Group already exists!'
+      $stderr.puts 'Group already exists!'
       exit 1
     end
 
@@ -113,7 +113,7 @@ namespace :nodegroup do
        puts "Class '#{nodeclass.name}' added to node group '#{nodegroup.name}'"
      end
     rescue => e
-      puts e.message
+      $stderr.puts e.message
       exit 1
     end
   end
@@ -132,7 +132,7 @@ namespace :nodegroup do
        puts "Group '#{addlgroup.name}' added to node group '#{nodegroup.name}'"
      end
     rescue => e
-      puts e.message
+      $stderr.puts e.message
       exit 1
     end
   end
@@ -151,7 +151,7 @@ namespace :nodegroup do
         puts "Class '#{nodeclass.name}' removed from node group '#{nodegroup.name}'"
       end
     rescue => e
-      puts e.message
+      $stderr.puts e.message
       exit 1
     end
   end
@@ -170,7 +170,7 @@ namespace :nodegroup do
         puts "Group '#{addlgroup.name}' removed from node group '#{nodegroup.name}'"
       end
     rescue => e
-      puts e.message
+      $stderr.puts e.message
       exit 1
     end
   end
@@ -234,7 +234,7 @@ namespace :nodegroup do
         puts "Node group variables successfully edited for #{nodegroup.name}!"
       end
     rescue => e
-      puts "There was a problem saving the node group: #{e.message}"
+      $stderr.puts "There was a problem saving the node group: #{e.message}"
       exit 1
     end
 
@@ -252,7 +252,7 @@ namespace :nodegroup do
       nodegroup.save!
       puts 'Group successfully edited!'
     rescue => e
-      puts e.message
+      $stderr.puts e.message
       exit 1
     end
   end
@@ -263,7 +263,7 @@ namespace :nodegroup do
       get_group(ENV['name']).destroy
       puts 'Group successfully deleted!'
     rescue => e
-      puts e.message
+      $stderr.puts e.message
       exit 1
     end
   end
@@ -278,7 +278,7 @@ namespace :nodegroup do
         node_groups << group unless node_groups.include?(group)
       end
     rescue => e
-      puts "There was a problem adding all nodes to the group '#{group}': #{e.message}"
+      $stderr.puts "There was a problem adding all nodes to the group '#{group}': #{e.message}"
       exit 1
     end
   end

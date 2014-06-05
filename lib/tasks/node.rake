@@ -7,12 +7,12 @@ namespace :node do
     if ENV['name']
       name = ENV['name']
     else
-      puts 'Must specify node name (name=<hostname>).'
+      $stderr.puts 'Must specify node name (name=<hostname>).'
       exit 1
     end
 
     if Node.find_by_name(name)
-      puts 'Node already exists!'
+      $stderr.puts 'Node already exists!'
       exit 1
     end
 
@@ -27,7 +27,7 @@ namespace :node do
       node.save!
       puts 'Node successfully created!'
     rescue => e
-      puts "There was a problem saving the node: #{e.message}"
+      $stderr.puts "There was a problem saving the node: #{e.message}"
       exit 1
     end
   end
@@ -37,7 +37,7 @@ namespace :node do
     node = get_node(ENV['name'])
 
     unless ENV['group']
-      puts 'Must specify group(s) to add to node'
+      $stderr.puts 'Must specify group(s) to add to node'
       exit 1
     end
 
@@ -48,7 +48,7 @@ namespace :node do
       node.node_groups << [ NodeGroup.find_all_by_name(groups) - node.node_groups ]
       puts "Node groups successfully edited for #{node.name}!"
     rescue => e
-      puts "There was a problem saving the node: #{e.message}"
+      $stderr.puts "There was a problem saving the node: #{e.message}"
       exit 1
     end
   end
@@ -60,7 +60,7 @@ namespace :node do
     begin
       node.node_groups.map(&:name).map{|n| puts n}
     rescue => e
-      puts e.message
+      $stderr.puts e.message
       exit 1
     end
   end
@@ -70,7 +70,7 @@ namespace :node do
     node = get_node(ENV['name'])
 
     unless ENV['class']
-      puts 'Must specify class(es) to add to node'
+      $stderr.puts 'Must specify class(es) to add to node'
       exit 1
     end
 
@@ -81,7 +81,7 @@ namespace :node do
       node.node_classes << [ NodeClass.find_all_by_name(classes) - node.node_classes ]
       puts "Node classes successfully edited for #{node.name}!"
     rescue => e
-      puts "There was a problem saving the node: #{e.message}"
+      $stderr.puts "There was a problem saving the node: #{e.message}"
       exit 1
     end
   end
@@ -93,7 +93,7 @@ namespace :node do
     begin
       node.node_classes.map(&:name).map{|n| puts n}
     rescue => e
-      puts e.message
+      $stderr.puts e.message
       exit 1
     end
   end
@@ -103,7 +103,7 @@ namespace :node do
     begin
       get_node(ENV['name']).destroy
     rescue => e
-      puts e.message
+      $stderr.puts e.message
       exit 1
     end
   end
@@ -113,7 +113,7 @@ namespace :node do
     node = get_node(ENV['name'])
 
     unless ENV['classes']
-      puts 'Must specify class(es) to set on node.'
+      $stderr.puts 'Must specify class(es) to set on node.'
       exit 1
     end
 
@@ -124,7 +124,7 @@ namespace :node do
       node.save!
       puts "Node classes successfully edited for #{node.name}!"
     rescue => e
-      puts "There was a problem saving the node: #{e.message}"
+      $stderr.puts "There was a problem saving the node: #{e.message}"
       exit 1
     end
   end
@@ -229,7 +229,7 @@ namespace :node do
         end
       end
     rescue => e
-      puts "There was a problem saving the node: #{e.message}"
+      $stderr.puts "There was a problem saving the node: #{e.message}"
       exit 1
     end
   end
@@ -239,7 +239,7 @@ namespace :node do
     node = get_node(ENV['name'])
 
     unless ENV['groups']
-      puts 'Must specify group(s) to set on node'
+      $stderr.puts 'Must specify group(s) to set on node'
       exit 1
     end
 
@@ -250,7 +250,7 @@ namespace :node do
       node.save!
       puts "Node groups successfully edited for #{node.name}!"
     rescue => e
-      puts "There was a problem saving the node: #{e.message}"
+      $stderr.puts "There was a problem saving the node: #{e.message}"
       exit 1
     end
   end

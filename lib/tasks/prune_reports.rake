@@ -23,8 +23,8 @@ UNITS:
     }.strip
 
     unless ENV['upto'] || ENV['unit']
-      puts usage
-      exit 0
+      $stderr.puts usage
+      exit 1
     end
 
     errors = []
@@ -44,9 +44,9 @@ UNITS:
     end
 
     if errors.present?
-      puts errors.map { |error| "ERROR: #{error}" }
-      puts
-      puts usage
+      $stderr.puts errors.map { |error| "ERROR: #{error}" }
+      $stderr.puts
+      $stderr.puts usage
       exit 1
     end
 

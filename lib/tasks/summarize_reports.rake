@@ -8,7 +8,7 @@ namespace :reports do
         if ENV['unit']
           unit = ENV['unit']
         else
-          puts 'You must specify the unit of time. (min,hr,day,wk,mon,yr)'
+          $stderr.puts 'You must specify the unit of time: min, hr, day, wk, mon, yr'
           exit 1
         end
 
@@ -24,7 +24,7 @@ namespace :reports do
         if units.has_key?(unit)
           esec = range.to_i * units[unit].to_i
         else
-          puts 'I don\'t know that unit.'
+          $stderr.puts "I don't understand unit '#{unit}'"
           exit 1
         end
       else
