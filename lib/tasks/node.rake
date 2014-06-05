@@ -138,6 +138,11 @@ namespace :node do
 
   desc 'Show/Edit/Add variables for a list of nodes'
   task :variables => :environment do
+    unless ENV['name']
+      $stderr.puts 'Must specify node name (name=<hostname>).'
+      exit 1
+    end
+
     nodes = ENV['name'].split(',')
 
     # Show variables
@@ -189,28 +194,25 @@ namespace :node do
         end
       end
     rescue => e
-      puts "There was a problem saving the node #{node.name}: #{e.message}"
+      $stderr.puts "There was a problem saving the node #{node.name}: #{e.message}"
       exit 1
     end
   end
 
   desc 'Delete variables for a list of nodes'
   task :delvariables => :environment do
-    nodes = ENV['name'].split(',')
+    unless ENV['name']
+      $stderr.puts 'Must specify node name (name=<hostname>[,hostname...]).'
+      exit 1
+    end
 
-    given_parameters = Hash[ ENV['variables'].split(',').map do |param|
-      param_array = param.split('=',2)
-      if param_array.size != 2
-        raise ArgumentError, "Could not parse variable #{param_array.first} given. Perhaps you're missing a '='"
-      end
-      if param_array[0].nil? or param_array[0].empty?
-        raise ArgumentError, "Could not parse variables. Please check your format. Perhaps you need to name a variable before a '='"
-      end
-      if param_array[1].nil? or param_array[1].empty?
-        raise ArgumentError, "Could not parse variables #{param_array.first}. Please check your format"
-      end
-      param_array
-    end ]
+    unless ENV['delvariables']
+      $stderr.puts 'Must specify variables to delete (delvariables=<key>[,key...]).'
+      exit 1
+    end
+
+    nodes = ENV['name'].split(',')
+    given_parameters = ENV['delvariables'].split(',')
 
     begin
       #  Attempt all nodes within the same transaction, so a fail fails all.
