@@ -177,60 +177,9 @@ namespace :nodegroup do
 
   # deprecated - use variables instead
   task :parameters => :environment do
-    nodegroup = get_group(ENV['name'])
-
-    # Show parameters
-    unless ENV['parameters']
-      nodegroup.parameters.each do |p|
-        puts "#{p.key}=#{p.value}"
-      end
-      exit
-    end
-
-    #We do a ton of reversing here, because Ruby 1.8 doesn't have lookbehind
-    given_parameters = Hash[ ENV['parameters'].reverse.split(/,(?!\\)/).map do |param|
-      param_array = param.split(/=(?!\\)/,2).map do |reverse_element|
-        reverse_element.reverse.gsub('\\=', '=').gsub('\\,', ',')
-      end
-
-      param_array.reverse!
-      if param_array.size != 2
-        raise ArgumentError, "Could not parse parameter #{param_array.first} given. Perhaps you're missing a '='"
-      end
-      if param_array[0].nil? or param_array[0].empty?
-        raise ArgumentError, "Could not parse parameters. Please check your format. Perhaps you need to name a parameter before a '='"
-      end
-      if param_array[1].nil? or param_array[1].empty?
-        raise ArgumentError, "Could not parse parameters #{param_array.first}. Please check your format"
-      end
-      param_array
-    end ]
-
-    begin
-      ActiveRecord::Base.transaction do
-        given_parameters.each do |key, value|
-          param, *dupes = *nodegroup.parameters.find_all_by_key(key)
-          if param
-            # Change existing parameters
-            param.value = value
-            param.save!
-            # If there were duplicate params from the previous buggy version of
-            # this code, remove them
-            dupes.each { |d| d.destroy }
-          else
-            # Create new parameters
-            nodegroup.parameters.create(:key => key, :value => value)
-          end
-        end
-
-        nodegroup.save!
-        puts "Node group parameters successfully edited for #{nodegroup.name}!"
-      end
-    rescue => e
-      puts "There was a problem saving the node group: #{e.message}"
-      exit 1
-    end
-
+    $stderr.puts "nodegroup:parameters is deprecated, use nodegroup:variables instead"
+    ENV['variables'] = ENV['parameters']
+    Rake::Task['nodegroup:variables'].invoke
   end
 
   desc 'Show/Edit/Add variables for a node group'
@@ -245,8 +194,13 @@ namespace :nodegroup do
       exit
     end
 
-    given_parameters = Hash[ ENV['variables'].split(',').map do |param|
-      param_array = param.split('=',2)
+    #We do a ton of reversing here, because Ruby 1.8 doesn't have lookbehind
+    given_parameters = Hash[ ENV['variables'].reverse.split(/,(?!\\)/).map do |param|
+      param_array = param.split(/=(?!\\)/,2).map do |reverse_element|
+        reverse_element.reverse.gsub('\\=', '=').gsub('\\,', ',')
+      end
+
+      param_array.reverse!
       if param_array.size != 2
         raise ArgumentError, "Could not parse variable #{param_array.first} given. Perhaps you're missing a '='"
       end
