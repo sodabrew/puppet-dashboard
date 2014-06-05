@@ -221,13 +221,7 @@ namespace :node do
           node = get_node(name)
 
           given_parameters.each do |key, value|
-            param, *dupes = *node.parameters.find_all_by_key(key)
-            if param
-              param.destroy
-              # If there were duplicate params from the previous buggy version of
-              # this code, remove them
-              dupes.each { |d| d.destroy }
-            end
+            node.parameters.find_all_by_key(key).map(&:destroy)
           end
 
           node.save!
