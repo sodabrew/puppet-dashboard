@@ -129,56 +129,11 @@ namespace :node do
     end
   end
 
-  # deprecated - use variables instead
+  # no description, this is deprecated - use variables instead
   task :parameters => :environment do
-    node = get_node(ENV['name'])
-
-    # Show parameters
-    unless ENV['parameters']
-      node.parameters.each do |p|
-        puts "#{p.key}=#{p.value}"
-      end
-      exit
-    end
-
-    given_parameters = Hash[ ENV['parameters'].split(',').map do |param|
-      param_array = param.split('=',2)
-      if param_array.size != 2
-        raise ArgumentError, "Could not parse parameter #{param_array.first} given. Perhaps you're missing a '='"
-      end
-      if param_array[0].nil? or param_array[0].empty?
-        raise ArgumentError, "Could not parse parameters. Please check your format. Perhaps you need to name a parameter before a '='"
-      end
-      if param_array[1].nil? or param_array[1].empty?
-        raise ArgumentError, "Could not parse parameters #{param_array.first}. Please check your format"
-      end
-      param_array
-    end ]
-
-    begin
-      ActiveRecord::Base.transaction do
-        given_parameters.each do |key, value|
-          param, *dupes = *node.parameters.find_all_by_key(key)
-          if param
-            # Change existing parameters
-            param.value = value
-            param.save!
-            # If there were duplicate params from the previous buggy version of
-            # this code, remove them
-            dupes.each { |d| d.destroy }
-          else
-            # Create new parameters
-            node.parameters.create(:key => key, :value => value)
-          end
-        end
-
-        node.save!
-        puts "Node parameters successfully edited for #{node.name}!"
-      end
-    rescue => e
-      puts "There was a problem saving the node: #{e.message}"
-      exit 1
-    end
+    $stderr.puts "node:parameters is deprecated, use node:variables instead"
+    ENV['variables'] = ENV['parameters']
+    Rake::Task['node:variables'].invoke
   end
 
   desc 'Show/Edit/Add variables for a list of nodes'
