@@ -21,7 +21,7 @@ Fast Install
 * Create a MySQL database and user, and set `max_allowed_packet` to 32M.
 * Edit your `config/settings.yml` and `config/database.yml` files.
 * `gem install bundler`
-* `bundle install --path vendor/bundle`
+* `bundle install --deployment`
 * Generate a new secret_token in config/settings.yml:
   `echo "secret_token: '$(bundle exec rake secret)'" >> config/settings.yml`
 * `bundle exec rake db:setup`
