@@ -157,6 +157,21 @@ describe Node do
       @node.configuration.keys.should =~ ['classes', 'name', 'parameters']
     end
 
+    it "should omit environment if it's an empty string" do
+      @node.environment = ''
+      @node.configuration.keys.should_not include('environment')
+    end
+
+    it 'should omit environment if nil' do
+      @node.environment = nil
+      @node.configuration.keys.should_not include('environment')
+    end
+
+    it 'should return an environment if valid' do
+      @node.environment = 'foo'
+      @node.configuration.keys.should include('environment')
+    end
+
     it "should return the names of the node's classes in the keys of the returned class list" do
       @node.node_classes = @classes = Array.new(3) { NodeClass.generate! }
       @node.configuration['classes'].keys.should =~ @classes.collect(&:name)

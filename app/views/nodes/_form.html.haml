@@ -12,6 +12,10 @@
     = form.label :node, "Node"
     = form.text_field :name, :placeholder => "Enter the node name here", :disabled => !form.object.name.nil?
 
+  .element
+    = form.label :environment, "Environment"
+    = form.text_field :environment, :placeholder => "Enter the environment here"
+
   .element.textarea
     = form.label :description
     = form.text_area :description, :rows => 4, :placeholder => "Enter a description for this node here..."
