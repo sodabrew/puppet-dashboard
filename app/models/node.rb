@@ -13,6 +13,7 @@ class Node < ActiveRecord::Base
 
   # attr_readonly :name, :created_at # FIXME: these should be readonly, but inherit_resources isn't creating new instances right
   attr_accessible :name, :created_at # FIXME: ^^
+  attr_accessible :environment
   attr_accessible :description, :parameter_attributes, :assigned_node_group_ids, :assigned_node_class_ids, :node_class_ids, :node_group_ids
   attr_accessible :reported_at, :last_inspect_report_id, :hidden, :updated_at, :last_apply_report_id, :status, :value, :report, :category
 
@@ -111,7 +112,9 @@ class Node < ActiveRecord::Base
       'name'       => name,
       'classes'    => classes,
       'parameters' => parameter_list
-    }
+    }.tap do |config|
+      config.merge!('environment' => environment) unless environment.blank?
+    end
   end
 
   # Psych YAML calls this method
@@ -173,12 +176,6 @@ class Node < ActiveRecord::Base
 
   def timeline_events
     TimelineEvent.for_node(self)
-  end
-
-  # Placeholder attributes
-
-  def environment
-    'production'
   end
 
   def assign_last_apply_report_if_newer(report)
