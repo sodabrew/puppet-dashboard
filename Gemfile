@@ -4,6 +4,7 @@ gem 'rake'                , '~> 0.9.3'
 gem 'rails'               , '~> 3.2'
 gem 'will_paginate'       , '~> 3.0'
 gem 'inherited_resources' , '1.4.0' # Pin this until they fix ruby 1.8.7 compat
+gem 'i18n'                , '~> 0.6.0' # support ruby 1.8.7
 
 gem 'thin'
 gem 'rack'
@@ -24,7 +25,7 @@ group :assets do
   gem 'haml-rails'    , '~> 0.3.5'
   gem 'jquery-rails'  , '~> 2.1'
   gem 'uglifier'      , '~> 1.0'
-  gem 'execjs' # Will use system-available JS runtime
+  gem 'execjs'        , '~> 2.0.0' # Will use system-available JS runtime
 end
 
 group :development, :test do
