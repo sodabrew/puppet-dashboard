@@ -13,13 +13,34 @@ namespace :reports do
     }
     known_units = units.keys.join(',')
 
+    statuses = [
+      'changed',
+      'unchanged',
+      'pending',
+      'failed'
+    ]
+    known_statuses = statuses.join(',')
+
+    conditions = {
+      'is' => '=',
+      'not' => '!='
+    }
+    known_conditions = conditions.keys.join(',')
+
     usage = %{
 EXAMPLE:
   # Prune records upto 1 month old:
   rake reports:prune upto=1 unit=mon
 
+  # Prune records upto 1 month old and with status 'unchanged'
+  rake reports:prune upto=1 unit=mon condition=is status=unchanged
+
 UNITS:
   Valid units of time are: #{known_units}
+
+STATUS & CONDITION:
+  Valid status values are: #{known_statuses}
+  Valid condition values are: #{known_conditions}
     }.strip
 
     unless ENV['upto'] || ENV['unit']
@@ -43,11 +64,27 @@ UNITS:
       errors << "You must specify the unit of time, .e.g.: unit={#{known_units}}" \
     end
 
+    if ( ENV['status'] && ! ENV['condition'] ) || ( ENV['condition'] && ! ENV['status'] )
+      errors << "You must specify status AND condition!"\
+    end
+
+    if status = ENV['status']
+      unless statuses.include?(status)
+        errors << "I don't know that status. Valid statuses are: #{known_statuses}"\
+      end
+    else
+      status = ""
+    end
+
     if errors.present?
       $stderr.puts errors.map { |error| "ERROR: #{error}" }
       $stderr.puts
       $stderr.puts usage
       exit 1
+    end
+
+    if condition != "!="
+      condition = conditions[condition]
     end
 
     # Thin query for nodes with reports that may be pruned.
@@ -56,9 +93,9 @@ UNITS:
     cutoff = Time.now.gmtime - (upto * units[unit].to_i)
     affected_nodes = Node.select('DISTINCT nodes.id') \
                          .joins('LEFT OUTER JOIN reports ON reports.node_id = nodes.id') \
-                         .where(['reports.time < ?', cutoff])
+                         .where("reports.time < \"#{cutoff}\" and reports.status #{condition} \"#{status}\"")
     deletion_count = affected_nodes.count
-    puts "#{Time.now.to_s(:db)}: Deleting reports before #{cutoff} for #{deletion_count} nodes"
+    puts "#{Time.now.to_s(:db)}: Deleting reports before #{cutoff} and with report status #{condition} \"#{status}\" for #{deletion_count} nodes"
 
     pbar = ProgressBar.new('Deleting', deletion_count, STDOUT)
     deleted_count = 0
@@ -66,7 +103,7 @@ UNITS:
     begin
       affected_nodes.each do |node|
         node.reload # Become a complete object (the query above returns shalow objects with 'id' only)
-        deleted_count += node.prune_reports(cutoff)
+        deleted_count += node.prune_reports(cutoff, condition, status)
         pbar.inc
       end
     rescue SignalException
