@@ -81,7 +81,7 @@ STATUS & CONDITION:
         errors << "I don't know that condition. Valid conditionss are: #{known_conditions}"\
       end
     else
-      condition = "!="
+      condition = "not"
     end
 
     if errors.present?
@@ -91,9 +91,7 @@ STATUS & CONDITION:
       exit 1
     end
 
-    if condition != "!="
-      condition = conditions[condition]
-    end
+    condition = conditions[condition]
 
     # Thin query for nodes with reports that may be pruned.
     # By selecting the 'id' column only, it does not eager load all of the
@@ -101,7 +99,7 @@ STATUS & CONDITION:
     cutoff = Time.now.gmtime - (upto * units[unit].to_i)
     affected_nodes = Node.select('DISTINCT nodes.id') \
                          .joins('LEFT OUTER JOIN reports ON reports.node_id = nodes.id') \
-                         .where("reports.time < \"#{cutoff}\" and reports.status #{condition} \"#{status}\"")
+                         .where("reports.time < ? AND reports.status #{condition} ?", cutoff, status)
     deletion_count = affected_nodes.count
     puts "#{Time.now.to_s(:db)}: Deleting reports before #{cutoff} and with report status #{condition} \"#{status}\" for #{deletion_count} nodes"
 
