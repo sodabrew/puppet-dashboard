@@ -76,6 +76,14 @@ STATUS & CONDITION:
       status = ""
     end
 
+    if condition = ENV['condition']
+      unless conditions.has_key?(condition)
+        errors << "I don't know that condition. Valid conditionss are: #{known_conditions}"\
+      end
+    else
+      condition = "!="
+    end
+
     if errors.present?
       $stderr.puts errors.map { |error| "ERROR: #{error}" }
       $stderr.puts
