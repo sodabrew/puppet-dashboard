@@ -223,7 +223,7 @@ class Node < ActiveRecord::Base
 
   def prune_reports(cutoff, condition, status)
     transaction do
-      old_report_ids = self.reports.where("reports.time < \"#{cutoff}\" and reports.status #{condition} \"#{status}\"").pluck(:id)
+      old_report_ids = self.reports.where("reports.time < ? AND reports.status #{condition} ?", cutoff, status).pluck(:id)
       deleted_count = Report.bulk_delete(old_report_ids)
       self.find_and_assign_last_inspect_report
       self.find_and_assign_last_apply_report
