@@ -53,24 +53,24 @@ STATUS & CONDITION:
     if ENV['upto'] =~ /^\d+$/
       upto = ENV['upto'].to_i
     else
-      errors << "You must specify how far up you want to prune as an integer, e.g.: upto={some integer}" \
+      errors << "You must specify how far up you want to prune as an integer, e.g.: upto={some integer}" 
     end
 
     if unit = ENV['unit']
       unless units.has_key?(unit)
-        errors << "I don't know that unit. Valid units are: #{known_units}" \
+        errors << "I don't know that unit. Valid units are: #{known_units}" 
       end
     else
-      errors << "You must specify the unit of time, .e.g.: unit={#{known_units}}" \
+      errors << "You must specify the unit of time, .e.g.: unit={#{known_units}}" 
     end
 
     if ( ENV['status'] && ! ENV['condition'] ) || ( ENV['condition'] && ! ENV['status'] )
-      errors << "You must specify status AND condition!"\
+      errors << "You must specify status AND condition!"
     end
 
     if status = ENV['status']
       unless statuses.include?(status)
-        errors << "I don't know that status. Valid statuses are: #{known_statuses}"\
+        errors << "I don't know that status. Valid statuses are: #{known_statuses}"
       end
     else
       status = ""
@@ -78,7 +78,7 @@ STATUS & CONDITION:
 
     if condition = ENV['condition']
       unless conditions.has_key?(condition)
-        errors << "I don't know that condition. Valid conditionss are: #{known_conditions}"\
+        errors << "I don't know that condition. Valid conditions are: #{known_conditions}"
       end
     else
       condition = "not"
