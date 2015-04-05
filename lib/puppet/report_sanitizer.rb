@@ -135,7 +135,7 @@ module ReportSanitizer #:nodoc:
     end
   end
 
-  # format version 1 was used by puppet 2.6.x-2.7.12
+  # format version 1 was used by puppet 2.6.0-2.6.4
   class FormatVersion1 < Base
     def initialize(
       log_sanitizer    = VersionLogSanitizer.new,
@@ -169,7 +169,7 @@ module ReportSanitizer #:nodoc:
     end
   end
 
-  # format version 2 has been used since puppet 2.7.13
+  # format version 2 was used by puppet 2.6.5-2.7.11
   class FormatVersion2 < FormatVersion1
     def initialize(
       log_sanitizer    = LogSanitizer.new,

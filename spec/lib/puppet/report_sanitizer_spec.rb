@@ -92,7 +92,7 @@ describe ReportSanitizer do
       end
     end
 
-    describe 'a format version 1 (puppet 2.6.x-2.7.12) report' do
+    describe 'a format version 1 (puppet 2.6.0-2.6.4) report' do
       let :report_filename do
         Rails.root.join('spec', 'fixtures', 'reports', 'puppet26', 'report_ok_service_started_ok.yaml')
       end
@@ -358,7 +358,7 @@ describe ReportSanitizer do
       end
     end
 
-    describe 'a format version 2 (puppet 2.7.13+) report' do
+    describe 'a format version 2 (puppet 2.6.5-2.7.11) report' do
       let :raw_report do
         YAML.load(<<HEREDOC, :safe => :true, :deserialize_symbols => true)
 --- !ruby/object:Puppet::Transaction::Report
