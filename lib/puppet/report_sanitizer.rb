@@ -7,7 +7,12 @@ module ReportSanitizer #:nodoc:
     def sanitize(raw)
       case
         when raw.include?('report_format')
-          format2sanitizer.sanitize(raw)
+          case raw['report_format']
+            when 2
+              format2sanitizer.sanitize(raw)
+            when 3
+              format3sanitizer.sanitize(raw)
+          end
         when raw.include?('resource_statuses')
           format1sanitizer.sanitize(raw)
         else
@@ -27,6 +32,10 @@ module ReportSanitizer #:nodoc:
 
     def format2sanitizer()
       @format2sanitizer ||= ReportSanitizer::FormatVersion2.new
+    end
+
+    def format3sanitizer()
+      @format3sanitizer ||= ReportSanitizer::FormatVersion3.new
     end
   end
 
@@ -207,6 +216,15 @@ module ReportSanitizer #:nodoc:
           Util.copy_attributes(sanitized, raw, %w[audited historical_value])
         end
       end
+    end
+  end
+
+  # format version 3 was used by puppet 2.7.13-3.2.4
+  class FormatVersion3 < FormatVersion2
+    def sanitize(raw)
+      sanitized = super
+      Util.verify_attributes(raw, %w[kind status puppet_version configuration_version environment])
+      Util.copy_attributes(sanitized, raw, %w[kind status puppet_version configuration_version environment])
     end
   end
 end
