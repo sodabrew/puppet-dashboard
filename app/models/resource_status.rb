@@ -5,6 +5,7 @@ class ResourceStatus < ApplicationRecord
   accepts_nested_attributes_for :events
 
   serialize :tags, Array
+  serialize :containment_path, Array
 
   scope :inspections, -> { joins(:report).where("reports.kind = 'inspect'") }
 

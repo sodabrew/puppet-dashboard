@@ -12,6 +12,8 @@ module ReportSanitizer #:nodoc:
               format2sanitizer.sanitize(raw)
             when 3
               format3sanitizer.sanitize(raw)
+            when 4
+              format4sanitizer.sanitize(raw)
           end
         when raw.include?('resource_statuses')
           format1sanitizer.sanitize(raw)
@@ -36,6 +38,10 @@ module ReportSanitizer #:nodoc:
 
     def format3sanitizer()
       @format3sanitizer ||= ReportSanitizer::FormatVersion3.new
+    end
+
+    def format4sanitizer()
+      @format4sanitizer ||= ReportSanitizer::FormatVersion4.new
     end
   end
 
@@ -225,6 +231,49 @@ module ReportSanitizer #:nodoc:
       sanitized = super
       Util.verify_attributes(raw, %w[kind status puppet_version configuration_version environment])
       Util.copy_attributes(sanitized, raw, %w[kind status puppet_version configuration_version environment])
+    end
+  end
+
+  # format version 4 is used by puppet since version 3.3.0
+  class FormatVersion4 < FormatVersion3
+    def initialize(
+      log_sanitizer    = LogSanitizer.new,
+      metric_sanitizer = MetricSanitizer.new,
+      status_sanitizer = FormatVersion4StatusSanitizer.new
+    )
+      super(log_sanitizer, metric_sanitizer, status_sanitizer)
+    end
+
+    def sanitize(raw)
+      sanitized = super
+      Util.verify_attributes(raw, %w[kind status puppet_version configuration_version environment transaction_uuid])
+      Util.copy_attributes(sanitized, raw, %w[kind status puppet_version configuration_version environment transaction_uuid])
+    end
+
+    class FormatVersion4StatusSanitizer < ExtendedStatusSanitizer
+      def initialize(event_sanitizer = FormatVersion4EventSanitizer.new)
+        super(event_sanitizer)
+      end
+
+      def sanitize(raw)
+        sanitized = super
+        Util.verify_attributes(raw, %w[containment_path])
+        Util.copy_attributes(sanitized, raw, %w[containment_path])
+      end
+
+      class FormatVersion4EventSanitizer < ExtendedEventSanitizer
+        def sanitize(raw)
+          Util.verify_attributes(raw, %w[message status time audited])
+
+          sanitized = {}
+
+          if raw['name']
+            sanitized['name'] = raw['name'].to_s
+          end
+
+          Util.copy_attributes(sanitized, raw, %w[previous_value desired_value message property status time audited historical_value])
+        end
+      end
     end
   end
 end
