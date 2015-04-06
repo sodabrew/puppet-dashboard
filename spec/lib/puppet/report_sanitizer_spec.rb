@@ -633,5 +633,154 @@ HEREDOC
         hash["environment"].should == "production"
       end
     end
+
+    describe 'a format version 4 (puppet 3.3.0-) report' do
+      let :raw_report do
+        YAML.load(<<HEREDOC, :safe => :true, :deserialize_symbols => true)
+--- !ruby/object:Puppet::Transaction::Report
+  host: localhost
+  time: 2010-07-22 12:19:47.204207 -07:00
+  logs: []
+  metrics:
+    time: !ruby/object:Puppet::Util::Metric
+      name: time
+      label: Time
+      values:
+        - - config_retrieval
+          - Config retrieval
+          - 0.25
+        - - total
+          - Total
+          - 0.5
+    resources: !ruby/object:Puppet::Util::Metric
+      name: resources
+      label: Resources
+      values:
+        - - failed
+          - Failed
+          - 1
+        - - out_of_sync
+          - Out of sync
+          - 2
+        - - changed
+          - Changed
+          - 3
+        - - total
+          - Total
+          - 4
+    events: !ruby/object:Puppet::Util::Metric
+      name: events
+      label: Events
+      values:
+        - - total
+          - Total
+          - 0
+    changes: !ruby/object:Puppet::Util::Metric
+      name: changes
+      label: Changes
+      values:
+        - - total
+          - Total
+          - 0
+  resource_statuses:
+    File[/etc/motd]: !ruby/object:Puppet::Resource::Status
+      resource: File[/etc/motd]
+      file: /etc/puppetlabs/puppet/modules/motd/manifests/init.pp
+      line: 21
+      evaluation_time: 0.046776106
+      change_count: 1
+      out_of_sync_count: 1
+      tags:
+        - file
+        - class
+        - motd
+        - node
+        - default
+      time: 2013-10-02 16:54:44.845351 -07:00
+      events:
+        - !ruby/object:Puppet::Transaction::Event
+          audited: false
+          property: content
+          previous_value: \"{md5}576c30100670abe54a2446d05d72e4cf\"
+          desired_value: \"{md5}892b87473b3ce3afbcb28198ac02f02d\"
+          historical_value:
+          message: \"content changed '{md5}576c30100670abe54a2446d05d72e4cf' to '{md5}892b87473b3ce3afbcb28198ac02f02d'\"
+          name: !ruby/sym content_changed
+          status: success
+          time: 2013-10-02 16:54:44.885931 -07:00
+      out_of_sync: true
+      changed: true
+      resource_type: File
+      title: /etc/motd
+      skipped: false
+      failed: false
+      containment_path:
+        - Stage[main]
+        - Motd
+        - File[/etc/motd]
+    File[hello.rb]: !ruby/object:Puppet::Resource::Status
+      resource: File[hello.rb]
+      file: /etc/puppetlabs/puppet/modules/hello/manifests/init.pp
+      line: 47
+      evaluation_time: 0.108021493
+      change_count: 0
+      out_of_sync_count: 1
+      tags:
+        - file
+        - hello.rb
+        - class
+        - hello
+        - node
+        - default
+      time: 2013-10-02 16:54:49.012379 -07:00
+      events:
+        - !ruby/object:Puppet::Transaction::Event
+          audited: false
+          message: \"Could not find user abcdefghijklmnop\"
+          status: failure
+          time: 2013-10-02 16:54:49.120393 -07:00
+      out_of_sync: true
+      changed: false
+      resource_type: File
+      title: hello.rb
+      skipped: false
+      failed: true
+      containment_path:
+        - Stage[main]
+        - Hello
+        - File[hello.rb]
+  configuration_version: 12345
+  report_format: 4
+  puppet_version: 3.3.0
+  kind: apply
+  transaction_uuid: b2b7567c-696a-4250-8d74-e3c5030e1263
+  environment: production
+  status: unchanged
+HEREDOC
+      end
+
+      it "should produce a hash of the report" do
+        hash = ReportSanitizer.sanitize(raw_report)
+        hash.should be_a(Hash)
+        hash.keys.should =~ %w{host time logs metrics resource_statuses kind configuration_version puppet_version report_format status environment transaction_uuid}
+        hash["report_format"].should == 4
+        hash["host"].should == "localhost"
+        hash["time"].should == Time.parse("2010-07-22 12:19:47.204207 -07:00")
+        hash["environment"].should == "production"
+        hash["transaction_uuid"].should == "b2b7567c-696a-4250-8d74-e3c5030e1263"
+      end
+
+      it "should have resource_statuses that contain a containment_path" do
+        hash = ReportSanitizer.sanitize(raw_report)
+        hash.should be_a(Hash)
+        hash["resource_statuses"].values.each do |resource_status|
+          resource_status["containment_path"].should be_a(Array)
+        end
+      end
+
+      it "should allow resource events that do not contain property previous_value desired_value or historical_value" do
+        expect { ReportSanitizer.sanitize(raw_report) }.to_not raise_error ArgumentError
+      end
+    end
   end
 end

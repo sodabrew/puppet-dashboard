@@ -5,10 +5,11 @@ class ResourceStatus < ActiveRecord::Base
   attr_readonly   :report_id
   attr_accessible :resource_type, :title, :evaluation_time, :file, :line, \
                   :tags, :time, :change_count, :out_of_sync_count, :skipped, \
-                  :failed, :status, :events_attributes, :report
+                  :failed, :status, :events_attributes, :report, :containment_path
   accepts_nested_attributes_for :events
 
   serialize :tags, Array
+  serialize :containment_path, Array
 
   scope :inspections, joins(:report).where("reports.kind = 'inspect'")
 

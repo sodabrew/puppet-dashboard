@@ -12,6 +12,7 @@ class Report < ActiveRecord::Base
 
   attr_accessible :host, :time, :status, :kind, :puppet_version, :configuration_version, :environment
   attr_accessible :logs_attributes, :metrics_attributes, :resource_statuses_attributes, :events_attributes
+  attr_accessible :transaction_uuid
 
   before_validation :assign_to_node
   validates_presence_of :host, :time, :kind
