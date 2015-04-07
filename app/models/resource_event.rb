@@ -4,7 +4,11 @@ class ResourceEvent < ActiveRecord::Base
   # Only perform YAMLization on non-strings.
   class ValueWrapper
     def self.load(val)
-      YAML.load(val) rescue val
+      begin
+        YAML.load(val)
+      rescue Exception
+        val
+      end
     end
 
     def self.dump(val)
