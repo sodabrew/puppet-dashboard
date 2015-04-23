@@ -43,7 +43,7 @@ group :development, :test do
 end
 
 group :postgresql do
-  gem 'pg', '~> 0.15'
+  gem 'pg', '~> 0.17.0' # support ruby 1.8.7
 end
 
 group :mysql do
