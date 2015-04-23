@@ -15,6 +15,10 @@ gem 'safe_yaml',    :require => false
 gem 'fastercsv',    :platforms => :ruby_18
 gem 'system_timer', :platforms => :ruby_18
 
+# On Ruby 1.9.3 and above, use the Psych 2.0 gem because
+# Psych 1.3.x included with some Ruby versions is slow/buggy.
+gem 'psych', '~> 2.0' unless RUBY_VERSION =~ /1\.8/
+
 gem 'delayed_job', '~> 3.0'
 gem 'delayed_job_active_record', '~> 0.3.3'
 gem 'timeline_fu', '~> 0.3.0'
