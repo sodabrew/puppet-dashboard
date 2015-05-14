@@ -107,6 +107,18 @@ namespace :node do
       exit 1
     end
   end
+  
+  desc 'Hide a node'
+  task :hide => :environment do
+    begin
+      node = get_node(ENV['name'])
+      node.hidden = true
+      node.save!
+    rescue => e
+      puts e.message
+      exit 1
+    end
+  end
 
   desc 'Replace class(es) for a node'
   task :classes => :environment do
