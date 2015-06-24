@@ -6,11 +6,15 @@ include /usr/share/cdbs/1/rules/buildcore.mk
 ruby_ver = 1.8
 
 binary-install/puppet-dashboard::
-	mkdir -p $(CURDIR)/debian/$(cdbs_curpkg)/etc/puppet-dashboard
-	mkdir -p $(CURDIR)/debian/$(cdbs_curpkg)/usr/share/puppet-dashboard/certs
-	mkdir -p $(CURDIR)/debian/$(cdbs_curpkg)/var/$(cdbs_curpkg)/tmp
+	mkdir -p $(CURDIR)/debian/$(cdbs_curpkg)/etc/puppet-dashboard/certs
+	mkdir -p $(CURDIR)/debian/$(cdbs_curpkg)/usr/share/puppet-dashboard
+	mkdir -p $(CURDIR)/debian/$(cdbs_curpkg)/usr/cache/puppet-dashboard
 	mkdir -p $(CURDIR)/debian/$(cdbs_curpkg)/var/log/puppet-dashboard
+	mkdir -p $(CURDIR)/debian/$(cdbs_curpkg)/var/spool/puppet-dashboard
+	mkdir -p $(CURDIR)/debian/$(cdbs_curpkg)/var/tmp/puppet-dashboard
+	mkdir -p $(CURDIR)/debian/$(cdbs_curpkg)/var/run/puppet-dashboard
 	dh_installinit --name=puppet-dashboard-workers
+	dh_installinit --name=puppet-dashboard
 	cp -r app \
 	    bin \
 	    config \
@@ -26,7 +30,6 @@ binary-install/puppet-dashboard::
 	    $(CURDIR)/debian/$(cdbs_curpkg)/usr/share/puppet-dashboard
 	cp $(CURDIR)/config/database.yml.example $(CURDIR)/debian/$(cdbs_curpkg)/etc/puppet-dashboard/database.yml
 	cp $(CURDIR)/config/settings.yml.example $(CURDIR)/debian/$(cdbs_curpkg)/etc/puppet-dashboard/settings.yml
-	cp -r $(CURDIR)/public $(CURDIR)/debian/$(cdbs_curpkg)/var/$(cdbs_curpkg)
 	chmod -R a+rx $(CURDIR)/debian/$(cdbs_curpkg)/usr/share/puppet-dashboard/script
 	rm -rf $(CURDIR)/debian/$(cdbs_curpkg)/usr/share/puppet-dashboard/ext/{redhat,debian,build_defaults.yaml,project_data.yaml}
 	# Clean up the "extra" files
@@ -46,4 +49,6 @@ binary-install/puppet-dashboard::
 	    $(CURDIR)/debian/$(cdbs_curpkg)/usr/share/puppet-dashboard/lib \
 	    $(CURDIR)/debian/$(cdbs_curpkg)/usr/share/puppet-dashboard/app \
 	    $(CURDIR)/debian/$(cdbs_curpkg)/usr/share/puppet-dashboard/spec \
-	    $(CURDIR)/debian/$(cdbs_curpkg)/usr/share/puppet-dashboard/vendor
+	    $(CURDIR)/debian/$(cdbs_curpkg)/usr/share/puppet-dashboard/vendor \
+	    $(CURDIR)/debian/$(cdbs_curpkg)/usr/share/puppet-dashboard/log \
+	    $(CURDIR)/debian/$(cdbs_curpkg)/usr/share/puppet-dashboard/tmp/{sessions,sockets,pids}

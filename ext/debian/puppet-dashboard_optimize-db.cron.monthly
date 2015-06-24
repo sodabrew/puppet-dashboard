@@ -1,0 +1,15 @@
+i#!/bin/bash
+
+set -u
+
+PUPPET_DB_PATH=/usr/share/puppet-dashboard
+
+# Prune records up to one month old:
+UPTO=1
+# Valid units of time are: hr,day,wk,min,yr,mon
+UNIT=mon
+
+output=`rake -s -f ${PUPPET_DB_PATH}/Rakefile RAILS_ENV=production db:raw:optimize 2>&1 1> /dev/null`
+if [ $? -ne 0 ]; then
+  logger -i "${output}"
+fi

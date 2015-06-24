@@ -28,6 +28,8 @@ DASHBOARD_RUBY=${DASHBOARD_RUBY:-/usr/bin/ruby}
 DASHBOARD_ENVIRONMENT=${DASHBOARD_ENVIRONMENT:-production}
 DASHBOARD_IFACE=${DASHBOARD_IFACE:-0.0.0.0}
 DASHBOARD_PORT=${DASHBOARD_PORT:-3000}
+DASHBOARD_PID=${DASHBOARD_PID:-/var/run/puppet-dashboard}
+PID_FILE="${DASHBOARD_PID}/puppet-dashboard.pid"
 
 check_dashboard_enabled_option() {
     if [ ! "$START" = "yes" ]; then
@@ -50,7 +52,7 @@ start_puppet_dashboard() {
     # Wait five seconds, then check if the pid is still valid,
     # since start-stop-daemon returns success if the process is executed,
     # but does not return an error if it exits right away.
-    sleep 5
+    sleep 5; echo
 
     check_puppet_dashboard_status
 }

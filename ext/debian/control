@@ -10,9 +10,9 @@ Homepage: http://github.com/puppetlabs/puppet-dashboard
 Package: puppet-dashboard
 Architecture: all
 Pre-Depends: debconf
-Depends: ruby, ruby1.8 (>= 1.8.7), rake (>=0.8.3), dbconfig-common, libdbd-mysql-ruby, mysql-client, rubygems, libhttpclient-ruby1.8
-Suggests: mysql-server
-Recommends: libapache2-mod-passenger
+Depends: ruby, deconf-common, rubygems, lighttpclient-ruby1.8, bundler, g++, ruby1.9.1-dev, make, libxml2, zliblg-dev, libxml2-dev, patch, libxslt-dev, libpq-dev, libsqlite2-dev, nodejs
+Suggests: mysql-server, lidbd-mysql-ruby, mysql-client, ruby-mysql2, libmysql-ruby, libmysqlclient-dev
+Recommends: apache2|nginx
 Description: Dashboard for Puppet
  The Puppet Dashboard is a web application for managing the Puppet configuration
  management tool.
