@@ -1,0 +1,66 @@
+# config/database.yml
+# 
+# IMPORTANT NOTE: Before starting Dashboard, you will need to ensure that the
+# MySQL user and databases you've specified in this file exist, and that the
+# user has all permissions on the relevant databases. This will have to be done
+# with an external database administration tool. If using the command-line
+# `mysql` client, the commands to do this will resemble the following:
+# 
+# CREATE DATABASE dashboard_production CHARACTER SET utf8;
+# CREATE USER 'dashboard'@'localhost' IDENTIFIED BY 'my_password';
+# GRANT ALL PRIVILEGES ON dashboard_production.* TO 'dashboard'@'localhost';
+# 
+# -----
+# 
+# This file should be a YAML hash with one key for each of the standard Rails
+# environments: production, development, and test.
+# 
+# - The "production" environment gives the best performance, and should be used
+#   most of the time by most users. **Note that Rails does not consider
+#   production its default environment, and you must specify it manually with
+#   the RAILS_ENV environment variable when running any rake tasks.**
+# - The "development" environment gives worse performance, but yields better
+#   logging and error reporting when something goes wrong.
+# - The "test" environment is only used for running Dashboard's automated tests.
+#   It should never be used by most users. If you are using the test
+#   environment, **DO NOT set its database to the same database used by the
+#   development or production environments,** as it will be erased and
+#   re-written every time the automated tests are run.
+# 
+# The environment is set when Dashboard is started, a console is started, or a
+# rake task is run. Most production-quality Rails servers (such as Passenger)
+# will default to the production environment, but the included WEBrick server
+# script will default to development unless run with the `-e production` option.
+# 
+# Each environment should be a hash with keys for:
+# 
+# - database
+# - username
+# - password
+# - encoding
+# - adapter
+# 
+# At the moment, "adapter" can be "mysql2" or "postgresql", and "encoding" should always
+# be "utf8".
+# 
+production:
+  database: dashboard_production
+  username: dashboard
+  password:
+  encoding: utf8
+  adapter: postgresql
+
+development:
+  database: dashboard_development
+  username: dashboard
+  password:
+  encoding: utf8
+  adapter: postgresql
+
+test:
+  database: dashboard_test
+  username: dashboard
+  password:
+  encoding: utf8
+  adapter: postgresql
+

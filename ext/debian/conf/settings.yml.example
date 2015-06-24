@@ -1,0 +1,108 @@
+#===[ Settings ]=========================================================
+#
+# This file is meant for storing setting information that is never
+# published or committed to a revision control system.
+#
+# Do not modify this "config/settings.yml.example" file directly -- you
+# should copy it to "config/settings.yml" and customize it there.
+#
+#---[ Values ]----------------------------------------------------------
+
+# Node name to use when contacting the puppet master.  This is the
+# CN that is used in Dashboard's certificate.
+cn_name: 'dashboard'
+
+ca_crl_path: 'certs/dashboard.ca_crl.pem'
+
+ca_certificate_path: 'certs/dashboard.ca_cert.pem'
+
+certificate_path: 'certs/dashboard.cert.pem'
+
+private_key_path: 'certs/dashboard.private_key.pem'
+
+public_key_path: 'certs/dashboard.public_key.pem'
+
+# Hostname of the certificate authority.
+ca_server: 'puppet'
+
+# Port for the certificate authority.
+ca_port: 8140
+
+# Key length for SSL certificates
+key_length: 1024
+
+# The "inventory service" allows you to connect to a puppet master to retrieve and node facts
+enable_inventory_service: false
+
+# Hostname of the inventory server.
+inventory_server: 'puppet'
+
+# Port for the inventory server.
+inventory_port: 8140
+
+# Set this to true to allow Dashboard to display diffs on files that
+# are archived in the file bucket.
+use_file_bucket_diffs: false
+
+# Hostname of the file bucket server.
+file_bucket_server: 'puppet'
+
+# Port for the file bucket server.
+file_bucket_port: 8140
+
+# Amount of time in seconds since last report before a node is considered no longer reporting
+no_longer_reporting_cutoff: 3600
+
+# How many days of history to display on the "Daily Run Status" graph
+daily_run_history_length: 30
+
+use_external_node_classification: true
+
+# Uncomment the following line to set a local time zone.  Run
+# "rake time:zones:local" for the name of your local time zone.
+#time_zone: 'Pacific Time (US & Canada)'
+
+# Look at http://ruby-doc.org/core/classes/Time.html#M000298 for the strftime formatting
+datetime_format: '%Y-%m-%d %H:%M %Z'
+date_format: '%A, %B %e, %Y'
+
+# Set this to the URL of an image. The image will be scaled to the specified dimensions.
+custom_logo_url: '/images/dashboard_logo.png'
+custom_logo_width: 155px
+custom_logo_height: 23px
+custom_logo_alt_text: 'Puppet Dashboard'
+
+# We will be deprecating using "http://dashboard_servername/reports" as the puppet master's reporturl.
+# Set this to 'true' once you have changed all your puppet masters to send reports to
+# "http://dashboard_servername/reports/upload"
+disable_legacy_report_upload_url: false
+
+# Set this to true to prevent storing details about not-changed events
+# which saves a tremendous amount of space in the resource_statuses table.
+disable_report_unchanged_events: false
+
+# Disables the UI and controller actions for editing nodes, classes, groups and reports.  Report submission is still allowed
+enable_read_only_mode: false
+
+# Default number of items of each kind to display per page
+nodes_per_page: 20
+classes_per_page: 50
+groups_per_page: 50
+reports_per_page: 20
+
+# Previously Dashboard used only ID numbers as URL slugs, set to true to return to that style.
+numeric_url_slugs: false
+
+# Adds optional custom links in the top bar of puppet dashboard.
+# Exemple that will add two links:
+#custom_links:
+# -
+#   href: /link/href
+#   title: The title that will be displayed
+# -
+#   href: /node_groups/1
+#   title: Special group
+
+# Generate a new secret_token for production use!
+secret_token: 'b1bbd28f6f9ebfc25f09da9bff4643f75d5ad8c8da8b60234168c81cd6d32c15e5e5421196ee99da248d37d84f73c9ecb38608fc0d8b2709872290a3f43b244e'
+#===[ fin ]=============================================================
