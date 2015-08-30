@@ -1,0 +1,21 @@
+[Unit]
+Description=Puppet Dashboard
+After=httpd.service syslog.target
+
+[Service]
+# Default values
+Environment="RAILS_ENV=production"
+Environment="DASHBOARD_HOME=/usr/share/puppet-dashboard"
+# Overrides here
+EnvironmentFile=-/etc/sysconfig/puppet-dashboard
+# 
+Type=forking
+Restart=always
+ExecStart=/bin/ruby ${DASHBOARD_HOME}/script/rails server -e ${DASHBOARD_ENVIRONMENT} -p ${DASHBOARD_PORT} -b ${DASHBOARD_IFACE}
+KillSignal=SIGINT
+User=puppet-dashboard
+SyslogIdentifier=puppet-dashboard
+NoNewPrivileges=true
+
+[Install]
+WantedBy=multi-user.target
