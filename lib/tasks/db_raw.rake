@@ -61,6 +61,12 @@ namespace :db do
           puts "* #{table}"
           ActiveRecord::Base.connection.execute("OPTIMIZE TABLE #{table}")
         end
+      when 'postgresql'
+        puts "Optimizing tables, this may take a while:"
+        for table in ActiveRecord::Base.connection.tables.sort
+          puts "* #{table}"
+          ActiveRecord::Base.connection.execute("VACUUM FULL ANALYZE #{table}")
+        end
       else
         raise "Don't know how to optimize for database engine: #{adapter}"
       end
