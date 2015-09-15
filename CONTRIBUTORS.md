@@ -1,6 +1,7 @@
 Contributors
 ------------
 
+* Pascal Vibet <p.vibet@gmail.com>
 * Aaron Stone <aaron@serendipity.cx>
 * Adrien Thebo <adrien@puppetlabs.com>
 * Andreas Zuber <zuber@puzzle.ch>
