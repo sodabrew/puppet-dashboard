@@ -73,7 +73,7 @@ bundle install --deployment
 ````
 * You need to create a secret for production and either set it via environment variable:
   `export SECRET_KEY_BASE=$(bundle exec rails secret)`
-  or follow the instructions in config/secrets.yml to setup an encrypted secret. 
+  or follow the instructions in config/secrets.yml to setup an encrypted secret.
 * Setup database and pre-compile assets
 ````
 RAILS_ENV=production bundle exec rake db:setup && \
@@ -96,9 +96,17 @@ precompile assets for production using:
 
  * `SECRET_KEY_BASE=none RAILS_ENV=production bundle exec rails assets:precompile`
 
+Dashboard will keep all reports in the database. If your infrastructure is big the database will
+eventually become very large (more than 50GB). To periodically purge old reports (~ once per day)
+and optimize the database tables (~ once per month) it is recommended to run the following tasks
+periodically:
+
+ * `SECRET_KEY_BASE=none RAILS_ENV=production bundle exec rails reports:prune upto=20 unit=day`
+ * `SECRET_KEY_BASE=none RAILS_ENV=production bundle exec rails db:raw:optimize`
+
 Contributing
 ------------
 
-To contribute to this project, please read [CONTRIBUTING](CONTRIBUTING.md).  
-A list of contributors is found in [CONTRIBUTORS](CONTRIBUTORS.md). Thanks!  
+To contribute to this project, please read [CONTRIBUTING](CONTRIBUTING.md).
+A list of contributors is found in [CONTRIBUTORS](CONTRIBUTORS.md). Thanks!
 This project uses the [Silk icons](http://www.famfamfam.com/lab/icons/silk/) by Mark James.  Thank you!
