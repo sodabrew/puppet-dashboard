@@ -28,6 +28,16 @@ group :assets do
   gem 'execjs'        , '~> 2.0.0' # Will use system-available JS runtime
 end
 
+gem :developpement, :test do
+ 	gem 'mocha', '~> 0.13.3', :require => false
+ 	gem 'sqlite3'
+ 	gem 'rspec-rails', '~> 2.13.0'
+ 	gem 'factory_girl', '< 3.0' # supports ruby 1.8.7
+ 	gem 'shoulda-matchers', '< 2.0' # supports ruby 1.8.7
+ 	gem 'respc-html-matchers'
+ 	gem 'nokogiri', '< 1.6' # support ruby 1.8.7
+end
+
 group :postgresql do
   gem 'pg', '~> 0.15'
 end
