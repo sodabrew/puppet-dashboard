@@ -1,7 +1,6 @@
 Contributors
 ------------
 
-* Pascal Vibet <p.vibet@gmail.com>
 * Aaron Stone <aaron@serendipity.cx>
 * Adrien Thebo <adrien@puppetlabs.com>
 * Andreas Zuber <zuber@puzzle.ch>
@@ -35,6 +34,7 @@ Contributors
 * Nick Fagerlund <nick.fagerlund@gmail.com>
 * Nick Lewis <nick@puppetlabs.com>
 * Nigel Kersten <nigel@puppetlabs.com>
+* Pascal Vibet <p.vibet@gmail.com>
 * Patrick Carlisle <patrick@puppetlabs.com>
 * Paul Berry <paul@puppetlabs.com>
 * Peter Meier <peter.meier@immerda.ch>
