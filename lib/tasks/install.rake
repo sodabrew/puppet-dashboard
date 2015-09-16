@@ -44,7 +44,7 @@ namespace :cert do
     cert_req.version = 0
     cert_req.subject = OpenSSL::X509::Name.new([["CN", SETTINGS.cn_name]])
     cert_req.public_key = key.public_key
-    cert_req.sign(key, OpenSSL::Digest::MD5.new)
+    cert_req.sign(key, OpenSSL::Digest::SHA256.new)
 
     begin
       PuppetHttps.put("https://#{SETTINGS.ca_server}:#{SETTINGS.ca_port}/production/certificate_request/#{CGI::escape(SETTINGS.cn_name)}",
