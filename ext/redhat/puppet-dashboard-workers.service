@@ -1,0 +1,23 @@
+[Unit]
+Description=Puppet Dashboard background workers
+After=httpd.service syslog.target
+
+[Service]
+# Default values
+Environment="WORKERS=2"
+Environment="RAILS_ENV=production"
+Environment="DASHBOARD_HOME=/usr/share/puppet-dashboard"
+# Overrides here
+EnvironmentFile=-/etc/sysconfig/puppet-dashboard
+EnvironmentFile=-/etc/sysconfig/puppet-dashboard-workers
+# 
+Type=forking
+Restart=always
+ExecStart=/bin/ruby ${DASHBOARD_HOME}/script/delayed_job -p dashboard -n ${WORKERS} -m start
+ExecStop=/bin/ruby ${DASHBOARD_HOME}/script/delayed_job -p dashboard -n ${WORKERS} -m stop
+User=puppet-dashboard
+SyslogIdentifier=puppet-dashboard
+NoNewPrivileges=true
+
+[Install]
+WantedBy=multi-user.target
