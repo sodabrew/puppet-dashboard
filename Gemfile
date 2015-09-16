@@ -28,7 +28,7 @@ group :assets do
   gem 'execjs'        , '~> 2.0.0' # Will use system-available JS runtime
 end
 
-gem :developpement, :test do
+gem :development, :test do
  	gem 'mocha', '~> 0.13.3', :require => false
  	gem 'sqlite3'
  	gem 'rspec-rails', '~> 2.13.0'
