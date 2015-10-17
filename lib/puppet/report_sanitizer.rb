@@ -237,7 +237,7 @@ module ReportSanitizer #:nodoc:
   # format version 4 is used by puppet since version 3.3.0
   class FormatVersion4 < FormatVersion3
     def initialize(
-      log_sanitizer    = LogSanitizer.new,
+      log_sanitizer    = FormatVersion4LogSanitizer.new,
       metric_sanitizer = MetricSanitizer.new,
       status_sanitizer = FormatVersion4StatusSanitizer.new
     )
@@ -250,6 +250,16 @@ module ReportSanitizer #:nodoc:
       Util.copy_attributes(sanitized, raw, %w[kind status puppet_version configuration_version environment transaction_uuid])
     end
 
+    class FormatVersion4LogSanitizer < LogSanitizer
+      def sanitize(raw)
+        sanitized = super
+        unless sanitized['tags'].is_a?(Array)
+          sanitized['tags'] = raw['tags']['hash'].keys
+        end
+        sanitized
+      end
+    end
+
     class FormatVersion4StatusSanitizer < ExtendedStatusSanitizer
       def initialize(event_sanitizer = FormatVersion4EventSanitizer.new)
         super(event_sanitizer)
@@ -259,6 +269,11 @@ module ReportSanitizer #:nodoc:
         sanitized = super
         Util.verify_attributes(raw, %w[containment_path])
         Util.copy_attributes(sanitized, raw, %w[containment_path])
+
+        unless sanitized['tags'].is_a?(Array)
+          sanitized['tags'] = raw['tags']['hash'].keys
+        end
+        sanitized
       end
 
       class FormatVersion4EventSanitizer < ExtendedEventSanitizer
