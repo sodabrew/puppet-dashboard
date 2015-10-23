@@ -17,7 +17,7 @@ Fast Install
 
 * Install prerequisites:
 ````
-apt-get install git libmysqlclient-dev libpq-dev libsqlite3-dev nodejs
+apt-get install git libmysqlclient-dev libpq-dev libsqlite3-dev ruby-dev libxml2-dev libxslt-dev nodejs
 ````
 * Check out the code:
 ````
