@@ -104,7 +104,7 @@ UNITS:
         # Breaking the deletion up into blocks turns out to be overall faster
         # and allows for progress feedback
         DELETION_BATCH_SIZE = 1000
-        while deletion_count > 0
+        while deletion_count > DELETION_BATCH_SIZE
           ActiveRecord::Base.connection.execute(
             "delete from #{model.table_name} where #{deletion_where_clause} limit #{DELETION_BATCH_SIZE}"
           )
