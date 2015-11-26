@@ -27,7 +27,12 @@ class PuppetHttps
 
   def self.put(url, content_type, data, authenticate = true)
     url = URI.parse(url)
-    req = Net::HTTP::Put.new(url.path)
+    if url.query.nil?
+      uristring = url.path
+    else
+      uristring = "#{url.path}?#{url.query}"
+    end
+    req = Net::HTTP::Put.new(uristring)
     req.content_type = content_type
     req.body = data
     res = make_ssl_request(url, req, authenticate)
