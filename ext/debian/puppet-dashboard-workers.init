@@ -65,7 +65,7 @@ start_puppet_dashboard_workers() {
     start-stop-daemon  --start --quiet --oknodo --user ${DASHBOARD_USER} --chuid ${DASHBOARD_USER}  --exec /bin/bash -- -e -c "
                 export PATH='${PATH}';
                 export RUBYLIB='${RUBYLIB:-}';
-                export RAILS_ENV=production;
+                export RAILS_ENV=${DASHBOARD_ENVIRONMENT};
                 ${DASHBOARD_HOME}/script/delayed_job -p dashboard -n ${NUM_DELAYED_JOB_WORKERS:-2} -m start;"
     check_puppet_dashboard_worker_status
 }
