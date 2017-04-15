@@ -51,7 +51,10 @@ start_puppet_dashboard() {
     # since start-stop-daemon returns success if the process is executed,
     # but does not return an error if it exits right away.
     sleep 5
-
+    # Due to an issue of cascading processes being started up, the pid file 
+    # becomes invalid as the process that was started 
+    # does not remain as the ongoing running process
+    ps -ef | grep puppet-dashboard | grep -v grep | awk '{print $2}' > ${PIDFILE}
     check_puppet_dashboard_status
 }
 
