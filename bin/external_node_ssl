@@ -1,0 +1,50 @@
+#! /usr/bin/ruby
+#
+# Sample External Node script for Puppet Dashboard
+#
+# == puppet.conf Configuration
+#
+#  [main]
+#  external_nodes = /path/to/external_node
+#  node_terminus = exec
+
+require 'puppet'
+require 'yaml'
+require 'puppet/sslcertificates/support'
+require 'uri'
+require 'net/https'
+
+#
+# Required settings
+#
+
+Puppet[:config] = "/etc/puppet/puppet.conf"
+Puppet.parse_config
+
+#
+# 
+#
+
+DASHBOARD = "https://puppet.puppetlabs.lan"
+PORT = '4430'
+NODE = ARGV.first
+
+cert = File.read(Puppet[:hostcert])
+pem = File.read(Puppet[:hostprivkey])
+ca = Puppet[:localcacert]
+
+uri = URI.parse("#{DASHBOARD}/nodes/#{NODE}")
+puts uri.host
+puts uri.path
+http = Net::HTTP.new(uri.host, PORT)
+http.use_ssl = true
+http.cert = OpenSSL::X509::Certificate.new(cert)
+http.key = OpenSSL::PKey::RSA.new(pem)
+http.ca_file = ca
+http.verify_mode = OpenSSL::SSL::VERIFY_PEER
+res = http.start { http.request_get(uri.path, 'Accept' => 'text/yaml') }
+
+case res
+when Net::HTTPSuccess; puts res.body; exit 0
+else; STDERR.puts "Error: #{res.code} #{res.message}"; exit 1
+end
