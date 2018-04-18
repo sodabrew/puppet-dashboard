@@ -189,17 +189,10 @@ class Report < ActiveRecord::Base
     add_status_to_resource_status
     add_missing_metrics
     recalculate_report_status
-    fix_kind_for_puppet5
     self
   end
 
   private
-
-  # Report format 7 from Puppet 5 is missing "kind" leading to
-  # "Validation failed: Kind can't be blank"
-  def fix_kind_for_puppet5
-    self.kind = 'apply' if self.kind.blank?
-  end
 
   # Report format 2 knows nothing about pending status
   def recalculate_report_status
