@@ -20,13 +20,15 @@ class NodeClass < ActiveRecord::Base
 
   scope :search, ->(name) { where('name LIKE ?', "%#{name}%") unless name.blank? }
 
-  scope :with_nodes_count,
-    :select => 'node_classes.*, count(nodes.id) as nodes_count',
-    :joins => <<-SQL,
+  scope :with_nodes_count, -> do
+    select('node_classes.*, count(nodes.id) as nodes_count').
+    joins(<<-SQL,
       LEFT OUTER JOIN node_class_memberships ON (node_classes.id = node_class_memberships.node_class_id)
       LEFT OUTER JOIN nodes ON (nodes.id = node_class_memberships.node_id)
     SQL
-    :group => 'node_classes.id'
+    ).
+    group('node_classes.id')
+  end
 
   def to_param
     SETTINGS.numeric_url_slugs ? id.to_s : name

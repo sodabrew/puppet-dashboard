@@ -6,7 +6,7 @@ class ResourceEvent < ActiveRecord::Base
     def self.load(val)
       begin
         YAML.load(val)
-      rescue Exception
+      rescue StandardError
         val
       end
     end

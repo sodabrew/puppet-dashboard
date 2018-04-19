@@ -10,7 +10,7 @@ module HasParameters
 
       has_many :parameters, {:as => :parameterable, :dependent => :destroy}.merge(options) do
         def to_hash
-          Hash[*all.map{|p| [p.key, p.value]}.flatten]
+          Hash[*to_a.map{|p| [p.key, p.value]}.flatten]
         end
       end
     end
@@ -20,7 +20,7 @@ module HasParameters
     def parameter_attributes=(values)
       raise NodeClassificationDisabledError.new unless SETTINGS.use_external_node_classification
       new_parameters = values.reject{|v| v[:key].blank? && v[:value].blank?}.map do |hash|
-        parameter = parameters.find_or_initialize_by_key(hash[:key])
+        parameter = parameters.find_or_initialize_by(key: hash[:key])
         parameter.value = hash[:value]
         parameter.save
         parameter

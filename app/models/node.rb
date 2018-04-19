@@ -87,7 +87,7 @@ class Node < ActiveRecord::Base
 
     matches = JSON.parse(PuppetHttps.get(url, 'pson')) rescue []
     matches.map!(&:downcase)
-    nodes = Node.find_all_by_name(matches)
+    nodes = Node.where(name: matches).to_a
     found = nodes.map(&:name)
     created_nodes = matches.map do |m|
       Node.create!(:name => m) unless found.include? m

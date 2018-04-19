@@ -160,7 +160,7 @@ class Report < ActiveRecord::Base
   end
 
   def assign_to_node
-    self.node = Node.find_or_create_by_name(self.host)
+    self.node = Node.find_or_create_by(name: self.host)
   end
 
   def update_node

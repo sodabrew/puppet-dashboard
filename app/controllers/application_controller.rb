@@ -29,7 +29,7 @@ class ApplicationController < ActionController::Base
   def set_timezone
     if SETTINGS.time_zone
       time_zone_obj = ActiveSupport::TimeZone.new(SETTINGS.time_zone)
-      raise Exception.new("Invalid timezone #{SETTINGS.time_zone.inspect}") unless time_zone_obj
+      raise StandardError.new("Invalid timezone #{SETTINGS.time_zone.inspect}") unless time_zone_obj
       Time.zone = time_zone_obj
     end
   end

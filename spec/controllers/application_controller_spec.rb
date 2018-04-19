@@ -20,7 +20,7 @@ describe InheritedFromApplicationController, :type => :controller do
 
   it "should raise if SETTINGS.time_zone is set to something invalid" do
     SETTINGS.stubs(:time_zone).returns('invalid')
-    lambda { get :generic_action }.should raise_error
+    lambda { get :generic_action }.should raise_error StandardError, 'Invalid timezone "invalid"'
     Time.zone.name.should == "UTC"
   end
 end

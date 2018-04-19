@@ -8,7 +8,7 @@
       - unless SETTINGS.enable_read_only_mode || session['ACCESS_CONTROL_ROLE'] == 'READ_ONLY'
         %li= link_to 'Edit', edit_node_group_path(@node_group), :class => "edit button", :rel => 'inspect'
         %li
-          = link_to 'Delete', url_for(@node_group) + "?force_delete=false", :remote => true, :confirm => 'Are you sure?', :method => :delete, :id => "delete_button", :class => "delete button"
+          = link_to 'Delete', url_for(@node_group) + "?force_delete=false", :remote => true, :data => {:confirm => 'Are you sure?'}, :method => :delete, :id => "delete_button", :class => "delete button"
           = link_to 'Force Delete', url_for(@node_group) + "?force_delete=true", :remote => true, :method => :delete, :id => "force_delete_button", :style => "display: none"
   .item
     .section#error_messages{:style => "display: none;"}

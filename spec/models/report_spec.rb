@@ -63,7 +63,7 @@ describe Report, :type => :model do
     it "creates a node by host if none exists" do
       lambda {
         Report.create_from_yaml(report_yaml)
-      }.should change { Node.count(:conditions => {:name => raw_report['host']}) }.by(1)
+      }.should change { Node.where(name: raw_report['host']).count }.by(1)
     end
 
     it "updates the node's reported_at timestamp for apply reports" do

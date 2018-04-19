@@ -9,7 +9,7 @@ class TimelineEvent < ActiveRecord::Base
       (secondary_subject_id = :id AND secondary_subject_type = :klass)
     SQL
   end
-  scope :recent, order('created_at DESC, id DESC').limit(10)
+  scope :recent, ->(n = 10) { order('created_at DESC, id DESC').limit(n) }
 
   def subject_name
     subject ? subject.name : "A #{subject_type.downcase}"

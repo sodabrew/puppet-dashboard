@@ -365,7 +365,7 @@ describe Node, :type => :model do
       it "should not raise an error if there are two sibling parameters with the same key and value" do
         @param_2.update_attributes(:key => @param_1.key, :value => @param_1.value)
 
-        expect {@node.compiled_parameters}.to_not raise_error(ParameterConflictError)
+        expect {@node.compiled_parameters}.to_not raise_error
         @node.errors[:parameters].should be_empty
       end
 
@@ -378,7 +378,7 @@ describe Node, :type => :model do
         @node_group_d.parameters << param_4
         @node_group_a.node_groups << @node_group_c << @node_group_d
 
-        expect {@node.compiled_parameters}.to_not raise_error(ParameterConflictError)
+        expect {@node.compiled_parameters}.to_not raise_error
         @node.errors[:parameters].should be_empty
       end
 
@@ -625,7 +625,7 @@ describe Node, :type => :model do
       successful_resource = create(:successful_resource, :title => 'successful', :report => @report)
       failed_resource = create(:failed_resource, :title => 'failed', :report => @report)
 
-      csv_lines = Node.find(:all).to_csv.split("\n")
+      csv_lines = Node.all.to_csv.split("\n")
       csv_lines.first.should == (@custom_node_properties + @custom_resource_properties).join(',')
       csv_lines[1..-1].should =~ [pending_resource, failed_resource, successful_resource].map do |res|
         line = node_values + @custom_resource_properties.map { |field| res.send(field) }
@@ -634,7 +634,7 @@ describe Node, :type => :model do
     end
 
     it 'should export nulls for the resource status values when there are no resource statuses' do
-      Node.find(:all).to_csv.split("\n").should == [
+      Node.all.to_csv.split("\n").should == [
         (@custom_node_properties + @custom_resource_properties).join(','),
         (node_values + ([nil] * @custom_resource_properties.count)).join(',')
       ]

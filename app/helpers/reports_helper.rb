@@ -6,7 +6,7 @@ module ReportsHelper
           match
         else
           popup_url = url_for :controller => :files, :action => :show, :params => { :file => match.sub('{md5}','') }
-          link_to_function options[:label] || match, "display_file_popup('#{popup_url}')", :class => 'popup-md5'
+          link_to options[:label] || match, '#', :onclick => "display_file_popup('#{popup_url}'); return false;", :class => 'popup-md5'
         end
       end
     else

@@ -16,7 +16,7 @@ describe "/timeline_events/_timeline_event.html.haml", :type => :view do
 
     context "when this node is the subject" do
       before :each do
-        subject = @node.timeline_events.first(:conditions => {:subject_type => "Node", :event_type => "created"})
+        subject = @node.timeline_events.where(subject_type: 'Node', event_type: 'created').first
         view.stubs(:timeline_event => subject)
         render
       end
@@ -24,7 +24,6 @@ describe "/timeline_events/_timeline_event.html.haml", :type => :view do
       subject { rendered }
 
       it "should describe the action on this node" do
-        puts @node.timeline_events.inspect
         should =~ /This node\s+was created/
       end
     end
@@ -32,7 +31,7 @@ describe "/timeline_events/_timeline_event.html.haml", :type => :view do
     context "when something else is the subject" do
       context "and is linkable" do
         before :each do
-          subject = @node.timeline_events.first(:conditions => {:subject_type => "NodeClass", :event_type => "added_to"})
+          subject = @node.timeline_events.where(subject_type: 'NodeClass', event_type: 'added_to').first
           view.stubs(:timeline_event => subject)
           render
         end
@@ -50,7 +49,7 @@ describe "/timeline_events/_timeline_event.html.haml", :type => :view do
 
       context "and is not linkable" do
         before :each do
-          subject = @node.timeline_events.first(:conditions => {:subject_type => "Parameter", :event_type => "added_to"})
+          subject = @node.timeline_events.where(subject_type: 'Parameter', event_type: 'added_to').first
           view.stubs(:timeline_event => subject)
           render
         end

@@ -26,17 +26,19 @@ class NodeGroup < ActiveRecord::Base
   validates_presence_of :name
   validates_uniqueness_of :name
 
-  default_scope :order => 'node_groups.name ASC'
+  default_scope -> { order('node_groups.name ASC') }
 
-  scope :search, ->(name) {where('name LIKE ?', "%#{name}%") unless name.blank? }
+  scope :search, ->(name) { where('name LIKE ?', "%#{name}%") unless name.blank? }
 
-  scope :with_nodes_count,
-    :select => 'node_groups.*, count(nodes.id) as nodes_count',
-    :joins => <<-SQL,
+  scope :with_nodes_count, -> do
+    select('node_groups.*, count(nodes.id) as nodes_count').
+    joins(<<-SQL,
       LEFT OUTER JOIN node_group_memberships ON (node_groups.id = node_group_memberships.node_group_id)
       LEFT OUTER JOIN nodes ON (nodes.id = node_group_memberships.node_id)
     SQL
-    :group => 'node_groups.id'
+    ).
+    group('node_groups.id')
+  end
 
   assigns_related :node_class, :node_group, :node
 

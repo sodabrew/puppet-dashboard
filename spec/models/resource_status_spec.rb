@@ -50,7 +50,7 @@ describe ResourceStatus, :type => :model do
 
     describe ".latest_inspections" do
       it "should only return statuses from reports that are the latest inspect report for their node" do
-        ResourceStatus.latest_inspections.all.should =~ @matching_report.resource_statuses
+        ResourceStatus.latest_inspections.should =~ @matching_report.resource_statuses
       end
     end
 
@@ -114,7 +114,7 @@ describe ResourceStatus, :type => :model do
     it 'should use a custom list of properties to export as CSV' do
       custom_properties = [:resource_type, :title, :evaluation_time, :file, :line, :time, :change_count, :out_of_sync_count, :skipped, :failed]
 
-      csv_lines = ResourceStatus.find(:all).to_csv.split("\n")
+      csv_lines = ResourceStatus.all.to_csv.split("\n")
       csv_lines.first.should == custom_properties.join(',')
       csv_lines[1..-1].should =~ [@pending_resource, @failed_resource, @successful_resource].map do |res|
         custom_properties.map do |field|
