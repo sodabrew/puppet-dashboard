@@ -11,12 +11,6 @@ class Node < ActiveRecord::Base
   # Enforce lowercase node name
   before_save lambda { self.name = self.name.downcase }
 
-  # attr_readonly :name, :created_at # FIXME: these should be readonly, but inherit_resources isn't creating new instances right
-  attr_accessible :name, :created_at # FIXME: ^^
-  attr_accessible :environment
-  attr_accessible :description, :parameter_attributes, :assigned_node_group_ids, :assigned_node_class_ids, :node_class_ids, :node_group_ids
-  attr_accessible :reported_at, :last_inspect_report_id, :hidden, :updated_at, :last_apply_report_id, :status, :value, :report, :category
-
   has_many :node_class_memberships, :dependent => :destroy
   has_many :node_classes, :through => :node_class_memberships
   has_many :node_group_memberships, :dependent => :destroy
@@ -47,32 +41,32 @@ class Node < ActiveRecord::Base
     ["failed", "pending", "changed", "unchanged"]
   end
 
-  scope :with_last_report, includes(:last_apply_report)
-  scope :by_report_date, order('reported_at DESC')
+  scope :with_last_report, -> { includes(:last_apply_report) }
+  scope :by_report_date, -> { order('reported_at DESC') }
 
-  scope :search, lambda{ |q| where('name LIKE ?', "%#{q}%") unless q.blank? }
+  scope :search, ->(q) { where('name LIKE ?', "%#{q}%") unless q.blank? }
 
   scope :by_latest_report, proc { |order|
     direction = {1 => 'ASC', 0 => 'DESC'}[order]
     order("reported_at #{direction}") if direction
   }
 
-  scope :hidden,     where(:hidden => true)
-  scope :unhidden,   where(:hidden => false)
-  scope :unreported, where(:reported_at => nil)
+  scope :hidden,     -> { where(:hidden => true) }
+  scope :unhidden,   -> { where(:hidden => false) }
+  scope :unreported, -> { where(:reported_at => nil) }
 
-  scope :responsive, lambda {
+  scope :responsive, -> {
     where("last_apply_report_id IS NOT NULL AND reported_at >= ?",
           SETTINGS.no_longer_reporting_cutoff.seconds.ago)
   }
 
-  scope :unresponsive, lambda {
+  scope :unresponsive, -> {
     where("last_apply_report_id IS NOT NULL AND reported_at < ?",
           SETTINGS.no_longer_reporting_cutoff.seconds.ago)
   }
 
   possible_statuses.each do |node_status|
-    scope node_status, lambda {
+    scope node_status, -> {
       responsive.where("nodes.status = ?", node_status)
     }
   end

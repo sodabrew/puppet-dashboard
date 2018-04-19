@@ -25,13 +25,10 @@ class NodeGroup < ActiveRecord::Base
 
   validates_presence_of :name
   validates_uniqueness_of :name
-  attr_accessible :name, :description, :node_ids, :parameter_attributes, :node_class_ids, :node_group_ids
-  attr_accessible :assigned_node_group_ids, :assigned_node_ids, :assigned_node_class_ids
-  attr_accessible :assigned_node_group_names, :assigned_node_names, :assigned_node_class_names
 
   default_scope :order => 'node_groups.name ASC'
 
-  scope :search, lambda{|q| where('name LIKE ?', "%#{q}%") unless q.blank? }
+  scope :search, ->(name) {where('name LIKE ?', "%#{name}%") unless name.blank? }
 
   scope :with_nodes_count,
     :select => 'node_groups.*, count(nodes.id) as nodes_count',

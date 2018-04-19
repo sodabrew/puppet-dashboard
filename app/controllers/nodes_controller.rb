@@ -1,7 +1,7 @@
 class NodesController < InheritedResources::Base
+  respond_to :html, :yaml, :json
   belongs_to :node_class, :optional => true
   belongs_to :node_group, :optional => true
-  respond_to :html, :yaml, :json
   before_filter :raise_if_enable_read_only_mode, :only => [:new, :edit, :create, :update, :destroy]
 
   layout lambda {|c| c.request.xhr? ? false : 'application' }
@@ -29,7 +29,7 @@ class NodesController < InheritedResources::Base
   def create
     ActiveRecord::Base.transaction do
 
-      create! do |success, failure|
+      create!(node_params) do |success, failure|
         success.html {
           node = Node.find_by_name(params[:node][:name])
 
@@ -102,7 +102,7 @@ class NodesController < InheritedResources::Base
     ActiveRecord::Base.transaction do
       old_conflicts = force_update? ? nil : get_current_conflicts(Node.find_by_id(params[:id]))
 
-      update! do |success, failure|
+      update!(node_params) do |success, failure|
         success.html {
           node = Node.find_by_id(params[:id])
 
@@ -202,6 +202,20 @@ class NodesController < InheritedResources::Base
         render :csv => collection, :filename => "#{scope_names.join('-')}-nodes"
       }
     end
+  end
+
+  def node_params
+    params.require(:node).permit(
+      :name,
+      :description,
+      :environment,
+      :assigned_node_group_ids => [],
+      :assigned_node_class_ids => [],
+      :parameter_attributes => [[:key, :value]],
+      :node_class_ids => [],
+    )
+  rescue ActionController::ParameterMissing
+    {}
   end
 
 end

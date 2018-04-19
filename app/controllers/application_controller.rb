@@ -43,15 +43,6 @@ class ApplicationController < ActionController::Base
     session[:return_to] = nil
   end
 
-  def handle_parameters_for(param)
-    if params[param] && params[param][:parameters]
-      parameter_pairs = params[param][:parameters][:key].zip(params[param][:parameters][:value]).flatten
-      params[param][:parameters] = Hash[*parameter_pairs].reject{|k,v| k.blank?}
-    else
-      params[param][:parameters] = {}
-    end
-  end
-
   def set_node_autocomplete_data_sources(source_object)
     @node_data = {
       :class       => '#node_ids',

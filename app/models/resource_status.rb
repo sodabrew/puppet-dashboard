@@ -2,10 +2,6 @@ class ResourceStatus < ActiveRecord::Base
   belongs_to :report, :include => :node
   has_many :events, :class_name => 'ResourceEvent', :dependent => :delete_all
 
-  attr_readonly   :report_id
-  attr_accessible :resource_type, :title, :evaluation_time, :file, :line, \
-                  :tags, :time, :change_count, :out_of_sync_count, :skipped, \
-                  :failed, :status, :events_attributes, :report
   accepts_nested_attributes_for :events
 
   serialize :tags, Array

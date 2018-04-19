@@ -5,8 +5,6 @@ class NodeClassMembership < ActiveRecord::Base
 
   has_parameters
 
-  attr_accessible :parameter_attributes
-
   belongs_to :node
   belongs_to :node_class
 

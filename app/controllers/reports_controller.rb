@@ -1,4 +1,5 @@
 class ReportsController < InheritedResources::Base
+  respond_to :html, :yaml, :json
   belongs_to :node, :optional => true
   protect_from_forgery :except => [:create, :upload]
 

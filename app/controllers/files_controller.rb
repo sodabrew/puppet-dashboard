@@ -2,24 +2,28 @@ class FilesController < ApplicationController
   before_filter :deny_unless_file_bucket_enabled
 
   def diff
-    [params[:file1], params[:file2]].each do |md5|
+    file1 = params[:file1]
+    file2 = params[:file2]
+
+    [file1, file2].each do |md5|
       unless is_md5?(md5)
         render :text => "Invalid md5: #{md5.inspect}", :content_type => 'text/plain', :status => 400
         return
       end
     end
 
-    url = "https://#{SETTINGS.file_bucket_server}:#{SETTINGS.file_bucket_port}/production/file_bucket_file/md5/#{params[:file1]}?diff_with=#{params[:file2]}"
+    url = "https://#{SETTINGS.file_bucket_server}:#{SETTINGS.file_bucket_port}/production/file_bucket_file/md5/#{file1}?diff_with=#{file2}"
     safe_get(url)
   end
 
   def show
-    unless is_md5?(params[:file])
-      render :text => "Invalid md5: #{params[:file].inspect}", :content_type => 'text/plain', :status => 400
+    file = params[:file]
+    unless is_md5?(file)
+      render :text => "Invalid md5: #{file.inspect}", :content_type => 'text/plain', :status => 400
       return
     end
 
-    url = "https://#{SETTINGS.file_bucket_server}:#{SETTINGS.file_bucket_port}/production/file_bucket_file/md5/#{params[:file]}"
+    url = "https://#{SETTINGS.file_bucket_server}:#{SETTINGS.file_bucket_port}/production/file_bucket_file/md5/#{file}"
     safe_get(url)
   end
 
@@ -54,5 +58,9 @@ class FilesController < ApplicationController
       :status => 500
   rescue => e
     render :text => "#{e}", :content_type => 'text/plain', :status => 500
+  end
+
+  def file_params
+    params.require[:files].permit(:file, :file1, :file2)
   end
 end

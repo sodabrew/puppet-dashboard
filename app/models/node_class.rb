@@ -15,11 +15,10 @@ class NodeClass < ActiveRecord::Base
 
   validates_format_of :name, :with => /\A([a-z0-9][-\w]*)(::[a-z0-9][-\w]*)*\Z/, :message => "must contain a valid Puppet class name, e.g. 'foo' or 'foo::bar'"
   validates_uniqueness_of :name
-  attr_accessible :name, :description
 
-  default_scope :order => 'node_classes.name ASC'
+  default_scope { order('node_classes.name ASC') }
 
-  scope :search, lambda{|q| where('name LIKE ?', "%#{q}%") unless q.blank? }
+  scope :search, ->(name) { where('name LIKE ?', "%#{name}%") unless name.blank? }
 
   scope :with_nodes_count,
     :select => 'node_classes.*, count(nodes.id) as nodes_count',

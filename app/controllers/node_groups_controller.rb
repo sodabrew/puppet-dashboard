@@ -1,5 +1,5 @@
 class NodeGroupsController < InheritedResources::Base
-  respond_to :html, :json
+  respond_to :html, :json, :yaml
   before_filter :raise_if_enable_read_only_mode, :only => [:new, :edit, :create, :update, :destroy]
 
   include SearchableIndex
@@ -18,11 +18,11 @@ class NodeGroupsController < InheritedResources::Base
   def create
     ActiveRecord::Base.transaction do
       related_resources = []
-      node_ids_params = params[:node_group][:assigned_node_ids]
-      unless node_ids_params.nil?
-        node_ids_params.each do |node_ids_param|
-          unless node_ids_param.nil? || node_ids_param.length == 0
-            node_ids_param.split(/,/).each do |resource_id|
+      node_ids = node_group_params[:assigned_node_ids]
+      unless node_ids.nil?
+        node_ids.each do |node_ids|
+          unless node_ids.nil? || node_ids.length == 0
+            node_ids.split(/,/).each do |resource_id|
               related_resources << Node.find_by_id(resource_id)
             end
           end
@@ -30,9 +30,9 @@ class NodeGroupsController < InheritedResources::Base
       end
       old_conflicts = force_create? ? nil : get_current_conflicts(nil, related_resources)
 
-      create! do |success, failure|
+      create!(node_group_params) do |success, failure|
         success.html {
-          node_group = NodeGroup.find_by_name(params[:node_group][:name])
+          node_group = NodeGroup.find_by_name(node_group_params[:name])
 
           unless(force_create?)
 
@@ -70,7 +70,7 @@ class NodeGroupsController < InheritedResources::Base
     ActiveRecord::Base.transaction do
       old_conflicts = force_update? ? nil : get_current_conflicts(NodeGroup.find_by_id(params[:id]))
 
-      update! do |success, failure|
+      update!(node_group_params) do |success, failure|
         success.html {
           update_success_helper old_conflicts, :class => NodeGroup, :conflict_attribute => nil
         };
@@ -96,6 +96,19 @@ class NodeGroupsController < InheritedResources::Base
   end
 
   protected
+
+  def node_group_params
+    params.require(:node_group).permit(
+      :name,
+      :assigned_node_ids => [],
+      :assigned_node_class_ids => [],
+      :assigned_node_group_ids => [],
+      :parameter_attributes => [[:key, :value]],
+      :node_class_ids => []
+    )
+  rescue ActionController::ParameterMissing
+    {}
+  end
 
   def resource
     get_resource_ivar || set_resource_ivar(end_of_association_chain.find_by_id_or_name!(params[:id]))

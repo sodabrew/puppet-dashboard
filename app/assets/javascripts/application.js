@@ -13,7 +13,7 @@
 //= require jquery
 //= require jquery_ujs
 //= require dashboard
-//= require jquery-ui.min
+//= require jquery-ui
 //= require jquery.tokeninput
 //= require jquery.form
 //= require jquery.placeholders
