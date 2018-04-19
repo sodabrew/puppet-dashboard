@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Status  do
+describe Status, :type => :model do
   include ReportSupport
 
   describe ".get_utc_boundaries_ending" do
@@ -43,7 +43,7 @@ describe Status  do
           "2011-03-11 00:00 PST",
         ].each do |date_string|
           time = Time.zone.parse(date_string)
-          Report.generate!(:time => time)
+          create(:report, :time => time)
         end
 
         time = Time.zone.parse("2011-03-14 00:30:00 -0700")
@@ -68,7 +68,7 @@ describe Status  do
           "2010-11-06 00:00 PDT",
         ].each do |date_string|
           time = Time.zone.parse(date_string)
-          Report.generate!(:time => time)
+          create(:report, :time => time)
         end
 
         time = Time.zone.parse("2010-11-08 00:00:00 -0800")
@@ -99,7 +99,7 @@ describe Status  do
           "2011-03-12 00:00 PST",
         ].each do |date_string|
           time = Time.zone.parse(date_string)
-          Report.generate!(:time => time)
+          create(:report, :time => time)
         end
 
         time = Time.zone.parse("2011-03-18 00:00:00 -0800")
@@ -127,7 +127,7 @@ describe Status  do
           "2009-11-09 12:00 PST"
         ].each do |date_string|
           time = Time.zone.parse(date_string)
-          Report.generate!(:time => time)
+          create(:report, :time => time)
         end
 
         time = Time.zone.parse("2009-11-11 00:00 PST")
@@ -151,9 +151,9 @@ describe Status  do
           "2009-11-09 12:00 PST"
         ].each do |date_string|
           time = Time.zone.parse(date_string)
-          Report.generate!(:time => time)
+          create(:report, :time => time)
         end
-        Report.generate(:time => Time.zone.parse("2009-11-10 12:00 PST"), :kind => "inspect")
+        create(:report, :time => Time.zone.parse("2009-11-10 12:00 PST"), :kind => "inspect")
 
         time = Time.zone.parse("2009-11-10 00:00 PST")
         ActiveSupport::TimeZone.any_instance.stubs(:now).returns(time)
@@ -182,7 +182,7 @@ describe Status  do
           "2011-03-11 00:00 +09:00",
         ].each do |date_string|
           time = Time.zone.parse(date_string)
-          Report.generate!(:time => time)
+          create(:report, :time => time)
         end
 
         time = Time.zone.parse("2011-03-14 00:30:00 +0900")
@@ -208,7 +208,7 @@ describe Status  do
           "2010-11-06 00:00 +09:00",
         ].each do |date_string|
           time = Time.zone.parse(date_string)
-          Report.generate!(:time => time)
+          create(:report, :time => time)
         end
 
         time = Time.zone.parse("2010-11-08 00:00:00 +0900")
@@ -239,7 +239,7 @@ describe Status  do
           "2011-03-12 00:00 +09:00",
         ].each do |date_string|
           time = Time.zone.parse(date_string)
-          Report.generate!(:time => time)
+          create(:report, :time => time)
         end
 
         time = Time.zone.parse("2011-03-18 00:00:00 +0900")
@@ -268,7 +268,7 @@ describe Status  do
           "2009-11-09 12:00 +09:00"
         ].each do |date_string|
           time = Time.zone.parse(date_string)
-          Report.generate!(:time => time)
+          create(:report, :time => time)
         end
 
         time = Time.zone.parse("2009-11-11 00:00 JST")
@@ -293,9 +293,9 @@ describe Status  do
           "2009-11-09 12:00 +09:00"
         ].each do |date_string|
           time = Time.zone.parse(date_string)
-          Report.generate!(:time => time)
+          create(:report, :time => time)
         end
-        Report.generate(:time => Time.zone.parse("2009-11-10 12:00 +09:00"), :kind => "inspect")
+        create(:report, :time => Time.zone.parse("2009-11-10 12:00 +09:00"), :kind => "inspect")
 
         time = Time.zone.parse("2009-11-10 00:00 +09:00")
         ActiveSupport::TimeZone.any_instance.stubs(:now).returns(time)

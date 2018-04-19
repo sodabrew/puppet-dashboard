@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe StringHelper do
+describe StringHelper, :type => :helper do
   describe ".is_md5?" do
     it "returns true for a valid md5" do
       helper.instance_eval{ is_md5?("abcdef0123456789abcdef0123456789") }.should == true

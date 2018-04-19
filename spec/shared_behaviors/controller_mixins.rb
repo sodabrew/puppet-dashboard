@@ -5,9 +5,10 @@ shared_examples_for "with search by q and tag" do
   describe "when searching" do
     before :each do
       SETTINGS.stubs(:use_external_node_classification).returns(true)
-      @for_tag = model.generate(:name => 'for_tag')
-      @for_q = model.generate(:name => 'for_q')
-      model.generate(:name => 'without_search')
+      model_sym = model.name.underscore.to_sym
+      @for_tag = create(model_sym, :name => 'for_tag')
+      @for_q = create(model_sym, :name => 'for_q')
+      create(model_sym, :name => 'without_search')
     end
 
     describe "without a search" do
@@ -15,7 +16,7 @@ shared_examples_for "with search by q and tag" do
       subject { assigns[model.name.tableize] }
 
       it "returns all node groupes" do
-        should == model.all
+        should match_array(model.all)
       end
     end
 
@@ -24,11 +25,11 @@ shared_examples_for "with search by q and tag" do
       subject { assigns[model.name.tableize] }
 
       it "returns node groupes whose name contains the term" do
-        subject.all?{|item| item.name.include?('for_tag')}.should be_true
+        subject.all?{|item| item.name.include?('for_tag')}.should be true
       end
 
       it "does not return node groups whose name does not contain the term" do
-        subject.any?{|item| item.name.include?('for_q')}.should be_false
+        subject.any?{|item| item.name.include?('for_q')}.should be false
       end
     end
 
@@ -37,11 +38,11 @@ shared_examples_for "with search by q and tag" do
       subject { assigns[model.name.tableize] }
 
       it "returns node groupes whose name contains the term" do
-        subject.all?{|item| item.name.include?('for_q')}.should be_true
+        subject.all?{|item| item.name.include?('for_q')}.should be true
       end
 
       it "does not return node groups whose name does not contain the term" do
-        subject.any?{|item| item.name.include?('for_tag')}.should be_false
+        subject.any?{|item| item.name.include?('for_tag')}.should be false
       end
     end
   end

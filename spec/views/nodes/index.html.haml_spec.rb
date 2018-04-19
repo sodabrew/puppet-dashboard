@@ -1,9 +1,9 @@
 
 require 'spec_helper'
 
-describe '/nodes/index' do
+describe '/nodes/index', :type => :view do
   before :each do
-    @nodes = [Node.generate!]
+    @nodes = [create(:node)]
   end
 
   describe "search fields" do

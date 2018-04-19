@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe ApplicationHelper do
+describe ApplicationHelper, :type => :helper do
 
   it "should be included in the object returned by #helper" do
     included_modules = (class << helper; self; end).send :included_modules
@@ -34,13 +34,13 @@ describe ApplicationHelper do
 
   describe "#header_for" do
     it "should return a header for a form with a new record" do
-      record = Node.spawn
+      record = build(:node)
       form = stub(:object => record)
       helper.header_for(form).should =~ /Add node/
     end
 
     it "should return a header for a form with an existing object" do
-      record = Node.generate
+      record = create(:node)
       form = stub(:object => record)
       helper.header_for(form).should =~ /Edit node/
     end
@@ -175,7 +175,7 @@ describe ApplicationHelper do
 
   describe "tokenize_input_class" do
     before :each do
-      @objects = Array.new(6) { NodeGroup.generate! }
+      @objects = Array.new(6) { create(:node_group) }
     end
 
     context "when given a single input" do

@@ -2,7 +2,7 @@ require 'spec_helper'
 require 'shared_behaviors/controller_mixins'
 require 'shared_behaviors/sorted_index'
 
-describe NodeGroupsController do
+describe NodeGroupsController, :type => :controller do
   render_views
   def model; NodeGroup end
 
@@ -17,7 +17,7 @@ describe NodeGroupsController do
     end
 
     it "should render error when creation fails" do
-      post :create, 'node_group' => { }
+      post :create, 'node_group' => {}
       response.should render_template('shared/_error')
       response.should be_success
 
@@ -40,7 +40,7 @@ describe NodeGroupsController do
 
   describe "#edit" do
     before :each do
-      @node_group = NodeGroup.generate!
+      @node_group = create(:node_group)
     end
 
     it "should render the edit template" do
@@ -57,12 +57,12 @@ describe NodeGroupsController do
 
   describe "#update" do
     def do_put
-      put :update, @params
+      patch :update, @params
     end
 
     before :each do
       SETTINGS.stubs(:enable_read_only_mode).returns(false)
-      @node_group = NodeGroup.generate!
+      @node_group = create(:node_group)
       @params = { :id => @node_group.id, :node_group => {} }
     end
 
@@ -80,7 +80,7 @@ describe NodeGroupsController do
       end
 
       it "should allow specification of node classes" do
-        node_class = NodeClass.generate!
+        node_class = create(:node_class)
         @params[:node_group].merge! :node_class_ids => [node_class.id]
 
         do_put
@@ -89,7 +89,7 @@ describe NodeGroupsController do
       end
 
       it "should be able to remove assigned classes" do
-        node_class = NodeClass.generate!
+        node_class = create(:node_class)
         @node_group.node_classes << node_class
         @node_group.save!
         @node_group.reload.node_classes.should == [node_class]
@@ -102,7 +102,7 @@ describe NodeGroupsController do
       end
 
       it "should be able to remove assigned groups" do
-        node_subgroup = NodeGroup.generate!
+        node_subgroup = create(:node_group)
         @node_group.node_groups << node_subgroup
         @node_group.save!
         @node_group.reload.node_groups.should == [node_subgroup]
@@ -115,7 +115,7 @@ describe NodeGroupsController do
       end
 
       it "should be able to remove assigned nodes" do
-        node = Node.generate!
+        node = create(:node)
         @node_group.nodes << node
         @node_group.save!
         @node_group.reload.nodes.should == [node]
@@ -145,7 +145,7 @@ describe NodeGroupsController do
       end
 
       it "should fail if node classes are specified" do
-        node_class = NodeClass.generate!
+        node_class = create(:node_class)
         @params[:node_group].merge! :assigned_node_class_ids => [node_class.id]
 
         do_put

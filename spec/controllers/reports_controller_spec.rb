@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'shared_behaviors/controller_mixins'
 
-describe ReportsController do
+describe ReportsController, :type => :controller do
   before :each do
     @yaml = File.read(Rails.root.join('spec', 'fixtures', 'sample_report.yml'))
     @failed = Report.create!(:host => "failed", :time => 1.week.ago.to_date, :status => "failed", :kind => "apply")

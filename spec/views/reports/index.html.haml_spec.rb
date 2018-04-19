@@ -1,10 +1,10 @@
 require 'spec_helper'
 
-describe "/reports/index.html.haml" do
+describe "/reports/index.html.haml", :type => :view do
   describe "the response"  do
     before :each do
-      @nodes = [Node.generate!, Node.generate!]
-      assigns[:reports] = @reports = @nodes.map { |node| Report.generate!(:host => node.name) }.paginate
+      @nodes = [create(:node), create(:node)]
+      assigns[:reports] = @reports = @nodes.map { |node| create(:report, :host => node.name) }.paginate
       render
     end
 
@@ -14,7 +14,7 @@ describe "/reports/index.html.haml" do
 
   describe "the response with a report lacking metrics" do
     before :each do
-      @report = Report.generate!
+      @report = create(:report)
       assigns[:reports] = @reports = [ @report ].paginate
       render
     end

@@ -1,7 +1,7 @@
 require 'spec_helper'
 
-describe Parameter do
-  before { @parameter = Parameter.generate! }
+describe Parameter, :type => :model do
+  before { @parameter = create(:parameter) }
 
   it { should belong_to(:parameterable) }
   it { should validate_presence_of(:key) }

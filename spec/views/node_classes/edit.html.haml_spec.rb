@@ -1,11 +1,11 @@
 require 'spec_helper'
 
-describe "/node_classes/edit.html.haml" do
+describe "/node_classes/edit.html.haml", :type => :view do
   include NodeClassesHelper
 
   describe "successful render" do
     before :each do
-      @node_class = NodeClass.generate!
+      @node_class = create(:node_class)
       render
     end
 

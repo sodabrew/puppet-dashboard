@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe FilesController do
+describe FilesController, :type => :controller do
   before :each do
     SETTINGS.stubs(:use_file_bucket_diffs).returns(true)
     SETTINGS.stubs(:file_bucket_server).returns('filebucket')

@@ -1,12 +1,12 @@
 require 'spec_helper'
 
-describe ResourceStatus do
+describe ResourceStatus, :type => :model do
   describe "#name" do
     it "should combine type and title" do
       resource_status = ResourceStatus.create!(
         :resource_type => "File",
         :title         => "/tmp/foo",
-        :report        => Report.generate!
+        :report        => create(:report)
       )
       resource_status.name.should == "File[/tmp/foo]"
     end
@@ -63,10 +63,10 @@ describe ResourceStatus do
 
   describe ".pending" do
     before :each do
-      report = Report.generate!
-      @pending_resource = Factory(:pending_resource, :title => 'pending', :report => report)
-      @successful_resource = Factory(:successful_resource, :title => 'successful', :report => report)
-      @failed_resource = Factory(:failed_resource, :title => 'failed', :report => report)
+      report = create(:report)
+      @pending_resource = create(:pending_resource, :title => 'pending', :report => report)
+      @successful_resource = create(:successful_resource, :title => 'successful', :report => report)
+      @failed_resource = create(:failed_resource, :title => 'failed', :report => report)
     end
 
     describe "true" do
@@ -84,10 +84,10 @@ describe ResourceStatus do
 
   describe ".failed" do
     before :each do
-      report = Report.generate!
-      @pending_resource = Factory(:pending_resource, :title => 'pending', :report => report)
-      @successful_resource = Factory(:successful_resource, :title => 'successful', :report => report)
-      @failed_resource = Factory(:failed_resource, :title => 'failed', :report => report)
+      report = create(:report)
+      @pending_resource = create(:pending_resource, :title => 'pending', :report => report)
+      @successful_resource = create(:successful_resource, :title => 'successful', :report => report)
+      @failed_resource = create(:failed_resource, :title => 'failed', :report => report)
     end
 
     describe "true" do
@@ -105,10 +105,10 @@ describe ResourceStatus do
 
   describe '.to_csv' do
     before :each do
-      report = Report.generate!
-      @pending_resource = Factory(:pending_resource, :title => 'pending', :report => report)
-      @successful_resource = Factory(:successful_resource, :title => 'successful', :report => report)
-      @failed_resource = Factory(:failed_resource, :title => 'failed', :report => report)
+      report = create(:report)
+      @pending_resource = create(:pending_resource, :title => 'pending', :report => report)
+      @successful_resource = create(:successful_resource, :title => 'successful', :report => report)
+      @failed_resource = create(:failed_resource, :title => 'failed', :report => report)
     end
 
     it 'should use a custom list of properties to export as CSV' do

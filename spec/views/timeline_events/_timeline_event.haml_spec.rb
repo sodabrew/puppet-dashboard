@@ -1,16 +1,16 @@
 require 'spec_helper'
 
-describe "/timeline_events/_timeline_event.html.haml" do
+describe "/timeline_events/_timeline_event.html.haml", :type => :view do
   context "with a node" do
     before :each do
-      @node = Node.generate!
+      @node = create(:node)
       @node.name.swapcase!
       @node.save!
 
-      @node_class = NodeClass.generate! 
+      @node_class = create(:node_class)
       @node.node_classes << @node_class
 
-      @parameter = Parameter.generate! :parameterable => @node
+      @parameter = create(:parameter, :parameterable => @node)
       @node.reload
     end
 
@@ -24,6 +24,7 @@ describe "/timeline_events/_timeline_event.html.haml" do
       subject { rendered }
 
       it "should describe the action on this node" do
+        puts @node.timeline_events.inspect
         should =~ /This node\s+was created/
       end
     end

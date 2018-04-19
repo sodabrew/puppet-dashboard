@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe "/node_groups/_actions.html.haml" do
+describe "/node_groups/_actions.html.haml", :type => :view do
   include NodesHelper
 
   describe "successful render" do

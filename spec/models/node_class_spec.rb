@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe NodeClass do
+describe NodeClass, :type => :model do
   it { should validate_presence_of(:name) }
 
   ["", "with spaces", "invalid ch*r", "CAPS", "single:colon", "::beginswithcolon", "endswithcolons::"].each do |name|
@@ -13,11 +13,11 @@ describe NodeClass do
 
   describe "when destroying" do
     before :each do
-      @node_class = NodeClass.generate!()
+      @node_class = create(:node_class)
     end
 
     it "should disassociate member nodes from the class" do
-      node = Node.generate!()
+      node = create(:node)
       node.node_classes << @node_class
 
       @node_class.destroy
@@ -27,7 +27,7 @@ describe NodeClass do
     end
 
     it "should disassociate node groups from the class" do
-      node_group = NodeGroup.generate!()
+      node_group = create(:node_group)
       node_group.node_classes << @node_class
 
       @node_class.destroy
@@ -39,7 +39,7 @@ describe NodeClass do
 
   describe "helper" do
     before :each do
-      @classes = Array.new(3) {|idx| NodeClass.generate! :name => "class_#{idx}"}
+      @classes = Array.new(3) {|idx| create(:node_class, :name => "class_#{idx}") }
     end
 
     describe "find_from_form_names" do
@@ -60,7 +60,7 @@ describe NodeClass do
       it "should work with the description field" do
         @classes.each {|o| o.description.should be_nil}
 
-        obj = NodeClass.generate! :name => "anobj", :description => "A Node Class"
+        obj = create(:node_class, :name => 'anobj', :description => 'A Node Class')
         obj.description.should == "A Node Class"
       end
     end

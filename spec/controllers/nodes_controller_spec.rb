@@ -1,12 +1,12 @@
 require 'spec_helper'
 
-describe NodesController do
+describe NodesController, :type => :controller do
   include ReportSupport
   render_views
 
   describe "#index" do
     before :each do
-      @node = Factory(:changed_node)
+      @node = create(:changed_node)
       @resource = @node.last_apply_report.resource_statuses.first
     end
 
@@ -78,7 +78,7 @@ describe NodesController do
       end
 
       it "should handle unreported nodes" do
-        unreported_node = Node.generate!
+        unreported_node = create(:node)
 
         get :index, :format => "csv"
 
@@ -92,7 +92,7 @@ describe NodesController do
 
       %w[foo,_-' bar/\\$^ <ba"z>>].each do |name|
         it "should handle a node named #{name}" do
-          node = Node.generate!(:name => name, :reported_at => @node.reported_at - 1)  # cannot be nil since PGS and MySQL sort nils differently
+          node = create(:node, :name => name, :reported_at => @node.reported_at - 1)  # cannot be nil since PGS and MySQL sort nils differently
           get :index, :format => "csv"
 
           response.should be_success
@@ -102,20 +102,22 @@ describe NodesController do
       end
 
       it "should include the node's resources" do
-        report = Report.generate!(:host => @node.name, :status => "failed", :time => Time.now)
-        res1 = report.resource_statuses.generate!( :resource_type     => "File",    :title        => "/etc/sudoers",
-                                                   :evaluation_time   => 1.second,  :file         => "/etc/puppet/manifests/site.pp",
-                                                   :line              => 1,         :tags         => ["file", "default"],
-                                                   :time              => Time.now,  :change_count => 1,
-                                                   :out_of_sync_count => 1,         :skipped      => false,
-                                                   :failed            => false )
+        report = create(:report, :host => @node.name, :status => "failed", :time => Time.now)
+        res1 = create(:resource_status, :report => report,
+                      :resource_type     => "File",    :title        => "/etc/sudoers",
+                      :evaluation_time   => 1.second,  :file         => "/etc/puppet/manifests/site.pp",
+                      :line              => 1,         :tags         => ["file", "default"],
+                      :time              => Time.now,  :change_count => 1,
+                      :out_of_sync_count => 1,         :skipped      => false,
+                      :failed            => false )
 
-        res2 = report.resource_statuses.generate!( :resource_type     => "File",    :title        => "/etc/hosts",
-                                                   :evaluation_time   => 2.seconds, :file         => "/etc/puppet/manifests/site.pp",
-                                                   :line              => 5,         :tags         => ["file", "default"],
-                                                   :time              => Time.now,  :change_count => 2,
-                                                   :out_of_sync_count => 2,         :skipped      => false,
-                                                   :failed            => true )
+        res2 = create(:resource_status, :report => report,
+                      :resource_type     => "File",    :title        => "/etc/hosts",
+                      :evaluation_time   => 2.seconds, :file         => "/etc/puppet/manifests/site.pp",
+                      :line              => 5,         :tags         => ["file", "default"],
+                      :time              => Time.now,  :change_count => 2,
+                      :out_of_sync_count => 2,         :skipped      => false,
+                      :failed            => true )
 
         res1.reload
         res2.reload
@@ -162,7 +164,7 @@ describe NodesController do
   describe "#show" do
 
     before :each do
-      @node = Node.generate!
+      @node = create(:node)
     end
 
     context "as HTML" do
@@ -249,7 +251,7 @@ describe NodesController do
     end
 
     before :each do
-      @node = Node.generate!
+      @node = create(:node)
     end
 
     it 'should render the edit template' do
@@ -280,7 +282,7 @@ describe NodesController do
 
     before :each do
       SETTINGS.stubs(:enable_read_only_mode).returns(false)
-      @node = Node.generate!
+      @node = create(:node)
       @params = { :id => @node.id, :node => @node.attributes }
     end
 
@@ -362,7 +364,7 @@ describe NodesController do
       end
 
       it "should allow specification of node classes" do
-        node_class = NodeClass.generate!
+        node_class = create(:node_class)
         @params[:node].merge! :node_class_ids => [node_class.id]
 
         do_put
@@ -388,7 +390,7 @@ describe NodesController do
       end
 
       it "should fail if node classes are specified" do
-        node_class = NodeClass.generate!
+        node_class = create(:node_class)
         @params[:node].merge! :assigned_node_class_ids => [node_class.id]
 
         do_put
@@ -400,7 +402,7 @@ describe NodesController do
       end
 
       it "should not fail if node groups are specified" do
-        node_group = NodeGroup.generate!
+        node_group = create(:node_group)
         @params[:node].merge! :assigned_node_group_ids => [node_group.id]
 
         do_put
@@ -426,14 +428,14 @@ describe NodesController do
 
     describe "when conflicts exist" do
       before :each do
-        @node_group_a = NodeGroup.generate! :name => "A"
-        @node_group_b = NodeGroup.generate! :name => "B"
+        @node_group_a = create(:node_group, :name => 'A')
+        @node_group_b = create(:node_group, :name => 'B')
       end
 
       describe "when global parameters conflicts exists" do
         before :each do
-          @param_1 = Parameter.generate(:key => 'foo', :value => '1')
-          @param_2 = Parameter.generate(:key => 'foo', :value => '2')
+          @param_1 = create(:parameter, :key => 'foo', :value => '1')
+          @param_2 = create(:parameter, :key => 'foo', :value => '2')
 
           @node_group_a.parameters << @param_1
           @node_group_b.parameters << @param_2
@@ -478,14 +480,14 @@ describe NodesController do
 
       describe "when class parameters conflicts exists" do
         before :each do
-          @node_class_a = NodeClass.generate! :name => "class_a"
+          @node_class_a = create(:node_class, :name => 'class_a')
           @node_group_a.node_classes << @node_class_a
           @node_group_b.node_classes << @node_class_a
 
           @node_group_a_class_memberships_a = NodeGroupClassMembership.find_by_node_group_id_and_node_class_id(@node_group_a.id, @node_class_a.id)
-          @node_group_a_class_memberships_a.parameters << Parameter.generate(:key => 'foo', :value => '1')
+          @node_group_a_class_memberships_a.parameters << create(:parameter, :key => 'foo', :value => '1')
           @node_group_b_class_memberships_a = NodeGroupClassMembership.find_by_node_group_id_and_node_class_id(@node_group_b.id, @node_class_a.id)
-          @node_group_b_class_memberships_a.parameters << Parameter.generate(:key => 'foo', :value => '2')
+          @node_group_b_class_memberships_a.parameters << create(:parameter, :key => 'foo', :value => '2')
         end
 
         it "should return JSON containing valid='false'" do
@@ -556,7 +558,7 @@ describe NodesController do
 
   describe "#hide" do
     it "should hide the node" do
-      @node = Node.generate!
+      @node = create(:node)
       @node.hidden.should == false
 
       put :hide, :id => @node.name
@@ -569,7 +571,7 @@ describe NodesController do
 
   describe "#unhide" do
     it "should unhide the node" do
-      @node = Node.generate! :hidden => true
+      @node = create(:node, :hidden => true)
       @node.hidden.should == true
 
       put :unhide, :id => @node.name
@@ -583,7 +585,7 @@ describe NodesController do
   describe "#facts" do
     before :each do
       @time = Time.now
-      @node = Node.generate! :name => "testnode"
+      @node = create(:node, :name => 'testnode')
       Node.any_instance.stubs(:facts).returns({:timestamp => @time, :values => {"foo" => "1", "bar" => "2"}})
     end
 
@@ -618,7 +620,7 @@ describe NodesController do
 
   describe "#reports" do
     before :each do
-      @node = Node.generate!
+      @node = create(:node)
       Node.stubs(:find_by_name! => @node)
       Report.stubs(:assign_to_node => false)
       @report = Report.create_from_yaml(report_yaml_with(:host => @node.name))
@@ -683,8 +685,8 @@ describe NodesController do
 
     describe "#unreported" do
       before :each do
-        @node = Node.generate!(:name => "foo")
-        @hidden_node = Node.generate!(:name => "bar", :hidden => true)
+        @node = create(:node, :name => 'foo')
+        @hidden_node = create(:node, :name => 'bar', :hidden => true)
       end
 
       let(:action) { "unreported" }
@@ -695,8 +697,8 @@ describe NodesController do
 
     describe "#hidden" do
       before :each do
-        @node = Node.generate!(:name => "foo", :hidden => true)
-        @unhidden_node = Node.generate!(:name => "bar")
+        @node = create(:node, :name => 'foo', :hidden => true)
+        @unhidden_node = create(:node, :name => 'bar')
       end
 
       let(:action) { "hidden" }
@@ -708,7 +710,7 @@ describe NodesController do
 
   describe 'read-only mode' do
 
-    let(:node) { Node.generate! }
+    let(:node) { create(:node) }
 
     ['configuration file', 'Rack middleware'].each do |source|
       describe "when set by the #{source}" do

@@ -1,19 +1,19 @@
 require 'spec_helper'
 
-describe NodeGroup do
+describe NodeGroup, :type => :model do
   describe "associations" do
-    before { @node_group = NodeGroup.spawn }
+    before { @node_group = build(:node_group) }
     it { should have_many(:node_classes).through(:node_group_class_memberships) }
     it { should have_many(:nodes).through(:node_group_memberships) }
   end
 
   describe "when destroying" do
     before :each do
-      @group = NodeGroup.generate!()
+      @group = create(:node_group)
     end
 
     it "should disassociate nodes" do
-      node = Node.generate!()
+      node = create(:node)
       node.node_groups << @group
 
       @group.destroy
@@ -23,7 +23,7 @@ describe NodeGroup do
     end
 
     it "should disassociate node_classes" do
-      node_class = NodeClass.generate!()
+      node_class = create(:node_class)
       @group.node_classes << node_class
 
       @group.destroy
@@ -33,8 +33,8 @@ describe NodeGroup do
     end
 
     it "should disassociate node_groups" do
-      group_last = NodeGroup.generate!()
-      group_first = NodeGroup.generate!()
+      group_last = create(:node_group)
+      group_first = create(:node_group)
 
       group_first.node_groups << @group
       @group.node_groups << group_last
@@ -49,8 +49,8 @@ describe NodeGroup do
 
   describe "when including groups" do
     before :each do
-      @node_group_a = NodeGroup.generate! :name => "A"
-      @node_group_b = NodeGroup.generate! :name => "B"
+      @node_group_a = create(:node_group, :name => 'A')
+      @node_group_b = create(:node_group, :name => 'B')
     end
 
     describe "by id" do
@@ -74,8 +74,8 @@ describe NodeGroup do
       end
 
       it "should allow a group to be included twice through inheritance" do
-        @node_group_c = NodeGroup.generate!
-        @node_group_d = NodeGroup.generate!
+        @node_group_c = create(:node_group)
+        @node_group_d = create(:node_group)
         @node_group_a.node_groups << @node_group_c
         @node_group_b.node_groups << @node_group_c
         @node_group_d.assigned_node_group_ids = [@node_group_a.id, @node_group_b.id]
@@ -107,8 +107,8 @@ describe NodeGroup do
       end
 
       it "should allow a group to be included twice through inheritance" do
-        @node_group_c = NodeGroup.generate!
-        @node_group_d = NodeGroup.generate!
+        @node_group_c = create(:node_group)
+        @node_group_d = create(:node_group)
         @node_group_a.node_groups << @node_group_c
         @node_group_b.node_groups << @node_group_c
         @node_group_d.assigned_node_group_names = [@node_group_a.name, @node_group_b.name]
@@ -122,9 +122,9 @@ describe NodeGroup do
 
   describe "when including classes" do
     before :each do
-      @node_group   = NodeGroup.generate!
-      @node_class_a = NodeClass.generate! :name => "class_a"
-      @node_class_b = NodeClass.generate! :name => "class_b"
+      @node_group   = create(:node_group)
+      @node_class_a = create(:node_class, :name => 'class_a')
+      @node_class_b = create(:node_class, :name => 'class_b')
     end
 
     describe "by id" do
@@ -190,7 +190,7 @@ describe NodeGroup do
 
   describe "helper" do
     before :each do
-      @groups = Array.new(3) {|idx| NodeGroup.generate! :name => "Group #{idx}"}
+      @groups = Array.new(3) {|idx| create(:node_group, :name => "Group #{idx}") }
     end
 
     describe "find_from_form_names" do
@@ -233,16 +233,16 @@ describe NodeGroup do
       it "should work with the description field" do
         @groups.each {|o| o.description.should be_nil}
 
-        obj = NodeGroup.generate! :name => "anobj", :description => "A Node Group"
+        obj = create(:node_group, :name => 'anobj', :description => 'A Node Group')
         obj.description.should == "A Node Group"
       end
     end
   end
 
   describe "assigning before validation" do
-    let(:node_groups)  { Array.new(2) { |i| NodeGroup.generate! :name => "group#{i}" } }
-    let(:node_classes) { Array.new(2) { |i| NodeClass.generate! :name => "class#{i}" } }
-    let(:nodes)        { Array.new(2) { |i| Node.generate!      :name => "node#{i}"  } }
+    let(:node_groups)  { Array.new(2) { |i| create(:node_group, :name => "group#{i}") } }
+    let(:node_classes) { Array.new(2) { |i| create(:node_class, :name => "class#{i}") } }
+    let(:nodes)        { Array.new(2) { |i| create(:node, :name => "node#{i}")  } }
 
     it "should assign groups, classes and nodes by id" do
       new_group = NodeGroup.new(

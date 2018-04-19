@@ -7,7 +7,7 @@ class InheritedFromApplicationController < ApplicationController
   end
 end
 
-describe InheritedFromApplicationController do
+describe InheritedFromApplicationController, :type => :controller do
   before :each do
     Time.zone = 'UTC'
   end

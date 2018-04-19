@@ -1,15 +1,15 @@
 require 'spec_helper'
 
-describe PagesController do
+describe PagesController, :type => :controller do
   describe "#home" do
     before :each do
       SETTINGS.stubs(:no_longer_reporting_cutoff).returns(3600)
 
       [true, false].each do |hidden|
         prefix = hidden ? 'hidden:' : ''
-        Factory(:node, :hidden => hidden, :name => prefix + 'unreported')
+        create(:node, :hidden => hidden, :name => prefix + 'unreported')
         [:unresponsive, :responsive, :failing, :pending, :changed, :unchanged].each do |node_status|
-          Factory("#{node_status}_node".to_sym, :hidden => hidden, :name => prefix + node_status.to_s)
+          create("#{node_status}_node".to_sym, :hidden => hidden, :name => prefix + node_status.to_s)
         end
       end
     end

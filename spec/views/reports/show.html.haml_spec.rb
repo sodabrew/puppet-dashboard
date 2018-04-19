@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe "/reports/show.html.haml" do
+describe "/reports/show.html.haml", :type => :view do
   include ReportsHelper
 
   describe "successful render" do

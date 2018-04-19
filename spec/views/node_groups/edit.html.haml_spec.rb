@@ -1,11 +1,11 @@
 require 'spec_helper'
 
-describe "/node_groups/edit.html.haml" do
+describe "/node_groups/edit.html.haml", :type => :view do
   include NodeGroupsHelper
 
   describe "when successfully rendered" do
     before :each do
-      @node_group = NodeGroup.generate!
+      @node_group = create(:node_group)
     end
 
     it { render; rendered.should have_tag('form', :with => { :method => 'post', :action => node_group_path(@node_group.id) }) }
@@ -35,7 +35,7 @@ describe "/node_groups/edit.html.haml" do
 
       describe "for classes" do
         before :each do
-          @classes = Array.new(6) { NodeClass.generate! }
+          @classes = Array.new(6) { create(:node_class) }
           @node_group.node_classes << @classes[0..2]
           @class_data = {:class => '#node_class_ids', :data_source => node_classes_path(:format => :json), :objects => @node_group.node_classes}
 
@@ -60,7 +60,7 @@ describe "/node_groups/edit.html.haml" do
 
       describe "for groups" do
         before :each do
-          @groups = Array.new(6) { NodeGroup.generate! }
+          @groups = Array.new(6) { create(:node_group) }
           @node_group.node_groups << @groups[0..3]
           @group_data = {:class => '#node_group_ids', :data_source => node_groups_path(:format => :json),  :objects => @node_group.node_groups}
 

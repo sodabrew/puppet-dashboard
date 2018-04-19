@@ -1,11 +1,11 @@
 require 'spec_helper'
 
-describe "/nodes/show.html.haml" do
+describe "/nodes/show.html.haml", :type => :view do
   include NodesHelper
 
   describe "successful render" do
     before(:each) do
-      @report = Report.generate!
+      @report = create(:report)
       assigns[:node] = @node = @report.node
       render :template => "/nodes/show"
     end

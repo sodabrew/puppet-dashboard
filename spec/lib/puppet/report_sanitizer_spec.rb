@@ -102,7 +102,7 @@ describe ReportSanitizer do
 
       it "should fill in change_count=0 wherever a report is missing change_count attributes" do
         report_yaml = File.read(report_filename)
-        report_yaml.gsub!(/^ *change_count: [0-9]+\n/, '').should be_true
+        report_yaml.gsub!(/^ *change_count: [0-9]+\n/, '').should be_truthy
         raw_report = YAML.load(report_yaml, :safe => :true, :deserialize_symbols => true)
         hash = ReportSanitizer.sanitize(raw_report)
         hash["resource_statuses"].values.each do |resource_status|

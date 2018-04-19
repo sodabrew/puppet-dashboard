@@ -1,12 +1,12 @@
 require 'spec_helper'
 
-describe "/node_classes/index.html.haml" do
+describe "/node_classes/index.html.haml", :type => :view do
   include NodeClassesHelper
 
   describe "successful render" do
     before :each do
       view.stubs(:action_name => 'index')
-      @node_classes = [ NodeClass.generate!, NodeClass.generate! ].paginate
+      @node_classes = [ create(:node_class), create(:node_class) ].paginate
       render
     end
 

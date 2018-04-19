@@ -1,9 +1,9 @@
 require 'spec_helper'
 
-describe Node do
+describe Node, :type => :model do
   describe 'attributes' do
     before :each do
-      Node.generate!
+      create(:node)
       @node = Node.new
     end
 
@@ -14,7 +14,7 @@ describe Node do
 
     it { should have_db_column(:name).of_type(:string) }
     it { should validate_presence_of(:name) }
-    it { should validate_uniqueness_of(:name) }
+    it { should validate_uniqueness_of(:name).case_insensitive }
     it { pending 'problem with attr_readonly and inherited_resources'; should have_readonly_attribute(:name) }
 
   end
@@ -24,48 +24,48 @@ describe Node do
       later = 1.week.ago.to_date
       sooner = Date.today
 
-      @ever_changed = Node.generate!(:name => 'ever_changed').tap do |node|
-        Report.generate!(:host => node.name, :time => later, :status => 'changed')
-        Report.generate!(:host => node.name, :time => sooner, :status => 'changed')
+      @ever_changed = create(:node, :name => 'ever_changed').tap do |node|
+        create(:report, :host => node.name, :time => later, :status => 'changed')
+        create(:report, :host => node.name, :time => sooner, :status => 'changed')
         node.reload
       end
 
-      @ever_unchanged = Node.generate!(:name => 'ever_unchanged').tap do |node|
-        Report.generate!(:host => node.name, :time => later, :status => 'unchanged')
-        Report.generate!(:host => node.name, :time => sooner, :status => 'unchanged')
+      @ever_unchanged = create(:node, :name => 'ever_unchanged').tap do |node|
+        create(:report, :host => node.name, :time => later, :status => 'unchanged')
+        create(:report, :host => node.name, :time => sooner, :status => 'unchanged')
         node.reload
       end
 
-      @just_changed = Node.generate!(:name => 'just_changed').tap do |node|
-        Report.generate!(:host => node.name, :time => later, :status => 'failed')
-        Report.generate!(:host => node.name, :time => sooner, :status => 'changed')
+      @just_changed = create(:node, :name => 'just_changed').tap do |node|
+        create(:report, :host => node.name, :time => later, :status => 'failed')
+        create(:report, :host => node.name, :time => sooner, :status => 'changed')
         node.reload
       end
 
-      @just_unchanged = Node.generate!(:name => 'just_unchanged').tap do |node|
-        Report.generate!(:host => node.name, :time => later, :status => 'failed')
-        Report.generate!(:host => node.name, :time => sooner, :status => 'unchanged')
+      @just_unchanged = create(:node, :name => 'just_unchanged').tap do |node|
+        create(:report, :host => node.name, :time => later, :status => 'failed')
+        create(:report, :host => node.name, :time => sooner, :status => 'unchanged')
         node.reload
       end
 
-      @ever_failed = Node.generate!(:name => 'ever_failed').tap do |node|
-        Report.generate!(:host => node.name, :time => later, :status => 'failed')
-        Report.generate!(:host => node.name, :time => sooner, :status => 'failed')
+      @ever_failed = create(:node, :name => 'ever_failed').tap do |node|
+        create(:report, :host => node.name, :time => later, :status => 'failed')
+        create(:report, :host => node.name, :time => sooner, :status => 'failed')
         node.reload
       end
 
-      @just_failed = Node.generate!(:name => 'just_failed').tap do |node|
-        Report.generate!(:host => node.name, :time => later, :status => 'unchanged')
-        Report.generate!(:host => node.name, :time => sooner, :status => 'failed')
+      @just_failed = create(:node, :name => 'just_failed').tap do |node|
+        create(:report, :host => node.name, :time => later, :status => 'unchanged')
+        create(:report, :host => node.name, :time => sooner, :status => 'failed')
         node.reload
       end
 
-      @only_inspections = Node.generate!(:name => 'only_inspections').tap do |node|
-        Report.generate!(:host => node.name, :time => later, :kind => 'inspect', :status => "unchanged")
+      @only_inspections = create(:node, :name => 'only_inspections').tap do |node|
+        create(:report, :host => node.name, :time => later, :kind => 'inspect', :status => "unchanged")
         node.reload
       end
 
-      @never_reported = Node.generate!(:name => 'never_reported')
+      @never_reported = create(:node, :name => 'never_reported')
     end
   end
 
@@ -73,12 +73,12 @@ describe Node do
     it "should find nodes with the appropriate statuses on the latest report" do
       [:failed, :pending, :changed, :unchanged].each do |node_status|
         node = Node.create!(:name => node_status.to_s)
-        node.reports.generate!(:status => 'bogus', :time => Time.now - 1)
-        node.reports.generate!(:status => node_status.to_s, :time => Time.now)
+        create(:report, :node => node, :status => 'bogus', :time => Time.now - 1)
+        create(:report, :node => node, :status => node_status.to_s, :time => Time.now)
 
         node = Node.create!(:name => "#{node_status}-unresponsive")
-        node.reports.generate!(
-          :status => node_status.to_s, 
+        create(:report, :node => node,
+          :status => node_status.to_s,
           :time => SETTINGS.no_longer_reporting_cutoff.seconds.ago - 1
         )
       end
@@ -99,8 +99,8 @@ describe Node do
 
   describe "::find_from_inventory_search" do
     before :each do
-      @foo = Node.generate :name => "foo"
-      @bar = Node.generate :name => "bar"
+      @foo = create(:node, :name => 'foo')
+      @bar = create(:node, :name => 'bar')
     end
 
     it "should find the nodes that match the list of names given" do
@@ -114,7 +114,7 @@ describe Node do
     end
 
     it "should look-up nodes case-insensitively" do
-      baz = Node.generate :name => "BAZ"
+      baz = create(:node, :name => 'BAZ')
       PuppetHttps.stubs(:get).returns('["foo", "BAR", "baz"]')
       Node.find_from_inventory_search.should =~ [@foo, @bar, baz]
     end
@@ -122,9 +122,9 @@ describe Node do
 
   describe ".unreported" do
     it "should return all nodes whose latest report was unreported" do
-      unreported_node = Node.generate
-      reported_node = Node.generate
-      Report.generate!(:host => reported_node.name)
+      unreported_node = create(:node)
+      reported_node = create(:node)
+      create(:report, :host => reported_node.name)
 
       Node.unreported.should == [unreported_node]
     end
@@ -132,8 +132,8 @@ describe Node do
 
   describe "" do
     before :each do
-      @nodes = {:hidden   => Node.generate!(:hidden => true),
-                :unhidden => Node.generate!(:hidden => false)
+      @nodes = {:hidden   => create(:node, :hidden => true),
+                :unhidden => create(:node, :hidden => false)
       }
     end
 
@@ -150,7 +150,7 @@ describe Node do
 
   describe 'when computing a configuration' do
     before :each do
-      @node = Node.generate!
+      @node = create(:node)
     end
 
     it 'should return a name and set of classes and parameters' do
@@ -173,7 +173,7 @@ describe Node do
     end
 
     it "should return the names of the node's classes in the keys of the returned class list" do
-      @node.node_classes = @classes = Array.new(3) { NodeClass.generate! }
+      @node.node_classes = @classes = Array.new(3) { create(:node_class) }
       @node.configuration['classes'].keys.should =~ @classes.collect(&:name)
     end
 
@@ -187,7 +187,7 @@ describe Node do
   end
 
   describe "#parameters=" do
-    before { @node = Node.generate! }
+    before { @node = create(:node) }
 
     it "should create parameter objects for new parameters" do
       lambda {
@@ -215,13 +215,13 @@ describe Node do
 
   describe "handling the node group graph" do
     before :each do
-      @node = Node.generate! :name => "Sample"
+      @node = create(:node, :name => 'Sample')
 
-      @node_group_a = NodeGroup.generate! :name => "A"
-      @node_group_b = NodeGroup.generate! :name => "B"
+      @node_group_a = create(:node_group, :name => 'A')
+      @node_group_b = create(:node_group, :name => 'B')
 
-      @param_1 = Parameter.generate(:key => 'foo', :value => '1')
-      @param_2 = Parameter.generate(:key => 'bar', :value => '2')
+      @param_1 = create(:parameter, :key => 'foo', :value => '1')
+      @param_2 = create(:parameter, :key => 'bar', :value => '2')
 
       @node_group_a.parameters << @param_1
       @node_group_b.parameters << @param_2
@@ -232,23 +232,23 @@ describe Node do
 
     describe "collecting global parameters conflicts" do
       it "should find 1 conflict" do
-        param_3 = Parameter.generate(:key => 'foo', :value => '2')
+        param_3 = create(:parameter, :key => 'foo', :value => '2')
         @node_group_b.parameters << param_3
         @node.global_conflicts.length.should == 1
       end
 
       it "should not find any conflicts when the parameter is overridden" do
-        node_group_a1 = NodeGroup.generate! :name => "A1"
+        node_group_a1 = create(:node_group, :name => 'A1')
         @node_group_a.node_groups << node_group_a1
-        param_3 = Parameter.generate(:key => 'foo', :value => '2')
+        param_3 = create(:parameter, :key => 'foo', :value => '2')
         node_group_a1.parameters << param_3
         @node.global_conflicts.length.should == 0
       end
 
       it "should find 1 conflict" do
-        node_group_b1 = NodeGroup.generate! :name => "B1"
+        node_group_b1 = create(:node_group, :name => 'B1')
         @node_group_b.node_groups << node_group_b1
-        param_3 = Parameter.generate(:key => 'foo', :value => '2')
+        param_3 = create(:parameter, :key => 'foo', :value => '2')
         node_group_b1.parameters << param_3
         @node.global_conflicts.length.should == 1
       end
@@ -256,23 +256,23 @@ describe Node do
 
     describe "collecting class parameters conflicts" do
       before :each do
-        @node_class_a = NodeClass.generate :name => "a"
-        @node_class_b = NodeClass.generate :name => "b"
-        @node_class_c = NodeClass.generate :name => "c"
+        @node_class_a = create(:node_class, :name => 'a')
+        @node_class_b = create(:node_class, :name => 'b')
+        @node_class_c = create(:node_class, :name => 'c')
 
         @node_group_a.node_classes << @node_class_a
         @node_group_b.node_classes << @node_class_b
 
-        @node_group_a1 = NodeGroup.generate! :name => "A1"
-        @node_group_a2 = NodeGroup.generate! :name => "A2"
+        @node_group_a1 = create(:node_group, :name => 'A1')
+        @node_group_a2 = create(:node_group, :name => 'A2')
 
         @node_group_a.node_groups << @node_group_a1
         @node_group_a.node_groups << @node_group_a2
 
         @node_group_a_class_memberships_a = NodeGroupClassMembership.find_by_node_group_id_and_node_class_id(@node_group_a.id, @node_class_a.id)
-        @node_group_a_class_memberships_a.parameters << Parameter.generate(:key => 'p1', :value => '1')
+        @node_group_a_class_memberships_a.parameters << create(:parameter, :key => 'p1', :value => '1')
         @node_group_b_class_memberships_b = NodeGroupClassMembership.find_by_node_group_id_and_node_class_id(@node_group_b.id, @node_class_b.id)
-        @node_group_b_class_memberships_b.parameters << Parameter.generate(:key => 'p1', :value => '2')
+        @node_group_b_class_memberships_b.parameters << create(:parameter, :key => 'p1', :value => '2')
       end
 
       it "should not find any conflicts when different classes use the same parameter with different values" do
@@ -282,15 +282,15 @@ describe Node do
       it "should find 1 conflict" do
         @node_group_b.node_classes << @node_class_a
         node_group_b_class_memberships_a = NodeGroupClassMembership.find_by_node_group_id_and_node_class_id(@node_group_b.id, @node_class_a.id)
-        node_group_b_class_memberships_a.parameters << Parameter.generate(:key => 'p1', :value => '2')
-        
+        node_group_b_class_memberships_a.parameters << create(:parameter, :key => 'p1', :value => '2')
+
         @node.class_conflicts.length.should == 1
       end
 
       it "should not find any conflicts when the competing parameters have the same value" do
         @node_group_b.node_classes << @node_class_a
         node_group_b_class_memberships_a = NodeGroupClassMembership.find_by_node_group_id_and_node_class_id(@node_group_b.id, @node_class_a.id)
-        node_group_b_class_memberships_a.parameters << Parameter.generate(:key => 'p1', :value => '1')
+        node_group_b_class_memberships_a.parameters << create(:parameter, :key => 'p1', :value => '1')
 
         @node.class_conflicts.length.should == 0
       end
@@ -301,10 +301,10 @@ describe Node do
           @node_group_a2.node_classes << @node_class_c
 
           node_group_a1_class_memberships_c = NodeGroupClassMembership.find_by_node_group_id_and_node_class_id(@node_group_a1.id, @node_class_c.id)
-          node_group_a1_class_memberships_c.parameters << Parameter.generate(:key => 'p1', :value => '1')
+          node_group_a1_class_memberships_c.parameters << create(:parameter, :key => 'p1', :value => '1')
 
           node_group_a2_class_memberships_c = NodeGroupClassMembership.find_by_node_group_id_and_node_class_id(@node_group_a2.id, @node_class_c.id)
-          node_group_a2_class_memberships_c.parameters << Parameter.generate(:key => 'p1', :value => '2')
+          node_group_a2_class_memberships_c.parameters << create(:parameter, :key => 'p1', :value => '2')
         end
 
         it "should find 1 conflict" do
@@ -314,7 +314,7 @@ describe Node do
         it "should not find any conflicts when the conflicting parameter is overridden" do
           @node_group_a.node_classes << @node_class_c
           node_group_a_class_memberships_c = NodeGroupClassMembership.find_by_node_group_id_and_node_class_id(@node_group_a.id, @node_class_c.id)
-          node_group_a_class_memberships_c.parameters << Parameter.generate(:key => 'p1', :value => '3')
+          node_group_a_class_memberships_c.parameters << create(:parameter, :key => 'p1', :value => '3')
 
           @node.class_conflicts.length.should == 0
         end
@@ -323,8 +323,8 @@ describe Node do
 
     describe "when a group is included twice" do
       before :each do
-        @node_group_c = NodeGroup.generate! :name => "C"
-        @node_group_d = NodeGroup.generate! :name => "D"
+        @node_group_c = create(:node_group, :name => 'C')
+        @node_group_d = create(:node_group, :name => 'D')
         @node_group_c.node_groups << @node_group_d
         @node_group_a.node_groups << @node_group_c
         @node_group_b.node_groups << @node_group_c
@@ -345,7 +345,7 @@ describe Node do
       end
 
       it "should ensure that parameters nearer to the node are retained" do
-        @node_group_a1 = NodeGroup.generate!
+        @node_group_a1 = create(:node_group)
         @node_group_a1.parameters << Parameter.create(:key => 'foo', :value => '2')
         @node_group_a.node_groups << @node_group_a1
 
@@ -370,11 +370,11 @@ describe Node do
       end
 
       it "should not raise an error if there are parameter conflicts that can be resolved at a higher level" do
-        param_3 = Parameter.generate(:key => 'foo', :value => '3')
-        param_4 = Parameter.generate(:key => 'foo', :value => '4')
-        @node_group_c = NodeGroup.generate!
+        param_3 = create(:parameter, :key => 'foo', :value => '3')
+        param_4 = create(:parameter, :key => 'foo', :value => '4')
+        @node_group_c = create(:node_group)
         @node_group_c.parameters << param_3
-        @node_group_d = NodeGroup.generate!
+        @node_group_d = create(:node_group)
         @node_group_d.parameters << param_4
         @node_group_a.node_groups << @node_group_c << @node_group_d
 
@@ -389,10 +389,10 @@ describe Node do
       end
 
       it "should retain the history of its parameters" do
-        @node_group_c = NodeGroup.generate! :name => "C"
-        @node_group_d = NodeGroup.generate! :name => "D"
-        @node_group_c.parameters << Parameter.generate(:key => 'foo', :value => '3')
-        @node_group_d.parameters << Parameter.generate(:key => 'foo', :value => '4')
+        @node_group_c = create(:node_group, :name => 'C')
+        @node_group_d = create(:node_group, :name => 'D')
+        @node_group_c.parameters << create(:parameter, :key => 'foo', :value => '3')
+        @node_group_d.parameters << create(:parameter, :key => 'foo', :value => '4')
         @node_group_a.node_groups << @node_group_c
         @node_group_a.node_groups << @node_group_d
 
@@ -406,8 +406,8 @@ describe Node do
 
   describe "when assigning classes" do
     before :each do
-      @node    = Node.generate!
-      @classes = Array.new(3) { NodeClass.generate! }
+      @node    = create(:node)
+      @classes = Array.new(3) { create(:node_class) }
     end
 
     it "should not remove classes if node_class_ids and node_class_names are unspecified" do
@@ -470,8 +470,8 @@ describe Node do
 
   describe "when assigning groups" do
     before :each do
-      @node   = Node.generate!
-      @groups = Array.new(3) { NodeGroup.generate! }
+      @node   = create(:node)
+      @groups = Array.new(3) { create(:node_group) }
     end
 
     it "should not remove groups if node_group_ids and node_group_names are unspecified" do
@@ -521,7 +521,7 @@ describe Node do
 
     describe "via node_group_ids, and node_group_names" do
       before :each do
-        @groups = Array.new(3) { NodeGroup.generate! }
+        @groups = Array.new(3) { create(:node_group) }
       end
 
       it "should assign all specified groups" do
@@ -538,17 +538,17 @@ describe Node do
 
   describe "destroying" do
     before :each do
-      @node = Node.generate!(:name => 'gonnadienode')
+      @node = create(:node, :name => 'gonnadienode')
     end
 
     it("should destroy dependent reports") do
-      @report = Report.generate!(:host => @node.name)
+      @report = create(:report, :host => @node.name)
       @node.destroy
       Report.all.should_not include([@report])
     end
 
     it "should remove class memberships" do
-      node_class = NodeClass.generate!()
+      node_class = create(:node_class)
       @node.node_classes << node_class
 
       @node.destroy
@@ -558,7 +558,7 @@ describe Node do
     end
 
     it "should remove group memberships" do
-      node_group = NodeGroup.generate!()
+      node_group = create(:node_group)
       @node.node_groups << node_group
 
       @node.destroy
@@ -570,7 +570,7 @@ describe Node do
 
   describe "facts" do
     before :each do
-      @node = Node.generate!(:name => 'gonaddynode')
+      @node = create(:node, :name => 'gonaddynode')
       @sample_pson = '{"name":"foo","timestamp":"Fri Oct 29 10:33:53 -0700 2010","expiration":"Fri Oct 29 11:03:53 -0700 2010","values":{"a":"1","b":"2"}}'
       @sample_pson_without_timestamp = '{"name":"foo","expiration":"Fri Oct 29 11:03:53 -0700 2010","values":{"a":"1","b":"2"}}'
       @sample_pson_with_malformed_timestamp = '{"name":"foo","expiration":"Fri Oct 29 11:03:53 -0700 2010","values":{"a":"1","b":"2","--- !ruby/sym _timestamp":"Sat Oct 30 10:33:53 -0700 2010"}}'
@@ -610,8 +610,8 @@ describe Node do
 
   describe '.to_csv' do
     before :each do
-      @node = Node.generate!
-      @report = Report.generate!(:host => @node.name)
+      @node = create(:node)
+      @report = create(:report, :host => @node.name)
       @node.reload
 
       @custom_node_properties = [:name, :status, :resource_count, :pending_count, :failed_count, :compliant_count]
@@ -621,9 +621,9 @@ describe Node do
     let(:node_values) { @custom_node_properties.map {|prop| @node.send(prop)} }
 
     it 'should export one row per resource status with both node, and resource data' do
-      pending_resource = Factory(:pending_resource, :title => 'pending', :report => @report)
-      successful_resource = Factory(:successful_resource, :title => 'successful', :report => @report)
-      failed_resource = Factory(:failed_resource, :title => 'failed', :report => @report)
+      pending_resource = create(:pending_resource, :title => 'pending', :report => @report)
+      successful_resource = create(:successful_resource, :title => 'successful', :report => @report)
+      failed_resource = create(:failed_resource, :title => 'failed', :report => @report)
 
       csv_lines = Node.find(:all).to_csv.split("\n")
       csv_lines.first.should == (@custom_node_properties + @custom_resource_properties).join(',')
@@ -643,8 +643,8 @@ describe Node do
 
   describe 'self.resource_status_totals' do
     before :each do
-      @pending_node = Factory(:pending_node)
-      @unchanged_node = Factory(:unchanged_node)
+      @pending_node = create(:pending_node)
+      @unchanged_node = create(:unchanged_node)
 
       Metric.create!(:report => @pending_node.last_apply_report, :category => "resources", :name => "pending", :value => 27)
       Metric.create!(:report => @pending_node.last_apply_report, :category => "resources", :name => "unchanged", :value => 48)
@@ -661,7 +661,7 @@ describe Node do
       Node.resource_status_totals("unchanged","pending").should == 48
       Node.resource_status_totals("unchanged","unchanged").should == 25
     end
- 
+
     it 'should raise an error if passed a scope that does not exist' do
       expect { Node.resource_status_totals("unchanged","not_a_scope") }.to raise_error(NoMethodError, /undefined method/)
     end

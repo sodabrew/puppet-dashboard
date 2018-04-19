@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe ReportsHelper do
+describe ReportsHelper, :type => :helper do
   describe "#popup_md5s" do
     before do
       SETTINGS.stubs(:use_file_bucket_diffs).returns(true)
@@ -12,12 +12,12 @@ describe ReportsHelper do
         content changed '<a
           class=\"popup-md5\"
           href=\"#\"
-          onclick=\"display_file_popup( &#x27;/files/show?file=b84b7c77fb71f0d945f186513a09e185&#x27;); return false;\">
+          onclick=\"display_file_popup( &#39;/files/show?file=b84b7c77fb71f0d945f186513a09e185&#39;); return false;\">
           {md5}b84b7c77fb71f0d945f186513a09e185
         </a>' to '<a
           class=\"popup-md5\"
           href=\"#\"
-          onclick=\"display_file_popup(&#x27;/files/show?file=d28d2d3560fa76f0dbb1a452f8c38169&#x27;); return false;\">
+          onclick=\"display_file_popup(&#39;/files/show?file=d28d2d3560fa76f0dbb1a452f8c38169&#39;); return false;\">
           {md5}d28d2d3560fa76f0dbb1a452f8c38169
         </a>'
       HEREDOC
@@ -28,12 +28,12 @@ describe ReportsHelper do
         content changed '<a
           class=\"popup-md5\"
           href=\"#\"
-          onclick=\"display_file_popup( &#x27;/files/show?file=b84b7c77fb71f0d945f186513a09e185&#x27;); return false;\">
+          onclick=\"display_file_popup( &#39;/files/show?file=b84b7c77fb71f0d945f186513a09e185&#39;); return false;\">
           foo
         </a>' to '<a
           class=\"popup-md5\"
           href=\"#\"
-          onclick=\"display_file_popup(&#x27;/files/show?file=d28d2d3560fa76f0dbb1a452f8c38169&#x27;); return false;\">
+          onclick=\"display_file_popup(&#39;/files/show?file=d28d2d3560fa76f0dbb1a452f8c38169&#39;); return false;\">
           foo
         </a>'
       HEREDOC
@@ -44,7 +44,7 @@ describe ReportsHelper do
         content changed '<a
           class=\"popup-md5\"
           href=\"#\"
-          onclick=\"display_file_popup( &#x27;/files/show?file=b84b7c77fb71f0d945f186513a09e185&#x27;); return false;\">
+          onclick=\"display_file_popup( &#39;/files/show?file=b84b7c77fb71f0d945f186513a09e185&#39;); return false;\">
           {md5}b84b7c77fb71f0d945f186513a09e185
         </a>' to '{md5}d28d2d3560fa76f0dbb1a452f8c38169'
       HEREDOC
