@@ -1,4 +1,4 @@
-PuppetDashboard::Application.routes do
+PuppetDashboard::Application.routes.draw do
 
   root :to => 'pages#home'
 
@@ -21,8 +21,8 @@ PuppetDashboard::Application.routes do
 
     resources :nodes do
       member do
-        put :hide
-        put :unhide
+        patch :hide
+        patch :unhide
         get :facts
         get :reports
       end
@@ -59,10 +59,10 @@ PuppetDashboard::Application.routes do
 
   resources :node_group_memberships, :as => :memberships
 
-  match 'files/:action/:file1/:file2' => 'files#:action'
-  match 'files/:action/:file'         => 'files#:action'
+  match 'files/:action/:file1/:file2' => 'files#:action', :via => :get
+  match 'files/:action/:file'         => 'files#:action', :via => :get
 
-  match '/header.:format' => 'pages#header'
+  match '/header.:format' => 'pages#header', :via => :get
   match 'reports/upload'  => 'reports#upload', :via => :post
   match 'release_notes'   => 'pages#release_notes', :via => :get
   match '/delayed_job_failures/read_all' => 'delayed_job_failures#read_all', :via => :post
