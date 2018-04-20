@@ -10,14 +10,14 @@ describe ReportsHelper, :type => :helper do
     it "should make anything that looks like an md5 into a filebucket link" do
       helper.popup_md5s(@text).gsub(/\s/, '').should == <<-HEREDOC.gsub(/\s/, '')
         content changed '<a
+          onclick=\"display_file_popup( &#39;/files/show?file=b84b7c77fb71f0d945f186513a09e185&#39;); return false;\"
           class=\"popup-md5\"
-          href=\"#\"
-          onclick=\"display_file_popup( &#39;/files/show?file=b84b7c77fb71f0d945f186513a09e185&#39;); return false;\">
+          href=\"#\">
           {md5}b84b7c77fb71f0d945f186513a09e185
         </a>' to '<a
+          onclick=\"display_file_popup(&#39;/files/show?file=d28d2d3560fa76f0dbb1a452f8c38169&#39;); return false;\"
           class=\"popup-md5\"
-          href=\"#\"
-          onclick=\"display_file_popup(&#39;/files/show?file=d28d2d3560fa76f0dbb1a452f8c38169&#39;); return false;\">
+          href=\"#\">
           {md5}d28d2d3560fa76f0dbb1a452f8c38169
         </a>'
       HEREDOC
@@ -26,14 +26,14 @@ describe ReportsHelper, :type => :helper do
     it "should make the link text be a label if it's passed in" do
       helper.popup_md5s(@text, :label => 'foo').gsub(/\s/, '').should == <<-HEREDOC.gsub(/\s/, '')
         content changed '<a
+          onclick=\"display_file_popup( &#39;/files/show?file=b84b7c77fb71f0d945f186513a09e185&#39;); return false;\"
           class=\"popup-md5\"
-          href=\"#\"
-          onclick=\"display_file_popup( &#39;/files/show?file=b84b7c77fb71f0d945f186513a09e185&#39;); return false;\">
+          href=\"#\">
           foo
         </a>' to '<a
+          onclick=\"display_file_popup(&#39;/files/show?file=d28d2d3560fa76f0dbb1a452f8c38169&#39;); return false;\"
           class=\"popup-md5\"
-          href=\"#\"
-          onclick=\"display_file_popup(&#39;/files/show?file=d28d2d3560fa76f0dbb1a452f8c38169&#39;); return false;\">
+          href=\"#\">
           foo
         </a>'
       HEREDOC
@@ -42,9 +42,9 @@ describe ReportsHelper, :type => :helper do
     it "should not link md5s if they're in the excluded list" do
       helper.popup_md5s(@text, :exclude_md5s => ['{md5}d28d2d3560fa76f0dbb1a452f8c38169']).gsub(/\s/, '').should == <<-HEREDOC.gsub(/\s/, '')
         content changed '<a
+          onclick=\"display_file_popup( &#39;/files/show?file=b84b7c77fb71f0d945f186513a09e185&#39;); return false;\"
           class=\"popup-md5\"
-          href=\"#\"
-          onclick=\"display_file_popup( &#39;/files/show?file=b84b7c77fb71f0d945f186513a09e185&#39;); return false;\">
+          href=\"#\">
           {md5}b84b7c77fb71f0d945f186513a09e185
         </a>' to '{md5}d28d2d3560fa76f0dbb1a452f8c38169'
       HEREDOC
