@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 gem 'rake'
 gem 'rdoc'
-gem 'rails', '~> 4.1.0'
+gem 'rails', '~> 4.2.0'
 gem 'will_paginate'
 gem 'inherited_resources'
 gem 'i18n'
@@ -26,6 +26,8 @@ gem 'jquery-ui-rails'
 gem 'uglifier'
 gem 'execjs'
 gem 'therubyracer'
+
+gem 'web-console', '~> 2.0', group: :development
 
 group :development, :test do
   gem 'mocha'
