@@ -1,6 +1,6 @@
-PuppetDashboard::Application.routes.draw do
+Rails.application.routes.draw do
 
-  root :to => 'pages#home'
+  root 'pages#home'
 
   # Nodes, Groups, and Classes may all have names or numeric ids
   constraints(:id => /[^\/]+/) do
