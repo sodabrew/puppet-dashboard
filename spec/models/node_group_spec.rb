@@ -289,9 +289,9 @@ describe NodeGroup, :type => :model do
       new_group.nodes.should        be_empty
 
       new_group.errors.full_messages.should =~ [
-        "Couldn't find NodeGroup with id=cow",
-        "Couldn't find NodeClass with id=dog",
-        "Couldn't find Node with id=pig"
+        "Couldn't find NodeGroup with 'id'=cow",
+        "Couldn't find NodeClass with 'id'=dog",
+        "Couldn't find Node with 'id'=pig"
       ]
     end
   end

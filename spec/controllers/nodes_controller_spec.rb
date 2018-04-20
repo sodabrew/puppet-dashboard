@@ -718,7 +718,7 @@ describe NodesController, :type => :controller do
           SETTINGS.stubs(:enable_read_only_mode).returns(source == 'configuration file')
           session.expects(:[]).with('ACCESS_CONTROL_ROLE').returns('READ_ONLY') if source == 'Rack middleware'
           # Raising the ReadOnlyEnabledError exception will create a session[:flash] error entry, which we stub (but not expects)
-          session.stubs(:[]).with('flash').returns(ActionDispatch::Flash::FlashHash.new)
+          session.stubs(:[]).with('flash').returns(nil)
         end
 
         it "should raise an error when calling 'new'" do
