@@ -5,7 +5,11 @@ class ResourceEvent < ActiveRecord::Base
   class ValueWrapper
     def self.load(val)
       begin
-        YAML.load(val)
+        if val.start_with?('---')
+          YAML.load(val)
+        else
+          val
+        end
       rescue StandardError
         val
       end
