@@ -57,9 +57,15 @@ namespace :db do
       case adapter
       when 'mysql', 'mysql2'
         puts "Optimizing tables, this may take a while:"
-        for table in ActiveRecord::Base.connection.select_values('SHOW TABLES').sort
+        for table in ActiveRecord::Base.connection.tables.sort
           puts "* #{table}"
           ActiveRecord::Base.connection.execute("OPTIMIZE TABLE #{table}")
+        end
+      when 'postgresql'
+        puts "Optimizing tables, this may take a while:"
+        for table in ActiveRecord::Base.connection.tables.sort
+          puts "* #{table}"
+          ActiveRecord::Base.connection.execute("VACUUM FULL ANALYZE #{table}")
         end
       else
         raise "Don't know how to optimize for database engine: #{adapter}"

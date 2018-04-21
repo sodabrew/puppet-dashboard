@@ -36,6 +36,12 @@ precompile assets for production using:
 
  * `RAILS_ENV=production bundle exec rake assets:precompile`
 
+Dashboard is an front-end of puppet, so it keep all reports. If infrastructure is big, puppetdashboard database become very large (more than 50Gio). 
+So add periodicaly 2 tasks:
+
+ * `RAILS_ENV=production bundle exec rake reports:prune upto=20 unit=day`
+ * `RAILS_ENV=production bundle exec rake db:raw:optimize`
+
 Contributing
 ------------
 

@@ -1,4 +1,7 @@
 usr/share/puppet-dashboard/log
 usr/share/puppet-dashboard/tmp
 usr/share/puppet-dashboard/spool
+var/log/puppet-dashboard
+var/spool/puppet-dashboard
+var/tmp/puppet-dashboard
 

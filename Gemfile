@@ -45,3 +45,7 @@ end
 group :mysql do
   gem 'mysql2', '~> 0.3.11'
 end
+
+group :sqlite do
+  gem 'sqlite3'
+end
