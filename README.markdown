@@ -5,8 +5,6 @@ Puppet Dashboard is a web interface for [Puppet](http://www.puppetlabs.com/).
 It can view and analyze Puppet reports, assign Puppet classes and parameters to
 nodes, and view inventory data and backed-up file contents.
 
-For full documentation, see the [Puppet Dashboard Manual](http://docs.puppetlabs.com/dashboard/manual).
-
 Dependencies
 ------------
 
