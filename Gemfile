@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 gem 'rake'
 gem 'rdoc'
-gem 'rails', '~> 4.2.0'
+gem 'rails', '~> 5.0.0'
 gem 'will_paginate'
 gem 'inherited_resources'
 gem 'i18n'
@@ -27,7 +27,7 @@ gem 'uglifier'
 gem 'execjs'
 gem 'therubyracer'
 
-gem 'web-console', '~> 2.0', group: :development
+gem 'web-console', group: :development
 
 group :development, :test do
   gem 'mocha'
@@ -38,6 +38,7 @@ group :development, :test do
   gem 'shoulda-matchers'
   gem 'factory_bot_rails'
   gem 'nokogiri'
+  gem 'rails-controller-testing'
 end
 
 group :postgresql do
