@@ -24,7 +24,7 @@ describe ReportsController, :type => :controller do
     describe "with a POST from Puppet 2.6.x" do
       subject do
         lambda {
-          post_with_body('upload', @yaml, :content_type => 'application/x-yaml')
+          post_with_body :upload, @yaml, content_type: 'application/x-yaml'
           Delayed::Worker.new.work_off
         }
       end
@@ -35,7 +35,7 @@ describe ReportsController, :type => :controller do
     describe "with a POST from Puppet 0.25.x" do
       subject do
         lambda {
-          post('upload', :report => @yaml)
+          post :upload, params: { report: @yaml }, as: :json
           Delayed::Worker.new.work_off
         }
       end
@@ -46,7 +46,7 @@ describe ReportsController, :type => :controller do
     describe "with a POST with a report inside the report parameter" do
       subject do
         lambda {
-          post('upload', :report => { :report => @yaml })
+          post :upload, params: { report: { report: @yaml } }
           Delayed::Worker.new.work_off
         }
       end
@@ -56,7 +56,7 @@ describe ReportsController, :type => :controller do
 
     describe "with a POST without a report, the response code" do
       before :each do
-        post('upload', :report => "" )
+        post :upload, params: { report: '' }
       end
 
       it "should be 200, because we queued the job" do
@@ -66,7 +66,7 @@ describe ReportsController, :type => :controller do
 
     describe "with a POST with invalid report data, the response code" do
       before :each do
-        post('upload', :report => "foo bar baz bad data invalid")
+        post :upload, params: { report: 'foo bar baz bad data invalid' }
       end
 
       it "should be 200, because we queued the job" do
@@ -78,13 +78,13 @@ describe ReportsController, :type => :controller do
   describe "#create" do
     it "should fail with a 403 error when disable_legacy_report_upload_url is true" do
       SETTINGS.stubs(:disable_legacy_report_upload_url).returns(true)
-      response = post_with_body('create', @yaml, :content_type => 'application/x-yaml')
+      response = post_with_body :create, @yaml, content_type: 'application/x-yaml'
       response.should be_forbidden
     end
 
     it "should succeed when disable_legacy_report_upload_url is false" do
       SETTINGS.stubs(:disable_legacy_report_upload_url).returns(false)
-      response = post_with_body('create', @yaml, :content_type => 'application/x-yaml')
+      response = post_with_body :create, @yaml, content_type: 'application/x-yaml'
       response.should be_success
     end
   end
@@ -104,7 +104,7 @@ describe ReportsController, :type => :controller do
 
   describe "#failed" do
     it "should render the index template and show only failed reports" do
-      get :index, :status => 'failed'
+      get :index, params: { status: 'failed' }
       response.code.should == '200'
       response.should render_template("reports/index")
       assigns[:tab].should == 'failed'
@@ -116,7 +116,7 @@ describe ReportsController, :type => :controller do
   end
   describe "#pending" do
     it "should render the index template and show only pending reports" do
-      get :index, :status => 'pending'
+      get :index, params: { status: 'pending' }
       response.code.should == '200'
       response.should render_template("reports/index")
       assigns[:tab].should == 'pending'
@@ -128,7 +128,7 @@ describe ReportsController, :type => :controller do
   end
   describe "#changed" do
     it "should render the index template and show only changed reports" do
-      get :index, :status => 'changed'
+      get :index, params: { status: 'changed' }
       response.code.should == '200'
       response.should render_template("reports/index")
       assigns[:tab].should == 'changed'
@@ -141,7 +141,7 @@ describe ReportsController, :type => :controller do
 
   describe "#unchanged" do
     it "should render the index template and show only unchanged reports" do
-      get :index, :status => 'unchanged'
+      get :index, params: { status: 'unchanged' }
       response.code.should == '200'
       response.should render_template("reports/index")
       assigns[:tab].should == 'unchanged'
@@ -154,7 +154,7 @@ describe ReportsController, :type => :controller do
 
   def post_with_body(action, body, headers)
     @request.env['RAW_POST_DATA'] = body
-    response = post(action, {}, headers)
+    response = post(action, {params: {}}.merge(headers))
     @request.env.delete('RAW_POST_DATA')
     response
   end

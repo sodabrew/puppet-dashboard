@@ -1,4 +1,4 @@
-class DelayedJobFailure < ActiveRecord::Base
+class DelayedJobFailure < ApplicationRecord
   def self.per_page; 25 end
 
   scope :unread, -> { where(:read => false) }

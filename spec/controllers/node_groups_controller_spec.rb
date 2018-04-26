@@ -56,8 +56,8 @@ describe NodeGroupsController, :type => :controller do
   end
 
   describe "#update" do
-    def do_put
-      patch :update, @params
+    def do_patch
+      patch :update, params: @params, as: :json
     end
 
     before :each do
@@ -74,7 +74,7 @@ describe NodeGroupsController, :type => :controller do
       it "should allow specification of 'parameter_attributes'" do
         @params[:node_group].merge! :parameter_attributes => [{:key => 'foo', :value => 'bar'}]
 
-        do_put
+        do_patch
 
         @node_group.reload.parameters.to_hash.should include({'foo' => 'bar'})
       end
@@ -83,7 +83,7 @@ describe NodeGroupsController, :type => :controller do
         node_class = create(:node_class)
         @params[:node_group].merge! :node_class_ids => [node_class.id]
 
-        do_put
+        do_patch
 
         @node_group.reload.node_classes.should == [node_class]
       end
@@ -96,7 +96,7 @@ describe NodeGroupsController, :type => :controller do
 
         @params[:node_group].merge! :assigned_node_class_ids => []
 
-        do_put
+        do_patch
 
         @node_group.reload.node_classes.should be_empty
       end
@@ -109,7 +109,7 @@ describe NodeGroupsController, :type => :controller do
 
         @params[:node_group].merge! :assigned_node_group_ids => []
 
-        do_put
+        do_patch
 
         @node_group.reload.node_groups.should be_empty
       end
@@ -122,7 +122,7 @@ describe NodeGroupsController, :type => :controller do
 
         @params[:node_group].merge! :assigned_node_ids => []
 
-        do_put
+        do_patch
 
         @node_group.reload.nodes.should be_empty
       end
@@ -136,7 +136,7 @@ describe NodeGroupsController, :type => :controller do
       it "should fail if parameter_attributes are specified" do
         @params[:node_group].merge! :parameter_attributes => [{:key => 'foo', :value => 'bar'}]
 
-        do_put
+        do_patch
 
         response.should be_forbidden
         response.body.should =~ /Node classification has been disabled/
@@ -148,7 +148,7 @@ describe NodeGroupsController, :type => :controller do
         node_class = create(:node_class)
         @params[:node_group].merge! :assigned_node_class_ids => [node_class.id]
 
-        do_put
+        do_patch
 
         response.should be_forbidden
         response.body.should =~ /Node classification has been disabled/
@@ -157,12 +157,8 @@ describe NodeGroupsController, :type => :controller do
       end
 
       it "should succeed if parameter_attributes and node classes are omitted" do
-        do_put
-        response.code.should == '200'
-        response_hash = JSON.parse(response.body)
-        response_hash["status"].should == "ok"
-        response_hash["valid"].should == "true"
-        response_hash["redirect_to"].should_not be_empty
+        do_patch
+        response.code.should == '204'
       end
     end
   end

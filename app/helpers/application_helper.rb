@@ -127,7 +127,7 @@ module ApplicationHelper
         if (params[:per_page] || scope.per_page.to_s) == n.to_s
           content_tag(:span, n, :class => "current")
         else
-          link_to(n, params.merge({:per_page => n}))
+          link_to(n, params.permit(:per_page).merge({:per_page => n}))
         end
       end.join.html_safe
     end

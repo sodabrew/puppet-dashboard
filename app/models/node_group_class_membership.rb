@@ -1,4 +1,4 @@
-class NodeGroupClassMembership < ActiveRecord::Base
+class NodeGroupClassMembership < ApplicationRecord
   validates_presence_of :node_class_id, :node_group_id
 
   include NodeGroupGraph

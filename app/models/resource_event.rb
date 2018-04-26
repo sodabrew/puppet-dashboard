@@ -1,4 +1,4 @@
-class ResourceEvent < ActiveRecord::Base
+class ResourceEvent < ApplicationRecord
   belongs_to :resource_status
 
   # Only perform YAMLization on non-strings.

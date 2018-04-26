@@ -1,4 +1,4 @@
-class ResourceStatus < ActiveRecord::Base
+class ResourceStatus < ApplicationRecord
   belongs_to :report, -> { includes(:node) }
   has_many :events, :class_name => 'ResourceEvent', :dependent => :delete_all
 

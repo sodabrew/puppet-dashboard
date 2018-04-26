@@ -1,4 +1,4 @@
-class ReportLog < ActiveRecord::Base
+class ReportLog < ApplicationRecord
   belongs_to :report
 
   serialize :tags, Array

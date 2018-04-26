@@ -199,7 +199,7 @@ class NodesController < InheritedResources::Base
       format.yaml { render :yaml => collection }
       format.csv {
         expires_in 0, 'must-revalidate' => true, :private => true
-        render :csv => collection, :filename => "#{scope_names.join('-')}-nodes"
+        render :csv => collection.to_a, :filename => "#{scope_names.join('-')}-nodes"
       }
     end
   end

@@ -1,4 +1,4 @@
-class NodeClass < ActiveRecord::Base
+class NodeClass < ApplicationRecord
   def self.per_page; SETTINGS.classes_per_page end # Pagination
 
   include NodeGroupGraph

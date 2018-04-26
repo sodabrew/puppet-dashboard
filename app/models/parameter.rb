@@ -1,4 +1,4 @@
-class Parameter < ActiveRecord::Base
+class Parameter < ApplicationRecord
   include Trimmer
   trimmed_fields :key
 

@@ -625,7 +625,7 @@ describe Node, :type => :model do
       successful_resource = create(:successful_resource, :title => 'successful', :report => @report)
       failed_resource = create(:failed_resource, :title => 'failed', :report => @report)
 
-      csv_lines = Node.all.to_csv.split("\n")
+      csv_lines = Node.all.to_a.to_csv.split("\n")
       csv_lines.first.should == (@custom_node_properties + @custom_resource_properties).join(',')
       csv_lines[1..-1].should =~ [pending_resource, failed_resource, successful_resource].map do |res|
         line = node_values + @custom_resource_properties.map { |field| res.send(field) }
@@ -634,7 +634,7 @@ describe Node, :type => :model do
     end
 
     it 'should export nulls for the resource status values when there are no resource statuses' do
-      Node.all.to_csv.split("\n").should == [
+      Node.all.to_a.to_csv.split("\n").should == [
         (@custom_node_properties + @custom_resource_properties).join(','),
         (node_values + ([nil] * @custom_resource_properties.count)).join(',')
       ]

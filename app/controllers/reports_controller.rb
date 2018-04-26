@@ -4,7 +4,6 @@ class ReportsController < InheritedResources::Base
   protect_from_forgery :except => [:create, :upload]
 
   before_filter :raise_if_enable_read_only_mode, :only => [:new, :edit, :update, :destroy]
-  before_filter :handle_raw_post, :only => [:create, :upload]
 
   def index
     index! do |format|
@@ -33,7 +32,7 @@ class ReportsController < InheritedResources::Base
 
   def upload
     begin
-      Report.delay.create_from_yaml(params[:report][:report])
+      Report.delay.create_from_yaml(raw_report_from_params)
       render :text => "Report queued for import"
     rescue => e
       error_text = "ERROR! ReportsController#upload failed:"
@@ -53,17 +52,15 @@ class ReportsController < InheritedResources::Base
     )
   end
 
-  def handle_raw_post
-    report = params[:report]
-    params[:report] = {}
-    case report
-    when String
-      params[:report][:report] = report
-    when nil
-      params[:report][:report] = request.raw_post
-    when Hash
-      params[:report] = report
+  def raw_report_from_params
+    report = params.require(:report)
+    if report.kind_of?(ActionController::Parameters)
+      report.require(:report)
+    else
+      report
     end
+  rescue ActionController::ParameterMissing
+    request.raw_post
   end
 
 end

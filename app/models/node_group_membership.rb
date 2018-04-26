@@ -1,4 +1,4 @@
-class NodeGroupMembership < ActiveRecord::Base
+class NodeGroupMembership < ApplicationRecord
   validates_presence_of :node_id, :node_group_id
   validates_uniqueness_of :node_id, :scope => :node_group_id
 
