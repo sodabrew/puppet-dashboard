@@ -1,4 +1,4 @@
-class RemoveOutOfSyncColumn < ActiveRecord::Migration
+class RemoveOutOfSyncColumn < ActiveRecord::Migration[4.2]
   def self.up
     remove_column :resource_statuses, :out_of_sync
   end

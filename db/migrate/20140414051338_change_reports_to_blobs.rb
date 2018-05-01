@@ -1,4 +1,4 @@
-class ChangeReportsToBlobs < ActiveRecord::Migration
+class ChangeReportsToBlobs < ActiveRecord::Migration[4.2]
   def up
     if ActiveRecord::Base.connection.adapter_name.downcase =~ /postgres/
       # bytea columns are unlimited

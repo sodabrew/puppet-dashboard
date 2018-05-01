@@ -95,7 +95,7 @@ UNITS:
       orphaned_tables.each do |model, deletion_where_clause|
         puts "Preparing to delete from #{model.table_name}"
         start_time     = Time.now
-        deletion_count = model.count(:conditions => deletion_where_clause)
+        deletion_count = model.where(deletion_where_clause).count
 
         puts "#{start_time.to_s(:db)}: Deleting #{deletion_count} orphaned records from #{model.table_name}"
         pbar = ProgressBar.new('Deleting', deletion_count, STDOUT)

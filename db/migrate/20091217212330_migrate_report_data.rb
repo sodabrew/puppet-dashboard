@@ -1,4 +1,4 @@
-class MigrateReportData < ActiveRecord::Migration
+class MigrateReportData < ActiveRecord::Migration[4.2]
   def self.up
     STDOUT.puts "-- migrate Report data"
     pbar = ProgressBar.new("   ->", Report.count)

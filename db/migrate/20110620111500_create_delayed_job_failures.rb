@@ -1,4 +1,4 @@
-class CreateDelayedJobFailures < ActiveRecord::Migration
+class CreateDelayedJobFailures < ActiveRecord::Migration[4.2]
   def self.up
     create_table :delayed_job_failures do |t|
       t.string      :summary, :limit => 255

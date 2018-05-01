@@ -1,4 +1,4 @@
-class RemoveUrlFromNodes < ActiveRecord::Migration
+class RemoveUrlFromNodes < ActiveRecord::Migration[4.2]
   def self.up
     remove_column :nodes, :url
   end

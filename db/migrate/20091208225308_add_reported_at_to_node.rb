@@ -1,4 +1,4 @@
-class AddReportedAtToNode < ActiveRecord::Migration
+class AddReportedAtToNode < ActiveRecord::Migration[4.2]
   def self.up
     add_column :nodes, :reported_at, :timestamp
 

@@ -1,4 +1,4 @@
-class CreateNodeClassMemberships < ActiveRecord::Migration
+class CreateNodeClassMemberships < ActiveRecord::Migration[4.2]
   def self.up
     create_table :node_class_memberships do |t|
       t.integer :node_id

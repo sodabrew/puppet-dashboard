@@ -1,4 +1,4 @@
-class AddSuccessAndLastReportToNodes < ActiveRecord::Migration
+class AddSuccessAndLastReportToNodes < ActiveRecord::Migration[4.2]
   def self.up
     add_column :nodes, :success, :boolean, :default => false
     add_column :nodes, :last_report_id, :integer

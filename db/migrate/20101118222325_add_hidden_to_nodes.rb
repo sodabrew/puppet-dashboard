@@ -1,4 +1,4 @@
-class AddHiddenToNodes < ActiveRecord::Migration
+class AddHiddenToNodes < ActiveRecord::Migration[4.2]
   def self.up
     add_column :nodes, :hidden, :boolean, :default => false
   end

@@ -1,4 +1,4 @@
-class RemoveUnusedTablesAndModels < ActiveRecord::Migration
+class RemoveUnusedTablesAndModels < ActiveRecord::Migration[4.2]
   def self.up
     drop_table :assignments
     drop_table :services

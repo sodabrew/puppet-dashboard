@@ -1,4 +1,4 @@
-class AddAuditedToResourceEvents < ActiveRecord::Migration
+class AddAuditedToResourceEvents < ActiveRecord::Migration[4.2]
   def self.up
     add_column :resource_events, :audited, :boolean
   end

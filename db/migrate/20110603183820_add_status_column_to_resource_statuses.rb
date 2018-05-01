@@ -1,4 +1,4 @@
-class AddStatusColumnToResourceStatuses < ActiveRecord::Migration
+class AddStatusColumnToResourceStatuses < ActiveRecord::Migration[4.2]
   def self.up
     add_column :resource_statuses, :status, :string
 

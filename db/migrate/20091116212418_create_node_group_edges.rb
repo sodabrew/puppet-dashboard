@@ -1,4 +1,4 @@
-class CreateNodeGroupEdges < ActiveRecord::Migration
+class CreateNodeGroupEdges < ActiveRecord::Migration[4.2]
   def self.up
     create_table :node_group_edges do |t|
       t.integer :to_id
