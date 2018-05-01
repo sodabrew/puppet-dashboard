@@ -95,25 +95,28 @@ UNITS:
       orphaned_tables.each do |model, deletion_where_clause|
         puts "Preparing to delete from #{model.table_name}"
         start_time     = Time.now
-        deletion_count = model.where(deletion_where_clause).count
+        deletion_count = model.where(deletion_where_clause).to_a.size
+        if deletion_count > 0
+          puts "#{start_time.to_s(:db)}: Deleting #{deletion_count} orphaned records from #{model.table_name}"
+          pbar = ProgressBar.new('Deleting', deletion_count, STDOUT)
 
-        puts "#{start_time.to_s(:db)}: Deleting #{deletion_count} orphaned records from #{model.table_name}"
-        pbar = ProgressBar.new('Deleting', deletion_count, STDOUT)
+          # Deleting a very large group of records in MySQL can be very slow with no feedback
+          # Breaking the deletion up into blocks turns out to be overall faster
+          # and allows for progress feedback
+          DELETION_BATCH_SIZE = 1000
+          while deletion_count > DELETION_BATCH_SIZE
+            ActiveRecord::Base.connection.execute(
+              "delete from #{model.table_name} where #{deletion_where_clause} limit #{DELETION_BATCH_SIZE}"
+            )
+            pbar.inc(DELETION_BATCH_SIZE)
+            deletion_count -= DELETION_BATCH_SIZE
+          end
 
-        # Deleting a very large group of records in MySQL can be very slow with no feedback
-        # Breaking the deletion up into blocks turns out to be overall faster
-        # and allows for progress feedback
-        DELETION_BATCH_SIZE = 1000
-        while deletion_count > DELETION_BATCH_SIZE
-          ActiveRecord::Base.connection.execute(
-            "delete from #{model.table_name} where #{deletion_where_clause} limit #{DELETION_BATCH_SIZE}"
-          )
-          pbar.inc(DELETION_BATCH_SIZE)
-          deletion_count -= DELETION_BATCH_SIZE
+          pbar.finish
+          puts
+        else
+          puts 'No records to delete'
         end
-
-        pbar.finish
-        puts
       end
     end
   end
