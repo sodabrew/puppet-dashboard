@@ -60,7 +60,7 @@ describe ReportsController, :type => :controller do
       end
 
       it "should be 200, because we queued the job" do
-        response.should be_success
+        response.should be_successful
       end
     end
 
@@ -70,7 +70,7 @@ describe ReportsController, :type => :controller do
       end
 
       it "should be 200, because we queued the job" do
-        response.should be_success
+        response.should be_successful
       end
     end
   end
@@ -85,7 +85,7 @@ describe ReportsController, :type => :controller do
     it "should succeed when disable_legacy_report_upload_url is false" do
       SETTINGS.stubs(:disable_legacy_report_upload_url).returns(false)
       response = post_with_body :create, @yaml, as: :yaml
-      response.should be_success
+      response.should be_successful
     end
   end
 

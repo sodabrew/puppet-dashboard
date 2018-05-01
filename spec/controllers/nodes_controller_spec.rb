@@ -12,12 +12,12 @@ describe NodesController, :type => :controller do
 
     context "as HTML" do
       before { get :index }
-      specify { response.should be_success }
+      specify { response.should be_successful }
     end
 
     context "as JSON" do
       before { get :index, params: { format: 'json' } }
-      specify { response.should be_success }
+      specify { response.should be_successful }
       it "should return JSON" do
         struct = json_from_response_body
         struct.size.should == 1
@@ -34,7 +34,7 @@ describe NodesController, :type => :controller do
         it "should return YAML when the nodes are valid" do
           get :index, params: { format: 'yaml' }
 
-          response.should be_success
+          response.should be_successful
           struct = yaml_from_response_body
           struct.size.should == 1
           struct.first["name"].should == @node.name
@@ -52,7 +52,7 @@ describe NodesController, :type => :controller do
           get :index, params: { format: 'yaml' }
 
           response.body.should =~ /Node classification has been disabled/
-          response.should_not be_success
+          response.should_not be_successful
           response.should be_forbidden
         end
       end
@@ -69,7 +69,7 @@ describe NodesController, :type => :controller do
       it "should make correct CSV" do
         get :index, params: { format: 'csv' }
 
-        response.should be_success
+        response.should be_successful
         response.body.split("\n").should =~ [
           header,
           "#{@node.name},changed,1,0,0,1,#{@resource.resource_type},#{@resource.title},#{@resource.evaluation_time},#{@resource.file},#{@resource.line},#{@resource.time},#{@resource.change_count},#{@resource.out_of_sync_count},#{@resource.skipped},#{@resource.failed}"
@@ -82,7 +82,7 @@ describe NodesController, :type => :controller do
 
         get :index, params: { format: 'csv' }
 
-        response.should be_success
+        response.should be_successful
         response.body.split("\n").should =~ [
           header,
           "#{@node.name},changed,1,0,0,1,#{@resource.resource_type},#{@resource.title},#{@resource.evaluation_time},#{@resource.file},#{@resource.line},#{@resource.time},#{@resource.change_count},#{@resource.out_of_sync_count},#{@resource.skipped},#{@resource.failed}",
@@ -95,7 +95,7 @@ describe NodesController, :type => :controller do
           node = create(:node, :name => name, :reported_at => @node.reported_at - 1)  # cannot be nil since PGS and MySQL sort nils differently
           get :index, params: { format: 'csv' }
 
-          response.should be_success
+          response.should be_successful
 
           CSV.parse(response.body).last.first.should == name
         end
@@ -124,7 +124,7 @@ describe NodesController, :type => :controller do
 
         get :index, params: { format: 'csv' }
 
-        response.should be_success
+        response.should be_successful
         response.body.split("\n").should =~ [
           header,
           %Q[#{@node.name},failed,2,0,1,1,File,/etc/sudoers,1.0,/etc/puppet/manifests/site.pp,1,#{res1.time},1,1,false,false],
@@ -138,7 +138,7 @@ describe NodesController, :type => :controller do
     it "should successfully render the new page" do
       get :new
 
-      response.should be_success
+      response.should be_successful
       assigns[:class_data].should include({:class=>"#node_class_ids", :data_source=>"/node_classes.json", :objects=>[]})
       assigns[:group_data].should include({:class=>"#node_group_ids", :data_source=>"/node_groups.json", :objects=>[]})
     end
@@ -153,7 +153,7 @@ describe NodesController, :type => :controller do
     it "should render error when creation fails" do
       post :create, params: { node: {} }
       response.should render_template('shared/_error')
-      response.should be_success
+      response.should be_successful
 
       assigns[:node].errors.full_messages.should == ["Name can't be blank"]
       assigns[:class_data].should include({:class=>"#node_class_ids", :data_source=>"/node_classes.json", :objects=>[]})
@@ -171,7 +171,7 @@ describe NodesController, :type => :controller do
       it "should return HTML for an existing node" do
         get :show, params: { id: @node.name }
 
-        response.should be_success
+        response.should be_successful
         assigns[:node].name.should == @node.name
       end
 
@@ -187,7 +187,7 @@ describe NodesController, :type => :controller do
       it "should return JSON for an existing node" do
         get :show, params: { id: @node.name, format: 'json' }
 
-        response.should be_success
+        response.should be_successful
 
         struct = json_from_response_body
         struct["name"].should == @node.name
@@ -210,7 +210,7 @@ describe NodesController, :type => :controller do
         it "should return YAML when the node is valid" do
           get :show, params: { id: @node.name, format: 'yaml' }
 
-          response.should be_success
+          response.should be_successful
           struct = yaml_from_response_body
           struct["name"].should == @node.name
         end
@@ -219,14 +219,14 @@ describe NodesController, :type => :controller do
           Node.any_instance.stubs(:compiled_parameters).raises ParameterConflictError
           get :show, params: { id: @node.name, format: 'yaml' }
 
-          response.should_not be_success
+          response.should_not be_successful
           response.body.should =~ /has conflicting variable\(s\)/
         end
 
         it "should return YAML for an empty node when the node is not found" do
           get :show, params: { id: 'nonexistent', format: 'yaml' }
 
-          response.should be_success
+          response.should be_successful
           struct = yaml_from_response_body
           struct.should include({'classes' => []})
         end
@@ -238,7 +238,7 @@ describe NodesController, :type => :controller do
           get :show, params: { id: @node.name, format: 'yaml' }
 
           response.body.should =~ /Node classification has been disabled/
-          response.should_not be_success
+          response.should_not be_successful
           response.should be_forbidden
         end
       end
@@ -259,7 +259,7 @@ describe NodesController, :type => :controller do
       assigns[:node].should == @node
 
       response.should render_template('edit')
-      response.should be_success
+      response.should be_successful
 
       assigns[:class_data].should include({:class=>"#node_class_ids", :data_source=>"/node_classes.json", :objects=>[]})
       assigns[:group_data].should include({:class=>"#node_group_ids", :data_source=>"/node_groups.json", :objects=>[]})
@@ -269,7 +269,7 @@ describe NodesController, :type => :controller do
       get :edit, params: { id: @node.name }
 
       response.should render_template('edit')
-      response.should be_success
+      response.should be_successful
 
       assigns[:node].should == @node
     end
@@ -630,7 +630,7 @@ describe NodesController, :type => :controller do
     context "for HTML" do
       before { get :reports, params: { id: @node.name } }
 
-      specify { response.should be_success }
+      specify { response.should be_successful }
 
       it "should be paginated" do
         assigns[:reports].should respond_to(:paginate)
@@ -644,7 +644,7 @@ describe NodesController, :type => :controller do
       context "as HTML" do
         before { get action, params: action_params }
 
-        specify { response.should be_success }
+        specify { response.should be_successful }
 
         it "should assign only appropriate records" do
           assigns[:nodes].size.should == 1
@@ -664,7 +664,7 @@ describe NodesController, :type => :controller do
             get action, params: action_params.merge(format: 'yaml')
           end
 
-          specify { response.should be_success }
+          specify { response.should be_successful }
 
           it "should assign only appropriate records" do
             assigns[:nodes].size.should == 1

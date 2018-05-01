@@ -19,7 +19,7 @@ describe NodeGroupsController, :type => :controller do
     it "should render error when creation fails" do
       post :create, params: { node_group: {} }
       response.should render_template('shared/_error')
-      response.should be_success
+      response.should be_successful
 
       assigns[:node_group].errors.full_messages.should == ["Name can't be blank"]
       assigns[:class_data].should include({:class=>"#node_class_ids", :data_source=>"/node_classes.json", :objects=>[]})
@@ -32,7 +32,7 @@ describe NodeGroupsController, :type => :controller do
       get :new
 
       response.should render_template('node_groups/new')
-      response.should be_success
+      response.should be_successful
       assigns[:class_data].should include({:class=>"#node_class_ids", :data_source=>"/node_classes.json", :objects=>[]})
       assigns[:group_data].should include({:class=>"#node_group_ids", :data_source=>"/node_groups.json", :objects=>[]})
     end
@@ -48,7 +48,7 @@ describe NodeGroupsController, :type => :controller do
       assigns[:node_group].should == @node_group
 
       response.should render_template('edit')
-      response.should be_success
+      response.should be_successful
 
       assigns[:class_data].should include({:class=>"#node_class_ids", :data_source=>"/node_classes.json", :objects=>[]})
       assigns[:group_data].should include({:class=>"#node_group_ids", :data_source=>"/node_groups.json", :objects=>[]})

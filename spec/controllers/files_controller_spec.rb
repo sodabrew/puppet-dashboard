@@ -19,7 +19,7 @@ describe FilesController, :type => :controller do
 
       get :diff, params: @options
 
-      response.should be_success
+      response.should be_successful
       response.body.should == "This is the diff"
     end
 
@@ -29,7 +29,7 @@ describe FilesController, :type => :controller do
 
       get :diff, params: @options
 
-      response.should_not be_success
+      response.should_not be_successful
       response.should be_forbidden
       response.body.should == 'File bucket diffs have been disabled'
     end
@@ -40,7 +40,7 @@ describe FilesController, :type => :controller do
 
         get :diff, params: @options
 
-        response.should_not be_success
+        response.should_not be_successful
         response.should be_bad_request
         response.body.should == 'Invalid md5: "Turkmenistan"'
       end
@@ -60,7 +60,7 @@ describe FilesController, :type => :controller do
 
       get :show, params: @options
 
-      response.should be_success
+      response.should be_successful
       response.body.should == "This is the contents"
     end
 
@@ -70,7 +70,7 @@ describe FilesController, :type => :controller do
 
       get :show, params: @options
 
-      response.should_not be_success
+      response.should_not be_successful
       response.should be_forbidden
       response.body.should == 'File bucket diffs have been disabled'
     end
@@ -80,7 +80,7 @@ describe FilesController, :type => :controller do
 
       get :show, params: @options
 
-      response.should_not be_success
+      response.should_not be_successful
       response.should be_bad_request
       response.body.should == 'Invalid md5: "Turkmenistan"'
     end
@@ -96,7 +96,7 @@ describe FilesController, :type => :controller do
 
       get :show, params: @options
 
-      response.should_not be_success
+      response.should_not be_successful
       response.should be_forbidden
       response.body.should have_tag(
         "p",
@@ -116,7 +116,7 @@ describe FilesController, :type => :controller do
 
       get :show, params: @options
 
-      response.should_not be_success
+      response.should_not be_successful
       response.should be_not_found
       response.body.should have_tag(
         "p",
@@ -131,7 +131,7 @@ describe FilesController, :type => :controller do
 
       get :show, params: @options
 
-      response.should_not be_success
+      response.should_not be_successful
       response.should be_internal_server_error
       response.body.should have_tag(
         "p",
@@ -146,7 +146,7 @@ describe FilesController, :type => :controller do
 
       get :show, params: @options
 
-      response.should_not be_success
+      response.should_not be_successful
       response.should be_internal_server_error
       response.body.should == 'oops'
     end

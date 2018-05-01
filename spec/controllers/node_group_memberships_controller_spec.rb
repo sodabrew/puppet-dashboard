@@ -13,7 +13,7 @@ describe NodeGroupMembershipsController, :type => :controller do
 
       NodeGroupMembership.count.should == 1
 
-      response.should be_success
+      response.should be_successful
       membership = NodeGroupMembership.first
       membership.node_id.should == node.id
       membership.node_group_id.should == group.id
@@ -26,7 +26,7 @@ describe NodeGroupMembershipsController, :type => :controller do
 
       post :create, params: { node_group_membership: { node_id: node.id, node_group_id: group.id }, format: 'json' }
 
-      response.should_not be_success
+      response.should_not be_successful
       NodeGroupMembership.count.should == 1
       NodeGroupMembership.first.should == membership
     end
@@ -37,7 +37,7 @@ describe NodeGroupMembershipsController, :type => :controller do
 
       post :create, params: { node_name: node.name, group_name: group.name, format: 'json' }
 
-      response.should be_success
+      response.should be_successful
       NodeGroupMembership.count.should == 1
       membership = NodeGroupMembership.first
       membership.node_id.should == node.id
@@ -49,7 +49,7 @@ describe NodeGroupMembershipsController, :type => :controller do
 
       post :create, params: { node_name: 'missing', group_name: group.name, format: 'json' }
 
-      response.should_not be_success
+      response.should_not be_successful
       NodeGroupMembership.count.should == 0
     end
   end
