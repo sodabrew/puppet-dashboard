@@ -19,6 +19,7 @@ class ReportsController < InheritedResources::Base
           @tab = 'all'
         end
       end
+      format.json { render :json => Report.all }
     end
   end
 
