@@ -2,13 +2,14 @@ source 'https://rubygems.org'
 
 gem 'rake'
 gem 'rdoc'
-gem 'rails', '~> 5.1.0'
+gem 'rails', '~> 5.2.0'
 gem 'will_paginate'
 gem 'inherited_resources'
 gem 'i18n'
 
 gem 'thin'
 gem 'rack'
+gem 'bootsnap'
 
 gem 'daemons'
 gem 'json_pure'
