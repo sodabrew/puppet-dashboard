@@ -1,6 +1,6 @@
 class Report < ActiveRecord::Base
   def self.per_page; SETTINGS.reports_per_page end # Pagination
-  belongs_to :node
+  belongs_to :node, optional: true
 
   # See the after_destroy delete_resources method for more delete_all action
   has_many :logs,   :class_name => 'ReportLog',     :dependent => :delete_all

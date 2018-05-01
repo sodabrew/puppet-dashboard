@@ -1,5 +1,5 @@
 class ResourceStatus < ApplicationRecord
-  belongs_to :report, -> { includes(:node) }
+  belongs_to :report, -> { includes(:node) }, optional: true
   has_many :events, :class_name => 'ResourceEvent', :dependent => :delete_all
 
   accepts_nested_attributes_for :events

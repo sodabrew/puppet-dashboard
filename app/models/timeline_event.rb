@@ -1,7 +1,7 @@
 class TimelineEvent < ApplicationRecord
-  belongs_to :actor,              :polymorphic => true
-  belongs_to :subject,            :polymorphic => true
-  belongs_to :secondary_subject,  :polymorphic => true
+  belongs_to :actor,             polymorphic: true, optional: true
+  belongs_to :subject,           polymorphic: true, optional: true
+  belongs_to :secondary_subject, polymorphic: true, optional: true
 
   scope :for_node, ->(node) do
     where(<<-SQL, {:id => node.id, :klass => node.class.name})

@@ -2,7 +2,7 @@ class Parameter < ApplicationRecord
   include Trimmer
   trimmed_fields :key
 
-  belongs_to :parameterable, :polymorphic => true
+  belongs_to :parameterable, polymorphic: true, optional: true
   validates_presence_of :key
 
   serialize :value

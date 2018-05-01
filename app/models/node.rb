@@ -18,8 +18,8 @@ class Node < ApplicationRecord
   has_many :reports, :dependent => :destroy
   has_many :resource_statuses, :through => :reports
 
-  belongs_to :last_apply_report, :class_name => 'Report'
-  belongs_to :last_inspect_report, :class_name => 'Report'
+  belongs_to :last_apply_report, class_name: 'Report', optional: true
+  belongs_to :last_inspect_report, class_name: 'Report', optional: true
 
   has_parameters
 
