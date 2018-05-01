@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 gem 'rake'
 gem 'rdoc'
-gem 'rails', '~> 5.0.0'
+gem 'rails', '~> 5.1.0'
 gem 'will_paginate'
 gem 'inherited_resources'
 gem 'i18n'
@@ -46,5 +46,5 @@ group :postgresql do
 end
 
 group :mysql do
-  gem 'mysql2', '~> 0.3.10'
+  gem 'mysql2'
 end
