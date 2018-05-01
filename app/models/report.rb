@@ -230,8 +230,8 @@ class Report < ActiveRecord::Base
   # It is too expensive to use has_many ... :dependent => :destroy
   # and unfortunately :dependent => :delete_all doesn't work :through.
   def delete_resources
-    ResourceEvent.delete_all(:resource_status_id => resource_statuses.map(&:id))
-    ResourceStatus.delete_all(:report_id => id)
+    ResourceEvent.where(resource_status_id: resource_statuses.map(&:id)).delete_all
+    ResourceStatus.where(report_id: id).delete_all
   end
 
   def replace_last_report

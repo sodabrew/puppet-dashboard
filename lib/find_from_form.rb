@@ -12,7 +12,7 @@ module FindFromForm
       model = model.to_s
       attr_accessor "assigned_#{model}_names"
       attr_accessor "assigned_#{model}_ids"
-      before_validation "assign_#{model.pluralize}"
+      before_validation "assign_#{model.pluralize}".to_sym
 
       define_method("assign_#{model.pluralize}") do
         names = instance_variable_get("@assigned_#{model}_names")
@@ -20,7 +20,7 @@ module FindFromForm
         begin
           return true unless ids || names
           if !SETTINGS.use_external_node_classification and model == 'node_class'
-            raise NodeClassificationDisabledError.new 
+            raise NodeClassificationDisabledError.new
           end
           my_models = []
           my_models << model.camelize.constantize.find_from_form_names(*names) if names

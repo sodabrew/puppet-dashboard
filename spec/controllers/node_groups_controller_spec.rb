@@ -12,12 +12,12 @@ describe NodeGroupsController, :type => :controller do
 
   describe "#create" do
     it "should create a node group on successful creation" do
-      post :create, 'node_group' => { 'name' => 'foo' }
+      post :create, params: { node_group: { name: 'foo' } }
       assigns[:node_group].name.should == 'foo'
     end
 
     it "should render error when creation fails" do
-      post :create, 'node_group' => {}
+      post :create, params: { node_group: {} }
       response.should render_template('shared/_error')
       response.should be_success
 
@@ -44,7 +44,7 @@ describe NodeGroupsController, :type => :controller do
     end
 
     it "should render the edit template" do
-      get :edit, :id => @node_group
+      get :edit, params: { id: @node_group }
       assigns[:node_group].should == @node_group
 
       response.should render_template('edit')

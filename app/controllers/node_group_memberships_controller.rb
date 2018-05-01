@@ -1,7 +1,7 @@
 class NodeGroupMembershipsController < InheritedResources::Base
   respond_to :json
-  before_filter :raise_if_enable_read_only_mode, :only => [:new, :edit, :create, :update, :destroy]
-  before_filter :standardize_post_data, :only => [:create]
+  before_action :raise_if_enable_read_only_mode, :only => [:new, :edit, :create, :update, :destroy]
+  before_action :standardize_post_data, :only => [:create]
 
   def create
     create!(node_group_membership_params) do |success, failure|

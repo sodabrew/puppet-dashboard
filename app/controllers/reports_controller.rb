@@ -3,7 +3,7 @@ class ReportsController < InheritedResources::Base
   belongs_to :node, :optional => true
   protect_from_forgery :except => [:create, :upload]
 
-  before_filter :raise_if_enable_read_only_mode, :only => [:new, :edit, :update, :destroy]
+  before_action :raise_if_enable_read_only_mode, :only => [:new, :edit, :update, :destroy]
 
   def index
     index! do |format|
@@ -24,7 +24,7 @@ class ReportsController < InheritedResources::Base
 
   def create
     if SETTINGS.disable_legacy_report_upload_url
-      render :text => "Access Denied, this url has been disabled, try /reports/upload", :status => 403
+      render html: 'Access Denied, this url has been disabled, try /reports/upload', status: 403
     else
       upload
     end
@@ -33,12 +33,12 @@ class ReportsController < InheritedResources::Base
   def upload
     begin
       Report.delay.create_from_yaml(raw_report_from_params)
-      render :text => "Report queued for import"
+      render html: 'Report queued for import'
     rescue => e
-      error_text = "ERROR! ReportsController#upload failed:"
+      error_text = 'ERROR! ReportsController#upload failed:'
       Rails.logger.debug error_text
       Rails.logger.debug e.message
-      render :text => "#{error_text} #{e.message}", :status => 406
+      render html: "#{error_text} #{e.message}", status: 406
     end
   end
 

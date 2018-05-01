@@ -17,7 +17,7 @@ describe FilesController, :type => :controller do
         with("https://filebucket:1337/production/file_bucket_file/md5/24d27c169c2c881eb09a065116f2aa5c?diff_with=40bb25658a72f731a6f71ef9476cd5af", 's').
         returns("This is the diff")
 
-      get :diff, @options
+      get :diff, params: @options
 
       response.should be_success
       response.body.should == "This is the diff"
@@ -27,7 +27,7 @@ describe FilesController, :type => :controller do
       SETTINGS.stubs(:use_file_bucket_diffs).returns(false)
       PuppetHttps.expects(:get).never
 
-      get :diff, @options
+      get :diff, params: @options
 
       response.should_not be_success
       response.should be_forbidden
@@ -38,7 +38,7 @@ describe FilesController, :type => :controller do
       it "Rejects an invalid md5 for #{which_parameter}" do
         @options[which_parameter] = 'Turkmenistan'
 
-        get :diff, @options
+        get :diff, params: @options
 
         response.should_not be_success
         response.should be_bad_request
@@ -58,7 +58,7 @@ describe FilesController, :type => :controller do
         with("https://filebucket:1337/production/file_bucket_file/md5/24d27c169c2c881eb09a065116f2aa5c", 's').
         returns("This is the contents")
 
-      get :show, @options
+      get :show, params: @options
 
       response.should be_success
       response.body.should == "This is the contents"
@@ -68,7 +68,7 @@ describe FilesController, :type => :controller do
       SETTINGS.stubs(:use_file_bucket_diffs).returns(false)
       PuppetHttps.expects(:get).never
 
-      get :show, @options
+      get :show, params: @options
 
       response.should_not be_success
       response.should be_forbidden
@@ -78,7 +78,7 @@ describe FilesController, :type => :controller do
     it "Rejects an invalid md5 for :file" do
       @options[:file] = 'Turkmenistan'
 
-      get :show, @options
+      get :show, params: @options
 
       response.should_not be_success
       response.should be_bad_request
@@ -94,7 +94,7 @@ describe FilesController, :type => :controller do
           )
         )
 
-      get :show, @options
+      get :show, params: @options
 
       response.should_not be_success
       response.should be_forbidden
@@ -114,7 +114,7 @@ describe FilesController, :type => :controller do
           )
         )
 
-      get :show, @options
+      get :show, params: @options
 
       response.should_not be_success
       response.should be_not_found
@@ -129,7 +129,7 @@ describe FilesController, :type => :controller do
         with(@url, 's').
         raises(Errno::ECONNREFUSED, "your server isn't running, so you don't need to catch it, yo.")
 
-      get :show, @options
+      get :show, params: @options
 
       response.should_not be_success
       response.should be_internal_server_error
@@ -144,7 +144,7 @@ describe FilesController, :type => :controller do
         with(@url, 's').
         raises(ArgumentError, 'oops')
 
-      get :show, @options
+      get :show, params: @options
 
       response.should_not be_success
       response.should be_internal_server_error

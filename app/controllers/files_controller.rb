@@ -1,5 +1,5 @@
 class FilesController < ApplicationController
-  before_filter :deny_unless_file_bucket_enabled
+  before_action :deny_unless_file_bucket_enabled
 
   def diff
     file1 = params[:file1]
@@ -7,7 +7,7 @@ class FilesController < ApplicationController
 
     [file1, file2].each do |md5|
       unless is_md5?(md5)
-        render :text => "Invalid md5: #{md5.inspect}", :content_type => 'text/plain', :status => 400
+        render plain: "Invalid md5: #{md5.inspect}", status: 400
         return
       end
     end
@@ -19,7 +19,7 @@ class FilesController < ApplicationController
   def show
     file = params[:file]
     unless is_md5?(file)
-      render :text => "Invalid md5: #{file.inspect}", :content_type => 'text/plain', :status => 400
+      render plain: "Invalid md5: #{file.inspect}", status: 400
       return
     end
 
@@ -30,13 +30,13 @@ class FilesController < ApplicationController
   private
   def deny_unless_file_bucket_enabled
     unless SETTINGS.use_file_bucket_diffs
-      render :text => "File bucket diffs have been disabled", :content_type => 'text/plain', :status => 403
+      render plain: 'File bucket diffs have been disabled', status: 403
       return
     end
   end
 
   def safe_get(url)
-    render :text => PuppetHttps.get(url, 's'), :content_type => 'text/plain'
+    render plain: PuppetHttps.get(url, 's')
   rescue Net::HTTPServerException => e
     if e.response.code == "403"
       text = "<p>Connection not authorized: #{e}</p>
@@ -47,17 +47,13 @@ class FilesController < ApplicationController
         <p>Your agents may not be submitting files to a central filebucket.
         <a target=\"_blank\" href=\"http://links.puppetlabs.com/enabling_the_filebucket_viewer\">View documentation</a></p>"
     end
-    render :text => text,
-      :content_type => 'text/html',
-      :status => e.response.code
+    render html: ActionController::Base.helpers.sanitize(text), status: e.response.code
   rescue Errno::ECONNREFUSED => e
-    render :text =>
-      "<p>Could not connect to your filebucket server at #{SETTINGS.file_bucket_server}:#{SETTINGS.file_bucket_port}</p>
-       <p>#{e}</p>",
-      :content_type => 'text/html',
-      :status => 500
+    text = "<p>Could not connect to your filebucket server at #{SETTINGS.file_bucket_server}:#{SETTINGS.file_bucket_port}</p>
+       <p>#{e}</p>"
+    render html: ActionController::Base.helpers.sanitize(text), status: 500
   rescue => e
-    render :text => "#{e}", :content_type => 'text/plain', :status => 500
+    render plain: "#{e}", status: 500
   end
 
   def file_params

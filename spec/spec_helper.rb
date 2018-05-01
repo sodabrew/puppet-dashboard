@@ -12,6 +12,8 @@ require 'rspec/collection_matchers'
 # in ./support/ and its subdirectories.
 Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each {|f| require f}
 
+# Uncomment to trace deprecation warnings
+#ActiveSupport::Deprecation.debug = true
 
 RSpec.configure do |config|
   config.use_transactional_fixtures = true

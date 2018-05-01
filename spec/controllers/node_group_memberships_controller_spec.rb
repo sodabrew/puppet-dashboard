@@ -9,7 +9,7 @@ describe NodeGroupMembershipsController, :type => :controller do
       node = create(:node)
       group = create(:node_group)
 
-      post :create, :node_group_membership => {:node_id => node.id, :node_group_id => group.id}, :format => 'json'
+      post :create, params: { node_group_membership: { node_id: node.id, node_group_id: group.id }, format: 'json' }
 
       NodeGroupMembership.count.should == 1
 
@@ -24,7 +24,7 @@ describe NodeGroupMembershipsController, :type => :controller do
       group = create(:node_group)
       membership = NodeGroupMembership.create!(:node => node, :node_group => group)
 
-      post :create, :node_group_membership => {:node_id => node.id, :node_group_id => group.id}, :format => 'json'
+      post :create, params: { node_group_membership: { node_id: node.id, node_group_id: group.id }, format: 'json' }
 
       response.should_not be_success
       NodeGroupMembership.count.should == 1
@@ -35,7 +35,7 @@ describe NodeGroupMembershipsController, :type => :controller do
       node = create(:node)
       group = create(:node_group)
 
-      post :create, :node_name => node.name, :group_name => group.name, :format => 'json'
+      post :create, params: { node_name: node.name, group_name: group.name, format: 'json' }
 
       response.should be_success
       NodeGroupMembership.count.should == 1
@@ -47,7 +47,7 @@ describe NodeGroupMembershipsController, :type => :controller do
     it "should fail if given a non-existent node name" do
       group = create(:node_group)
 
-      post :create, :node_name => "missing", :group_name => group.name, :format => 'json'
+      post :create, params: { node_name: 'missing', group_name: group.name, format: 'json' }
 
       response.should_not be_success
       NodeGroupMembership.count.should == 0

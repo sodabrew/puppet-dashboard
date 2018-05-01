@@ -2,7 +2,7 @@ class NodesController < InheritedResources::Base
   respond_to :html, :yaml, :json
   belongs_to :node_class, :optional => true
   belongs_to :node_group, :optional => true
-  before_filter :raise_if_enable_read_only_mode, :only => [:new, :edit, :create, :update, :destroy]
+  before_action :raise_if_enable_read_only_mode, :only => [:new, :edit, :create, :update, :destroy]
 
   layout lambda {|c| c.request.xhr? ? false : 'application' }
 
@@ -62,7 +62,7 @@ class NodesController < InheritedResources::Base
     @comparators = [['is', 'eq'], ['is not', 'ne'], ['>', 'gt'], ['>=', 'ge'], ['<', 'lt'], ['<=', 'le']]
     index! do |format|
       format.html {
-        @search_params = params['search_params'] || []
+        @search_params = search_params || []
         @search_params.each {|param| param['fact'] = param['fact'] || param['key'] }
         @search_params.delete_if {|param| param.values.any?(&:blank?)}
         nodes = @search_params.empty? ? [] : Node.find_from_inventory_search(@search_params)
@@ -78,15 +78,18 @@ class NodesController < InheritedResources::Base
       show!
     rescue ActiveRecord::RecordNotFound => e
       raise e unless request.format == :yaml
-      render :yaml => {'classes' => []}
+      render :yaml => { 'classes' => [] }
     rescue ParameterConflictError => e
       raise e unless request.format == :yaml
-      render :text => "Node \"#{resource.name}\" has conflicting variable(s): #{resource.errors[:parameters].to_a.to_sentence}", :content_type => 'text/plain', :status => 500
+      text = "Node \"#{resource.name}\" has conflicting variable(s): #{resource.errors[:parameters].to_a.to_sentence}"
+      render plain: text, status: 500
     rescue ClassParameterConflictError => e
       raise e unless request.format == :yaml
-      render :text => "Node \"#{resource.name}\" has conflicting class parameter(s): #{resource.errors[:classParameters].to_a.to_sentence}", :content_type => 'text/plain', :status => 500
+      text = "Node \"#{resource.name}\" has conflicting class parameter(s): #{resource.errors[:classParameters].to_a.to_sentence}"
+      render plain: text, status: 500
     rescue NodeClassificationDisabledError => e
-      render :text => "Node classification has been disabled", :content_type => 'text/plain', :status => 403
+      text = 'Node classification has been disabled'
+      render plain: text, status: 403
     end
   end
 
@@ -153,7 +156,7 @@ class NodesController < InheritedResources::Base
         begin
           render :partial => 'nodes/facts', :locals => {:node => resource, :facts => resource.facts}
         rescue => e
-          render :text => "Could not retrieve facts from inventory service: #{e.message}"
+          render html: "Could not retrieve facts from inventory service: #{e.message}"
         end
       }
     end
@@ -216,6 +219,10 @@ class NodesController < InheritedResources::Base
     )
   rescue ActionController::ParameterMissing
     {}
+  end
+
+  def search_params
+    params.permit(search_params: [[:comparator, :fact, :value]]).to_h[:search_params]
   end
 
 end

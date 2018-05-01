@@ -1,6 +1,6 @@
 class NodeGroupsController < InheritedResources::Base
   respond_to :html, :json, :yaml
-  before_filter :raise_if_enable_read_only_mode, :only => [:new, :edit, :create, :update, :destroy]
+  before_action :raise_if_enable_read_only_mode, :only => [:new, :edit, :create, :update, :destroy]
 
   include SearchableIndex
   include ConflictAnalyzer

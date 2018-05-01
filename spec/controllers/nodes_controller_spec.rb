@@ -16,7 +16,7 @@ describe NodesController, :type => :controller do
     end
 
     context "as JSON" do
-      before { get :index, :format => "json" }
+      before { get :index, params: { format: 'json' } }
       specify { response.should be_success }
       it "should return JSON" do
         struct = json_from_response_body
@@ -32,7 +32,7 @@ describe NodesController, :type => :controller do
         end
 
         it "should return YAML when the nodes are valid" do
-          get :index, :format => "yaml"
+          get :index, params: { format: 'yaml' }
 
           response.should be_success
           struct = yaml_from_response_body
@@ -42,14 +42,14 @@ describe NodesController, :type => :controller do
 
         it "should propagate errors encountered when a node is invalid" do
           Node.any_instance.stubs(:compiled_parameters).raises ParameterConflictError
-          expect { get :index, :format => "yaml" }.to raise_error(ParameterConflictError)
+          expect { get :index, params: { format: 'yaml' }}.to raise_error(ParameterConflictError)
         end
       end
 
       context "when not using node classification" do
         it "should raise an error and respond 403" do
           SETTINGS.stubs(:use_external_node_classification).returns(false)
-          get :index, :format => "yaml"
+          get :index, params: { format: 'yaml' }
 
           response.body.should =~ /Node classification has been disabled/
           response.should_not be_success
@@ -67,7 +67,7 @@ describe NodesController, :type => :controller do
       end
 
       it "should make correct CSV" do
-        get :index, :format => "csv"
+        get :index, params: { format: 'csv' }
 
         response.should be_success
         response.body.split("\n").should =~ [
@@ -80,7 +80,7 @@ describe NodesController, :type => :controller do
       it "should handle unreported nodes" do
         unreported_node = create(:node)
 
-        get :index, :format => "csv"
+        get :index, params: { format: 'csv' }
 
         response.should be_success
         response.body.split("\n").should =~ [
@@ -93,7 +93,7 @@ describe NodesController, :type => :controller do
       %w[foo,_-' bar/\\$^ <ba"z>>].each do |name|
         it "should handle a node named #{name}" do
           node = create(:node, :name => name, :reported_at => @node.reported_at - 1)  # cannot be nil since PGS and MySQL sort nils differently
-          get :index, :format => "csv"
+          get :index, params: { format: 'csv' }
 
           response.should be_success
 
@@ -122,7 +122,7 @@ describe NodesController, :type => :controller do
         res1.reload
         res2.reload
 
-        get :index, :format => "csv"
+        get :index, params: { format: 'csv' }
 
         response.should be_success
         response.body.split("\n").should =~ [
@@ -146,12 +146,12 @@ describe NodesController, :type => :controller do
 
   describe "#create" do
     it "should create a node on successful creation" do
-      post :create, 'node' => { 'name' => 'foo' }
+      post :create, params: { node: { name: 'foo' } }
       assigns[:node].name.should == 'foo'
     end
 
     it "should render error when creation fails" do
-      post :create, 'node' => { }
+      post :create, params: { node: {} }
       response.should render_template('shared/_error')
       response.should be_success
 
@@ -169,7 +169,7 @@ describe NodesController, :type => :controller do
 
     context "as HTML" do
       it "should return HTML for an existing node" do
-        get :show, :id => @node.name
+        get :show, params: { id: @node.name }
 
         response.should be_success
         assigns[:node].name.should == @node.name
@@ -179,13 +179,13 @@ describe NodesController, :type => :controller do
         # NOTE: Uncaught RecordNotFound exceptions cause Rails to render a 404
         # Not Found response in production. We may want to add our own
         # friendlier error handling, rather than letting Rails handle these.
-        expect { get :show, :id => 'not_a_valid_node' }.to raise_error(ActiveRecord::RecordNotFound)
+        expect { get :show, params: { id: 'not_a_valid_node' } }.to raise_error(ActiveRecord::RecordNotFound)
       end
     end
 
     context "as JSON" do
       it "should return JSON for an existing node" do
-        get :show, :id => @node.name, :format => "json"
+        get :show, params: { id: @node.name, format: 'json' }
 
         response.should be_success
 
@@ -197,7 +197,7 @@ describe NodesController, :type => :controller do
         # NOTE: In the future, it may be better to return a JSON object that
         # better describes the error. Currently we're raising RecordNotFound,
         # which returns an HTML page.
-        expect { get :show, :id => 'not_a_valid_node', :format => 'json' }.to raise_error(ActiveRecord::RecordNotFound)
+        expect { get :show, params: { id: 'not_a_valid_node', format: 'json' } }.to raise_error(ActiveRecord::RecordNotFound)
       end
     end
 
@@ -208,7 +208,7 @@ describe NodesController, :type => :controller do
         end
 
         it "should return YAML when the node is valid" do
-          get :show, :id => @node.name, :format => "yaml"
+          get :show, params: { id: @node.name, format: 'yaml' }
 
           response.should be_success
           struct = yaml_from_response_body
@@ -217,14 +217,14 @@ describe NodesController, :type => :controller do
 
         it "should explain errors encountered when the node is invalid" do
           Node.any_instance.stubs(:compiled_parameters).raises ParameterConflictError
-          get :show, :id => @node.name, :format => "yaml"
+          get :show, params: { id: @node.name, format: 'yaml' }
 
           response.should_not be_success
           response.body.should =~ /has conflicting variable\(s\)/
         end
 
         it "should return YAML for an empty node when the node is not found" do
-          get :show, :id => "nonexistent", :format => "yaml"
+          get :show, params: { id: 'nonexistent', format: 'yaml' }
 
           response.should be_success
           struct = yaml_from_response_body
@@ -235,7 +235,7 @@ describe NodesController, :type => :controller do
       context "when not using node classification" do
         it "should raise an error and respond 403" do
           SETTINGS.stubs(:use_external_node_classification).returns(false)
-          get :show, :id => @node.name, :format => "yaml"
+          get :show, params: { id: @node.name, format: 'yaml' }
 
           response.body.should =~ /Node classification has been disabled/
           response.should_not be_success
@@ -247,7 +247,7 @@ describe NodesController, :type => :controller do
 
   describe '#edit' do
     def do_get
-      get :edit, :id => @node.id
+      get :edit, params: { id: @node.id }
     end
 
     before :each do
@@ -266,7 +266,7 @@ describe NodesController, :type => :controller do
     end
 
     it 'should work when given a node name' do
-      get :edit, :id => @node.name
+      get :edit, params: { id: @node.name }
 
       response.should render_template('edit')
       response.should be_success
@@ -276,8 +276,8 @@ describe NodesController, :type => :controller do
   end
 
   describe '#update' do
-    def do_put
-      put :update, @params
+    def do_patch
+      patch :update, params: @params
     end
 
     before :each do
@@ -288,13 +288,13 @@ describe NodesController, :type => :controller do
 
     it 'should fail when an invalid node id is given' do
       @params[:id] = 'unknown'
-      expect { do_put }.to raise_error(ActiveRecord::RecordNotFound)
+      expect { do_patch }.to raise_error(ActiveRecord::RecordNotFound)
     end
 
     it 'should work when given a node name' do
       @params.merge!({:id => @node.name})
 
-      do_put
+      do_patch
       assigns[:node].should == @node
     end
 
@@ -306,22 +306,22 @@ describe NodesController, :type => :controller do
         end
 
         it 'should make the node available to the view' do
-          do_put
+          do_patch
           assigns[:node].should == @node
         end
 
         it 'should not save the node' do
-          do_put
+          do_patch
           Node.find(@node.id).name.should_not be_nil
         end
 
         it 'should have errors on the node' do
-          do_put
+          do_patch
           assigns[:node].errors[:name].should_not be_blank
         end
 
         it 'should render error' do
-          do_put
+          do_patch
           response.should render_template('shared/_error')
         end
       end
@@ -329,18 +329,18 @@ describe NodesController, :type => :controller do
       describe 'and the data provided make the node valid' do
         it 'should update the node with the data provided' do
           @params[:node]['description'] = 'new description'
-          do_put
+          do_patch
           Node.find(@node.id).description.should == 'new description'
         end
 
         it 'should have a valid node' do
-          do_put
+          do_patch
           assigns[:node].should be_valid
         end
       end
 
       it 'should response with JSON that contains redirect URL' do
-        do_put
+        do_patch
         json_response = json_from_response_body
         response.code.should == '200'
         response_hash = JSON.parse(response.body)
@@ -358,7 +358,7 @@ describe NodesController, :type => :controller do
       it "should allow specification of 'parameter_attributes'" do
         @params[:node].merge! :parameter_attributes => [{:key => 'foo', :value => 'bar'}]
 
-        do_put
+        do_patch
 
         @node.reload.parameters.to_hash.should include({'foo' => 'bar'})
       end
@@ -367,7 +367,7 @@ describe NodesController, :type => :controller do
         node_class = create(:node_class)
         @params[:node].merge! :node_class_ids => [node_class.id]
 
-        do_put
+        do_patch
 
         @node.reload.node_classes.should == [node_class]
       end
@@ -381,7 +381,7 @@ describe NodesController, :type => :controller do
       it "should fail if parameter_attributes are specified" do
         @params[:node].merge! :parameter_attributes => [{:key => 'foo', :value => 'bar'}]
 
-        do_put
+        do_patch
 
         response.should be_forbidden
         response.body.should =~ /Node classification has been disabled/
@@ -393,7 +393,7 @@ describe NodesController, :type => :controller do
         node_class = create(:node_class)
         @params[:node].merge! :assigned_node_class_ids => [node_class.id]
 
-        do_put
+        do_patch
 
         response.should be_forbidden
         response.body.should =~ /Node classification has been disabled/
@@ -405,7 +405,7 @@ describe NodesController, :type => :controller do
         node_group = create(:node_group)
         @params[:node].merge! :assigned_node_group_ids => [node_group.id]
 
-        do_put
+        do_patch
 
         response.code.should == '200'
         response_hash = JSON.parse(response.body)
@@ -417,7 +417,7 @@ describe NodesController, :type => :controller do
       end
 
       it "should succeed if parameter_attributes and node classes are omitted" do
-        do_put
+        do_patch
         response.code.should == '200'
         response_hash = JSON.parse(response.body)
         response_hash["status"].should == "ok"
@@ -443,7 +443,7 @@ describe NodesController, :type => :controller do
 
         it "should return JSON containing valid='false'" do
           @params[:node].merge!({"assigned_node_group_ids" => ["#{@node_group_a.id},#{@node_group_b.id},"]})
-          do_put
+          do_patch
 
           response = json_from_response_body
           response["status"].should == "ok"
@@ -452,7 +452,7 @@ describe NodesController, :type => :controller do
 
         it "should render conflicts prompt" do
           @params[:node].merge!({"assigned_node_group_ids" => ["#{@node_group_a.id},#{@node_group_b.id},"]})
-          do_put
+          do_patch
 
           response.should render_template('shared/_variable_conflicts_table')
         end
@@ -460,7 +460,7 @@ describe NodesController, :type => :controller do
         it "should return JSON containing redirect_to URL when update is forced" do
           @params[:node].merge!({"assigned_node_group_ids" => ["#{@node_group_a.id},#{@node_group_b.id},"]})
           @params.merge!({ :force_update => "true" })
-          do_put
+          do_patch
 
           response.code.should == '200'
           response_hash = JSON.parse(response.body)
@@ -472,7 +472,7 @@ describe NodesController, :type => :controller do
         it "should not render conflicts prompt when update is forced" do
           @params[:node].merge!({"assigned_node_group_ids" => ["#{@node_group_a.id},#{@node_group_b.id},"]})
           @params.merge!({ :force_update => "true" })
-          do_put
+          do_patch
 
           response.should_not render_template('shared/_confirm.html.haml')
         end
@@ -492,7 +492,7 @@ describe NodesController, :type => :controller do
 
         it "should return JSON containing valid='false'" do
           @params[:node].merge!({"assigned_node_group_ids" => ["#{@node_group_a.id},#{@node_group_b.id},"]})
-          do_put
+          do_patch
 
           response = json_from_response_body
           response["status"].should == "ok"
@@ -501,7 +501,7 @@ describe NodesController, :type => :controller do
 
         it "should render conflicts prompt" do
           @params[:node].merge!({"assigned_node_group_ids" => ["#{@node_group_a.id},#{@node_group_b.id},"]})
-          do_put
+          do_patch
 
           response.should render_template('shared/_class_parameter_conflicts_table')
         end
@@ -509,7 +509,7 @@ describe NodesController, :type => :controller do
         it "should return JSON containing redirect_to URL when update is forced" do
           @params[:node].merge!({"assigned_node_group_ids" => ["#{@node_group_a.id},#{@node_group_b.id},"]})
           @params.merge!({ :force_update => "true" })
-          do_put
+          do_patch
 
           response.code.should == '200'
           response_hash = JSON.parse(response.body)
@@ -521,7 +521,7 @@ describe NodesController, :type => :controller do
         it "should not render conflicts prompt when update is forced" do
           @params[:node].merge!({"assigned_node_group_ids" => ["#{@node_group_a.id},#{@node_group_b.id},"]})
           @params.merge!({ :force_update => "true" })
-          do_put
+          do_patch
 
           response.should_not render_template('shared/_confirm.html.haml')
         end
@@ -545,14 +545,14 @@ describe NodesController, :type => :controller do
       ]
 
       Node.expects(:find_from_inventory_search).with([expected_param])
-      get :search, @params
+      get :search, params: @params
     end
 
     it "should not search with no parameters" do
       @params['search_params'] = []
 
       Node.expects(:find_from_inventory_search).never
-      get :search, @params
+      get :search, params: @params
     end
   end
 
@@ -561,7 +561,7 @@ describe NodesController, :type => :controller do
       @node = create(:node)
       @node.hidden.should == false
 
-      put :hide, :id => @node.name
+      put :hide, params: { id: @node.name }
 
       response.should redirect_to(node_path(@node))
       @node.reload
@@ -574,7 +574,7 @@ describe NodesController, :type => :controller do
       @node = create(:node, :hidden => true)
       @node.hidden.should == true
 
-      put :unhide, :id => @node.name
+      put :unhide, params: { id: @node.name }
 
       response.should redirect_to(node_path(@node))
       @node.reload
@@ -590,7 +590,7 @@ describe NodesController, :type => :controller do
     end
 
     def do_get
-      get :facts, :id => @node.name
+      get :facts, params: { id: @node.name }
     end
 
     it "should fail gracefully when connections are refused" do
@@ -628,7 +628,7 @@ describe NodesController, :type => :controller do
     end
 
     context "for HTML" do
-      before { get :reports, :node => 123 }
+      before { get :reports, params: { id: @node.name } }
 
       specify { response.should be_success }
 
@@ -642,7 +642,7 @@ describe NodesController, :type => :controller do
   describe "#scoped_index" do
     shared_examples_for "a scoped_index action" do
       context "as HTML" do
-        before { get action, action_params }
+        before { get action, params: action_params }
 
         specify { response.should be_success }
 
@@ -661,7 +661,7 @@ describe NodesController, :type => :controller do
         context "when using node classification" do
           before :each do
             SETTINGS.stubs(:use_external_node_classification).returns(true)
-            get action, action_params.merge(:format => "yaml")
+            get action, params: action_params.merge(format: 'yaml')
           end
 
           specify { response.should be_success }
@@ -726,16 +726,16 @@ describe NodesController, :type => :controller do
         end
 
         it "should raise an error calling 'edit'" do
-          expect { get :edit, :id => node.name }.to raise_error(ReadOnlyEnabledError)
+          expect { get :edit, params: { id: node.name } }.to raise_error(ReadOnlyEnabledError)
         end
 
         it "should raise an error when calling 'update'" do
           params = { :id => node.id, :node => node.attributes }
-          expect { put :update, params }.to raise_error(ReadOnlyEnabledError)
+          expect { put :update, params: params }.to raise_error(ReadOnlyEnabledError)
         end
 
         it "should raise an error when calling 'create'" do
-          expect { post :create, 'node' => { 'name' => 'foo' } }.to raise_error(ReadOnlyEnabledError)
+          expect { post :create, params: { node: { name: 'foo' } } }.to raise_error(ReadOnlyEnabledError)
         end
       end
     end

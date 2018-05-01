@@ -8,7 +8,7 @@ class ApplicationController < ActionController::Base
 
   helper :all # include all helpers, all the time
 
-  before_filter :set_timezone
+  before_action :set_timezone
 
   protect_from_forgery
 
@@ -23,7 +23,7 @@ class ApplicationController < ActionController::Base
   end
 
   rescue_from NodeClassificationDisabledError do |e|
-    render :text => "Node classification has been disabled", :content_type => 'text/plain', :status => 403
+    render plain: 'Node classification has been disabled', status: 403
   end
 
   def set_timezone

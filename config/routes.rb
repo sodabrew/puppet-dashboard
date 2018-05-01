@@ -3,7 +3,7 @@ Rails.application.routes.draw do
   root 'pages#home'
 
   # Nodes, Groups, and Classes may all have names or numeric ids
-  constraints(:id => /[^\/]+/) do
+  constraints(id: /[^\/]+/) do
     resources :node_classes do
       collection do
         get :search
@@ -54,21 +54,26 @@ Rails.application.routes.draw do
   resources :reports do
     collection do
       get :search
+      post :upload
     end
   end
 
-  resources :node_group_memberships, :as => :memberships
+  resources :delayed_job_failures, only: :index do
+    member do
+      post :read
+    end
+    collection do
+      post :read_all
+    end
+  end
 
-  match 'files/:action/:file1/:file2' => 'files#:action', :via => :get
-  match 'files/:action/:file'         => 'files#:action', :via => :get
+  resources :node_group_memberships, as: :memberships
 
-  match '/header.:format' => 'pages#header', :via => :get
-  match 'reports/upload'  => 'reports#upload', :via => :post
-  match 'release_notes'   => 'pages#release_notes', :via => :get
-  match '/delayed_job_failures/read_all' => 'delayed_job_failures#read_all', :via => :post
+  get 'files/diff/:file1/:file2', to: 'files#diff'
+  get 'files/show/:file', to: 'files#show'
 
-  get 'radiator(.:format)' => 'radiator#index'
+  get '/header.:format', to: 'pages#header'
+  get 'release_notes', to: 'pages#release_notes'
 
-  get ':controller(/:action(/:id(.:format)))'
-
+  get 'radiator(.:format)', to: 'radiator#index'
 end
