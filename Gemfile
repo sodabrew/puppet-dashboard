@@ -40,6 +40,7 @@ group :development, :test do
   gem 'factory_bot_rails'
   gem 'nokogiri'
   gem 'rails-controller-testing'
+  gem 'listen'
 end
 
 group :postgresql do
