@@ -12,5 +12,8 @@ module PuppetDashboard
     # Application configuration can go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded after loading
     # the framework and any gems in your application.
+
+    # TODO: We will have to move to move this to app/lib eventually
+    Rails.application.config.eager_load_paths << Rails.root.join('lib')
   end
 end
