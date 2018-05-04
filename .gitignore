@@ -29,3 +29,6 @@
 # Ignore Ruby selection tools
 /.rvmrc
 /.rbenv
+
+# Ignore coverage report results
+/coverage

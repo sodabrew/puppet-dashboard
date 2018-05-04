@@ -41,6 +41,8 @@ group :development, :test do
   gem 'nokogiri'
   gem 'rails-controller-testing'
   gem 'listen'
+  gem 'simplecov'
+  gem 'simplecov-console'
 end
 
 group :postgresql do
