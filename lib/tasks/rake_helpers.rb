@@ -2,7 +2,7 @@
 
 def get_node(node_name)
   begin
-    node = Node.find_by_name(node_name)
+    node = Node.find_by(name: node_name)
     unless node
       $stderr.puts "Node #{node_name} doesn't exist!"
       exit 1
@@ -18,7 +18,7 @@ def get_node(node_name)
 end
 
 def get_group(group_name)
-  group = NodeGroup.find_by_name(group_name)
+  group = NodeGroup.find_by(name: group_name)
   unless group
     $stderr.puts "Node group #{group_name} doesn't exist!"
     exit 1
@@ -33,7 +33,7 @@ rescue => e
 end
 
 def get_class(class_name)
-  nodeclass = NodeClass.find_by_name(class_name)
+  nodeclass = NodeClass.find_by(name: class_name)
   unless nodeclass
     $stderr.puts "Node class #{class_name} doesn't exist!"
     exit 1

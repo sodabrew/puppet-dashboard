@@ -31,9 +31,9 @@ namespace :reports do
         esec = 3540 # 59 minutes
       end
 
-      Node.find(:all).each do |node|
+      Node.all.each do |node|
         begin
-          report = Report.find(:first, :conditions => "node_id = #{node.id}")
+          report = Report.find_by(node_id: node.id)
 
           t = report.time.to_i
 

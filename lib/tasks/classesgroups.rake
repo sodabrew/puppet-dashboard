@@ -18,7 +18,7 @@ namespace :nodeclass do
       exit 1
     end
 
-    if NodeClass.find_by_name(name)
+    if NodeClass.find_by(name: name)
       $stderr.puts 'Class already exists!'
       exit 1
     end
@@ -83,7 +83,7 @@ namespace :nodegroup do
       exit 1
     end
 
-    if NodeGroup.find_by_name(name)
+    if NodeGroup.find_by(name: name)
       $stderr.puts 'Group already exists!'
       exit 1
     end
@@ -92,7 +92,7 @@ namespace :nodegroup do
 
     if ENV['classes']
       classes = ENV['classes'].split(',').map(&:strip)
-      nodegroup.node_classes = NodeClass.find_all_by_name(classes)
+      nodegroup.node_classes = NodeClass.where(name: classes)
     end
 
     nodegroup.save!
@@ -216,7 +216,7 @@ namespace :nodegroup do
     begin
       ActiveRecord::Base.transaction do
         given_parameters.each do |key, value|
-          param, *dupes = *nodegroup.parameters.find_all_by_key(key)
+          param, *dupes = *nodegroup.parameters.where(key: key)
           if param
             # Change existing variables
             param.value = value
@@ -248,7 +248,7 @@ namespace :nodegroup do
 
     begin
       classes = ENV['classes'].split(',').map(&:strip)
-      nodegroup.node_classes = NodeClass.find_all_by_name(classes)
+      nodegroup.node_classes = NodeClass.where(name: classes)
       nodegroup.save!
       puts 'Group successfully edited!'
     rescue => e

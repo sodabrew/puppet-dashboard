@@ -18,7 +18,7 @@ namespace :reports do
 
     while OldReport.count > 0 do
       # Doing records in groups of 10_000 since finding all with millions at once takes forever and eats memory
-      OldReport.find(:all, :limit => 10_000, :order => "time desc").each do |report|
+      OldReport.all.limit(10_000).order('time desc').to_a.each do |report|
         ActiveRecord::Base.transaction do
           Report.create_from_yaml(report.report)
           report.destroy

@@ -10,7 +10,7 @@ namespace :reports do
 
     # Doing records in groups of 1_000 since finding all with millions at once takes forever and eats memory
     while offset < Report.count
-      Report.find(:all, :limit => 1_000, :offset => offset, :order => "time desc").each do |report|
+      Report.all.limit(1_000).offset(offset).order('time desc').to_a.each do |report|
         report.munge
         report.save!
 
