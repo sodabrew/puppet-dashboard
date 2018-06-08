@@ -33,6 +33,7 @@ GEM
       mocha (>= 0.13.2, < 0.15)
     builder (3.0.4)
     daemons (1.1.9)
+    dalli (2.7.1)
     delayed_job (3.0.5)
       activesupport (~> 3.0)
     delayed_job_active_record (0.3.3)
@@ -157,6 +158,7 @@ PLATFORMS
 
 DEPENDENCIES
   daemons
+  dalli
   delayed_job (~> 3.0)
   delayed_job_active_record (~> 0.3.3)
   execjs (~> 2.0.0)

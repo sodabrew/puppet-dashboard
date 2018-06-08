@@ -8,6 +8,7 @@ gem 'i18n'                , '~> 0.6.0' # support ruby 1.8.7
 
 gem 'thin'
 gem 'rack'
+gem 'dalli'
 
 gem 'daemons'
 gem 'json_pure'
