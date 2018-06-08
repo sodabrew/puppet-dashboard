@@ -7,7 +7,14 @@ module ReportSanitizer #:nodoc:
     def sanitize(raw)
       case
         when raw.include?('report_format')
-          format2sanitizer.sanitize(raw)
+          case raw['report_format']
+            when 2
+              format2sanitizer.sanitize(raw)
+            when 3
+              format3sanitizer.sanitize(raw)
+            when 4
+              format4sanitizer.sanitize(raw)
+          end
         when raw.include?('resource_statuses')
           format1sanitizer.sanitize(raw)
         else
@@ -27,6 +34,14 @@ module ReportSanitizer #:nodoc:
 
     def format2sanitizer()
       @format2sanitizer ||= ReportSanitizer::FormatVersion2.new
+    end
+
+    def format3sanitizer()
+      @format3sanitizer ||= ReportSanitizer::FormatVersion3.new
+    end
+
+    def format4sanitizer()
+      @format4sanitizer ||= ReportSanitizer::FormatVersion4.new
     end
   end
 
@@ -135,7 +150,7 @@ module ReportSanitizer #:nodoc:
     end
   end
 
-  # format version 1 was used by puppet 2.6.x-2.7.12
+  # format version 1 was used by puppet 2.6.0-2.6.4
   class FormatVersion1 < Base
     def initialize(
       log_sanitizer    = VersionLogSanitizer.new,
@@ -169,7 +184,7 @@ module ReportSanitizer #:nodoc:
     end
   end
 
-  # format version 2 has been used since puppet 2.7.13
+  # format version 2 was used by puppet 2.6.5-2.7.11
   class FormatVersion2 < FormatVersion1
     def initialize(
       log_sanitizer    = LogSanitizer.new,
@@ -205,6 +220,73 @@ module ReportSanitizer #:nodoc:
           sanitized = super
           Util.verify_attributes(raw, %w[audited historical_value])
           Util.copy_attributes(sanitized, raw, %w[audited historical_value])
+        end
+      end
+    end
+  end
+
+  # format version 3 was used by puppet 2.7.13-3.2.4
+  class FormatVersion3 < FormatVersion2
+    def sanitize(raw)
+      sanitized = super
+      Util.verify_attributes(raw, %w[kind status puppet_version configuration_version environment])
+      Util.copy_attributes(sanitized, raw, %w[kind status puppet_version configuration_version environment])
+    end
+  end
+
+  # format version 4 is used by puppet since version 3.3.0
+  class FormatVersion4 < FormatVersion3
+    def initialize(
+      log_sanitizer    = FormatVersion4LogSanitizer.new,
+      metric_sanitizer = MetricSanitizer.new,
+      status_sanitizer = FormatVersion4StatusSanitizer.new
+    )
+      super(log_sanitizer, metric_sanitizer, status_sanitizer)
+    end
+
+    def sanitize(raw)
+      sanitized = super
+      Util.verify_attributes(raw, %w[kind status puppet_version configuration_version environment transaction_uuid])
+      Util.copy_attributes(sanitized, raw, %w[kind status puppet_version configuration_version environment transaction_uuid])
+    end
+
+    class FormatVersion4LogSanitizer < LogSanitizer
+      def sanitize(raw)
+        sanitized = super
+        unless sanitized['tags'].is_a?(Array)
+          sanitized['tags'] = raw['tags']['hash'].keys
+        end
+        sanitized
+      end
+    end
+
+    class FormatVersion4StatusSanitizer < ExtendedStatusSanitizer
+      def initialize(event_sanitizer = FormatVersion4EventSanitizer.new)
+        super(event_sanitizer)
+      end
+
+      def sanitize(raw)
+        sanitized = super
+        Util.verify_attributes(raw, %w[containment_path])
+        Util.copy_attributes(sanitized, raw, %w[containment_path])
+
+        unless sanitized['tags'].is_a?(Array)
+          sanitized['tags'] = raw['tags']['hash'].keys
+        end
+        sanitized
+      end
+
+      class FormatVersion4EventSanitizer < ExtendedEventSanitizer
+        def sanitize(raw)
+          Util.verify_attributes(raw, %w[message status time audited])
+
+          sanitized = {}
+
+          if raw['name']
+            sanitized['name'] = raw['name'].to_s
+          end
+
+          Util.copy_attributes(sanitized, raw, %w[previous_value desired_value message property status time audited historical_value])
         end
       end
     end

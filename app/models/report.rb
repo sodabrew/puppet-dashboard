@@ -10,8 +10,9 @@ class Report < ActiveRecord::Base
 
   accepts_nested_attributes_for :logs, :metrics, :resource_statuses, :events
 
-  attr_accessible :host, :time, :status, :kind, :puppet_version, :configuration_version
+  attr_accessible :host, :time, :status, :kind, :puppet_version, :configuration_version, :environment
   attr_accessible :logs_attributes, :metrics_attributes, :resource_statuses_attributes, :events_attributes
+  attr_accessible :transaction_uuid
 
   before_validation :assign_to_node
   validates_presence_of :host, :time, :kind
@@ -77,14 +78,14 @@ class Report < ActiveRecord::Base
 
   def self.attribute_hash_from(report_hash)
     attribute_hash = report_hash.dup
-    
+
     # message could grow larger than what database column size allow.
     attribute_hash["logs_attributes"] = attribute_hash.delete("logs")
     attribute_hash["logs_attributes"].each do |resource_logs_hash|
       log_message = resource_logs_hash["message"].to_s
       resource_logs_hash["message"] = log_message.slice(0, 65535) if log_message.length > 65535
     end
-    
+
     attribute_hash["resource_statuses_attributes"] = attribute_hash.delete("resource_statuses")
     attribute_hash["metrics_attributes"] = attribute_hash.delete("metrics")
     attribute_hash["resource_statuses_attributes"].each do |resource_status_hash|
@@ -205,7 +206,7 @@ class Report < ActiveRecord::Base
   def recalculate_report_status
     self.status = 'pending' if resource_statuses.any? {|rs| rs.status == 'pending' } &&
       resource_statuses.none? {|rs| rs.status == 'failed'}
-    self.status = 'failed' if self.logs.any? {|l| l.level == 'err' } 
+    self.status = 'failed' if self.logs.any? {|l| l.level == 'err' }
   end
 
   def add_missing_metrics

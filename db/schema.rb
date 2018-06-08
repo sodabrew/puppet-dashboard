@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20141217071943) do
+ActiveRecord::Schema.define(:version => 20150406035704) do
 
   postgres = ActiveRecord::Base.connection.adapter_name.downcase =~ /postgres/
 
@@ -168,6 +168,8 @@ ActiveRecord::Schema.define(:version => 20141217071943) do
     t.string   "kind"
     t.string   "puppet_version"
     t.string   "configuration_version"
+    t.string   "environment"
+    t.string   "transaction_uuid"
   end
 
   add_index "reports", ["node_id"], :name => "index_reports_on_node_id"
@@ -209,6 +211,7 @@ ActiveRecord::Schema.define(:version => 20141217071943) do
     t.boolean  "skipped"
     t.boolean  "failed"
     t.string   "status"
+    t.text     "containment_path"
   end
 
   add_index "resource_statuses", ["report_id"], :name => "index_resource_statuses_on_report_id"
