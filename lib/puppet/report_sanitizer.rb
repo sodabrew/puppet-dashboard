@@ -2,6 +2,9 @@
 # using safe_yaml into structures expected by the model code.
 # Note that this must be updated whenever any of those changes.
 #
+# Report Format Docs:
+# https://github.com/puppetlabs/puppet-docs/blob/master/source/_includes/reportformat
+#
 module ReportSanitizer #:nodoc:
   class << self
     def sanitize(raw)
