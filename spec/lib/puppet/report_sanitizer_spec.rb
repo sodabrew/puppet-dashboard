@@ -389,7 +389,7 @@ describe ReportSanitizer do
       end
     end
 
-   describe 'a format version 4 (puppet 3.3.0-) report' do
+   describe 'a format version 4 (puppet 3.3.0-4.3.2) report' do
       let(:report_file) { '04_failing.yaml' }
 
       it "should produce a hash of the report" do
@@ -415,5 +415,23 @@ describe ReportSanitizer do
         expect { ReportSanitizer.sanitize(raw_report) }.to_not raise_error
       end
     end
+
+   describe 'a format version 5 (puppet 4.4.0-4.5.3) report' do
+      let(:report_file) { '05_failing.yaml' }
+
+      it 'should produce a hash of the report' do
+        hash = ReportSanitizer.sanitize(raw_report)
+        hash.should be_a(Hash)
+        hash.keys.should =~ %w{host time logs metrics resource_statuses kind configuration_version puppet_version report_format status environment transaction_uuid catalog_uuid cached_catalog_status}
+        hash['report_format'].should == 5
+        hash['host'].should == 'report-test.example.com'
+        hash['time'].should == Time.parse('2018-06-12 22:42:23.273615216 +02:00')
+        hash['environment'].should == 'production'
+        hash['transaction_uuid'].should == '439b4577-1b26-4313-91ea-3e2812d41d22'
+        hash['catalog_uuid'].should == 'da1beb33-3775-4c12-88f5-78ad84a54988'
+        hash['cached_catalog_status'].should == 'not_used'
+      end
+    end
+
   end
 end

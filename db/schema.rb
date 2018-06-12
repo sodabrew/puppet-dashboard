@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2015_04_06_035704) do
+ActiveRecord::Schema.define(version: 2018_06_12_210310) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -157,6 +157,8 @@ ActiveRecord::Schema.define(version: 2015_04_06_035704) do
     t.string "configuration_version"
     t.string "environment"
     t.string "transaction_uuid"
+    t.string "catalog_uuid"
+    t.string "cached_catalog_status"
     t.index ["node_id"], name: "index_reports_on_node_id"
     t.index ["time", "node_id", "status"], name: "index_reports_on_time_and_node_id_and_status"
   end

@@ -17,6 +17,8 @@ module ReportSanitizer #:nodoc:
               format3sanitizer.sanitize(raw)
             when 4
               format4sanitizer.sanitize(raw)
+            when 5
+              format5sanitizer.sanitize(raw)
           end
         when raw.include?('resource_statuses')
           format1sanitizer.sanitize(raw)
@@ -45,6 +47,10 @@ module ReportSanitizer #:nodoc:
 
     def format4sanitizer()
       @format4sanitizer ||= ReportSanitizer::FormatVersion4.new
+    end
+
+    def format5sanitizer()
+      @format5sanitizer ||= ReportSanitizer::FormatVersion5.new
     end
   end
 
@@ -237,7 +243,7 @@ module ReportSanitizer #:nodoc:
     end
   end
 
-  # format version 4 is used by puppet since version 3.3.0
+  # format version 4 is used by puppet 3.3.0-4.3.2
   class FormatVersion4 < FormatVersion3
     def initialize(
       log_sanitizer    = FormatVersion4LogSanitizer.new,
@@ -294,4 +300,13 @@ module ReportSanitizer #:nodoc:
       end
     end
   end
+
+  class FormatVersion5 < FormatVersion4
+    def sanitize(raw)
+      sanitized = super
+      Util.verify_attributes(raw, %w[catalog_uuid cached_catalog_status])
+      Util.copy_attributes(sanitized, raw, %w[catalog_uuid cached_catalog_status])
+    end
+  end
+
 end
