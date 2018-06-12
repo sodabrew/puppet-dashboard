@@ -779,7 +779,7 @@ HEREDOC
       end
 
       it "should allow resource events that do not contain property previous_value desired_value or historical_value" do
-        expect { ReportSanitizer.sanitize(raw_report) }.to_not raise_error ArgumentError
+        expect { ReportSanitizer.sanitize(raw_report) }.to_not raise_error
       end
     end
   end
