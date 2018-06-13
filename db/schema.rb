@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_06_12_210310) do
+ActiveRecord::Schema.define(version: 2018_06_13_224704) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -159,6 +159,10 @@ ActiveRecord::Schema.define(version: 2018_06_12_210310) do
     t.string "transaction_uuid"
     t.string "catalog_uuid"
     t.string "cached_catalog_status"
+    t.boolean "noop"
+    t.boolean "noop_pending"
+    t.boolean "corrective_change"
+    t.string "master_used"
     t.index ["node_id"], name: "index_reports_on_node_id"
     t.index ["time", "node_id", "status"], name: "index_reports_on_time_and_node_id_and_status"
   end
@@ -174,6 +178,8 @@ ActiveRecord::Schema.define(version: 2018_06_12_210310) do
     t.datetime "time"
     t.text "historical_value"
     t.boolean "audited"
+    t.boolean "corrective_change"
+    t.boolean "redacted"
     t.index ["resource_status_id"], name: "index_resource_events_on_resource_status_id"
   end
 
@@ -192,6 +198,7 @@ ActiveRecord::Schema.define(version: 2018_06_12_210310) do
     t.boolean "failed"
     t.string "status"
     t.text "containment_path"
+    t.boolean "corrective_change"
     t.index ["report_id"], name: "index_resource_statuses_on_report_id"
   end
 

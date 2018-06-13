@@ -433,5 +433,27 @@ describe ReportSanitizer do
       end
     end
 
+    describe 'a format version 6 (puppet 4.6.0-4.10.x) report' do
+      let(:report_file) { '06_failing.yaml' }
+
+      it 'should produce a hash of the report' do
+        hash = ReportSanitizer.sanitize(raw_report)
+        hash.should be_a(Hash)
+        hash.keys.should =~ %w{host time logs metrics resource_statuses kind configuration_version puppet_version report_format status environment transaction_uuid catalog_uuid cached_catalog_status noop noop_pending corrective_change master_used}
+        hash['report_format'].should == 6
+        hash['host'].should == 'report-test.example.com'
+        hash['time'].should == Time.parse('2018-06-12 23:17:11.338306228 +02:00')
+        hash['noop'].should == false
+        hash['noop_pending'].should == false
+        hash['corrective_change'].should == false
+        hash['master_used'].should == nil
+        resource_status = hash['resource_statuses']['Notify[hello world]']
+        resource_status['corrective_change'].should == false
+        event = resource_status['events'].first
+        event['audited'].should == false
+        event['corrective_change'].should == false
+      end
+    end
+
   end
 end

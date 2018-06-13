@@ -19,6 +19,8 @@ module ReportSanitizer #:nodoc:
               format4sanitizer.sanitize(raw)
             when 5
               format5sanitizer.sanitize(raw)
+            else
+              format6sanitizer.sanitize(raw)
           end
         when raw.include?('resource_statuses')
           format1sanitizer.sanitize(raw)
@@ -51,6 +53,10 @@ module ReportSanitizer #:nodoc:
 
     def format5sanitizer()
       @format5sanitizer ||= ReportSanitizer::FormatVersion5.new
+    end
+
+    def format6sanitizer()
+      @format6sanitizer ||= ReportSanitizer::FormatVersion6.new
     end
   end
 
@@ -306,6 +312,42 @@ module ReportSanitizer #:nodoc:
       sanitized = super
       Util.verify_attributes(raw, %w[catalog_uuid cached_catalog_status])
       Util.copy_attributes(sanitized, raw, %w[catalog_uuid cached_catalog_status])
+    end
+  end
+
+  class FormatVersion6 < FormatVersion5
+    def initialize(
+      log_sanitizer    = FormatVersion4LogSanitizer.new,
+      metric_sanitizer = MetricSanitizer.new,
+      status_sanitizer = FormatVersion5StatusSanitizer.new
+    )
+      super(log_sanitizer, metric_sanitizer, status_sanitizer)
+    end
+
+    def sanitize(raw)
+      sanitized = super
+      Util.verify_attributes(raw, %w[noop noop_pending corrective_change master_used])
+      Util.copy_attributes(sanitized, raw, %w[noop noop_pending corrective_change master_used])
+    end
+
+    class FormatVersion5StatusSanitizer < FormatVersion4StatusSanitizer
+      def initialize(event_sanitizer = FormatVersion5EventSanitizer.new)
+        super(event_sanitizer)
+      end
+
+      def sanitize(raw)
+        sanitized = super
+        Util.verify_attributes(raw, %w[corrective_change])
+        Util.copy_attributes(sanitized, raw, %w[corrective_change])
+      end
+
+      class FormatVersion5EventSanitizer < FormatVersion4EventSanitizer
+        def sanitize(raw)
+          sanitized = super
+          Util.verify_attributes(raw, %w[corrective_change redacted])
+          Util.copy_attributes(sanitized, raw, %w[corrective_change redacted])
+        end
+      end
     end
   end
 

@@ -1,0 +1,361 @@
+--- !ruby/object:Puppet::Transaction::Report
+metrics:
+  resources: !ruby/object:Puppet::Util::Metric
+    name: resources
+    label: Resources
+    values:
+    - - total
+      - Total
+      - 9
+    - - skipped
+      - Skipped
+      - 0
+    - - failed
+      - Failed
+      - 1
+    - - failed_to_restart
+      - Failed to restart
+      - 0
+    - - restarted
+      - Restarted
+      - 0
+    - - changed
+      - Changed
+      - 1
+    - - out_of_sync
+      - Out of sync
+      - 2
+    - - scheduled
+      - Scheduled
+      - 0
+    - - corrective_change
+      - Corrective change
+      - 0
+  time: !ruby/object:Puppet::Util::Metric
+    name: time
+    label: Time
+    values:
+    - - exec
+      - Exec
+      - 0.000517577
+    - - notify
+      - Notify
+      - 0.000341475
+    - - schedule
+      - Schedule
+      - 0.000293712
+    - - filebucket
+      - Filebucket
+      - 4.6623e-05
+    - - config_retrieval
+      - Config retrieval
+      - 0.136173907
+    - - total
+      - Total
+      - 0.137373294
+  changes: !ruby/object:Puppet::Util::Metric
+    name: changes
+    label: Changes
+    values:
+    - - total
+      - Total
+      - 1
+  events: !ruby/object:Puppet::Util::Metric
+    name: events
+    label: Events
+    values:
+    - - total
+      - Total
+      - 2
+    - - failure
+      - Failure
+      - 1
+    - - success
+      - Success
+      - 1
+logs:
+- !ruby/object:Puppet::Util::Log
+  level: :err
+  message: Could not find command '/usr/bin/thisdoesnotexist'
+  source: Puppet
+  tags:
+  - err
+  time: '2018-06-12T23:17:11.345405537+02:00'
+  file:
+  line:
+- !ruby/object:Puppet::Util::Log
+  level: :err
+  message: 'change from notrun to 0 failed: Could not find command ''/usr/bin/thisdoesnotexist'''
+  source: "/Stage[main]/Main/Exec[/usr/bin/thisdoesnotexist]/returns"
+  tags:
+  - err
+  - exec
+  - class
+  time: '2018-06-12T23:17:11.345582063+02:00'
+  file: "/tmp/puppet/test.pp"
+  line: 2
+- !ruby/object:Puppet::Util::Log
+  level: :notice
+  message: hello world
+  source: Puppet
+  tags:
+  - notice
+  time: '2018-06-12T23:17:11.346050745+02:00'
+  file:
+  line:
+- !ruby/object:Puppet::Util::Log
+  level: :notice
+  message: defined 'message' as 'hello world'
+  source: "/Stage[main]/Main/Notify[hello world]/message"
+  tags:
+  - notice
+  - notify
+  - class
+  time: '2018-06-12T23:17:11.346107414+02:00'
+  file: "/tmp/puppet/test.pp"
+  line: 4
+- !ruby/object:Puppet::Util::Log
+  level: :notice
+  message: Applied catalog in 0.02 seconds
+  source: Puppet
+  tags:
+  - notice
+  time: '2018-06-12T23:17:11.361657755+02:00'
+  file:
+  line:
+resource_statuses:
+  Exec[/usr/bin/thisdoesnotexist]: !ruby/object:Puppet::Resource::Status
+    title: "/usr/bin/thisdoesnotexist"
+    file: "/tmp/puppet/test.pp"
+    line: 2
+    resource: Exec[/usr/bin/thisdoesnotexist]
+    resource_type: Exec
+    containment_path:
+    - Stage[main]
+    - Main
+    - Exec[/usr/bin/thisdoesnotexist]
+    evaluation_time: 0.000517577
+    tags:
+    - exec
+    - class
+    time: '2018-06-12T23:17:11.345153098+02:00'
+    failed: true
+    changed: false
+    out_of_sync: true
+    skipped: false
+    change_count: 0
+    out_of_sync_count: 1
+    events:
+    - !ruby/object:Puppet::Transaction::Event
+      audited: false
+      property: returns
+      previous_value: :notrun
+      desired_value:
+      - '0'
+      historical_value:
+      message: 'change from notrun to 0 failed: Could not find command ''/usr/bin/thisdoesnotexist'''
+      name: :executed_command
+      status: failure
+      time: 2018-06-12 23:17:11.345516498 +02:00
+      redacted:
+      corrective_change: false
+    corrective_change: false
+  Notify[hello world]: !ruby/object:Puppet::Resource::Status
+    title: hello world
+    file: "/tmp/puppet/test.pp"
+    line: 4
+    resource: Notify[hello world]
+    resource_type: Notify
+    containment_path:
+    - Stage[main]
+    - Main
+    - Notify[hello world]
+    evaluation_time: 0.000341475
+    tags:
+    - notify
+    - class
+    time: '2018-06-12T23:17:11.345812992+02:00'
+    failed: false
+    changed: true
+    out_of_sync: true
+    skipped: false
+    change_count: 1
+    out_of_sync_count: 1
+    events:
+    - !ruby/object:Puppet::Transaction::Event
+      audited: false
+      property: message
+      previous_value: :absent
+      desired_value: hello world
+      historical_value:
+      message: defined 'message' as 'hello world'
+      name: :message_changed
+      status: success
+      time: 2018-06-12 23:17:11.346006481 +02:00
+      redacted:
+      corrective_change: false
+    corrective_change: false
+  Schedule[puppet]: !ruby/object:Puppet::Resource::Status
+    title: puppet
+    file:
+    line:
+    resource: Schedule[puppet]
+    resource_type: Schedule
+    containment_path:
+    - Schedule[puppet]
+    evaluation_time: 6.0116e-05
+    tags:
+    - schedule
+    - puppet
+    time: '2018-06-12T23:17:11.346551592+02:00'
+    failed: false
+    changed: false
+    out_of_sync: false
+    skipped: false
+    change_count: 0
+    out_of_sync_count: 0
+    events: []
+    corrective_change: false
+  Schedule[hourly]: !ruby/object:Puppet::Resource::Status
+    title: hourly
+    file:
+    line:
+    resource: Schedule[hourly]
+    resource_type: Schedule
+    containment_path:
+    - Schedule[hourly]
+    evaluation_time: 6.2587e-05
+    tags:
+    - schedule
+    - hourly
+    time: '2018-06-12T23:17:11.346681112+02:00'
+    failed: false
+    changed: false
+    out_of_sync: false
+    skipped: false
+    change_count: 0
+    out_of_sync_count: 0
+    events: []
+    corrective_change: false
+  Schedule[daily]: !ruby/object:Puppet::Resource::Status
+    title: daily
+    file:
+    line:
+    resource: Schedule[daily]
+    resource_type: Schedule
+    containment_path:
+    - Schedule[daily]
+    evaluation_time: 5.0456e-05
+    tags:
+    - schedule
+    - daily
+    time: '2018-06-12T23:17:11.346810263+02:00'
+    failed: false
+    changed: false
+    out_of_sync: false
+    skipped: false
+    change_count: 0
+    out_of_sync_count: 0
+    events: []
+    corrective_change: false
+  Schedule[weekly]: !ruby/object:Puppet::Resource::Status
+    title: weekly
+    file:
+    line:
+    resource: Schedule[weekly]
+    resource_type: Schedule
+    containment_path:
+    - Schedule[weekly]
+    evaluation_time: 5.5423e-05
+    tags:
+    - schedule
+    - weekly
+    time: '2018-06-12T23:17:11.346922374+02:00'
+    failed: false
+    changed: false
+    out_of_sync: false
+    skipped: false
+    change_count: 0
+    out_of_sync_count: 0
+    events: []
+    corrective_change: false
+  Schedule[monthly]: !ruby/object:Puppet::Resource::Status
+    title: monthly
+    file:
+    line:
+    resource: Schedule[monthly]
+    resource_type: Schedule
+    containment_path:
+    - Schedule[monthly]
+    evaluation_time: 3.5182e-05
+    tags:
+    - schedule
+    - monthly
+    time: '2018-06-12T23:17:11.347041081+02:00'
+    failed: false
+    changed: false
+    out_of_sync: false
+    skipped: false
+    change_count: 0
+    out_of_sync_count: 0
+    events: []
+    corrective_change: false
+  Schedule[never]: !ruby/object:Puppet::Resource::Status
+    title: never
+    file:
+    line:
+    resource: Schedule[never]
+    resource_type: Schedule
+    containment_path:
+    - Schedule[never]
+    evaluation_time: 2.9948e-05
+    tags:
+    - schedule
+    - never
+    time: '2018-06-12T23:17:11.347141060+02:00'
+    failed: false
+    changed: false
+    out_of_sync: false
+    skipped: false
+    change_count: 0
+    out_of_sync_count: 0
+    events: []
+    corrective_change: false
+  Filebucket[puppet]: !ruby/object:Puppet::Resource::Status
+    title: puppet
+    file:
+    line:
+    resource: Filebucket[puppet]
+    resource_type: Filebucket
+    containment_path:
+    - Filebucket[puppet]
+    evaluation_time: 4.6623e-05
+    tags:
+    - filebucket
+    - puppet
+    time: '2018-06-12T23:17:11.347242685+02:00'
+    failed: false
+    changed: false
+    out_of_sync: false
+    skipped: false
+    change_count: 0
+    out_of_sync_count: 0
+    events: []
+    corrective_change: false
+host: report-test.example.com
+time: 2018-06-12 23:17:11.338306228 +02:00
+kind: apply
+report_format: 6
+puppet_version: 4.10.11
+configuration_version: 1528838231
+transaction_uuid: 2374a3c0-7426-474e-a2d4-cd10ab2a3834
+code_id:
+catalog_uuid: e10613b7-eb6e-4532-929f-9662308ff418
+cached_catalog_status: not_used
+master_used:
+environment: production
+status: failed
+noop: false
+noop_pending: false
+corrective_change: false
+transaction_completed: true
