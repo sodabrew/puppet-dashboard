@@ -384,7 +384,7 @@ describe ReportSanitizer do
         hash.keys.should =~ %w{host time logs metrics resource_statuses kind configuration_version puppet_version report_format status environment}
         hash["report_format"].should == 3
         hash["host"].should == "localhost"
-        hash["time"].should == Time.parse("2010-07-22 12:19:47.204207 -07:00")
+        hash["time"].should == Time.parse("2010-07-22 13:19:47.204207 -07:00")
         hash["environment"].should == "production"
       end
     end
@@ -398,7 +398,7 @@ describe ReportSanitizer do
         hash.keys.should =~ %w{host time logs metrics resource_statuses kind configuration_version puppet_version report_format status environment transaction_uuid}
         hash["report_format"].should == 4
         hash["host"].should == "localhost"
-        hash["time"].should == Time.parse("2010-07-22 12:19:47.204207 -07:00")
+        hash["time"].should == Time.parse("2010-07-22 14:19:47.204207 -07:00")
         hash["environment"].should == "production"
         hash["transaction_uuid"].should == "b2b7567c-696a-4250-8d74-e3c5030e1263"
       end

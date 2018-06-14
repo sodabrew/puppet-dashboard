@@ -1,6 +1,6 @@
 --- !ruby/object:Puppet::Transaction::Report
   host: localhost
-  time: 2010-07-22 12:19:47.204207 -07:00
+  time: 2010-07-22 14:19:47.204207 -07:00
   logs: []
   metrics:
     time: !ruby/object:Puppet::Util::Metric
