@@ -19,8 +19,10 @@ module ReportSanitizer #:nodoc:
               format4sanitizer.sanitize(raw)
             when 5
               format5sanitizer.sanitize(raw)
-            else
+            when 6
               format6sanitizer.sanitize(raw)
+            else
+              format7sanitizer.sanitize(raw)
           end
         when raw.include?('resource_statuses')
           format1sanitizer.sanitize(raw)
@@ -57,6 +59,10 @@ module ReportSanitizer #:nodoc:
 
     def format6sanitizer()
       @format6sanitizer ||= ReportSanitizer::FormatVersion6.new
+    end
+
+    def format7sanitizer()
+      @format7sanitizer ||= ReportSanitizer::FormatVersion7.new
     end
   end
 
@@ -348,6 +354,14 @@ module ReportSanitizer #:nodoc:
           Util.copy_attributes(sanitized, raw, %w[corrective_change redacted])
         end
       end
+    end
+  end
+
+  class FormatVersion7 < FormatVersion6
+    def sanitize(raw)
+      raw['kind'] = 'apply'
+      raw['master_used'] ||= nil
+      super
     end
   end
 
