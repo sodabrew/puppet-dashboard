@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_06_14_161626) do
+ActiveRecord::Schema.define(version: 2018_06_14_210435) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -200,6 +200,7 @@ ActiveRecord::Schema.define(version: 2018_06_14_161626) do
     t.string "status"
     t.text "containment_path"
     t.boolean "corrective_change"
+    t.string "provider_used"
     t.index ["report_id"], name: "index_resource_statuses_on_report_id"
   end
 

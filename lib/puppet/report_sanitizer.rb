@@ -23,8 +23,10 @@ module ReportSanitizer #:nodoc:
               format6sanitizer.sanitize(raw)
             when 7
               format7sanitizer.sanitize(raw)
-            else
+            when 8
               format8sanitizer.sanitize(raw)
+            else
+              format9sanitizer.sanitize(raw)
           end
         when raw.include?('resource_statuses')
           format1sanitizer.sanitize(raw)
@@ -69,6 +71,10 @@ module ReportSanitizer #:nodoc:
 
     def format8sanitizer()
       @format8sanitizer ||= ReportSanitizer::FormatVersion8.new
+    end
+
+    def format9sanitizer()
+      @format9sanitizer ||= ReportSanitizer::FormatVersion9.new
     end
   end
 
@@ -331,7 +337,7 @@ module ReportSanitizer #:nodoc:
     def initialize(
       log_sanitizer    = FormatVersion4LogSanitizer.new,
       metric_sanitizer = MetricSanitizer.new,
-      status_sanitizer = FormatVersion5StatusSanitizer.new
+      status_sanitizer = FormatVersion6StatusSanitizer.new
     )
       super(log_sanitizer, metric_sanitizer, status_sanitizer)
     end
@@ -342,8 +348,8 @@ module ReportSanitizer #:nodoc:
       Util.copy_attributes(sanitized, raw, %w[noop noop_pending corrective_change master_used])
     end
 
-    class FormatVersion5StatusSanitizer < FormatVersion4StatusSanitizer
-      def initialize(event_sanitizer = FormatVersion5EventSanitizer.new)
+    class FormatVersion6StatusSanitizer < FormatVersion4StatusSanitizer
+      def initialize(event_sanitizer = FormatVersion6EventSanitizer.new)
         super(event_sanitizer)
       end
 
@@ -353,7 +359,7 @@ module ReportSanitizer #:nodoc:
         Util.copy_attributes(sanitized, raw, %w[corrective_change])
       end
 
-      class FormatVersion5EventSanitizer < FormatVersion4EventSanitizer
+      class FormatVersion6EventSanitizer < FormatVersion4EventSanitizer
         def sanitize(raw)
           sanitized = super
           Util.verify_attributes(raw, %w[corrective_change redacted])
@@ -376,6 +382,24 @@ module ReportSanitizer #:nodoc:
       sanitized = super
       Util.verify_attributes(raw, %w[transaction_completed])
       Util.copy_attributes(sanitized, raw, %w[transaction_completed])
+    end
+  end
+
+  class FormatVersion9 < FormatVersion8
+    def initialize(
+      log_sanitizer    = FormatVersion4LogSanitizer.new,
+      metric_sanitizer = MetricSanitizer.new,
+      status_sanitizer = FormatVersion9StatusSanitizer.new
+    )
+      super(log_sanitizer, metric_sanitizer, status_sanitizer)
+    end
+
+    class FormatVersion9StatusSanitizer < FormatVersion6StatusSanitizer
+      def sanitize(raw)
+        sanitized = super
+        Util.verify_attributes(raw, %w[provider_used])
+        Util.copy_attributes(sanitized, raw, %w[provider_used])
+      end
     end
   end
 

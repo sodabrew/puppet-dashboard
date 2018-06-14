@@ -480,6 +480,20 @@ describe ReportSanitizer do
       end
     end
 
+    describe 'a format version 9 (puppet 5.5.0-latest) report' do
+      let(:report_file) { '09_failing.yaml' }
+
+      it 'should produce a hash of the report' do
+        hash = ReportSanitizer.sanitize(raw_report)
+        hash.should be_a(Hash)
+        hash.keys.should =~ %w{host time logs metrics resource_statuses kind configuration_version puppet_version report_format status environment transaction_uuid catalog_uuid cached_catalog_status noop noop_pending corrective_change master_used transaction_completed}
+        hash['report_format'].should == 9
+        hash['host'].should == 'report-test.example.com'
+        resource_status = hash['resource_statuses']['Exec[/usr/bin/thisdoesnotexist]']
+        resource_status['provider_used'].should == 'posix'
+      end
+    end
+
 
   end
 end
