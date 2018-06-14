@@ -1,0 +1,351 @@
+--- !ruby/object:Puppet::Transaction::Report
+host: report-test.example.com
+time: '2018-06-12T23:30:03.087762562+02:00'
+configuration_version: 1528839003
+transaction_uuid: 5338a066-4f08-49e0-b747-bd4245b80898
+report_format: 8
+puppet_version: 5.4.0
+status: failed
+transaction_completed: true
+noop: false
+noop_pending: false
+environment: production
+logs:
+- level: err
+  message: Could not find command '/usr/bin/thisdoesnotexist'
+  source: Puppet
+  tags:
+  - err
+  time: '2018-06-12T23:30:03.095655048+02:00'
+  file:
+  line:
+- level: err
+  message: 'change from ''notrun'' to [''0''] failed: Could not find command ''/usr/bin/thisdoesnotexist'''
+  source: "/Stage[main]/Main/Exec[/usr/bin/thisdoesnotexist]/returns"
+  tags:
+  - err
+  - exec
+  - class
+  time: '2018-06-12T23:30:03.096930899+02:00'
+  file: "/home/azuber/tmp/puppet-report-generator/test.pp"
+  line: 2
+- level: notice
+  message: hello world
+  source: Puppet
+  tags:
+  - notice
+  time: '2018-06-12T23:30:03.097659564+02:00'
+  file:
+  line:
+- level: notice
+  message: defined 'message' as 'hello world'
+  source: "/Stage[main]/Main/Notify[hello world]/message"
+  tags:
+  - notice
+  - notify
+  - class
+  time: '2018-06-12T23:30:03.098071425+02:00'
+  file: "/home/azuber/tmp/puppet-report-generator/test.pp"
+  line: 4
+- level: notice
+  message: Applied catalog in 0.02 seconds
+  source: Puppet
+  tags:
+  - notice
+  time: '2018-06-12T23:30:03.107773307+02:00'
+  file:
+  line:
+metrics:
+  resources:
+    name: resources
+    label: Resources
+    values:
+    - - total
+      - Total
+      - 9
+    - - skipped
+      - Skipped
+      - 0
+    - - failed
+      - Failed
+      - 1
+    - - failed_to_restart
+      - Failed to restart
+      - 0
+    - - restarted
+      - Restarted
+      - 0
+    - - changed
+      - Changed
+      - 1
+    - - out_of_sync
+      - Out of sync
+      - 2
+    - - scheduled
+      - Scheduled
+      - 0
+    - - corrective_change
+      - Corrective change
+      - 0
+  time:
+    name: time
+    label: Time
+    values:
+    - - exec
+      - Exec
+      - 0.001959372
+    - - notify
+      - Notify
+      - 0.000765967
+    - - schedule
+      - Schedule
+      - 0.00027547
+    - - filebucket
+      - Filebucket
+      - 3.9389e-05
+    - - config_retrieval
+      - Config retrieval
+      - 0.100191276
+    - - total
+      - Total
+      - 0.10323147399999999
+  changes:
+    name: changes
+    label: Changes
+    values:
+    - - total
+      - Total
+      - 1
+  events:
+    name: events
+    label: Events
+    values:
+    - - total
+      - Total
+      - 2
+    - - failure
+      - Failure
+      - 1
+    - - success
+      - Success
+      - 1
+resource_statuses:
+  Exec[/usr/bin/thisdoesnotexist]:
+    title: "/usr/bin/thisdoesnotexist"
+    file: "/home/azuber/tmp/puppet-report-generator/test.pp"
+    line: 2
+    resource: Exec[/usr/bin/thisdoesnotexist]
+    resource_type: Exec
+    containment_path:
+    - Stage[main]
+    - Main
+    - Exec[/usr/bin/thisdoesnotexist]
+    evaluation_time: 0.001959372
+    tags:
+    - exec
+    - class
+    time: '2018-06-12T23:30:03.095167960+02:00'
+    failed: true
+    changed: false
+    out_of_sync: true
+    skipped: false
+    change_count: 0
+    out_of_sync_count: 1
+    events:
+    - audited: false
+      property: returns
+      previous_value: notrun
+      desired_value:
+      - '0'
+      historical_value:
+      message: 'change from ''notrun'' to [''0''] failed: Could not find command ''/usr/bin/thisdoesnotexist'''
+      name: executed_command
+      status: failure
+      time: '2018-06-12T23:30:03.095788580+02:00'
+      redacted:
+      corrective_change: false
+    corrective_change: false
+  Notify[hello world]:
+    title: hello world
+    file: "/home/azuber/tmp/puppet-report-generator/test.pp"
+    line: 4
+    resource: Notify[hello world]
+    resource_type: Notify
+    containment_path:
+    - Stage[main]
+    - Main
+    - Notify[hello world]
+    evaluation_time: 0.000765967
+    tags:
+    - notify
+    - class
+    time: '2018-06-12T23:30:03.097381928+02:00'
+    failed: false
+    changed: true
+    out_of_sync: true
+    skipped: false
+    change_count: 1
+    out_of_sync_count: 1
+    events:
+    - audited: false
+      property: message
+      previous_value: absent
+      desired_value: hello world
+      historical_value:
+      message: defined 'message' as 'hello world'
+      name: message_changed
+      status: success
+      time: '2018-06-12T23:30:03.097619296+02:00'
+      redacted:
+      corrective_change: false
+    corrective_change: false
+  Schedule[puppet]:
+    title: puppet
+    file:
+    line:
+    resource: Schedule[puppet]
+    resource_type: Schedule
+    containment_path:
+    - Schedule[puppet]
+    evaluation_time: 6.0737e-05
+    tags:
+    - schedule
+    - puppet
+    time: '2018-06-12T23:30:03.098449273+02:00'
+    failed: false
+    changed: false
+    out_of_sync: false
+    skipped: false
+    change_count: 0
+    out_of_sync_count: 0
+    events: []
+    corrective_change: false
+  Schedule[hourly]:
+    title: hourly
+    file:
+    line:
+    resource: Schedule[hourly]
+    resource_type: Schedule
+    containment_path:
+    - Schedule[hourly]
+    evaluation_time: 4.5278e-05
+    tags:
+    - schedule
+    - hourly
+    time: '2018-06-12T23:30:03.098573639+02:00'
+    failed: false
+    changed: false
+    out_of_sync: false
+    skipped: false
+    change_count: 0
+    out_of_sync_count: 0
+    events: []
+    corrective_change: false
+  Schedule[daily]:
+    title: daily
+    file:
+    line:
+    resource: Schedule[daily]
+    resource_type: Schedule
+    containment_path:
+    - Schedule[daily]
+    evaluation_time: 4.7564e-05
+    tags:
+    - schedule
+    - daily
+    time: '2018-06-12T23:30:03.098679267+02:00'
+    failed: false
+    changed: false
+    out_of_sync: false
+    skipped: false
+    change_count: 0
+    out_of_sync_count: 0
+    events: []
+    corrective_change: false
+  Schedule[weekly]:
+    title: weekly
+    file:
+    line:
+    resource: Schedule[weekly]
+    resource_type: Schedule
+    containment_path:
+    - Schedule[weekly]
+    evaluation_time: 3.5012e-05
+    tags:
+    - schedule
+    - weekly
+    time: '2018-06-12T23:30:03.098784860+02:00'
+    failed: false
+    changed: false
+    out_of_sync: false
+    skipped: false
+    change_count: 0
+    out_of_sync_count: 0
+    events: []
+    corrective_change: false
+  Schedule[monthly]:
+    title: monthly
+    file:
+    line:
+    resource: Schedule[monthly]
+    resource_type: Schedule
+    containment_path:
+    - Schedule[monthly]
+    evaluation_time: 3.0778e-05
+    tags:
+    - schedule
+    - monthly
+    time: '2018-06-12T23:30:03.098907615+02:00'
+    failed: false
+    changed: false
+    out_of_sync: false
+    skipped: false
+    change_count: 0
+    out_of_sync_count: 0
+    events: []
+    corrective_change: false
+  Schedule[never]:
+    title: never
+    file:
+    line:
+    resource: Schedule[never]
+    resource_type: Schedule
+    containment_path:
+    - Schedule[never]
+    evaluation_time: 5.6101e-05
+    tags:
+    - schedule
+    - never
+    time: '2018-06-12T23:30:03.098995239+02:00'
+    failed: false
+    changed: false
+    out_of_sync: false
+    skipped: false
+    change_count: 0
+    out_of_sync_count: 0
+    events: []
+    corrective_change: false
+  Filebucket[puppet]:
+    title: puppet
+    file:
+    line:
+    resource: Filebucket[puppet]
+    resource_type: Filebucket
+    containment_path:
+    - Filebucket[puppet]
+    evaluation_time: 3.9389e-05
+    tags:
+    - filebucket
+    - puppet
+    time: '2018-06-12T23:30:03.099118894+02:00'
+    failed: false
+    changed: false
+    out_of_sync: false
+    skipped: false
+    change_count: 0
+    out_of_sync_count: 0
+    events: []
+    corrective_change: false
+corrective_change: false
+catalog_uuid: cf6ff162-4ece-4fb6-bd4d-2923ddb563fa
+cached_catalog_status: not_used
