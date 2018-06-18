@@ -25,7 +25,12 @@ module ReportSanitizer #:nodoc:
               format7sanitizer.sanitize(raw)
             when 8
               format8sanitizer.sanitize(raw)
+            when 9
+              format9sanitizer.sanitize(raw)
             else
+              msg = "Sanitizer: Unknown report format #{raw['report_format']}, " +
+                    "using format 9 and hoping for the best"
+              Rails.logger.warn(msg)
               format9sanitizer.sanitize(raw)
           end
         when raw.include?('resource_statuses')
@@ -33,6 +38,14 @@ module ReportSanitizer #:nodoc:
         else
           format0sanitizer.sanitize(raw)
       end
+    rescue => e
+      host = raw['host'] || 'unknown_host'
+      format_version = raw['report_format'] || 'unknown_version'
+      puppet_version = raw['puppet_version'] || 'unknown_version'
+      msg = "Sanitizer error, #{host}, report format #{format_version}, " +
+            "puppet version #{puppet_version}: #{e.message}"
+      Rails.logger.error(msg)
+      raise e, msg, e.backtrace
     end
 
     private
@@ -82,7 +95,7 @@ module ReportSanitizer #:nodoc:
     class << self
       def verify_attributes(raw, names)
         names.each do |n|
-          raise ArgumentError, "required attribute not present: #{n}" unless raw.include?(n)
+          raise StandardError, "required attribute not present: #{n}" unless raw.include?(n)
         end
       end
 
