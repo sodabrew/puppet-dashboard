@@ -341,6 +341,7 @@ module ReportSanitizer #:nodoc:
   class FormatVersion5 < FormatVersion4
     def sanitize(raw)
       sanitized = super
+      raw['catalog_uuid'] ||= nil
       Util.verify_attributes(raw, %w[catalog_uuid cached_catalog_status])
       Util.copy_attributes(sanitized, raw, %w[catalog_uuid cached_catalog_status])
     end
@@ -393,6 +394,7 @@ module ReportSanitizer #:nodoc:
   class FormatVersion8 < FormatVersion7
     def sanitize(raw)
       sanitized = super
+      raw['transaction_completed'] ||= nil
       Util.verify_attributes(raw, %w[transaction_completed])
       Util.copy_attributes(sanitized, raw, %w[transaction_completed])
     end
@@ -410,6 +412,7 @@ module ReportSanitizer #:nodoc:
     class FormatVersion9StatusSanitizer < FormatVersion6StatusSanitizer
       def sanitize(raw)
         sanitized = super
+        raw['provider_used'] ||= nil
         Util.verify_attributes(raw, %w[provider_used])
         Util.copy_attributes(sanitized, raw, %w[provider_used])
       end
