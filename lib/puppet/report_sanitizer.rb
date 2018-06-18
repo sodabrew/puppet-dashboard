@@ -344,6 +344,7 @@ module ReportSanitizer #:nodoc:
 
     def sanitize(raw)
       sanitized = super
+      raw['master_used'] ||= nil
       Util.verify_attributes(raw, %w[noop noop_pending corrective_change master_used])
       Util.copy_attributes(sanitized, raw, %w[noop noop_pending corrective_change master_used])
     end
@@ -372,7 +373,6 @@ module ReportSanitizer #:nodoc:
   class FormatVersion7 < FormatVersion6
     def sanitize(raw)
       raw['kind'] = 'apply'
-      raw['master_used'] ||= nil
       super
     end
   end
