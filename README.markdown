@@ -8,24 +8,54 @@ nodes, and view inventory data and backed-up file contents.
 Dependencies
 ------------
 
-* Ruby 1.8.7, 1.9.3 or 2.0.0
+* Ruby 1.8.7, 1.9.3, 2.0.0 or 2.1.x
 * Bundler >= 1.1
 * MySQL >= 5.1 or PostgreSQL >= 9.0
 
 Fast Install
 ------------
 
-* Check out the code or download a release package.
-* Create a MySQL database and user, and set `max_allowed_packet` to 32M.
+* Install prerequisites:
+````
+apt-get install git libmysqlclient-dev libpq-dev libsqlite3-dev ruby-dev libxml2-dev libxslt-dev nodejs
+````
+* Check out the code:
+````
+cd /usr/share && \
+git clone https://github.com/sodabrew/puppet-dashboard.git && \
+cd puppet-dashboard
+````
+* Create a MySQL database and user
+````
+mysql -p -e"CREATE DATABASE dashboard_production CHARACTER SET utf8;" && \
+mysql -p -e"CREATE USER 'dashboard'@'localhost' IDENTIFIED BY 'my_password';" && \
+mysql -p -e"GRANT ALL PRIVILEGES ON dashboard_production.* TO 'dashboard'@'localhost';"
+````
+* Set `max_allowed_packet = 32M` in your MySQL configuration
+````
+vim /etc/mysql/my.cnf
+````
 * Edit your `config/settings.yml` and `config/database.yml` files.
-* `gem install bundler`
-* `bundle install --deployment`
-* Generate a new secret_token in config/settings.yml:
-  `echo "secret_token: '$(bundle exec rake secret)'" >> config/settings.yml`
-* `bundle exec rake db:setup`
-* `bundle exec rails server`
+````
+cp config/settings.yml.example config/settings.yml && \
+cp config/database.yml.example config/database.yml && \
+vim config/database.yml
+````
+* Install Puppet Dashboard
+````
+gem install bundler && \
+bundle install --deployment && \
+echo "secret_token: '$(bundle exec rake secret)'" >> config/settings.yml && \
+RAILS_ENV=production bundle exec rake db:setup && \
+RAILS_ENV=production bundle exec rake assets:precompile
+````
+* Start Puppet Dashboard manually
+````
+RAILS_ENV=production bundle exec rails server
+````
 * Set up Puppet to be Dashboard-aware.
 * Start the delayed job worker processes.
+* You will find an initscript and other useful files for Debian in `ext/debian`
 
 Production Environment
 ----------------------
