@@ -1,4 +1,4 @@
-class CreateNodeClasses < ActiveRecord::Migration
+class CreateNodeClasses < ActiveRecord::Migration[4.2]
   def self.up
     create_table :node_classes do |t|
       t.string :name

@@ -7,7 +7,7 @@
     %ul.actions
       - unless SETTINGS.enable_read_only_mode || session['ACCESS_CONTROL_ROLE'] == 'READ_ONLY'
         %li= link_to 'Edit', edit_node_class_path(@node_class), :class => "edit button"
-        %li= link_to 'Delete', @node_class, :confirm => 'Are you sure?', :method => :delete, :class => "delete button"
+        %li= link_to 'Delete', @node_class, :data => {:confirm => 'Are you sure?'}, :method => :delete, :class => "delete button"
 
   .item
     .section#error_messages{:style => "display: none;"}

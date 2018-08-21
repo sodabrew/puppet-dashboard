@@ -1,9 +1,6 @@
-class DelayedJobFailure < ActiveRecord::Base
+class DelayedJobFailure < ApplicationRecord
   def self.per_page; 25 end
 
-  scope :unread, where(:read => false)
+  scope :unread, -> { where(:read => false) }
   serialize :backtrace
-
-  # attr_readonly :created_at # FIXME
-  attr_accessible :summary, :backtrace, :details, :read, :created_at, :updated_at
 end

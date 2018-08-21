@@ -11,7 +11,7 @@ namespace :node do
       exit 1
     end
 
-    if Node.find_by_name(name)
+    if Node.find_by(name: name)
       $stderr.puts 'Node already exists!'
       exit 1
     end
@@ -22,8 +22,8 @@ namespace :node do
 
     begin
       node = Node.new(:name => name)
-      node.node_groups = NodeGroup.find_all_by_name(groups)
-      node.node_classes = NodeClass.find_all_by_name(classes)
+      node.node_groups = NodeGroup.where(name: groups)
+      node.node_classes = NodeClass.where(name: classes)
       node.save!
       puts 'Node successfully created!'
     rescue => e
@@ -45,7 +45,7 @@ namespace :node do
 
     begin
       # ActiveRecord << takes effect immediately without save!
-      node.node_groups << [ NodeGroup.find_all_by_name(groups) - node.node_groups ]
+      node.node_groups << [ NodeGroup.where(name: groups) - node.node_groups ]
       puts "Node groups successfully edited for #{node.name}!"
     rescue => e
       $stderr.puts "There was a problem saving the node: #{e.message}"
@@ -78,7 +78,7 @@ namespace :node do
 
     begin
       # ActiveRecord << takes effect immediately without save!
-      node.node_classes << [ NodeClass.find_all_by_name(classes) - node.node_classes ]
+      node.node_classes << [ NodeClass.where(name: classes).to_a - node.node_classes ]
       puts "Node classes successfully edited for #{node.name}!"
     rescue => e
       $stderr.puts "There was a problem saving the node: #{e.message}"
@@ -118,7 +118,7 @@ namespace :node do
     end
 
     classes = ENV['classes'].split(',').map(&:strip)
-    node.node_classes = NodeClass.find_all_by_name(classes)
+    node.node_classes = NodeClass.where(name: classes)
 
     begin
       node.save!
@@ -175,7 +175,7 @@ namespace :node do
           node = get_node(name)
 
           given_parameters.each do |key, value|
-            param, *dupes = *node.parameters.find_all_by_key(key)
+            param, *dupes = *node.parameters.where(key: key)
             if param
               # Change existing variables
               param.value = value
@@ -221,7 +221,7 @@ namespace :node do
           node = get_node(name)
 
           given_parameters.each do |key, value|
-            node.parameters.find_all_by_key(key).map(&:destroy)
+            node.parameters.where(key: key).map(&:destroy)
           end
 
           node.save!
@@ -244,7 +244,7 @@ namespace :node do
     end
 
     groups = ENV['groups'].split(',').map(&:strip)
-    node.node_groups = NodeGroup.find_all_by_name(groups)
+    node.node_groups = NodeGroup.where(name: groups)
 
     begin
       node.save!

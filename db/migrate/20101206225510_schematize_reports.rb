@@ -1,6 +1,6 @@
 require "#{Rails.root}/lib/progress_bar"
 
-class SchematizeReports < ActiveRecord::Migration
+class SchematizeReports < ActiveRecord::Migration[4.2]
   def self.up
     create_table :report_logs do |t|
       t.integer :report_id, :null => false
@@ -56,7 +56,7 @@ class SchematizeReports < ActiveRecord::Migration
     add_index :metrics, [:report_id]
 
     # The name of this index is wrong, it's really only an index on node_id
-    if index_name_exists?("reports", "index_reports_on_node_id_and_success", false)
+    if index_name_exists?("reports", "index_reports_on_node_id_and_success")
       remove_index "reports", :name => "index_reports_on_node_id_and_success"
     end
 

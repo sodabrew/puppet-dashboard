@@ -1,4 +1,4 @@
-class BasicSchema < ActiveRecord::Migration
+class BasicSchema < ActiveRecord::Migration[4.2]
   def self.up
     create_table :assignments, :force => true do |t|
       t.integer  :node_id

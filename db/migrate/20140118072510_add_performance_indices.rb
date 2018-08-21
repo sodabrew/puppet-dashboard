@@ -1,4 +1,4 @@
-class AddPerformanceIndices < ActiveRecord::Migration
+class AddPerformanceIndices < ActiveRecord::Migration[4.2]
   def self.up
     add_index :timeline_events, [:subject_id, :subject_type], :name => 'index_timeline_events_primary'
     add_index :timeline_events, [:secondary_subject_id, :secondary_subject_type], :name => 'index_timeline_events_secondary'

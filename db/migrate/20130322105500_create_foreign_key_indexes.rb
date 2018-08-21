@@ -1,4 +1,4 @@
-class CreateForeignKeyIndexes < ActiveRecord::Migration
+class CreateForeignKeyIndexes < ActiveRecord::Migration[4.2]
   def self.up
     add_index :node_group_memberships, :node_group_id
     add_index :node_group_memberships, :node_id

@@ -1,11 +1,11 @@
 require 'spec_helper'
 
-describe Report do
+describe Report, :type => :model do
   include DescribeReports
 
   describe "on creation" do
     let :node do
-      Node.generate
+      create(:node)
     end
     let :report_yaml do
       File.read(File.join(Rails.root, "spec/fixtures/sample_report.yml"))
@@ -34,7 +34,7 @@ describe Report do
       DelayedJobFailure.count.should == 1
       DelayedJobFailure.first.summary.should == 'Importing report'
       DelayedJobFailure.first.details.should == 'The supplied report did not deserialize into a Hash'
-      DelayedJobFailure.first.backtrace.any? {|trace| trace =~ /report\.rb:\d+:in.*create_from_yaml/}.should be_true
+      DelayedJobFailure.first.backtrace.any? {|trace| trace =~ /report\.rb:\d+:in.*create_from_yaml/}.should be true
     end
 
     it "should consider a report in incorrect format to be invalid" do
@@ -42,7 +42,7 @@ describe Report do
       DelayedJobFailure.count.should == 1
       DelayedJobFailure.first.summary.should == 'Importing report'
       DelayedJobFailure.first.details.should == 'The supplied report did not deserialize into a Hash'
-      DelayedJobFailure.first.backtrace.any? {|trace| trace =~ /report\.rb:\d+:in.*create_from_yaml/}.should be_true
+      DelayedJobFailure.first.backtrace.any? {|trace| trace =~ /report\.rb:\d+:in.*create_from_yaml/}.should be true
     end
 
     it "should consider a report in correct format to be valid" do
@@ -57,38 +57,39 @@ describe Report do
       DelayedJobFailure.count.should == 1
       DelayedJobFailure.first.summary.should == 'Importing report'
       DelayedJobFailure.first.details.should == 'Validation failed: Host already has a report for time and kind'
-      DelayedJobFailure.first.backtrace.any? {|trace| trace =~ /report\.rb:\d+:in.*create_from_yaml/}.should be_true
+      DelayedJobFailure.first.backtrace.any? {|trace| trace =~ /report\.rb:\d+:in.*create_from_yaml/}.should be true
     end
 
     it "creates a node by host if none exists" do
       lambda {
         Report.create_from_yaml(report_yaml)
-      }.should change { Node.count(:conditions => {:name => raw_report['host']}) }.by(1)
+      }.should change { Node.where(name: raw_report['host']).count }.by(1)
     end
 
     it "updates the node's reported_at timestamp for apply reports" do
-      node = Node.generate(:name => raw_report['host'])
+      node =
+      create(:node, :name => raw_report['host'])
       report = Report.create_from_yaml(report_yaml)
       node.reload
       node.reported_at.should be_within(1.second).of(raw_report['time'].in_time_zone)
     end
 
     it "does not update the node's reported_at timestamp for inspect reports" do
-      node = Node.generate
-      report = Report.generate!(:kind => "inspect", :host => node.name)
+      node = create(:node)
+      report = create(:report, :kind => "inspect", :host => node.name)
       node.reload
       node.reported_at.should == nil
     end
 
     it "should update the node's last report for apply reports" do
-      node = Node.generate!
+      node = create(:node)
       report = Report.create!(:host => node.name, :time => Time.now, :kind => "apply")
       node.reload
       node.last_apply_report.should == report
     end
 
     it "should not update the node's last report for inspect reports" do
-      node = Node.generate
+      node = create(:node)
       report = Report.create!(:host => node.name, :time => Time.now, :kind => "inspect")
       node.reload
       node.last_apply_report.should_not == report
@@ -104,11 +105,11 @@ describe Report do
     end
 
     it "should idempotently update statuses and metrics" do
-      suc_rep = Factory.create(:successful_report)
+      suc_rep = create(:successful_report)
       suc_rep.status.should == 'changed'
       suc_rep.metrics.should be_empty
 
-      Factory.create(:pending_resource, :report => suc_rep)
+      create(:pending_resource, :report => suc_rep)
 
       suc_rep.munge
       suc_rep.status.should == 'pending'
@@ -189,7 +190,7 @@ describe Report do
   describe "#create_from_yaml" do
     it "should populate report related tables from a version 0 yaml report" do
       Time.zone = 'UTC'
-      node = Node.generate(:name => 'sample_node')
+      node = create(:node, :name => 'sample_node')
       report_yaml = File.read(File.join(Rails.root, "spec/fixtures/reports/puppet25/1_changed_0_failures.yml"))
       Report.count.should == 0
       Report.create_from_yaml(report_yaml)
@@ -236,7 +237,7 @@ describe Report do
     end
 
     it "should populate report related tables from a version 1 yaml report" do
-      node = Node.generate(:name => 'puppet.puppetlabs.vm')
+      node = create(:node, :name => 'puppet.puppetlabs.vm')
       report_yaml = File.read(File.join(Rails.root, "spec/fixtures/reports/puppet26/report_ok_service_started_ok.yaml"))
       file = '/etc/puppet/manifests/site.pp'
       Report.create_from_yaml(report_yaml)
@@ -314,7 +315,7 @@ describe Report do
     end
 
     it "should populate report related tables from a version 2 report" do
-      node = Node.generate(:name => 'paul-berrys-macbook-pro-3.local')
+      node = create(:node, :name => 'paul-berrys-macbook-pro-3.local')
       report_yaml = File.read(File.join(Rails.root, "spec/fixtures/reports/version2/example.yaml"))
       file = '/Users/pberry/puppet_labs/test_data/master/manifests/site.pp'
       Report.create_from_yaml(report_yaml)
@@ -461,7 +462,7 @@ describe Report do
 
   describe "When destroying" do
     it "should destroy all dependent model objects" do
-      node = Node.generate(:name => 'puppet.puppetlabs.vm')
+      node = create(:node, :name => 'puppet.puppetlabs.vm')
       report_yaml = File.read(File.join(Rails.root, "spec/fixtures/reports/puppet26/report_ok_service_started_ok.yaml"))
       file = '/etc/puppet/manifests/site.pp'
       report = Report.create_from_yaml(report_yaml)
@@ -480,8 +481,8 @@ describe Report do
   describe "when submitting reports" do
     it "should be able to save an inspect report and an apply report with the same timestamp" do
       time = Time.now
-      Report.generate(:host => "my_node", :time => time, :kind => "apply")
-      Report.generate(:host => "my_node", :time => time, :kind => "inspect")
+      create(:report, :host => "my_node", :time => time, :kind => "apply")
+      create(:report, :host => "my_node", :time => time, :kind => "inspect")
 
       Report.count.should == 2
     end
@@ -489,7 +490,7 @@ describe Report do
 
   describe "setting denormalized fields on node" do
     let :node do
-      Node.generate(:name => "my_node")
+      create(:node, :name => "my_node")
     end
 
     ["apply", "inspect"].each do |kind|
@@ -503,7 +504,7 @@ describe Report do
             node.last_inspect_report.should == nil
             node.reported_at.should == nil
 
-            report = Report.generate(:host => "my_node", :time => Time.now, :kind => kind)
+            report = create(:report, :host => "my_node", :time => Time.now, :kind => kind)
 
             node.reload
 
@@ -530,11 +531,11 @@ describe Report do
         describe "when creating a subsequent report" do
           let :old_apply_report do
             node # force creation
-            Report.generate(:host => "my_node", :time =>  1.hour.ago, :kind => "apply")
+            create(:report, :host => "my_node", :time =>  1.hour.ago, :kind => "apply")
           end
           let :old_inspect_report do
             node # force creation
-            Report.generate(:host => "my_node", :time => 2.hours.ago, :kind => "inspect")
+            create(:report, :host => "my_node", :time => 2.hours.ago, :kind => "inspect")
           end
           let :report do
             node # force creation
@@ -546,7 +547,7 @@ describe Report do
             node.last_inspect_report.should == old_inspect_report
             node.reported_at.to_s.should == old_apply_report.time.to_s
 
-            report = Report.generate(:host => "my_node", :time => Time.now, :kind => kind)
+            report = create(:report, :host => "my_node", :time => Time.now, :kind => kind)
 
             node.reload
 
@@ -573,11 +574,11 @@ describe Report do
         describe "when creating a prior report" do
           let :old_apply_report do
             node # force creation
-            Report.generate(:host => "my_node", :time =>  1.hour.ago, :kind => "apply")
+            create(:report, :host => "my_node", :time =>  1.hour.ago, :kind => "apply")
           end
           let :old_inspect_report do
             node # force creation
-            Report.generate(:host => "my_node", :time => 2.hours.ago, :kind => "inspect")
+            create(:report, :host => "my_node", :time => 2.hours.ago, :kind => "inspect")
           end
 
           before :each do
@@ -590,7 +591,7 @@ describe Report do
             node.last_inspect_report.should == old_inspect_report
             node.reported_at.to_s.should == old_apply_report.time.to_s
 
-            Report.generate(:host => "my_node", :time => 3.hours.ago, :kind => kind)
+            create(:report, :host => "my_node", :time => 3.hours.ago, :kind => kind)
 
             node.reload
           end
@@ -605,17 +606,17 @@ describe Report do
         describe "when deleting the latest report" do
           let :older_apply_report do
             node # force creation
-            Report.generate(:host => "my_node", :time => 3.hours.ago, :kind => "apply",   :status => "changed")
+            create(:report, :host => "my_node", :time => 3.hours.ago, :kind => "apply",   :status => "changed")
           end
           let :older_inspect_report do
             node # force creation
-            Report.generate(:host => "my_node", :time => 4.hours.ago, :kind => "inspect", :status => "unchanged")
+            create(:report, :host => "my_node", :time => 4.hours.ago, :kind => "inspect", :status => "unchanged")
           end
 
           before :each do
             node # force creation
-            newer_apply_report   = Report.generate(:host => "my_node", :time =>  1.hour.ago, :kind => "apply",   :status => "failed")
-            newer_inspect_report = Report.generate(:host => "my_node", :time => 2.hours.ago, :kind => "inspect", :status => "unchanged")
+            newer_apply_report   = create(:report, :host => "my_node", :time =>  1.hour.ago, :kind => "apply",   :status => "failed")
+            newer_inspect_report = create(:report, :host => "my_node", :time => 2.hours.ago, :kind => "inspect", :status => "unchanged")
             older_apply_report # force creation
             older_inspect_report # force creation
 
@@ -649,8 +650,8 @@ describe Report do
         describe "when deleting the only report" do
           before :each do
             node # force creation
-            apply_report   = Report.generate(:host => "my_node", :time =>  1.hour.ago, :kind => "apply",   :status => "failed")
-            inspect_report = Report.generate(:host => "my_node", :time => 2.hours.ago, :kind => "inspect", :status => "unchanged")
+            apply_report   = create(:report, :host => "my_node", :time =>  1.hour.ago, :kind => "apply",   :status => "failed")
+            inspect_report = create(:report, :host => "my_node", :time => 2.hours.ago, :kind => "inspect", :status => "unchanged")
 
             Report.count.should == 2
 
@@ -684,19 +685,19 @@ describe Report do
       describe "when deleting some historical report" do
         let :newer_apply_report do
           node # force creation
-          Report.generate(:host => "my_node", :time =>  1.hour.ago, :kind => "apply",   :status => "failed")
+          create(:report, :host => "my_node", :time =>  1.hour.ago, :kind => "apply",   :status => "failed")
         end
         let :newer_inspect_report do
           node # force creation
-          Report.generate(:host => "my_node", :time => 2.hours.ago, :kind => "inspect", :status => "unchanged")
+          create(:report, :host => "my_node", :time => 2.hours.ago, :kind => "inspect", :status => "unchanged")
         end
 
         before :each do
           node # force creation
           newer_apply_report # force creation
           newer_inspect_report # force creation
-          older_apply_report   = Report.generate(:host => "my_node", :time => 3.hours.ago, :kind => "apply",   :status => "changed")
-          older_inspect_report = Report.generate(:host => "my_node", :time => 4.hours.ago, :kind => "inspect", :status => "unchanged")
+          older_apply_report   = create(:report, :host => "my_node", :time => 3.hours.ago, :kind => "apply",   :status => "changed")
+          older_inspect_report = create(:report, :host => "my_node", :time => 4.hours.ago, :kind => "inspect", :status => "unchanged")
 
           Report.count.should == 4
 

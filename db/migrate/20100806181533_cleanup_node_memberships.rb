@@ -1,4 +1,4 @@
-class CleanupNodeMemberships < ActiveRecord::Migration
+class CleanupNodeMemberships < ActiveRecord::Migration[4.2]
   def self.up
     NodeClassMembership.all.each do |n|
       n.destroy if n.node_class.nil? || n.node.nil?

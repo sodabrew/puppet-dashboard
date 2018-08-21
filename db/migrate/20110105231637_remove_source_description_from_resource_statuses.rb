@@ -1,4 +1,4 @@
-class RemoveSourceDescriptionFromResourceStatuses < ActiveRecord::Migration
+class RemoveSourceDescriptionFromResourceStatuses < ActiveRecord::Migration[4.2]
   def self.up
     remove_column :resource_statuses, :source_description
   end

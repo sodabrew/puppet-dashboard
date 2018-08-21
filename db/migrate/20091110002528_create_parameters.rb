@@ -1,4 +1,4 @@
-class CreateParameters < ActiveRecord::Migration
+class CreateParameters < ActiveRecord::Migration[4.2]
   def self.up
     create_table :parameters do |t|
       t.string :key

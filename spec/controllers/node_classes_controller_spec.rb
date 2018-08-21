@@ -2,7 +2,7 @@ require 'spec_helper'
 require 'shared_behaviors/controller_mixins'
 require 'shared_behaviors/sorted_index'
 
-describe NodeClassesController do
+describe NodeClassesController, :type => :controller do
   def model; NodeClass end
 
   it_should_behave_like "without JSON pagination"

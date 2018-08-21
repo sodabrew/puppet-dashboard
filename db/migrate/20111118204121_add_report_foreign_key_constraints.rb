@@ -1,4 +1,4 @@
-class AddReportForeignKeyConstraints < ActiveRecord::Migration
+class AddReportForeignKeyConstraints < ActiveRecord::Migration[4.2]
   def self.up
     # Can't add constraints until we clean up
     Rake::Task['reports:prune:orphaned'].invoke

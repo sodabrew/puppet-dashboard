@@ -2,7 +2,7 @@ require 'spec_helper'
 require 'shared_behaviors/controller_mixins'
 require 'shared_behaviors/sorted_index'
 
-describe NodeGroupsController do
+describe NodeGroupsController, :type => :controller do
   render_views
   def model; NodeGroup end
 
@@ -12,14 +12,14 @@ describe NodeGroupsController do
 
   describe "#create" do
     it "should create a node group on successful creation" do
-      post :create, 'node_group' => { 'name' => 'foo' }
+      post :create, params: { node_group: { name: 'foo' } }
       assigns[:node_group].name.should == 'foo'
     end
 
     it "should render error when creation fails" do
-      post :create, 'node_group' => { }
+      post :create, params: { node_group: {} }
       response.should render_template('shared/_error')
-      response.should be_success
+      response.should be_successful
 
       assigns[:node_group].errors.full_messages.should == ["Name can't be blank"]
       assigns[:class_data].should include({:class=>"#node_class_ids", :data_source=>"/node_classes.json", :objects=>[]})
@@ -32,7 +32,7 @@ describe NodeGroupsController do
       get :new
 
       response.should render_template('node_groups/new')
-      response.should be_success
+      response.should be_successful
       assigns[:class_data].should include({:class=>"#node_class_ids", :data_source=>"/node_classes.json", :objects=>[]})
       assigns[:group_data].should include({:class=>"#node_group_ids", :data_source=>"/node_groups.json", :objects=>[]})
     end
@@ -40,15 +40,15 @@ describe NodeGroupsController do
 
   describe "#edit" do
     before :each do
-      @node_group = NodeGroup.generate!
+      @node_group = create(:node_group)
     end
 
     it "should render the edit template" do
-      get :edit, :id => @node_group
+      get :edit, params: { id: @node_group }
       assigns[:node_group].should == @node_group
 
       response.should render_template('edit')
-      response.should be_success
+      response.should be_successful
 
       assigns[:class_data].should include({:class=>"#node_class_ids", :data_source=>"/node_classes.json", :objects=>[]})
       assigns[:group_data].should include({:class=>"#node_group_ids", :data_source=>"/node_groups.json", :objects=>[]})
@@ -56,13 +56,13 @@ describe NodeGroupsController do
   end
 
   describe "#update" do
-    def do_put
-      put :update, @params
+    def do_patch
+      patch :update, params: @params, as: :json
     end
 
     before :each do
       SETTINGS.stubs(:enable_read_only_mode).returns(false)
-      @node_group = NodeGroup.generate!
+      @node_group = create(:node_group)
       @params = { :id => @node_group.id, :node_group => {} }
     end
 
@@ -74,55 +74,55 @@ describe NodeGroupsController do
       it "should allow specification of 'parameter_attributes'" do
         @params[:node_group].merge! :parameter_attributes => [{:key => 'foo', :value => 'bar'}]
 
-        do_put
+        do_patch
 
         @node_group.reload.parameters.to_hash.should include({'foo' => 'bar'})
       end
 
       it "should allow specification of node classes" do
-        node_class = NodeClass.generate!
+        node_class = create(:node_class)
         @params[:node_group].merge! :node_class_ids => [node_class.id]
 
-        do_put
+        do_patch
 
         @node_group.reload.node_classes.should == [node_class]
       end
 
       it "should be able to remove assigned classes" do
-        node_class = NodeClass.generate!
+        node_class = create(:node_class)
         @node_group.node_classes << node_class
         @node_group.save!
         @node_group.reload.node_classes.should == [node_class]
 
         @params[:node_group].merge! :assigned_node_class_ids => []
 
-        do_put
+        do_patch
 
         @node_group.reload.node_classes.should be_empty
       end
 
       it "should be able to remove assigned groups" do
-        node_subgroup = NodeGroup.generate!
+        node_subgroup = create(:node_group)
         @node_group.node_groups << node_subgroup
         @node_group.save!
         @node_group.reload.node_groups.should == [node_subgroup]
 
         @params[:node_group].merge! :assigned_node_group_ids => []
 
-        do_put
+        do_patch
 
         @node_group.reload.node_groups.should be_empty
       end
 
       it "should be able to remove assigned nodes" do
-        node = Node.generate!
+        node = create(:node)
         @node_group.nodes << node
         @node_group.save!
         @node_group.reload.nodes.should == [node]
 
         @params[:node_group].merge! :assigned_node_ids => []
 
-        do_put
+        do_patch
 
         @node_group.reload.nodes.should be_empty
       end
@@ -136,7 +136,7 @@ describe NodeGroupsController do
       it "should fail if parameter_attributes are specified" do
         @params[:node_group].merge! :parameter_attributes => [{:key => 'foo', :value => 'bar'}]
 
-        do_put
+        do_patch
 
         response.should be_forbidden
         response.body.should =~ /Node classification has been disabled/
@@ -145,10 +145,10 @@ describe NodeGroupsController do
       end
 
       it "should fail if node classes are specified" do
-        node_class = NodeClass.generate!
+        node_class = create(:node_class)
         @params[:node_group].merge! :assigned_node_class_ids => [node_class.id]
 
-        do_put
+        do_patch
 
         response.should be_forbidden
         response.body.should =~ /Node classification has been disabled/
@@ -157,12 +157,8 @@ describe NodeGroupsController do
       end
 
       it "should succeed if parameter_attributes and node classes are omitted" do
-        do_put
-        response.code.should == '200'
-        response_hash = JSON.parse(response.body)
-        response_hash["status"].should == "ok"
-        response_hash["valid"].should == "true"
-        response_hash["redirect_to"].should_not be_empty
+        do_patch
+        response.code.should == '204'
       end
     end
   end

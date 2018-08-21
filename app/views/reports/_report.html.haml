@@ -5,7 +5,7 @@
     %ul.actions
       - Registry.each_callback :report, :actions do |thing|
         = thing.call self, report
-      %li= link_to 'Delete', report, :confirm => 'Are you sure?', :method => :delete, :class => "delete button"
+      %li= link_to 'Delete', report, :data => {:confirm => 'Are you sure?'}, :method => :delete, :class => "delete button"
 
 .item
   - user_facing = Hash.new { |hash, key| hash[key] = key[/[a-z].*/i].titleize }

@@ -1,4 +1,4 @@
-class RemoveSourceDescriptionFromResourceEvents < ActiveRecord::Migration
+class RemoveSourceDescriptionFromResourceEvents < ActiveRecord::Migration[4.2]
   def self.up
     remove_column :resource_events, :source_description
   end

@@ -1,12 +1,12 @@
 require 'spec_helper'
 
-describe "/node_groups/index.html.haml" do
+describe "/node_groups/index.html.haml", :type => :view do
   include NodeGroupsHelper
 
   describe "successful render" do
     before :each do
       view.stubs(:action_name => 'index')
-      assigns[:node_groups] = @node_groups = [ NodeGroup.generate!, NodeGroup.generate! ].paginate
+      assigns[:node_groups] = @node_groups = [ create(:node_group), create(:node_group) ].paginate
       render
     end
 

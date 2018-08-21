@@ -1,12 +1,12 @@
 require 'spec_helper'
 
-describe ResourceStatus do
+describe ResourceStatus, :type => :model do
   describe "#name" do
     it "should combine type and title" do
       resource_status = ResourceStatus.create!(
         :resource_type => "File",
         :title         => "/tmp/foo",
-        :report        => Report.generate!
+        :report        => create(:report)
       )
       resource_status.name.should == "File[/tmp/foo]"
     end
@@ -50,7 +50,7 @@ describe ResourceStatus do
 
     describe ".latest_inspections" do
       it "should only return statuses from reports that are the latest inspect report for their node" do
-        ResourceStatus.latest_inspections.all.should =~ @matching_report.resource_statuses
+        ResourceStatus.latest_inspections.should =~ @matching_report.resource_statuses
       end
     end
 
@@ -63,10 +63,10 @@ describe ResourceStatus do
 
   describe ".pending" do
     before :each do
-      report = Report.generate!
-      @pending_resource = Factory(:pending_resource, :title => 'pending', :report => report)
-      @successful_resource = Factory(:successful_resource, :title => 'successful', :report => report)
-      @failed_resource = Factory(:failed_resource, :title => 'failed', :report => report)
+      report = create(:report)
+      @pending_resource = create(:pending_resource, :title => 'pending', :report => report)
+      @successful_resource = create(:successful_resource, :title => 'successful', :report => report)
+      @failed_resource = create(:failed_resource, :title => 'failed', :report => report)
     end
 
     describe "true" do
@@ -84,10 +84,10 @@ describe ResourceStatus do
 
   describe ".failed" do
     before :each do
-      report = Report.generate!
-      @pending_resource = Factory(:pending_resource, :title => 'pending', :report => report)
-      @successful_resource = Factory(:successful_resource, :title => 'successful', :report => report)
-      @failed_resource = Factory(:failed_resource, :title => 'failed', :report => report)
+      report = create(:report)
+      @pending_resource = create(:pending_resource, :title => 'pending', :report => report)
+      @successful_resource = create(:successful_resource, :title => 'successful', :report => report)
+      @failed_resource = create(:failed_resource, :title => 'failed', :report => report)
     end
 
     describe "true" do
@@ -105,16 +105,16 @@ describe ResourceStatus do
 
   describe '.to_csv' do
     before :each do
-      report = Report.generate!
-      @pending_resource = Factory(:pending_resource, :title => 'pending', :report => report)
-      @successful_resource = Factory(:successful_resource, :title => 'successful', :report => report)
-      @failed_resource = Factory(:failed_resource, :title => 'failed', :report => report)
+      report = create(:report)
+      @pending_resource = create(:pending_resource, :title => 'pending', :report => report)
+      @successful_resource = create(:successful_resource, :title => 'successful', :report => report)
+      @failed_resource = create(:failed_resource, :title => 'failed', :report => report)
     end
 
     it 'should use a custom list of properties to export as CSV' do
       custom_properties = [:resource_type, :title, :evaluation_time, :file, :line, :time, :change_count, :out_of_sync_count, :skipped, :failed]
 
-      csv_lines = ResourceStatus.find(:all).to_csv.split("\n")
+      csv_lines = ResourceStatus.all.to_a.to_csv.split("\n")
       csv_lines.first.should == custom_properties.join(',')
       csv_lines[1..-1].should =~ [@pending_resource, @failed_resource, @successful_resource].map do |res|
         custom_properties.map do |field|

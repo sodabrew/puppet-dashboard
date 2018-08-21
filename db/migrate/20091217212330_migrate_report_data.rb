@@ -1,10 +1,12 @@
-class MigrateReportData < ActiveRecord::Migration
+class MigrateReportData < ActiveRecord::Migration[4.2]
   def self.up
     STDOUT.puts "-- migrate Report data"
-    pbar = ProgressBar.new("   ->", Report.count)
-    ms = Benchmark.ms do
-      reports = Report.all
-      reports.each{|r| r.send(:set_attributes); r.save_without_validation; pbar.inc}
+    reports = Report.all.to_a
+    if reports.size > 0
+      pbar = ProgressBar.new("   ->", reports.size)
+      ms = Benchmark.ms do
+        reports.each{|r| r.send(:set_attributes); r.save_without_validation; pbar.inc}
+      end
     end
   ensure
     pbar and pbar.finish

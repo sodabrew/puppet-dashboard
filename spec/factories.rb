@@ -1,151 +1,166 @@
-Factory.define :node_group do |group|
-  group.name { Factory.next(:name) }
-end
+FactoryBot.define do
 
-Factory.define :node_class do |node_class|
-  node_class.name { Factory.next(:name) }
-end
+  sequence :name do |n|
+    "name_#{n}"
+  end
 
-Factory.define :parameter do |parameter|
-  parameter.sequence(:key)   {|n| "Key #{n}"   }
-  parameter.sequence(:value) {|n| "Value #{n}" }
-end
+  sequence :filename do |n|
+    dir = "dir_{n}"
+    File.join('/', dir, dir, dir)
+  end
 
-Factory.define :report do |report|
-  report.status "failed"
-  report.kind   "apply"
-  report.host do |rep|
-    if rep.node 
-      rep.node.name 
-    else
-      Factory.next(:name)
+  sequence :time do |n|
+    # each things created will be 1 hour newer than the last
+    # might be a problem if creating more than 1000 objects
+    (1000 - n).hours.ago
+  end
+
+  factory :node_group do
+    name
+  end
+
+  factory :node_class do
+    name
+  end
+
+  factory :node do
+    name
+
+    factory :reported_node do |node|
+      after(:create) do |node|
+        create(:report, :node => node, :host => node.name)
+        node.reload
+      end
+
+      factory :unresponsive_node do
+        after(:create) do |node|
+          node.last_apply_report.update_attributes!(:time => 2.days.ago)
+          node.update_attributes!(:reported_at => 2.days.ago)
+        end
+      end
+
+      factory :responsive_node do
+        after(:create) do |node|
+          node.last_apply_report.update_attributes!(:time => 2.minutes.ago)
+          node.update_attributes!(:reported_at => 2.minutes.ago)
+        end
+
+        factory :failing_node do
+          after(:create) do |node|
+            node.last_apply_report.update_attributes!(:status => 'failed')
+            node.update_attributes!(:status => 'failed')
+          end
+        end
+
+        factory :pending_node do
+          after(:create) do |node|
+            node.last_apply_report.update_attributes!(:status => 'pending')
+            node.update_attributes!(:status => 'pending')
+            create(:pending_resource, report: node.last_apply_report)
+          end
+        end
+
+        factory :changed_node do
+          after(:create) do |node|
+            node.last_apply_report.update_attributes!(:status => 'changed')
+            node.update_attributes!(:status => 'changed')
+            create(:changed_resource, report: node.last_apply_report)
+          end
+        end
+
+        factory :unchanged_node do
+          after(:create) do |node|
+            node.last_apply_report.update_attributes!(:status => 'unchanged')
+            node.update_attributes!(:status => 'unchanged')
+          end
+        end
+
+      end
     end
   end
-  report.time   { Factory.next(:time) }
-end
 
-Factory.define :successful_report, :parent => :report do |report|
-  report.status 'changed'
-end
-
-Factory.define :failing_report, :parent => :report do |report|
-  report.status 'failed'
-end
-
-Factory.define :inspect_report, :parent => :report do |inspect|
-  inspect.kind 'inspect'
-end
-
-Factory.define :resource_status do |status|
-  status.resource_type 'File'
-  status.title { Factory.next(:filename) }
-  status.evaluation_time { rand(60)+1 }
-  status.file { Factory.next(:filename) }
-  status.line { rand(60)+1 }
-  status.time { Factory.next(:time) }
-  status.change_count 0
-  status.out_of_sync_count 0
-  status.skipped false
-  status.failed false
-end
-
-Factory.define :failed_resource, :parent => :resource_status do |status|
-  status.failed true
-  status.after_create do |status|
-    status.events.generate!(:status => 'failed')
-    status.change_count += 1
-    status.out_of_sync_count += 1
-    status.save
+  factory :parameter do
+    sequence(:key)   {|n| "Key #{n}"   }
+    sequence(:value) {|n| "Value #{n}" }
   end
-end
 
-Factory.define :successful_resource, :parent => :resource_status do |status|
-  status.failed false
-  status.after_create do |status|
-    status.events.generate!(:status => 'success')
-    status.change_count += 1
-    status.out_of_sync_count += 1
-    status.save
+  factory :report do
+    status "failed"
+    kind   "apply"
+    host do |rep|
+      if rep.node
+        rep.node.name
+      else
+        generate(:name)
+      end
+    end
+    time
+
+    factory :successful_report do
+      status 'changed'
+    end
+
+    factory :failing_report do
+      status 'failed'
+    end
+
+    factory :inspect_report do
+      kind 'inspect'
+    end
   end
-end
 
-Factory.define :pending_resource, :parent => :successful_resource do |status|
-  status.failed false
-  status.after_create do |status|
-    status.events.generate!(:status => 'noop')
-    status.out_of_sync_count += 1
-    status.save
+
+  factory :resource_status do
+    resource_type 'File'
+    title { generate(:filename) }
+    evaluation_time { rand(60)+1 }
+    file { generate(:filename) }
+    line { rand(60)+1 }
+    time
+    change_count 0
+    out_of_sync_count 0
+    skipped false
+    failed false
+
+    factory :failed_resource do
+      failed true
+      after(:create) do |status|
+        create(:resource_event, :resource_status => status, :status => 'failed')
+        status.change_count += 1
+        status.out_of_sync_count += 1
+        status.save
+      end
+    end
+
+    factory :changed_resource do
+      after(:create) do |status|
+        status.status = 'changed'
+        create(:resource_event, :resource_status => status, :status => 'changed')
+        status.change_count += 1
+        status.out_of_sync_count += 1
+        status.save
+      end
+    end
+
+    factory :successful_resource do
+      after(:create) do |status|
+        create(:resource_event, :resource_status => status, :status => 'success')
+        status.change_count += 1
+        status.out_of_sync_count += 1
+        status.save
+      end
+    end
+
+    factory :pending_resource do
+      after(:create) do |status|
+        create(:resource_event, :resource_status => status, :status => 'noop')
+        status.out_of_sync_count += 1
+        status.save
+      end
+    end
+
   end
-end
 
-Factory.define :resource_event do |event|
-end
+  factory :resource_event
 
-Factory.define :node do |node|
-  node.name { Factory.next(:name) }
-end
-
-Factory.define :reported_node, :parent => :node do |node|
-  node.after_create do |node|
-    Report.generate!(:host => node.name)
-    node.reload
-  end
-end
-
-Factory.define :unresponsive_node, :parent => :reported_node do |node|
-  node.after_create do |node|
-    node.last_apply_report.update_attributes!(:time => 2.days.ago)
-    node.update_attributes!(:reported_at => 2.days.ago)
-  end
-end
-
-Factory.define :responsive_node, :parent => :reported_node do |node|
-  node.after_create do |node|
-    node.last_apply_report.update_attributes!(:time => 2.minutes.ago)
-    node.update_attributes!(:reported_at => 2.minutes.ago)
-  end
-end
-
-Factory.define :failing_node, :parent => :responsive_node do |node|
-  node.after_create do |node|
-    node.last_apply_report.update_attributes!(:status => 'failed')
-    node.update_attributes!(:status => 'failed')
-  end
-end
-
-Factory.define :pending_node, :parent => :responsive_node do |node|
-  node.after_create do |node|
-    node.last_apply_report.update_attributes!(:status => 'pending')
-    node.update_attributes!(:status => 'pending')
-    node.last_apply_report.resource_statuses.generate().events.generate(:status => 'noop')
-  end
-end
-
-Factory.define :changed_node, :parent => :responsive_node do |node|
-  node.after_create do |node|
-    node.last_apply_report.update_attributes!(:status => 'changed')
-    node.last_apply_report.resource_statuses.generate(:status => 'changed').events.generate(:status => 'changed')
-    node.update_attributes!(:status => 'changed')
-  end
-end
-
-Factory.define :unchanged_node, :parent => :responsive_node do |node|
-  node.after_create do |node|
-    node.last_apply_report.update_attributes!(:status => 'unchanged')
-    node.update_attributes!(:status => 'unchanged')
-  end
-end
-
-Factory.sequence :name do |n|
-  "name_#{n}"
-end
-
-Factory.sequence :filename do |n|
-  File.join('/', *(1..3).map {Factory.next(:name)})
-end
-
-Factory.sequence :time do |n|
-  # each things created will be 1 hour newer than the last
-  # might be a problem if creating more than 1000 objects
-  (1000 - n).hours.ago
 end

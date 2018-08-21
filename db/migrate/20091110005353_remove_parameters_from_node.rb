@@ -1,4 +1,4 @@
-class RemoveParametersFromNode < ActiveRecord::Migration
+class RemoveParametersFromNode < ActiveRecord::Migration[4.2]
   def self.up
     remove_column :nodes, :parameters
   end

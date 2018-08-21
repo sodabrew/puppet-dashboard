@@ -1,17 +1,15 @@
-class TimelineEvent < ActiveRecord::Base
-  belongs_to :actor,              :polymorphic => true
-  belongs_to :subject,            :polymorphic => true
-  belongs_to :secondary_subject,  :polymorphic => true
+class TimelineEvent < ApplicationRecord
+  belongs_to :actor,             polymorphic: true, optional: true
+  belongs_to :subject,           polymorphic: true, optional: true
+  belongs_to :secondary_subject, polymorphic: true, optional: true
 
-  scope :for_node, lambda { |node|
+  scope :for_node, ->(node) do
     where(<<-SQL, {:id => node.id, :klass => node.class.name})
       (subject_id = :id AND subject_type = :klass) OR
       (secondary_subject_id = :id AND secondary_subject_type = :klass)
     SQL
-  }
-  scope :recent, order('created_at DESC, id DESC').limit(10)
-
-  attr_accessible :subject, :secondary_subject, :event_type
+  end
+  scope :recent, ->(n = 10) { order('created_at DESC, id DESC').limit(n) }
 
   def subject_name
     subject ? subject.name : "A #{subject_type.downcase}"

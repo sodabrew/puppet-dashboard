@@ -1,4 +1,4 @@
-class AddNodeHostUniquenessConstraint < ActiveRecord::Migration
+class AddNodeHostUniquenessConstraint < ActiveRecord::Migration[4.2]
   def self.up
     execute <<-SQL
       ALTER TABLE nodes

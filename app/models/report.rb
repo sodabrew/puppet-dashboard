@@ -1,6 +1,6 @@
 class Report < ActiveRecord::Base
   def self.per_page; SETTINGS.reports_per_page end # Pagination
-  belongs_to :node
+  belongs_to :node, optional: true
 
   # See the after_destroy delete_resources method for more delete_all action
   has_many :logs,   :class_name => 'ReportLog',     :dependent => :delete_all
@@ -9,9 +9,6 @@ class Report < ActiveRecord::Base
   has_many :events, :through => :resource_statuses
 
   accepts_nested_attributes_for :logs, :metrics, :resource_statuses, :events
-
-  attr_accessible :host, :time, :status, :kind, :puppet_version, :configuration_version
-  attr_accessible :logs_attributes, :metrics_attributes, :resource_statuses_attributes, :events_attributes
 
   before_validation :assign_to_node
   validates_presence_of :host, :time, :kind
@@ -23,14 +20,14 @@ class Report < ActiveRecord::Base
   after_destroy :delete_resources
   after_destroy :replace_last_report
 
-  default_scope includes(:node).order('time DESC')
+  default_scope -> { includes(:node).order('time DESC') }
 
-  scope :inspections, includes(:metrics).where(:kind => 'inspect')
-  scope :applies,     includes(:metrics).where(:kind => 'apply')
-  scope :changed,     includes(:metrics).where(:kind => 'apply', :status => 'changed'   )
-  scope :unchanged,   includes(:metrics).where(:kind => 'apply', :status => 'unchanged' )
-  scope :failed,      includes(:metrics).where(:kind => 'apply', :status => 'failed'    )
-  scope :pending,     includes(:metrics).where(:kind => 'apply', :status => 'pending'   )
+  scope :inspections, -> { includes(:metrics).where(:kind => 'inspect' ) }
+  scope :applies,     -> { includes(:metrics).where(:kind => 'apply'   ) }
+  scope :changed,     -> { includes(:metrics).where(:kind => 'apply', :status => 'changed'   ) }
+  scope :unchanged,   -> { includes(:metrics).where(:kind => 'apply', :status => 'unchanged' ) }
+  scope :failed,      -> { includes(:metrics).where(:kind => 'apply', :status => 'failed'    ) }
+  scope :pending,     -> { includes(:metrics).where(:kind => 'apply', :status => 'pending'   ) }
 
   def total_resources
     metric_value("resources", "total")
@@ -77,14 +74,14 @@ class Report < ActiveRecord::Base
 
   def self.attribute_hash_from(report_hash)
     attribute_hash = report_hash.dup
-    
+
     # message could grow larger than what database column size allow.
     attribute_hash["logs_attributes"] = attribute_hash.delete("logs")
     attribute_hash["logs_attributes"].each do |resource_logs_hash|
       log_message = resource_logs_hash["message"].to_s
       resource_logs_hash["message"] = log_message.slice(0, 65535) if log_message.length > 65535
     end
-    
+
     attribute_hash["resource_statuses_attributes"] = attribute_hash.delete("resource_statuses")
     attribute_hash["metrics_attributes"] = attribute_hash.delete("metrics")
     attribute_hash["resource_statuses_attributes"].each do |resource_status_hash|
@@ -163,7 +160,7 @@ class Report < ActiveRecord::Base
   end
 
   def assign_to_node
-    self.node = Node.find_or_create_by_name(self.host)
+    self.node = Node.find_or_create_by(name: self.host)
   end
 
   def update_node
@@ -205,7 +202,7 @@ class Report < ActiveRecord::Base
   def recalculate_report_status
     self.status = 'pending' if resource_statuses.any? {|rs| rs.status == 'pending' } &&
       resource_statuses.none? {|rs| rs.status == 'failed'}
-    self.status = 'failed' if self.logs.any? {|l| l.level == 'err' } 
+    self.status = 'failed' if self.logs.any? {|l| l.level == 'err' }
   end
 
   def add_missing_metrics
@@ -240,8 +237,8 @@ class Report < ActiveRecord::Base
   # It is too expensive to use has_many ... :dependent => :destroy
   # and unfortunately :dependent => :delete_all doesn't work :through.
   def delete_resources
-    ResourceEvent.delete_all(:resource_status_id => resource_statuses.map(&:id))
-    ResourceStatus.delete_all(:report_id => id)
+    ResourceEvent.where(resource_status_id: resource_statuses.map(&:id)).delete_all
+    ResourceStatus.where(report_id: id).delete_all
   end
 
   def replace_last_report
@@ -261,12 +258,12 @@ class Report < ActiveRecord::Base
   # NOTE: does not fix up the last_report fields on the related Node
   def self.bulk_delete(report_ids)
     transaction do
-      status_ids = ResourceStatus.where(:report_id => report_ids).pluck(:id)
-      ResourceEvent.delete_all(:resource_status_id => status_ids)
-      ResourceStatus.delete_all(:report_id => report_ids)
-      ReportLog.delete_all(:report_id => report_ids)
-      Metric.delete_all(:report_id => report_ids)
-      Report.delete_all(:id => report_ids)
+      status_ids = ResourceStatus.where(report_id: report_ids).pluck(:id)
+      ResourceEvent.where(resource_status_id: status_ids).delete_all
+      ResourceStatus.where(report_id: report_ids).delete_all
+      ReportLog.where(report_id: report_ids).delete_all
+      Metric.where(report_id: report_ids).delete_all
+      Report.where(id: report_ids).delete_all
     end
   end
 end

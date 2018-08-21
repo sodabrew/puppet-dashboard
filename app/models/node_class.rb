@@ -1,4 +1,4 @@
-class NodeClass < ActiveRecord::Base
+class NodeClass < ApplicationRecord
   def self.per_page; SETTINGS.classes_per_page end # Pagination
 
   include NodeGroupGraph
@@ -15,19 +15,20 @@ class NodeClass < ActiveRecord::Base
 
   validates_format_of :name, :with => /\A([a-z0-9][-\w]*)(::[a-z0-9][-\w]*)*\Z/, :message => "must contain a valid Puppet class name, e.g. 'foo' or 'foo::bar'"
   validates_uniqueness_of :name
-  attr_accessible :name, :description
 
-  default_scope :order => 'node_classes.name ASC'
+  default_scope { order('node_classes.name ASC') }
 
-  scope :search, lambda{|q| where('name LIKE ?', "%#{q}%") unless q.blank? }
+  scope :search, ->(name) { where('name LIKE ?', "%#{name}%") unless name.blank? }
 
-  scope :with_nodes_count,
-    :select => 'node_classes.*, count(nodes.id) as nodes_count',
-    :joins => <<-SQL,
+  scope :with_nodes_count, -> do
+    select('node_classes.*, count(nodes.id) as nodes_count').
+    joins(<<-SQL,
       LEFT OUTER JOIN node_class_memberships ON (node_classes.id = node_class_memberships.node_class_id)
       LEFT OUTER JOIN nodes ON (nodes.id = node_class_memberships.node_id)
     SQL
-    :group => 'node_classes.id'
+    ).
+    group('node_classes.id')
+  end
 
   def to_param
     SETTINGS.numeric_url_slugs ? id.to_s : name

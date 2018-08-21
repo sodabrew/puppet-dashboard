@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe FilesController do
+describe FilesController, :type => :controller do
   before :each do
     SETTINGS.stubs(:use_file_bucket_diffs).returns(true)
     SETTINGS.stubs(:file_bucket_server).returns('filebucket')
@@ -17,9 +17,9 @@ describe FilesController do
         with("https://filebucket:1337/production/file_bucket_file/md5/24d27c169c2c881eb09a065116f2aa5c?diff_with=40bb25658a72f731a6f71ef9476cd5af", 's').
         returns("This is the diff")
 
-      get :diff, @options
+      get :diff, params: @options
 
-      response.should be_success
+      response.should be_successful
       response.body.should == "This is the diff"
     end
 
@@ -27,9 +27,9 @@ describe FilesController do
       SETTINGS.stubs(:use_file_bucket_diffs).returns(false)
       PuppetHttps.expects(:get).never
 
-      get :diff, @options
+      get :diff, params: @options
 
-      response.should_not be_success
+      response.should_not be_successful
       response.should be_forbidden
       response.body.should == 'File bucket diffs have been disabled'
     end
@@ -38,9 +38,9 @@ describe FilesController do
       it "Rejects an invalid md5 for #{which_parameter}" do
         @options[which_parameter] = 'Turkmenistan'
 
-        get :diff, @options
+        get :diff, params: @options
 
-        response.should_not be_success
+        response.should_not be_successful
         response.should be_bad_request
         response.body.should == 'Invalid md5: "Turkmenistan"'
       end
@@ -58,9 +58,9 @@ describe FilesController do
         with("https://filebucket:1337/production/file_bucket_file/md5/24d27c169c2c881eb09a065116f2aa5c", 's').
         returns("This is the contents")
 
-      get :show, @options
+      get :show, params: @options
 
-      response.should be_success
+      response.should be_successful
       response.body.should == "This is the contents"
     end
 
@@ -68,9 +68,9 @@ describe FilesController do
       SETTINGS.stubs(:use_file_bucket_diffs).returns(false)
       PuppetHttps.expects(:get).never
 
-      get :show, @options
+      get :show, params: @options
 
-      response.should_not be_success
+      response.should_not be_successful
       response.should be_forbidden
       response.body.should == 'File bucket diffs have been disabled'
     end
@@ -78,9 +78,9 @@ describe FilesController do
     it "Rejects an invalid md5 for :file" do
       @options[:file] = 'Turkmenistan'
 
-      get :show, @options
+      get :show, params: @options
 
-      response.should_not be_success
+      response.should_not be_successful
       response.should be_bad_request
       response.body.should == 'Invalid md5: "Turkmenistan"'
     end
@@ -94,9 +94,9 @@ describe FilesController do
           )
         )
 
-      get :show, @options
+      get :show, params: @options
 
-      response.should_not be_success
+      response.should_not be_successful
       response.should be_forbidden
       response.body.should have_tag(
         "p",
@@ -114,9 +114,9 @@ describe FilesController do
           )
         )
 
-      get :show, @options
+      get :show, params: @options
 
-      response.should_not be_success
+      response.should_not be_successful
       response.should be_not_found
       response.body.should have_tag(
         "p",
@@ -129,9 +129,9 @@ describe FilesController do
         with(@url, 's').
         raises(Errno::ECONNREFUSED, "your server isn't running, so you don't need to catch it, yo.")
 
-      get :show, @options
+      get :show, params: @options
 
-      response.should_not be_success
+      response.should_not be_successful
       response.should be_internal_server_error
       response.body.should have_tag(
         "p",
@@ -144,9 +144,9 @@ describe FilesController do
         with(@url, 's').
         raises(ArgumentError, 'oops')
 
-      get :show, @options
+      get :show, params: @options
 
-      response.should_not be_success
+      response.should_not be_successful
       response.should be_internal_server_error
       response.body.should == 'oops'
     end

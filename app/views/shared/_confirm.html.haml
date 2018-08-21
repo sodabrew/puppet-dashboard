@@ -7,4 +7,4 @@
         %button{:onclick => on_confirm_clicked_script}
           = confirm_label
         or
-        = link_to_function 'Cancel', "jQuery('#popupWindowGlass').parent().detach();"
+        = link_to 'Cancel', '#', :onclick => "jQuery('#popupWindowGlass').parent().detach(); return false;"

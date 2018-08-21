@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe "/statuses/_run_failure.html.haml" do
+describe "/statuses/_run_failure.html.haml", :type => :view do
   include ReportSupport
 
   describe "successful render" do

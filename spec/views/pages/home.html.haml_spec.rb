@@ -1,8 +1,8 @@
 require 'spec_helper'
 
-describe '/pages/home' do
+describe '/pages/home', :type => :view do
   before :each do
-    @all_nodes          = [Node.generate!]
+    @all_nodes          = [create(:node)]
     @unreported_nodes   = []
     @unresponsive_nodes = []
     @failed_nodes       = []
@@ -13,11 +13,11 @@ describe '/pages/home' do
     render
   end
 
-  it "should have a correct delayed_job_failures link" do
+  it 'should have a correct delayed_job_failures link' do
     rendered.should have_tag('a', :href => '/delayed_job_failures', :text => 'Background Tasks')
   end
 
-  it "should have a correct radiator link" do
+  it 'should have a correct radiator link' do
     rendered.should have_tag('a', :href => '/radiator', :text => 'Radiator View')
   end
 end

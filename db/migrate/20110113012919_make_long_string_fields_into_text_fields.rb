@@ -1,4 +1,4 @@
-class MakeLongStringFieldsIntoTextFields < ActiveRecord::Migration
+class MakeLongStringFieldsIntoTextFields < ActiveRecord::Migration[4.2]
   def self.up
     change_table :report_logs do |t|
       t.change :message, :text

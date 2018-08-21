@@ -1,4 +1,4 @@
-class AddDelayedJobFailureBacktrace < ActiveRecord::Migration
+class AddDelayedJobFailureBacktrace < ActiveRecord::Migration[4.2]
   def self.up
     add_column :delayed_job_failures, :backtrace, :text
   end

@@ -1,22 +1,22 @@
 require 'spec_helper'
 
-describe "/timeline_events/_timeline_event.html.haml" do
+describe "/timeline_events/_timeline_event.html.haml", :type => :view do
   context "with a node" do
     before :each do
-      @node = Node.generate!
+      @node = create(:node)
       @node.name.swapcase!
       @node.save!
 
-      @node_class = NodeClass.generate! 
+      @node_class = create(:node_class)
       @node.node_classes << @node_class
 
-      @parameter = Parameter.generate! :parameterable => @node
+      @parameter = create(:parameter, :parameterable => @node)
       @node.reload
     end
 
     context "when this node is the subject" do
       before :each do
-        subject = @node.timeline_events.first(:conditions => {:subject_type => "Node", :event_type => "created"})
+        subject = @node.timeline_events.where(subject_type: 'Node', event_type: 'created').first
         view.stubs(:timeline_event => subject)
         render
       end
@@ -31,7 +31,7 @@ describe "/timeline_events/_timeline_event.html.haml" do
     context "when something else is the subject" do
       context "and is linkable" do
         before :each do
-          subject = @node.timeline_events.first(:conditions => {:subject_type => "NodeClass", :event_type => "added_to"})
+          subject = @node.timeline_events.where(subject_type: 'NodeClass', event_type: 'added_to').first
           view.stubs(:timeline_event => subject)
           render
         end
@@ -49,7 +49,7 @@ describe "/timeline_events/_timeline_event.html.haml" do
 
       context "and is not linkable" do
         before :each do
-          subject = @node.timeline_events.first(:conditions => {:subject_type => "Parameter", :event_type => "added_to"})
+          subject = @node.timeline_events.where(subject_type: 'Parameter', event_type: 'added_to').first
           view.stubs(:timeline_event => subject)
           render
         end

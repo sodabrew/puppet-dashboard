@@ -1,8 +1,8 @@
 require 'spec_helper'
 
-describe '/nodes/edit' do
+describe '/nodes/edit', :type => :view do
   before :each do
-    @node = Node.generate!
+    @node = create(:node)
   end
 
   def do_render
@@ -36,10 +36,10 @@ describe '/nodes/edit' do
       response.should have_tag('form[method=post]', :with => { :id => "param_form", :action => node_path(@node.id) })
     end
 
-    it 'should set the form method to PUT' do
+    it 'should set the form method to PATCH' do
       do_render
       response.should have_tag('form[id=param_form]') do
-        with_tag('input[name=_method][value=put]')
+        with_tag('input[name=_method][value=patch]')
       end
     end
 
@@ -99,7 +99,7 @@ describe '/nodes/edit' do
 
     describe 'for classes' do
       before :each do
-        @classes = Array.new(6) { NodeClass.generate! }
+        @classes = Array.new(6) { create(:node_class) }
         @node.node_classes << @classes[0..2]
         @class_data = {:class => '#node_class_ids', :data_source => node_classes_path(:format => :json), :objects => @node.node_classes}
       end
@@ -141,7 +141,7 @@ describe '/nodes/edit' do
 
     describe 'for groups' do
       before :each do
-        @groups = Array.new(6) {NodeGroup.generate! }
+        @groups = Array.new(6) { create(:node_group) }
         @node.node_groups << @groups[0..3]
         @group_data = {:class => '#node_group_ids', :data_source => node_groups_path(:format => :json), :objects => @node.node_groups}
       end

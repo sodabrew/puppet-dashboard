@@ -1,4 +1,4 @@
-class NodeGroupEdge < ActiveRecord::Base
+class NodeGroupEdge < ApplicationRecord
   validates_presence_of :to_id, :from_id
 
   belongs_to :to, :class_name => 'NodeGroup'

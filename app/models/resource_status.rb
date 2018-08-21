@@ -1,25 +1,21 @@
-class ResourceStatus < ActiveRecord::Base
-  belongs_to :report, :include => :node
+class ResourceStatus < ApplicationRecord
+  belongs_to :report, -> { includes(:node) }, optional: true
   has_many :events, :class_name => 'ResourceEvent', :dependent => :delete_all
 
-  attr_readonly   :report_id
-  attr_accessible :resource_type, :title, :evaluation_time, :file, :line, \
-                  :tags, :time, :change_count, :out_of_sync_count, :skipped, \
-                  :failed, :status, :events_attributes, :report
   accepts_nested_attributes_for :events
 
   serialize :tags, Array
 
-  scope :inspections, joins(:report).where("reports.kind = 'inspect'")
+  scope :inspections, -> { joins(:report).where("reports.kind = 'inspect'") }
 
   scope :latest_inspections, lambda {
-    includes(:report => :node).where(<<-SQL)
+    includes(:report => :node).where(<<-SQL).references(:nodes)
       nodes.last_inspect_report_id = resource_statuses.report_id
     SQL
   }
 
   scope :by_file_content, lambda {|content|
-    includes(:events).where(<<-SQL, "{md5}#{content}")
+    includes(:events).where(<<-SQL, "{md5}#{content}").references(:resource_events)
       resource_statuses.resource_type = 'File' AND
       resource_events.property = 'content' AND
       resource_events.previous_value = ?
@@ -27,7 +23,7 @@ class ResourceStatus < ActiveRecord::Base
   }
 
   scope :without_file_content, lambda {|content|
-    includes(:events).where(<<-SQL, "{md5}#{content}")
+    includes(:events).where(<<-SQL, "{md5}#{content}").references(:resource_events)
       resource_statuses.resource_type = 'File' AND
       resource_events.property = 'content' AND
       resource_events.previous_value != ?
@@ -43,7 +39,7 @@ class ResourceStatus < ActiveRecord::Base
 
   scope :pending, lambda { |predicate|
     predicate = predicate ? '' : 'NOT'
-    where(<<-SQL)
+    where(<<-SQL).references(:resource_events)
         resource_statuses.id #{predicate} IN (
           SELECT resource_statuses.id FROM resource_statuses
             INNER JOIN resource_events ON resource_statuses.id = resource_events.resource_status_id

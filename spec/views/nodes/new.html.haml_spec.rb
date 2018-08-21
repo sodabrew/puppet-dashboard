@@ -1,11 +1,11 @@
 require 'spec_helper'
 
-describe "/nodes/new.html.haml" do
+describe "/nodes/new.html.haml", :type => :view do
   include NodesHelper
 
   describe "successful render" do
     before :each do
-      assigns[:node] = @node = Node.spawn
+      assigns[:node] = @node = build(:node)
       render
     end
 

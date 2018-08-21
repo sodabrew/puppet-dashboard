@@ -8,7 +8,7 @@ class ApplicationController < ActionController::Base
 
   helper :all # include all helpers, all the time
 
-  before_filter :set_timezone
+  before_action :set_timezone
 
   protect_from_forgery
 
@@ -23,13 +23,13 @@ class ApplicationController < ActionController::Base
   end
 
   rescue_from NodeClassificationDisabledError do |e|
-    render :text => "Node classification has been disabled", :content_type => 'text/plain', :status => 403
+    render plain: 'Node classification has been disabled', status: 403
   end
 
   def set_timezone
     if SETTINGS.time_zone
       time_zone_obj = ActiveSupport::TimeZone.new(SETTINGS.time_zone)
-      raise Exception.new("Invalid timezone #{SETTINGS.time_zone.inspect}") unless time_zone_obj
+      raise StandardError.new("Invalid timezone #{SETTINGS.time_zone.inspect}") unless time_zone_obj
       Time.zone = time_zone_obj
     end
   end
@@ -41,15 +41,6 @@ class ApplicationController < ActionController::Base
   def redirect_back_or_default(default)
     redirect_to(session[:return_to] || default)
     session[:return_to] = nil
-  end
-
-  def handle_parameters_for(param)
-    if params[param] && params[param][:parameters]
-      parameter_pairs = params[param][:parameters][:key].zip(params[param][:parameters][:value]).flatten
-      params[param][:parameters] = Hash[*parameter_pairs].reject{|k,v| k.blank?}
-    else
-      params[param][:parameters] = {}
-    end
   end
 
   def set_node_autocomplete_data_sources(source_object)

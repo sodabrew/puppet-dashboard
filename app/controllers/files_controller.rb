@@ -1,38 +1,42 @@
 class FilesController < ApplicationController
-  before_filter :deny_unless_file_bucket_enabled
+  before_action :deny_unless_file_bucket_enabled
 
   def diff
-    [params[:file1], params[:file2]].each do |md5|
+    file1 = params[:file1]
+    file2 = params[:file2]
+
+    [file1, file2].each do |md5|
       unless is_md5?(md5)
-        render :text => "Invalid md5: #{md5.inspect}", :content_type => 'text/plain', :status => 400
+        render plain: "Invalid md5: #{md5.inspect}", status: 400
         return
       end
     end
 
-    url = "https://#{SETTINGS.file_bucket_server}:#{SETTINGS.file_bucket_port}/production/file_bucket_file/md5/#{params[:file1]}?diff_with=#{params[:file2]}"
+    url = "https://#{SETTINGS.file_bucket_server}:#{SETTINGS.file_bucket_port}/production/file_bucket_file/md5/#{file1}?diff_with=#{file2}"
     safe_get(url)
   end
 
   def show
-    unless is_md5?(params[:file])
-      render :text => "Invalid md5: #{params[:file].inspect}", :content_type => 'text/plain', :status => 400
+    file = params[:file]
+    unless is_md5?(file)
+      render plain: "Invalid md5: #{file.inspect}", status: 400
       return
     end
 
-    url = "https://#{SETTINGS.file_bucket_server}:#{SETTINGS.file_bucket_port}/production/file_bucket_file/md5/#{params[:file]}"
+    url = "https://#{SETTINGS.file_bucket_server}:#{SETTINGS.file_bucket_port}/production/file_bucket_file/md5/#{file}"
     safe_get(url)
   end
 
   private
   def deny_unless_file_bucket_enabled
     unless SETTINGS.use_file_bucket_diffs
-      render :text => "File bucket diffs have been disabled", :content_type => 'text/plain', :status => 403
+      render plain: 'File bucket diffs have been disabled', status: 403
       return
     end
   end
 
   def safe_get(url)
-    render :text => PuppetHttps.get(url, 's'), :content_type => 'text/plain'
+    render plain: PuppetHttps.get(url, 's')
   rescue Net::HTTPServerException => e
     if e.response.code == "403"
       text = "<p>Connection not authorized: #{e}</p>
@@ -43,16 +47,16 @@ class FilesController < ApplicationController
         <p>Your agents may not be submitting files to a central filebucket.
         <a target=\"_blank\" href=\"http://links.puppetlabs.com/enabling_the_filebucket_viewer\">View documentation</a></p>"
     end
-    render :text => text,
-      :content_type => 'text/html',
-      :status => e.response.code
+    render html: ActionController::Base.helpers.sanitize(text), status: e.response.code
   rescue Errno::ECONNREFUSED => e
-    render :text =>
-      "<p>Could not connect to your filebucket server at #{SETTINGS.file_bucket_server}:#{SETTINGS.file_bucket_port}</p>
-       <p>#{e}</p>",
-      :content_type => 'text/html',
-      :status => 500
+    text = "<p>Could not connect to your filebucket server at #{SETTINGS.file_bucket_server}:#{SETTINGS.file_bucket_port}</p>
+       <p>#{e}</p>"
+    render html: ActionController::Base.helpers.sanitize(text), status: 500
   rescue => e
-    render :text => "#{e}", :content_type => 'text/plain', :status => 500
+    render plain: "#{e}", status: 500
+  end
+
+  def file_params
+    params.require[:files].permit(:file, :file1, :file2)
   end
 end

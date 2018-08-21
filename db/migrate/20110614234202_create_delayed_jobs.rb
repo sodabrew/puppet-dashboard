@@ -1,4 +1,4 @@
-class CreateDelayedJobs < ActiveRecord::Migration
+class CreateDelayedJobs < ActiveRecord::Migration[4.2]
 
   @postgres = ActiveRecord::Base.connection.adapter_name.downcase =~ /postgres/
 

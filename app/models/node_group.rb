@@ -1,4 +1,4 @@
-class NodeGroup < ActiveRecord::Base
+class NodeGroup < ApplicationRecord
   def self.per_page; SETTINGS.groups_per_page end # Pagination
 
   include NodeGroupGraph
@@ -25,21 +25,20 @@ class NodeGroup < ActiveRecord::Base
 
   validates_presence_of :name
   validates_uniqueness_of :name
-  attr_accessible :name, :description, :node_ids, :parameter_attributes, :node_class_ids, :node_group_ids
-  attr_accessible :assigned_node_group_ids, :assigned_node_ids, :assigned_node_class_ids
-  attr_accessible :assigned_node_group_names, :assigned_node_names, :assigned_node_class_names
 
-  default_scope :order => 'node_groups.name ASC'
+  default_scope -> { order('node_groups.name ASC') }
 
-  scope :search, lambda{|q| where('name LIKE ?', "%#{q}%") unless q.blank? }
+  scope :search, ->(name) { where('name LIKE ?', "%#{name}%") unless name.blank? }
 
-  scope :with_nodes_count,
-    :select => 'node_groups.*, count(nodes.id) as nodes_count',
-    :joins => <<-SQL,
+  scope :with_nodes_count, -> do
+    select('node_groups.*, count(nodes.id) as nodes_count').
+    joins(<<-SQL,
       LEFT OUTER JOIN node_group_memberships ON (node_groups.id = node_group_memberships.node_group_id)
       LEFT OUTER JOIN nodes ON (nodes.id = node_group_memberships.node_id)
     SQL
-    :group => 'node_groups.id'
+    ).
+    group('node_groups.id')
+  end
 
   assigns_related :node_class, :node_group, :node
 

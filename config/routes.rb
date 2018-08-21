@@ -1,9 +1,9 @@
-PuppetDashboard::Application.routes do
+Rails.application.routes.draw do
 
-  root :to => 'pages#home'
+  root 'pages#home'
 
   # Nodes, Groups, and Classes may all have names or numeric ids
-  constraints(:id => /[^\/]+/) do
+  constraints(id: /[^\/]+/) do
     resources :node_classes do
       collection do
         get :search
@@ -21,8 +21,8 @@ PuppetDashboard::Application.routes do
 
     resources :nodes do
       member do
-        put :hide
-        put :unhide
+        patch :hide
+        patch :unhide
         get :facts
         get :reports
       end
@@ -54,21 +54,27 @@ PuppetDashboard::Application.routes do
   resources :reports do
     collection do
       get :search
+      post :upload
     end
   end
 
-  resources :node_group_memberships, :as => :memberships
+  resources :delayed_job_failures, only: :index do
+    member do
+      post :read
+    end
+    collection do
+      get :read
+      post :read_all
+    end
+  end
 
-  match 'files/:action/:file1/:file2' => 'files#:action'
-  match 'files/:action/:file'         => 'files#:action'
+  resources :node_group_memberships, as: :memberships
 
-  match '/header.:format' => 'pages#header'
-  match 'reports/upload'  => 'reports#upload', :via => :post
-  match 'release_notes'   => 'pages#release_notes', :via => :get
-  match '/delayed_job_failures/read_all' => 'delayed_job_failures#read_all', :via => :post
+  get 'files/diff/:file1/:file2', to: 'files#diff'
+  get 'files/show/:file', to: 'files#show'
 
-  get 'radiator(.:format)' => 'radiator#index'
+  get '/header.:format', to: 'pages#header'
+  get 'release_notes', to: 'pages#release_notes'
 
-  get ':controller(/:action(/:id(.:format)))'
-
+  get 'radiator(.:format)', to: 'radiator#index'
 end
