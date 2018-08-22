@@ -80,12 +80,14 @@ class Report < ActiveRecord::Base
     attribute_hash["logs_attributes"].each do |resource_logs_hash|
       log_message = resource_logs_hash["message"].to_s
       resource_logs_hash["message"] = log_message.slice(0, 65535) if log_message.length > 65535
+      resource_logs_hash["tags"] = []
     end
 
     attribute_hash["resource_statuses_attributes"] = attribute_hash.delete("resource_statuses")
     attribute_hash["metrics_attributes"] = attribute_hash.delete("metrics")
     attribute_hash["resource_statuses_attributes"].each do |resource_status_hash|
       resource_status_hash["events_attributes"] = resource_status_hash.delete("events") || {}
+      resource_status_hash["tags"] = []
     end
     attribute_hash["metrics_attributes"] = attribute_hash["metrics_attributes"].map do |category,metric_hash|
       metric_hash.map do |name,value|
