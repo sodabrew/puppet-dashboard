@@ -8,8 +8,7 @@ nodes, and view inventory data and backed-up file contents.
 Dependencies
 ------------
 
-* Ruby 1.8.7, 1.9.3, 2.0.0 or 2.1.x
-* Bundler >= 1.1
+* Ruby 2.2, 2.3, 2.4, 2.5
 * MySQL >= 5.1 or PostgreSQL >= 9.0
 
 Fast Install
@@ -41,11 +40,16 @@ cp config/settings.yml.example config/settings.yml && \
 cp config/database.yml.example config/database.yml && \
 vim config/database.yml
 ````
-* Install Puppet Dashboard
+* Install Puppet Dashboard Dependencies
 ````
 gem install bundler && \
-bundle install --deployment && \
-echo "secret_token: '$(bundle exec rake secret)'" >> config/settings.yml && \
+bundle install --deployment
+````
+* You need to create a secret for production and either set it via environment variable:
+  `export SECRET_KEY_BASE=$(bundle exec rails secret)`
+  or follow the instructions in config/secrets.yml to setup an encrypted secret. 
+* Setup database and pre-compile assets
+````
 RAILS_ENV=production bundle exec rake db:setup && \
 RAILS_ENV=production bundle exec rake assets:precompile
 ````
@@ -64,7 +68,7 @@ Dashboard is currently configured to serve static assets when `RAILS_ENV=product
 environments, you may wish to farm this out to Apache or nginx.  Additionally, you must explicitly
 precompile assets for production using:
 
- * `RAILS_ENV=production bundle exec rake assets:precompile`
+ * `SECRET_KEY_BASE=none RAILS_ENV=production bundle exec rails assets:precompile`
 
 Contributing
 ------------

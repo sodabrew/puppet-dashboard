@@ -4,10 +4,19 @@ describe ReportSanitizer do
   extend DescribeReports
 
   describe 'when sanitizing' do
+
+    let(:formats_dir) do
+      Rails.root.join('spec', 'fixtures', 'reports', 'formats')
+    end
+    let(:report_filename) do
+      File.join(formats_dir, report_file)
+    end
+    let(:raw_report) do
+      YAML.load_file(report_filename, safe: :true, deserialize_symbols: true)
+    end
+
     describe 'a format version 0 (puppet 0.25.x) report' do
-      let :raw_report do
-        YAML.load_file(Rails.root.join('spec', 'fixtures', 'reports', 'puppet25', '1_changed_0_failures.yml'), :safe => :true, :deserialize_symbols => true)
-      end
+      let(:report_file) { '00_changes.yaml' }
 
       it "should produce a hash of the report" do
         hash = ReportSanitizer.sanitize(raw_report)
@@ -92,13 +101,8 @@ describe ReportSanitizer do
       end
     end
 
-    describe 'a format version 1 (puppet 2.6.x-2.7.12) report' do
-      let :report_filename do
-        Rails.root.join('spec', 'fixtures', 'reports', 'puppet26', 'report_ok_service_started_ok.yaml')
-      end
-      let :raw_report do
-        YAML.load_file(report_filename, :safe => :true, :deserialize_symbols => true)
-      end
+    describe 'a format version 1 (puppet 2.6.0-2.6.4) report' do
+      let(:report_file) { '01_changes.yaml' }
 
       it "should fill in change_count=0 wherever a report is missing change_count attributes" do
         report_yaml = File.read(report_filename)
@@ -358,132 +362,8 @@ describe ReportSanitizer do
       end
     end
 
-    describe 'a format version 2 (puppet 2.7.13+) report' do
-      let :raw_report do
-        YAML.load(<<HEREDOC, :safe => :true, :deserialize_symbols => true)
---- !ruby/object:Puppet::Transaction::Report
-  host: localhost
-  time: 2010-07-22 12:19:47.204207 -07:00
-  logs: []
-  metrics:
-    time: !ruby/object:Puppet::Util::Metric
-      name: time
-      label: Time
-      values:
-        - - config_retrieval
-          - Config retrieval
-          - 0.25
-        - - total
-          - Total
-          - 0.5
-    resources: !ruby/object:Puppet::Util::Metric
-      name: resources
-      label: Resources
-      values:
-        - - failed
-          - Failed
-          - 1
-        - - out_of_sync
-          - Out of sync
-          - 2
-        - - changed
-          - Changed
-          - 3
-        - - total
-          - Total
-          - 4
-    events: !ruby/object:Puppet::Util::Metric
-      name: events
-      label: Events
-      values:
-        - - total
-          - Total
-          - 0
-    changes: !ruby/object:Puppet::Util::Metric
-      name: changes
-      label: Changes
-      values:
-        - - total
-          - Total
-          - 0
-  resource_statuses:
-    File[/etc/motd]: !ruby/object:Puppet::Resource::Status
-      resource: File[/etc/motd]
-      file: /etc/puppetlabs/puppet/modules/motd/manifests/init.pp
-      line: 21
-      evaluation_time: 0.046776106
-      change_count: 1
-      out_of_sync_count: 1
-      tags:
-        - file
-        - class
-        - motd
-        - node
-        - default
-      time: 2013-10-02 16:54:44.845351 -07:00
-      events:
-        - !ruby/object:Puppet::Transaction::Event
-          audited: false
-          property: content
-          previous_value: \"{md5}576c30100670abe54a2446d05d72e4cf\"
-          desired_value: \"{md5}892b87473b3ce3afbcb28198ac02f02d\"
-          historical_value:
-          message: \"content changed '{md5}576c30100670abe54a2446d05d72e4cf' to '{md5}892b87473b3ce3afbcb28198ac02f02d'\"
-          name: !ruby/sym content_changed
-          status: success
-          time: 2013-10-02 16:54:44.885931 -07:00
-      out_of_sync: true
-      changed: true
-      resource_type: File
-      title: /etc/motd
-      skipped: false
-      failed: false
-      containment_path:
-        - Stage[main]
-        - Motd
-        - File[/etc/motd]
-    File[hello.rb]: !ruby/object:Puppet::Resource::Status
-      resource: File[hello.rb]
-      file: /etc/puppetlabs/puppet/modules/hello/manifests/init.pp
-      line: 47
-      evaluation_time: 0.108021493
-      change_count: 0
-      out_of_sync_count: 1
-      tags:
-        - file
-        - hello.rb
-        - class
-        - hello
-        - node
-        - default
-      time: 2013-10-02 16:54:49.012379 -07:00
-      events:
-        - !ruby/object:Puppet::Transaction::Event
-          audited: false
-          property:
-          previous_value:
-          desired_value:
-          historical_value:
-          message: \"Could not find user abcdefghijklmnop\"
-          status: failure
-          time: 2013-10-02 16:54:49.120393 -07:00
-      out_of_sync: true
-      changed: false
-      resource_type: File
-      title: hello.rb
-      skipped: false
-      failed: true
-      containment_path:
-        - Stage[main]
-        - Hello
-        - File[hello.rb]
-  configuration_version: 12345
-  report_format: 2
-  puppet_version: 2.6.5
-  kind: apply
-  status: unchanged
-HEREDOC
-      end
+    describe 'a format version 2 (puppet 2.6.5-2.7.11) report' do
+      let(:report_file) { '02_failing.yaml' }
 
       it "should produce a hash of the report" do
         hash = ReportSanitizer.sanitize(raw_report)
@@ -494,5 +374,126 @@ HEREDOC
         hash["time"].should == Time.parse("2010-07-22 12:19:47.204207 -07:00")
       end
     end
+
+    describe 'a format version 3 (puppet 2.7.13-3.2.4) report' do
+      let(:report_file) { '03_failing.yaml' }
+
+      it "should produce a hash of the report" do
+        hash = ReportSanitizer.sanitize(raw_report)
+        hash.should be_a(Hash)
+        hash.keys.should =~ %w{host time logs metrics resource_statuses kind configuration_version puppet_version report_format status environment}
+        hash["report_format"].should == 3
+        hash["host"].should == "localhost"
+        hash["time"].should == Time.parse("2010-07-22 13:19:47.204207 -07:00")
+        hash["environment"].should == "production"
+      end
+    end
+
+   describe 'a format version 4 (puppet 3.3.0-4.3.2) report' do
+      let(:report_file) { '04_failing.yaml' }
+
+      it "should produce a hash of the report" do
+        hash = ReportSanitizer.sanitize(raw_report)
+        hash.should be_a(Hash)
+        hash.keys.should =~ %w{host time logs metrics resource_statuses kind configuration_version puppet_version report_format status environment transaction_uuid}
+        hash["report_format"].should == 4
+        hash["host"].should == "localhost"
+        hash["time"].should == Time.parse("2010-07-22 14:19:47.204207 -07:00")
+        hash["environment"].should == "production"
+        hash["transaction_uuid"].should == "b2b7567c-696a-4250-8d74-e3c5030e1263"
+      end
+
+      it "should have resource_statuses that contain a containment_path" do
+        hash = ReportSanitizer.sanitize(raw_report)
+        hash.should be_a(Hash)
+        hash["resource_statuses"].values.each do |resource_status|
+          resource_status["containment_path"].should be_a(Array)
+        end
+      end
+
+      it "should allow resource events that do not contain property previous_value desired_value or historical_value" do
+        expect { ReportSanitizer.sanitize(raw_report) }.to_not raise_error
+      end
+    end
+
+   describe 'a format version 5 (puppet 4.4.0-4.5.3) report' do
+      let(:report_file) { '05_failing.yaml' }
+
+      it 'should produce a hash of the report' do
+        hash = ReportSanitizer.sanitize(raw_report)
+        hash.should be_a(Hash)
+        hash.keys.should =~ %w{host time logs metrics resource_statuses kind configuration_version puppet_version report_format status environment transaction_uuid catalog_uuid cached_catalog_status}
+        hash['report_format'].should == 5
+        hash['host'].should == 'report-test.example.com'
+        hash['time'].should == Time.parse('2018-06-12 22:42:23.273615216 +02:00')
+        hash['environment'].should == 'production'
+        hash['transaction_uuid'].should == '439b4577-1b26-4313-91ea-3e2812d41d22'
+        hash['catalog_uuid'].should == 'da1beb33-3775-4c12-88f5-78ad84a54988'
+        hash['cached_catalog_status'].should == 'not_used'
+      end
+    end
+
+    describe 'a format version 6 (puppet 4.6.0-4.10.x) report' do
+      let(:report_file) { '06_failing.yaml' }
+
+      it 'should produce a hash of the report' do
+        hash = ReportSanitizer.sanitize(raw_report)
+        hash.should be_a(Hash)
+        hash.keys.should =~ %w{host time logs metrics resource_statuses kind configuration_version puppet_version report_format status environment transaction_uuid catalog_uuid cached_catalog_status noop noop_pending corrective_change master_used}
+        hash['report_format'].should == 6
+        hash['host'].should == 'report-test.example.com'
+        hash['time'].should == Time.parse('2018-06-12 23:17:11.338306228 +02:00')
+        hash['noop'].should == false
+        hash['noop_pending'].should == false
+        hash['corrective_change'].should == false
+        hash['master_used'].should == nil
+        resource_status = hash['resource_statuses']['Notify[hello world]']
+        resource_status['corrective_change'].should == false
+        event = resource_status['events'].first
+        event['audited'].should == false
+        event['corrective_change'].should == false
+      end
+    end
+
+    describe 'a format version 7 (puppet 5.0.0-5.3.x) report' do
+      let(:report_file) { '07_failing.yaml' }
+
+      it 'should produce a hash of the report' do
+        hash = ReportSanitizer.sanitize(raw_report)
+        hash.should be_a(Hash)
+        hash.keys.should =~ %w{host time logs metrics resource_statuses kind configuration_version puppet_version report_format status environment transaction_uuid catalog_uuid cached_catalog_status noop noop_pending corrective_change master_used}
+        hash['report_format'].should == 7
+        hash['host'].should == 'report-test.example.com'
+        hash['kind'].should == 'apply'
+      end
+    end
+
+    describe 'a format version 8 (puppet 5.4.0-5.4.x) report' do
+      let(:report_file) { '08_failing.yaml' }
+
+      it 'should produce a hash of the report' do
+        hash = ReportSanitizer.sanitize(raw_report)
+        hash.should be_a(Hash)
+        hash.keys.should =~ %w{host time logs metrics resource_statuses kind configuration_version puppet_version report_format status environment transaction_uuid catalog_uuid cached_catalog_status noop noop_pending corrective_change master_used transaction_completed}
+        hash['report_format'].should == 8
+        hash['transaction_completed'].should == true
+      end
+    end
+
+    describe 'a format version 9 (puppet 5.5.0-latest) report' do
+      let(:report_file) { '09_failing.yaml' }
+
+      it 'should produce a hash of the report' do
+        hash = ReportSanitizer.sanitize(raw_report)
+        hash.should be_a(Hash)
+        hash.keys.should =~ %w{host time logs metrics resource_statuses kind configuration_version puppet_version report_format status environment transaction_uuid catalog_uuid cached_catalog_status noop noop_pending corrective_change master_used transaction_completed}
+        hash['report_format'].should == 9
+        hash['host'].should == 'report-test.example.com'
+        resource_status = hash['resource_statuses']['Exec[/usr/bin/thisdoesnotexist]']
+        resource_status['provider_used'].should == 'posix'
+      end
+    end
+
+
   end
 end

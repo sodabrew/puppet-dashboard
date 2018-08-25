@@ -2,17 +2,50 @@
 # using safe_yaml into structures expected by the model code.
 # Note that this must be updated whenever any of those changes.
 #
+# Report Format Docs:
+# https://github.com/puppetlabs/puppet-docs/blob/master/source/_includes/reportformat
+#
 module ReportSanitizer #:nodoc:
   class << self
     def sanitize(raw)
       case
         when raw.include?('report_format')
-          format2sanitizer.sanitize(raw)
+          case raw['report_format']
+            when 2
+              format2sanitizer.sanitize(raw)
+            when 3
+              format3sanitizer.sanitize(raw)
+            when 4
+              format4sanitizer.sanitize(raw)
+            when 5
+              format5sanitizer.sanitize(raw)
+            when 6
+              format6sanitizer.sanitize(raw)
+            when 7
+              format7sanitizer.sanitize(raw)
+            when 8
+              format8sanitizer.sanitize(raw)
+            when 9
+              format9sanitizer.sanitize(raw)
+            else
+              msg = "Sanitizer: Unknown report format #{raw['report_format']}, " +
+                    "using format 9 and hoping for the best"
+              Rails.logger.warn(msg)
+              format9sanitizer.sanitize(raw)
+          end
         when raw.include?('resource_statuses')
           format1sanitizer.sanitize(raw)
         else
           format0sanitizer.sanitize(raw)
       end
+    rescue => e
+      host = raw['host'] || 'unknown_host'
+      format_version = raw['report_format'] || 'unknown_version'
+      puppet_version = raw['puppet_version'] || 'unknown_version'
+      msg = "Sanitizer error, #{host}, report format #{format_version}, " +
+            "puppet version #{puppet_version}: #{e.message}"
+      Rails.logger.error(msg)
+      raise e, msg, e.backtrace
     end
 
     private
@@ -28,13 +61,41 @@ module ReportSanitizer #:nodoc:
     def format2sanitizer()
       @format2sanitizer ||= ReportSanitizer::FormatVersion2.new
     end
+
+    def format3sanitizer()
+      @format3sanitizer ||= ReportSanitizer::FormatVersion3.new
+    end
+
+    def format4sanitizer()
+      @format4sanitizer ||= ReportSanitizer::FormatVersion4.new
+    end
+
+    def format5sanitizer()
+      @format5sanitizer ||= ReportSanitizer::FormatVersion5.new
+    end
+
+    def format6sanitizer()
+      @format6sanitizer ||= ReportSanitizer::FormatVersion6.new
+    end
+
+    def format7sanitizer()
+      @format7sanitizer ||= ReportSanitizer::FormatVersion7.new
+    end
+
+    def format8sanitizer()
+      @format8sanitizer ||= ReportSanitizer::FormatVersion8.new
+    end
+
+    def format9sanitizer()
+      @format9sanitizer ||= ReportSanitizer::FormatVersion9.new
+    end
   end
 
   module Util
     class << self
       def verify_attributes(raw, names)
         names.each do |n|
-          raise ArgumentError, "required attribute not present: #{n}" unless raw.include?(n)
+          raise StandardError, "required attribute not present: #{n}" unless raw.include?(n)
         end
       end
 
@@ -135,7 +196,7 @@ module ReportSanitizer #:nodoc:
     end
   end
 
-  # format version 1 was used by puppet 2.6.x-2.7.12
+  # format version 1 was used by puppet 2.6.0-2.6.4
   class FormatVersion1 < Base
     def initialize(
       log_sanitizer    = VersionLogSanitizer.new,
@@ -169,7 +230,7 @@ module ReportSanitizer #:nodoc:
     end
   end
 
-  # format version 2 has been used since puppet 2.7.13
+  # format version 2 was used by puppet 2.6.5-2.7.11
   class FormatVersion2 < FormatVersion1
     def initialize(
       log_sanitizer    = LogSanitizer.new,
@@ -209,4 +270,153 @@ module ReportSanitizer #:nodoc:
       end
     end
   end
+
+  # format version 3 was used by puppet 2.7.13-3.2.4
+  class FormatVersion3 < FormatVersion2
+    def sanitize(raw)
+      sanitized = super
+      Util.verify_attributes(raw, %w[kind status puppet_version configuration_version environment])
+      Util.copy_attributes(sanitized, raw, %w[kind status puppet_version configuration_version environment])
+    end
+  end
+
+  # format version 4 is used by puppet 3.3.0-4.3.2
+  class FormatVersion4 < FormatVersion3
+    def initialize(
+      log_sanitizer    = FormatVersion4LogSanitizer.new,
+      metric_sanitizer = MetricSanitizer.new,
+      status_sanitizer = FormatVersion4StatusSanitizer.new
+    )
+      super(log_sanitizer, metric_sanitizer, status_sanitizer)
+    end
+
+    def sanitize(raw)
+      sanitized = super
+      Util.verify_attributes(raw, %w[kind status puppet_version configuration_version environment transaction_uuid])
+      Util.copy_attributes(sanitized, raw, %w[kind status puppet_version configuration_version environment transaction_uuid])
+    end
+
+    class FormatVersion4LogSanitizer < LogSanitizer
+      def sanitize(raw)
+        sanitized = super
+        unless sanitized['tags'].is_a?(Array)
+          sanitized['tags'] = raw['tags']['hash'].keys
+        end
+        sanitized
+      end
+    end
+
+    class FormatVersion4StatusSanitizer < ExtendedStatusSanitizer
+      def initialize(event_sanitizer = FormatVersion4EventSanitizer.new)
+        super(event_sanitizer)
+      end
+
+      def sanitize(raw)
+        sanitized = super
+        Util.verify_attributes(raw, %w[containment_path])
+        Util.copy_attributes(sanitized, raw, %w[containment_path])
+
+        unless sanitized['tags'].is_a?(Array)
+          sanitized['tags'] = raw['tags']['hash'].keys
+        end
+        sanitized
+      end
+
+      class FormatVersion4EventSanitizer < ExtendedEventSanitizer
+        def sanitize(raw)
+          Util.verify_attributes(raw, %w[message status time audited])
+
+          sanitized = {}
+
+          if raw['name']
+            sanitized['name'] = raw['name'].to_s
+          end
+
+          Util.copy_attributes(sanitized, raw, %w[previous_value desired_value message property status time audited historical_value])
+        end
+      end
+    end
+  end
+
+  class FormatVersion5 < FormatVersion4
+    def sanitize(raw)
+      sanitized = super
+      raw['catalog_uuid'] ||= nil
+      Util.verify_attributes(raw, %w[catalog_uuid cached_catalog_status])
+      Util.copy_attributes(sanitized, raw, %w[catalog_uuid cached_catalog_status])
+    end
+  end
+
+  class FormatVersion6 < FormatVersion5
+    def initialize(
+      log_sanitizer    = FormatVersion4LogSanitizer.new,
+      metric_sanitizer = MetricSanitizer.new,
+      status_sanitizer = FormatVersion6StatusSanitizer.new
+    )
+      super(log_sanitizer, metric_sanitizer, status_sanitizer)
+    end
+
+    def sanitize(raw)
+      sanitized = super
+      raw['master_used'] ||= nil
+      Util.verify_attributes(raw, %w[noop noop_pending corrective_change master_used])
+      Util.copy_attributes(sanitized, raw, %w[noop noop_pending corrective_change master_used])
+    end
+
+    class FormatVersion6StatusSanitizer < FormatVersion4StatusSanitizer
+      def initialize(event_sanitizer = FormatVersion6EventSanitizer.new)
+        super(event_sanitizer)
+      end
+
+      def sanitize(raw)
+        sanitized = super
+        Util.verify_attributes(raw, %w[corrective_change])
+        Util.copy_attributes(sanitized, raw, %w[corrective_change])
+      end
+
+      class FormatVersion6EventSanitizer < FormatVersion4EventSanitizer
+        def sanitize(raw)
+          sanitized = super
+          Util.verify_attributes(raw, %w[corrective_change redacted])
+          Util.copy_attributes(sanitized, raw, %w[corrective_change redacted])
+        end
+      end
+    end
+  end
+
+  class FormatVersion7 < FormatVersion6
+    def sanitize(raw)
+      raw['kind'] = 'apply'
+      super
+    end
+  end
+
+  class FormatVersion8 < FormatVersion7
+    def sanitize(raw)
+      sanitized = super
+      raw['transaction_completed'] ||= nil
+      Util.verify_attributes(raw, %w[transaction_completed])
+      Util.copy_attributes(sanitized, raw, %w[transaction_completed])
+    end
+  end
+
+  class FormatVersion9 < FormatVersion8
+    def initialize(
+      log_sanitizer    = FormatVersion4LogSanitizer.new,
+      metric_sanitizer = MetricSanitizer.new,
+      status_sanitizer = FormatVersion9StatusSanitizer.new
+    )
+      super(log_sanitizer, metric_sanitizer, status_sanitizer)
+    end
+
+    class FormatVersion9StatusSanitizer < FormatVersion6StatusSanitizer
+      def sanitize(raw)
+        sanitized = super
+        raw['provider_used'] ||= nil
+        Util.verify_attributes(raw, %w[provider_used])
+        Util.copy_attributes(sanitized, raw, %w[provider_used])
+      end
+    end
+  end
+
 end
