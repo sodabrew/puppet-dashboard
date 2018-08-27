@@ -19,3 +19,4 @@ before_script:
   - bundle exec rails db:migrate
 script:
   - bundle exec rails spec
+  - bundle exec rubocop

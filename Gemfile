@@ -43,6 +43,7 @@ group :development, :test do
   gem 'listen'
   gem 'simplecov'
   gem 'simplecov-console'
+  gem "rubocop-rails_config"
 end
 
 group :postgresql do
