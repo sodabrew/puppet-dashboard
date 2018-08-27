@@ -9,7 +9,29 @@ Dependencies
 ------------
 
 * Ruby 2.2, 2.3, 2.4, 2.5
-* MySQL >= 5.1 or PostgreSQL >= 9.0
+* MySQL/MariaDB >= 5.5 or PostgreSQL >= 9.2
+
+Puppet Report Format Support
+----------------------------
+
+[Puppet Format Documentation](https://github.com/puppetlabs/puppet-docs/tree/master/source/_includes/reportformat)
+
+| Format Version  | Puppet Version | Dashboard Version |
+|-----------------|----------------|-------------------|
+| 0               | 0.25.x         | >= 1.0.0          |
+| 1               | 2.6.0 - 2.6.4  | >= 1.0.0          |
+| 2               | 2.6.5 - 2.7.11 | >= 1.0.0          |
+| 3               | 2.7.13 - 3.2.4 | >= 1.0.0          |
+| 4               | 3.3.0 - 4.3.2  | >= 2.0.0          |
+| 5               | 4.4.0 - 4.5.3  | >= 3.0.0          |
+| 6               | 4.6.0 - 4.10.x | >= 3.0.0          |
+| 7               | 5.0.0 - 5.3.x  | >= 3.0.0          |
+| 8               | 5.4.0 - 5.4.x  | >= 3.0.0          |
+| 9               | 5.5.0 - 5.5.x  | >= 3.0.0          |
+
+Future Puppet Report formats may work automatically if no required fields are removed.
+If there is a new Format available which is not yet supported please let us know by creating
+a [new issue](https://github.com/sodabrew/puppet-dashboard/issues/new).
 
 Fast Install
 ------------
