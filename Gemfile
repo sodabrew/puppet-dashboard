@@ -43,6 +43,8 @@ group :development, :test do
   gem 'listen'
   gem 'simplecov'
   gem 'simplecov-console'
+  gem 'rubocop-rails_config'
+  gem 'haml_lint', require: false
 end
 
 group :postgresql do
