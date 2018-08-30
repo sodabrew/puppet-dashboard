@@ -5,10 +5,12 @@ Puppet Dashboard is a web interface for [Puppet](http://www.puppetlabs.com/).
 It can view and analyze Puppet reports, assign Puppet classes and parameters to
 nodes, and view inventory data and backed-up file contents.
 
+[![Build Status](https://travis-ci.org/sodabrew/puppet-dashboard.svg?branch=master)](https://travis-ci.org/sodabrew/puppet-dashboard)
+
 Dependencies
 ------------
 
-* Ruby 2.2, 2.3, 2.4, 2.5
+* Ruby 2.3, 2.4, 2.5
 * MySQL/MariaDB >= 5.5 or PostgreSQL >= 9.2
 
 Puppet Report Format Support
