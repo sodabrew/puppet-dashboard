@@ -1,13 +1,15 @@
 language: ruby
 cache: bundler
 env:
-  - DB=mysql
-  - DB=postgres
+  global:
+    - CC_TEST_REPORTER_ID=aa9428ecce81885fa4f1c0d0283f0075e353dd1894ececefb103846e32794de3
+  matrix:
+    - DB=mysql
+    - DB=postgres
 services:
   - mysql
   - postgresql
 rvm:
-  - 2.2
   - 2.3
   - 2.4
   - 2.5
@@ -17,7 +19,12 @@ before_script:
   - 'echo "test: *${DB}" >> config/database.yml'
   - bundle exec rails db:create
   - bundle exec rails db:migrate
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+  - chmod +x ./cc-test-reporter
+  - ./cc-test-reporter before-build
 script:
   - bundle exec rails spec
   - bundle exec rubocop
   - bundle exec haml-lint
+after_script:
+  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
