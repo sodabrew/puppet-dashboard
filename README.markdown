@@ -6,6 +6,8 @@ It can view and analyze Puppet reports, assign Puppet classes and parameters to
 nodes, and view inventory data and backed-up file contents.
 
 [![Build Status](https://travis-ci.org/sodabrew/puppet-dashboard.svg?branch=master)](https://travis-ci.org/sodabrew/puppet-dashboard)
+[![Maintainability](https://api.codeclimate.com/v1/badges/375ff4ee551f467dd62a/maintainability)](https://codeclimate.com/github/sodabrew/puppet-dashboard/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/375ff4ee551f467dd62a/test_coverage)](https://codeclimate.com/github/sodabrew/puppet-dashboard/test_coverage)
 
 Dependencies
 ------------
