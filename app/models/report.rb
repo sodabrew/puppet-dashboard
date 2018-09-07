@@ -125,7 +125,7 @@ class Report < ActiveRecord::Base
     # munge will capture metrics about the number of unchanged items
     # then we can remove them to save space in the resource_statuses table
     if SETTINGS.disable_report_unchanged_events
-      report.resource_statuses.delete_if {|rs| rs.status == 'unchanged' }
+      report.resource_statuses.each{|rs| rs.destroy if rs.status == 'unchanged' }
     end
 
     report.save!

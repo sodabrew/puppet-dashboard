@@ -457,6 +457,20 @@ describe Report, :type => :model do
         myStubbedClass.create_from_yaml_file('/tmp/foo').should == nil
       end
     end
+
+    describe 'disable_report_unchanged_events setting' do
+      let(:report_yaml){ File.read(File.join(Rails.root, 'spec/fixtures/reports/failure.yml')) }
+      let(:report) { Report.create_from_yaml(report_yaml) }
+      it 'should keep all resource statuses per default' do
+        expect(report.resource_statuses.count).to be 9
+        expect(ResourceStatus.count).to be 9
+      end
+      it 'should remove unchanged resource statuses' do
+        SETTINGS.stubs(:disable_report_unchanged_events).returns(true)
+        expect(report.resource_statuses.count).to be 1
+        expect(ResourceStatus.count).to be 1
+      end
+    end
   end
 
 
