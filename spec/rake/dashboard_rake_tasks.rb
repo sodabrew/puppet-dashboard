@@ -1,21 +1,27 @@
-test_name "Dashboard Rake Tasks"
+require 'spec_helper'
+require 'rake'
 
-dashboard_hosts = hosts.select { |h| h['roles'].include? 'dashboard' }
+describe 'Dashboard Rake Tasks' do
+  before :all do
+    Rake.application.rake_require 'lib/tasks'
+    Rake::Task.define_task(:environment)
+  end
 
-step "Verify there's at least one dashboard host" do
-  assert(dashboard_hosts.length > 0, "No dashboard hosts found!")
-end
+  describe 'nodeclass' do
+    before do
+      BarOutput.stub(:banner)
+      BarOutput.stub(:puts)
+    end
 
-def build_rake_cmd_string(host, cmd)
-  rake_path = host.is_pe? ? "/opt/puppet/bin/rake" : "rake"
-  rakefile_path = host.is_pe? ? "/opt/puppet/share/puppet-dashboard/Rakefile" : "/usr/share/puppet-dashboard/Rakefile"
-  "RAILS_ENV=production #{rake_path} -f #{rakefile_path} #{cmd}"
-end
+    let :run_rake_task do
+      Rake::Task["foo:bake_a_bar"].reenable
+      Rake.application.invoke_task "foo:bake_a_bar"
+    end
 
-def run_rake_task(host, cmd)
-  result = on(host, build_rake_cmd_string(host, cmd))
-  result.stdout.split("\n")
-end
+    it "should bake a bar" do
+      Bar.any_instance.should_receive :bake
+      run_rake_task
+    end
 
 
 #################################
