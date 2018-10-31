@@ -1,23 +1,17 @@
----
-layout: default
-title: "Dashboard Manual: Upgrading"
----
-
 Upgrading Puppet Dashboard
 ========
 
-This is a chapter of the [Puppet Dashboard 1.2 manual](./index.html).
+This is a chapter of the [Puppet Dashboard manual](./index.markdown).
 
 #### Navigation
 
-* [Installing Dashboard](./bootstrapping.html)
+* [Installing Dashboard](./bootstrapping.markdown)
 * **Upgrading Dashboard**
-* [Configuring Dashboard](./configuring.html)
-* [Maintaining Dashboard](./maintaining.html)
-* [Using Dashboard](./using.html)
-* [Rake API](./rake_api.html)
+* [Configuring Dashboard](./configuring.markdown)
+* [Maintaining Dashboard](./maintaining.markdown)
+* [Rake API](./rake_api.markdown)
 
-[dbbackups]: ./maintaining.html#database-backups
+[dbbackups]: ./maintaining.markdown#database-backups
 
 * * * 
 
@@ -146,7 +140,7 @@ Currently, the best way to manage these processes is with the `script/delayed_jo
 
     $ sudo -u puppet-dashboard env RAILS_ENV=production script/delayed_job -p dashboard -n 4 -m start
 
-See [the delayed jobs section](./bootstrapping.html#starting-and-managing-delayed-job-workers) of the installation chapter for more information.
+See [the delayed jobs section](./bootstrapping.markdown#starting-and-managing-delayed-job-workers) of the installation chapter for more information.
 
 Upgrading From Versions Prior to 1.1.0
 --------------------------------------
@@ -163,9 +157,8 @@ This task will convert the most recent reports first, and if it is interrupted, 
 
 #### Navigation
 
-* [Installing Dashboard](./bootstrapping.html)
+* [Installing Dashboard](./bootstrapping.markdown)
 * **Upgrading Dashboard**
-* [Configuring Dashboard](./configuring.html)
-* [Maintaining Dashboard](./maintaining.html)
-* [Using Dashboard](./using.html)
-* [Rake API](./rake_api.html)
+* [Configuring Dashboard](./configuring.markdown)
+* [Maintaining Dashboard](./maintaining.markdown)
+* [Rake API](./rake_api.markdown)

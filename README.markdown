@@ -104,6 +104,12 @@ periodically:
  * `SECRET_KEY_BASE=none RAILS_ENV=production bundle exec rails reports:prune upto=20 unit=day`
  * `SECRET_KEY_BASE=none RAILS_ENV=production bundle exec rails db:raw:optimize`
 
+Puppet Dashboard Manual
+-----------------------
+
+The [Puppet Dashboard manual](./docs/manual/index.markdown) is an extracted version of the Puppet
+Dashboard documentation which was hosted on the Puppetlabs homepage.
+
 Contributing
 ------------
 
