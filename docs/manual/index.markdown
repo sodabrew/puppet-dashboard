@@ -1,13 +1,18 @@
----
-layout: default
-title: "Puppet Dashboard Manuals: Index"
----
-
-Puppet Dashboard Manuals
+Puppet Dashboard Manual
 =====
 
-Please select your version of Puppet Dashboard:
+This is the manual for Puppet Dashboard.
 
-* [Puppet Dashboard 1.2](./1.2)
+Overview
+--------
 
-For versions of Dashboard prior to 1.2, please see the README file shipped with the Dashboard code. 
+Puppet Dashboard is a web interface for Puppet. It can view and analyze Puppet reports, assign Puppet classes and parameters to nodes, and view inventory data and backed-up file contents.
+
+Chapters
+--------
+
+* [Installing Dashboard](./bootstrapping.markdown)
+* [Upgrading Dashboard](./upgrading.markdown)
+* [Configuring Dashboard](./configuring.markdown)
+* [Maintaining Dashboard](./maintaining.markdown)
+* [Rake API](./rake_api.markdown)

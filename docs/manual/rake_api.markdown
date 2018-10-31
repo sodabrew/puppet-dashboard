@@ -1,20 +1,14 @@
----
-layout: default
-title: "Dashboard Manual: Rake API"
----
-
 Puppet Dashboard's Rake API
 =====
 
-This is a chapter of the [Puppet Dashboard 1.2 manual](./index.html).
+This is a chapter of the [Puppet Dashboard manual](./index.markdown).
 
 #### Navigation
 
-* [Installing Dashboard](./bootstrapping.html)
-* [Upgrading Dashboard](./upgrading.html)
-* [Configuring Dashboard](./configuring.html)
-* [Maintaining Dashboard](./maintaining.html)
-* [Using Dashboard](./using.html)
+* [Installing Dashboard](./bootstrapping.markdown)
+* [Upgrading Dashboard](./upgrading.markdown)
+* [Configuring Dashboard](./configuring.markdown)
+* [Maintaining Dashboard](./maintaining.markdown)
 * **Rake API**
 
 * * * 
@@ -84,9 +78,8 @@ All of these tasks should be run as follows, replacing `<TASK>` with the task na
 
 #### Navigation
 
-* [Installing Dashboard](./bootstrapping.html)
-* [Upgrading Dashboard](./upgrading.html)
-* [Configuring Dashboard](./configuring.html)
-* [Maintaining Dashboard](./maintaining.html)
-* [Using Dashboard](./using.html)
+* [Installing Dashboard](./bootstrapping.markdown)
+* [Upgrading Dashboard](./upgrading.markdown)
+* [Configuring Dashboard](./configuring.markdown)
+* [Maintaining Dashboard](./maintaining.markdown)
 * **Rake API**

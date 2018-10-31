@@ -1,26 +1,15 @@
----
-layout: default
-title: "Dashboard Manual: Installing"
----
-
 Installing Puppet Dashboard
 =====
 
-This is a chapter of the [Puppet Dashboard 1.2 manual](./index.html).
+This is a chapter of the [Puppet Dashboard manual](./index.markdown).
 
 #### Navigation
 
 * **Installing Dashboard**
-* [Upgrading Dashboard](./upgrading.html)
-* [Configuring Dashboard](./configuring.html)
-* [Maintaining Dashboard](./maintaining.html)
-* [Using Dashboard](./using.html)
-* [Rake API](./rake_api.html)
-
-
-[pe]: http://www.puppetlabs.com/puppet/puppet-enterprise/
-[upgrading]: ./upgrading.html
-[packages]: http://downloads.puppetlabs.com/dashboard/
+* [Upgrading Dashboard](./upgrading.markdown)
+* [Configuring Dashboard](./configuring.markdown)
+* [Maintaining Dashboard](./maintaining.markdown)
+* [Rake API](./rake_api.markdown)
 
 * * *
 
@@ -48,7 +37,7 @@ In outline, the steps to get Dashboard running are:
 * [Starting the delayed job worker processes](#starting-and-managing-delayed-job-workers)
 * [Running Dashboard in a production-quality server](#running-dashboard-in-a-production-quality-server)
 
-After completing these tasks, Dashboard's main functionality will be on-line and working smoothly. You can then [configure](./configuring.html) Dashboard further and enable optional features
+After completing these tasks, Dashboard's main functionality will be on-line and working smoothly. You can then [configure](./configuring.markdown) Dashboard further and enable optional features
 
 If you are trying to upgrade Puppet Dashboard instead of installing it from scratch, [see the chapter of this manual on upgrading][upgrading] instead of reading further in this chapter. If you're looking for a vastly simplified installation and maintenance process, download a free trial of [Puppet Enterprise][pe] and try its improved and extended web console.
 
@@ -266,7 +255,7 @@ To use Dashboard's ENC, you'll need to set the puppet master's `node_terminus` a
       node_terminus = exec
       external_nodes = /usr/bin/env PUPPET_DASHBOARD_URL=http://localhost:3000 /opt/puppet-dashboard/bin/external_node
 
-[https]: ./configuring.html#security
+[https]: ./configuring.markdown#security
 
 ### Testing Puppet's Connection to Dashboard
 
@@ -334,8 +323,7 @@ Once Dashboard's vhost config is properly configured, simply restart Apache and 
 #### Navigation
 
 * **Installing Dashboard**
-* [Upgrading Dashboard](./upgrading.html)
-* [Configuring Dashboard](./configuring.html)
-* [Maintaining Dashboard](./maintaining.html)
-* [Using Dashboard](./using.html)
-* [Rake API](./rake_api.html)
+* [Upgrading Dashboard](./upgrading.markdown)
+* [Configuring Dashboard](./configuring.markdown)
+* [Maintaining Dashboard](./maintaining.markdown)
+* [Rake API](./rake_api.markdown)
