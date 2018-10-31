@@ -66,10 +66,16 @@ rescue LoadError
   STDERR.puts "Warning: Rails rake tasks currently unavailable because we can't find the 'rails' gem"
 end
 
-require 'rubocop/rake_task'
-RuboCop::RakeTask.new
+begin
+  require 'rubocop/rake_task'
+  RuboCop::RakeTask.new
+rescue LoadError
+end
 
-require 'haml_lint/rake_task'
-HamlLint::RakeTask.new
+begin
+  require 'haml_lint/rake_task'
+  HamlLint::RakeTask.new
+rescue LoadError
+end
 
 task :default => [:spec, :rubocop, :haml_lint]
