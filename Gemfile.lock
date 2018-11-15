@@ -68,7 +68,7 @@ GEM
     factory_bot_rails (4.8.2)
       factory_bot (~> 4.8.2)
       railties (>= 3.0.0)
-    ffi (1.9.23)
+    ffi (1.9.24)
     globalid (0.4.1)
       activesupport (>= 4.2.0)
     haml (5.0.4)
