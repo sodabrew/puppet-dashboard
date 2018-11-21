@@ -270,6 +270,10 @@ function display_file_popup(url) {
     jQuery.colorbox({href: url, width: '80%', height: '80%', iframe: true});
 }
 
+function help_overlay(content) {
+    jQuery.colorbox({href: content, width: '60%', height: '80%'})
+}
+
 function init_sidebar_links() {
   jQuery( '.node_summary .primary tr' ).each( function() {
     jQuery( this )

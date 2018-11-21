@@ -270,4 +270,9 @@ module ApplicationHelper
   def add_body_class(klass)
     (@body_classes ||= []).push(klass).uniq!
   end
+
+  def help_overlay(action)
+    url = url_for controller: :help, action: action
+    link_to 'Help', '#', onclick: "help_overlay('#{url}'); return false;", class: 'popup-md5'
+  end
 end
