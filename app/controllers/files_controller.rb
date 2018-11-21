@@ -41,11 +41,11 @@ class FilesController < ApplicationController
     if e.response.code == "403"
       text = "<p>Connection not authorized: #{e}</p>
         <p>You may not have generated your certificates.
-        <a target=\"_blank\" href=\"http://links.puppetlabs.com/dashboard_generating_certs\">View documentation</a></p>"
+        <a target=\"_blank\" href=\"https://github.com/sodabrew/puppet-dashboard/blob/master/docs/manual/configuring.markdown#generating-certs-and-connecting-to-the-puppet-master\">View documentation</a></p>"
     else
       text = "<p>File contents not available: #{e}</p>
         <p>Your agents may not be submitting files to a central filebucket.
-        <a target=\"_blank\" href=\"http://links.puppetlabs.com/enabling_the_filebucket_viewer\">View documentation</a></p>"
+        <a target=\"_blank\" href=\"https://github.com/sodabrew/puppet-dashboard/blob/master/docs/manual/configuring.markdown#enabling-the-filebucket-viewer\">View documentation</a></p>"
     end
     render html: ActionController::Base.helpers.sanitize(text), status: e.response.code
   rescue Errno::ECONNREFUSED => e
