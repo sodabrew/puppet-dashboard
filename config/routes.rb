@@ -77,4 +77,6 @@ Rails.application.routes.draw do
   get 'release_notes', to: 'pages#release_notes'
 
   get 'radiator(.:format)', to: 'radiator#index'
+
+  get 'help/node_status', to: 'help#node_status'
 end
