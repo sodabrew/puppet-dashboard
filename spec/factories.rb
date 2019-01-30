@@ -85,8 +85,8 @@ FactoryBot.define do
   end
 
   factory :report do
-    status "failed"
-    kind   "apply"
+    status { 'failed' }
+    kind { 'apply' }
     host do |rep|
       if rep.node
         rep.node.name
@@ -97,33 +97,33 @@ FactoryBot.define do
     time
 
     factory :successful_report do
-      status 'changed'
+      status { 'changed' }
     end
 
     factory :failing_report do
-      status 'failed'
+      status { 'failed' }
     end
 
     factory :inspect_report do
-      kind 'inspect'
+      kind { 'inspect' }
     end
   end
 
 
   factory :resource_status do
-    resource_type 'File'
+    resource_type { 'File' }
     title { generate(:filename) }
     evaluation_time { rand(60)+1 }
     file { generate(:filename) }
     line { rand(60)+1 }
     time
-    change_count 0
-    out_of_sync_count 0
-    skipped false
-    failed false
+    change_count { 0 }
+    out_of_sync_count { 0 }
+    skipped { false }
+    failed { false }
 
     factory :failed_resource do
-      failed true
+      failed { true }
       after(:create) do |status|
         create(:resource_event, :resource_status => status, :status => 'failed')
         status.change_count += 1
