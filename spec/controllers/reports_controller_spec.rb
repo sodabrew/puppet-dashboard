@@ -24,7 +24,7 @@ describe ReportsController, :type => :controller do
     describe "with a POST from Puppet 2.6.x" do
       subject do
         lambda {
-          post_with_body :upload, @yaml, as: :yaml
+          post :upload, body: @yaml, as: :yaml
           Delayed::Worker.new.work_off
         }
       end
@@ -78,13 +78,13 @@ describe ReportsController, :type => :controller do
   describe "#create" do
     it "should fail with a 403 error when disable_legacy_report_upload_url is true" do
       SETTINGS.stubs(:disable_legacy_report_upload_url).returns(true)
-      response = post_with_body :create, @yaml, as: :yaml
+      post :create, body: @yaml, as: :yaml
       response.should be_forbidden
     end
 
     it "should succeed when disable_legacy_report_upload_url is false" do
       SETTINGS.stubs(:disable_legacy_report_upload_url).returns(false)
-      response = post_with_body :create, @yaml, as: :yaml
+      post :create, body: @yaml, as: :yaml
       response.should be_successful
     end
   end
@@ -150,12 +150,5 @@ describe ReportsController, :type => :controller do
       assigns[:reports].should_not include @changed
       assigns[:reports].should include @unchanged
     end
-  end
-
-  def post_with_body(action, body, args)
-    @request.env['RAW_POST_DATA'] = body
-    response = post(action, args)
-    @request.env.delete('RAW_POST_DATA')
-    response
   end
 end
