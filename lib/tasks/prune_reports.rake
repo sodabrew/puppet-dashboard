@@ -81,13 +81,13 @@ UNITS:
   namespace :prune do
     desc 'Delete orphaned records whose report has already been deleted'
     task :orphaned => :environment do
-      report_dependent_deletion = 'report_id not in (select id from reports)'
+      report_dependent_deletion = 'e LEFT JOIN reports r ON (e.reports_id = r.id) WHERE r.id IS NULL'
 
       orphaned_tables = ActiveSupport::OrderedHash[
         Metric,         report_dependent_deletion,
         ReportLog,      report_dependent_deletion,
         ResourceStatus, report_dependent_deletion,
-        ResourceEvent, 'resource_status_id not in (select id from resource_statuses)'
+        ResourceEvent, 'e LEFT JOIN resource_statuses s ON (e.resource_status_id = s.id) WHERE resource_status_id.id IS NULL'
       ]
 
       puts "Going to delete orphaned records from #{orphaned_tables.keys.map(&:table_name).join(', ')}\n"
@@ -95,27 +95,21 @@ UNITS:
       orphaned_tables.each do |model, deletion_where_clause|
         puts "Preparing to delete from #{model.table_name}"
         start_time     = Time.now
-        deletion_count = model.where(deletion_where_clause).to_a.size
-        if deletion_count > 0
-          puts "#{start_time.to_s(:db)}: Deleting #{deletion_count} orphaned records from #{model.table_name}"
-          pbar = ProgressBar.new('Deleting', deletion_count, STDOUT)
+        deletion_count = model.count(:joins => deletion_where_clause)
 
-          # Deleting a very large group of records in MySQL can be very slow with no feedback
-          # Breaking the deletion up into blocks turns out to be overall faster
-          # and allows for progress feedback
-          DELETION_BATCH_SIZE = 1000
-          while deletion_count > DELETION_BATCH_SIZE
-            ActiveRecord::Base.connection.execute(
-              "delete from #{model.table_name} where #{deletion_where_clause} limit #{DELETION_BATCH_SIZE}"
-            )
-            pbar.inc(DELETION_BATCH_SIZE)
-            deletion_count -= DELETION_BATCH_SIZE
-          end
+        puts "#{start_time.to_s(:db)}: Deleting #{deletion_count} orphaned records from #{model.table_name}"
+        pbar = ProgressBar.new('Deleting', deletion_count, STDOUT)
 
-          pbar.finish
-          puts
-        else
-          puts 'No records to delete'
+        # Deleting a very large group of records can be very slow with no feedback
+        # Breaking the deletion up into blocks turns out to be overall faster
+        # and allows for progress feedback
+        DELETION_BATCH_SIZE = 1000
+        while deletion_count > 0
+          ActiveRecord::Base.connection.execute(
+            "DELETE FROM #{model.table_name} USING #{model.table_name} WHERE #{deletion_where_clause}"
+          )
+          pbar.inc(DELETION_BATCH_SIZE)
+          deletion_count -= DELETION_BATCH_SIZE
         end
       end
     end
