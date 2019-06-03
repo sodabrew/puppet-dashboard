@@ -43,6 +43,7 @@ group :development, :test do
   gem 'listen'
   gem 'simplecov'
   gem 'simplecov-console'
+  gem 'rubocop', '~> 0.67.0'
   gem 'rubocop-rails_config'
   gem 'haml_lint', require: false
 end
