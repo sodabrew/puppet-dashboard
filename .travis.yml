@@ -10,10 +10,10 @@ services:
   - mysql
   - postgresql
 rvm:
-  - 2.3
   - 2.4
   - 2.5
-before_install: gem install bundler
+  - 2.6
+before_install: gem install bundler --version '~> 1'
 before_script:
   - cp config/database.yml.travis config/database.yml
   - 'echo "test: *${DB}" >> config/database.yml'
