@@ -31,7 +31,7 @@
           - if message = flash[type]
             - type = :warning if type == :alert
             %div.section#flash{:class => type}
-              .close= link_to_function icon(:close), "jQuery('#flash').hide()"
+              .close= link_to icon(:close), '#', onclick: "jQuery('#flash').hide(); return false;"
               %p
                 = icon(type)
                 = h message
