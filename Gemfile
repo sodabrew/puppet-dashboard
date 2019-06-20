@@ -36,7 +36,7 @@ group :development, :test do
   gem 'rspec-rails'
   gem 'rspec-html-matchers'
   gem 'rspec-collection_matchers'
-  gem 'shoulda-matchers'
+  gem 'shoulda-matchers', '~> 3'
   gem 'factory_bot_rails'
   gem 'nokogiri'
   gem 'rails-controller-testing'
