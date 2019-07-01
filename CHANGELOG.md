@@ -2,7 +2,7 @@
 
 Notable changes to new releases of Puppet Dashboard.
 
-## [3.0.0] - unreleased
+## [3.0.0] - 2019-07-01
 
 This release includes changes from over 5 years since the 2.0.0-beta2 release.
 
