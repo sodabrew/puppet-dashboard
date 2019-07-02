@@ -132,7 +132,7 @@ module DataGenerator
 
   private
   def self.words
-    @words ||= File.new('/usr/share/dict/words').lines.map(&:chomp).reject do |w|
+    @words ||= File.new('/usr/share/dict/words').each_line.map(&:chomp).reject do |w|
       w.length < 6 or w =~ /[A-Z]|(.)\1/
     end
   end
