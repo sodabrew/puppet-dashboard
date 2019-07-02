@@ -1,5 +1,3 @@
-require "#{Rails.root}/lib/progress_bar"
-
 class AddStatusToReports < ActiveRecord::Migration[4.2]
   class Node < ActiveRecord::Base
     belongs_to :last_report, :class_name => 'Report'

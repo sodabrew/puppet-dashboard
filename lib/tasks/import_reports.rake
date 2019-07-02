@@ -1,4 +1,3 @@
-require "#{Rails.root}/lib/progress_bar"
 namespace :reports do
   DEFAULT_DIR = '/var/lib/puppet/reports'
   DEFAULT_URL = 'http://localhost:3000/reports/upload'
@@ -16,7 +15,7 @@ namespace :reports do
     puts "Importing #{reports.size} #{plural['report', reports.size]} from #{report_dir} in the background"
 
     skipped = 0
-    pbar = ProgressBar.new("Importing:", reports.size, STDOUT)
+    pbar = ProgressBar.create(title: 'Importing', total: reports.size)
     reports.each do |report|
       success = begin
         Report.delay.create_from_yaml_file(report)
@@ -25,7 +24,7 @@ namespace :reports do
         false
       end
       skipped += 1 unless success
-      pbar.inc
+      pbar.increment
     end
     pbar.finish
 

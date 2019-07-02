@@ -317,6 +317,7 @@ DEPENDENCIES
   rspec-rails
   rubocop (~> 0.67.0)
   rubocop-rails_config
+  ruby-progressbar
   safe_yaml
   sass-rails
   shoulda-matchers (~> 3)

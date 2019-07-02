@@ -13,8 +13,7 @@ namespace :reports do
     puts "Restarting the migration will resume where you left off"
     puts
 
-    require "#{Rails.root}/lib/progress_bar"
-    pbar = ProgressBar.new("Migrating:", old_report_count, STDOUT)
+    pbar = ProgressBar.create(title: 'Migrating', total: old_report_count)
 
     while OldReport.count > 0 do
       # Doing records in groups of 10_000 since finding all with millions at once takes forever and eats memory
@@ -23,7 +22,7 @@ namespace :reports do
           Report.create_from_yaml(report.report)
           report.destroy
         end
-        pbar.inc
+        pbar.increment
       end
     end
     pbar.finish

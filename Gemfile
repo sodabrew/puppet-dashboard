@@ -30,6 +30,8 @@ gem 'therubyracer'
 
 gem 'web-console', group: :development
 
+gem 'ruby-progressbar'
+
 group :development, :test do
   gem 'mocha'
   gem 'sqlite3'
