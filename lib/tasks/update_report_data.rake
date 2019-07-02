@@ -3,8 +3,7 @@ namespace :reports do
   task :update_report_data => :environment do
     report_count = Report.count
 
-    require "#{Rails.root}/lib/progress_bar"
-    pbar = ProgressBar.new("Updating:", report_count, STDOUT)
+    pbar = ProgressBar.create(title: 'Updating', total: report_count)
 
     offset = 0
 
@@ -14,7 +13,7 @@ namespace :reports do
         report.munge
         report.save!
 
-        pbar.inc
+        pbar.increment
         offset += 1
       end
     end

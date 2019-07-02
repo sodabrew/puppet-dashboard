@@ -1,5 +1,3 @@
-require "#{Rails.root}/lib/progress_bar"
-
 namespace :reports do
   desc 'Prune old reports from the databases, will print help if run without arguments'
   task :prune => :environment do
@@ -60,14 +58,14 @@ UNITS:
     deletion_count = affected_nodes.count
     puts "#{Time.now.to_s(:db)}: Deleting reports before #{cutoff} for #{deletion_count} nodes"
 
-    pbar = ProgressBar.new('Deleting', deletion_count, STDOUT)
+    pbar = ProgressBar.create(title: 'Deleting', total: deletion_count)
     deleted_count = 0
 
     begin
       affected_nodes.each do |node|
         node.reload # Become a complete object (the query above returns shalow objects with 'id' only)
         deleted_count += node.prune_reports(cutoff)
-        pbar.inc
+        pbar.increment
       end
     rescue SignalException
       # Trap signals (e.g. CTRL-C) so that we can show how far we got
@@ -98,7 +96,7 @@ UNITS:
         deletion_count = model.where(deletion_where_clause).to_a.size
         if deletion_count > 0
           puts "#{start_time.to_s(:db)}: Deleting #{deletion_count} orphaned records from #{model.table_name}"
-          pbar = ProgressBar.new('Deleting', deletion_count, STDOUT)
+          pbar = ProgressBar.create(title: 'Deleting', total: deletion_count)
 
           # Deleting a very large group of records in MySQL can be very slow with no feedback
           # Breaking the deletion up into blocks turns out to be overall faster
@@ -108,7 +106,7 @@ UNITS:
             ActiveRecord::Base.connection.execute(
               "delete from #{model.table_name} where #{deletion_where_clause} limit #{DELETION_BATCH_SIZE}"
             )
-            pbar.inc(DELETION_BATCH_SIZE)
+            pbar.increment(DELETION_BATCH_SIZE)
             deletion_count -= DELETION_BATCH_SIZE
           end
 

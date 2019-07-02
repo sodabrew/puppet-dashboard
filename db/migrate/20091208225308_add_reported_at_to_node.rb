@@ -7,9 +7,9 @@ class AddReportedAtToNode < ActiveRecord::Migration[4.2]
       ms = Benchmark.ms do
         nodes = Node.all.to_a.select{|n| n.last_report.respond_to?(:report)}
         if nodes.size > 0
-          pbar = ProgressBar.new("   ->", nodes.size)
+          pbar = ProgressBar.create(title: '   ->', total: nodes.size)
           ms = Benchmark.ms do
-            nodes.each{|n| n.update_attribute(:reported_at, n.last_report.report.time); pbar.inc}
+            nodes.each{|n| n.update_attribute(:reported_at, n.last_report.report.time); pbar.increment}
           pbar.finish
           end
         end

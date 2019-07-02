@@ -1,5 +1,3 @@
-require "#{Rails.root}/lib/progress_bar"
-
 class SchematizeReports < ActiveRecord::Migration[4.2]
   def self.up
     create_table :report_logs do |t|
