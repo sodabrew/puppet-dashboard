@@ -357,6 +357,8 @@ module ReportSanitizer #:nodoc:
     end
 
     def sanitize(raw)
+      # Puppetserver seems to remove 'kind' even from format version 6 reports.
+      raw['kind'] ||= 'apply'
       sanitized = super
       raw['master_used'] ||= nil
       Util.verify_attributes(raw, %w[noop noop_pending corrective_change master_used])
