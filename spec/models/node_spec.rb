@@ -15,8 +15,6 @@ describe Node, :type => :model do
     it { should have_db_column(:name).of_type(:string) }
     it { should validate_presence_of(:name) }
     it { should validate_uniqueness_of(:name).case_insensitive }
-    it { pending 'problem with attr_readonly and inherited_resources'; should have_readonly_attribute(:name) }
-
   end
 
   describe "statuses" do
