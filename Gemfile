@@ -20,7 +20,7 @@ gem 'delayed_job_active_record'
 gem 'timeline_fu'
 gem 'haml'
 
-gem 'sass-rails'
+gem 'sass-rails', '~> 5'
 gem 'haml-rails'
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
