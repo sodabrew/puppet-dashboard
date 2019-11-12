@@ -2,6 +2,14 @@
 
 Notable changes to new releases of Puppet Dashboard.
 
+## [3.0.1] - 2019-11-12
+
+### Fixed
+
+- Fix the cli progressbar by using the ruby-progressbar gem
+- Fix an issue with report format 6 where the 'kind' key gets removed
+- Update multiple gem dependencies
+
 ## [3.0.0] - 2019-07-01
 
 This release includes changes from over 5 years since the 2.0.0-beta2 release.
