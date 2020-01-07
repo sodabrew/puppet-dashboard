@@ -34,44 +34,44 @@ FactoryBot.define do
 
       factory :unresponsive_node do
         after(:create) do |node|
-          node.last_apply_report.update_attributes!(:time => 2.days.ago)
-          node.update_attributes!(:reported_at => 2.days.ago)
+          node.last_apply_report.update!(time: 2.days.ago)
+          node.update!(reported_at: 2.days.ago)
         end
       end
 
       factory :responsive_node do
         after(:create) do |node|
-          node.last_apply_report.update_attributes!(:time => 2.minutes.ago)
-          node.update_attributes!(:reported_at => 2.minutes.ago)
+          node.last_apply_report.update!(time: 2.minutes.ago)
+          node.update!(reported_at: 2.minutes.ago)
         end
 
         factory :failing_node do
           after(:create) do |node|
-            node.last_apply_report.update_attributes!(:status => 'failed')
-            node.update_attributes!(:status => 'failed')
+            node.last_apply_report.update!(status: 'failed')
+            node.update!(status: 'failed')
           end
         end
 
         factory :pending_node do
           after(:create) do |node|
-            node.last_apply_report.update_attributes!(:status => 'pending')
-            node.update_attributes!(:status => 'pending')
+            node.last_apply_report.update!(status: 'pending')
+            node.update!(status: 'pending')
             create(:pending_resource, report: node.last_apply_report)
           end
         end
 
         factory :changed_node do
           after(:create) do |node|
-            node.last_apply_report.update_attributes!(:status => 'changed')
-            node.update_attributes!(:status => 'changed')
+            node.last_apply_report.update!(status: 'changed')
+            node.update!(status: 'changed')
             create(:changed_resource, report: node.last_apply_report)
           end
         end
 
         factory :unchanged_node do
           after(:create) do |node|
-            node.last_apply_report.update_attributes!(:status => 'unchanged')
-            node.update_attributes!(:status => 'unchanged')
+            node.last_apply_report.update!(status: 'unchanged')
+            node.update!(status: 'unchanged')
           end
         end
 
