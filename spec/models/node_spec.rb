@@ -361,7 +361,7 @@ describe Node, :type => :model do
       end
 
       it "should not raise an error if there are two sibling parameters with the same key and value" do
-        @param_2.update_attributes(:key => @param_1.key, :value => @param_1.value)
+        @param_2.update(key: @param_1.key, value: @param_1.value)
 
         expect {@node.compiled_parameters}.to_not raise_error
         @node.errors[:parameters].should be_empty

@@ -12,7 +12,7 @@ nodes, and view inventory data and backed-up file contents.
 Dependencies
 ------------
 
-* Ruby 2.4, 2.5, 2.6
+* Ruby 2.5, 2.6, 2.7
 * MySQL/MariaDB >= 5.5 or PostgreSQL >= 9.2
 
 Puppet Report Format Support

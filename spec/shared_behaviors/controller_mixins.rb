@@ -54,7 +54,7 @@ shared_examples_for "without JSON pagination" do
       describe "as HTML" do
         before do
           SETTINGS.stubs(:use_external_node_classification).returns(true)
-          get :index, params: { format: 'html' }
+          get :index, as: :html
         end
         subject { assigns[model.name.tableize] }
 
@@ -64,7 +64,7 @@ shared_examples_for "without JSON pagination" do
       end
 
       describe "as JSON" do
-        before { get :index, params: { format: 'json' } }
+        before { get :index, as: :json }
         subject { assigns[model.name.tableize] }
 
         it "does not paginate" do
@@ -73,7 +73,7 @@ shared_examples_for "without JSON pagination" do
       end
 
       describe "as YAML" do
-        before { get :index, params: { format: 'yaml' } }
+        before { get :index, as: :yaml }
         subject { assigns[model.name.tableize] }
 
         it "does not paginate" do
