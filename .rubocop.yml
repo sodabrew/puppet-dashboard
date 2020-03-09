@@ -1,5 +1,10 @@
 inherit_from: .rubocop_todo.yml
 
+require:
+- rubocop-rails
+- rubocop-rspec
+- rubocop-performance
+
 inherit_gem:
   rubocop-rails_config:
-    - config/rails.yml
+  - config/rails.yml
