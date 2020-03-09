@@ -1,0 +1,59 @@
+name: 'Code Style Review'
+
+on:
+  pull_request:
+    branches:
+    - 'master'
+    paths-ignore:
+    - 'doc/**'
+    - '**.md'
+
+jobs:
+  lint:
+    runs-on: 'ubuntu-latest'
+
+    steps:
+    - name: 'Checkout'
+      uses: actions/checkout@v2
+
+    - name: 'Set up Ruby'
+      uses: actions/setup-ruby@v1
+      with:
+        ruby-version: '2.6'
+
+    - name: 'Set up Reviewdog'
+      env:
+        REVIEWDOG_INSTALLER: 'https://raw.githubusercontent.com/reviewdog/reviewdog/master/install.sh'
+      run: |
+        mkdir -p $HOME/bin
+        curl -sfL ${REVIEWDOG_INSTALLER} | sh -s -- -b $HOME/bin
+
+    - name: 'Set up Rubocop'
+      run: 'gem install rubocop rubocop-rspec rubocop-performance rubocop-rails'
+
+    - name: 'Run Rubocop'
+      env:
+        REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        rubocop |
+        $HOME/bin/reviewdog \
+        -f=rubocop \
+        -name="Rubocop" \
+        -reporter=github-pr-review \
+        -level=error \
+        -diff="git diff $DIFF_BRANCH"
+
+    - name: 'Set up Haml-lint'
+      run: 'gem install haml-lint'
+
+    - name: 'Run Haml-lint'
+      env:
+        REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        haml-lint |
+        $HOME/bin/reviewdog \
+        -efm="%f:%l %m" \
+        -name="Haml-lint" \
+        -reporter=github-pr-review \
+        -level=error \
+        -diff="git diff $DIFF_BRANCH"
