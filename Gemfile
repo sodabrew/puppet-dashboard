@@ -45,8 +45,11 @@ group :development, :test do
   gem 'listen'
   gem 'simplecov'
   gem 'simplecov-console'
-  gem 'rubocop', '~> 0.67.0'
+  gem 'rubocop'
+  gem 'rubocop-performance'
+  gem 'rubocop-rails'
   gem 'rubocop-rails_config'
+  gem 'rubocop-rspec'
   gem 'haml_lint', require: false
 end
 
