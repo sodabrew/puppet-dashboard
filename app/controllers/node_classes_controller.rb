@@ -7,6 +7,10 @@ class NodeClassesController < InheritedResources::Base
 
   protected
 
+  def node_class_params
+    params.require(:node_class).permit(:name, :description)
+  end
+
   def resource
     get_resource_ivar || set_resource_ivar(end_of_association_chain.find_by_id_or_name!(params[:id]))
   end
