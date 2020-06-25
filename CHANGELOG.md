@@ -2,6 +2,17 @@
 
 Notable changes to new releases of Puppet Dashboard.
 
+## [unreleased] - unreleased
+
+### Fixed
+
+- Fix error when creating node classes (thanks @big32mike)
+- Update multiple gem dependencies
+
+### Changed
+
+- Support for Ruby version 2.7
+
 ## [3.0.1] - 2019-11-12
 
 ### Fixed
