@@ -12,7 +12,7 @@ describe NodeGroupsController, :type => :controller do
 
   describe "#create" do
     it "should create a node group on successful creation" do
-      post :create, params: { node_group: { name: 'foo' } }
+      post :create, params: { node_group: { name: 'foo', description: 'foo' } }
       assigns[:node_group].name.should == 'foo'
     end
 
