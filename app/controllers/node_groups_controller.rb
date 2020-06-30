@@ -100,6 +100,7 @@ class NodeGroupsController < InheritedResources::Base
   def node_group_params
     params.require(:node_group).permit(
       :name,
+      :description,
       :assigned_node_ids => [],
       :assigned_node_class_ids => [],
       :assigned_node_group_ids => [],
