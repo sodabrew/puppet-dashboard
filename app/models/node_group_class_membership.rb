@@ -1,10 +1,8 @@
 class NodeGroupClassMembership < ApplicationRecord
-  validates_presence_of :node_class_id, :node_group_id
-
   include NodeGroupGraph
 
   has_parameters
 
-  belongs_to :node_class
-  belongs_to :node_group
+  belongs_to :node_class, required: true
+  belongs_to :node_group, required: true
 end
